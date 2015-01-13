@@ -1,16 +1,11 @@
 #ifndef __CINT__
 
 #include "DGammaAnalysis.h"
+#include "PPi0Example.h"
 
 // So far file should only include stuff that allows program to open file correctly and try to run the analysis on it, may need to remove some segments however
 // Configfile may not be needed for example so may need to remove it
 
-/**
- * @brief the main routine
- * @param argc number of parameters
- * @param argv the parameters as strings
- * @return exit code
- */
 int main(int argc, char *argv[])
 {
 
@@ -38,7 +33,7 @@ int main(int argc, char *argv[])
 	else if(argc == 2) configfile = argv[1];
 	else
 	{
-		for(int i=1; i<argc; i++)
+	    for(int i=1; i<argc; i++)
 		{
 			flag = argv[i];
 			if(flag.find_first_of("-") == 0)
@@ -84,8 +79,7 @@ int main(int argc, char *argv[])
 	// If no server file is specified, allow for checking in the config file
 	else serverfile = configfile;
 
-	//Need to create instance of DGammaAnalysis class here?
-	DGammaAnalysis* DGA = new DGammaAnalysis;
+	DGammaAnalysis* DGA = new DGammaAnalysis;	
 
 	// If unset, scan server or config file for file settings
 	if(dir_in.length() == 0)
@@ -257,6 +251,140 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
+DGammaAnalysis::DGammaAnalysis() 
+{ 
+}
+
+DGammaAnalysis::~DGammaAnalysis()
+{
+}
+
+Bool_t	DGammaAnalysis::Init(const char* configfile)
+{
+	// Initialise shared pdg database
+	pdgDB = TDatabasePDG::Instance();
+
+	// Set by user in the future...
+	SetTarget(938);
+	
+	Double_t Prompt_low 	=  -20;
+	Double_t Prompt_high 	=   15;
+	Double_t Random_low1 	= -100;
+	Double_t Random_high1 	=  -40;
+	Double_t Random_low2 	=   35;
+	Double_t Random_high2 	=   95;
+	
+	SetPromptWindow(Prompt_low, Prompt_high);
+	SetRandomWindow1(Random_low1, Random_high1);
+	SetRandomWindow2(Random_low2, Random_high2);
+	SetPvRratio();
+
+	return kTRUE;
+}
+
+Bool_t	DGammaAnalysis::File(const char* file_in, const char* file_out)
+{
+	OpenGoATFile(file_in, "READ");
+	OpenHistFile(file_out);
+	DefineHistograms();
+
+	cout << "Setting up tree files:" << endl;
+	if(!OpenTreeParticles(GoATFile)) 	return kFALSE;
+	if(!OpenTreeTagger(GoATFile))		return kFALSE;
+	cout << endl;
+
+	cout << "Detmining valid for analysis:" << endl;	
+	if(!FindValidGoATEvents())			return kFALSE;	
+	cout << endl;
+		
+	Analyse();	
+	return kTRUE;
+}
+
+void	DGammaAnalysis::Analyse()
+{
+
+	TraverseGoATEntries();
+	cout << "Total Pi0s found: " << N_pi0 << endl << endl;
+	
+	PostReconstruction();		
+	WriteHistograms();
+	CloseHistFile();	
+
+}
+
+void	DGammaAnalysis::Reconstruct()
+{
+	if(GetGoATEvent() == 0) N_pi0 = 0;
+	else if(GetGoATEvent() % 100000 == 0) cout << "Event: "<< GetGoATEvent() << " Total Pi0s found: " << N_pi0 << endl;
+
+	// Fill timing histogram (all PDG matching pi0)
+	FillTimePDG(pdgDB->GetParticle("pi0")->PdgCode(),time_pi0);
+	
+	// Fill missing mass (all PDG matching pi0)
+	MissingMassPDG(pdgDB->GetParticle("pi0")->PdgCode(), MM_prompt_pi0, MM_random_pi0);
+
+	// Some neutral decays
+	for (Int_t i = 0; i < GoATTree_GetNParticles(); i++)
+	{
+		// Count total pi0s
+		if(GoATTree_GetPDG(i) == pdgDB->GetParticle("pi0")->PdgCode()) 	N_pi0++;
+		
+		// Check PDG: Not pi0, continue
+		if (GoATTree_GetPDG(i) != pdgDB->GetParticle("pi0")->PdgCode()) continue; 
+		
+		// Check neutrality: Not neutral, continue
+		if (GoATTree_GetCharge(i) != 0) continue;
+		
+		// Check # of daughters: Not 2, continue
+		if (GoATTree_GetNDaughters(i) != 2) continue;
+		
+		// Fill missing mass for particle i
+		FillMissingMass(i, MM_prompt_pi0_n_2g, MM_prompt_pi0_n_2g);
+	}
+}
+
+void  DGammaAnalysis::PostReconstruction()
+{
+	cout << "Performing post reconstruction." << endl;
+
+	RandomSubtraction(MM_prompt_pi0,MM_random_pi0, MM_pi0);		
+	RandomSubtraction(MM_prompt_pi0_n_2g,MM_random_pi0_n_2g, MM_pi0_n_2g);	
+		
+	ShowTimeCuts(time_pi0, time_pi0_cuts);
+
+}
+
+void	DGammaAnalysis::DefineHistograms()
+{
+	gROOT->cd();
+	
+	time_pi0		= new TH1D("time_pi0",		"time_pi0",		1000,-500,500);
+	time_pi0_cuts	= new TH1D("time_pi0_cuts",	"time_pi0_cuts",1000,-500,500);
+
+	MM_prompt_pi0 	= new TH1D("MM_prompt_pi0",	"MM_prompt_pi0",1500,0,1500);
+	MM_random_pi0 	= new TH1D("MM_random_pi0",	"MM_random_pi0",1500,0,1500);
+	MM_pi0			= new TH1D("MM_pi0",		"MM_pi0",		1500,0,1500);
+	
+	MM_prompt_pi0_n_2g = new TH1D("MM_prompt_pi0_n_2g",	"MM_prompt_pi0_n_2g",1500,0,1500);
+	MM_random_pi0_n_2g = new TH1D("MM_random_pi0_n_2g",	"MM_random_pi0_n_2g",1500,0,1500);
+	MM_pi0_n_2g		  = new TH1D("MM_pi0_n_2g",		 	"MM_pi0_n_2g",	   	 1500,0,1500);		
+}
+
+Bool_t 	DGammaAnalysis::WriteHistograms(TFile* pfile)
+{
+	cout << "Writing histograms." << endl;
+		
+	if(!pfile) return kFALSE;
+	pfile->cd();
+
+	gROOT->GetList()->Write();
+	gROOT->GetList()->Delete();
+		
+	return kTRUE;
+}
+
 //Now need to actually get it to do something
 
 #endif
+

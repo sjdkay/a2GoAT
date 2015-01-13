@@ -47,6 +47,14 @@ add_executable(pi0-example
    )
 target_link_libraries(pi0-example ${ROOT_LIBRARIES})
 
+add_executable(DGammaAnalysis
+   src/DGammaAnalysis.cc
+   src/PPhysics.cc
+   src/GoATTreeManager.cc
+   src/GAcquTreeManager.cc
+   )
+target_link_libraries(DGammaAnalysis ${ROOT_LIBRARIES})
+
 add_executable(eta-example
    src/PEtaExample.cc
    src/PPhysics.cc
@@ -54,6 +62,13 @@ add_executable(eta-example
    src/GAcquTreeManager.cc
    )
 target_link_libraries(eta-example ${ROOT_LIBRARIES})
+
+#add_executable(PPhysics
+#   src/PPhysics.cc
+#   src/GoATTreeManager.cc
+#   src/GAcquTreeManager.cc
+#   )
+#target_link_libraries(PPhysics ${ROOT_LIBRARIES})
 
 # install some scripts to the bin directory
 # by creating symlinks
