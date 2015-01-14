@@ -2,8 +2,8 @@
 
 #include "DGammaAnalysis.h"
 
-// Cut down version of PPi0Example.cc, no usage of DGammaAnalysis class yet, need to decide what to actually do with the class and how to utilise it
-// So far this should just check for a configfile
+// Heavily altered version of PPi0Example.cc, unsure if "Reconstruction" and "Post Reconstruction" steps needed in this case
+// Also unsure as to what exactly the "Analyse" step is doing
 
 int main(int argc, char *argv[])
 {
@@ -138,7 +138,7 @@ int main(int argc, char *argv[])
 	if(pre_in.length() != 0)  	cout << "Input prefix:     '" << pre_in << "' chosen" << endl;
 	else { pre_in = "GoAT"; 	cout << "Input prefix:     '" << pre_in << "' chosen by default" << endl; }
 	if(pre_out.length() != 0)  	cout << "Output prefix:    '" << pre_out << "' chosen" << endl;	
-	else { pre_out = "Pi0"; 	cout << "Output prefix:    '" << pre_out << "' chosen by default" << endl; }
+	else { pre_out = "Proton"; 	cout << "Output prefix:    '" << pre_out << "' chosen by default" << endl; }
 	cout << endl;
 	
 	// Perform full initialisation 
@@ -292,7 +292,7 @@ Bool_t	DGammaAnalysis::File(const char* file_in, const char* file_out)
 	if(!OpenTreeTagger(GoATFile))		return kFALSE;
 	cout << endl;
 
-	cout << "Detmining valid for analysis:" << endl;	
+	cout << "Determining valid for analysis:" << endl;	
 	if(!FindValidGoATEvents())			return kFALSE;	
 	cout << endl;
 		
@@ -303,34 +303,35 @@ Bool_t	DGammaAnalysis::File(const char* file_in, const char* file_out)
 void	DGammaAnalysis::Analyse()
 {
 
-  //	TraverseGoATEntries();
-  //	cout << "Total Pi0s found: " << N_pi0 << endl << endl;
+  TraverseGoATEntries(); //This just looks through all GoAT events, how does it know they're Pi0's/protons?
+  	cout << "Total Protons found: " << N_P << endl << endl;
 	
-  //	PostReconstruction();		
-  //	WriteHistograms();
-  //	CloseHistFile();	
+  	PostReconstruction();		
+  	WriteHistograms();
+  	CloseHistFile();	
 
 }
 
+//Change this to look for protons from PDG? Don't want time though want energy/angle. Also don't need to reconstruct protons? Is this phase needed?
 void	DGammaAnalysis::Reconstruct()
 {
-  //	if(GetGoATEvent() == 0) N_pi0 = 0;
-	//	else if(GetGoATEvent() % 100000 == 0) cout << "Event: "<< GetGoATEvent() << " Total Pi0s found: " << N_pi0 << endl;
+  //	if(GetGoATEvent() == 0) N_P = 0;
+	//	else if(GetGoATEvent() % 100000 == 0) cout << "Event: "<< GetGoATEvent() << " Total Protons found: " << N_P << endl;
 
-	// Fill timing histogram (all PDG matching pi0)
-	//	FillTimePDG(pdgDB->GetParticle("pi0")->PdgCode(),time_pi0);
+	// Fill timing histogram (all PDG matching proton)
+	//	FillTimePDG(pdgDB->GetParticle("proton")->PdgCode(),time_pi0);
 	
-	// Fill missing mass (all PDG matching pi0)
-	//	MissingMassPDG(pdgDB->GetParticle("pi0")->PdgCode(), MM_prompt_pi0, MM_random_pi0);
+	// Fill missing mass (all PDG matching proton)
+	//	MissingMassPDG(pdgDB->GetParticle("proton")->PdgCode(), MM_prompt_pi0, MM_random_pi0);
 
 	// Some neutral decays
 	//	for (Int_t i = 0; i < GoATTree_GetNParticles(); i++)
 	{
-		// Count total pi0s
-	  //	if(GoATTree_GetPDG(i) == pdgDB->GetParticle("pi0")->PdgCode()) 	N_pi0++;
+		// Count total protons
+	  //	if(GoATTree_GetPDG(i) == pdgDB->GetParticle("proton")->PdgCode()) 	N_pi0++;
 		
 		// Check PDG: Not pi0, continue
-		//	if (GoATTree_GetPDG(i) != pdgDB->GetParticle("pi0")->PdgCode()) continue; 
+		//	if (GoATTree_GetPDG(i) != pdgDB->GetParticle("proton")->PdgCode()) continue; 
 		
 		// Check neutrality: Not neutral, continue
 		//	if (GoATTree_GetCharge(i) != 0) continue;
@@ -360,6 +361,7 @@ void	DGammaAnalysis::DefineHistograms()
        
 	PEk = new TH1D("P_Ek", "P_Ek", 10000, 0, 1000);
 	PTheta = new TH1D("P_Theta", "P_Theta", 10000, -180, 180);
+	PEg = new TH1D("photonbeam_E", "photonbeam_E", 100000, 0, 1500);
    	
 }
 
