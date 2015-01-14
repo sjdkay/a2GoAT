@@ -315,29 +315,24 @@ void	DGammaAnalysis::Analyse()
 //Change this to look for protons from PDG? Don't want time though want energy/angle. Also don't need to reconstruct protons? Is this phase needed?
 void	DGammaAnalysis::Reconstruct()
 {
-  //	if(GetGoATEvent() == 0) N_P = 0;
-	//	else if(GetGoATEvent() % 100000 == 0) cout << "Event: "<< GetGoATEvent() << " Total Protons found: " << N_P << endl;
+  	if(GetGoATEvent() == 0) N_P = 0;
+		else if(GetGoATEvent() % 1000 == 0) cout << "Event: "<< GetGoATEvent() << " Total Protons found: " << N_P << endl;
 
-	// Fill timing histogram (all PDG matching proton)
-	//	FillTimePDG(pdgDB->GetParticle("proton")->PdgCode(),time_pi0);
-	
-	// Fill missing mass (all PDG matching proton)
-	//	MissingMassPDG(pdgDB->GetParticle("proton")->PdgCode(), MM_prompt_pi0, MM_random_pi0);
-
-	// Some neutral decays
-	//	for (Int_t i = 0; i < GoATTree_GetNParticles(); i++)
+		for (Int_t i = 0; i < GoATTree_GetNParticles(); i++)
 	{
 		// Count total protons
-	  //	if(GoATTree_GetPDG(i) == pdgDB->GetParticle("proton")->PdgCode()) 	N_pi0++;
+	         	if(GoATTree_GetPDG(i) == pdgDB->GetParticle("proton")->PdgCode()) 	N_P++;
 		
-		// Check PDG: Not pi0, continue
-		//	if (GoATTree_GetPDG(i) != pdgDB->GetParticle("proton")->PdgCode()) continue; 
+		//Check PDG: Not proton, continue
+			if (GoATTree_GetPDG(i) != pdgDB->GetParticle("proton")->PdgCode()) continue; 
 		
-		// Check neutrality: Not neutral, continue
-		//	if (GoATTree_GetCharge(i) != 0) continue;
-		
-		// Check # of daughters: Not 2, continue
-		//	if (GoATTree_GetNDaughters(i) != 2) continue;
+		// Check Charge: Not +1, continue
+			if (GoATTree_GetCharge(i) != 1) continue;
+			
+			//Fill some histograms with events
+			
+			cout<<GoATTree_GetEk(i)<<"   "<<GoATTree_GetTheta(i)<<endl; //Use these to get parameters we want
+			// Now need to fill the correct histograms using these values I.e. fill PEk e.t.c. defined below
 		
 		// Fill missing mass for particle i
 		//	FillMissingMass(i, MM_prompt_pi0_n_2g, MM_prompt_pi0_n_2g);
@@ -362,6 +357,7 @@ void	DGammaAnalysis::DefineHistograms()
 	PEk = new TH1D("P_Ek", "P_Ek", 10000, 0, 1000);
 	PTheta = new TH1D("P_Theta", "P_Theta", 10000, -180, 180);
 	PEg = new TH1D("photonbeam_E", "photonbeam_E", 100000, 0, 1500);
+	EpTp = new TH2D("EpTp", "EpTp", 2000 ,0, 1000, 500, -180, 180);
    	
 }
 
@@ -381,7 +377,7 @@ Bool_t 	DGammaAnalysis::WriteHistograms(TFile* pfile)
 
 #endif
 
-//So Far should open and check files and then prepare output files to put stuff in, NOT certain that PvRratio needs to be done.
-//Now need to try and get script to do what we want - e.g. Get a plot of Ek vs photonbeam_E, need to define classes correctly for this
+//So far should open and check files and then prepare output files to put stuff in, NOT certain that PvRratio needs to be done.
+//Now need to try and get script to do what we want - e.g. Get a plot of Ek vs photonbeam_E, Ek vs Theta, need to define classes correctly for this
 //Need to change define histograms to the ones we actually want
 //Then need to write them too
