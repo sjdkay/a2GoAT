@@ -331,8 +331,9 @@ void	DGammaAnalysis::Reconstruct()
 			
 			//Fill some histograms with events
 			
-			cout<<GoATTree_GetEk(i)<<"   "<<GoATTree_GetTheta(i)<<endl; //Use these to get parameters we want
+			cout<<GoATTree_GetEk(i)<<"   "<<GetPhotonBeam_E(i)<<"    "<<GoATTree_GetTheta(i)<<endl; //Use these to get parameters we want
 			// Now need to fill the correct histograms using these values I.e. fill PEk e.t.c. defined below
+			
 		
 		// Fill missing mass for particle i
 		//	FillMissingMass(i, MM_prompt_pi0_n_2g, MM_prompt_pi0_n_2g);
