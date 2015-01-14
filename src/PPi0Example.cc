@@ -268,7 +268,7 @@ Bool_t	PPi0Example::Init(const char* configfile)
 	pdgDB = TDatabasePDG::Instance();
 
 	// Set by user in the future...
-	SetTarget(938);
+	SetTarget(1875.6);
 	
 	Double_t Prompt_low 	=  -20;
 	Double_t Prompt_high 	=   15;
