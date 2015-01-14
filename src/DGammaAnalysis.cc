@@ -1,10 +1,9 @@
 #ifndef __CINT__
 
 #include "DGammaAnalysis.h"
-#include "PPi0Example.h"
 
-// So far file should only include stuff that allows program to open file correctly and try to run the analysis on it, may need to remove some segments however
-// Configfile may not be needed for example so may need to remove it
+// Cut down version of PPi0Example.cc, no usage of DGammaAnalysis class yet, need to decide what to actually do with the class and how to utilise it
+// So far this should just check for a configfile
 
 int main(int argc, char *argv[])
 {
@@ -79,7 +78,7 @@ int main(int argc, char *argv[])
 	// If no server file is specified, allow for checking in the config file
 	else serverfile = configfile;
 
-	DGammaAnalysis* DGA = new DGammaAnalysis;	
+	DGammaAnalysis* DGA = new DGammaAnalysis;
 
 	// If unset, scan server or config file for file settings
 	if(dir_in.length() == 0)
@@ -265,7 +264,7 @@ Bool_t	DGammaAnalysis::Init(const char* configfile)
 	pdgDB = TDatabasePDG::Instance();
 
 	// Set by user in the future...
-	SetTarget(938);
+	SetTarget(1875.6);
 	
 	Double_t Prompt_low 	=  -20;
 	Double_t Prompt_high 	=   15;
@@ -304,71 +303,64 @@ Bool_t	DGammaAnalysis::File(const char* file_in, const char* file_out)
 void	DGammaAnalysis::Analyse()
 {
 
-	TraverseGoATEntries();
-	cout << "Total Pi0s found: " << N_pi0 << endl << endl;
+  //	TraverseGoATEntries();
+  //	cout << "Total Pi0s found: " << N_pi0 << endl << endl;
 	
-	PostReconstruction();		
-	WriteHistograms();
-	CloseHistFile();	
+  //	PostReconstruction();		
+  //	WriteHistograms();
+  //	CloseHistFile();	
 
 }
 
 void	DGammaAnalysis::Reconstruct()
 {
-	if(GetGoATEvent() == 0) N_pi0 = 0;
-	else if(GetGoATEvent() % 100000 == 0) cout << "Event: "<< GetGoATEvent() << " Total Pi0s found: " << N_pi0 << endl;
+  //	if(GetGoATEvent() == 0) N_pi0 = 0;
+	//	else if(GetGoATEvent() % 100000 == 0) cout << "Event: "<< GetGoATEvent() << " Total Pi0s found: " << N_pi0 << endl;
 
 	// Fill timing histogram (all PDG matching pi0)
-	FillTimePDG(pdgDB->GetParticle("pi0")->PdgCode(),time_pi0);
+	//	FillTimePDG(pdgDB->GetParticle("pi0")->PdgCode(),time_pi0);
 	
 	// Fill missing mass (all PDG matching pi0)
-	MissingMassPDG(pdgDB->GetParticle("pi0")->PdgCode(), MM_prompt_pi0, MM_random_pi0);
+	//	MissingMassPDG(pdgDB->GetParticle("pi0")->PdgCode(), MM_prompt_pi0, MM_random_pi0);
 
 	// Some neutral decays
-	for (Int_t i = 0; i < GoATTree_GetNParticles(); i++)
+	//	for (Int_t i = 0; i < GoATTree_GetNParticles(); i++)
 	{
 		// Count total pi0s
-		if(GoATTree_GetPDG(i) == pdgDB->GetParticle("pi0")->PdgCode()) 	N_pi0++;
+	  //	if(GoATTree_GetPDG(i) == pdgDB->GetParticle("pi0")->PdgCode()) 	N_pi0++;
 		
 		// Check PDG: Not pi0, continue
-		if (GoATTree_GetPDG(i) != pdgDB->GetParticle("pi0")->PdgCode()) continue; 
+		//	if (GoATTree_GetPDG(i) != pdgDB->GetParticle("pi0")->PdgCode()) continue; 
 		
 		// Check neutrality: Not neutral, continue
-		if (GoATTree_GetCharge(i) != 0) continue;
+		//	if (GoATTree_GetCharge(i) != 0) continue;
 		
 		// Check # of daughters: Not 2, continue
-		if (GoATTree_GetNDaughters(i) != 2) continue;
+		//	if (GoATTree_GetNDaughters(i) != 2) continue;
 		
 		// Fill missing mass for particle i
-		FillMissingMass(i, MM_prompt_pi0_n_2g, MM_prompt_pi0_n_2g);
+		//	FillMissingMass(i, MM_prompt_pi0_n_2g, MM_prompt_pi0_n_2g);
 	}
 }
 
 void  DGammaAnalysis::PostReconstruction()
 {
-	cout << "Performing post reconstruction." << endl;
+  //    cout << "Performing post reconstruction." << endl;
 
-	RandomSubtraction(MM_prompt_pi0,MM_random_pi0, MM_pi0);		
-	RandomSubtraction(MM_prompt_pi0_n_2g,MM_random_pi0_n_2g, MM_pi0_n_2g);	
+  //	RandomSubtraction(MM_prompt_pi0,MM_random_pi0, MM_pi0);		
+  //	RandomSubtraction(MM_prompt_pi0_n_2g,MM_random_pi0_n_2g, MM_pi0_n_2g);	
 		
-	ShowTimeCuts(time_pi0, time_pi0_cuts);
+  //	ShowTimeCuts(time_pi0, time_pi0_cuts);
 
 }
 
 void	DGammaAnalysis::DefineHistograms()
 {
-	gROOT->cd();
-	
-	time_pi0		= new TH1D("time_pi0",		"time_pi0",		1000,-500,500);
-	time_pi0_cuts	= new TH1D("time_pi0_cuts",	"time_pi0_cuts",1000,-500,500);
-
-	MM_prompt_pi0 	= new TH1D("MM_prompt_pi0",	"MM_prompt_pi0",1500,0,1500);
-	MM_random_pi0 	= new TH1D("MM_random_pi0",	"MM_random_pi0",1500,0,1500);
-	MM_pi0			= new TH1D("MM_pi0",		"MM_pi0",		1500,0,1500);
-	
-	MM_prompt_pi0_n_2g = new TH1D("MM_prompt_pi0_n_2g",	"MM_prompt_pi0_n_2g",1500,0,1500);
-	MM_random_pi0_n_2g = new TH1D("MM_random_pi0_n_2g",	"MM_random_pi0_n_2g",1500,0,1500);
-	MM_pi0_n_2g		  = new TH1D("MM_pi0_n_2g",		 	"MM_pi0_n_2g",	   	 1500,0,1500);		
+ 	gROOT->cd();
+       
+	PEk = new TH1D("P_Ek", "P_Ek", 10000, 0, 1000);
+	PTheta = new TH1D("P_Theta", "P_Theta", 10000, -180, 180);
+   	
 }
 
 Bool_t 	DGammaAnalysis::WriteHistograms(TFile* pfile)
@@ -384,7 +376,10 @@ Bool_t 	DGammaAnalysis::WriteHistograms(TFile* pfile)
 	return kTRUE;
 }
 
-//Now need to actually get it to do something
 
 #endif
 
+//So Far should open and check files and then prepare output files to put stuff in, NOT certain that PvRratio needs to be done.
+//Now need to try and get script to do what we want - e.g. Get a plot of Ek vs photonbeam_E, need to define classes correctly for this
+//Need to change define histograms to the ones we actually want
+//Then need to write them too

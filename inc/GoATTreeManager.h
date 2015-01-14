@@ -26,12 +26,12 @@ private:
     Int_t* 		PDG;
     Double_t*	Px;
     Double_t*	Py;
-   	Double_t*	Pz;
+    Double_t*	Pz;
     Double_t*	Ek;
     Double_t*	Theta;
     Double_t*	Mass; 
     Double_t*	Phi; 
-   	Double_t*	time;
+    Double_t*	time;
     UChar_t*    clusterSize;
     Int_t*      centralIndex;
     Int_t*      vetoIndex;
@@ -39,17 +39,17 @@ private:
     Double_t*	d_E;
     Double_t*	WC0_E;
     Double_t*	WC1_E;
-   	Double_t* 	WC_Vertex_X;
-   	Double_t* 	WC_Vertex_Y;
-   	Double_t* 	WC_Vertex_Z;    
+    Double_t* 	WC_Vertex_X;
+    Double_t* 	WC_Vertex_Y;
+    Double_t* 	WC_Vertex_Z;    
 
-	Int_t*		nDaughters;
-	Int_t 		nDaughterList;
-   	Int_t*		daughter_index;   	
+    Int_t*		nDaughters;
+    Int_t 		nDaughterList;
+    Int_t*		daughter_index;   	
     Int_t*		daughter_PDG;
-   	Double_t* 	daughter_E; 
-   	Double_t*	daughter_Theta;
-   	Double_t*	daughter_Phi;
+    Double_t* 	daughter_E; 
+    Double_t*	daughter_Theta;
+    Double_t*	daughter_Phi;
 
     Int_t		firstGoATEvent;
     Int_t		lastGoATEvent;
@@ -58,7 +58,7 @@ private:
 protected:
     Int_t       offsetToAcquTree;
 
- 	Char_t*		global_config_file;
+    Char_t*		global_config_file;
     void		GetEntryFast();
     void		TraverseEntries(const Int_t min, const Int_t max);
     void		TraverseEntries(const Int_t max) {TraverseEntries(0, max);}
@@ -73,18 +73,18 @@ public:
     Bool_t	OpenGoATFile(const char* treefile, Option_t* option);
     Bool_t	OpenGoATFile(const char* treefile) {return OpenGoATFile(treefile,"RECREATE");}
     Bool_t  InitTreeParticles(TFile* TreeFile);
-	Bool_t	InitTreeParticles() {return InitTreeParticles(GoATFile);}
+    Bool_t	InitTreeParticles() {return InitTreeParticles(GoATFile);}
     Bool_t  OpenTreeParticles(TFile* TreeFile);
-	Bool_t	OpenTreeParticles() {return OpenTreeParticles(GoATFile);}    
+    Bool_t	OpenTreeParticles() {return OpenTreeParticles(GoATFile);}    
     virtual Bool_t 	FillEvent();
     Bool_t	WriteTrees(TFile* TreeFile);
-	Bool_t	WriteTrees() {return WriteTrees(GoATFile);}    
-	Bool_t 	CloseGoATFile();
+    Bool_t	WriteTrees() {return WriteTrees(GoATFile);}    
+    Bool_t 	CloseGoATFile();
     Bool_t	CloseOutputFile(TFile* TreeFile); 
-	Bool_t	CloseOutputFile() {return CloseOutputFile(GoATFile);}    
+    Bool_t	CloseOutputFile() {return CloseOutputFile(GoATFile);}    
     
     
-	Bool_t	FindValidGoATEvents();
+    Bool_t	FindValidGoATEvents();
     void 	GetGoATEntryFast(); // without testing index
     void	TraverseGoATEntries(const Int_t min, const Int_t max);
     void	TraverseGoATEntries(const Int_t max) {TraverseGoATEntries(firstGoATEvent, max);}

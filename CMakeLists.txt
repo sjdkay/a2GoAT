@@ -63,13 +63,6 @@ add_executable(eta-example
    )
 target_link_libraries(eta-example ${ROOT_LIBRARIES})
 
-#add_executable(PPhysics
-#   src/PPhysics.cc
-#   src/GoATTreeManager.cc
-#   src/GAcquTreeManager.cc
-#   )
-#target_link_libraries(PPhysics ${ROOT_LIBRARIES})
-
 # install some scripts to the bin directory
 # by creating symlinks
 file(GLOB CORE_EXTRA_SCRIPTS "scripts/*")

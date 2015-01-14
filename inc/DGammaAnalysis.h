@@ -17,18 +17,11 @@ class	DGammaAnalysis : public PPhysics
 private:
 
 	Double_t time;
-	TH1* 	time_pi0;
-	TH1* 	time_pi0_cuts;	
-
-	TH1* 	MM_prompt_pi0;
-	TH1* 	MM_random_pi0;
-	TH1* 	MM_pi0;
-	
-	TH1* 	MM_prompt_pi0_n_2g;
-	TH1* 	MM_random_pi0_n_2g;
-	TH1* 	MM_pi0_n_2g;		
-
-	Int_t 	N_pi0;
+	TH1*    PTheta;
+	TH1*    PEk;
+	TH2* 	EpEg;	//2D histogram of Proton energy against photon energy, could do this as 3D? Will this even work?
+	//Need to define something that will fill this histogram?
+	Int_t 	N_P;
 		
 protected:
 
@@ -36,14 +29,16 @@ public:
     DGammaAnalysis();
     virtual ~DGammaAnalysis();
 
+    // These are used for file checking, need to make similar in this class later?
+
     virtual Bool_t	Init(const char* configfile);	
     virtual Bool_t	File(const char* file_in, const char* file_out);    
     virtual void 	Analyse();
-	virtual void	Reconstruct();
-	void	PostReconstruction();
+    virtual void	Reconstruct();
+    void	PostReconstruction();
 
-	void	DefineHistograms();
-	Bool_t	WriteHistograms(TFile* pfile);
-	Bool_t	WriteHistograms() {return WriteHistograms(HistFile);}
+    void	DefineHistograms();
+    Bool_t	WriteHistograms(TFile* pfile);
+    Bool_t	WriteHistograms() {return WriteHistograms(HistFile);}
 };
 #endif
