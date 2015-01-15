@@ -331,18 +331,22 @@ void	DGammaAnalysis::Reconstruct()
 			
 			//Fill some histograms with events
 			
-			cout<<GoATTree_GetEk(i)<<"   "<<GetPhotonBeam_E(i)<<"    "<<GoATTree_GetTheta(i)<<endl; //Use these to get parameters we want
-			// Now need to fill the correct histograms using these values I.e. fill PEk e.t.c. defined below
+			//cout<<GoATTree_GetEk(i)<<"   "<<GetPhotonBeam_E(i)<<"    "<<GoATTree_GetTheta(i)<<endl; //Use these to get parameters we want
+			PEk->Fill(GoATTree_GetEk(i));
+			PEg->Fill(GetPhotonBeam_E(i));
+			PTheta->Fill(GoATTree_GetTheta(i));
+			EpEg->Fill(GoATTree_GetEk(i),GetPhotonBeam_E(i));
+			EpTp->Fill(GoATTree_GetEk(i), GoATTree_GetTheta(i));
 			
-		
-		// Fill missing mass for particle i
+		// Pi0 example uses the below to fill histograms, need to define something like this for what I want to do?
 		//	FillMissingMass(i, MM_prompt_pi0_n_2g, MM_prompt_pi0_n_2g);
 	}
 }
 
 void  DGammaAnalysis::PostReconstruction()
 {
-  //    cout << "Performing post reconstruction." << endl;
+ 
+ //    cout << "Performing post reconstruction." << endl;
 
   //	RandomSubtraction(MM_prompt_pi0,MM_random_pi0, MM_pi0);		
   //	RandomSubtraction(MM_prompt_pi0_n_2g,MM_random_pi0_n_2g, MM_pi0_n_2g);	
@@ -355,10 +359,11 @@ void	DGammaAnalysis::DefineHistograms()
 {
  	gROOT->cd();
        
-	PEk = new TH1D("P_Ek", "P_Ek", 10000, 0, 1000);
-	PTheta = new TH1D("P_Theta", "P_Theta", 10000, -180, 180);
-	PEg = new TH1D("photonbeam_E", "photonbeam_E", 100000, 0, 1500);
-	EpTp = new TH2D("EpTp", "EpTp", 2000 ,0, 1000, 500, -180, 180);
+	PEk = new TH1D("P_Ek", "P_Ek", 150, 0, 600);
+	PTheta = new TH1D("P_Theta", "P_Theta", 33, 15, 180);
+	PEg = new TH1D("photonbeam_E", "photonbeam_E", 200, 100, 900);
+	EpEg = new TH2D("EpEg", "EpEg", 150, 0, 600, 200, 100, 900);
+	EpTp = new TH2D("EpTp", "EpTp", 150 ,0, 600, 33, 15, 180);
    	
 }
 

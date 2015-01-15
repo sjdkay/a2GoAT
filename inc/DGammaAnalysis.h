@@ -31,8 +31,6 @@ public:
     DGammaAnalysis();
     virtual ~DGammaAnalysis();
 
-    // These are used for file checking, need to make similar in this class later?
-
     virtual Bool_t	Init(const char* configfile);	
     virtual Bool_t	File(const char* file_in, const char* file_out);    
     virtual void 	Analyse();

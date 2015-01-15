@@ -8,7 +8,6 @@ using namespace std;
 #include <string> 
 
 #include "GoATTreeManager.h"
-#include "TLorentzVector.h"
 
 class	PPhysics : public GoATTreeManager
 {
