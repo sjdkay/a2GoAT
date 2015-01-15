@@ -303,7 +303,7 @@ Bool_t	DGammaAnalysis::File(const char* file_in, const char* file_out)
 void	DGammaAnalysis::Analyse()
 {
 
-  TraverseGoATEntries(); //This just looks through all GoAT events, how does it know they're Pi0's/protons?
+  TraverseGoATEntries();
   	cout << "Total Protons found: " << N_P << endl << endl;
 	
   	PostReconstruction();		
@@ -312,16 +312,15 @@ void	DGammaAnalysis::Analyse()
 
 }
 
-//Change this to look for protons from PDG? Don't want time though want energy/angle. Also don't need to reconstruct protons? Is this phase needed?
-void	DGammaAnalysis::Reconstruct()
+void	DGammaAnalysis::Reconstruct() //Starts at event 0 so 0 - X events hence extra two protons
 {
   	if(GetGoATEvent() == 0) N_P = 0;
 		else if(GetGoATEvent() % 1000 == 0) cout << "Event: "<< GetGoATEvent() << " Total Protons found: " << N_P << endl;
 
 		for (Int_t i = 0; i < GoATTree_GetNParticles(); i++)
 	{
-		// Count total protons
-	         	if(GoATTree_GetPDG(i) == pdgDB->GetParticle("proton")->PdgCode()) 	N_P++;
+
+	                if(GoATTree_GetPDG(i) == pdgDB->GetParticle("proton")->PdgCode()) 	N_P++; 
 		
 		//Check PDG: Not proton, continue
 			if (GoATTree_GetPDG(i) != pdgDB->GetParticle("proton")->PdgCode()) continue; 
@@ -330,16 +329,16 @@ void	DGammaAnalysis::Reconstruct()
 			if (GoATTree_GetCharge(i) != 1) continue;
 			
 			//Fill some histograms with events
-			
-			//cout<<GoATTree_GetEk(i)<<"   "<<GetPhotonBeam_E(i)<<"    "<<GoATTree_GetTheta(i)<<endl; //Use these to get parameters we want
 			PEk->Fill(GoATTree_GetEk(i));
 			PEg->Fill(GetPhotonBeam_E(i));
 			PTheta->Fill(GoATTree_GetTheta(i));
 			EpEg->Fill(GoATTree_GetEk(i),GetPhotonBeam_E(i));
 			EpTp->Fill(GoATTree_GetEk(i), GoATTree_GetTheta(i));
-			
-		// Pi0 example uses the below to fill histograms, need to define something like this for what I want to do?
-		//	FillMissingMass(i, MM_prompt_pi0_n_2g, MM_prompt_pi0_n_2g);
+			PVX->Fill(GoATTree_GetWC_Vertex_X(i));
+			PVY->Fill(GoATTree_GetWC_Vertex_Y(i));
+			PVZ->Fill(GoATTree_GetWC_Vertex_Z(i));
+			//cout<<GoATTree_GetWC_Vertex_Z(i)<<endl;
+
 	}
 }
 
@@ -360,11 +359,14 @@ void	DGammaAnalysis::DefineHistograms()
  	gROOT->cd();
        
 	PEk = new TH1D("P_Ek", "P_Ek", 150, 0, 600);
-	PTheta = new TH1D("P_Theta", "P_Theta", 33, 15, 180);
+	PTheta = new TH1D("P_Theta", "P_Theta", 150, 15, 160);
 	PEg = new TH1D("photonbeam_E", "photonbeam_E", 200, 100, 900);
 	EpEg = new TH2D("EpEg", "EpEg", 150, 0, 600, 200, 100, 900);
-	EpTp = new TH2D("EpTp", "EpTp", 150 ,0, 600, 33, 15, 180);
-   	
+	EpTp = new TH2D("EpTp", "EpTp", 150 ,0, 600, 150, 15, 160);
+	PVX = new TH1D("X_Vertex", "X_Vertex", 200,-50,50);
+	PVY = new TH1D("Y_Vertex", "Y_Vertex", 200, -60 , 60);
+	PVZ = new TH1D("Z_Vertex", "Z_Vertex", 200, -150, 150);			
+
 }
 
 Bool_t 	DGammaAnalysis::WriteHistograms(TFile* pfile)
