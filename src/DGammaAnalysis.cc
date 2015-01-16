@@ -329,15 +329,18 @@ void	DGammaAnalysis::Reconstruct() //Starts at event 0 so 0 - X events hence ext
 			if (GoATTree_GetCharge(i) != 1) continue;
 			
 			//Fill some histograms with events
-			PEk->Fill(GoATTree_GetEk(i));
+			PEp->Fill(GoATTree_GetEk(i));
 			PEg->Fill(GetPhotonBeam_E(i));
 			PTheta->Fill(GoATTree_GetTheta(i));
+		       	PPhi->Fill(GoATTree_GetPhi(i));
 			EpEg->Fill(GoATTree_GetEk(i),GetPhotonBeam_E(i));
 			EpTp->Fill(GoATTree_GetEk(i), GoATTree_GetTheta(i));
 			PVX->Fill(GoATTree_GetWC_Vertex_X(i));
 			PVY->Fill(GoATTree_GetWC_Vertex_Y(i));
 			PVZ->Fill(GoATTree_GetWC_Vertex_Z(i));
-			//cout<<GoATTree_GetWC_Vertex_Z(i)<<endl;
+			EpdE->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
+			TpPp->Fill(GoATTree_GetTheta(i), GoATTree_GetPhi(i));     			
+			//cout<<GoATTree_GetPhi(i)<<endl; cout line here just to check variables
 
 	}
 }
@@ -358,15 +361,18 @@ void	DGammaAnalysis::DefineHistograms()
 {
  	gROOT->cd();
        
-	PEk = new TH1D("P_Ek", "P_Ek", 150, 0, 600);
+	PEp = new TH1D("P_Ep", "P_Ep", 150, 0, 600);
 	PTheta = new TH1D("P_Theta", "P_Theta", 150, 15, 160);
+	PPhi = new TH1D("PPhi", "PPhi", 450, -180, 180);
 	PEg = new TH1D("photonbeam_E", "photonbeam_E", 200, 100, 900);
 	EpEg = new TH2D("EpEg", "EpEg", 150, 0, 600, 200, 100, 900);
 	EpTp = new TH2D("EpTp", "EpTp", 150 ,0, 600, 150, 15, 160);
 	PVX = new TH1D("X_Vertex", "X_Vertex", 200,-50,50);
 	PVY = new TH1D("Y_Vertex", "Y_Vertex", 200, -60 , 60);
-	PVZ = new TH1D("Z_Vertex", "Z_Vertex", 200, -150, 150);			
-
+	PVZ = new TH1D("Z_Vertex", "Z_Vertex", 200, -150, 150);	
+	EpdE = new TH2D("dE_E", "dE_E", 150, 0, 600, 150, 0, 5); 
+	TpPp = new TH2D("Theta_Phi", "Theta_Phi", 150, 15, 160, 450, -180, 180);
+ 	    
 }
 
 Bool_t 	DGammaAnalysis::WriteHistograms(TFile* pfile)
@@ -385,7 +391,3 @@ Bool_t 	DGammaAnalysis::WriteHistograms(TFile* pfile)
 
 #endif
 
-//So far should open and check files and then prepare output files to put stuff in, NOT certain that PvRratio needs to be done.
-//Now need to try and get script to do what we want - e.g. Get a plot of Ek vs photonbeam_E, Ek vs Theta, need to define classes correctly for this
-//Need to change define histograms to the ones we actually want
-//Then need to write them too
