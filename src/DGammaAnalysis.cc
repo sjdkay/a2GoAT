@@ -339,8 +339,12 @@ void	DGammaAnalysis::Reconstruct() //Starts at event 0 so 0 - X events hence ext
 			PVY->Fill(GoATTree_GetWC_Vertex_Y(i));
 			PVZ->Fill(GoATTree_GetWC_Vertex_Z(i));
 			EpdE->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
-			TpPp->Fill(GoATTree_GetTheta(i), GoATTree_GetPhi(i));     			
+			TpPp->Fill(GoATTree_GetTheta(i), GoATTree_GetPhi(i)); 
+			TpdE->Fill(GoATTree_GetTheta(i),GoATTree_Get_dE(i)); //May be interesting?
+			PVXdE->Fill(GoATTree_GetWC_Vertex_X(i), GoATTree_Get_dE(i)); // Doesn't really show anything?
+			//cout<<GetNPID_Hits()<<endl; Get 0 PID hits out?
 			//cout<<GoATTree_GetPhi(i)<<endl; cout line here just to check variables
+			// Do some scalar/vector products? What next, what do we want next?
 
 	}
 }
@@ -367,11 +371,13 @@ void	DGammaAnalysis::DefineHistograms()
 	PEg = new TH1D("photonbeam_E", "photonbeam_E", 200, 100, 900);
 	EpEg = new TH2D("EpEg", "EpEg", 150, 0, 600, 200, 100, 900);
 	EpTp = new TH2D("EpTp", "EpTp", 150 ,0, 600, 150, 15, 160);
-	PVX = new TH1D("X_Vertex", "X_Vertex", 200,-50,50);
+	PVX = new TH1D("X_Vertex", "X_Vertex", 200,-50, 50);
 	PVY = new TH1D("Y_Vertex", "Y_Vertex", 200, -60 , 60);
 	PVZ = new TH1D("Z_Vertex", "Z_Vertex", 200, -150, 150);	
 	EpdE = new TH2D("dE_E", "dE_E", 150, 0, 600, 150, 0, 5); 
 	TpPp = new TH2D("Theta_Phi", "Theta_Phi", 150, 15, 160, 450, -180, 180);
+	TpdE = new TH2D("Theta_dE", "Theta_dE", 150, 15, 160, 150, 0, 5);
+	PVXdE = new TH2D("X_Vertex_dE", "X_Vertex_dE", 200, -50, 50, 150, 0, 5);
  	    
 }
 

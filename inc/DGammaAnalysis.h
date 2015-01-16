@@ -28,6 +28,8 @@ private:
 	TH2*    EpTp;
 	TH2*    EpdE;
 	TH2*    TpPp;
+	TH2*    TpdE;
+	TH2*    PVXdE;
 	Int_t 	N_P;
 		
 protected:
