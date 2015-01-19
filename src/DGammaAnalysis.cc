@@ -316,9 +316,9 @@ void	DGammaAnalysis::Reconstruct() //Starts at event 0 so 0 - X events hence ext
 {
   	if(GetGoATEvent() == 0) N_P = 0;
 		else if(GetGoATEvent() % 1000 == 0) cout << "Event: "<< GetGoATEvent() << " Total Protons found: " << N_P << endl;
-
+	    
 		for (Int_t i = 0; i < GoATTree_GetNParticles(); i++)
-	{
+		  {
 
 	                if(GoATTree_GetPDG(i) == pdgDB->GetParticle("proton")->PdgCode()) 	N_P++; 
 		
@@ -342,8 +342,6 @@ void	DGammaAnalysis::Reconstruct() //Starts at event 0 so 0 - X events hence ext
 			TpPp->Fill(GoATTree_GetTheta(i), GoATTree_GetPhi(i)); 
 			TpdE->Fill(GoATTree_GetTheta(i),GoATTree_Get_dE(i)); //May be interesting?
 			//PVXdE->Fill(GoATTree_GetWC_Vertex_X(i), GoATTree_Get_dE(i)); // Doesn't really show anything?
-			//cout<<GetNPID_Hits()<<endl; Get 0 PID hits out?
-			//cout<<GoATTree_GetPhi(i)<<endl; cout line here just to check variables
 			//Do some scalar/vector products? What next, what do we want next?
 
 			if(GoATTree_Get_dE(i) <1.6){
