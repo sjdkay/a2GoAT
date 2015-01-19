@@ -319,7 +319,6 @@ void	DGammaAnalysis::Reconstruct() //Starts at event 0 so 0 - X events hence ext
 	    
 		for (Int_t i = 0; i < GoATTree_GetNParticles(); i++)
 		  {
-
 	                if(GoATTree_GetPDG(i) == pdgDB->GetParticle("proton")->PdgCode()) 	N_P++; 
 		
 		//Check PDG: Not proton, continue
@@ -363,7 +362,6 @@ void	DGammaAnalysis::Reconstruct() //Starts at event 0 so 0 - X events hence ext
 			  PThetaHigh->Fill(GoATTree_GetTheta(i));
 			  PPhiHigh->Fill(GoATTree_GetPhi(i));
 			}
-
 	}
 }
 
