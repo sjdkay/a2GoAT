@@ -337,9 +337,17 @@ void	DGammaAnalysis::Reconstruct() //Starts at event 0 so 0 - X events hence ext
 			PVX->Fill(GoATTree_GetWC_Vertex_X(i));
 			PVY->Fill(GoATTree_GetWC_Vertex_Y(i));
 			PVZ->Fill(GoATTree_GetWC_Vertex_Z(i));
+			nTAPS->Fill(GetBaF2_PbWO4_Hits(i));
 			EpdE->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
 			TpPp->Fill(GoATTree_GetTheta(i), GoATTree_GetPhi(i)); 
 			TpdE->Fill(GoATTree_GetTheta(i),GoATTree_Get_dE(i)); 
+			
+			if((i % 2) == 0){
+			  int j = (i-1); // Doesn't work at the moment, need to fix
+			  cout<<(GoATTree_GetEk(i))<<"    "<< (GoATTree_GetEk(j))<<endl;
+			  PEpTot->Fill(((GoATTree_GetEk(i))+ (GoATTree_GetEk(j))));
+			  dE1_dE2->Fill(GoATTree_Get_dE(j), GoATTree_Get_dE(i));
+			}
 
 			//if(GoATTree_Get_dE(i) <1.6){
 			//  EpdELow->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
@@ -382,6 +390,7 @@ void	DGammaAnalysis::DefineHistograms()
 	PEp = new TH1D("P_Ep", "P_Ep", 150, 0, 410);
 	PTheta = new TH1D("P_Theta", "P_Theta", 150, 15, 160);
 	PPhi = new TH1D("PPhi", "PPhi", 450, -180, 180);
+	PEpTot = new TH1D("P_Ep_Total", "P_Ep_Total", 300, 0, 900);
 	//PThetaLow = new TH1D("P_Theta_Low", "P_Theta_Low", 150, 15, 160);
 	//PPhiLow = new TH1D("PPhi_Low", "PPhi_Low", 450, -180, 180);	
 	//PThetaHigh = new TH1D("P_Theta_High", "P_Theta_High", 150, 15, 160);
@@ -392,9 +401,11 @@ void	DGammaAnalysis::DefineHistograms()
 	PVX = new TH1D("X_Vertex", "X_Vertex", 200,-50, 50);
 	PVY = new TH1D("Y_Vertex", "Y_Vertex", 200, -60 , 60);
 	PVZ = new TH1D("Z_Vertex", "Z_Vertex", 200, -150, 150);	
+	nTAPS = new TH1D("TAPS_Hits", "TAPS_Hits", 200, 0, 50);
 	EpdE = new TH2D("E_dE", "E_dE", 150, 0, 410, 150, 0, 8); 
 	TpPp = new TH2D("Theta_Phi", "Theta_Phi", 150, 15, 160, 450, -180, 180);
 	TpdE = new TH2D("Theta_dE", "Theta_dE", 150, 15, 160, 150, 0, 8);
+	dE1_dE2 = new TH2D("dE1_dE2", "dE1_dE2",150, 0, 8, 150, 0, 8);
         //EpdELow = new TH2D("E_dE_Low", "E_dE_Low", 150, 0, 500, 150, 0.5, 1.7);
 	//EpdEHigh = new TH2D("E_dE_High", "E_dE_High", 150, 0, 200, 150, 1.7, 4.1);
 	//TpdELow = new TH2D("Theta_dE_Low", "Theta_dE_Low", 150, 15, 160, 150, 0.5, 1.5);
