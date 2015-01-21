@@ -9,9 +9,6 @@ using namespace std;
 
 #include "PPhysics.h"
 
-//This may not actually have all of the required things and may need to change defintion of variables
-//E.g. change names to things we need
-
 class	DGammaAnalysis : public PPhysics
 {
 private:
@@ -43,7 +40,6 @@ private:
 	TH2*    TpdE;
 	TH2*    TpdELow;
         TH2*    TpdEHigh;
-	TH2*    PVXdE;
 	Int_t 	N_P;
 		
 protected:

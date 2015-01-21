@@ -2,8 +2,8 @@
 
 #include "DGammaAnalysis.h"
 
-// Heavily altered version of PPi0Example.cc, unsure if "Reconstruction" and "Post Reconstruction" steps needed in this case
-// Also unsure as to what exactly the "Analyse" step is doing
+// Heavily altered version of PPi0Example.cc
+// Unsure as to what exactly the "Analyse" step is doing
 
 int main(int argc, char *argv[])
 {
@@ -339,13 +339,11 @@ void	DGammaAnalysis::Reconstruct() //Starts at event 0 so 0 - X events hence ext
 			PVZ->Fill(GoATTree_GetWC_Vertex_Z(i));
 			EpdE->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
 			TpPp->Fill(GoATTree_GetTheta(i), GoATTree_GetPhi(i)); 
-			TpdE->Fill(GoATTree_GetTheta(i),GoATTree_Get_dE(i)); //May be interesting?
-			//PVXdE->Fill(GoATTree_GetWC_Vertex_X(i), GoATTree_Get_dE(i)); // Doesn't really show anything?
-			//Do some scalar/vector products? What next, what do we want next?
+			TpdE->Fill(GoATTree_GetTheta(i),GoATTree_Get_dE(i)); 
 
 			//if(GoATTree_Get_dE(i) <1.6){
 			//  EpdELow->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
-			// TpdELow->Fill(GoATTree_GetTheta(i),GoATTree_Get_dE(i));
+			//  TpdELow->Fill(GoATTree_GetTheta(i),GoATTree_Get_dE(i));
 			//  PVXLow->Fill(GoATTree_GetWC_Vertex_X(i));
 			//  PVYLow->Fill(GoATTree_GetWC_Vertex_Y(i));
 			//  PVZLow->Fill(GoATTree_GetWC_Vertex_Z(i));
@@ -381,7 +379,7 @@ void	DGammaAnalysis::DefineHistograms()
 {
  	gROOT->cd();
        
-	PEp = new TH1D("P_Ep", "P_Ep", 150, 0, 600);
+	PEp = new TH1D("P_Ep", "P_Ep", 150, 0, 410);
 	PTheta = new TH1D("P_Theta", "P_Theta", 150, 15, 160);
 	PPhi = new TH1D("PPhi", "PPhi", 450, -180, 180);
 	//PThetaLow = new TH1D("P_Theta_Low", "P_Theta_Low", 150, 15, 160);
@@ -394,10 +392,9 @@ void	DGammaAnalysis::DefineHistograms()
 	PVX = new TH1D("X_Vertex", "X_Vertex", 200,-50, 50);
 	PVY = new TH1D("Y_Vertex", "Y_Vertex", 200, -60 , 60);
 	PVZ = new TH1D("Z_Vertex", "Z_Vertex", 200, -150, 150);	
-	EpdE = new TH2D("E_dE", "E_dE", 150, 0, 410, 150, 0.75, 8); 
+	EpdE = new TH2D("E_dE", "E_dE", 150, 0, 410, 150, 0, 8); 
 	TpPp = new TH2D("Theta_Phi", "Theta_Phi", 150, 15, 160, 450, -180, 180);
-	TpdE = new TH2D("Theta_dE", "Theta_dE", 150, 15, 160, 150, 1, 8);
-	PVXdE = new TH2D("X_Vertex_dE", "X_Vertex_dE", 200, -50, 50, 150, 0, 5);
+	TpdE = new TH2D("Theta_dE", "Theta_dE", 150, 15, 160, 150, 0, 8);
         //EpdELow = new TH2D("E_dE_Low", "E_dE_Low", 150, 0, 500, 150, 0.5, 1.7);
 	//EpdEHigh = new TH2D("E_dE_High", "E_dE_High", 150, 0, 200, 150, 1.7, 4.1);
 	//TpdELow = new TH2D("Theta_dE_Low", "Theta_dE_Low", 150, 15, 160, 150, 0.5, 1.5);
