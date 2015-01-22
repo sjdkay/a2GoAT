@@ -33,6 +33,7 @@ private:
 	//TH1*    PVZHigh;
 	TH1*    nTAPS;
 	TH1*    PEpTot;
+	TH1*    PEpTot_2;
 	TH2* 	EpEg;	
 	TH2*    EpTp;
 	TH2*    EpdE;
@@ -44,6 +45,11 @@ private:
 	TH2*    dE1_dE2;
 	TH2*    Ep1_Ep2;
 	TH2*    PVZ1_PVZ2;
+	TH2*    PTheta1_PTheta2;
+	TH2*    dE1_dE2_2;
+	TH2*    Ep1_Ep2_2;
+	TH2*    PVZ1_PVZ2_2;
+	TH2*    PTheta1_PTheta2_2;	
 	//TH2*    TpdELow;
         //TH2*    TpdEHigh;
 	Int_t 	N_P;
