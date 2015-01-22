@@ -314,7 +314,7 @@ void	DGammaAnalysis::Analyse()
 
 void	DGammaAnalysis::Reconstruct() //Starts at event 0 so 0 - X events hence extra two protons
 {
-  	if(GetGoATEvent() == 0) N_P = 0;
+  if(GetGoATEvent() == 0) N_P = 0;
 		else if(GetGoATEvent() % 1000 == 0) cout << "Event: "<< GetGoATEvent() << " Total Protons found: " << N_P << endl;
 	    
 		for (Int_t i = 0; i < GoATTree_GetNParticles(); i++)
@@ -340,13 +340,15 @@ void	DGammaAnalysis::Reconstruct() //Starts at event 0 so 0 - X events hence ext
 			nTAPS->Fill(GetBaF2_PbWO4_Hits(i));
 			EpdE->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
 			TpPp->Fill(GoATTree_GetTheta(i), GoATTree_GetPhi(i)); 
-			TpdE->Fill(GoATTree_GetTheta(i),GoATTree_Get_dE(i)); 
-			
-			if((i % 2) == 0){
-			  int j = (i-1); // Doesn't work at the moment, need to fix
-			  cout<<(GoATTree_GetEk(i))<<"    "<< (GoATTree_GetEk(j))<<endl;
-			  PEpTot->Fill(((GoATTree_GetEk(i))+ (GoATTree_GetEk(j))));
-			  dE1_dE2->Fill(GoATTree_Get_dE(j), GoATTree_Get_dE(i));
+			TpdE->Fill(GoATTree_GetTheta(i),GoATTree_Get_dE(i));
+			EpPVZ->Fill(GoATTree_GetEk(i), GoATTree_GetWC_Vertex_Z(i));
+
+			if((i % 2) != 0){
+			  PEpTot->Fill(((GoATTree_GetEk(i)) + (GoATTree_GetEk(i-1))));
+			  dE1_dE2->Fill(GoATTree_Get_dE(i-1), GoATTree_Get_dE(i));
+			  Ep1_Ep2->Fill(GoATTree_GetEk(i-1), GoATTree_GetEk(i));
+			  PVZ1_PVZ2->Fill(GoATTree_GetWC_Vertex_Z(i-1),GoATTree_GetWC_Vertex_Z(i));
+			  //cout<<GoATTree_GetEk(i-1)<<"    "<<GoATTree_GetEk(i)<<"   "<<i<<"    "<< i-1<<endl;
 			}
 
 			//if(GoATTree_Get_dE(i) <1.6){
@@ -405,7 +407,10 @@ void	DGammaAnalysis::DefineHistograms()
 	EpdE = new TH2D("E_dE", "E_dE", 150, 0, 410, 150, 0, 8); 
 	TpPp = new TH2D("Theta_Phi", "Theta_Phi", 150, 15, 160, 450, -180, 180);
 	TpdE = new TH2D("Theta_dE", "Theta_dE", 150, 15, 160, 150, 0, 8);
-	dE1_dE2 = new TH2D("dE1_dE2", "dE1_dE2",150, 0, 8, 150, 0, 8);
+	EpPVZ = new TH2D("Ep_Z_Vertex", "Ep_Z_Vertex", 150, 0, 450, 200, -150, 150);
+	dE1_dE2 = new TH2D("dE1_dE2", "dE1_dE2",300, 0, 8, 300, 0, 8);
+	Ep1_Ep2 = new TH2D("Ep1_Ep2", "Ep1_Ep2",150, 0, 450, 150, 0, 450);
+	PVZ1_PVZ2 = new TH2D("Z_Vertex1_Z_Vertex2","Z_Vertex1_Z_Vertex2", 400, -150, 150, 400, -150, 150);
         //EpdELow = new TH2D("E_dE_Low", "E_dE_Low", 150, 0, 500, 150, 0.5, 1.7);
 	//EpdEHigh = new TH2D("E_dE_High", "E_dE_High", 150, 0, 200, 150, 1.7, 4.1);
 	//TpdELow = new TH2D("Theta_dE_Low", "Theta_dE_Low", 150, 15, 160, 150, 0.5, 1.5);

@@ -40,10 +40,14 @@ private:
 	//TH2*    EpdEHigh;	
 	TH2*    TpPp;
 	TH2*    TpdE;
+	TH2*    EpPVZ;
 	TH2*    dE1_dE2;
+	TH2*    Ep1_Ep2;
+	TH2*    PVZ1_PVZ2;
 	//TH2*    TpdELow;
         //TH2*    TpdEHigh;
 	Int_t 	N_P;
+	Int_t   j;
 		
 protected:
 
