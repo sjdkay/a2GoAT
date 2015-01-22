@@ -138,7 +138,7 @@ int main(int argc, char *argv[])
 	if(pre_in.length() != 0)  	cout << "Input prefix:     '" << pre_in << "' chosen" << endl;
 	else { pre_in = "GoAT"; 	cout << "Input prefix:     '" << pre_in << "' chosen by default" << endl; }
 	if(pre_out.length() != 0)  	cout << "Output prefix:    '" << pre_out << "' chosen" << endl;	
-	else { pre_out = "Proton"; 	cout << "Output prefix:    '" << pre_out << "' chosen by default" << endl; }
+	else { pre_out = "Physics"; 	cout << "Output prefix:    '" << pre_out << "' chosen by default" << endl; }
 	cout << endl;
 	
 	// Perform full initialisation 
@@ -266,17 +266,19 @@ Bool_t	DGammaAnalysis::Init(const char* configfile)
 	// Set by user in the future...
 	SetTarget(1875.6);
 	
-	Double_t Prompt_low 	=  -20;
-	Double_t Prompt_high 	=   15;
-	Double_t Random_low1 	= -100;
-	Double_t Random_high1 	=  -40;
-	Double_t Random_low2 	=   35;
-	Double_t Random_high2 	=   95;
+	//	Double_t Prompt_low 	=  -20;
+	//	Double_t Prompt_high 	=   15;
+	//	Double_t Random_low1 	= -100;
+	//	Double_t Random_high1 	=  -40;
+	//	Double_t Random_low2 	=   35;
+	//	Double_t Random_high2 	=   95;
 	
-	SetPromptWindow(Prompt_low, Prompt_high);
-	SetRandomWindow1(Random_low1, Random_high1);
-	SetRandomWindow2(Random_low2, Random_high2);
-	SetPvRratio();
+	//	SetPromptWindow(Prompt_low, Prompt_high);
+	//	SetRandomWindow1(Random_low1, Random_high1);
+	//	SetRandomWindow2(Random_low2, Random_high2);
+	//	SetPvRratio();
+
+	//Prompt and random ratios needed for some things in PPhysics class? Not currently used
 
 	return kTRUE;
 }
@@ -391,28 +393,6 @@ void	DGammaAnalysis::Reconstruct() //Starts at event 0 so 0 - X events hence ext
 
 			  //cout<<GoATTree_GetEk(i-1)<<"    "<<GoATTree_GetEk(i)<<"   "<<GoATTree_Get_dE(i-1)<<"    "<<GoATTree_Get_dE(i)<<"    "<<GoATTree_GetWC_Vertex_Z(i-1)<<"    "<<GoATTree_GetWC_Vertex_Z(i)<<endl;
 			}
-
-		
-
-			//if(GoATTree_Get_dE(i) <1.6){
-			//  EpdELow->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
-			//  TpdELow->Fill(GoATTree_GetTheta(i),GoATTree_Get_dE(i));
-			//  PVXLow->Fill(GoATTree_GetWC_Vertex_X(i));
-			//  PVYLow->Fill(GoATTree_GetWC_Vertex_Y(i));
-			//  PVZLow->Fill(GoATTree_GetWC_Vertex_Z(i));
-			//  PThetaLow->Fill(GoATTree_GetTheta(i));
-			//  PPhiLow->Fill(GoATTree_GetPhi(i));
-			//	}
-
-		//else if (GoATTree_Get_dE(i) >1.6){
-		// EpdEHigh->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
-		// TpdEHigh->Fill(GoATTree_GetTheta(i),GoATTree_Get_dE(i));
-		// PVXHigh->Fill(GoATTree_GetWC_Vertex_X(i));
-		// PVYHigh->Fill(GoATTree_GetWC_Vertex_Y(i));
-		// PVZHigh->Fill(GoATTree_GetWC_Vertex_Z(i));
-		// PThetaHigh->Fill(GoATTree_GetTheta(i));
-		// PPhiHigh->Fill(GoATTree_GetPhi(i));
-		//	}
 	}
 }
 
@@ -437,17 +417,13 @@ void	DGammaAnalysis::DefineHistograms()
 	PPhi = new TH1D("PPhi", "PPhi", 450, -180, 180);
 	PEpTot = new TH1D("P_Ep_Total", "P_Ep_Total", 300, 0, 900);
 	PEpTot_2 = new TH1D("P_Ep_Total2", "P_Ep_Total2", 300, 0, 900);
-	//PThetaLow = new TH1D("P_Theta_Low", "P_Theta_Low", 150, 15, 160);
-	//PPhiLow = new TH1D("PPhi_Low", "PPhi_Low", 450, -180, 180);	
-	//PThetaHigh = new TH1D("P_Theta_High", "P_Theta_High", 150, 15, 160);
-	//PPhiHigh = new TH1D("PPhi_High", "PPhi_High", 450, -180, 180);
 	PEg = new TH1D("photonbeam_E", "photonbeam_E", 200, 100, 900);
 	EpEg = new TH2D("EpEg", "EpEg", 150, 0, 410, 200, 100, 900);
 	EpTp = new TH2D("EpTp", "EpTp", 150 ,0, 410, 150, 15, 160);
 	PVX = new TH1D("X_Vertex", "X_Vertex", 200,-50, 50);
 	PVY = new TH1D("Y_Vertex", "Y_Vertex", 200, -60 , 60);
 	PVZ = new TH1D("Z_Vertex", "Z_Vertex", 200, -300, 300);	
-	nTAPS = new TH1D("TAPS_Hits", "TAPS_Hits", 200, 0, 50);
+	nTAPS = new TH1D("TAPS_Hits", "TAPS_Hits", 5, 0, 10);
 	EpdE = new TH2D("E_dE", "E_dE", 150, 0, 410, 150, 0, 8); 
 	TpPp = new TH2D("Theta_Phi", "Theta_Phi", 150, 15, 160, 450, -180, 180);
 	TpdE = new TH2D("Theta_dE", "Theta_dE", 150, 15, 160, 150, 0, 8);
@@ -459,17 +435,7 @@ void	DGammaAnalysis::DefineHistograms()
         dE1_dE2_2 = new TH2D("dE1_dE2_2", "dE1_dE2_2",300, 0, 8, 300, 0, 8);
 	Ep1_Ep2_2 = new TH2D("Ep1_Ep2_2", "Ep1_Ep2_2",150, 0, 450, 150, 0, 450);
 	PVZ1_PVZ2_2 = new TH2D("Z_Vertex1_Z_Vertex2_2","Z_Vertex1_Z_Vertex2_2", 400, -300, 300, 400, -300, 300);
-	PTheta1_PTheta2_2 = new TH2D("Theta1_Theta2_2", "Theta1_Theta2_2", 150, 0, 180, 150, 0, 180);
-        //EpdELow = new TH2D("E_dE_Low", "E_dE_Low", 150, 0, 500, 150, 0.5, 1.7);
-	//EpdEHigh = new TH2D("E_dE_High", "E_dE_High", 150, 0, 200, 150, 1.7, 4.1);
-	//TpdELow = new TH2D("Theta_dE_Low", "Theta_dE_Low", 150, 15, 160, 150, 0.5, 1.5);
-	//TpdEHigh = new TH2D("Theta_dE_High", "Theta_dE_High", 150, 15, 160, 150, 1.5, 4.1);
-	//PVXLow = new TH1D("X_Vertex_Low", "X_Vertex_Low", 200,-50, 50);
-      	//PVYLow = new TH1D("Y_Vertex_Low", "Y_Vertex_Low", 200, -60 , 60);
-	//PVZLow = new TH1D("Z_Vertex_Low", "Z_Vertex_Low", 200, -150, 150);	
-	//PVXHigh = new TH1D("X_Vertex_High", "X_Vertex_High", 200,-50, 50);
-	//PVYHigh = new TH1D("Y_Vertex_High", "Y_Vertex_High", 200, -60 , 60);
-	//PVZHigh = new TH1D("Z_Vertex_High", "Z_Vertex_High", 200, -150, 150);	
+	PTheta1_PTheta2_2 = new TH2D("Theta1_Theta2_2", "Theta1_Theta2_2", 150, 0, 180, 150, 0, 180);	
 	
 }
 

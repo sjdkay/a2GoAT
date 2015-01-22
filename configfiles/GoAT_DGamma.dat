@@ -16,8 +16,8 @@ CheckCBStability: 1
 Do-Particle-Reconstruction: 1
 
 Do-Charged-Particle-Reconstruction: 1
-Cut-dE-E-CB-Proton: 	configfiles/cuts/CB_DeltaE-E_ProtonNew.root Proton
-Cut-dE-E-CB-Pion:    	configfiles/cuts/CB_DeltaE-E_PionNew.root Pion
+Cut-dE-E-CB-Proton: 	configfiles/cuts/CB_DeltaE-E_ProtonHigh.root Proton
+Cut-dE-E-CB-Pion:    	configfiles/cuts/CB_DeltaE-E_PionHigh.root Pion
 Cut-dE-E-TAPS-Pion: 	configfiles/cuts/TAPS_DeltaE-E.root	CutPiplus
 Cut-dE-E-TAPS-Proton: 	configfiles/cuts/TAPS_DeltaE-E.root CutProton
 Cut-dE-E-TAPS-Electron: configfiles/cuts/TAPS_DeltaE-E.root CutElectron
