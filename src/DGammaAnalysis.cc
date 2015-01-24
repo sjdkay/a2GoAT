@@ -306,7 +306,11 @@ void	DGammaAnalysis::Analyse()
 {
 
   TraverseGoATEntries();
-  	cout << "Total Protons found: " << N_P << endl << endl;
+  cout << "Total Protons found: " << N_P <<" ... after removing equal dE: "<< (N_P2 * 2) << endl;
+  Diff = ((N_P)-(N_P2 * 2));
+  DiffD = double (Diff);
+  N_PD = double (N_P);
+  cout << "Percentage of events lost after removing equal dE events: " << (DiffD/N_PD)*100 << " %" << endl;
 	
   	PostReconstruction();		
   	WriteHistograms();
@@ -316,8 +320,8 @@ void	DGammaAnalysis::Analyse()
 
 void	DGammaAnalysis::Reconstruct() //Starts at event 0 so 0 - X events hence extra two protons
 {
-  if(GetGoATEvent() == 0) N_P = 0;
-		else if(GetGoATEvent() % 1000 == 0) cout << "Event: "<< GetGoATEvent() << " Total Protons found: " << N_P << endl;
+  if(GetGoATEvent() == 0) N_P = 0, N_P2 = 0;
+  else if(GetGoATEvent() % 1000 == 0) cout << "Event: "<< GetGoATEvent() << " Total Protons found: " << N_P << " ... after removing equal dE: "<<(N_P2 * 2)<< endl;
 	    
 		for (Int_t i = 0; i < GoATTree_GetNParticles(); i++)
 		  {
@@ -329,37 +333,32 @@ void	DGammaAnalysis::Reconstruct() //Starts at event 0 so 0 - X events hence ext
 		// Check Charge: Not +1, continue
 			if (GoATTree_GetCharge(i) != 1) continue;
 			
-			//Fill some histograms with events
-			//PEp->Fill(GoATTree_GetEk(i));
-			//PEg->Fill(GetPhotonBeam_E(i));
-			//PTheta->Fill(GoATTree_GetTheta(i));
-		       	//PPhi->Fill(GoATTree_GetPhi(i));
-			//EpEg->Fill(GoATTree_GetEk(i),GetPhotonBeam_E(i));
-			//EpTp->Fill(GoATTree_GetEk(i), GoATTree_GetTheta(i));
-			//PVX->Fill(GoATTree_GetWC_Vertex_X(i));
-			//PVY->Fill(GoATTree_GetWC_Vertex_Y(i));
-			//PVZ->Fill(GoATTree_GetWC_Vertex_Z(i));
-			//nTAPS->Fill(GetBaF2_PbWO4_Hits(i));
-			//EpdE->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
-			//TpPp->Fill(GoATTree_GetTheta(i), GoATTree_GetPhi(i)); 
-			//TpdE->Fill(GoATTree_GetTheta(i),GoATTree_Get_dE(i));
-			//EpPVZ->Fill(GoATTree_GetEk(i), GoATTree_GetWC_Vertex_Z(i));
+			//if (GoATTree_Get_dE(i) == GoATTree_Get_dE(i-1)) continue;
+		       
+		        //if (GoATTree_Get_dE(i) == GoATTree_Get_dE(i+1)) continue;
 
-			if((i % 2) != 0){ //If loop only selects odd numbers, i.e the second proton, first is particle 0, second is particle 1
-			  PEpTot->Fill(((GoATTree_GetEk(i)) + (GoATTree_GetEk(i-1))));
-			  dE1_dE2->Fill(GoATTree_Get_dE(i-1), GoATTree_Get_dE(i)); //Some events seem to have the same dE for each proton?
-			  Ep1_Ep2->Fill(GoATTree_GetEk(i-1), GoATTree_GetEk(i));
-			  PVZ1_PVZ2->Fill(GoATTree_GetWC_Vertex_Z(i-1),GoATTree_GetWC_Vertex_Z(i));
-			  PTheta1_PTheta2->Fill(GoATTree_GetTheta(i-1), GoATTree_GetTheta(i));
+			// At this point all of the equal dE events should be filtered out
+			// Try copying up the histogram filling bit to here and see if it works
+
+			// Want the non comparison histograms filled here ideally, need to filter out dE1 = dE2 events prior to reaching this point
+			
+			EpdE_2->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));// Original banana without removing any events
+
+			if((i % 2) != 0){ // If loop only selects odd numbers, i.e the second proton, first is particle 0, second is particle 1
+			  PEpTot_2->Fill(((GoATTree_GetEk(i)) + (GoATTree_GetEk(i-1)))); // These histograms include events where dE1 dE2
+			  dE1_dE2_2->Fill(GoATTree_Get_dE(i-1), GoATTree_Get_dE(i)); // These events should probably be discarded prior to this
+			  Ep1_Ep2_2->Fill(GoATTree_GetEk(i-1), GoATTree_GetEk(i)); // These are here now only as comparisons
+			  PVZ1_PVZ2_2->Fill(GoATTree_GetWC_Vertex_Z(i-1),GoATTree_GetWC_Vertex_Z(i));
+			  PTheta1_PTheta2_2->Fill(GoATTree_GetTheta(i-1), GoATTree_GetTheta(i));
 			  
 			  if(GoATTree_Get_dE(i-1) != GoATTree_Get_dE(i)){
 			     
-			  PEpTot_2->Fill(((GoATTree_GetEk(i)) + (GoATTree_GetEk(i-1))));
-			  dE1_dE2_2->Fill(GoATTree_Get_dE(i-1), GoATTree_Get_dE(i)); //Some events seem to have the same dE for each proton?
-			  Ep1_Ep2_2->Fill(GoATTree_GetEk(i-1), GoATTree_GetEk(i));
-			  PVZ1_PVZ2_2->Fill(GoATTree_GetWC_Vertex_Z(i-1),GoATTree_GetWC_Vertex_Z(i));
-			  PTheta1_PTheta2_2->Fill(GoATTree_GetTheta(i-1), GoATTree_GetTheta(i));
-			  //Probably a better way to do this - i.e. filter out equal dE events prior to going through all events, skips need for this if loop then too
+			  PEpTot->Fill(((GoATTree_GetEk(i)) + (GoATTree_GetEk(i-1))));
+			  dE1_dE2->Fill(GoATTree_Get_dE(i-1), GoATTree_Get_dE(i));
+			  Ep1_Ep2->Fill(GoATTree_GetEk(i-1), GoATTree_GetEk(i));
+			  PVZ1_PVZ2->Fill(GoATTree_GetWC_Vertex_Z(i-1),GoATTree_GetWC_Vertex_Z(i));
+			  PTheta1_PTheta2->Fill(GoATTree_GetTheta(i-1), GoATTree_GetTheta(i));
+			  // Probably a better way to do this - i.e. filter out equal dE events prior to going through all events, skips need for this if loop then too
 			  PEp->Fill(GoATTree_GetEk(i));
 			  PEg->Fill(GetPhotonBeam_E(i));
 			  PTheta->Fill(GoATTree_GetTheta(i));
@@ -388,6 +387,7 @@ void	DGammaAnalysis::Reconstruct() //Starts at event 0 so 0 - X events hence ext
 			  TpPp->Fill(GoATTree_GetTheta(i-1), GoATTree_GetPhi(i-1)); 
 			  TpdE->Fill(GoATTree_GetTheta(i-1),GoATTree_Get_dE(i-1));
 			  EpPVZ->Fill(GoATTree_GetEk(i-1), GoATTree_GetWC_Vertex_Z(i-1));
+			  N_P2++;
 			   
 			  }
 
@@ -432,6 +432,7 @@ void	DGammaAnalysis::DefineHistograms()
 	Ep1_Ep2 = new TH2D("Ep1_Ep2", "Ep1_Ep2",150, 0, 450, 150, 0, 450);
 	PVZ1_PVZ2 = new TH2D("Z_Vertex1_Z_Vertex2","Z_Vertex1_Z_Vertex2", 400, -300, 300, 400, -300, 300);
 	PTheta1_PTheta2 = new TH2D("Theta1_Theta2", "Theta1_Theta2", 150, 0, 180, 150, 0, 180);
+	EpdE_2 = new TH2D("E_dE_2", "E_dE_2", 150, 0, 410, 150, 0, 8);
         dE1_dE2_2 = new TH2D("dE1_dE2_2", "dE1_dE2_2",300, 0, 8, 300, 0, 8);
 	Ep1_Ep2_2 = new TH2D("Ep1_Ep2_2", "Ep1_Ep2_2",150, 0, 450, 150, 0, 450);
 	PVZ1_PVZ2_2 = new TH2D("Z_Vertex1_Z_Vertex2_2","Z_Vertex1_Z_Vertex2_2", 400, -300, 300, 400, -300, 300);

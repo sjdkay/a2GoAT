@@ -26,7 +26,8 @@ private:
 	TH1*    PEpTot_2;
 	TH2* 	EpEg;	
 	TH2*    EpTp;
-	TH2*    EpdE;	
+	TH2*    EpdE;
+	TH2*    EpdE_2;
 	TH2*    TpPp;
 	TH2*    TpdE;
 	TH2*    EpPVZ;
@@ -39,6 +40,10 @@ private:
 	TH2*    PVZ1_PVZ2_2;
 	TH2*    PTheta1_PTheta2_2;	
 	Int_t 	N_P;
+	Int_t   N_P2;
+	Int_t   Diff;
+	Double_t N_PD;
+	Double_t DiffD;
 	Int_t   j;
 		
 protected:
