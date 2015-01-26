@@ -14,6 +14,9 @@ class	DGammaAnalysis : public PPhysics
 private:
 
 	Double_t time;
+	Double_t N_PD;
+	Double_t DiffD;
+	
 	TH1*    PTheta;
 	TH1*    PPhi;
 	TH1*    PEp;
@@ -23,9 +26,14 @@ private:
 	TH1*    PVZ;
 	TH1*    nTAPS;
 	TH1*    PEpTot;
+	TH1*    PPhiDiff;
+	TH1*    Eg_Epsum;
+	
 	TH2* 	EpEg;	
 	TH2*    EpTp;
 	TH2*    EpdE;
+	TH2*    EpdE_HighEg;
+	TH2*    EpdE_LowEg;	
 	TH2*    TpPp;
 	TH2*    TpdE;
 	TH2*    EpPVZ;
@@ -33,12 +41,19 @@ private:
 	TH2*    Ep1_Ep2;
 	TH2*    PVZ1_PVZ2;
 	TH2*    PTheta1_PTheta2;
+	TH2*    Ep1dE1;
+	TH2*    Ep2dE2;
+	
+	
 	Int_t 	N_P;
 	Int_t   N_P2;
 	Int_t   Diff;
-	Double_t N_PD;
-	Double_t DiffD;
-	Int_t   j;
+
+	TLorentzVector GV1;
+	TLorentzVector GV2;
+	TLorentzVector sum;
+	TLorentzVector sumBoost;
+	
 		
 protected:
 

@@ -306,11 +306,11 @@ void	DGammaAnalysis::Analyse()
 {
 
   TraverseGoATEntries();
-  cout << "Total Protons found: " << N_P <<" ... after removing equal dE: "<< (N_P2) << endl;
+  cout << "Total Protons found: " << N_P <<" ... after cuts: "<< (N_P2) << endl;
   Diff = ((N_P)-(N_P2));
   DiffD = double (Diff);
   N_PD = double (N_P);
-  cout << "Percentage of events lost after removing equal dE events: " << (DiffD/N_PD)*100 << " %" << endl;
+  cout << "Percentage of events lost after cuts: " << (DiffD/N_PD)*100 << " %" << endl;
 	
   	PostReconstruction();		
   	WriteHistograms();
@@ -318,10 +318,10 @@ void	DGammaAnalysis::Analyse()
 
 }
 
-void	DGammaAnalysis::Reconstruct() //Starts at event 0 so 0 - X events hence extra two protons
+void	DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence extra two protons
 {
   if(GetGoATEvent() == 0) N_P = 0, N_P2 = 0;
-  else if(GetGoATEvent() % 1000 == 0) cout << "Event: "<< GetGoATEvent() << " Total Protons found: " << N_P << " ... after removing equal dE: "<<(N_P2)<< endl;
+  else if(GetGoATEvent() % 1000 == 0) cout << "Event: "<< GetGoATEvent() << " Total Protons found: " << N_P << " ... after cuts: "<<N_P2<< endl;
 	    
 		for (Int_t i = 0; i < GoATTree_GetNParticles(); i++)
 		  {
@@ -337,8 +337,22 @@ void	DGammaAnalysis::Reconstruct() //Starts at event 0 so 0 - X events hence ext
 
 			// Check if dE above or below equal, if so continue
 
-			if (GoATTree_Get_dE(i) == GoATTree_Get_dE(i-1)) continue;
-			if (GoATTree_Get_dE(i) == GoATTree_Get_dE(i+1)) continue;
+			if (GoATTree_Get_dE(0) == GoATTree_Get_dE(1)) continue;
+
+			// Check that if one backward, other forward
+			
+			if (GoATTree_GetTheta(0) < 90){
+			if (GoATTree_GetTheta(1) < 90) continue;
+			}
+			
+			if (GoATTree_GetTheta(0) > 90){
+			if (GoATTree_GetTheta(1) > 90) continue;
+			}
+
+			// Remove events that are not approx back to back
+
+			if ((abs(GoATTree_GetPhi(0) - GoATTree_GetPhi(1))) > 200) continue;
+			if ((abs(GoATTree_GetPhi(0) - GoATTree_GetPhi(1))) < 160) continue;
 
 			PEp->Fill(GoATTree_GetEk(i));
 			PEg->Fill(GetPhotonBeam_E(i));
@@ -349,28 +363,42 @@ void	DGammaAnalysis::Reconstruct() //Starts at event 0 so 0 - X events hence ext
 			PVX->Fill(GoATTree_GetWC_Vertex_X(i));
 			PVY->Fill(GoATTree_GetWC_Vertex_Y(i));
 			PVZ->Fill(GoATTree_GetWC_Vertex_Z(i));
-			//nTAPS->Fill(GetBaF2_PbWO4_Hits(i));
+			// nTAPS->Fill(GetBaF2_PbWO4_Hits(i));
 			EpdE->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
 			TpPp->Fill(GoATTree_GetTheta(i), GoATTree_GetPhi(i)); 
 			TpdE->Fill(GoATTree_GetTheta(i), GoATTree_Get_dE(i));
 			EpPVZ->Fill(GoATTree_GetEk(i), GoATTree_GetWC_Vertex_Z(i));
-		        N_P2++;	
-	
+			N_P2++;	
+			
+			if(GetPhotonBeam_E(i) > 450) EpdE_HighEg->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i)); // 7/8 events high Eg
+			else if (GetPhotonBeam_E(i) < 450) EpdE_LowEg->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
+			
 			// If loop only selects odd numbers, i.e the second proton, first is particle 0, second is particle 1
 			// This loop is the one used to make comparison hisotgrams
-
-			if((i % 2) != 0){
-			     
+			
+			if ((i % 2) != 0){
+			  
 			  PEpTot->Fill(((GoATTree_GetEk(i)) + (GoATTree_GetEk(i-1))));
+			  PPhiDiff->Fill(abs(GoATTree_GetPhi(i) - GoATTree_GetPhi(i-1)));
 			  dE1_dE2->Fill(GoATTree_Get_dE(i-1), GoATTree_Get_dE(i));
 			  Ep1_Ep2->Fill(GoATTree_GetEk(i-1), GoATTree_GetEk(i));
 			  PVZ1_PVZ2->Fill(GoATTree_GetWC_Vertex_Z(i-1), GoATTree_GetWC_Vertex_Z(i));
-			  PTheta1_PTheta2->Fill(GoATTree_GetTheta(i-1), GoATTree_GetTheta(i)); 
-		   
-			  }
+			  PTheta1_PTheta2->Fill(GoATTree_GetTheta(i-1), GoATTree_GetTheta(i));
+			  Ep1dE1->Fill(GoATTree_GetEk(i-1), GoATTree_Get_dE(i-1));			  
+			  Ep2dE2->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
+			  Eg_Epsum->Fill((GetPhotonBeam_E(i)) - (GoATTree_GetEk(i)) - (GoATTree_GetEk(i-1)));
+			  
+			  GV1 = GetGoATVector(i-1);
+			  GV2 = GetGoATVector(i);
+			  sum = GV1 + GV2;
+			  
+			  // cout<<G1(0)<<"   "<<G2(0)<<"    "<<sum(0)<<endl;
 
 			  // cout<<GoATTree_GetEk(i-1)<<"    "<<GoATTree_GetEk(i)<<"   "<<GoATTree_Get_dE(i-1)<<"    "<<GoATTree_Get_dE(i)<<"    "<<GoATTree_GetWC_Vertex_Z(i-1)<<"    "<<GoATTree_GetWC_Vertex_Z(i)<<endl;
+			      
+			}
 		  }
+		
 }
 
 void  DGammaAnalysis::PostReconstruction()
@@ -389,25 +417,33 @@ void	DGammaAnalysis::DefineHistograms()
 {
  	gROOT->cd();
        
-	PEp = new TH1D("P_Ep", "P_Ep", 150, 0, 450);
-	PTheta = new TH1D("P_Theta", "P_Theta", 150, 0, 180);
-	PPhi = new TH1D("PPhi", "PPhi", 450, -180, 180);
+	PEp = new TH1D("P_Ep", "P_Ep", 150, 0, 500);
+	PTheta = new TH1D("P_Theta", "P_Theta", 150, 0, 85);
+	PPhi = new TH1D("PPhi", "PPhi", 500, -180, 180);
 	PEpTot = new TH1D("P_Ep_Total", "P_Ep_Total", 300, 0, 900);
+	PPhiDiff = new TH1D("Phi1-Phi2", "Phi1-Phi2", 300, 0, 360);
 	PEg = new TH1D("photonbeam_E", "photonbeam_E", 200, 100, 900);
-	EpEg = new TH2D("EpEg", "EpEg", 150, 0, 450, 200, 100, 900);
-	EpTp = new TH2D("EpTp", "EpTp", 150 ,0, 450, 150, 15, 160);
-	PVX = new TH1D("X_Vertex", "X_Vertex", 200,-50, 50);
+	PVX = new TH1D("X_Vertex", "X_Vertex", 200, -50, 50);
 	PVY = new TH1D("Y_Vertex", "Y_Vertex", 200, -60 , 60);
 	PVZ = new TH1D("Z_Vertex", "Z_Vertex", 200, -300, 300);	
+	Eg_Epsum = new TH1D("Eg - Epsum", "Eg - Epsum", 200, 0, 500);
 	//nTAPS = new TH1D("TAPS_Hits", "TAPS_Hits", 5, 0, 10);
-	EpdE = new TH2D("E_dE", "E_dE", 150, 0, 450, 150, 0, 8); 
-	TpPp = new TH2D("Theta_Phi", "Theta_Phi", 150, 15, 160, 450, -180, 180);
-	TpdE = new TH2D("Theta_dE", "Theta_dE", 150, 15, 160, 150, 0, 8);
-	EpPVZ = new TH2D("Ep_Z_Vertex", "Ep_Z_Vertex", 150, 0, 450, 200, -300, 300);
+	EpdE = new TH2D("E_dE", "E_dE", 150, 0, 500, 150, 0, 8); 
+	EpdE_HighEg = new TH2D("E_dE_HighEg", "E_dE_HighEg", 150, 0, 500, 150, 0, 8);
+	EpdE_LowEg = new TH2D("E_dE_LowEg", "E_dE_LowEg", 150, 0, 500, 150, 0, 8);
+	EpEg = new TH2D("EpEg", "EpEg", 150, 0, 500, 200, 100, 900);
+	EpTp = new TH2D("EpTp", "EpTp", 150 ,0, 500, 150, 15, 85);
+	TpPp = new TH2D("Theta_Phi", "Theta_Phi", 150, 15, 85, 500, -180, 180);
+	TpdE = new TH2D("Theta_dE", "Theta_dE", 150, 15, 85, 150, 0, 8);
+	EpPVZ = new TH2D("Ep_Z_Vertex", "Ep_Z_Vertex", 150, 0, 500, 200, -300, 300);
 	dE1_dE2 = new TH2D("dE1_dE2", "dE1_dE2", 300, 0, 8, 300, 0, 8);
-	Ep1_Ep2 = new TH2D("Ep1_Ep2", "Ep1_Ep2", 150, 0, 450, 150, 0, 450);
+	Ep1_Ep2 = new TH2D("Ep1_Ep2", "Ep1_Ep2", 150, 0, 500, 150, 0, 500);
 	PVZ1_PVZ2 = new TH2D("Z_Vertex1_Z_Vertex2","Z_Vertex1_Z_Vertex2", 400, -300, 300, 400, -300, 300);
-	PTheta1_PTheta2 = new TH2D("Theta1_Theta2", "Theta1_Theta2", 150, 0, 180, 150, 0, 180);
+	PTheta1_PTheta2 = new TH2D("Theta1_Theta2", "Theta1_Theta2", 150, 0, 85, 150, 0, 85);
+	Ep1dE1 = new TH2D("E1_dE1", "E1_dE1", 150, 0, 500, 150, 0, 8);
+	Ep2dE2 = new TH2D("E2_dE2", "E2_dE2", 150, 0, 500, 150, 0, 8);
+	
+
 }
 
 Bool_t 	DGammaAnalysis::WriteHistograms(TFile* pfile)
