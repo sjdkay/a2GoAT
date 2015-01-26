@@ -23,11 +23,9 @@ private:
 	TH1*    PVZ;
 	TH1*    nTAPS;
 	TH1*    PEpTot;
-	TH1*    PEpTot_2;
 	TH2* 	EpEg;	
 	TH2*    EpTp;
 	TH2*    EpdE;
-	TH2*    EpdE_2;
 	TH2*    TpPp;
 	TH2*    TpdE;
 	TH2*    EpPVZ;
