@@ -35,10 +35,6 @@ private:
 	TH2*    Ep1_Ep2;
 	TH2*    PVZ1_PVZ2;
 	TH2*    PTheta1_PTheta2;
-	TH2*    dE1_dE2_2;
-	TH2*    Ep1_Ep2_2;
-	TH2*    PVZ1_PVZ2_2;
-	TH2*    PTheta1_PTheta2_2;	
 	Int_t 	N_P;
 	Int_t   N_P2;
 	Int_t   Diff;
