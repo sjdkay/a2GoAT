@@ -339,17 +339,17 @@ void	DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 
 			// Cuts to remove sections of theta
 			
-			// if (GoATTree_GetTheta(0) < 90){
-			// if (GoATTree_GetTheta(1) < 90) continue;
-			// }
+			 if (GoATTree_GetTheta(0) < 90){
+			 if (GoATTree_GetTheta(1) < 90) continue;
+			 }
 
-			if (GoATTree_GetTheta(0) < 90){
-			if (GoATTree_GetTheta(1) > 90) continue;
-			}
+			 // if (GoATTree_GetTheta(0) < 90){
+			 // if (GoATTree_GetTheta(1) > 90) continue;
+			 // }
 			
-			if (GoATTree_GetTheta(0) > 90){
-			if (GoATTree_GetTheta(1) < 90) continue;
-			}
+			 // if (GoATTree_GetTheta(0) > 90){
+			 // if (GoATTree_GetTheta(1) < 90) continue;
+			 // }
 			
 			if (GoATTree_GetTheta(0) > 90){
 			if (GoATTree_GetTheta(1) > 90) continue;
@@ -361,10 +361,10 @@ void	DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 			if ((abs(GoATTree_GetPhi(0) - GoATTree_GetPhi(1))) < 160) continue;
 
 			PEp->Fill(GoATTree_GetEk(i));
-			PEg->Fill(GetPhotonBeam_E(i));
+			// PEg->Fill(GetPhotonBeam_E(i));
 			PTheta->Fill(GoATTree_GetTheta(i));
 			PPhi->Fill(GoATTree_GetPhi(i));
-			EpEg->Fill(GoATTree_GetEk(i),GetPhotonBeam_E(i));
+			// EpEg->Fill(GoATTree_GetEk(i),GetPhotonBeam_E(i));
 			EpTp->Fill(GoATTree_GetEk(i), GoATTree_GetTheta(i));
 			// PVX->Fill(GoATTree_GetWC_Vertex_X(i));
 			// PVY->Fill(GoATTree_GetWC_Vertex_Y(i));
@@ -392,13 +392,13 @@ void	DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 			  PTheta1_PTheta2->Fill(GoATTree_GetTheta(i-1), GoATTree_GetTheta(i));
 			  // Ep1dE1->Fill(GoATTree_GetEk(i-1), GoATTree_Get_dE(i-1));			  
 			  // Ep2dE2->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
-			  Eg_Epsum->Fill((GetPhotonBeam_E(i)) - (GoATTree_GetEk(i)) - (GoATTree_GetEk(i-1)));
+			  // Eg_Epsum->Fill((GetPhotonBeam_E(i)) - (GoATTree_GetEk(i)) - (GoATTree_GetEk(i-1)));
 			  
 			  GV1 = GetGoATVector(i-1);
 			  GV2 = GetGoATVector(i);
 			  sum = GV1 + GV2;
 			  
-			  //  cout<< GetPhotonBeam_E(i-1) << "    " << GetPhotonBeam_E(i) <<endl; 
+			  // cout<< GetPhotonBeam_E(i-1) << "    " << GetPhotonBeam_E(i) << "   " << GetPhotonBeam_E(i+1) << "    "<< GetPhotonBeam_E(i+2) << "     " << GetPhotonBeam_E(i+3) << endl; 
 			  // cout<<G1(0)<<"   "<<G2(0)<<"    "<<sum(0)<<endl;
 
 			  // cout<<GoATTree_GetEk(i-1)<<"    "<<GoATTree_GetEk(i)<<"   "<<GoATTree_Get_dE(i-1)<<"    "<<GoATTree_Get_dE(i)<<"    "<<GoATTree_GetWC_Vertex_Z(i-1)<<"    "<<GoATTree_GetWC_Vertex_Z(i)<<endl;
@@ -429,16 +429,16 @@ void	DGammaAnalysis::DefineHistograms()
 	PPhi = new TH1D("PPhi", "PPhi", 500, -180, 180);
 	PEpTot = new TH1D("P_Ep_Total", "P_Ep_Total", 300, 0, 900);
 	PPhiDiff = new TH1D("Phi1-Phi2", "Phi1-Phi2", 300, 0, 360);
-	PEg = new TH1D("photonbeam_E", "photonbeam_E", 200, 100, 900);
+	// PEg = new TH1D("photonbeam_E", "photonbeam_E", 200, 100, 900);
 	PVX = new TH1D("X_Vertex", "X_Vertex", 200, -50, 50);
 	PVY = new TH1D("Y_Vertex", "Y_Vertex", 200, -60 , 60);
 	PVZ = new TH1D("Z_Vertex", "Z_Vertex", 200, -300, 300);	
-	Eg_Epsum = new TH1D("Eg - Epsum", "Eg - Epsum", 100, 0, 800);
+	// Eg_Epsum = new TH1D("Eg - Epsum", "Eg - Epsum", 100, 0, 800);
 	// nTAPS = new TH1D("TAPS_Hits", "TAPS_Hits", 5, 0, 10);
 	EpdE = new TH2D("E_dE", "E_dE", 150, 0, 500, 150, 0, 8); 
 	// EpdE_HighEg = new TH2D("E_dE_HighEg", "E_dE_HighEg", 150, 0, 500, 150, 0, 8);
 	// EpdE_LowEg = new TH2D("E_dE_LowEg", "E_dE_LowEg", 150, 0, 500, 150, 0, 8);
-	EpEg = new TH2D("EpEg", "EpEg", 150, 0, 500, 200, 100, 900);
+	// EpEg = new TH2D("EpEg", "EpEg", 150, 0, 500, 200, 100, 900);
 	EpTp = new TH2D("EpTp", "EpTp", 150 ,0, 500, 150, 0, 180);
 	TpPp = new TH2D("Theta_Phi", "Theta_Phi", 150, 0, 180, 500, -180, 180);
 	TpdE = new TH2D("Theta_dE", "Theta_dE", 150, 0, 180, 150, 0, 8);
