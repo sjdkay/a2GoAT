@@ -185,7 +185,8 @@ public:
 						
 						return TLorentzVector(Px, Py, Pz, E);
 					}
-     Int_t	GetGoATEvent()	const	{return GoATEvent;}   
+
+     Int_t	GetGoATEvent()	const	{return GoATEvent;}
 };
 
 

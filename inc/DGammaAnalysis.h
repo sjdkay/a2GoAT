@@ -16,6 +16,12 @@ private:
 	Double_t time;
 	Double_t N_PD;
 	Double_t DiffD;
+
+	TH1* 	time_proton;
+	TH1* 	time_proton_cuts;	
+	TH1* 	prompt_proton;
+	TH1* 	random_proton;
+	TH1* 	proton;
 	
 	TH1*    PTheta;
 	TH1*    PPhi;
