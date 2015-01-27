@@ -143,7 +143,7 @@ public:
 	Int_t 		GoATTree_GetNParticles()				const 	{return nParticles;}
 	Int_t 		GoATTree_GetPDG(const Int_t index)		const	{return PDG[index];}
 	Int_t		GoATTree_GetNDaughters(const Int_t index)	const	{return nDaughters[index];}
-    Int_t 		GoATTree_GetCharge(const Int_t index) 	const 	{return Charge[index];}   
+	Int_t 		GoATTree_GetCharge(const Int_t index) 	const 	{return Charge[index];}   
 	Double_t	GoATTree_GetEk(const Int_t index)		const	{return Ek[index];}    
  	Double_t	GoATTree_GetTime(const Int_t index)		const	{return time[index];}
  	 		    		
