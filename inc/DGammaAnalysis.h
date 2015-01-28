@@ -16,6 +16,7 @@ private:
 	Double_t time;
 	Double_t N_PD;
 	Double_t DiffD;
+	Double_t EgPrompt;
 
 	TH1* 	time_proton;
 	TH1* 	time_proton_cuts;	
@@ -53,6 +54,8 @@ private:
 	
 	Int_t 	N_P;
 	Int_t   N_P2;
+	Int_t   N_GP;
+	Int_t   N_GR;
 	Int_t   Diff;
 
 	TLorentzVector GV1;

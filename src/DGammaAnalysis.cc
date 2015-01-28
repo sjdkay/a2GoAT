@@ -304,8 +304,8 @@ Bool_t	DGammaAnalysis::File(const char* file_in, const char* file_out)
 void	DGammaAnalysis::Analyse()
 {
 
-  TraverseGoATEntries();
-  cout << "Total Protons found: " << N_P <<" ... after cuts: "<< (N_P2) << endl;
+  TraverseGoATEntries(); //This calls the reconstruction function in it? Looks at all GoAT entries
+  cout << "Total Protons found: " << N_P <<" ... after cuts: "<< (N_P2) << "    "<< N_GP << endl;
   Diff = ((N_P)-(N_P2));
   DiffD = double (Diff);
   N_PD = double (N_P);
@@ -319,8 +319,8 @@ void	DGammaAnalysis::Analyse()
 
 void	DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence extra two protons
 {
-  if(GetGoATEvent() == 0) N_P = 0, N_P2 = 0;
-  else if(GetGoATEvent() % 1000 == 0) cout << "Event: "<< GetGoATEvent() << " Total Protons found: " << N_P << " ... after cuts: "<<N_P2<< endl;
+  if(GetGoATEvent() == 0) N_P = 0, N_P2 = 0, N_GP = 0, N_GR = 0;
+  else if(GetGoATEvent() % 1000 == 0) cout << "Event: "<< GetGoATEvent() << " Total Protons found: " << N_P << " ... after cuts: "<<N_P2 << endl;
 
   	// Fill timing histogram (all PDG matching proton)
 	FillTimePDG(pdgDB->GetParticle("proton")->PdgCode(),time_proton);
@@ -328,28 +328,51 @@ void	DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 	// Fill missing mass (all PDG matching proton)
 	MissingMassPDG(pdgDB->GetParticle("proton")->PdgCode(), prompt_proton, random_proton);
    
-		for (Int_t i = 0; i < GoATTree_GetNParticles(); i++)
+	// This for loop examines the number of tagged photons for each event and loops over them all
+
+	for (Int_t j = 0; j < GetNTagged(); j++) {
+       
+	  // This for loop loops over all the particles in an event, i.e. the # of protons
+
+	    for (Int_t i = 0; i < GoATTree_GetNParticles(); i++)
 		  {
-	                if(GoATTree_GetPDG(i) == pdgDB->GetParticle("proton")->PdgCode()) 	N_P++; 
-		
-			//Check PDG: Not proton, continue
+		    
+		    Int_t k = 0;
 
-			if (GoATTree_GetPDG(i) != pdgDB->GetParticle("proton")->PdgCode()) continue; 
-		
-			// Check Charge: Not +1, continue
+		    // At start of loop check we're only looking at events with a prompt photon
 
+		    if (IsPrompt(GetTagged_t(j), -20, 15) == kTRUE){
+	    
+		      k++;
+		      
+		      if (k > 1) {
+			cout<< "More than 1 prompt photon detected"<<endl;
+			    continue;
+		      }
+			 
+		      EgPrompt = GetPhotonBeam_E(j);
+		      //cout << GetPhotonBeam_E(j)<<"   "<< j <<endl;
+		      
+		      if(GoATTree_GetPDG(i) == pdgDB->GetParticle("proton")->PdgCode()) 	N_P++; 
+		    
+		      //Check PDG: Not proton, continue
+		    
+		      if (GoATTree_GetPDG(i) != pdgDB->GetParticle("proton")->PdgCode()) continue; 
+			
+		      // Check Charge: Not +1, continue
+		      
 			if (GoATTree_GetCharge(i) != 1) continue;
-
-			// Check if dE above or below equal, if so continue
-
+			
+			// Cut if dE for each proton equal
+			
 			if (GoATTree_Get_dE(0) == GoATTree_Get_dE(1)) continue;
-
+			
 			// Cuts to remove sections of theta
 			
-			 if (GoATTree_GetTheta(0) < 90){
-			 if (GoATTree_GetTheta(1) < 90) continue;
-			 }
-
+			if (GoATTree_GetTheta(0) < 90){
+			  if (GoATTree_GetTheta(1) < 90) continue;
+			}
+			
 			 // if (GoATTree_GetTheta(0) < 90){
 			 // if (GoATTree_GetTheta(1) > 90) continue;
 			 // }
@@ -359,67 +382,69 @@ void	DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 			 // }
 			
 			if (GoATTree_GetTheta(0) > 90){
-			if (GoATTree_GetTheta(1) > 90) continue;
-			}
-
+			   if (GoATTree_GetTheta(1) > 90) continue;
+			 }
+			
 			// Remove events that are not approx back to back
-
+			
 			if ((abs(GoATTree_GetPhi(0) - GoATTree_GetPhi(1))) > 200) continue;
 			if ((abs(GoATTree_GetPhi(0) - GoATTree_GetPhi(1))) < 160) continue;
-
-			for (Int_t j = 0; j < GetNTagged(); j++) {		 
-			  // This loops through each event and the tagger channels present in each event
-			  // Need to get this to check if each proton is random or prompt and ignore anything that's random
-			  // Once done need to do all of the stuff normally done
-			  
-			}
-
-			PEp->Fill(GoATTree_GetEk(i));
-			// PEg->Fill(GetPhotonBeam_E(i));
-			PTheta->Fill(GoATTree_GetTheta(i));
-			PPhi->Fill(GoATTree_GetPhi(i));
-			// EpEg->Fill(GoATTree_GetEk(i),GetPhotonBeam_E(i));
-			EpTp->Fill(GoATTree_GetEk(i), GoATTree_GetTheta(i));
-			// PVX->Fill(GoATTree_GetWC_Vertex_X(i));
-			// PVY->Fill(GoATTree_GetWC_Vertex_Y(i));
-			// PVZ->Fill(GoATTree_GetWC_Vertex_Z(i));
-			// nTAPS->Fill(GetBaF2_PbWO4_Hits(i));
-			EpdE->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
-			TpPp->Fill(GoATTree_GetTheta(i), GoATTree_GetPhi(i)); 
-			TpdE->Fill(GoATTree_GetTheta(i), GoATTree_Get_dE(i));
-			// EpPVZ->Fill(GoATTree_GetEk(i), GoATTree_GetWC_Vertex_Z(i));
-			N_P2++;
-
-			// if(GetPhotonBeam_E(i) > 450) EpdE_HighEg->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i)); // 7/8 events high Eg
-			// else if (GetPhotonBeam_E(i) < 450) EpdE_LowEg->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
 			
-			// If loop only selects odd numbers, i.e the second proton, first is particle 0, second is particle 1
-			// This loop is the one used to make comparison hisotgrams
-			
-			if ((i % 2) != 0){
-			  
-			  PEpTot->Fill(((GoATTree_GetEk(i)) + (GoATTree_GetEk(i-1))));
-			  PPhiDiff->Fill(abs(GoATTree_GetPhi(i) - GoATTree_GetPhi(i-1)));
-			  dE1_dE2->Fill(GoATTree_Get_dE(i-1), GoATTree_Get_dE(i));
-			  Ep1_Ep2->Fill(GoATTree_GetEk(i-1), GoATTree_GetEk(i));
-			  // PVZ1_PVZ2->Fill(GoATTree_GetWC_Vertex_Z(i-1), GoATTree_GetWC_Vertex_Z(i));
-			  PTheta1_PTheta2->Fill(GoATTree_GetTheta(i-1), GoATTree_GetTheta(i));
-			  // Ep1dE1->Fill(GoATTree_GetEk(i-1), GoATTree_Get_dE(i-1));			  
-			  // Ep2dE2->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
-			  // Eg_Epsum->Fill((GetPhotonBeam_E(i)) - (GoATTree_GetEk(i)) - (GoATTree_GetEk(i-1)));
-			  
-			  GV1 = GetGoATVector(i-1);
-			  GV2 = GetGoATVector(i);
-			  sum = GV1 + GV2;
-			  
-			  // cout<< GetPhotonBeam_E(i-1) << "    " << GetPhotonBeam_E(i) << "   " << GetPhotonBeam_E(i+1) << "    "<< GetPhotonBeam_E(i+2) << "     " << GetPhotonBeam_E(i+3) << endl; 
-			  // cout<<G1(0)<<"   "<<G2(0)<<"    "<<sum(0)<<endl;
+			// Remove events if Eg - Epsum out of a certain window
 
-			  // cout<<GoATTree_GetEk(i-1)<<"    "<<GoATTree_GetEk(i)<<"   "<<GoATTree_Get_dE(i-1)<<"    "<<GoATTree_Get_dE(i)<<"    "<<GoATTree_GetWC_Vertex_Z(i-1)<<"    "<<GoATTree_GetWC_Vertex_Z(i)<<endl;
-			      
-			}
-		  }
-		
+			 if ((EgPrompt - (GoATTree_GetEk(0)) - (GoATTree_GetEk(1))) > 200) continue;
+			 if ((EgPrompt - (GoATTree_GetEk(0)) - (GoATTree_GetEk(1))) < -100) continue;
+		       
+			  PEp->Fill(GoATTree_GetEk(i));
+			  PTheta->Fill(GoATTree_GetTheta(i));
+			  PPhi->Fill(GoATTree_GetPhi(i));
+			  // EpEg->Fill(GoATTree_GetEk(i),GetPhotonBeam_E(i));
+			  EpTp->Fill(GoATTree_GetEk(i), GoATTree_GetTheta(i));
+			  // PVX->Fill(GoATTree_GetWC_Vertex_X(i));
+			  // PVY->Fill(GoATTree_GetWC_Vertex_Y(i));
+			  // PVZ->Fill(GoATTree_GetWC_Vertex_Z(i));
+			  // nTAPS->Fill(GetBaF2_PbWO4_Hits(i));
+			  EpdE->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
+			  TpPp->Fill(GoATTree_GetTheta(i), GoATTree_GetPhi(i)); 
+			  TpdE->Fill(GoATTree_GetTheta(i), GoATTree_Get_dE(i));
+			  // EpPVZ->Fill(GoATTree_GetEk(i), GoATTree_GetWC_Vertex_Z(i));
+			  N_P2++;
+			  
+			  // if(GetPhotonBeam_E(i) > 450) EpdE_HighEg->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i)); // 7/8 events high Eg
+			  // else if (GetPhotonBeam_E(i) < 450) EpdE_LowEg->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
+			  
+			  // If loop only selects odd numbers, i.e the second proton, first is particle 0, second is particle 1
+			  // This loop is the one used to make comparison hisotgrams
+			  
+			  if ((i % 2) != 0){
+
+			    PEg->Fill(GetPhotonBeam_E(j));
+			    N_GP++;
+			  
+			    PEpTot->Fill(((GoATTree_GetEk(i)) + (GoATTree_GetEk(i-1))));
+			    PPhiDiff->Fill(abs(GoATTree_GetPhi(i) - GoATTree_GetPhi(i-1)));
+			    dE1_dE2->Fill(GoATTree_Get_dE(i-1), GoATTree_Get_dE(i));
+			    Ep1_Ep2->Fill(GoATTree_GetEk(i-1), GoATTree_GetEk(i));
+			    // PVZ1_PVZ2->Fill(GoATTree_GetWC_Vertex_Z(i-1), GoATTree_GetWC_Vertex_Z(i));
+			    PTheta1_PTheta2->Fill(GoATTree_GetTheta(i-1), GoATTree_GetTheta(i));
+			    // Ep1dE1->Fill(GoATTree_GetEk(i-1), GoATTree_Get_dE(i-1));			  
+			    // Ep2dE2->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
+			    Eg_Epsum->Fill( EgPrompt - (GoATTree_GetEk(i)) - (GoATTree_GetEk(i-1)));
+
+			    // cout<< EgPrompt << "    " << GoATTree_GetEk(0) << "    " << GoATTree_GetEk(1) << "    " << (EgPrompt - (GoATTree_GetEk(i)) - (GoATTree_GetEk(i-1))) << endl;
+			    
+			    GV1 = GetGoATVector(i-1);
+			    GV2 = GetGoATVector(i);
+			    sum = GV1 + GV2;
+			    
+			    // cout<<G1(0)<<"   "<<G2(0)<<"    "<<sum(0)<<endl;
+			    
+			    // cout<<GoATTree_GetEk(i-1)<<"    "<<GoATTree_GetEk(i)<<"   "<<GoATTree_Get_dE(i-1)<<"    "<<GoATTree_Get_dE(i)<<"    "<<GoATTree_GetWC_Vertex_Z(i-1)<<"    "<<GoATTree_GetWC_Vertex_Z(i)<<endl;
+			    
+			  }
+			}    
+		  }	    
+	}
 }
 
 void  DGammaAnalysis::PostReconstruction()
@@ -450,11 +475,11 @@ void	DGammaAnalysis::DefineHistograms()
 	PPhi = new TH1D("PPhi", "PPhi", 500, -180, 180);
 	PEpTot = new TH1D("P_Ep_Total", "P_Ep_Total", 300, 0, 900);
 	PPhiDiff = new TH1D("Phi1-Phi2", "Phi1-Phi2", 300, 0, 360);
-	// PEg = new TH1D("photonbeam_E", "photonbeam_E", 200, 100, 900);
+	PEg = new TH1D("photonbeam_E", "photonbeam_E", 200, 100, 900);
 	// PVX = new TH1D("X_Vertex", "X_Vertex", 200, -50, 50);
 	// PVY = new TH1D("Y_Vertex", "Y_Vertex", 200, -60 , 60);
 	// PVZ = new TH1D("Z_Vertex", "Z_Vertex", 200, -300, 300);	
-	// Eg_Epsum = new TH1D("Eg - Epsum", "Eg - Epsum", 100, 0, 800);
+	Eg_Epsum = new TH1D("Eg - Epsum", "Eg - Epsum", 200, -500, 800);
 	// nTAPS = new TH1D("TAPS_Hits", "TAPS_Hits", 5, 0, 10);
 
 	EpdE = new TH2D("E_dE", "E_dE", 150, 0, 500, 150, 0, 8); 
