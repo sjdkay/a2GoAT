@@ -16,14 +16,22 @@ private:
 	Double_t time;
 	Double_t N_PD;
 	Double_t DiffD;
-	Double_t EgPrompt;
 
 	TH1* 	time_proton;
 	TH1* 	time_proton_cuts;	
 	TH1* 	prompt_proton;
 	TH1* 	random_proton;
 	TH1* 	proton;
-	
+	TH1*    Eg_Epsum;
+	TH1*    Eg_EpsumPrompt;
+	TH1*    Eg_EpsumRandom;
+	TH1*	PEpPrompt;
+	TH1*    PEpRandom;
+	TH1*    PEgPrompt;
+	TH1*    PEgRandom;
+	TH1*    PEpTotPrompt;
+	TH1*    PEpTotRandom;	
+
 	TH1*    PTheta;
 	TH1*    PPhi;
 	TH1*    PEp;
@@ -34,7 +42,6 @@ private:
 	TH1*    nTAPS;
 	TH1*    PEpTot;
 	TH1*    PPhiDiff;
-	TH1*    Eg_Epsum;
 	
 	TH2* 	EpEg;	
 	TH2*    EpTp;
@@ -54,9 +61,8 @@ private:
 	
 	Int_t 	N_P;
 	Int_t   N_P2;
-	Int_t   N_GP;
-	Int_t   N_GR;
 	Int_t   Diff;
+	Int_t   k;
 
 	TLorentzVector GV1;
 	TLorentzVector GV2;

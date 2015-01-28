@@ -305,11 +305,11 @@ void	DGammaAnalysis::Analyse()
 {
 
   TraverseGoATEntries(); //This calls the reconstruction function in it? Looks at all GoAT entries
-  cout << "Total Protons found: " << N_P <<" ... after cuts: "<< (N_P2) << "    "<< N_GP << endl;
-  Diff = ((N_P)-(N_P2));
-  DiffD = double (Diff);
-  N_PD = double (N_P);
-  cout << "Percentage of events lost after cuts: " << (DiffD/N_PD)*100 << " %" << endl;
+  cout << "Total Protons found: " << N_P <<" ... after cuts: "<< (N_P2) << endl;
+   Diff = ((N_P)-(N_P2));
+   DiffD = double (Diff);
+   N_PD = double (N_P);
+   cout << "Percentage of events lost after cuts: " << (DiffD/N_PD)*100 << " %" << endl;
 	
   	PostReconstruction();		
   	WriteHistograms();
@@ -319,49 +319,38 @@ void	DGammaAnalysis::Analyse()
 
 void	DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence extra two protons
 {
-  if(GetGoATEvent() == 0) N_P = 0, N_P2 = 0, N_GP = 0, N_GR = 0;
+  if(GetGoATEvent() == 0) N_P = 0, N_P2 = 0;
   else if(GetGoATEvent() % 1000 == 0) cout << "Event: "<< GetGoATEvent() << " Total Protons found: " << N_P << " ... after cuts: "<<N_P2 << endl;
 
   	// Fill timing histogram (all PDG matching proton)
-	FillTimePDG(pdgDB->GetParticle("proton")->PdgCode(),time_proton);
+	FillTimePDG(pdgDB->GetParticle("proton")->PdgCode(), time_proton);
 
 	// Fill missing mass (all PDG matching proton)
 	MissingMassPDG(pdgDB->GetParticle("proton")->PdgCode(), prompt_proton, random_proton);
    
 	// This for loop examines the number of tagged photons for each event and loops over them all
-
+	
+	// k = 0;
+	
 	for (Int_t j = 0; j < GetNTagged(); j++) {
-       
+	  	  
+	  // if (k > 1) continue;
+	  // if (IsPrompt(GetTagged_t(j), -20, 15) == kTRUE) k++;
+							    	  
 	  // This for loop loops over all the particles in an event, i.e. the # of protons
 
 	    for (Int_t i = 0; i < GoATTree_GetNParticles(); i++)
-		  {
-		    
-		    Int_t k = 0;
-
-		    // At start of loop check we're only looking at events with a prompt photon
-
-		    if (IsPrompt(GetTagged_t(j), -20, 15) == kTRUE){
-	    
-		      k++;
-		      
-		      if (k > 1) {
-			cout<< "More than 1 prompt photon detected"<<endl;
-			    continue;
-		      }
-			 
-		      EgPrompt = GetPhotonBeam_E(j);
-		      //cout << GetPhotonBeam_E(j)<<"   "<< j <<endl;
-		      
-		      if(GoATTree_GetPDG(i) == pdgDB->GetParticle("proton")->PdgCode()) 	N_P++; 
-		    
-		      //Check PDG: Not proton, continue
+		  { 
+   
+		      // Check PDG: Not proton, continue
 		    
 		      if (GoATTree_GetPDG(i) != pdgDB->GetParticle("proton")->PdgCode()) continue; 
 			
 		      // Check Charge: Not +1, continue
 		      
 			if (GoATTree_GetCharge(i) != 1) continue;
+			
+			if (j == 0) N_P++;
 			
 			// Cut if dE for each proton equal
 			
@@ -392,59 +381,89 @@ void	DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 			
 			// Remove events if Eg - Epsum out of a certain window
 
-			 if ((EgPrompt - (GoATTree_GetEk(0)) - (GoATTree_GetEk(1))) > 200) continue;
-			 if ((EgPrompt - (GoATTree_GetEk(0)) - (GoATTree_GetEk(1))) < -100) continue;
-		       
-			  PEp->Fill(GoATTree_GetEk(i));
-			  PTheta->Fill(GoATTree_GetTheta(i));
-			  PPhi->Fill(GoATTree_GetPhi(i));
-			  // EpEg->Fill(GoATTree_GetEk(i),GetPhotonBeam_E(i));
-			  EpTp->Fill(GoATTree_GetEk(i), GoATTree_GetTheta(i));
-			  // PVX->Fill(GoATTree_GetWC_Vertex_X(i));
-			  // PVY->Fill(GoATTree_GetWC_Vertex_Y(i));
-			  // PVZ->Fill(GoATTree_GetWC_Vertex_Z(i));
-			  // nTAPS->Fill(GetBaF2_PbWO4_Hits(i));
-			  EpdE->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
-			  TpPp->Fill(GoATTree_GetTheta(i), GoATTree_GetPhi(i)); 
-			  TpdE->Fill(GoATTree_GetTheta(i), GoATTree_Get_dE(i));
-			  // EpPVZ->Fill(GoATTree_GetEk(i), GoATTree_GetWC_Vertex_Z(i));
-			  N_P2++;
-			  
-			  // if(GetPhotonBeam_E(i) > 450) EpdE_HighEg->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i)); // 7/8 events high Eg
-			  // else if (GetPhotonBeam_E(i) < 450) EpdE_LowEg->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
-			  
-			  // If loop only selects odd numbers, i.e the second proton, first is particle 0, second is particle 1
-			  // This loop is the one used to make comparison hisotgrams
-			  
-			  if ((i % 2) != 0){
+			// if ((EgPrompt - (GoATTree_GetEk(0)) - (GoATTree_GetEk(1))) > 200) continue;
+			// if ((EgPrompt - (GoATTree_GetEk(0)) - (GoATTree_GetEk(1))) < -100) continue;
 
-			    PEg->Fill(GetPhotonBeam_E(j));
-			    N_GP++;
-			  
-			    PEpTot->Fill(((GoATTree_GetEk(i)) + (GoATTree_GetEk(i-1))));
-			    PPhiDiff->Fill(abs(GoATTree_GetPhi(i) - GoATTree_GetPhi(i-1)));
-			    dE1_dE2->Fill(GoATTree_Get_dE(i-1), GoATTree_Get_dE(i));
-			    Ep1_Ep2->Fill(GoATTree_GetEk(i-1), GoATTree_GetEk(i));
-			    // PVZ1_PVZ2->Fill(GoATTree_GetWC_Vertex_Z(i-1), GoATTree_GetWC_Vertex_Z(i));
-			    PTheta1_PTheta2->Fill(GoATTree_GetTheta(i-1), GoATTree_GetTheta(i));
-			    // Ep1dE1->Fill(GoATTree_GetEk(i-1), GoATTree_Get_dE(i-1));			  
-			    // Ep2dE2->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
-			    Eg_Epsum->Fill( EgPrompt - (GoATTree_GetEk(i)) - (GoATTree_GetEk(i-1)));
+			 // Look at prompt photons for each proton
 
-			    // cout<< EgPrompt << "    " << GoATTree_GetEk(0) << "    " << GoATTree_GetEk(1) << "    " << (EgPrompt - (GoATTree_GetEk(i)) - (GoATTree_GetEk(i-1))) << endl;
-			    
-			    GV1 = GetGoATVector(i-1);
-			    GV2 = GetGoATVector(i);
-			    sum = GV1 + GV2;
-			    
-			    // cout<<G1(0)<<"   "<<G2(0)<<"    "<<sum(0)<<endl;
-			    
-			    // cout<<GoATTree_GetEk(i-1)<<"    "<<GoATTree_GetEk(i)<<"   "<<GoATTree_Get_dE(i-1)<<"    "<<GoATTree_Get_dE(i)<<"    "<<GoATTree_GetWC_Vertex_Z(i-1)<<"    "<<GoATTree_GetWC_Vertex_Z(i)<<endl;
-			    
-			  }
-			}    
-		  }	    
-	}
+			 if (IsPrompt(GetTagged_t(j), -20, 15) == kTRUE){
+			   
+			   PEpPrompt->Fill( GoATTree_GetEk(i) );
+			   N_P2++;
+
+			   if ((i % 2) != 0) {
+			     PEgPrompt->Fill( GetPhotonBeam_E(j) );
+			     Eg_EpsumPrompt->Fill( ( GetPhotonBeam_E(j) )- (GoATTree_GetEk(0) ) - ( GoATTree_GetEk(1) ) );
+			     PEpTotPrompt->Fill( (GoATTree_GetEk(0) + GoATTree_GetEk(1) ) );
+			   }
+			   //cout << GetPhotonBeam_E(j)<<"   "<< j <<endl;
+
+			 }
+
+			 // look at random photons for each proton
+
+			 else if (IsRandom(GetTagged_t(j), -100, -40, 35, 95) == kTRUE){			   
+			   
+			   PEpRandom->Fill( GoATTree_GetEk(i) );
+			   
+			   if ((i % 2) != 0) {
+			     Eg_EpsumRandom->Fill( (GetPhotonBeam_E(j))- (GoATTree_GetEk(0)) - (GoATTree_GetEk(1)));
+			     PEgRandom->Fill( GetPhotonBeam_E(j) );
+			     PEpTotRandom->Fill( (GoATTree_GetEk(0) + GoATTree_GetEk(1) ) );
+			   }
+											     
+			 }
+
+		      
+			 // PEp->Fill(GoATTree_GetEk(i));
+			 // PTheta->Fill(GoATTree_GetTheta(i));
+			 // PPhi->Fill(GoATTree_GetPhi(i));
+			 // EpEg->Fill(GoATTree_GetEk(i),GetPhotonBeam_E(i));
+			 // EpTp->Fill(GoATTree_GetEk(i), GoATTree_GetTheta(i));
+			 // PVX->Fill(GoATTree_GetWC_Vertex_X(i));
+			 // PVY->Fill(GoATTree_GetWC_Vertex_Y(i));
+			 // PVZ->Fill(GoATTree_GetWC_Vertex_Z(i));
+			 // nTAPS->Fill(GetBaF2_PbWO4_Hits(i));
+			 // EpdE->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
+			 // TpPp->Fill(GoATTree_GetTheta(i), GoATTree_GetPhi(i)); 
+			 // TpdE->Fill(GoATTree_GetTheta(i), GoATTree_Get_dE(i));
+			 // EpPVZ->Fill(GoATTree_GetEk(i), GoATTree_GetWC_Vertex_Z(i));
+			 //N_P2++;
+			 
+			 // if(GetPhotonBeam_E(i) > 450) EpdE_HighEg->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i)); // 7/8 events high Eg
+			 // else if (GetPhotonBeam_E(i) < 450) EpdE_LowEg->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
+			 
+			 // If loop only selects odd numbers, i.e the second proton, first is particle 0, second is particle 1
+			 // This loop is the one used to make comparison hisotgrams
+			 
+			 // if ((i % 2) != 0){
+			   
+			   // PEg->Fill(GetPhotonBeam_E(j));
+			   // N_GP++;
+			   
+			   // PEpTot->Fill(((GoATTree_GetEk(i)) + (GoATTree_GetEk(i-1))));
+			   // PPhiDiff->Fill(abs(GoATTree_GetPhi(i) - GoATTree_GetPhi(i-1)));
+			   // dE1_dE2->Fill(GoATTree_Get_dE(i-1), GoATTree_Get_dE(i));
+			   // Ep1_Ep2->Fill(GoATTree_GetEk(i-1), GoATTree_GetEk(i));
+			   // PVZ1_PVZ2->Fill(GoATTree_GetWC_Vertex_Z(i-1), GoATTree_GetWC_Vertex_Z(i));
+			   // PTheta1_PTheta2->Fill(GoATTree_GetTheta(i-1), GoATTree_GetTheta(i));
+			   // Ep1dE1->Fill(GoATTree_GetEk(i-1), GoATTree_Get_dE(i-1));			  
+			   // Ep2dE2->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
+			   
+			   // cout<< EgPrompt << "    " << GoATTree_GetEk(0) << "    " << GoATTree_GetEk(1) << "    " << (EgPrompt - (GoATTree_GetEk(i)) - (GoATTree_GetEk(i-1))) << endl;
+			   
+			   // GV1 = GetGoATVector(i-1);
+			   // GV2 = GetGoATVector(i);
+			   // sum = GV1 + GV2;
+			   
+			   // cout<<G1(0)<<"   "<<G2(0)<<"    "<<sum(0)<<endl;
+			   
+			   // cout<<GoATTree_GetEk(i-1)<<"    "<<GoATTree_GetEk(i)<<"   "<<GoATTree_Get_dE(i-1)<<"    "<<GoATTree_Get_dE(i)<<"    "<<GoATTree_GetWC_Vertex_Z(i-1)<<"    "<<GoATTree_GetWC_Vertex_Z(i)<<endl;
+			   
+			 // }
+			 
+		  }  
+	}	    
 }
 
 void  DGammaAnalysis::PostReconstruction()
@@ -452,9 +471,13 @@ void  DGammaAnalysis::PostReconstruction()
  
      cout << "Performing post reconstruction." << endl;
 
-  	RandomSubtraction(prompt_proton, random_proton, proton);		
+     RandomSubtraction(prompt_proton, random_proton, proton);
+     RandomSubtraction(Eg_EpsumPrompt, Eg_EpsumRandom, Eg_Epsum);
+     RandomSubtraction(PEpPrompt, PEpRandom, PEp);
+     RandomSubtraction(PEgPrompt, PEgRandom, PEg);
+     RandomSubtraction(PEpTotPrompt, PEpTotRandom, PEpTot);
 		
-  	ShowTimeCuts(time_proton, time_proton_cuts);
+     ShowTimeCuts(time_proton, time_proton_cuts);
 
 }
 
@@ -469,32 +492,42 @@ void	DGammaAnalysis::DefineHistograms()
 	prompt_proton 	= new TH1D("prompt_proton", "prompt_proton", 1500, 0, 1500);
 	random_proton 	= new TH1D("random_proton", "random_proton",1500, 0, 1500);
 	proton	      	= new TH1D("proton", "proton", 1500, 0, 1500);
-       
-	PEp = new TH1D("P_Ep", "P_Ep", 150, 0, 500);
-	PTheta = new TH1D("P_Theta", "P_Theta", 150, 0, 180);
-	PPhi = new TH1D("PPhi", "PPhi", 500, -180, 180);
+	
+	Eg_Epsum = new TH1D("Eg - Epsum", "Eg - Epsum", 100, -500, 800);
+	Eg_EpsumPrompt = new TH1D("Eg - Epsum_Prompt", "Eg - Epsum_Prompt", 100, -500, 800);
+	Eg_EpsumRandom = new TH1D("Eg - Epsum_Random", "Eg - Epsum_Random", 100, -500, 800);
+	PEp = new TH1D("P_Ep", "P_Ep", 100, 0, 500);
+	PEpPrompt = new TH1D("P_Ep_Prompt", "P_Ep_Prompt", 100, 0, 500);
+	PEpRandom = new TH1D("P_Ep_Random", "P_Ep_Random", 100, 0, 500);
+	PEg = new TH1D("photonbeam_E", "photonbeam_E", 100, 100, 900);
+	PEgPrompt = new TH1D("photonbeam_E_Prompt", "photonbeam_E_Prompt", 100, 100, 900);
+	PEgRandom = new TH1D("photonbeam_E_Random", "photonbeam_E_Random", 100, 100, 900);	
 	PEpTot = new TH1D("P_Ep_Total", "P_Ep_Total", 300, 0, 900);
-	PPhiDiff = new TH1D("Phi1-Phi2", "Phi1-Phi2", 300, 0, 360);
-	PEg = new TH1D("photonbeam_E", "photonbeam_E", 200, 100, 900);
+	PEpTotPrompt = new TH1D("P_Ep_Total_Prompt", "P_Ep_Total_Prompt", 300, 0, 900);
+	PEpTotRandom = new TH1D("P_Ep_Total_Random", "P_Ep_Total_Random", 300, 0, 900);
+
+	// PTheta = new TH1D("P_Theta", "P_Theta", 150, 0, 180);
+	// PPhi = new TH1D("PPhi", "PPhi", 500, -180, 180);
+	// PEpTot = new TH1D("P_Ep_Total", "P_Ep_Total", 300, 0, 900);
+	// PPhiDiff = new TH1D("Phi1-Phi2", "Phi1-Phi2", 300, 0, 360);
 	// PVX = new TH1D("X_Vertex", "X_Vertex", 200, -50, 50);
 	// PVY = new TH1D("Y_Vertex", "Y_Vertex", 200, -60 , 60);
 	// PVZ = new TH1D("Z_Vertex", "Z_Vertex", 200, -300, 300);	
-	Eg_Epsum = new TH1D("Eg - Epsum", "Eg - Epsum", 200, -500, 800);
 	// nTAPS = new TH1D("TAPS_Hits", "TAPS_Hits", 5, 0, 10);
 
-	EpdE = new TH2D("E_dE", "E_dE", 150, 0, 500, 150, 0, 8); 
+	// EpdE = new TH2D("E_dE", "E_dE", 150, 0, 500, 150, 0, 8); 
 	// EpdE_HighEg = new TH2D("E_dE_HighEg", "E_dE_HighEg", 150, 0, 500, 150, 0, 8);
 	// EpdE_LowEg = new TH2D("E_dE_LowEg", "E_dE_LowEg", 150, 0, 500, 150, 0, 8);
 	// EpEg = new TH2D("EpEg", "EpEg", 150, 0, 500, 200, 100, 900);
-	EpTp = new TH2D("EpTp", "EpTp", 150 ,0, 500, 150, 0, 180);
-	TpPp = new TH2D("Theta_Phi", "Theta_Phi", 150, 0, 180, 500, -180, 180);
-	TpdE = new TH2D("Theta_dE", "Theta_dE", 150, 0, 180, 150, 0, 8);
+	// EpTp = new TH2D("EpTp", "EpTp", 150 ,0, 500, 150, 0, 180);
+	// TpPp = new TH2D("Theta_Phi", "Theta_Phi", 150, 0, 180, 500, -180, 180);
+	// TpdE = new TH2D("Theta_dE", "Theta_dE", 150, 0, 180, 150, 0, 8);
 	// EpPVZ = new TH2D("Ep_Z_Vertex", "Ep_Z_Vertex", 150, 0, 500, 200, -300, 300);
 
-	dE1_dE2 = new TH2D("dE1_dE2", "dE1_dE2", 300, 0, 8, 300, 0, 8);
-	Ep1_Ep2 = new TH2D("Ep1_Ep2", "Ep1_Ep2", 150, 0, 500, 150, 0, 500);
+	// dE1_dE2 = new TH2D("dE1_dE2", "dE1_dE2", 300, 0, 8, 300, 0, 8);
+	// Ep1_Ep2 = new TH2D("Ep1_Ep2", "Ep1_Ep2", 150, 0, 500, 150, 0, 500);
 	// PVZ1_PVZ2 = new TH2D("Z_Vertex1_Z_Vertex2","Z_Vertex1_Z_Vertex2", 400, -300, 300, 400, -300, 300);
-	PTheta1_PTheta2 = new TH2D("Theta1_Theta2", "Theta1_Theta2", 150, 0, 180, 150, 0, 180);
+	// PTheta1_PTheta2 = new TH2D("Theta1_Theta2", "Theta1_Theta2", 150, 0, 180, 150, 0, 180);
 	// Ep1dE1 = new TH2D("E1_dE1", "E1_dE1", 150, 0, 500, 150, 0, 8);
 	// Ep2dE2 = new TH2D("E2_dE2", "E2_dE2", 150, 0, 500, 150, 0, 8);
 	

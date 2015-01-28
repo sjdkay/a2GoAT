@@ -352,7 +352,8 @@ void  PPi0Example::PostReconstruction()
 	cout << "Performing post reconstruction." << endl;
 
 	RandomSubtraction(MM_prompt_pi0,MM_random_pi0, MM_pi0);		
-	RandomSubtraction(MM_prompt_pi0_n_2g,MM_random_pi0_n_2g, MM_pi0_n_2g);	
+	RandomSubtraction(MM_prompt_pi0_n_2g,MM_random_pi0_n_2g, MM_pi0_n_2g);
+	// Do random subtractions for other plots we want
 		
 	ShowTimeCuts(time_pi0, time_pi0_cuts);
 
