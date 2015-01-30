@@ -45,9 +45,7 @@ private:
 	
 	TH2* 	EpEg;	
 	TH2*    EpTp;
-	TH2*    EpdE;
-	TH2*    EpdE_HighEg;
-	TH2*    EpdE_LowEg;	
+	TH2*    EpdE;	
 	TH2*    TpPp;
 	TH2*    TpdE;
 	TH2*    EpPVZ;
