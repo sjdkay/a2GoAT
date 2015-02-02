@@ -3,7 +3,6 @@
 #include "DGammaAnalysis.h"
 
 // Heavily altered version of PPi0Example.cc
-// Unsure as to what exactly the "Analyse" step is doing
 
 int main(int argc, char *argv[])
 {
@@ -449,14 +448,21 @@ void	DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 			   
 			   // cout<< EgPrompt << "    " << GoATTree_GetEk(0) << "    " << GoATTree_GetEk(1) << "    " << (EgPrompt - (GoATTree_GetEk(i)) - (GoATTree_GetEk(i-1))) << endl;
 			   
-			    GV1 = GetGoATVector(i-1);
+			    GV1 = GetGoATVector(i-1); // These should be moved up to the if isprompt loop
 			    GV2 = GetGoATVector(i);
+			    B = (GetPhotonBeam_E(j))/((GetPhotonBeam_E(j)) + 1875.613);
 			    sum = GV1 + GV2;
-			   
-			   // cout<<G1(0)<<"   "<<G2(0)<<"    "<<sum(0)<<endl;
-			   
-			   // cout<<GoATTree_GetEk(i-1)<<"    "<<GoATTree_GetEk(i)<<"   "<<GoATTree_Get_dE(i-1)<<"    "<<GoATTree_Get_dE(i)<<"    "<<GoATTree_GetWC_Vertex_Z(i-1)<<"    "<<GoATTree_GetWC_Vertex_Z(i)<<endl;
-			   
+			    b(0) = 0;
+			    b(1) = 0;
+			    b(2) = B;
+			    // cout << sum(0) << "    " << sum(1) << "   " << sum(2) << "    " << sum(3)<< "    ";
+			    //cout << GV1(0) << "    " << GV1(1) << "   " << GV1(2) << "    " << GV1(3)<< "    ";
+			    GV1.Boost(b);
+			    // cout << GV1(0) << "    " << GV1(1) << "   " << GV1(2) << "    " << GV1(3) << endl;
+			    GV2.Boost(b);
+			    sumB = GV1 + GV2;
+			    // cout << sumB(0) << "    " << sumB(1) << "   " << sumB(2) << "    " << sumB(3)<< endl;			    
+			  
 			  }
 			 
 		  }  

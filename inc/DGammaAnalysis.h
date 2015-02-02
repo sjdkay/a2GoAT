@@ -16,6 +16,7 @@ private:
 	Double_t time;
 	Double_t N_PD;
 	Double_t DiffD;
+	Double_t B;
 
 	TH1* 	time_proton;
 	TH1* 	time_proton_cuts;	
@@ -64,8 +65,12 @@ private:
 
 	TLorentzVector GV1;
 	TLorentzVector GV2;
+	TLorentzVector GV1B;
+	TLorentzVector GV2B;
 	TLorentzVector sum;
-	TLorentzVector sumBoost;
+	TLorentzVector sumB;
+	TLorentzVector boostvector;
+	TVector3 b;
 	
 		
 protected:
