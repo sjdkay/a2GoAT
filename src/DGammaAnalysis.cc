@@ -407,15 +407,19 @@ void DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 
 			 if ( IsPrompt(GetTagged_t(j), -20, 15) == kTRUE ){
 			   
-			   PEpPrompt -> Fill( GoATTree_GetEk(i) );
+			   PEp -> Fill( GoATTree_GetEk(i) ); // Remove if want to do random subtraction on PEp
+			   PTheta -> Fill( GoATTree_GetTheta(i) ); // Remove if want to do random subtraction on PTheta
+			   // PEpPrompt -> Fill( GoATTree_GetEk(i) );
 			   N_P2++;
 
 			   if ((i % 2) != 0) {
+
 			     PEgPrompt -> Fill( GetPhotonBeam_E(j) );
 			     Eg_EpsumPrompt -> Fill( ( GetPhotonBeam_E(j) )- (GoATTree_GetEk(0) ) - ( GoATTree_GetEk(1) ) );
-			     PEpTotPrompt -> Fill( (GoATTree_GetEk(0) + GoATTree_GetEk(1) ) );
-			     PThetaPrompt -> Fill(Theta1);
-			     PThetaPrompt -> Fill(Theta2);
+			     PEpTot -> Fill( (GoATTree_GetEk(0) + GoATTree_GetEk(1) ) ); // Remove if want to do random subtraction on PEpTot
+			     // PEpTotPrompt -> Fill( (GoATTree_GetEk(0) + GoATTree_GetEk(1) ) );
+			     // PThetaPrompt -> Fill(Theta1);
+			     // PThetaPrompt -> Fill(Theta2);
 			     PThetaCMPrompt -> Fill(Theta1B);
 			     PThetaCMPrompt -> Fill(Theta2B);
 			       
@@ -427,14 +431,15 @@ void DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 
 			 else if (IsRandom(GetTagged_t(j), -100, -40, 35, 95) == kTRUE){			   
 			   
-			   PEpRandom -> Fill( GoATTree_GetEk(i) );
+			   // PEpRandom -> Fill( GoATTree_GetEk(i) );
 			   
 			   if ((i % 2) != 0) {
+
 			     Eg_EpsumRandom -> Fill( (GetPhotonBeam_E(j))- (GoATTree_GetEk(0)) - (GoATTree_GetEk(1)));
 			     PEgRandom -> Fill( GetPhotonBeam_E(j) );
-			     PEpTotRandom -> Fill( (GoATTree_GetEk(0) + GoATTree_GetEk(1) ) );
-			     PThetaRandom -> Fill(Theta1);
-			     PThetaRandom -> Fill(Theta2);
+			     // PEpTotRandom -> Fill( (GoATTree_GetEk(0) + GoATTree_GetEk(1) ) );
+			     // PThetaRandom -> Fill(Theta1);
+			     // PThetaRandom -> Fill(Theta2);
 			     PThetaCMRandom -> Fill(Theta1B);
 			     PThetaCMRandom -> Fill(Theta2B);
 
@@ -482,10 +487,10 @@ void DGammaAnalysis::PostReconstruction()
 
      RandomSubtraction( prompt_proton, random_proton, proton );
      RandomSubtraction( Eg_EpsumPrompt, Eg_EpsumRandom, Eg_Epsum );
-     RandomSubtraction( PEpPrompt, PEpRandom, PEp );
+     // RandomSubtraction( PEpPrompt, PEpRandom, PEp );
      RandomSubtraction( PEgPrompt, PEgRandom, PEg );
-     RandomSubtraction( PEpTotPrompt, PEpTotRandom, PEpTot );
-     RandomSubtraction( PThetaPrompt, PThetaRandom, PTheta );
+     // RandomSubtraction( PEpTotPrompt, PEpTotRandom, PEpTot );
+     // RandomSubtraction( PThetaPrompt, PThetaRandom, PTheta );
      RandomSubtraction( PThetaCMPrompt, PThetaCMRandom, PThetaCM );
 		
      ShowTimeCuts( time_proton, time_proton_cuts );
@@ -511,14 +516,14 @@ void DGammaAnalysis::DefineHistograms()
 
 	Eg_EpsumPrompt = new TH1D( "Eg - Epsum_Prompt", "Eg - Epsum_Prompt", 100, -500, 800 );
 	Eg_EpsumRandom = new TH1D( "Eg - Epsum_Random", "Eg - Epsum_Random", 100, -500, 800 );
-	PEpPrompt = new TH1D( "P_Ep_Prompt", "P_Ep_Prompt", 100, 0, 500 );
-	PEpRandom = new TH1D( "P_Ep_Random", "P_Ep_Random", 100, 0, 500 );
+	// PEpPrompt = new TH1D( "P_Ep_Prompt", "P_Ep_Prompt", 100, 0, 500 );
+	// PEpRandom = new TH1D( "P_Ep_Random", "P_Ep_Random", 100, 0, 500 );
 	PEgPrompt = new TH1D( "photonbeam_E_Prompt", "photonbeam_E_Prompt", 100, 100, 900 );
 	PEgRandom = new TH1D( "photonbeam_E_Random", "photonbeam_E_Random", 100, 100, 900 );	
-	PEpTotPrompt = new TH1D( "P_Ep_Total_Prompt", "P_Ep_Total_Prompt", 300, 0, 900 );
-	PEpTotRandom = new TH1D( "P_Ep_Total_Random", "P_Ep_Total_Random", 300, 0, 900 );
-	PThetaPrompt = new TH1D("P_Theta_Prompt", "P_Theta_Prompt", 150, 0, 180);
-	PThetaRandom = new TH1D("P_Theta_Random", "P_Theta_Random", 150, 0, 180);
+	// PEpTotPrompt = new TH1D( "P_Ep_Total_Prompt", "P_Ep_Total_Prompt", 300, 0, 900 );
+	// PEpTotRandom = new TH1D( "P_Ep_Total_Random", "P_Ep_Total_Random", 300, 0, 900 );
+	// PThetaPrompt = new TH1D("P_Theta_Prompt", "P_Theta_Prompt", 150, 0, 180);
+	// PThetaRandom = new TH1D("P_Theta_Random", "P_Theta_Random", 150, 0, 180);
 	PThetaCMPrompt = new TH1D("P_ThetaCM_Prompt", "P_ThetaCM_Prompt", 150, 0, 180);
 	PThetaCMRandom = new TH1D("P_ThetaCM_Random", "P_ThetaCM_Random", 150, 0, 180);
 	prompt_proton = new TH1D( "prompt_proton", "prompt_proton", 1500, 0, 1500 );
