@@ -259,45 +259,49 @@ DGammaAnalysis::~DGammaAnalysis()
 
 Bool_t	DGammaAnalysis::Init(const char* configfile)
 {
-	// Initialise shared pdg database
-	pdgDB = TDatabasePDG::Instance();
-
-	// Set by user in the future...
-	SetTarget(1875.6);
 	
-		Double_t Prompt_low 	=  -20;
-		Double_t Prompt_high 	=   15;
-		Double_t Random_low1 	= -100;
-		Double_t Random_high1 	=  -40;
-		Double_t Random_low2 	=   35;
-		Double_t Random_high2 	=   95;
+  // Initialise shared pdg database
+  pdgDB = TDatabasePDG::Instance();
 
+  // Set by user in the future...
+  SetTarget(1875.6);
 	
-		SetPromptWindow(Prompt_low, Prompt_high);
-		SetRandomWindow1(Random_low1, Random_high1);
-		SetRandomWindow2(Random_low2, Random_high2);
-		SetPvRratio();
+  Double_t Prompt_low 	=  -20;
+  Double_t Prompt_high 	=   15;
+  Double_t Random_low1 	= -100;
+  Double_t Random_high1 	=  -40;
+  Double_t Random_low2 	=   35;
+  Double_t Random_high2 	=   95;
+  
+  
+  SetPromptWindow(Prompt_low, Prompt_high);
+  SetRandomWindow1(Random_low1, Random_high1);
+  SetRandomWindow2(Random_low2, Random_high2);
+  SetPvRratio();
+  
+  return kTRUE;
 
-	return kTRUE;
 }
 
 Bool_t	DGammaAnalysis::File(const char* file_in, const char* file_out)
 {
-	OpenGoATFile(file_in, "READ");
-	OpenHistFile(file_out);
-	DefineHistograms();
 
-	cout << "Setting up tree files:" << endl;
-	if(!OpenTreeParticles(GoATFile)) 	return kFALSE;
-	if(!OpenTreeTagger(GoATFile))		return kFALSE;
-	cout << endl;
+  OpenGoATFile(file_in, "READ");
+  OpenHistFile(file_out);
+  DefineHistograms();
 
-	cout << "Determining valid for analysis:" << endl;	
-	if(!FindValidGoATEvents())			return kFALSE;	
-	cout << endl;
-		
-	Analyse();	
-	return kTRUE;
+  cout << "Setting up tree files:" << endl;
+  if(!OpenTreeParticles(GoATFile)) 	return kFALSE;
+  if(!OpenTreeTagger(GoATFile))		return kFALSE;
+  cout << endl;
+  
+  cout << "Determining valid for analysis:" << endl;	
+  if(!FindValidGoATEvents())			return kFALSE;	
+  cout << endl;
+  
+  Analyse();	
+  return kTRUE;
+
 }
 
 void	DGammaAnalysis::Analyse()
@@ -305,19 +309,20 @@ void	DGammaAnalysis::Analyse()
 
   TraverseGoATEntries(); //This functions calls Reconstruct() inside it, looks at all GoAT entries
   cout << "Total Protons found: " << N_P <<" ... after cuts: "<< (N_P2) << endl;
-   Diff = ((N_P)-(N_P2));
-   DiffD = double (Diff);
-   N_PD = double (N_P);
-   cout << "Percentage of events lost after cuts: " << (DiffD/N_PD)*100 << " %" << endl;
+  Diff = ((N_P)-(N_P2));
+  DiffD = double (Diff);
+  N_PD = double (N_P);
+  cout << "Percentage of events lost after cuts: " << (DiffD/N_PD)*100 << " %" << endl;
 	
-  	PostReconstruction();		
-  	WriteHistograms();
-  	CloseHistFile();	
+  PostReconstruction();		
+  WriteHistograms();
+  CloseHistFile();	
 
 }
 
 void	DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence extra two protons
 {
+  
   if(GetGoATEvent() == 0) N_P = 0, N_P2 = 0;
   else if(GetGoATEvent() % 1000 == 0) cout << "Event: "<< GetGoATEvent() << " Total Protons found: " << N_P << " ... after cuts: "<<N_P2 << endl;
 
@@ -361,16 +366,16 @@ void	DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 			  if ( GoATTree_GetTheta(1) < 90 ) continue;
 			}
 			
-			 // if (GoATTree_GetTheta(0) < 90){
-			 // if (GoATTree_GetTheta(1) > 90) continue;
+			 // if ( GoATTree_GetTheta(0) < 90 ){
+			 // if ( GoATTree_GetTheta(1) > 90 ) continue;
 			 // }
 			
-			 // if (GoATTree_GetTheta(0) > 90){
-			 // if (GoATTree_GetTheta(1) < 90) continue;
+			 // if ( GoATTree_GetTheta(0) > 90 ){
+			 // if ( GoATTree_GetTheta(1) < 90 ) continue;
 			 // }
 			
-			if (GoATTree_GetTheta(0) > 90){
-			   if (GoATTree_GetTheta(1) > 90) continue;
+			if ( GoATTree_GetTheta(0) > 90 ){
+			   if ( GoATTree_GetTheta(1) > 90 ) continue;
 			 }
 			
 			// Remove events that are not approx back to back
@@ -378,24 +383,18 @@ void	DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 			if ( (abs(GoATTree_GetPhi(0) - GoATTree_GetPhi(1))) > 200 ) continue;
 			if ( (abs(GoATTree_GetPhi(0) - GoATTree_GetPhi(1))) < 160 ) continue;
 			
-			// Remove events if Eg - Epsum out of a certain window
-
-			// if ((EgPrompt - (GoATTree_GetEk(0)) - (GoATTree_GetEk(1))) > 200) continue;
-			// if ((EgPrompt - (GoATTree_GetEk(0)) - (GoATTree_GetEk(1))) < -100) continue;
-
 			 // Look at prompt photons for each proton
 
 			 if ( IsPrompt(GetTagged_t(j), -20, 15) == kTRUE ){
 			   
-			   PEpPrompt->Fill( GoATTree_GetEk(i) );
+			   PEpPrompt -> Fill( GoATTree_GetEk(i) );
 			   N_P2++;
 
 			   if ((i % 2) != 0) {
-			     PEgPrompt->Fill( GetPhotonBeam_E(j) );
-			     Eg_EpsumPrompt->Fill( ( GetPhotonBeam_E(j) )- (GoATTree_GetEk(0) ) - ( GoATTree_GetEk(1) ) );
-			     PEpTotPrompt->Fill( (GoATTree_GetEk(0) + GoATTree_GetEk(1) ) );
+			     PEgPrompt -> Fill( GetPhotonBeam_E(j) );
+			     Eg_EpsumPrompt -> Fill( ( GetPhotonBeam_E(j) )- (GoATTree_GetEk(0) ) - ( GoATTree_GetEk(1) ) );
+			     PEpTotPrompt -> Fill( (GoATTree_GetEk(0) + GoATTree_GetEk(1) ) );
 			   }
-			   //cout << GetPhotonBeam_E(j)<<"   "<< j <<endl;
 
 			 }
 
@@ -403,12 +402,12 @@ void	DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 
 			 else if (IsRandom(GetTagged_t(j), -100, -40, 35, 95) == kTRUE){			   
 			   
-			   PEpRandom->Fill( GoATTree_GetEk(i) );
+			   PEpRandom -> Fill( GoATTree_GetEk(i) );
 			   
 			   if ((i % 2) != 0) {
-			     Eg_EpsumRandom->Fill( (GetPhotonBeam_E(j))- (GoATTree_GetEk(0)) - (GoATTree_GetEk(1)));
-			     PEgRandom->Fill( GetPhotonBeam_E(j) );
-			     PEpTotRandom->Fill( (GoATTree_GetEk(0) + GoATTree_GetEk(1) ) );
+			     Eg_EpsumRandom -> Fill( (GetPhotonBeam_E(j))- (GoATTree_GetEk(0)) - (GoATTree_GetEk(1)));
+			     PEgRandom -> Fill( GetPhotonBeam_E(j) );
+			     PEpTotRandom -> Fill( (GoATTree_GetEk(0) + GoATTree_GetEk(1) ) );
 			   }
 											     
 			 }
@@ -421,22 +420,16 @@ void	DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 			 // PVX->Fill(GoATTree_GetWC_Vertex_X(i));
 			 // PVY->Fill(GoATTree_GetWC_Vertex_Y(i));
 			 // PVZ->Fill(GoATTree_GetWC_Vertex_Z(i));
-			 // nTAPS->Fill(GetBaF2_PbWO4_Hits(i));
 			 // EpdE->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
 			 // TpPp->Fill(GoATTree_GetTheta(i), GoATTree_GetPhi(i)); 
 			 // TpdE->Fill(GoATTree_GetTheta(i), GoATTree_Get_dE(i));
 			 // EpPVZ->Fill(GoATTree_GetEk(i), GoATTree_GetWC_Vertex_Z(i));
-			 
-			 // if(GetPhotonBeam_E(i) > 450) EpdE_HighEg->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i)); // 7/8 events high Eg
-			 // else if (GetPhotonBeam_E(i) < 450) EpdE_LowEg->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
-			 
+			 			 
 			 // If loop only selects odd numbers, i.e the second proton, first is particle 0, second is particle 1
 			 // This loop is the one used to make comparison hisotgrams
 			 
 			  if ((i % 2) != 0){
-			   
-			   // PEg->Fill(GetPhotonBeam_E(j));
-			   
+			  			   
 			   // PEpTot->Fill(((GoATTree_GetEk(i)) + (GoATTree_GetEk(i-1))));
 			   // PPhiDiff->Fill(abs(GoATTree_GetPhi(i) - GoATTree_GetPhi(i-1)));
 			   // dE1_dE2->Fill(GoATTree_Get_dE(i-1), GoATTree_Get_dE(i));
@@ -445,28 +438,23 @@ void	DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 			   // PTheta1_PTheta2->Fill(GoATTree_GetTheta(i-1), GoATTree_GetTheta(i));
 			   // Ep1dE1->Fill(GoATTree_GetEk(i-1), GoATTree_Get_dE(i-1));			  
 			   // Ep2dE2->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
-			   
-			   // cout<< EgPrompt << "    " << GoATTree_GetEk(0) << "    " << GoATTree_GetEk(1) << "    " << (EgPrompt - (GoATTree_GetEk(i)) - (GoATTree_GetEk(i-1))) << endl;
-			   
+			   			   
 			    GV1 = GetGoATVector(i-1); // These should be moved up to the if isprompt loop
-			    GV2 = GetGoATVector(i);
+			    GV2 = GetGoATVector(i); // Could just directly boost the GoATVector? This didn't seem to work so maybe not
 			    Theta1 = (GV1.Theta()) * TMath::RadToDeg();
 			    Theta2 = (GV2.Theta()) * TMath::RadToDeg();
 			    B = (GetPhotonBeam_E(j))/((GetPhotonBeam_E(j)) + 1875.613);
-			    sum = GV1 + GV2;
 			    b(0) = 0;
 			    b(1) = 0;
 			    b(2) = B;
-			    // cout << sum(0) << "    " << sum(1) << "   " << sum(2) << "    " << sum(3)<< "    ";
-			    //cout << GV1(0) << "    " << GV1(1) << "   " << GV1(2) << "    " << GV1(3)<< "    ";
+			    // cout << GV2(0) << "    " << GV2(1) << "   " << GV2(2) << "    " << GV2(3)<< "    ";
 			    GV1.Boost(b);
-			    // cout << GV1(0) << "    " << GV1(1) << "   " << GV1(2) << "    " << GV1(3) << endl;
 			    GV2.Boost(b);
-			    sumB = GV1 + GV2;
+			    // cout << GV2(0) << "    " << GV2(1) << "   " << GV2(2) << "    " << GV2(3) << endl;
 			    Theta1B = (GV1.Theta()) * TMath::RadToDeg();
 			    Theta2B = (GV2.Theta()) * TMath::RadToDeg();
-			    // cout << Theta1 << "    " << Theta1B << "    " << Theta2 << "    " <<  Theta2B << endl;
-			    // cout << sumB(0) << "    " << sumB(1) << "   " << sumB(2) << "    " << sumB(3)<< endl;			    
+			    // cout << Theta1 << "    " << Theta1B << "    " << Theta2 << "    " <<  Theta2B << "    ";
+			    
 			  
 			  }
 			 
@@ -497,9 +485,9 @@ void	DGammaAnalysis::DefineHistograms()
 
 	time_proton = new TH1D( "time_proton", "time_proton", 1000, -500, 500 );
 	time_proton_cuts = new TH1D( "time_proton_cuts", "time_proton_cuts", 1000, -500, 500 );
-	prompt_proton 	= new TH1D( "prompt_proton", "prompt_proton", 1500, 0, 1500 );
-	random_proton 	= new TH1D( "random_proton", "random_proton",1500, 0, 1500 );
-	proton	      	= new TH1D( "proton", "proton", 1500, 0, 1500 );
+	prompt_proton = new TH1D( "prompt_proton", "prompt_proton", 1500, 0, 1500 );
+	random_proton = new TH1D( "random_proton", "random_proton",1500, 0, 1500 );
+	proton = new TH1D( "proton", "proton", 1500, 0, 1500 );
 	
 	Eg_Epsum = new TH1D( "Eg - Epsum", "Eg - Epsum", 100, -500, 800);
 	Eg_EpsumPrompt = new TH1D( "Eg - Epsum_Prompt", "Eg - Epsum_Prompt", 100, -500, 800 );
@@ -521,7 +509,6 @@ void	DGammaAnalysis::DefineHistograms()
 	// PVX = new TH1D("X_Vertex", "X_Vertex", 200, -50, 50);
 	// PVY = new TH1D("Y_Vertex", "Y_Vertex", 200, -60 , 60);
 	// PVZ = new TH1D("Z_Vertex", "Z_Vertex", 200, -300, 300);	
-	// nTAPS = new TH1D("TAPS_Hits", "TAPS_Hits", 5, 0, 10);
 
 	// EpdE = new TH2D("E_dE", "E_dE", 150, 0, 500, 150, 0, 8); 
 	// EpEg = new TH2D("EpEg", "EpEg", 150, 0, 500, 200, 100, 900);
@@ -541,7 +528,8 @@ void	DGammaAnalysis::DefineHistograms()
 
 Bool_t 	DGammaAnalysis::WriteHistograms(TFile* pfile)
 {
-	cout << "Writing histograms." << endl;
+	
+  cout << "Writing histograms." << endl;
 		
 	if(!pfile) return kFALSE;
 	pfile->cd();
@@ -550,6 +538,7 @@ Bool_t 	DGammaAnalysis::WriteHistograms(TFile* pfile)
 	gROOT->GetList()->Delete();
 		
 	return kTRUE;
+	
 }
 
 

@@ -44,7 +44,6 @@ private:
 	TH1*    PVX;
 	TH1*    PVY;
 	TH1*    PVZ;
-	TH1*    nTAPS;
 	TH1*    PEpTot;
 	TH1*    PPhiDiff;
 	
@@ -60,8 +59,7 @@ private:
 	TH2*    PTheta1_PTheta2;
 	TH2*    Ep1dE1;
 	TH2*    Ep2dE2;
-	
-	
+		
 	Int_t 	N_P;
 	Int_t   N_P2;
 	Int_t   Diff;
@@ -69,10 +67,6 @@ private:
 
 	TLorentzVector GV1;
 	TLorentzVector GV2;
-	TLorentzVector GV1B;
-	TLorentzVector GV2B;
-	TLorentzVector sum;
-	TLorentzVector sumB;
 	TLorentzVector boostvector;
 	TVector3 b;
 	
