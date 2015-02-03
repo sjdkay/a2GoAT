@@ -140,15 +140,15 @@ public:
     string	ReadConfig(const std::string& key_in) {return ReadConfig(key_in,0,GetConfigFile());}
 
 	// Make some things available for sorting/analysis
-	Int_t 		GoATTree_GetNParticles()				const 	{return nParticles;}
+	Int_t 		GoATTree_GetNParticles()		       	const 	{return nParticles;}
 	Int_t 		GoATTree_GetPDG(const Int_t index)		const	{return PDG[index];}
 	Int_t		GoATTree_GetNDaughters(const Int_t index)	const	{return nDaughters[index];}
-	Int_t 		GoATTree_GetCharge(const Int_t index) 	const 	{return Charge[index];}   
+	Int_t 		GoATTree_GetCharge(const Int_t index) 	        const 	{return Charge[index];}   
 	Double_t	GoATTree_GetEk(const Int_t index)		const	{return Ek[index];}    
  	Double_t	GoATTree_GetTime(const Int_t index)		const	{return time[index];}
  	 		    		
 	Double_t	GoATTree_GetTheta(const Int_t index)	const	{return Theta[index];}
-	Double_t	GoATTree_GetPhi(const Int_t index)		const	{return Phi[index];} 
+	Double_t	GoATTree_GetPhi(const Int_t index)	const	{return Phi[index];} 
 	Double_t	GoATTree_GetThetaRad(const Int_t index)	const	{return Theta[index] * TMath::DegToRad();}
 	Double_t	GoATTree_GetPhiRad(const Int_t index)	const	{return Theta[index] * TMath::DegToRad();}
 		
@@ -156,7 +156,7 @@ public:
 	Int_t   	GoATTree_GetCentralIndex(const Int_t index) 	const 	{return centralIndex[index];}
 	Int_t   	GoATTree_GetVetoIndex(const Int_t index) 	const 	{return vetoIndex[index];}
 	UChar_t		GoATTree_GetApparatus(const Int_t index)	const	{return Apparatus[index];}
-	Double_t	GoATTree_Get_dE(const Int_t index)			const	{return d_E[index];}
+	Double_t	GoATTree_Get_dE(const Int_t index)		const	{return d_E[index];}
 	Double_t	GoATTree_GetWC0_E(const Int_t index)		const	{return WC0_E[index];}
 	Double_t	GoATTree_GetWC1_E(const Int_t index)		const	{return WC1_E[index];}
 

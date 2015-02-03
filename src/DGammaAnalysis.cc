@@ -257,7 +257,7 @@ DGammaAnalysis::~DGammaAnalysis()
 {
 }
 
-Bool_t	DGammaAnalysis::Init(const char* configfile)
+Bool_t DGammaAnalysis::Init(const char* configfile)
 {
 	
   // Initialise shared pdg database
@@ -283,7 +283,7 @@ Bool_t	DGammaAnalysis::Init(const char* configfile)
 
 }
 
-Bool_t	DGammaAnalysis::File(const char* file_in, const char* file_out)
+Bool_t DGammaAnalysis::File(const char* file_in, const char* file_out)
 {
 
   OpenGoATFile(file_in, "READ");
@@ -304,7 +304,7 @@ Bool_t	DGammaAnalysis::File(const char* file_in, const char* file_out)
 
 }
 
-void	DGammaAnalysis::Analyse()
+void DGammaAnalysis::Analyse()
 {
 
   TraverseGoATEntries(); //This functions calls Reconstruct() inside it, looks at all GoAT entries
@@ -320,7 +320,7 @@ void	DGammaAnalysis::Analyse()
 
 }
 
-void	DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence extra two protons
+void DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence extra two protons
 {
   
   if(GetGoATEvent() == 0) N_P = 0, N_P2 = 0;
@@ -383,7 +383,27 @@ void	DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 			if ( (abs(GoATTree_GetPhi(0) - GoATTree_GetPhi(1))) > 200 ) continue;
 			if ( (abs(GoATTree_GetPhi(0) - GoATTree_GetPhi(1))) < 160 ) continue;
 			
-			 // Look at prompt photons for each proton
+			// Look at prompt photons for each proton
+
+			// Do Boost for each proton 4-vector, since this is before filling histograms this COULD be used to do a cut
+			// Also if moved to be above theta could cut on CM theta instead of lab theta
+			
+			if ((i % 2) != 0) {
+			  
+			  GV1 = GetGoATVector(i-1); // These should be moved up to the if isprompt loop
+			  GV2 = GetGoATVector(i); // Could just directly boost the GoATVector? This didn't seem to work so maybe not
+			  Theta1 = (GV1.Theta()) * TMath::RadToDeg();
+			  Theta2 = (GV2.Theta()) * TMath::RadToDeg();
+			  B = (GetPhotonBeam_E(j))/((GetPhotonBeam_E(j)) + 1875.613);
+			  b(0) = 0;
+			  b(1) = 0;
+			  b(2) = B;
+			  GV1.Boost(b);
+			  GV2.Boost(b);
+			  Theta1B = (GV1.Theta()) * TMath::RadToDeg();
+			  Theta2B = (GV2.Theta()) * TMath::RadToDeg();
+			
+			}
 
 			 if ( IsPrompt(GetTagged_t(j), -20, 15) == kTRUE ){
 			   
@@ -394,11 +414,16 @@ void	DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 			     PEgPrompt -> Fill( GetPhotonBeam_E(j) );
 			     Eg_EpsumPrompt -> Fill( ( GetPhotonBeam_E(j) )- (GoATTree_GetEk(0) ) - ( GoATTree_GetEk(1) ) );
 			     PEpTotPrompt -> Fill( (GoATTree_GetEk(0) + GoATTree_GetEk(1) ) );
+			     PThetaPrompt -> Fill(Theta1);
+			     PThetaPrompt -> Fill(Theta2);
+			     PThetaCMPrompt -> Fill(Theta1B);
+			     PThetaCMPrompt -> Fill(Theta2B);
+			       
 			   }
 
 			 }
 
-			 // look at random photons for each proton
+			 // Look at random photons for each proton
 
 			 else if (IsRandom(GetTagged_t(j), -100, -40, 35, 95) == kTRUE){			   
 			   
@@ -408,6 +433,11 @@ void	DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 			     Eg_EpsumRandom -> Fill( (GetPhotonBeam_E(j))- (GoATTree_GetEk(0)) - (GoATTree_GetEk(1)));
 			     PEgRandom -> Fill( GetPhotonBeam_E(j) );
 			     PEpTotRandom -> Fill( (GoATTree_GetEk(0) + GoATTree_GetEk(1) ) );
+			     PThetaRandom -> Fill(Theta1);
+			     PThetaRandom -> Fill(Theta2);
+			     PThetaCMRandom -> Fill(Theta1B);
+			     PThetaCMRandom -> Fill(Theta2B);
+
 			   }
 											     
 			 }
@@ -428,7 +458,7 @@ void	DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 			 // If loop only selects odd numbers, i.e the second proton, first is particle 0, second is particle 1
 			 // This loop is the one used to make comparison hisotgrams
 			 
-			  if ((i % 2) != 0){
+			 // if ((i % 2) != 0){
 			  			   
 			   // PEpTot->Fill(((GoATTree_GetEk(i)) + (GoATTree_GetEk(i-1))));
 			   // PPhiDiff->Fill(abs(GoATTree_GetPhi(i) - GoATTree_GetPhi(i-1)));
@@ -438,31 +468,14 @@ void	DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 			   // PTheta1_PTheta2->Fill(GoATTree_GetTheta(i-1), GoATTree_GetTheta(i));
 			   // Ep1dE1->Fill(GoATTree_GetEk(i-1), GoATTree_Get_dE(i-1));			  
 			   // Ep2dE2->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
-			   			   
-			    GV1 = GetGoATVector(i-1); // These should be moved up to the if isprompt loop
-			    GV2 = GetGoATVector(i); // Could just directly boost the GoATVector? This didn't seem to work so maybe not
-			    Theta1 = (GV1.Theta()) * TMath::RadToDeg();
-			    Theta2 = (GV2.Theta()) * TMath::RadToDeg();
-			    B = (GetPhotonBeam_E(j))/((GetPhotonBeam_E(j)) + 1875.613);
-			    b(0) = 0;
-			    b(1) = 0;
-			    b(2) = B;
-			    // cout << GV2(0) << "    " << GV2(1) << "   " << GV2(2) << "    " << GV2(3)<< "    ";
-			    GV1.Boost(b);
-			    GV2.Boost(b);
-			    // cout << GV2(0) << "    " << GV2(1) << "   " << GV2(2) << "    " << GV2(3) << endl;
-			    Theta1B = (GV1.Theta()) * TMath::RadToDeg();
-			    Theta2B = (GV2.Theta()) * TMath::RadToDeg();
-			    // cout << Theta1 << "    " << Theta1B << "    " << Theta2 << "    " <<  Theta2B << "    ";
-			    
-			  
-			  }
+			   			   			    			  
+			 // }
 			 
 		  }  
 	}	    
 }
 
-void  DGammaAnalysis::PostReconstruction()
+void DGammaAnalysis::PostReconstruction()
 {
  
      cout << "Performing post reconstruction." << endl;
@@ -472,6 +485,8 @@ void  DGammaAnalysis::PostReconstruction()
      RandomSubtraction( PEpPrompt, PEpRandom, PEp );
      RandomSubtraction( PEgPrompt, PEgRandom, PEg );
      RandomSubtraction( PEpTotPrompt, PEpTotRandom, PEpTot );
+     RandomSubtraction( PThetaPrompt, PThetaRandom, PTheta );
+     RandomSubtraction( PThetaCMPrompt, PThetaCMRandom, PThetaCM );
 		
      ShowTimeCuts( time_proton, time_proton_cuts );
 
@@ -479,30 +494,38 @@ void  DGammaAnalysis::PostReconstruction()
 
 
 
-void	DGammaAnalysis::DefineHistograms()
+void DGammaAnalysis::DefineHistograms()
 {
  	gROOT->cd();
 
 	time_proton = new TH1D( "time_proton", "time_proton", 1000, -500, 500 );
 	time_proton_cuts = new TH1D( "time_proton_cuts", "time_proton_cuts", 1000, -500, 500 );
-	prompt_proton = new TH1D( "prompt_proton", "prompt_proton", 1500, 0, 1500 );
-	random_proton = new TH1D( "random_proton", "random_proton",1500, 0, 1500 );
-	proton = new TH1D( "proton", "proton", 1500, 0, 1500 );
 	
 	Eg_Epsum = new TH1D( "Eg - Epsum", "Eg - Epsum", 100, -500, 800);
+	PEp = new TH1D( "P_Ep", "P_Ep", 100, 0, 500 );
+	PEg = new TH1D( "photonbeam_E", "photonbeam_E", 100, 100, 900 );
+	PEpTot = new TH1D( "P_Ep_Total", "P_Ep_Total", 300, 0, 900 );	
+	PTheta = new TH1D("P_Theta", "P_Theta", 150, 0, 180);
+	PThetaCM = new TH1D("P_ThetaCM", "P_ThetaCM", 150, 0, 180);
+	proton = new TH1D( "proton", "proton", 1500, 0, 1500 );	
+
 	Eg_EpsumPrompt = new TH1D( "Eg - Epsum_Prompt", "Eg - Epsum_Prompt", 100, -500, 800 );
 	Eg_EpsumRandom = new TH1D( "Eg - Epsum_Random", "Eg - Epsum_Random", 100, -500, 800 );
-	PEp = new TH1D( "P_Ep", "P_Ep", 100, 0, 500 );
 	PEpPrompt = new TH1D( "P_Ep_Prompt", "P_Ep_Prompt", 100, 0, 500 );
 	PEpRandom = new TH1D( "P_Ep_Random", "P_Ep_Random", 100, 0, 500 );
-	PEg = new TH1D( "photonbeam_E", "photonbeam_E", 100, 100, 900 );
 	PEgPrompt = new TH1D( "photonbeam_E_Prompt", "photonbeam_E_Prompt", 100, 100, 900 );
 	PEgRandom = new TH1D( "photonbeam_E_Random", "photonbeam_E_Random", 100, 100, 900 );	
-	PEpTot = new TH1D( "P_Ep_Total", "P_Ep_Total", 300, 0, 900 );
 	PEpTotPrompt = new TH1D( "P_Ep_Total_Prompt", "P_Ep_Total_Prompt", 300, 0, 900 );
 	PEpTotRandom = new TH1D( "P_Ep_Total_Random", "P_Ep_Total_Random", 300, 0, 900 );
+	PThetaPrompt = new TH1D("P_Theta_Prompt", "P_Theta_Prompt", 150, 0, 180);
+	PThetaRandom = new TH1D("P_Theta_Random", "P_Theta_Random", 150, 0, 180);
+	PThetaCMPrompt = new TH1D("P_ThetaCM_Prompt", "P_ThetaCM_Prompt", 150, 0, 180);
+	PThetaCMRandom = new TH1D("P_ThetaCM_Random", "P_ThetaCM_Random", 150, 0, 180);
+	prompt_proton = new TH1D( "prompt_proton", "prompt_proton", 1500, 0, 1500 );
+	random_proton = new TH1D( "random_proton", "random_proton",1500, 0, 1500 );
+	
 
-	// PTheta = new TH1D("P_Theta", "P_Theta", 150, 0, 180);
+        
 	// PPhi = new TH1D("PPhi", "PPhi", 500, -180, 180);
 	// PEpTot = new TH1D("P_Ep_Total", "P_Ep_Total", 300, 0, 900);
 	// PPhiDiff = new TH1D("Phi1-Phi2", "Phi1-Phi2", 300, 0, 360);
@@ -526,7 +549,7 @@ void	DGammaAnalysis::DefineHistograms()
 	
 }
 
-Bool_t 	DGammaAnalysis::WriteHistograms(TFile* pfile)
+Bool_t DGammaAnalysis::WriteHistograms(TFile* pfile)
 {
 	
   cout << "Writing histograms." << endl;

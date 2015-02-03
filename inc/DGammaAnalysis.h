@@ -35,9 +35,14 @@ private:
 	TH1*    PEgPrompt;
 	TH1*    PEgRandom;
 	TH1*    PEpTotPrompt;
-	TH1*    PEpTotRandom;	
+	TH1*    PEpTotRandom;
+	TH1*    PThetaPrompt;
+	TH1*    PThetaRandom;
+	TH1*    PThetaCMPrompt;
+	TH1*    PThetaCMRandom;
 
 	TH1*    PTheta;
+	TH1*    PThetaCM;
 	TH1*    PPhi;
 	TH1*    PEp;
 	TH1*    PEg;
