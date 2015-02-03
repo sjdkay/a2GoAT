@@ -273,7 +273,6 @@ Bool_t DGammaAnalysis::Init(const char* configfile)
   Double_t Random_low2 	=   35;
   Double_t Random_high2 	=   95;
   
-  
   SetPromptWindow(Prompt_low, Prompt_high);
   SetRandomWindow1(Random_low1, Random_high1);
   SetRandomWindow2(Random_low2, Random_high2);
@@ -323,6 +322,10 @@ void DGammaAnalysis::Analyse()
 void DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence extra two protons
 {
   
+  // Potentially move several of the cuts (Theta, dE, Phi) out of the tagger and proton loop and to this point??
+  // The two for loops below are themselves within a loop in TraverseGoATEntries so this should be possible, shouldn't make a difference though
+  // As a sanity check move them here and check the output is the same?
+
   if(GetGoATEvent() == 0) N_P = 0, N_P2 = 0;
   else if(GetGoATEvent() % 1000 == 0) cout << "Event: "<< GetGoATEvent() << " Total Protons found: " << N_P << " ... after cuts: "<<N_P2 << endl;
 
@@ -343,140 +346,136 @@ void DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 							    	  
 	  // This for loop loops over all the particles in an event, i.e. the # of protons
 
-	    for (Int_t i = 0; i < GoATTree_GetNParticles(); i++)
-		  { 
+	    for (Int_t i = 0; i < GoATTree_GetNParticles(); i++) { 
    
-		      // Check PDG: Not proton, continue
+	      // Check PDG: Not proton, continue
 		    
-		      if ( GoATTree_GetPDG(i) != pdgDB->GetParticle("proton")->PdgCode() ) continue; 
+	      if ( GoATTree_GetPDG(i) != pdgDB->GetParticle("proton")->PdgCode() ) continue; 
 			
-		      // Check Charge: Not +1, continue
+	      // Check Charge: Not +1, continue
 		      
-			if ( GoATTree_GetCharge(i) != 1 ) continue;
+	      if ( GoATTree_GetCharge(i) != 1 ) continue;
 			
-			if (j == 0) N_P++;
+	      if (j == 0) N_P++;
 			
-			// Cut if dE for each proton equal
+	      // Cut if dE for each proton equal
 			
-			if ( GoATTree_Get_dE(0) == GoATTree_Get_dE(1) ) continue;
+	      if ( GoATTree_Get_dE(0) == GoATTree_Get_dE(1) ) continue;
+	      
+	      // Cuts to remove sections of theta 
+	      
+	      if ( GoATTree_GetTheta(0) < 90 ){
+		if ( GoATTree_GetTheta(1) < 90 ) continue;
+	      }
+	      
+	      // if ( GoATTree_GetTheta(0) < 90 ){
+	      // if ( GoATTree_GetTheta(1) > 90 ) continue;
+	      // }
+	      
+	      // if ( GoATTree_GetTheta(0) > 90 ){
+	      // if ( GoATTree_GetTheta(1) < 90 ) continue;
+	      // }
+	      
+	      if ( GoATTree_GetTheta(0) > 90 ){
+		if ( GoATTree_GetTheta(1) > 90 ) continue;
+	      }
+	      
+	      // Remove events that are not approx back to back
+	      
+	      if ( (abs(GoATTree_GetPhi(0) - GoATTree_GetPhi(1))) > 200 ) continue;
+	      if ( (abs(GoATTree_GetPhi(0) - GoATTree_GetPhi(1))) < 160 ) continue;
 			
-			// Cuts to remove sections of theta
-			
-			if ( GoATTree_GetTheta(0) < 90 ){
-			  if ( GoATTree_GetTheta(1) < 90 ) continue;
-			}
-			
-			 // if ( GoATTree_GetTheta(0) < 90 ){
-			 // if ( GoATTree_GetTheta(1) > 90 ) continue;
-			 // }
-			
-			 // if ( GoATTree_GetTheta(0) > 90 ){
-			 // if ( GoATTree_GetTheta(1) < 90 ) continue;
-			 // }
-			
-			if ( GoATTree_GetTheta(0) > 90 ){
-			   if ( GoATTree_GetTheta(1) > 90 ) continue;
-			 }
-			
-			// Remove events that are not approx back to back
-			
-			if ( (abs(GoATTree_GetPhi(0) - GoATTree_GetPhi(1))) > 200 ) continue;
-			if ( (abs(GoATTree_GetPhi(0) - GoATTree_GetPhi(1))) < 160 ) continue;
-			
-			// Look at prompt photons for each proton
+	      // Look at prompt photons for each proton
+	      
+	      // Do Boost for each proton 4-vector, since this is before filling histograms this COULD be used to do a cut
+	      // Also if moved to be above theta could cut on CM theta instead of lab theta
+	      
+	      if ((i % 2) != 0) {
+		
+		GV1 = GetGoATVector(i-1); // These should be moved up to the if isprompt loop
+		GV2 = GetGoATVector(i); // Could just directly boost the GoATVector? This didn't seem to work so maybe not
+		Theta1 = (GV1.Theta()) * TMath::RadToDeg();
+		Theta2 = (GV2.Theta()) * TMath::RadToDeg();
+		B = (GetPhotonBeam_E(j))/((GetPhotonBeam_E(j)) + 1875.613);
+		b(0) = 0;
+		b(1) = 0;
+		b(2) = B;
+		GV1.Boost(b);
+		GV2.Boost(b);
+		Theta1B = (GV1.Theta()) * TMath::RadToDeg();
+		Theta2B = (GV2.Theta()) * TMath::RadToDeg();
+		
+	      }
+	      
+	      if ( IsPrompt(GetTagged_t(j), -20, 15) == kTRUE ) {
+		
+		PEp -> Fill( GoATTree_GetEk(i) ); // Remove if want to do random subtraction on PEp
+		PTheta -> Fill( GoATTree_GetTheta(i) ); // Remove if want to do random subtraction on PTheta
+		// PEpPrompt -> Fill( GoATTree_GetEk(i) );
+		N_P2++;
+		
+		if ((i % 2) != 0) {
 
-			// Do Boost for each proton 4-vector, since this is before filling histograms this COULD be used to do a cut
-			// Also if moved to be above theta could cut on CM theta instead of lab theta
-			
-			if ((i % 2) != 0) {
-			  
-			  GV1 = GetGoATVector(i-1); // These should be moved up to the if isprompt loop
-			  GV2 = GetGoATVector(i); // Could just directly boost the GoATVector? This didn't seem to work so maybe not
-			  Theta1 = (GV1.Theta()) * TMath::RadToDeg();
-			  Theta2 = (GV2.Theta()) * TMath::RadToDeg();
-			  B = (GetPhotonBeam_E(j))/((GetPhotonBeam_E(j)) + 1875.613);
-			  b(0) = 0;
-			  b(1) = 0;
-			  b(2) = B;
-			  GV1.Boost(b);
-			  GV2.Boost(b);
-			  Theta1B = (GV1.Theta()) * TMath::RadToDeg();
-			  Theta2B = (GV2.Theta()) * TMath::RadToDeg();
-			
-			}
-
-			 if ( IsPrompt(GetTagged_t(j), -20, 15) == kTRUE ){
-			   
-			   PEp -> Fill( GoATTree_GetEk(i) ); // Remove if want to do random subtraction on PEp
-			   PTheta -> Fill( GoATTree_GetTheta(i) ); // Remove if want to do random subtraction on PTheta
-			   // PEpPrompt -> Fill( GoATTree_GetEk(i) );
-			   N_P2++;
-
-			   if ((i % 2) != 0) {
-
-			     PEgPrompt -> Fill( GetPhotonBeam_E(j) );
-			     Eg_EpsumPrompt -> Fill( ( GetPhotonBeam_E(j) )- (GoATTree_GetEk(0) ) - ( GoATTree_GetEk(1) ) );
-			     PEpTot -> Fill( (GoATTree_GetEk(0) + GoATTree_GetEk(1) ) ); // Remove if want to do random subtraction on PEpTot
-			     // PEpTotPrompt -> Fill( (GoATTree_GetEk(0) + GoATTree_GetEk(1) ) );
-			     // PThetaPrompt -> Fill(Theta1);
-			     // PThetaPrompt -> Fill(Theta2);
-			     PThetaCMPrompt -> Fill(Theta1B);
-			     PThetaCMPrompt -> Fill(Theta2B);
+		  PEgPrompt -> Fill( GetPhotonBeam_E(j) );
+		  Eg_EpsumPrompt -> Fill( ( GetPhotonBeam_E(j) )- (GoATTree_GetEk(0) ) - ( GoATTree_GetEk(1) ) );
+		  PEpTot -> Fill( ( GoATTree_GetEk(0) + GoATTree_GetEk(1) ) ); // Remove if want to do random subtraction on PEpTot
+		  // PEpTotPrompt -> Fill( ( GoATTree_GetEk(0) + GoATTree_GetEk(1) ) );
+		  // PThetaPrompt -> Fill(Theta1);
+		  // PThetaPrompt -> Fill(Theta2);
+		  PThetaCMPrompt -> Fill(Theta1B);
+		  PThetaCMPrompt -> Fill(Theta2B);
 			       
-			   }
-
-			 }
-
-			 // Look at random photons for each proton
-
-			 else if (IsRandom(GetTagged_t(j), -100, -40, 35, 95) == kTRUE){			   
+		}
+	      }
+	      
+	      // Look at random photons for each proton
+	      
+	      else if (IsRandom(GetTagged_t(j), -100, -40, 35, 95) == kTRUE) {			   
 			   
-			   // PEpRandom -> Fill( GoATTree_GetEk(i) );
-			   
-			   if ((i % 2) != 0) {
+		// PEpRandom -> Fill( GoATTree_GetEk(i) );
+		
+		if ((i % 2) != 0) {
+		  
+		  Eg_EpsumRandom -> Fill( (GetPhotonBeam_E(j))- (GoATTree_GetEk(0)) - (GoATTree_GetEk(1)));
+		  PEgRandom -> Fill( GetPhotonBeam_E(j) );
+		  // PEpTotRandom -> Fill( ( GoATTree_GetEk(0) + GoATTree_GetEk(1) ) );
+		  // PThetaRandom -> Fill(Theta1);
+		  // PThetaRandom -> Fill(Theta2);
+		  PThetaCMRandom -> Fill(Theta1B);
+		  PThetaCMRandom -> Fill(Theta2B);
 
-			     Eg_EpsumRandom -> Fill( (GetPhotonBeam_E(j))- (GoATTree_GetEk(0)) - (GoATTree_GetEk(1)));
-			     PEgRandom -> Fill( GetPhotonBeam_E(j) );
-			     // PEpTotRandom -> Fill( (GoATTree_GetEk(0) + GoATTree_GetEk(1) ) );
-			     // PThetaRandom -> Fill(Theta1);
-			     // PThetaRandom -> Fill(Theta2);
-			     PThetaCMRandom -> Fill(Theta1B);
-			     PThetaCMRandom -> Fill(Theta2B);
+		}											     
+	      }
 
-			   }
-											     
-			 }
-
-			 // PEp->Fill(GoATTree_GetEk(i));
-			 // PTheta->Fill(GoATTree_GetTheta(i));
-			 // PPhi->Fill(GoATTree_GetPhi(i));
-			 // EpEg->Fill(GoATTree_GetEk(i),GetPhotonBeam_E(i));
-			 // EpTp->Fill(GoATTree_GetEk(i), GoATTree_GetTheta(i));
-			 // PVX->Fill(GoATTree_GetWC_Vertex_X(i));
-			 // PVY->Fill(GoATTree_GetWC_Vertex_Y(i));
-			 // PVZ->Fill(GoATTree_GetWC_Vertex_Z(i));
-			 // EpdE->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
-			 // TpPp->Fill(GoATTree_GetTheta(i), GoATTree_GetPhi(i)); 
-			 // TpdE->Fill(GoATTree_GetTheta(i), GoATTree_Get_dE(i));
-			 // EpPVZ->Fill(GoATTree_GetEk(i), GoATTree_GetWC_Vertex_Z(i));
-			 			 
-			 // If loop only selects odd numbers, i.e the second proton, first is particle 0, second is particle 1
-			 // This loop is the one used to make comparison hisotgrams
-			 
-			 // if ((i % 2) != 0){
+	      // PEp->Fill(GoATTree_GetEk(i));
+	      // PTheta->Fill(GoATTree_GetTheta(i));
+	      // PPhi->Fill(GoATTree_GetPhi(i));
+	      // EpEg->Fill(GoATTree_GetEk(i),GetPhotonBeam_E(i));
+	      // EpTp->Fill(GoATTree_GetEk(i), GoATTree_GetTheta(i));
+	      // PVX->Fill(GoATTree_GetWC_Vertex_X(i));
+	      // PVY->Fill(GoATTree_GetWC_Vertex_Y(i));
+	      // PVZ->Fill(GoATTree_GetWC_Vertex_Z(i));
+	      // EpdE->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
+	      // TpPp->Fill(GoATTree_GetTheta(i), GoATTree_GetPhi(i)); 
+	      // TpdE->Fill(GoATTree_GetTheta(i), GoATTree_Get_dE(i));
+	      // EpPVZ->Fill(GoATTree_GetEk(i), GoATTree_GetWC_Vertex_Z(i));
+	      
+	      // If loop only selects odd numbers, i.e the second proton, first is particle 0, second is particle 1
+	      // This loop is the one used to make comparison hisotgrams
+	      
+	      // if ((i % 2) != 0){
 			  			   
-			   // PEpTot->Fill(((GoATTree_GetEk(i)) + (GoATTree_GetEk(i-1))));
-			   // PPhiDiff->Fill(abs(GoATTree_GetPhi(i) - GoATTree_GetPhi(i-1)));
-			   // dE1_dE2->Fill(GoATTree_Get_dE(i-1), GoATTree_Get_dE(i));
-			   // Ep1_Ep2->Fill(GoATTree_GetEk(i-1), GoATTree_GetEk(i));
-			   // PVZ1_PVZ2->Fill(GoATTree_GetWC_Vertex_Z(i-1), GoATTree_GetWC_Vertex_Z(i));
-			   // PTheta1_PTheta2->Fill(GoATTree_GetTheta(i-1), GoATTree_GetTheta(i));
-			   // Ep1dE1->Fill(GoATTree_GetEk(i-1), GoATTree_Get_dE(i-1));			  
-			   // Ep2dE2->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
-			   			   			    			  
-			 // }
-			 
-		  }  
+	      // PEpTot->Fill(((GoATTree_GetEk(i)) + (GoATTree_GetEk(i-1))));
+	      // PPhiDiff->Fill(abs(GoATTree_GetPhi(i) - GoATTree_GetPhi(i-1)));
+	      // dE1_dE2->Fill(GoATTree_Get_dE(i-1), GoATTree_Get_dE(i));
+	      // Ep1_Ep2->Fill(GoATTree_GetEk(i-1), GoATTree_GetEk(i));
+	      // PVZ1_PVZ2->Fill(GoATTree_GetWC_Vertex_Z(i-1), GoATTree_GetWC_Vertex_Z(i));
+	      // PTheta1_PTheta2->Fill(GoATTree_GetTheta(i-1), GoATTree_GetTheta(i));
+	      // Ep1dE1->Fill(GoATTree_GetEk(i-1), GoATTree_Get_dE(i-1));			  
+	      // Ep2dE2->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
+	      
+	      // }			 
+	    }  
 	}	    
 }
 
@@ -487,11 +486,12 @@ void DGammaAnalysis::PostReconstruction()
 
      RandomSubtraction( prompt_proton, random_proton, proton );
      RandomSubtraction( Eg_EpsumPrompt, Eg_EpsumRandom, Eg_Epsum );
-     // RandomSubtraction( PEpPrompt, PEpRandom, PEp );
      RandomSubtraction( PEgPrompt, PEgRandom, PEg );
+     RandomSubtraction( PThetaCMPrompt, PThetaCMRandom, PThetaCM );
+
+     // RandomSubtraction( PEpPrompt, PEpRandom, PEp ); // Comment these back in if random subtraction wanted for these in the end
      // RandomSubtraction( PEpTotPrompt, PEpTotRandom, PEpTot );
      // RandomSubtraction( PThetaPrompt, PThetaRandom, PTheta );
-     RandomSubtraction( PThetaCMPrompt, PThetaCMRandom, PThetaCM );
 		
      ShowTimeCuts( time_proton, time_proton_cuts );
 
@@ -510,8 +510,8 @@ void DGammaAnalysis::DefineHistograms()
 	PEp = new TH1D( "P_Ep", "P_Ep", 100, 0, 500 );
 	PEg = new TH1D( "photonbeam_E", "photonbeam_E", 100, 100, 900 );
 	PEpTot = new TH1D( "P_Ep_Total", "P_Ep_Total", 300, 0, 900 );	
-	PTheta = new TH1D("P_Theta", "P_Theta", 150, 0, 180);
-	PThetaCM = new TH1D("P_ThetaCM", "P_ThetaCM", 150, 0, 180);
+	PTheta = new TH1D( "P_Theta", "P_Theta", 150, 0, 180 );
+	PThetaCM = new TH1D( "P_ThetaCM", "P_ThetaCM", 150, 0, 180 );
 	proton = new TH1D( "proton", "proton", 1500, 0, 1500 );	
 
 	Eg_EpsumPrompt = new TH1D( "Eg - Epsum_Prompt", "Eg - Epsum_Prompt", 100, -500, 800 );
@@ -522,15 +522,13 @@ void DGammaAnalysis::DefineHistograms()
 	PEgRandom = new TH1D( "photonbeam_E_Random", "photonbeam_E_Random", 100, 100, 900 );	
 	// PEpTotPrompt = new TH1D( "P_Ep_Total_Prompt", "P_Ep_Total_Prompt", 300, 0, 900 );
 	// PEpTotRandom = new TH1D( "P_Ep_Total_Random", "P_Ep_Total_Random", 300, 0, 900 );
-	// PThetaPrompt = new TH1D("P_Theta_Prompt", "P_Theta_Prompt", 150, 0, 180);
-	// PThetaRandom = new TH1D("P_Theta_Random", "P_Theta_Random", 150, 0, 180);
-	PThetaCMPrompt = new TH1D("P_ThetaCM_Prompt", "P_ThetaCM_Prompt", 150, 0, 180);
-	PThetaCMRandom = new TH1D("P_ThetaCM_Random", "P_ThetaCM_Random", 150, 0, 180);
+	// PThetaPrompt = new TH1D( "P_Theta_Prompt", "P_Theta_Prompt", 150, 0, 180 );
+	// PThetaRandom = new TH1D( "P_Theta_Random", "P_Theta_Random", 150, 0, 180 );
+	PThetaCMPrompt = new TH1D( "P_ThetaCM_Prompt", "P_ThetaCM_Prompt", 150, 0, 180 );
+	PThetaCMRandom = new TH1D( "P_ThetaCM_Random", "P_ThetaCM_Random", 150, 0, 180 );
 	prompt_proton = new TH1D( "prompt_proton", "prompt_proton", 1500, 0, 1500 );
 	random_proton = new TH1D( "random_proton", "random_proton",1500, 0, 1500 );
 	
-
-        
 	// PPhi = new TH1D("PPhi", "PPhi", 500, -180, 180);
 	// PEpTot = new TH1D("P_Ep_Total", "P_Ep_Total", 300, 0, 900);
 	// PPhiDiff = new TH1D("Phi1-Phi2", "Phi1-Phi2", 300, 0, 360);
