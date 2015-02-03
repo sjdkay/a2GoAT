@@ -17,6 +17,10 @@ private:
 	Double_t N_PD;
 	Double_t DiffD;
 	Double_t B;
+	Double_t Theta1;
+	Double_t Theta2;
+	Double_t Theta1B;
+	Double_t Theta2B;
 
 	TH1* 	time_proton;
 	TH1* 	time_proton_cuts;	

@@ -450,6 +450,8 @@ void	DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 			   
 			    GV1 = GetGoATVector(i-1); // These should be moved up to the if isprompt loop
 			    GV2 = GetGoATVector(i);
+			    Theta1 = (GV1.Theta()) * TMath::RadToDeg();
+			    Theta2 = (GV2.Theta()) * TMath::RadToDeg();
 			    B = (GetPhotonBeam_E(j))/((GetPhotonBeam_E(j)) + 1875.613);
 			    sum = GV1 + GV2;
 			    b(0) = 0;
@@ -461,6 +463,9 @@ void	DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 			    // cout << GV1(0) << "    " << GV1(1) << "   " << GV1(2) << "    " << GV1(3) << endl;
 			    GV2.Boost(b);
 			    sumB = GV1 + GV2;
+			    Theta1B = (GV1.Theta()) * TMath::RadToDeg();
+			    Theta2B = (GV2.Theta()) * TMath::RadToDeg();
+			    // cout << Theta1 << "    " << Theta1B << "    " << Theta2 << "    " <<  Theta2B << endl;
 			    // cout << sumB(0) << "    " << sumB(1) << "   " << sumB(2) << "    " << sumB(3)<< endl;			    
 			  
 			  }
