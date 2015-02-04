@@ -26,44 +26,22 @@ private:
 	TH1* 	time_proton_cuts;	
 	TH1* 	prompt_proton;
 	TH1* 	random_proton;
-	TH1* 	proton;
-	TH1*    Eg_Epsum;
 	TH1*    Eg_EpsumPrompt;
 	TH1*    Eg_EpsumRandom;
-	TH1*	PEpPrompt;
-	TH1*    PEpRandom;
 	TH1*    PEgPrompt;
 	TH1*    PEgRandom;
-	TH1*    PEpTotPrompt;
-	TH1*    PEpTotRandom;
-	TH1*    PThetaPrompt;
-	TH1*    PThetaRandom;
 	TH1*    PThetaCMPrompt;
 	TH1*    PThetaCMRandom;
 
+	TH1* 	proton;
+	TH1*    Eg_Epsum;
 	TH1*    PTheta;
 	TH1*    PThetaCM;
-	TH1*    PPhi;
 	TH1*    PEp;
 	TH1*    PEg;
-	TH1*    PVX;
-	TH1*    PVY;
-	TH1*    PVZ;
 	TH1*    PEpTot;
-	TH1*    PPhiDiff;
 	
-	TH2* 	EpEg;	
-	TH2*    EpTp;
 	TH2*    EpdE;	
-	TH2*    TpPp;
-	TH2*    TpdE;
-	TH2*    EpPVZ;
-	TH2*    dE1_dE2;
-	TH2*    Ep1_Ep2;
-	TH2*    PVZ1_PVZ2;
-	TH2*    PTheta1_PTheta2;
-	TH2*    Ep1dE1;
-	TH2*    Ep2dE2;
 		
 	Int_t 	N_P;
 	Int_t   N_P2;
