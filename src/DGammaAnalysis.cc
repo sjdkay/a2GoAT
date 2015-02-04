@@ -362,7 +362,7 @@ void DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 			
 	      if ( GoATTree_Get_dE(0) == GoATTree_Get_dE(1) ) continue;
 	      
-	      // Cuts to remove sections of theta, no longet used
+	      // Cuts to remove sections of theta, no longer used
 	      
 	      // if ( GoATTree_GetTheta(0) < 90 ){
 	      // if ( GoATTree_GetTheta(1) < 90 ) continue;
@@ -406,7 +406,7 @@ void DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 	      Theta1B = (GV1.Theta()) * TMath::RadToDeg();
 	      Theta2B = (GV2.Theta()) * TMath::RadToDeg();
 	      
-	      if ( IsPrompt(GetTagged_t(j), -20, 15) == kTRUE ) {
+	      if ( IsPrompt(GetTagged_t(j), -15, 15) == kTRUE ) {
 		
 		PEp -> Fill( GoATTree_GetEk(i) );
 		PTheta -> Fill( GoATTree_GetTheta(i) ); 

@@ -79,7 +79,6 @@ public:
 	Bool_t 	OpenHistFile(const char* pfile, Option_t* option);
 	Bool_t 	OpenHistFile(const char* pfile) { return OpenHistFile(pfile,"RECREATE");}
 	Bool_t	CloseHistFile();	
-
 		
 };
 #endif
