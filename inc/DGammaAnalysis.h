@@ -21,6 +21,10 @@ private:
 	Double_t Theta2;
 	Double_t Theta1B;
 	Double_t Theta2B;
+	Double_t P1CalcTheta;
+	Double_t P1ThetaDiff;
+	Double_t P2CalcTheta;
+	Double_t P2ThetaDiff;
 
 	TH1* 	time_proton;
 	TH1* 	time_proton_cuts;	
@@ -40,6 +44,7 @@ private:
 	TH1*    PEp;
 	TH1*    PEg;
 	TH1*    PEpTot;
+	TH1*    P2CDiff;
 	
 	TH2*    EpdE;	
 		
@@ -50,6 +55,10 @@ private:
 
 	TLorentzVector GV1;
 	TLorentzVector GV2;
+	TLorentzVector Gamma;
+	TLorentzVector Deut;
+	TLorentzVector P1Calc;
+	TLorentzVector P2Calc;
 	TLorentzVector boostvector;
 	TVector3 b;
 	

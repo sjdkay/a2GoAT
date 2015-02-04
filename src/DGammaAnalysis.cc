@@ -392,39 +392,43 @@ void DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 	      
 	      // Do Boost for each proton 4-vector, since this is before filling histograms this COULD be used to do a cut
 	      // Also if moved to be above theta could cut on CM theta instead of lab theta
-	      
-	      if ((i % 2) != 0) {
-		
-		GV1 = GetGoATVector(i-1); // These should be moved up to the if isprompt loop
-		GV2 = GetGoATVector(i); // Could just directly boost the GoATVector? This didn't seem to work so maybe not
-		Theta1 = (GV1.Theta()) * TMath::RadToDeg();
-		Theta2 = (GV2.Theta()) * TMath::RadToDeg();
-		B = (GetPhotonBeam_E(j))/((GetPhotonBeam_E(j)) + 1875.613);
-		b(0) = 0;
-		b(1) = 0;
-		b(2) = B;
-		GV1.Boost(b);
-		GV2.Boost(b);
-		Theta1B = (GV1.Theta()) * TMath::RadToDeg();
-		Theta2B = (GV2.Theta()) * TMath::RadToDeg();
-		
-	      }
+	      	
+	      GV1 = GetGoATVector(0); 
+	      GV2 = GetGoATVector(1); 
+	      Gamma(0) = 0, Gamma(1) = 0, Gamma (2) = ( GetPhotonBeam_E(j) ), Gamma(3) = ( GetPhotonBeam_E(j) ); // 4-Vector of Photon beam
+	      Deut (0) = 0, Deut (1) = 0, Deut (2) = 0, Deut (3) = 1875.613; // 4-Vector of Deuterium target
+	      Theta1 = (GV1.Theta()) * TMath::RadToDeg();
+	      Theta2 = (GV2.Theta()) * TMath::RadToDeg();
+	      B = (GetPhotonBeam_E(j))/((GetPhotonBeam_E(j) ) + 1875.613);
+	      b(0) = 0, b(1) = 0, b(2) = B;
+	      GV1.Boost(b);
+	      GV2.Boost(b);
+	      Theta1B = (GV1.Theta()) * TMath::RadToDeg();
+	      Theta2B = (GV2.Theta()) * TMath::RadToDeg();
 	      
 	      if ( IsPrompt(GetTagged_t(j), -20, 15) == kTRUE ) {
 		
 		PEp -> Fill( GoATTree_GetEk(i) );
 		PTheta -> Fill( GoATTree_GetTheta(i) ); 
-		EpdE->Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
+		EpdE -> Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
 		N_P2++;
 		
 		if ((i % 2) != 0) {
 
-		  PEgPrompt -> Fill( GetPhotonBeam_E(j) );
-		  Eg_EpsumPrompt -> Fill( ( GetPhotonBeam_E(j) )- (GoATTree_GetEk(0) ) - ( GoATTree_GetEk(1) ) );
-		  PEpTot -> Fill( ( GoATTree_GetEk(0) + GoATTree_GetEk(1) ) ); 
-		  PThetaCMPrompt -> Fill(Theta1B);
-		  PThetaCMPrompt -> Fill(Theta2B);
-			       
+		    P1Calc = (Gamma + Deut) - GetGoATVector(i);
+		    P1CalcTheta = (P2Calc.Theta()) * TMath::RadToDeg();
+		    P1ThetaDiff = abs( Theta1 - P1CalcTheta );
+		    P2Calc = (Gamma + Deut) - GetGoATVector(i-1); // Calculate 4-vector of second particle using first
+		    P2CalcTheta = (P2Calc.Theta()) * TMath::RadToDeg(); // Conservation of 4-momentum, if other particle really is a proton we should get same angle
+		    P2ThetaDiff = abs( Theta2 - P2CalcTheta );
+
+		    PEgPrompt -> Fill( GetPhotonBeam_E(j) );
+		    Eg_EpsumPrompt -> Fill( ( GetPhotonBeam_E(j) )- (GoATTree_GetEk(0) ) - ( GoATTree_GetEk(1) ) );
+		    PEpTot -> Fill( ( GoATTree_GetEk(0) + GoATTree_GetEk(1) ) ); 
+		    PThetaCMPrompt -> Fill(Theta1B);
+		    PThetaCMPrompt -> Fill(Theta2B);
+		    P2CDiff -> Fill(P2ThetaDiff);
+		    
 		}
 	      }
 	      
@@ -476,6 +480,7 @@ void DGammaAnalysis::DefineHistograms()
 	PThetaCM = new TH1D( "P_ThetaCM", "P_ThetaCM", 150, 0, 180 );
 	EpdE = new TH2D("E_dE", "E_dE", 150, 0, 500, 150, 0, 8); 
 	proton = new TH1D( "proton", "proton", 1500, 0, 1500 );	
+	P2CDiff = new TH1D( "P2CDiff", "P2CDiff", 100, 0, 180 );
 
 	Eg_EpsumPrompt = new TH1D( "Eg - Epsum_Prompt", "Eg - Epsum_Prompt", 100, -100, 100 );
 	Eg_EpsumRandom = new TH1D( "Eg - Epsum_Random", "Eg - Epsum_Random", 100, -100, 100 );
