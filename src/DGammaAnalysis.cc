@@ -357,11 +357,17 @@ void DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 	      if ( GoATTree_GetCharge(i) != 1 ) continue;
 			
 	      if (j == 0) N_P++;
+				     
+	      if ( ( GetPhotonBeam_E(j) )- (GoATTree_GetEk(0) ) - ( GoATTree_GetEk(1) ) > 80) continue;
+	      if ( ( GetPhotonBeam_E(j) )- (GoATTree_GetEk(0) ) - ( GoATTree_GetEk(1) ) < -40 ) continue;  
 			
 	      // Cut if dE for each proton equal
-			
 	      if ( GoATTree_Get_dE(0) == GoATTree_Get_dE(1) ) continue;
 	      
+	      // Remove events that are not approx back to back
+	      if ( (abs(GoATTree_GetPhi(0) - GoATTree_GetPhi(1))) > 200 ) continue;
+	      if ( (abs(GoATTree_GetPhi(0) - GoATTree_GetPhi(1))) < 160 ) continue;
+
 	      // Cuts to remove sections of theta, no longer used
 	      
 	      // if ( GoATTree_GetTheta(0) < 90 ){
@@ -379,15 +385,7 @@ void DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 	      // if ( GoATTree_GetTheta(0) > 90 ){
 	      // if ( GoATTree_GetTheta(1) > 90 ) continue;
 	      // }
-	      
-	      // Remove events that are not approx back to back
-
-	      if ( ( GetPhotonBeam_E(j) )- (GoATTree_GetEk(0) ) - ( GoATTree_GetEk(1) ) > 80) continue;
-	      if ( ( GetPhotonBeam_E(j) )- (GoATTree_GetEk(0) ) - ( GoATTree_GetEk(1) ) < -40 ) continue;
-	      
-	      if ( (abs(GoATTree_GetPhi(0) - GoATTree_GetPhi(1))) > 200 ) continue;
-	      if ( (abs(GoATTree_GetPhi(0) - GoATTree_GetPhi(1))) < 160 ) continue;
-			
+	      	      	    			
 	      // Look at prompt photons for each proton
 	      
 	      // Do Boost for each proton 4-vector, since this is before filling histograms this COULD be used to do a cut
