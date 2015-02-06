@@ -328,25 +328,19 @@ void DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 
   if(GetGoATEvent() == 0) N_P = 0, N_P2 = 0;
   else if(GetGoATEvent() % 1000 == 0) cout << "Event: "<< GetGoATEvent() << " Total Protons found: " << N_P << " ... after cuts: "<<N_P2 << endl;
-
-  	// Fill timing histogram (all PDG matching proton)
-	FillTimePDG(pdgDB->GetParticle("proton")->PdgCode(), time_proton);
-
-	// Fill missing mass (all PDG matching proton)
-	MissingMassPDG(pdgDB->GetParticle("proton")->PdgCode(), prompt_proton, random_proton);
-   
+  
 	// This for loop examines the number of tagged photons for each event and loops over them all
 	
 	// k = 0;
 	
-	for (Int_t j = 0; j < GetNTagged(); j++) {
+	for (Int_t i = 0; i < GoATTree_GetNParticles(); i++) {
 	  	  
 	  // if (k > 1) continue;
 	  // if (IsPrompt(GetTagged_t(j), -20, 15) == kTRUE) k++;
 							    	  
 	  // This for loop loops over all the particles in an event, i.e. the # of protons
 
-	    for (Int_t i = 0; i < GoATTree_GetNParticles(); i++) { 
+	  for (Int_t j = 0; j < GetNTagged(); j++) { 
    
 	      // Check PDG: Not proton, continue
 		    
@@ -386,25 +380,30 @@ void DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 	      // if ( GoATTree_GetTheta(1) > 90 ) continue;
 	      // }
 	      	      	    			
-	      // Look at prompt photons for each proton
-	      
 	      // Do Boost for each proton 4-vector, since this is before filling histograms this COULD be used to do a cut
 	      // Also if moved to be above theta could cut on CM theta instead of lab theta
 	      	
 	      GV1 = GetGoATVector(0); 
 	      GV2 = GetGoATVector(1); 
-	      Gamma(0) = 0, Gamma(1) = 0, Gamma (2) = ( GetPhotonBeam_E(j) ), Gamma(3) = ( GetPhotonBeam_E(j) ); // 4-Vector of Photon beam
-	      Deut (0) = 0, Deut (1) = 0, Deut (2) = 0, Deut (3) = 1875.613; // 4-Vector of Deuterium target
+	      Gamma = TLorentzVector(0., 0., GetPhotonBeam_E(j), GetPhotonBeam_E(j)); // 4-Vector of Photon beam
+	      Deut = TLorentzVector (0., 0., 0.,  1875.613); // 4-Vector of Deuterium target
 	      Theta1 = (GV1.Theta()) * TMath::RadToDeg();
 	      Theta2 = (GV2.Theta()) * TMath::RadToDeg();
-	      B = (GetPhotonBeam_E(j))/((GetPhotonBeam_E(j) ) + 1875.613);
-	      b(0) = 0, b(1) = 0, b(2) = B;
+	      B = (Deut + Gamma).Beta();
+	      b = TVector3(0., 0., B);
 	      GV1.Boost(b);
 	      GV2.Boost(b);
 	      Theta1B = (GV1.Theta()) * TMath::RadToDeg();
 	      Theta2B = (GV2.Theta()) * TMath::RadToDeg();
+
+	      // Fill timing histogram (all PDG matching proton)
+	      FillTimePDG(pdgDB->GetParticle("proton")->PdgCode(), time_proton);
+
+	      FillMissingMassPair( i, j, prompt_proton, random_proton);
+
+	      // Look at prompt photons for each proton
 	      
-	      if ( IsPrompt(GetTagged_t(j), -15, 15) == kTRUE ) {
+	      if ( IsPrompt(GetTagged_t(j) - GoATTree_GetTime(i))) {
 		
 		PEp -> Fill( GoATTree_GetEk(i) );
 		PTheta -> Fill( GoATTree_GetTheta(i) ); 
@@ -432,7 +431,7 @@ void DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 	      
 	      // Look at random photons for each proton
 	      
-	      else if (IsRandom(GetTagged_t(j), -100, -40, 35, 95) == kTRUE) {			   			   
+	      else if (IsRandom(GetTagged_t(j) - GoATTree_GetTime(i))) {			   			   
 		
 		if ((i % 2) != 0) {
 		  
@@ -444,7 +443,8 @@ void DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 		}											     
 	      }			 
 	    }  
-	}	    
+	}
+	// cout << endl; // Insert this to separate each event out when printing some info from each event
 }
 
 void DGammaAnalysis::PostReconstruction()

@@ -297,7 +297,7 @@ void	GoATTreeManager::TraverseGoATEntries(const Int_t min, const Int_t max)
 {
 
     GoATEvent = min-1;
-    for(int i=min; i<=max; i++)
+    for(int i=min; i<max; i++)
 	{
 		GetGoATEntryFast();
 		Reconstruct();
