@@ -306,13 +306,14 @@ Bool_t DGammaAnalysis::File(const char* file_in, const char* file_out)
 void DGammaAnalysis::Analyse()
 {
 
+  N_P = 0, N_P2 = 0;
   TraverseGoATEntries(); //This functions calls Reconstruct() inside it, looks at all GoAT entries
   cout << "Total Protons found: " << N_P <<" ... after cuts: "<< (N_P2) << endl;
   Diff = ((N_P)-(N_P2));
   DiffD = double (Diff);
   N_PD = double (N_P);
   cout << "Percentage of events lost after cuts: " << (DiffD/N_PD)*100 << " %" << endl;
-	
+      
   PostReconstruction();		
   WriteHistograms();
   CloseHistFile();	
@@ -325,9 +326,6 @@ void DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
   // Potentially move several of the cuts (Theta, dE, Phi) out of the tagger and proton loop and to this point??
   // The two for loops below are themselves within a loop in TraverseGoATEntries so this should be possible, shouldn't make a difference though
   // As a sanity check move them here and check the output is the same?
-
-  if(GetGoATEvent() == 0) N_P = 0, N_P2 = 0;
-  else if(GetGoATEvent() % 1000 == 0) cout << "Event: "<< GetGoATEvent() << " Total Protons found: " << N_P << " ... after cuts: "<<N_P2 << endl;
   
 	// This for loop examines the number of tagged photons for each event and loops over them all
 	
@@ -355,31 +353,20 @@ void DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 	      if ( ( GetPhotonBeam_E(j) )- (GoATTree_GetEk(0) ) - ( GoATTree_GetEk(1) ) > 80) continue;
 	      if ( ( GetPhotonBeam_E(j) )- (GoATTree_GetEk(0) ) - ( GoATTree_GetEk(1) ) < -40 ) continue;  
 			
-	      // Cut if dE for each proton equal
+	      // Cut if dE for each proton equal, with the Eg-Esum and Phi cuts this cut actually removes very few events
+
 	      if ( GoATTree_Get_dE(0) == GoATTree_Get_dE(1) ) continue;
 	      
 	      // Remove events that are not approx back to back
-	      if ( (abs(GoATTree_GetPhi(0) - GoATTree_GetPhi(1))) > 200 ) continue;
-	      if ( (abs(GoATTree_GetPhi(0) - GoATTree_GetPhi(1))) < 160 ) continue;
 
-	      // Cuts to remove sections of theta, no longer used
-	      
-	      // if ( GoATTree_GetTheta(0) < 90 ){
-	      // if ( GoATTree_GetTheta(1) < 90 ) continue;
-	      // }
-	      
-	      // if ( GoATTree_GetTheta(0) < 90 ){
-	      // if ( GoATTree_GetTheta(1) > 90 ) continue;
-	      // }
-	      
-	      // if ( GoATTree_GetTheta(0) > 90 ){
-	      // if ( GoATTree_GetTheta(1) < 90 ) continue;
-	      // }
-	      
-	      // if ( GoATTree_GetTheta(0) > 90 ){
-	      // if ( GoATTree_GetTheta(1) > 90 ) continue;
-	      // }
-	      	      	    			
+	      if ( ( abs(GoATTree_GetPhi(0) - GoATTree_GetPhi(1))) > 200 ) continue;
+	      if ( ( abs(GoATTree_GetPhi(0) - GoATTree_GetPhi(1))) < 160 ) continue;
+
+	      // This cut checks that both of the particles in the event are random or they are both prompt
+
+	      if ( IsPrompt(GetTagged_t(j) - GoATTree_GetTime(0)) && !IsPrompt(GetTagged_t(j) - GoATTree_GetTime(1))  ) continue;
+	      if ( IsPrompt(GetTagged_t(j) - GoATTree_GetTime(1)) && !IsPrompt(GetTagged_t(j) - GoATTree_GetTime(0))  ) continue;
+		
 	      // Do Boost for each proton 4-vector, since this is before filling histograms this COULD be used to do a cut
 	      // Also if moved to be above theta could cut on CM theta instead of lab theta
 	      	
@@ -397,13 +384,14 @@ void DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 	      Theta2B = (GV2.Theta()) * TMath::RadToDeg();
 
 	      // Fill timing histogram (all PDG matching proton)
+
 	      FillTimePDG(pdgDB->GetParticle("proton")->PdgCode(), time_proton);
 
 	      FillMissingMassPair( i, j, prompt_proton, random_proton);
 
 	      // Look at prompt photons for each proton
 	      
-	      if ( IsPrompt(GetTagged_t(j) - GoATTree_GetTime(i))) {
+	      if ( IsPrompt( GetTagged_t(j) - GoATTree_GetTime(i) ) ) {
 		
 		PEp -> Fill( GoATTree_GetEk(i) );
 		PTheta -> Fill( GoATTree_GetTheta(i) ); 
@@ -431,7 +419,7 @@ void DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 	      
 	      // Look at random photons for each proton
 	      
-	      else if (IsRandom(GetTagged_t(j) - GoATTree_GetTime(i))) {			   			   
+	      else if ( IsRandom( GetTagged_t(j) - GoATTree_GetTime(i) ) ) {			   			   
 		
 		if ((i % 2) != 0) {
 		  
@@ -445,6 +433,9 @@ void DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 	    }  
 	}
 	// cout << endl; // Insert this to separate each event out when printing some info from each event
+	if (GetGoATEvent() != 0) {
+	  if(GetGoATEvent() % 1000 == 0) cout << "Event: "<< GetGoATEvent() << " Total Protons found: " << N_P << " ... after cuts: "<<N_P2 << endl;
+	}
 }
 
 void DGammaAnalysis::PostReconstruction()
@@ -470,7 +461,7 @@ void DGammaAnalysis::DefineHistograms()
 	time_proton = new TH1D( "time_proton", "time_proton", 1000, -500, 500 );
 	time_proton_cuts = new TH1D( "time_proton_cuts", "time_proton_cuts", 1000, -500, 500 );
 	
-	Eg_Epsum = new TH1D( "Eg - Epsum", "Eg - Epsum", 100, -100, 100);
+	Eg_Epsum = new TH1D( "Eg - Epsum", "Eg - Epsum", 100, -60, 100);
 	PEp = new TH1D( "P_Ep", "P_Ep", 100, 0, 500 );
 	PEg = new TH1D( "photonbeam_E", "photonbeam_E", 100, 100, 900 );
 	PEpTot = new TH1D( "P_Ep_Total", "P_Ep_Total", 300, 0, 900 );	
@@ -480,8 +471,8 @@ void DGammaAnalysis::DefineHistograms()
 	proton = new TH1D( "proton", "proton", 1500, 0, 1500 );	
 	P2CDiff = new TH1D( "P2CDiff", "P2CDiff", 100, 0, 180 );
 
-	Eg_EpsumPrompt = new TH1D( "Eg - Epsum_Prompt", "Eg - Epsum_Prompt", 100, -100, 100 );
-	Eg_EpsumRandom = new TH1D( "Eg - Epsum_Random", "Eg - Epsum_Random", 100, -100, 100 );
+	Eg_EpsumPrompt = new TH1D( "Eg - Epsum_Prompt", "Eg - Epsum_Prompt", 100, -60, 100 );
+	Eg_EpsumRandom = new TH1D( "Eg - Epsum_Random", "Eg - Epsum_Random", 100, -60, 100 );
 	PEgPrompt = new TH1D( "photonbeam_E_Prompt", "photonbeam_E_Prompt", 100, 100, 900 );
 	PEgRandom = new TH1D( "photonbeam_E_Random", "photonbeam_E_Random", 100, 100, 900 );	
 	PThetaCMPrompt = new TH1D( "P_ThetaCM_Prompt", "P_ThetaCM_Prompt", 150, 0, 180 );
