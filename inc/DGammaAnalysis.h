@@ -25,6 +25,10 @@ private:
 	Double_t P1ThetaDiff;
 	Double_t P2CalcTheta;
 	Double_t P2ThetaDiff;
+	Double_t ThetaNReal1;
+	Double_t ThetaNReal2;
+	Double_t l1;
+	Double_t l2;
 
 	TH1* 	time_proton;
 	TH1* 	time_proton_cuts;	
@@ -61,7 +65,17 @@ private:
 	TLorentzVector P2Calc;
 	TLorentzVector boostvector;
 	TVector3 b;
-	
+
+	char 		cutfilename[256];
+	char 		cutname[256];	
+	TFile* 		CutFile;
+	TCutG* 		Cut;
+	TCutG* 		Cut_proton;
+	TCutG*		Cut_pion;
+	TCutG*		Cut_neutron;
+	TCutG* 		Cut_CB_proton;
+	TCutG* 		Cut_CB_pion;
+	TCutG* 		Cut_CB_neutron;
 		
 protected:
 
@@ -78,5 +92,6 @@ public:
     void	DefineHistograms();
     Bool_t	WriteHistograms(TFile* pfile);
     Bool_t	WriteHistograms() {return WriteHistograms(HistFile);}
+    TCutG*	OpenCutFile(Char_t* filename, Char_t* cutname);
 };
 #endif

@@ -16,8 +16,8 @@ CheckCBStability: 1
 Do-Particle-Reconstruction: 1
 
 Do-Charged-Particle-Reconstruction: 1
-Cut-dE-E-CB-Proton: 	configfiles/cuts/CB_DeltaE-E_ProtonHigh.root Proton
-Cut-dE-E-CB-Pion:    	configfiles/cuts/CB_DeltaE-E_PionHigh.root Pion
+Cut-dE-E-CB-Proton: 	configfiles/cuts/CB_DeltaE-E_Proton.root Proton
+Cut-dE-E-CB-Pion:    	configfiles/cuts/CB_DeltaE-E_Pion.root Pion
 Cut-dE-E-TAPS-Pion: 	configfiles/cuts/TAPS_DeltaE-E.root	CutPiplus
 Cut-dE-E-TAPS-Proton: 	configfiles/cuts/TAPS_DeltaE-E.root CutProton
 Cut-dE-E-TAPS-Electron: configfiles/cuts/TAPS_DeltaE-E.root CutElectron
@@ -51,7 +51,8 @@ Sort-NParticles: 	2-
 
 #				Type 	Number	Theta-min 	Theta-max
 #Sort-Particle:	pi0	1=		0			180
-Sort-Particle:	proton	2= 		0			180
+Sort-Particle:	proton	1+ 		0			180
+Sort-Particle:  charged  2=		0			180
 
 # Note: (I'll put this here while we don't have a manual)
 # the charged and neutral particle cuts are additional 

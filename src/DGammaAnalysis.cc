@@ -277,7 +277,7 @@ Bool_t DGammaAnalysis::Init(const char* configfile)
   SetRandomWindow1(Random_low1, Random_high1);
   SetRandomWindow2(Random_low2, Random_high2);
   SetPvRratio();
-  
+
   return kTRUE;
 
 }
@@ -306,6 +306,14 @@ Bool_t DGammaAnalysis::File(const char* file_in, const char* file_out)
 void DGammaAnalysis::Analyse()
 {
 
+  Cut_CB_proton = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Proton.root", "Proton");
+  Cut_proton = Cut_CB_proton;
+  Cut_CB_pion = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Pion.root", "Pion");
+  Cut_pion = Cut_CB_pion;
+  // Cut_CB_neutron = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Neutron.root", "Neutron");
+  // Cut_neutron = Cut_CB_neutron; // This only needs to be here if we get simulation to show where we expect neutrons
+  cout << endl;
+
   N_P = 0, N_P2 = 0;
   TraverseGoATEntries(); //This functions calls Reconstruct() inside it, looks at all GoAT entries
   cout << "Total Protons found: " << N_P <<" ... after cuts: "<< (N_P2) << endl;
@@ -326,15 +334,12 @@ void DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
   // Potentially move several of the cuts (Theta, dE, Phi) out of the tagger and proton loop and to this point??
   // The two for loops below are themselves within a loop in TraverseGoATEntries so this should be possible, shouldn't make a difference though
   // As a sanity check move them here and check the output is the same?
-  
+
 	// This for loop examines the number of tagged photons for each event and loops over them all
 	
-	// k = 0;
+	// k = 0; // Integer which can be used for counting something in the loop if desired
 	
 	for (Int_t i = 0; i < GoATTree_GetNParticles(); i++) {
-	  	  
-	  // if (k > 1) continue;
-	  // if (IsPrompt(GetTagged_t(j), -20, 15) == kTRUE) k++;
 							    	  
 	  // This for loop loops over all the particles in an event, i.e. the # of protons
 
@@ -342,7 +347,7 @@ void DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
    
 	      // Check PDG: Not proton, continue
 		    
-	      if ( GoATTree_GetPDG(i) != pdgDB->GetParticle("proton")->PdgCode() ) continue; 
+	    if ( GoATTree_GetPDG(i) != pdgDB->GetParticle("proton")->PdgCode() ) continue; // Be careful with this cut with new GoAT files
 			
 	      // Check Charge: Not +1, continue
 		      
@@ -369,11 +374,15 @@ void DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 		
 	      // Do Boost for each proton 4-vector, since this is before filling histograms this COULD be used to do a cut
 	      // Also if moved to be above theta could cut on CM theta instead of lab theta
+
+	      // if(Cut_proton->IsInside(GoATTree_GetEk(i), GoATTree_Get_dE(i))) { // Use loops like this to check which cut particle is present in
+	      // cout << "I'm inside" << endl; // Idea is that one proton is in our more accurate banana and the other is somewhere else
+	      // }
 	      	
 	      GV1 = GetGoATVector(0); 
 	      GV2 = GetGoATVector(1); 
 	      Gamma = TLorentzVector(0., 0., GetPhotonBeam_E(j), GetPhotonBeam_E(j)); // 4-Vector of Photon beam
-	      Deut = TLorentzVector (0., 0., 0.,  1875.613); // 4-Vector of Deuterium target
+	      Deut = TLorentzVector (0., 0., 0., 1875.613); // 4-Vector of Deuterium target
 	      Theta1 = (GV1.Theta()) * TMath::RadToDeg();
 	      Theta2 = (GV2.Theta()) * TMath::RadToDeg();
 	      B = (Deut + Gamma).Beta();
@@ -385,9 +394,9 @@ void DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 
 	      // Fill timing histogram (all PDG matching proton)
 
-	      FillTimePDG(pdgDB->GetParticle("proton")->PdgCode(), time_proton);
+	      FillTimePDG( pdgDB->GetParticle("proton")->PdgCode(), time_proton );
 
-	      FillMissingMassPair( i, j, prompt_proton, random_proton);
+	      FillMissingMassPair( i, j, prompt_proton, random_proton );
 
 	      // Look at prompt photons for each proton
 	      
@@ -406,6 +415,13 @@ void DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 		    P2Calc = (Gamma + Deut) - GetGoATVector(i-1); // Calculate 4-vector of second particle using first
 		    P2CalcTheta = (P2Calc.Theta()) * TMath::RadToDeg(); // Conservation of 4-momentum, if other particle really is a proton we should get same angle
 		    P2ThetaDiff = abs( Theta2 - P2CalcTheta );
+
+		    // l1 = 56.2/(tan(GoATTree_GetTheta(0) * TMath::DegToRad()));
+		    // ThetaNReal1 = (atan(56.2/( l1 + GoATTree_GetWC_Vertex_Z(0)))) *  TMath::RadToDeg();
+		    // l2 = 56.2/(tan(GoATTree_GetTheta(1) * TMath::DegToRad()));
+		    // ThetaNReal2 = (atan(56.2/( l2 + GoATTree_GetWC_Vertex_Z(1)))) *  TMath::RadToDeg();
+		    // cout<< l1 << "    " << ThetaNReal1 << "     " << Theta1 << "    " << "    " << l2 << "    " << ThetaNReal2 << "    " << Theta2  << endl;
+		    // cout << j << "    " << Theta1 << "    " << Theta2 << "    " << GetPhotonBeam_E(j) << "    " << GetTagged_t(j) << endl;
 
 		    PEgPrompt -> Fill( GetPhotonBeam_E(j) );
 		    Eg_EpsumPrompt -> Fill( ( GetPhotonBeam_E(j) )- (GoATTree_GetEk(0) ) - ( GoATTree_GetEk(1) ) );
@@ -432,7 +448,7 @@ void DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 	      }			 
 	    }  
 	}
-	// cout << endl; // Insert this to separate each event out when printing some info from each event
+        // cout << endl; // Insert this to separate each event out when printing some info from each event
 	if (GetGoATEvent() != 0) {
 	  if(GetGoATEvent() % 1000 == 0) cout << "Event: "<< GetGoATEvent() << " Total Protons found: " << N_P << " ... after cuts: "<<N_P2 << endl;
 	}
@@ -452,8 +468,6 @@ void DGammaAnalysis::PostReconstruction()
 
 }
 
-
-
 void DGammaAnalysis::DefineHistograms()
 {
  	gROOT->cd();
@@ -465,18 +479,18 @@ void DGammaAnalysis::DefineHistograms()
 	PEp = new TH1D( "P_Ep", "P_Ep", 100, 0, 500 );
 	PEg = new TH1D( "photonbeam_E", "photonbeam_E", 100, 100, 900 );
 	PEpTot = new TH1D( "P_Ep_Total", "P_Ep_Total", 300, 0, 900 );	
-	PTheta = new TH1D( "P_Theta", "P_Theta", 150, 0, 180 );
-	PThetaCM = new TH1D( "P_ThetaCM", "P_ThetaCM", 150, 0, 180 );
+	PTheta = new TH1D( "P_Theta", "P_Theta", 150, 0, 160 );
+	PThetaCM = new TH1D( "P_ThetaCM", "P_ThetaCM", 150, 0, 160 );
 	EpdE = new TH2D("E_dE", "E_dE", 150, 0, 500, 150, 0, 8); 
 	proton = new TH1D( "proton", "proton", 1500, 0, 1500 );	
-	P2CDiff = new TH1D( "P2CDiff", "P2CDiff", 100, 0, 180 );
+	P2CDiff = new TH1D( "P2CDiff", "P2CDiff", 100, 0, 130 );
 
 	Eg_EpsumPrompt = new TH1D( "Eg - Epsum_Prompt", "Eg - Epsum_Prompt", 100, -60, 100 );
 	Eg_EpsumRandom = new TH1D( "Eg - Epsum_Random", "Eg - Epsum_Random", 100, -60, 100 );
 	PEgPrompt = new TH1D( "photonbeam_E_Prompt", "photonbeam_E_Prompt", 100, 100, 900 );
 	PEgRandom = new TH1D( "photonbeam_E_Random", "photonbeam_E_Random", 100, 100, 900 );	
-	PThetaCMPrompt = new TH1D( "P_ThetaCM_Prompt", "P_ThetaCM_Prompt", 150, 0, 180 );
-	PThetaCMRandom = new TH1D( "P_ThetaCM_Random", "P_ThetaCM_Random", 150, 0, 180 );
+	PThetaCMPrompt = new TH1D( "P_ThetaCM_Prompt", "P_ThetaCM_Prompt", 150, 0, 160 );
+	PThetaCMRandom = new TH1D( "P_ThetaCM_Random", "P_ThetaCM_Random", 150, 0, 160 );
 	prompt_proton = new TH1D( "prompt_proton", "prompt_proton", 1500, 0, 1500 );
 	random_proton = new TH1D( "random_proton", "random_proton",1500, 0, 1500 );
 		
@@ -497,6 +511,38 @@ Bool_t DGammaAnalysis::WriteHistograms(TFile* pfile)
 	
 }
 
+TCutG*	DGammaAnalysis::OpenCutFile(Char_t* filename, Char_t* cutname)
+{
+	CutFile = new TFile(filename, "READ");
+
+    if( !CutFile || !CutFile->IsOpen() ) {
+        cerr << "Can't open cut file: " << filename << endl;
+        throw false;
+    }
+
+
+    // Try to find a TCutG with the name we want
+    // GetObject checks the type to be TCutG,
+    // see http://root.cern.ch/root/html534/TDirectory.html#TDirectory:GetObject
+    CutFile->GetObject(cutname, Cut);
+
+    if( !Cut ) {
+        cerr << "Could not find a TCutG with the name " << cutname << " in " << filename << endl;
+        throw false;
+    }
+	
+	TCutG* Cut_clone = Cut;
+	CutFile->Close();
+
+	cout << "cut file " << filename << 
+	 " opened (Cut-name = " << cutname << ")"<< endl;
+	return Cut_clone;
+	
+}
+
 
 #endif
 
+// Cut_CB_proton = OpenCutFile(configfiles/cuts/CB_DeltaE-E_Proton.root, Proton);
+// Cut_proton = Cut_CB_proton;
+// if(Cut_proton->IsInside(GetEk(i),Get_dE(i)))
