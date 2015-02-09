@@ -543,6 +543,3 @@ TCutG*	DGammaAnalysis::OpenCutFile(Char_t* filename, Char_t* cutname)
 
 #endif
 
-// Cut_CB_proton = OpenCutFile(configfiles/cuts/CB_DeltaE-E_Proton.root, Proton);
-// Cut_proton = Cut_CB_proton;
-// if(Cut_proton->IsInside(GetEk(i),Get_dE(i)))
