@@ -50,10 +50,13 @@ private:
 	TH1*    PEpTot;
 	TH1*    P2CDiff;
 	
-	TH2*    EpdE;	
+	TH2*    EpdE;
+	TH2*    EpdEProton;
+	TH2*    EpdEPion;
 		
 	Int_t 	N_P;
 	Int_t   N_P2;
+	Int_t   N_Part;
 	Int_t   Diff;
 	Int_t   k;
 

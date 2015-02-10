@@ -306,7 +306,7 @@ Bool_t DGammaAnalysis::File(const char* file_in, const char* file_out)
 void DGammaAnalysis::Analyse()
 {
 
-  Cut_CB_proton = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Proton.root", "Proton");
+  Cut_CB_proton = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Proton_4Sigma.root", "Proton");
   Cut_proton = Cut_CB_proton;
   Cut_CB_pion = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Pion.root", "Pion");
   Cut_pion = Cut_CB_pion;
@@ -314,13 +314,17 @@ void DGammaAnalysis::Analyse()
   // Cut_neutron = Cut_CB_neutron; // This only needs to be here if we get simulation to show where we expect neutrons
   cout << endl;
 
-  N_P = 0, N_P2 = 0;
+  N_P = 0, N_P2 = 0, N_Part = 0, k = 0;
   TraverseGoATEntries(); //This functions calls Reconstruct() inside it, looks at all GoAT entries
-  cout << "Total Protons found: " << N_P <<" ... after cuts: "<< (N_P2) << endl;
+  cout << "Total particles found: " << N_Part << "  Total Protons found: " << N_P <<" ... after cuts: "<< (N_P2) << endl;
   Diff = ((N_P)-(N_P2));
   DiffD = double (Diff);
   N_PD = double (N_P);
-  cout << "Percentage of events lost after cuts: " << (DiffD/N_PD)*100 << " %" << endl;
+  cout << "Percentage of protons lost due to cuts: " << (DiffD/N_PD)*100 << " %" << endl;
+  Diff = ((N_Part) - (N_P2));
+  DiffD = double (Diff);
+  N_PD = double (N_Part);
+  cout << "Percentage of particles lost due to cuts: " << (DiffD/N_PD)*100 << " %" << endl;
       
   PostReconstruction();		
   WriteHistograms();
@@ -343,110 +347,120 @@ void DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 							    	  
 	  // This for loop loops over all the particles in an event, i.e. the # of protons
 
-	  for (Int_t j = 0; j < GetNTagged(); j++) { 
-   
-	      // Check PDG: Not proton, continue
-		    
-	    if ( GoATTree_GetPDG(i) != pdgDB->GetParticle("proton")->PdgCode() ) continue; // Be careful with this cut with new GoAT files
-			
-	      // Check Charge: Not +1, continue
-		      
-	      if ( GoATTree_GetCharge(i) != 1 ) continue;
-			
-	      if (j == 0) N_P++;
-				     
-	      if ( ( GetPhotonBeam_E(j) )- (GoATTree_GetEk(0) ) - ( GoATTree_GetEk(1) ) > 80) continue;
-	      if ( ( GetPhotonBeam_E(j) )- (GoATTree_GetEk(0) ) - ( GoATTree_GetEk(1) ) < -40 ) continue;  
-			
-	      // Cut if dE for each proton equal, with the Eg-Esum and Phi cuts this cut actually removes very few events
-
-	      if ( GoATTree_Get_dE(0) == GoATTree_Get_dE(1) ) continue;
-	      
-	      // Remove events that are not approx back to back
-
-	      if ( ( abs(GoATTree_GetPhi(0) - GoATTree_GetPhi(1))) > 200 ) continue;
-	      if ( ( abs(GoATTree_GetPhi(0) - GoATTree_GetPhi(1))) < 160 ) continue;
-
-	      // This cut checks that both of the particles in the event are random or they are both prompt
-
-	      if ( IsPrompt(GetTagged_t(j) - GoATTree_GetTime(0)) && !IsPrompt(GetTagged_t(j) - GoATTree_GetTime(1))  ) continue;
-	      if ( IsPrompt(GetTagged_t(j) - GoATTree_GetTime(1)) && !IsPrompt(GetTagged_t(j) - GoATTree_GetTime(0))  ) continue;
-		
-	      // Do Boost for each proton 4-vector, since this is before filling histograms this COULD be used to do a cut
-	      // Also if moved to be above theta could cut on CM theta instead of lab theta
-
-	      // if(Cut_proton->IsInside(GoATTree_GetEk(i), GoATTree_Get_dE(i))) { // Use loops like this to check which cut particle is present in
-	      // cout << "I'm inside" << endl; // Idea is that one proton is in our more accurate banana and the other is somewhere else
-	      // }
-	      	
-	      GV1 = GetGoATVector(0); 
-	      GV2 = GetGoATVector(1); 
-	      Gamma = TLorentzVector(0., 0., GetPhotonBeam_E(j), GetPhotonBeam_E(j)); // 4-Vector of Photon beam
-	      Deut = TLorentzVector (0., 0., 0., 1875.613); // 4-Vector of Deuterium target
-	      Theta1 = (GV1.Theta()) * TMath::RadToDeg();
-	      Theta2 = (GV2.Theta()) * TMath::RadToDeg();
-	      B = (Deut + Gamma).Beta();
-	      b = TVector3(0., 0., B);
-	      GV1.Boost(b);
-	      GV2.Boost(b);
-	      Theta1B = (GV1.Theta()) * TMath::RadToDeg();
-	      Theta2B = (GV2.Theta()) * TMath::RadToDeg();
-
-	      // Fill timing histogram (all PDG matching proton)
-
-	      FillTimePDG( pdgDB->GetParticle("proton")->PdgCode(), time_proton );
-
-	      FillMissingMassPair( i, j, prompt_proton, random_proton );
-
-	      // Look at prompt photons for each proton
-	      
-	      if ( IsPrompt( GetTagged_t(j) - GoATTree_GetTime(i) ) ) {
-		
-		PEp -> Fill( GoATTree_GetEk(i) );
-		PTheta -> Fill( GoATTree_GetTheta(i) ); 
-		EpdE -> Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
-		N_P2++;
-		
-		if ((i % 2) != 0) {
-
-		    P1Calc = (Gamma + Deut) - GetGoATVector(i);
-		    P1CalcTheta = (P2Calc.Theta()) * TMath::RadToDeg();
-		    P1ThetaDiff = abs( Theta1 - P1CalcTheta );
-		    P2Calc = (Gamma + Deut) - GetGoATVector(i-1); // Calculate 4-vector of second particle using first
-		    P2CalcTheta = (P2Calc.Theta()) * TMath::RadToDeg(); // Conservation of 4-momentum, if other particle really is a proton we should get same angle
-		    P2ThetaDiff = abs( Theta2 - P2CalcTheta );
-
-		    // l1 = 56.2/(tan(GoATTree_GetTheta(0) * TMath::DegToRad()));
-		    // ThetaNReal1 = (atan(56.2/( l1 + GoATTree_GetWC_Vertex_Z(0)))) *  TMath::RadToDeg();
-		    // l2 = 56.2/(tan(GoATTree_GetTheta(1) * TMath::DegToRad()));
-		    // ThetaNReal2 = (atan(56.2/( l2 + GoATTree_GetWC_Vertex_Z(1)))) *  TMath::RadToDeg();
-		    // cout<< l1 << "    " << ThetaNReal1 << "     " << Theta1 << "    " << "    " << l2 << "    " << ThetaNReal2 << "    " << Theta2  << endl;
-		    // cout << j << "    " << Theta1 << "    " << Theta2 << "    " << GetPhotonBeam_E(j) << "    " << GetTagged_t(j) << endl;
-
-		    PEgPrompt -> Fill( GetPhotonBeam_E(j) );
-		    Eg_EpsumPrompt -> Fill( ( GetPhotonBeam_E(j) )- (GoATTree_GetEk(0) ) - ( GoATTree_GetEk(1) ) );
-		    PEpTot -> Fill( ( GoATTree_GetEk(0) + GoATTree_GetEk(1) ) ); 
-		    PThetaCMPrompt -> Fill(Theta1B);
-		    PThetaCMPrompt -> Fill(Theta2B);
-		    P2CDiff -> Fill(P2ThetaDiff);
-		    
-		}
+	  for (Int_t j = 0; j < GetNTagged(); j++) {    	   	    
+	    
+	    if (j == 0) N_Part++;
+	    
+	    if ( IsPrompt( GetTagged_t(j) - GoATTree_GetTime(i) ) ) {
+	     
+	      if(Cut_proton->IsInside(GoATTree_GetEk(i), GoATTree_Get_dE(i))) { 
+		EpdEProton -> Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
 	      }
 	      
-	      // Look at random photons for each proton
-	      
-	      else if ( IsRandom( GetTagged_t(j) - GoATTree_GetTime(i) ) ) {			   			   
-		
-		if ((i % 2) != 0) {
-		  
-		  Eg_EpsumRandom -> Fill( (GetPhotonBeam_E(j))- (GoATTree_GetEk(0)) - (GoATTree_GetEk(1)));
-		  PEgRandom -> Fill( GetPhotonBeam_E(j) );
-		  PThetaCMRandom -> Fill(Theta1B);
-		  PThetaCMRandom -> Fill(Theta2B);
+	      if(Cut_pion->IsInside(GoATTree_GetEk(i), GoATTree_Get_dE(i))) { 
+		EpdEPion -> Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
+	      }
+	    }
+	    
+	    // Check PDG: if both particles not a proton, continue
+		    
+	    if ( GoATTree_GetPDG(0) != pdgDB->GetParticle("proton")->PdgCode() ) continue; // Be careful with this cut with new GoAT files
+	    if ( GoATTree_GetPDG(1) != pdgDB->GetParticle("proton")->PdgCode() ) continue; 
+					
+	    if (j == 0) N_P++;
+				     
+	    if ( ( GetPhotonBeam_E(j) )- (GoATTree_GetEk(0) ) - ( GoATTree_GetEk(1) ) > 80) continue; // This is the cut that now removes the vast majority of events
+	    if ( ( GetPhotonBeam_E(j) )- (GoATTree_GetEk(0) ) - ( GoATTree_GetEk(1) ) < -40 ) continue;  
+	    
+	    // Cut if dE for each proton equal, with the Eg-Esum and Phi cuts this cut actually removes very few events
 
-		}											     
-	      }			 
-	    }  
+	    if ( GoATTree_Get_dE(0) == GoATTree_Get_dE(1) ) continue;
+	    
+	    // Remove events that are not approx back to back
+	    
+	    if ( ( abs(GoATTree_GetPhi(0) - GoATTree_GetPhi(1))) > 200 ) continue;
+	    if ( ( abs(GoATTree_GetPhi(0) - GoATTree_GetPhi(1))) < 160 ) continue;
+	    
+	    // This cut checks that both of the particles in the event are random or they are both prompt
+
+	    if ( IsPrompt(GetTagged_t(j) - GoATTree_GetTime(0)) && !IsPrompt(GetTagged_t(j) - GoATTree_GetTime(1))  ) continue;
+	    if ( IsPrompt(GetTagged_t(j) - GoATTree_GetTime(1)) && !IsPrompt(GetTagged_t(j) - GoATTree_GetTime(0))  ) continue;
+	    
+	    // Do Boost for each proton 4-vector, since this is before filling histograms this COULD be used to do a cut
+	      // Also if moved to be above theta could cut on CM theta instead of lab theta
+	    
+	    GV1 = GetGoATVector(0); 
+	    GV2 = GetGoATVector(1); 
+	    Gamma = TLorentzVector(0., 0., GetPhotonBeam_E(j), GetPhotonBeam_E(j)); // 4-Vector of Photon beam
+	    Deut = TLorentzVector (0., 0., 0., 1875.613); // 4-Vector of Deuterium target
+	    Theta1 = (GV1.Theta()) * TMath::RadToDeg();
+	    Theta2 = (GV2.Theta()) * TMath::RadToDeg();
+	    B = (Deut + Gamma).Beta();
+	    b = TVector3(0., 0., B);
+	    GV1.Boost(b);
+	    GV2.Boost(b);
+	    Theta1B = (GV1.Theta()) * TMath::RadToDeg();
+	    Theta2B = (GV2.Theta()) * TMath::RadToDeg();
+	    
+	    // Fill timing histogram (all PDG matching proton)
+	    
+	    FillTimePDG( pdgDB->GetParticle("proton")->PdgCode(), time_proton );
+	    
+	    FillMissingMassPair( i, j, prompt_proton, random_proton );
+	    
+	    // Look at prompt photons for each proton
+	    
+	    if ( IsPrompt( GetTagged_t(j) - GoATTree_GetTime(i) ) ) {
+	      
+	      PEp -> Fill( GoATTree_GetEk(i) );
+	      PTheta -> Fill( GoATTree_GetTheta(i) ); 
+	      EpdE -> Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
+	      N_P2++;
+	      
+	      if(Cut_proton->IsInside(GoATTree_GetEk(i), GoATTree_Get_dE(i))) { // Use loops like this to check which cut particle is present in
+		k++; // Idea is that one proton is in our more accurate banana and the other is somewhere else
+	      }
+	      
+	      if ((i % 2) != 0) {
+		
+		P1Calc = (Gamma + Deut) - GetGoATVector(i);
+		P1CalcTheta = (P2Calc.Theta()) * TMath::RadToDeg();
+		P1ThetaDiff = abs( Theta1 - P1CalcTheta );
+		P2Calc = (Gamma + Deut) - GetGoATVector(i-1); // Calculate 4-vector of second particle using first
+		P2CalcTheta = (P2Calc.Theta()) * TMath::RadToDeg(); // Conservation of 4-momentum, if other particle really is a proton we should get same angle
+		P2ThetaDiff = abs( Theta2 - P2CalcTheta );
+		
+		// l1 = 56.2/(tan(GoATTree_GetTheta(0) * TMath::DegToRad()));
+		// ThetaNReal1 = (atan(56.2/( l1 + GoATTree_GetWC_Vertex_Z(0)))) *  TMath::RadToDeg();
+		// l2 = 56.2/(tan(GoATTree_GetTheta(1) * TMath::DegToRad()));
+		// ThetaNReal2 = (atan(56.2/( l2 + GoATTree_GetWC_Vertex_Z(1)))) *  TMath::RadToDeg();
+		// cout<< l1 << "    " << ThetaNReal1 << "     " << Theta1 << "    " << "    " << l2 << "    " << ThetaNReal2 << "    " << Theta2  << endl;
+		// cout << j << "    " << Theta1 << "    " << Theta2 << "    " << GetPhotonBeam_E(j) << "    " << GetTagged_t(j) << endl;
+		
+		PEgPrompt -> Fill( GetPhotonBeam_E(j) );
+		Eg_EpsumPrompt -> Fill( ( GetPhotonBeam_E(j) )- (GoATTree_GetEk(0) ) - ( GoATTree_GetEk(1) ) );
+		PEpTot -> Fill( ( GoATTree_GetEk(0) + GoATTree_GetEk(1) ) ); 
+		PThetaCMPrompt -> Fill(Theta1B);
+		PThetaCMPrompt -> Fill(Theta2B);
+		P2CDiff -> Fill(P2ThetaDiff);
+		
+	      }
+	    }
+	    
+	    // Look at random photons for each proton
+	    
+	    else if ( IsRandom( GetTagged_t(j) - GoATTree_GetTime(i) ) ) {			   			   
+	      
+	      if ((i % 2) != 0) {
+		
+		Eg_EpsumRandom -> Fill( (GetPhotonBeam_E(j))- (GoATTree_GetEk(0)) - (GoATTree_GetEk(1)));
+		PEgRandom -> Fill( GetPhotonBeam_E(j) );
+		PThetaCMRandom -> Fill(Theta1B);
+		PThetaCMRandom -> Fill(Theta2B);
+		
+	      }											     
+	    }			 
+	  }  
 	}
         // cout << endl; // Insert this to separate each event out when printing some info from each event
 	if (GetGoATEvent() != 0) {
@@ -481,7 +495,9 @@ void DGammaAnalysis::DefineHistograms()
 	PEpTot = new TH1D( "P_Ep_Total", "P_Ep_Total", 300, 0, 900 );	
 	PTheta = new TH1D( "P_Theta", "P_Theta", 150, 0, 160 );
 	PThetaCM = new TH1D( "P_ThetaCM", "P_ThetaCM", 150, 0, 160 );
-	EpdE = new TH2D("E_dE", "E_dE", 150, 0, 500, 150, 0, 8); 
+	EpdE = new TH2D("E_dE", "E_dE", 150, 0, 500, 150, 0, 8);
+	EpdEProton = new TH2D("E_dE_Proton", "E_dE_Proton", 150, 0, 500, 150, 0, 8);
+	EpdEPion = new TH2D("E_dE_Pion", "E_dE_Pion", 150, 0, 500, 150, 0, 8);
 	proton = new TH1D( "proton", "proton", 1500, 0, 1500 );	
 	P2CDiff = new TH1D( "P2CDiff", "P2CDiff", 100, 0, 130 );
 
