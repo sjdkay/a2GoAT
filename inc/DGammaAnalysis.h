@@ -51,8 +51,8 @@ private:
 	TH1*    P2CDiff;
 	
 	TH2*    EpdE;
-	TH2*    EpdEProton;
-	TH2*    EpdEPion;
+	// TH2*    EpdEProton;
+	// TH2*    EpdEPion;
 		
 	Int_t 	N_P;
 	Int_t   N_P2;
@@ -69,14 +69,18 @@ private:
 	TLorentzVector boostvector;
 	TVector3 b;
 
-	char 		cutfilename[256];
-	char 		cutname[256];	
+	char 	        cutfilename[256];
+	char		cutname[256];	
 	TFile* 		CutFile;
 	TCutG* 		Cut;
 	TCutG* 		Cut_proton;
+	TCutG* 		Cut_proton_4Sig;
+	TCutG* 		Cut_proton_Full;	
 	TCutG*		Cut_pion;
 	TCutG*		Cut_neutron;
 	TCutG* 		Cut_CB_proton;
+	TCutG* 		Cut_CB_proton_4Sig;
+	TCutG* 		Cut_CB_proton_Full;
 	TCutG* 		Cut_CB_pion;
 	TCutG* 		Cut_CB_neutron;
 		

@@ -306,8 +306,12 @@ Bool_t DGammaAnalysis::File(const char* file_in, const char* file_out)
 void DGammaAnalysis::Analyse()
 {
 
-  Cut_CB_proton = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Proton_4Sigma.root", "Proton");
+  Cut_CB_proton = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Proton.root", "Proton");
   Cut_proton = Cut_CB_proton;
+  Cut_CB_proton_4Sig = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Proton_4Sigma.root", "Proton");
+  Cut_proton_4Sig = Cut_CB_proton_4Sig;
+  Cut_CB_proton_Full = OpenCutFile("configfiles/cuts/CB_DeltaE-E_ProtonFull.root", "Proton");
+  Cut_proton_Full = Cut_CB_proton_Full;
   Cut_CB_pion = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Pion.root", "Pion");
   Cut_pion = Cut_CB_pion;
   // Cut_CB_neutron = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Neutron.root", "Neutron");
@@ -351,17 +355,6 @@ void DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 	    
 	    if (j == 0) N_Part++;
 	    
-	    if ( IsPrompt( GetTagged_t(j) - GoATTree_GetTime(i) ) ) {
-	     
-	      if(Cut_proton->IsInside(GoATTree_GetEk(i), GoATTree_Get_dE(i))) { 
-		EpdEProton -> Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
-	      }
-	      
-	      if(Cut_pion->IsInside(GoATTree_GetEk(i), GoATTree_Get_dE(i))) { 
-		EpdEPion -> Fill(GoATTree_GetEk(i), GoATTree_Get_dE(i));
-	      }
-	    }
-	    
 	    // Check PDG: if both particles not a proton, continue
 		    
 	    if ( GoATTree_GetPDG(0) != pdgDB->GetParticle("proton")->PdgCode() ) continue; // Be careful with this cut with new GoAT files
@@ -387,7 +380,7 @@ void DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 	    if ( IsPrompt(GetTagged_t(j) - GoATTree_GetTime(1)) && !IsPrompt(GetTagged_t(j) - GoATTree_GetTime(0))  ) continue;
 	    
 	    // Do Boost for each proton 4-vector, since this is before filling histograms this COULD be used to do a cut
-	      // Also if moved to be above theta could cut on CM theta instead of lab theta
+	    // Also if moved to be above theta could cut on CM theta instead of lab theta
 	    
 	    GV1 = GetGoATVector(0); 
 	    GV2 = GetGoATVector(1); 
@@ -462,6 +455,7 @@ void DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 	    }			 
 	  }  
 	}
+
         // cout << endl; // Insert this to separate each event out when printing some info from each event
 	if (GetGoATEvent() != 0) {
 	  if(GetGoATEvent() % 1000 == 0) cout << "Event: "<< GetGoATEvent() << " Total Protons found: " << N_P << " ... after cuts: "<<N_P2 << endl;
@@ -496,8 +490,8 @@ void DGammaAnalysis::DefineHistograms()
 	PTheta = new TH1D( "P_Theta", "P_Theta", 150, 0, 160 );
 	PThetaCM = new TH1D( "P_ThetaCM", "P_ThetaCM", 150, 0, 160 );
 	EpdE = new TH2D("E_dE", "E_dE", 150, 0, 500, 150, 0, 8);
-	EpdEProton = new TH2D("E_dE_Proton", "E_dE_Proton", 150, 0, 500, 150, 0, 8);
-	EpdEPion = new TH2D("E_dE_Pion", "E_dE_Pion", 150, 0, 500, 150, 0, 8);
+	// EpdEProton = new TH2D("E_dE_Proton", "E_dE_Proton", 150, 0, 500, 150, 0, 8);
+	// EpdEPion = new TH2D("E_dE_Pion", "E_dE_Pion", 150, 0, 500, 150, 0, 8);
 	proton = new TH1D( "proton", "proton", 1500, 0, 1500 );	
 	P2CDiff = new TH1D( "P2CDiff", "P2CDiff", 100, 0, 130 );
 
