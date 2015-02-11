@@ -48,24 +48,24 @@ private:
 	TH1*    PEp;
 	TH1*    PEg;
 	TH1*    PEpTot;
+	TH1*    P1CDiff;
 	TH1*    P2CDiff;
+	TH1*    MM;
+	TH1*    MM2;
 	
 	TH2*    EpdE;
-	// TH2*    EpdEProton;
-	// TH2*    EpdEPion;
-		
+
 	Int_t 	N_P;
 	Int_t   N_P2;
 	Int_t   N_Part;
 	Int_t   Diff;
 	Int_t   k;
+	Int_t   a;
 
 	TLorentzVector GV1;
 	TLorentzVector GV2;
 	TLorentzVector Gamma;
 	TLorentzVector Deut;
-	TLorentzVector P1Calc;
-	TLorentzVector P2Calc;
 	TLorentzVector boostvector;
 	TVector3 b;
 
