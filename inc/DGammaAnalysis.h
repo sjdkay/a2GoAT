@@ -52,6 +52,8 @@ private:
 	TH1*    P2CDiff;
 	TH1*    MM;
 	TH1*    MM2;
+	TH1*    MMR;
+	TH1*    MM2R;
 	
 	TH2*    EpdE;
 

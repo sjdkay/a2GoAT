@@ -360,12 +360,21 @@ void DGammaAnalysis::Reconstruct() // Starts at event 0 so 0 - X events hence ex
 
 	    if (IsPrompt( GetTagged_t(j) - GoATTree_GetTime(i) )) {
 	      if (Cut_proton_4Sig -> IsInside(GoATTree_GetEk(i), GoATTree_Get_dE(i))) {
-		  if( i == 0 ) a = 1;
+		if( i == 0 ) a = 1;
 		  if ( i == 1 ) a = 0;
 		  MM2 -> Fill(CalcMissingMass( i, j ));
 		  MM -> Fill(CalcMissingMass( a, j));
-		}
 	      }
+	    }
+		  
+	    if (IsRandom( GetTagged_t(j) - GoATTree_GetTime(i) )) {
+	      if (Cut_proton_4Sig -> IsInside(GoATTree_GetEk(i), GoATTree_Get_dE(i))) {
+		if( i == 0 ) a = 1;
+		if ( i == 1 ) a = 0;
+		MM2R -> Fill(CalcMissingMass( i, j ));
+		MMR -> Fill(CalcMissingMass( a, j));
+	      }
+	    }
 			
 	    // Ensure at least 1 of particles in event is inside the proton banana, probably best to keep this cut regardless
 
@@ -505,8 +514,10 @@ void DGammaAnalysis::DefineHistograms()
 	proton = new TH1D( "proton", "proton", 200, 0, 1500 );	
 	P1CDiff = new TH1D( "P2CDiff", "P2CDiff", 100, 0, 130 );
 	P2CDiff = new TH1D( "P2CDiff", "P2CDiff", 100, 0, 130 );
-MM = new TH1D( "MM", "MM", 200, 0, 2000 );
-MM2 = new TH1D( "MM2", "MM2", 200, 0, 2000 );
+	MM = new TH1D( "MM", "MM", 200, 0, 2000 );
+	MM2 = new TH1D( "MM2", "MM2", 200, 0, 2000 );
+	MMR = new TH1D( "MMR", "MMR", 200, 0, 2000 );
+	MM2R = new TH1D( "MMR2", "MM2R", 200, 0, 2000 );	
 
 	Eg_EpsumPrompt = new TH1D( "Eg - Epsum_Prompt", "Eg - Epsum_Prompt", 100, -60, 100 );
 	Eg_EpsumRandom = new TH1D( "Eg - Epsum_Random", "Eg - Epsum_Random", 100, -60, 100 );
