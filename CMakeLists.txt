@@ -135,6 +135,39 @@ add_executable(pi0-example
    )
 target_link_libraries(pi0-example ${LIBS} ${ROOT_LIBRARIES})
 
+add_executable(NeutPol
+   ${GOAT_BASE}
+   ${GOAT_GHIST}
+   inc/PPhysics.h
+   src/PPhysics.cc
+   inc/PNeutPol.h
+   src/PNeutPol.cc
+   src/NeutPol_main.cc
+   )
+target_link_libraries(NeutPol ${LIBS} ${ROOT_LIBRARIES})
+
+add_executable(ProtPol
+   ${GOAT_BASE}
+   ${GOAT_GHIST}
+   inc/PPhysics.h
+   src/PPhysics.cc
+   inc/PProtPol.h
+   src/PProtPol.cc
+   src/ProtPol_main.cc
+   )
+target_link_libraries(ProtPol ${LIBS} ${ROOT_LIBRARIES})
+
+add_executable(MC_Analysis_1_Part
+   ${GOAT_BASE}
+   ${GOAT_GHIST}
+   inc/PPhysics.h
+   src/PPhysics.cc
+   inc/MC_Analysis_1_Part.h
+   src/MC_Analysis_1_Part.cc
+   src/MC_Analysis_1_Part_main.cc
+   )
+target_link_libraries(MC_Analysis_1_Part ${LIBS} ${ROOT_LIBRARIES})
+
 # install some scripts to the bin directory
 # by creating symlinks
 file(GLOB CORE_EXTRA_SCRIPTS "scripts/*")
