@@ -153,7 +153,7 @@ Double_t MC_Analysis_1_Part::InitialProp()
 
 Double_t MC_Analysis_1_Part::MCSmearing()
 {
-  dE1 = rGen.Gaus(GetTracks()->GetVetoEnergy(0) , (0.63/(sqrt(GetTracks()->GetVetoEnergy(0)))));
+  dE1 = rGen.Gaus(GetTracks()->GetVetoEnergy(0) , (0.29*(sqrt(GetTracks()->GetVetoEnergy(0)))));
 
   if (dE1 < 0) dE1 = 0.01;
 

@@ -225,8 +225,8 @@ Double_t PNeutPol::InitialProp()
 
 Double_t PNeutPol::MCSmearing()
 {
-  dE1 = rGen.Gaus(GetTracks()->GetVetoEnergy(0) , (0.63/(sqrt(GetTracks()->GetVetoEnergy(0)))));
-  dE2 = rGen.Gaus(GetTracks()->GetVetoEnergy(1) , (0.63/(sqrt(GetTracks()->GetVetoEnergy(1)))));
+  dE1 = rGen.Gaus(GetTracks()->GetVetoEnergy(0) , (0.29*(sqrt(GetTracks()->GetVetoEnergy(0)))));
+  dE2 = rGen.Gaus(GetTracks()->GetVetoEnergy(1) , (0.29*(sqrt(GetTracks()->GetVetoEnergy(1)))));
 
   if (dE1 < 0) dE1 = 0.01;
   if (dE2 < 0) dE2 = 0.01;
@@ -462,8 +462,8 @@ PNeutPol::PNeutPol()
   // Theta_Vs_Phi = new GH2("Theta vs Phi" , "Theta vs Phi", 180, 0, 50, 180, -180, 180); //These plots aren't showing what it used to, not sure if correct/still useful or not
   //PhiSc_dEn = new GH2("PhiSc_dEn" , "PhiSc_dEn", 180, -180, 180, 180, 0, 10);
   //mmE = new GH2 ("mmE", "Missing_Mass_as_a_Function_of_Energy", 200, 0, 600, 200, 850, 1050);
-  PhidEFixp = new GH2 ("PhidEFixp", "Phi_dE_Distribution", 180, -180, 180, 180, 0, 4);
-  PhidECorrFixp = new GH2 ("PhidECorrFixp", "Phi_dECorr_Distribution", 180, -180, 180, 180, 0, 4);
+  PhidEFixp = new GH2 ("PhidEFixp", "Phi_dE_Distribution", 180, -180, 180, 180, 0, 5);
+  PhidECorrFixp = new GH2 ("PhidECorrFixp", "Phi_dECorr_Distribution", 180, -180, 180, 180, 0, 5);
 
 }
 
