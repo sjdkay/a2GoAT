@@ -153,16 +153,7 @@ Double_t MC_Analysis_1_Part::InitialProp()
 
 Double_t MC_Analysis_1_Part::MCSmearing()
 {
-  if (E1 < 30) dE1 = rGen.Gaus(GetTracks()->GetVetoEnergy(0) , 1);
-  if (E1 > 30 && E1 < 60) dE1 = rGen.Gaus(GetTracks()->GetVetoEnergy(0) , 0.95);
-  if (E1 > 60 && E1 < 90) dE1 = rGen.Gaus(GetTracks()->GetVetoEnergy(0) , 0.68);
-  if (E1 > 90 && E1 < 120) dE1 = rGen.Gaus(GetTracks()->GetVetoEnergy(0) , 0.53);
-  if (E1 > 120 && E1 < 150) dE1 = rGen.Gaus(GetTracks()->GetVetoEnergy(0) , 0.47);
-  if (E1 > 150 && E1 < 180) dE1 = rGen.Gaus(GetTracks()->GetVetoEnergy(0) , 0.46);
-  if (E1 > 180 && E1 < 210) dE1 = rGen.Gaus(GetTracks()->GetVetoEnergy(0) , 0.45);
-  if (E1 > 210 && E1 < 240) dE1 = rGen.Gaus(GetTracks()->GetVetoEnergy(0) , 0.28);
-  if (E1 > 240 && E1 < 270) dE1 = rGen.Gaus(GetTracks()->GetVetoEnergy(0) , 0.29);
-  if (E1 >270) dE1 = rGen.Gaus(GetTracks()->GetVetoEnergy(0) , 0.29);
+  dE1 = rGen.Gaus(GetTracks()->GetVetoEnergy(0) , (0.63/(sqrt(GetTracks()->GetVetoEnergy(0)))));
 
   if (dE1 < 0) dE1 = 0.01;
 

@@ -153,6 +153,55 @@ private:
   GH1* PhiSc525Cut;
   GH1* PhiSc575Cut;
 
+  GH1* PhiSc_In;
+  GH1* PhiSc125_In;
+  GH1* PhiSc175_In;
+  GH1* PhiSc225_In;
+  GH1* PhiSc275_In;
+  GH1* PhiSc325_In;
+  GH1* PhiSc375_In;
+  GH1* PhiSc425_In;
+  GH1* PhiSc475_In;
+  GH1* PhiSc525_In;
+  GH1* PhiSc575_In;
+
+  GH1* PhiSc_Out;
+  GH1* PhiSc125_Out;
+  GH1* PhiSc175_Out;
+  GH1* PhiSc225_Out;
+  GH1* PhiSc275_Out;
+  GH1* PhiSc325_Out;
+  GH1* PhiSc375_Out;
+  GH1* PhiSc425_Out;
+  GH1* PhiSc475_Out;
+  GH1* PhiSc525_Out;
+  GH1* PhiSc575_Out;
+
+  GH1* PhiScCut_In;
+  GH1* PhiSc125Cut_In;
+  GH1* PhiSc175Cut_In;
+  GH1* PhiSc225Cut_In;
+  GH1* PhiSc275Cut_In;
+  GH1* PhiSc325Cut_In;
+  GH1* PhiSc375Cut_In;
+  GH1* PhiSc425Cut_In;
+  GH1* PhiSc475Cut_In;
+  GH1* PhiSc525Cut_In;
+  GH1* PhiSc575Cut_In;
+
+  GH1* PhiScCut_Out;
+  GH1* PhiSc125Cut_Out;
+  GH1* PhiSc175Cut_Out;
+  GH1* PhiSc225Cut_Out;
+  GH1* PhiSc275Cut_Out;
+  GH1* PhiSc325Cut_Out;
+  GH1* PhiSc375Cut_Out;
+  GH1* PhiSc425Cut_Out;
+  GH1* PhiSc475Cut_Out;
+  GH1* PhiSc525Cut_Out;
+  GH1* PhiSc575Cut_Out;
+
+
   GH2* E_dE;
   GH2* E_dE_Proton;
   GH2* E_dE_Neutron;
