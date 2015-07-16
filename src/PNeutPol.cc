@@ -31,17 +31,16 @@ Bool_t	PNeutPol::Start()
 
   SetAsPhysicsFile();
 
-  i = 0;
-  d = 54.2;
-  NP = 0;
-  NPi = 0;
-  NRoo = 0;
+  i = 0; // Integer counter
+  d = 54.2; // Distance from centre of target to centre of PID
+  NP = 0; // Set number of Protons to 0 before checking
+  NPi = 0; // Set number of pions to 0 before checking
+  NRoo = 0; // Set number of Rootinos to 0 before checking
   Deut = TLorentzVector (0., 0., 0., 1875.613); // 4-Vector of Deuterium target, assume at rest
-  Mn = 939.565;
-  Mp = 938.272;
-  TRandom2 *rGen = new TRandom2(0);
+  Mn = 939.565; // Mass of neutron
+  Mp = 938.272; // Mass of proton
 
-  Cut_CB_proton = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Proton_27_02_15.root", "Proton");
+  Cut_CB_proton = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Proton_27_02_15.root", "Proton"); // These will need adjusting with new Acqu files
   Cut_proton = Cut_CB_proton;
   Cut_CB_pion = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Pion_27_02_15.root", "Pion");
   Cut_pion = Cut_CB_pion;
@@ -49,12 +48,13 @@ Bool_t	PNeutPol::Start()
   // Cut_neutron = Cut_CB_neutron; // This only needs to be here if we get simulation to show where we expect neutrons
   cout << endl;
 
-  if (GetScalers()->GetNEntries() == 0)
+  if (GetScalers()->GetNEntries() == 0) // MC Data has no scaler entries so if 0, data gets a flag to denote it as MC
   {
       MCData = kTRUE;
+      TRandom2 *rGen = new TRandom2(0); // Define new random generator for use in MC smearing fn
   }
 
-  else if (GetScalers()->GetNEntries() != 0)
+  else if (GetScalers()->GetNEntries() != 0) // This flag is listed as false if the number of scaler entries does not equal 0
 
   {
       MCData = kFALSE;
@@ -82,10 +82,8 @@ void	PNeutPol::ProcessEvent()
   for (Int_t j = 0; j < GetTagger()->GetNTagged(); j++){
 
     // Time = ( GetTagger()->GetTaggedTime(j) - GetTracks()->GetTime(i) ); // maybe move this to AFTER the cuts once the Eg-EpSum loop has been checked?
-    TaggerTime = GetTagger()->GetTaggedTime(j);
-    EGamma = (GetTagger()->GetTaggedEnergy(j));
-
-    // if(((EGamma - (E1 + E2)) > 200) || ((EGamma - (E1 + E2)) < 0)) continue; // Remove this cut?
+    TaggerTime = GetTagger()->GetTaggedTime(j); // Get tagged time for event
+    EGamma = (GetTagger()->GetTaggedEnergy(j)); // Get Photon energy for event
 
     // If neither particle is in the proton banana region continue
     if (Cut_proton -> IsInside(E1, dE1Corr) == kFALSE && Cut_proton -> IsInside(E2, dE2Corr) == kFALSE) continue; // if neither particle is in proton region drop out
@@ -95,10 +93,10 @@ void	PNeutPol::ProcessEvent()
     //if (i == 0) { // These properties get defined for each photon
 
     Gamma = TLorentzVector (0., 0., EGamma , EGamma); // 4-Vector of Photon beam
-    Gamma3 = Gamma.Vect();
-    B = (Deut + Gamma).Beta();
-    b = TVector3(0., 0., B);
-    mm1 = ((Gamma + Deut) - GV2).M();
+    Gamma3 = Gamma.Vect(); // Convert photon beam 4-vector to 3-vector
+    B = (Deut + Gamma).Beta(); // Calculte Beta
+    b = TVector3(0., 0., B); // Define boost vector
+    mm1 = ((Gamma + Deut) - GV2).M(); // Calculate missing mass of each particle
     mm2 = ((Gamma + Deut) - GV1).M();
     mm1Diff = abs(Mn-mm1); // Look at difference of missing mass from neutron mass
     mm2Diff = abs(Mn-mm2);
@@ -148,23 +146,23 @@ void	PNeutPol::ProcessEvent()
     }
 
     if( Zp > 60 || Zp < -60) continue; // Cut if proton vertex not where we expect it to be
-    if(Cut_proton -> IsInside(En, dEn) == kTRUE) nBanana = kTRUE;
-    if(Cut_proton -> IsInside(En, dEn) == kFALSE) nBanana = kFALSE;
+    if(Cut_proton -> IsInside(En, dEn) == kTRUE) nBanana = kTRUE; // Set flag to true or false depending upon location of neutron
+    if(Cut_proton -> IsInside(En, dEn) == kFALSE) nBanana = kFALSE; // Is it in or out of proton banana?
 
     //mmadj = mmp - Mn; // Look at difference from what the missing mass SHOULD be
     //GVpUnadjE = GVp(3); // Take the initial energy of the proton
     //GVp(3) = GVpUnadjE + mmadj; // Add on the adjustment from the missing mass to the energy of the 4-vector
     mmn = ((Gamma+Deut)-GVn).M(); // Recalculate mmn using the Neutron vector with a corrected mass
     GVnCalc = ((Gamma + Deut) - GVp); // Calculate the original neutron 4-vector from conservation of 4 momenta
-    GVp3 = GVp.Vect(); // Generate some 3 vectors from the 4-vectors we have
+    GVp3 = GVp.Vect(); // Generate some 3-vectors from the 4-vectors we have
     GVn3 = GVn.Vect();
     GVnCalc3 = GVnCalc.Vect();
 
-    NeutronEnergy();
+    NeutronEnergy(); // Calculate the neutron energy in two ways and look at difference
     LabBoost(); // Boost particles in lab frame and return results
     LabScatter(); // Work out scattering angle in lab frame and return results
     nFrameScatter(); // Work out neutron scattering in its frame and return results
-    WCVertex();
+    WCVertex(); // Calculate Z vertex location in WC from measured and reconstructed vectors
     if (ScattTheta > 90) continue;
     if (nBanana == kFALSE && (zWCRec-zWC > 20 || zWCRec-zWC < -20)) continue;
     //if (Cut_proton -> IsInside(En, dEn) == kFALSE) continue; //If the neutron is inside the proton region drop out
@@ -210,7 +208,7 @@ TCutG*	PNeutPol::OpenCutFile(Char_t* filename, Char_t* cutname)
 	return Cut_clone;
 }
 
-Int_t PNeutPol::GetEvent()
+Int_t PNeutPol::GetEvent() // Gets basic info on particles for event
 {
   NTrack = GetTracks()->GetNTracks();
   NP = GetProtons()->GetNParticles();
@@ -220,14 +218,14 @@ Int_t PNeutPol::GetEvent()
   return NTrack, NP, NPi, NRoo, NTag;
 }
 
-TLorentzVector PNeutPol::InitialVect()
+TLorentzVector PNeutPol::InitialVect() // Defines initial vectors
 {
   GV1 = GetTracks()->GetVector(0, Mp);
   GV2 = GetTracks()->GetVector(1, Mp); // Set both to have proton mass for now
   return GV1, GV2; // Returns intial 4-vectors for use in later functions
 }
 
-Double_t PNeutPol::InitialProp()
+Double_t PNeutPol::InitialProp() // Defines initial particle properties
 {
   Theta1 = (GV1.Theta()) * TMath::RadToDeg();
   Theta2 = (GV2.Theta()) * TMath::RadToDeg();
@@ -237,15 +235,15 @@ Double_t PNeutPol::InitialProp()
   E2 = GetTracks()->GetClusterEnergy(1);
   dE1 = GetTracks()->GetVetoEnergy(0);
   dE2 = GetTracks()->GetVetoEnergy(1);
-  if (MCData == kFALSE)
+  if (MCData == kFALSE) // For non MC data currently need to correct dE
   {
-      dE1Corr = dE1*(sin(GV1.Theta()));
+      dE1Corr = dE1*(sin(GV1.Theta())); // This correction won't be needed at all with new acqu
       dE2Corr = dE2*(sin(GV2.Theta()));
   }
   return Theta1, Theta2, z1, z2, E1, E2, dE1, dE2, dE1Corr, dE2Corr; // Returns various quantities used in later functions
 }
 
-Double_t PNeutPol::MCSmearing()
+Double_t PNeutPol::MCSmearing() // Smear dE values for MC data to represent Energy resolution of PID
 {
   dE1 = rGen.Gaus(GetTracks()->GetVetoEnergy(0) , (0.29*(sqrt(GetTracks()->GetVetoEnergy(0)))));
   dE2 = rGen.Gaus(GetTracks()->GetVetoEnergy(1) , (0.29*(sqrt(GetTracks()->GetVetoEnergy(1)))));
@@ -253,13 +251,13 @@ Double_t PNeutPol::MCSmearing()
   if (dE1 < 0) dE1 = 0.01;
   if (dE2 < 0) dE2 = 0.01;
 
-  dE1Corr = dE1; // MC Data does not need corrections
+  dE1Corr = dE1; // MC Data does not need corrections so 'corrected' values equal the normal values
   dE2Corr = dE2;
 
   return dE1, dE2, dE1Corr, dE2Corr;
 }
 
-Double_t PNeutPol::PNProp(Int_t ProtonParticleNumber)
+Double_t PNeutPol::PNProp(Int_t ProtonParticleNumber) // Define properties of proton and neutron from particles that correspond to each
 {
   if(ProtonParticleNumber == 1)
     {
@@ -290,7 +288,7 @@ Double_t PNeutPol::PNProp(Int_t ProtonParticleNumber)
   return Zp, Zn, zdiff, mmp, mmn, Ep, En, dEp, dEn;
 }
 
-TLorentzVector PNeutPol::PNVect(Int_t ProtonParticleNumber)
+TLorentzVector PNeutPol::PNVect(Int_t ProtonParticleNumber) // Define vectors for p and n in similar manner to properties above
 {
   if(ProtonParticleNumber == 1)
     {
@@ -309,7 +307,7 @@ TLorentzVector PNeutPol::PNVect(Int_t ProtonParticleNumber)
   return GVp, GVn;
 }
 
-Double_t PNeutPol::NeutronEnergy()
+Double_t PNeutPol::NeutronEnergy() // Calculate the neutron energy from the reconstructed n vector and from kinematics
 
 {
 
@@ -320,7 +318,7 @@ Double_t PNeutPol::NeutronEnergy()
 
 }
 
-Double_t PNeutPol::LabBoost()
+Double_t PNeutPol::LabBoost() // Boost particles from lab frame to CM
 {
   GVpB = GVp; //Reset the boost vector on each photon
   GVnB = GVn;
@@ -347,7 +345,7 @@ Double_t PNeutPol::LabScatter()
 }
 
 
-Double_t PNeutPol::WCVertex()
+Double_t PNeutPol::WCVertex() // Calculate location of WC Z vertex for measured and reconstructed vector
 {
 
   lrec = d/(tan(GVnCalc3.Theta())); // Calculate how far along from interaction point the PID interaction was
@@ -379,7 +377,7 @@ Double_t PNeutPol::nFrameScatter()
   return ScattTheta, ScattPhi;
 }
 
-PNeutPol::PNeutPol()
+PNeutPol::PNeutPol() // Define a load of histograms to fill
 {
   time = new GH1("time", 	"time", 	1400, -700, 700);
   time_cut = new GH1("time_cut", 	"time_cut", 	1400, -700, 700);
