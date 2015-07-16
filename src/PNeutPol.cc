@@ -31,11 +31,14 @@ Bool_t	PNeutPol::Start()
 
   SetAsPhysicsFile();
 
+  i = 0;
   d = 54.2;
   NP = 0;
   NPi = 0;
   NRoo = 0;
   Deut = TLorentzVector (0., 0., 0., 1875.613); // 4-Vector of Deuterium target, assume at rest
+  Mn = 939.565;
+  Mp = 938.272;
   TRandom2 *rGen = new TRandom2(0);
 
   Cut_CB_proton = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Proton_27_02_15.root", "Proton");
@@ -45,6 +48,17 @@ Bool_t	PNeutPol::Start()
   // Cut_CB_neutron = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Neutron_25_02_15.root", "Neutron");
   // Cut_neutron = Cut_CB_neutron; // This only needs to be here if we get simulation to show where we expect neutrons
   cout << endl;
+
+  if (GetScalers()->GetNEntries() == 0)
+  {
+      MCData = kTRUE;
+  }
+
+  else if (GetScalers()->GetNEntries() != 0)
+
+  {
+      MCData = kFALSE;
+  }
 
   TraverseValidEvents(); // This loops over each event as in old file and calls ProcessEvent() each loop
 
@@ -59,8 +73,10 @@ void	PNeutPol::ProcessEvent()
   if (NTrack !=2) return; // Ensures two track event
   InitialVect(); // Function gets vectors of identified tracks and returns them
   InitialProp(); // Function gets initial properties (energy, vertex e.t.c.) of identified tracks
-  MCSmearing(); // Smear dE values for MC data, switch off for real data
-
+  if ( MCData == kTRUE)
+  {
+      MCSmearing(); // Smear dE values for MC data
+  }
   //for (Int_t i=0; i < NTrack; i++){ // Currently nothing relies upon i!
 
   for (Int_t j = 0; j < GetTagger()->GetNTagged(); j++){
@@ -84,8 +100,8 @@ void	PNeutPol::ProcessEvent()
     b = TVector3(0., 0., B);
     mm1 = ((Gamma + Deut) - GV2).M();
     mm2 = ((Gamma + Deut) - GV1).M();
-    mm1Diff = abs(939.565-mm1); // Look at difference of missing mass from neutron mass
-    mm2Diff = abs(939.565-mm2);
+    mm1Diff = abs(Mn-mm1); // Look at difference of missing mass from neutron mass
+    mm2Diff = abs(Mn-mm2);
 
     //}
 
@@ -132,8 +148,10 @@ void	PNeutPol::ProcessEvent()
     }
 
     if( Zp > 60 || Zp < -60) continue; // Cut if proton vertex not where we expect it to be
+    if(Cut_proton -> IsInside(En, dEn) == kTRUE) nBanana = kTRUE;
+    if(Cut_proton -> IsInside(En, dEn) == kFALSE) nBanana = kFALSE;
 
-    //mmadj = mmp - 939.565; // Look at difference from what the missing mass SHOULD be
+    //mmadj = mmp - Mn; // Look at difference from what the missing mass SHOULD be
     //GVpUnadjE = GVp(3); // Take the initial energy of the proton
     //GVp(3) = GVpUnadjE + mmadj; // Add on the adjustment from the missing mass to the energy of the 4-vector
     mmn = ((Gamma+Deut)-GVn).M(); // Recalculate mmn using the Neutron vector with a corrected mass
@@ -142,12 +160,13 @@ void	PNeutPol::ProcessEvent()
     GVn3 = GVn.Vect();
     GVnCalc3 = GVnCalc.Vect();
 
+    NeutronEnergy();
     LabBoost(); // Boost particles in lab frame and return results
     LabScatter(); // Work out scattering angle in lab frame and return results
     nFrameScatter(); // Work out neutron scattering in its frame and return results
     WCVertex();
     if (ScattTheta > 90) continue;
-    if (zWCRec-zWC > 20 || zWCRec-zWC < -20) continue;
+    if (nBanana == kFALSE && (zWCRec-zWC > 20 || zWCRec-zWC < -20)) continue;
     //if (Cut_proton -> IsInside(En, dEn) == kFALSE) continue; //If the neutron is inside the proton region drop out
     // This has been done as the neutrons in the proton region have potentially not scattered in the PID
     FillHists(); // Fill histograms with data generated
@@ -203,8 +222,8 @@ Int_t PNeutPol::GetEvent()
 
 TLorentzVector PNeutPol::InitialVect()
 {
-  GV1 = GetTracks()->GetVector(0, 938.272);
-  GV2 = GetTracks()->GetVector(1, 938.272); // Set both to have proton mass for now
+  GV1 = GetTracks()->GetVector(0, Mp);
+  GV2 = GetTracks()->GetVector(1, Mp); // Set both to have proton mass for now
   return GV1, GV2; // Returns intial 4-vectors for use in later functions
 }
 
@@ -218,8 +237,11 @@ Double_t PNeutPol::InitialProp()
   E2 = GetTracks()->GetClusterEnergy(1);
   dE1 = GetTracks()->GetVetoEnergy(0);
   dE2 = GetTracks()->GetVetoEnergy(1);
-  dE1Corr = dE1/(sin(GV1.Theta()));
-  dE2Corr = dE2/(sin(GV2.Theta()));
+  if (MCData == kFALSE)
+  {
+      dE1Corr = dE1*(sin(GV1.Theta()));
+      dE2Corr = dE2*(sin(GV2.Theta()));
+  }
   return Theta1, Theta2, z1, z2, E1, E2, dE1, dE2, dE1Corr, dE2Corr; // Returns various quantities used in later functions
 }
 
@@ -231,8 +253,8 @@ Double_t PNeutPol::MCSmearing()
   if (dE1 < 0) dE1 = 0.01;
   if (dE2 < 0) dE2 = 0.01;
 
-  dE1Corr = dE1/(sin(GV1.Theta()));
-  dE2Corr = dE2/(sin(GV2.Theta()));
+  dE1Corr = dE1; // MC Data does not need corrections
+  dE2Corr = dE2;
 
   return dE1, dE2, dE1Corr, dE2Corr;
 }
@@ -273,7 +295,7 @@ TLorentzVector PNeutPol::PNVect(Int_t ProtonParticleNumber)
   if(ProtonParticleNumber == 1)
     {
       GVp = GV1;
-      GV2 = GetTracks()->GetVector(1, 939.565);
+      GV2 = GetTracks()->GetVector(1, Mn);
       GVn = GV2;
     }
 
@@ -281,10 +303,21 @@ TLorentzVector PNeutPol::PNVect(Int_t ProtonParticleNumber)
 
     {
       GVp = GV2;
-      GV1 = GetTracks()->GetVector(0, 939.565); // Since we've decided this particle is a neutron, set its mass to Mn
+      GV1 = GetTracks()->GetVector(0, Mn); // Since we've decided this particle is a neutron, set its mass to Mn
       GVn = GV1; // The neutron vector as measured by the vertex information
     }
   return GVp, GVn;
+}
+
+Double_t PNeutPol::NeutronEnergy()
+
+{
+
+  EnVectCalc = GVnCalc(3)-Mn;
+  EnKinCalc = ((TMath::Power((Mn + Mp),2)) * En)/(2*Mn*Mp*(1-cos(GVnB.Theta())));
+
+  return EnVectCalc;
+
 }
 
 Double_t PNeutPol::LabBoost()
@@ -359,6 +392,9 @@ PNeutPol::PNeutPol()
   Ek = new GH1( "Ek", "Particle Energy Distribution", 100, 0, 500 );
   Eg = new GH1( "Eg", "Photon Energy Distribution", 100, 100, 900 );
   EkSum = new GH1( "Ek Sum", "Particle Energy Sum Distribution", 300, 0, 900 );
+  ENeutronVectCalc = new GH1 ( "EnVC", "Neutron Energy Calculated from Reconstructed Vectors", 300, 0, 600);
+  ENeutronKinCalc = new GH1 ( "EnKC", "Neutron Energy Calculated from Kinematics", 300, 0, 600);
+  ENeutronDiff = new GH1 ("EnDiff", "Difference in Calculated Neutron Energies (ZKin - ZVect)", 250, -100, 900);
   ThetaCM = new GH1( "ThetaCM", "Theta (CM) Distribution", 180, 0, 180 );
   Z_Vert = new GH1("Z_Vertex", "Z Vertex Distribution", 300, -150, 150 );
   Zp_Vert = new GH1("Zp_Vertex", "Proton Z Vertex Distribution", 300, -150, 150 );
@@ -368,8 +404,8 @@ PNeutPol::PNeutPol()
   Z_WireChamberDifference = new GH1("Z_Wire_Chamber_Difference", "Wire Chamber Z Vertex Difference Distribution", 300, -150, 150 );
   ThetaCMProton = new GH1( "ThetaCMProton", " Proton Theta (CM) Distribution", 180, 0, 180 );
   ThetaCMNeutron = new GH1( "ThetaCMNeutron", "Neutron Theta (CM) Distribution", 180, 0, 180 );
-  PhiCMProton = new GH1 ("PhiCMProton", "Proton Phi (CM) Distribution", 360, -180, 180);
-  PhiCMNeutron = new GH1 ("PhiCMNeutron", "Neutron Phi (CM) Distribution", 360, -180, 180);
+  PhiCMProton = new GH1 ("PhiCMProton", "Proton Phi (CM) Distribution", 36, -180, 180);
+  PhiCMNeutron = new GH1 ("PhiCMNeutron", "Neutron Phi (CM) Distribution", 36, -180, 180);
 
   CM150 = new GH1("CM_150MeV", "Theta (CM) Distribution for photon energies of 150pm50 MeV", 160, 0, 160);
   CM250 = new GH1("CM_250MeV", "Theta (CM) Distribution for photon energies of 250pm50 MeV", 160, 0, 160);
@@ -379,78 +415,76 @@ PNeutPol::PNeutPol()
 
   ThetaScLab =  new GH1( "Theta_Neutron_Lab Frame", "Theta_Neutron_Lab_Frame", 180, 0, 180);
   ThetaSc =  new GH1( "Theta_Scattered", "Scattetred Proton Theta Distribution in Rotated Frame", 180, 0, 180 );
-  PhiSc = new GH1( "Phi_Scattered", "Scattetred Proton Phi Distribution in Rotated Frame", 360, -180, 180 );
-  PhiScCut = new GH1( "Phi_Scattered_Cut", "Scattetred Proton Phi Distribution in Rotated Frame With Cut on Incident Theta", 360, -180, 180 );
-  PhiSc125 = new GH1( "Phi_Scattered_125MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 125pm25MeV", 360, -180, 180);
-  PhiSc175 = new GH1( "Phi_Scattered_175MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 175pm25MeV", 360, -180, 180);
-  PhiSc225 = new GH1( "Phi_Scattered_225MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 225pm25MeV", 360, -180, 180);
-  PhiSc275 = new GH1( "Phi_Scattered_275MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 275pm25MeV", 360, -180, 180);
-  PhiSc325 = new GH1( "Phi_Scattered_325MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 325pm25MeV", 360, -180, 180);
-  PhiSc375 = new GH1( "Phi_Scattered_375MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 375pm25MeV", 360, -180, 180);
-  PhiSc425 = new GH1( "Phi_Scattered_425MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 425pm25MeV", 360, -180, 180);
-  PhiSc475 = new GH1( "Phi_Scattered_475MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 475pm25MeV", 360, -180, 180);
-  PhiSc525 = new GH1( "Phi_Scattered_525MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 525pm25MeV", 360, -180, 180);
-  PhiSc575 = new GH1( "Phi_Scattered_575MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 575pm25MeV", 360, -180, 180);
-  PhiSc125Cut = new GH1( "Phi_Scattered_125MeV_Cut", "Phi_Scattered_125MeV_Cut", 360, -180, 180);
-  PhiSc175Cut = new GH1( "Phi_Scattered_175MeV_Cut", "Phi_Scattered_175MeV_Cut", 360, -180, 180);
-  PhiSc225Cut = new GH1( "Phi_Scattered_225MeV_Cut", "Phi_Scattered_225MeV_Cut", 360, -180, 180);
-  PhiSc275Cut = new GH1( "Phi_Scattered_275MeV_Cut", "Phi_Scattered_275MeV_Cut", 360, -180, 180);
-  PhiSc325Cut = new GH1( "Phi_Scattered_325MeV_Cut", "Phi_Scattered_325MeV_Cut", 360, -180, 180);
-  PhiSc375Cut = new GH1( "Phi_Scattered_375MeV_Cut", "Phi_Scattered_375MeV_Cut", 360, -180, 180);
-  PhiSc425Cut = new GH1( "Phi_Scattered_425MeV_Cut", "Phi_Scattered_425MeV_Cut", 360, -180, 180);
-  PhiSc475Cut = new GH1( "Phi_Scattered_475MeV_Cut", "Phi_Scattered_475MeV_Cut", 360, -180, 180);
-  PhiSc525Cut = new GH1( "Phi_Scattered_525MeV_Cut", "Phi_Scattered_525MeV_Cut", 360, -180, 180);
-  PhiSc575Cut = new GH1( "Phi_Scattered_575MeV_Cut", "Phi_Scattered_575MeV_Cut", 360, -180, 180);
+  PhiSc = new GH1( "Phi_Scattered", "Scattetred Proton Phi Distribution in Rotated Frame", 36, -180, 180 );
+  PhiScCut = new GH1( "Phi_Scattered_Cut", "Scattetred Proton Phi Distribution in Rotated Frame With Cut on Incident Theta", 36, -180, 180 );
+  PhiSc125 = new GH1( "Phi_Scattered_125MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 125pm25MeV", 36, -180, 180);
+  PhiSc175 = new GH1( "Phi_Scattered_175MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 175pm25MeV", 36, -180, 180);
+  PhiSc225 = new GH1( "Phi_Scattered_225MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 225pm25MeV", 36, -180, 180);
+  PhiSc275 = new GH1( "Phi_Scattered_275MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 275pm25MeV", 36, -180, 180);
+  PhiSc325 = new GH1( "Phi_Scattered_325MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 325pm25MeV", 36, -180, 180);
+  PhiSc375 = new GH1( "Phi_Scattered_375MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 375pm25MeV", 36, -180, 180);
+  PhiSc425 = new GH1( "Phi_Scattered_425MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 425pm25MeV", 36, -180, 180);
+  PhiSc475 = new GH1( "Phi_Scattered_475MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 475pm25MeV", 36, -180, 180);
+  PhiSc525 = new GH1( "Phi_Scattered_525MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 525pm25MeV", 36, -180, 180);
+  PhiSc575 = new GH1( "Phi_Scattered_575MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 575pm25MeV", 36, -180, 180);
+  PhiSc125Cut = new GH1( "Phi_Scattered_125MeV_Cut", "Phi_Scattered_125MeV_Cut", 36, -180, 180);
+  PhiSc175Cut = new GH1( "Phi_Scattered_175MeV_Cut", "Phi_Scattered_175MeV_Cut", 36, -180, 180);
+  PhiSc225Cut = new GH1( "Phi_Scattered_225MeV_Cut", "Phi_Scattered_225MeV_Cut", 36, -180, 180);
+  PhiSc275Cut = new GH1( "Phi_Scattered_275MeV_Cut", "Phi_Scattered_275MeV_Cut", 36, -180, 180);
+  PhiSc325Cut = new GH1( "Phi_Scattered_325MeV_Cut", "Phi_Scattered_325MeV_Cut", 36, -180, 180);
+  PhiSc375Cut = new GH1( "Phi_Scattered_375MeV_Cut", "Phi_Scattered_375MeV_Cut", 36, -180, 180);
+  PhiSc425Cut = new GH1( "Phi_Scattered_425MeV_Cut", "Phi_Scattered_425MeV_Cut", 36, -180, 180);
+  PhiSc475Cut = new GH1( "Phi_Scattered_475MeV_Cut", "Phi_Scattered_475MeV_Cut", 36, -180, 180);
+  PhiSc525Cut = new GH1( "Phi_Scattered_525MeV_Cut", "Phi_Scattered_525MeV_Cut", 36, -180, 180);
+  PhiSc575Cut = new GH1( "Phi_Scattered_575MeV_Cut", "Phi_Scattered_575MeV_Cut", 36, -180, 180);
 
-  PhiSc_In = new GH1( "Phi_Scattered_In", "Scattetred Proton Phi Distribution in Rotated Frame", 360, -180, 180 );
-  PhiSc125_In = new GH1( "Phi_Scattered_125MeV_In", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 125pm25MeV", 360, -180, 180);
-  PhiSc175_In = new GH1( "Phi_Scattered_175MeV_In", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 175pm25MeV", 360, -180, 180);
-  PhiSc225_In = new GH1( "Phi_Scattered_225MeV_In", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 225pm25MeV", 360, -180, 180);
-  PhiSc275_In = new GH1( "Phi_Scattered_275MeV_In", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 275pm25MeV", 360, -180, 180);
-  PhiSc325_In = new GH1( "Phi_Scattered_325MeV_In", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 325pm25MeV", 360, -180, 180);
-  PhiSc375_In = new GH1( "Phi_Scattered_375MeV_In", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 375pm25MeV", 360, -180, 180);
-  PhiSc425_In = new GH1( "Phi_Scattered_425MeV_In", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 425pm25MeV", 360, -180, 180);
-  PhiSc475_In = new GH1( "Phi_Scattered_475MeV_In", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 475pm25MeV", 360, -180, 180);
-  PhiSc525_In = new GH1( "Phi_Scattered_525MeV_In", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 525pm25MeV", 360, -180, 180);
-  PhiSc575_In = new GH1( "Phi_Scattered_575MeV_In", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 575pm25MeV", 360, -180, 180);
+  PhiSc_In = new GH1( "Phi_Scattered_In", "Scattetred Proton Phi Distribution in Rotated Frame", 36, -180, 180 );
+  PhiSc125_In = new GH1( "Phi_Scattered_125MeV_In", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 125pm25MeV", 36, -180, 180);
+  PhiSc175_In = new GH1( "Phi_Scattered_175MeV_In", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 175pm25MeV", 36, -180, 180);
+  PhiSc225_In = new GH1( "Phi_Scattered_225MeV_In", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 225pm25MeV", 36, -180, 180);
+  PhiSc275_In = new GH1( "Phi_Scattered_275MeV_In", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 275pm25MeV", 36, -180, 180);
+  PhiSc325_In = new GH1( "Phi_Scattered_325MeV_In", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 325pm25MeV", 36, -180, 180);
+  PhiSc375_In = new GH1( "Phi_Scattered_375MeV_In", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 375pm25MeV", 36, -180, 180);
+  PhiSc425_In = new GH1( "Phi_Scattered_425MeV_In", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 425pm25MeV", 36, -180, 180);
+  PhiSc475_In = new GH1( "Phi_Scattered_475MeV_In", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 475pm25MeV", 36, -180, 180);
+  PhiSc525_In = new GH1( "Phi_Scattered_525MeV_In", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 525pm25MeV", 36, -180, 180);
+  PhiSc575_In = new GH1( "Phi_Scattered_575MeV_In", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 575pm25MeV", 36, -180, 180);
 
-  PhiSc_Out = new GH1( "Phi_Scattered_Out", "Scattetred Proton Phi Distribution in Rotated Frame", 360, -180, 180 );
-  PhiSc125_Out = new GH1( "Phi_Scattered_125MeV_Out", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 125pm25MeV", 360, -180, 180);
-  PhiSc175_Out = new GH1( "Phi_Scattered_175MeV_Out", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 175pm25MeV", 360, -180, 180);
-  PhiSc225_Out = new GH1( "Phi_Scattered_225MeV_Out", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 225pm25MeV", 360, -180, 180);
-  PhiSc275_Out = new GH1( "Phi_Scattered_275MeV_Out", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 275pm25MeV", 360, -180, 180);
-  PhiSc325_Out = new GH1( "Phi_Scattered_325MeV_Out", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 325pm25MeV", 360, -180, 180);
-  PhiSc375_Out = new GH1( "Phi_Scattered_375MeV_Out", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 375pm25MeV", 360, -180, 180);
-  PhiSc425_Out = new GH1( "Phi_Scattered_425MeV_Out", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 425pm25MeV", 360, -180, 180);
-  PhiSc475_Out = new GH1( "Phi_Scattered_475MeV_Out", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 475pm25MeV", 360, -180, 180);
-  PhiSc525_Out = new GH1( "Phi_Scattered_525MeV_Out", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 525pm25MeV", 360, -180, 180);
-  PhiSc575_Out = new GH1( "Phi_Scattered_575MeV_Out", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 575pm25MeV", 360, -180, 180);
+  PhiSc_Out = new GH1( "Phi_Scattered_Out", "Scattetred Proton Phi Distribution in Rotated Frame", 36, -180, 180 );
+  PhiSc125_Out = new GH1( "Phi_Scattered_125MeV_Out", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 125pm25MeV", 36, -180, 180);
+  PhiSc175_Out = new GH1( "Phi_Scattered_175MeV_Out", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 175pm25MeV", 36, -180, 180);
+  PhiSc225_Out = new GH1( "Phi_Scattered_225MeV_Out", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 225pm25MeV", 36, -180, 180);
+  PhiSc275_Out = new GH1( "Phi_Scattered_275MeV_Out", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 275pm25MeV", 36, -180, 180);
+  PhiSc325_Out = new GH1( "Phi_Scattered_325MeV_Out", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 325pm25MeV", 36, -180, 180);
+  PhiSc375_Out = new GH1( "Phi_Scattered_375MeV_Out", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 375pm25MeV", 36, -180, 180);
+  PhiSc425_Out = new GH1( "Phi_Scattered_425MeV_Out", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 425pm25MeV", 36, -180, 180);
+  PhiSc475_Out = new GH1( "Phi_Scattered_475MeV_Out", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 475pm25MeV", 36, -180, 180);
+  PhiSc525_Out = new GH1( "Phi_Scattered_525MeV_Out", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 525pm25MeV", 36, -180, 180);
+  PhiSc575_Out = new GH1( "Phi_Scattered_575MeV_Out", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 575pm25MeV", 36, -180, 180);
 
-  PhiScCut_In = new GH1( "Phi_Scattered_Cut_In", "Scattetred Proton Phi Distribution in Rotated Frame With Cut on Incident Theta", 360, -180, 180 );
-  PhiSc125Cut_In = new GH1( "Phi_Scattered_125MeV_Cut_In", "Phi_Scattered_125MeV_Cut", 360, -180, 180);
-  PhiSc175Cut_In = new GH1( "Phi_Scattered_175MeV_Cut_In", "Phi_Scattered_175MeV_Cut", 360, -180, 180);
-  PhiSc225Cut_In = new GH1( "Phi_Scattered_225MeV_Cut_In", "Phi_Scattered_225MeV_Cut", 360, -180, 180);
-  PhiSc275Cut_In = new GH1( "Phi_Scattered_275MeV_Cut_In", "Phi_Scattered_275MeV_Cut", 360, -180, 180);
-  PhiSc325Cut_In = new GH1( "Phi_Scattered_325MeV_Cut_In", "Phi_Scattered_325MeV_Cut", 360, -180, 180);
-  PhiSc375Cut_In = new GH1( "Phi_Scattered_375MeV_Cut_In", "Phi_Scattered_375MeV_Cut", 360, -180, 180);
-  PhiSc425Cut_In = new GH1( "Phi_Scattered_425MeV_Cut_In", "Phi_Scattered_425MeV_Cut", 360, -180, 180);
-  PhiSc475Cut_In = new GH1( "Phi_Scattered_475MeV_Cut_In", "Phi_Scattered_475MeV_Cut", 360, -180, 180);
-  PhiSc525Cut_In = new GH1( "Phi_Scattered_525MeV_Cut_In", "Phi_Scattered_525MeV_Cut", 360, -180, 180);
-  PhiSc575Cut_In = new GH1( "Phi_Scattered_575MeV_Cut_In", "Phi_Scattered_575MeV_Cut", 360, -180, 180);
+  PhiScCut_In = new GH1( "Phi_Scattered_Cut_In", "Scattetred Proton Phi Distribution in Rotated Frame With Cut on Incident Theta", 36, -180, 180 );
+  PhiSc125Cut_In = new GH1( "Phi_Scattered_125MeV_Cut_In", "Phi_Scattered_125MeV_Cut", 36, -180, 180);
+  PhiSc175Cut_In = new GH1( "Phi_Scattered_175MeV_Cut_In", "Phi_Scattered_175MeV_Cut", 36, -180, 180);
+  PhiSc225Cut_In = new GH1( "Phi_Scattered_225MeV_Cut_In", "Phi_Scattered_225MeV_Cut", 36, -180, 180);
+  PhiSc275Cut_In = new GH1( "Phi_Scattered_275MeV_Cut_In", "Phi_Scattered_275MeV_Cut", 36, -180, 180);
+  PhiSc325Cut_In = new GH1( "Phi_Scattered_325MeV_Cut_In", "Phi_Scattered_325MeV_Cut", 36, -180, 180);
+  PhiSc375Cut_In = new GH1( "Phi_Scattered_375MeV_Cut_In", "Phi_Scattered_375MeV_Cut", 36, -180, 180);
+  PhiSc425Cut_In = new GH1( "Phi_Scattered_425MeV_Cut_In", "Phi_Scattered_425MeV_Cut", 36, -180, 180);
+  PhiSc475Cut_In = new GH1( "Phi_Scattered_475MeV_Cut_In", "Phi_Scattered_475MeV_Cut", 36, -180, 180);
+  PhiSc525Cut_In = new GH1( "Phi_Scattered_525MeV_Cut_In", "Phi_Scattered_525MeV_Cut", 36, -180, 180);
+  PhiSc575Cut_In = new GH1( "Phi_Scattered_575MeV_Cut_In", "Phi_Scattered_575MeV_Cut", 36, -180, 180);
 
-  PhiScCut_Out = new GH1( "Phi_Scattered_Cut_Out", "Scattetred Proton Phi Distribution in Rotated Frame With Cut on Incident Theta", 360, -180, 180 );
-  PhiSc125Cut_Out = new GH1( "Phi_Scattered_125MeV_Cut_Out", "Phi_Scattered_125MeV_Cut", 360, -180, 180);
-  PhiSc175Cut_Out = new GH1( "Phi_Scattered_175MeV_Cut_Out", "Phi_Scattered_175MeV_Cut", 360, -180, 180);
-  PhiSc225Cut_Out = new GH1( "Phi_Scattered_225MeV_Cut_Out", "Phi_Scattered_225MeV_Cut", 360, -180, 180);
-  PhiSc275Cut_Out = new GH1( "Phi_Scattered_275MeV_Cut_Out", "Phi_Scattered_275MeV_Cut", 360, -180, 180);
-  PhiSc325Cut_Out = new GH1( "Phi_Scattered_325MeV_Cut_Out", "Phi_Scattered_325MeV_Cut", 360, -180, 180);
-  PhiSc375Cut_Out = new GH1( "Phi_Scattered_375MeV_Cut_Out", "Phi_Scattered_375MeV_Cut", 360, -180, 180);
-  PhiSc425Cut_Out = new GH1( "Phi_Scattered_425MeV_Cut_Out", "Phi_Scattered_425MeV_Cut", 360, -180, 180);
-  PhiSc475Cut_Out = new GH1( "Phi_Scattered_475MeV_Cut_Out", "Phi_Scattered_475MeV_Cut", 360, -180, 180);
-  PhiSc525Cut_Out = new GH1( "Phi_Scattered_525MeV_Cut_Out", "Phi_Scattered_525MeV_Cut", 360, -180, 180);
-  PhiSc575Cut_Out = new GH1( "Phi_Scattered_575MeV_Cut_Out", "Phi_Scattered_575MeV_Cut", 360, -180, 180);
-
-
+  PhiScCut_Out = new GH1( "Phi_Scattered_Cut_Out", "Scattetred Proton Phi Distribution in Rotated Frame With Cut on Incident Theta", 36, -180, 180 );
+  PhiSc125Cut_Out = new GH1( "Phi_Scattered_125MeV_Cut_Out", "Phi_Scattered_125MeV_Cut", 36, -180, 180);
+  PhiSc175Cut_Out = new GH1( "Phi_Scattered_175MeV_Cut_Out", "Phi_Scattered_175MeV_Cut", 36, -180, 180);
+  PhiSc225Cut_Out = new GH1( "Phi_Scattered_225MeV_Cut_Out", "Phi_Scattered_225MeV_Cut", 36, -180, 180);
+  PhiSc275Cut_Out = new GH1( "Phi_Scattered_275MeV_Cut_Out", "Phi_Scattered_275MeV_Cut", 36, -180, 180);
+  PhiSc325Cut_Out = new GH1( "Phi_Scattered_325MeV_Cut_Out", "Phi_Scattered_325MeV_Cut", 36, -180, 180);
+  PhiSc375Cut_Out = new GH1( "Phi_Scattered_375MeV_Cut_Out", "Phi_Scattered_375MeV_Cut", 36, -180, 180);
+  PhiSc425Cut_Out = new GH1( "Phi_Scattered_425MeV_Cut_Out", "Phi_Scattered_425MeV_Cut", 36, -180, 180);
+  PhiSc475Cut_Out = new GH1( "Phi_Scattered_475MeV_Cut_Out", "Phi_Scattered_475MeV_Cut", 36, -180, 180);
+  PhiSc525Cut_Out = new GH1( "Phi_Scattered_525MeV_Cut_Out", "Phi_Scattered_525MeV_Cut", 36, -180, 180);
+  PhiSc575Cut_Out = new GH1( "Phi_Scattered_575MeV_Cut_Out", "Phi_Scattered_575MeV_Cut", 36, -180, 180);
 
   // PhiScCut = new GH1( "Phi Scattered Cut", "Phi Scattered Cut", 160, 0, 160 );
 
@@ -493,6 +527,9 @@ void PNeutPol::FillHists()
   Ek->Fill (E1, TaggerTime);
   Ek->Fill (E2, TaggerTime);
   Eg->Fill((EGamma), TaggerTime);
+  ENeutronVectCalc->Fill(EnVectCalc, TaggerTime);
+  ENeutronKinCalc->Fill(EnKinCalc, TaggerTime);
+  ENeutronDiff->Fill(EnKinCalc - EnVectCalc, TaggerTime);
   ThetaScLab -> Fill(abs(Thetan), TaggerTime);
   //Thetan_Vs_Phin_Lab -> Fill(abs(Thetan), Phin, TaggerTime); // We want Phi of scattered p and theta of scattered p in lab frame?
   //ThetanCM_PhinCM ->Fill(ThetanB, PhinB, TaggerTime);
@@ -524,7 +561,7 @@ void PNeutPol::FillHists()
   if ( 500 < EGamma && EGamma < 550) PhiSc525->Fill(ScattPhi, TaggerTime);
   if ( 550 < EGamma && EGamma < 600) PhiSc575->Fill(ScattPhi, TaggerTime);
 
-  if (Cut_proton -> IsInside(En, dEn) == kTRUE)
+  if (nBanana == kTRUE)
   {
 
     PhiSc_In -> Fill(ScattPhi, TaggerTime);
@@ -542,7 +579,7 @@ void PNeutPol::FillHists()
 
   }
 
-  if (Cut_proton -> IsInside(En, dEn) == kFALSE)
+  if (nBanana == kFALSE)
   {
 
     PhiSc_Out -> Fill(ScattPhi, TaggerTime);
@@ -576,7 +613,7 @@ void PNeutPol::FillHists()
     if ( 500 < EGamma && EGamma < 550) PhiSc525Cut->Fill(ScattPhi, TaggerTime);
     if ( 550 < EGamma && EGamma < 600) PhiSc575Cut->Fill(ScattPhi, TaggerTime);
 
-    if (Cut_proton -> IsInside(En, dEn) == kTRUE)
+    if (nBanana == kTRUE)
     {
 
         PhiScCut_In -> Fill(ScattPhi, TaggerTime);
@@ -594,7 +631,7 @@ void PNeutPol::FillHists()
 
     }
 
-    if (Cut_proton -> IsInside(En, dEn) == kFALSE)
+    if (nBanana == kFALSE)
     {
 
         PhiScCut_Out -> Fill(ScattPhi, TaggerTime);

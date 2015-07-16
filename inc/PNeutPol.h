@@ -12,6 +12,7 @@ using namespace std;
 #include "TObject.h"
 #include "TGraph.h"
 #include "TRandom2.h"
+#include "TMath.h"
 
 class	PNeutPol : public PPhysics
 {
@@ -24,10 +25,13 @@ private:
   Int_t NRoo;
   Int_t NTag;
   Int_t NTrack;
+  Int_t i;
 
   double_t Time;
   double_t TaggerTime;
   double_t EGamma;
+  double_t Mn;
+  double_t Mp;
   double_t mm1;
   double_t mm2;
   double_t mmp;
@@ -65,6 +69,8 @@ private:
   double_t E2;
   double_t Ep;
   double_t En;
+  double_t EnVectCalc;
+  double_t EnKinCalc;
   double_t dE1;
   double_t dE2;
   double_t dEp;
@@ -77,6 +83,9 @@ private:
   double_t ScattThetaLab;
   double_t ScattTheta;
   double_t ScattPhi;
+
+  Bool_t nBanana;
+  Bool_t MCData;
 
   TLorentzVector GV1;
   TLorentzVector GV2;
@@ -109,6 +118,9 @@ private:
   GH1* Eg;
   GH1* EgESum;
   GH1* EkSum;
+  GH1* ENeutronVectCalc;
+  GH1* ENeutronKinCalc;
+  GH1* ENeutronDiff;
   GH1* Theta;
   GH1* ThetaCM;
   GH1* Z_Vert;
@@ -201,7 +213,6 @@ private:
   GH1* PhiSc525Cut_Out;
   GH1* PhiSc575Cut_Out;
 
-
   GH2* E_dE;
   GH2* E_dE_Proton;
   GH2* E_dE_Neutron;
@@ -247,6 +258,7 @@ public:
     Double_t PNProp(Int_t ProtonParticleNumber);
     TLorentzVector PNVect(Int_t ProtonParticleNumber);
     TVector3 DefineAxes(TVector3 ProtonVector, TVector3 ReconstuctedNeutronVector);
+    Double_t NeutronEnergy();
     Double_t LabBoost();
     Double_t LabScatter();
     Double_t WCVertex();
