@@ -86,9 +86,9 @@ void	PNeutPol::ProcessEvent()
     EGamma = (GetTagger()->GetTaggedEnergy(j)); // Get Photon energy for event
 
     // If neither particle is in the proton banana region continue
-    if (Cut_proton -> IsInside(E1, dE1Corr) == kFALSE && Cut_proton -> IsInside(E2, dE2Corr) == kFALSE) continue; // if neither particle is in proton region drop out
-    if (Cut_proton -> IsInside(E1, dE1Corr) == kFALSE && Cut_pion -> IsInside(E1, dE1Corr) == kFALSE) continue; // If not in proton or pion region drop out
-    if (Cut_proton -> IsInside(E2, dE2Corr) == kFALSE && Cut_pion -> IsInside(E2, dE2Corr) == kFALSE) continue;
+    if (Cut_proton -> IsInside(E1, dE1) == kFALSE && Cut_proton -> IsInside(E2, dE2) == kFALSE) continue; // if neither particle is in proton region drop out
+    if (Cut_proton -> IsInside(E1, dE1) == kFALSE && Cut_pion -> IsInside(E1, dE1) == kFALSE) continue; // If not in proton or pion region drop out
+    if (Cut_proton -> IsInside(E2, dE2) == kFALSE && Cut_pion -> IsInside(E2, dE2) == kFALSE) continue;
 
     //if (i == 0) { // These properties get defined for each photon
 
@@ -111,7 +111,7 @@ void	PNeutPol::ProcessEvent()
 
     //if (i == 0) { // First loop sees if both are inside the protons region, checks only once per event on FIRST track
 
-    if (Cut_proton -> IsInside(E1, dE1Corr) == kTRUE && Cut_proton -> IsInside(E2, dE2Corr) == kTRUE) {
+    if (Cut_proton -> IsInside(E1, dE1) == kTRUE && Cut_proton -> IsInside(E2, dE2) == kTRUE) {
 
       if (mm1Diff < mm2Diff) { //If mm1 closer to nucleon than mm2, particle 2 is the "Good event" i.e. the initial proton
 
@@ -130,7 +130,7 @@ void	PNeutPol::ProcessEvent()
 
     // Now do loops which check if only one of the protons is inside the proton banana
 
-    else if (Cut_proton -> IsInside(E1, dE1Corr) == kTRUE && Cut_proton -> IsInside(E2, dE2Corr) == kFALSE) {
+    else if (Cut_proton -> IsInside(E1, dE1) == kTRUE && Cut_proton -> IsInside(E2, dE2) == kFALSE) {
 
 	  // The 'Good' proton is the one in the banana, in this case particle 1
         PNProp(1);
@@ -138,7 +138,7 @@ void	PNeutPol::ProcessEvent()
 
     }
 
-    else if (Cut_proton -> IsInside(E2, dE2Corr) == kTRUE && Cut_proton -> IsInside(E1, dE1Corr) == kFALSE) {
+    else if (Cut_proton -> IsInside(E2, dE2) == kTRUE && Cut_proton -> IsInside(E1, dE1) == kFALSE) {
 
       PNProp(2);
       PNVect(2);
@@ -235,12 +235,8 @@ Double_t PNeutPol::InitialProp() // Defines initial particle properties
   E2 = GetTracks()->GetClusterEnergy(1);
   dE1 = GetTracks()->GetVetoEnergy(0);
   dE2 = GetTracks()->GetVetoEnergy(1);
-  if (MCData == kFALSE) // For non MC data currently need to correct dE
-  {
-      dE1Corr = dE1*(sin(GV1.Theta())); // This correction won't be needed at all with new acqu
-      dE2Corr = dE2*(sin(GV2.Theta()));
-  }
-  return Theta1, Theta2, z1, z2, E1, E2, dE1, dE2, dE1Corr, dE2Corr; // Returns various quantities used in later functions
+
+  return Theta1, Theta2, z1, z2, E1, E2, dE1, dE2; // Returns various quantities used in later functions
 }
 
 Double_t PNeutPol::MCSmearing() // Smear dE values for MC data to represent Energy resolution of PID
@@ -251,10 +247,7 @@ Double_t PNeutPol::MCSmearing() // Smear dE values for MC data to represent Ener
   if (dE1 < 0) dE1 = 0.01;
   if (dE2 < 0) dE2 = 0.01;
 
-  dE1Corr = dE1; // MC Data does not need corrections so 'corrected' values equal the normal values
-  dE2Corr = dE2;
-
-  return dE1, dE2, dE1Corr, dE2Corr;
+  return dE1, dE2;
 }
 
 Double_t PNeutPol::PNProp(Int_t ProtonParticleNumber) // Define properties of proton and neutron from particles that correspond to each
@@ -268,8 +261,8 @@ Double_t PNeutPol::PNProp(Int_t ProtonParticleNumber) // Define properties of pr
       mmn = mm1;
       Ep = E1;
       En = E2;
-      dEp = dE1Corr;
-      dEn = dE2Corr;
+      dEp = dE1;
+      dEn = dE2;
     }
 
   if(ProtonParticleNumber == 2)
@@ -281,8 +274,8 @@ Double_t PNeutPol::PNProp(Int_t ProtonParticleNumber) // Define properties of pr
       mmn = mm2;
       Ep = E2; // Therefore the quantity mmp is the amount of missing mass we see when we do a kinematics calculation USING the proton
       En = E1;
-      dEp = dE2Corr;
-      dEn = dE1Corr;
+      dEp = dE2;
+      dEn = dE1;
     }
 
   return Zp, Zn, zdiff, mmp, mmn, Ep, En, dEp, dEn;
@@ -502,8 +495,8 @@ PNeutPol::PNeutPol() // Define a load of histograms to fill
 void PNeutPol::FillHists()
 {
   // Fill histograms with stuff we've calculated
-  E_dE->Fill(E1, dE1Corr, TaggerTime);
-  E_dE->Fill(E2, dE2Corr, TaggerTime);
+  E_dE->Fill(E1, dE1, TaggerTime);
+  E_dE->Fill(E2, dE2, TaggerTime);
   MM_Proton->Fill(mmp, TaggerTime);
   MM_Neutron->Fill(mmn, TaggerTime);
   E_dE_Proton->Fill(Ep, dEp, TaggerTime);

@@ -75,8 +75,6 @@ private:
   double_t dE2;
   double_t dEp;
   double_t dEn;
-  double_t dE1Corr;
-  double_t dE2Corr;
   double_t ScattX;
   double_t ScattY;
   double_t ScattZ;
