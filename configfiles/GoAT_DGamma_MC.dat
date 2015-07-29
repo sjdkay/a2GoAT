@@ -18,8 +18,8 @@ Do-Particle-Reconstruction: 1
 #Consider just removing cuts entirely and doing them purely in the Physics analysis
 
 Do-Charged-Particle-Reconstruction: 1
-Cut-dE-E-CB-Proton: 	configfiles/cuts/CB_DeltaE-E_Proton_27_02_15.root Proton
-Cut-dE-E-CB-Pion:    	configfiles/cuts/CB_DeltaE-E_Pion_27_02_15.root Pion
+Cut-dE-E-CB-Proton: 	configfiles/cuts/CB_DeltaE-E_Proton_29_07_15.root Proton
+Cut-dE-E-CB-Pion:    	configfiles/cuts/CB_DeltaE-E_Pion_29_07_15.root Pion
 
 Do-Meson-Reconstruction: 1
 Cut-IM-Width-Pi0: 20

@@ -40,9 +40,9 @@ Bool_t	PNeutPol::Start()
   Mn = 939.565; // Mass of neutron
   Mp = 938.272; // Mass of proton
 
-  Cut_CB_proton = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Proton_27_02_15.root", "Proton"); // These will need adjusting with new Acqu files
+  Cut_CB_proton = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Proton_29_07_15.root", "Proton"); // These will need adjusting with new Acqu files
   Cut_proton = Cut_CB_proton;
-  Cut_CB_pion = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Pion_27_02_15.root", "Pion");
+  Cut_CB_pion = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Pion_29_07_15.root", "Pion");
   Cut_pion = Cut_CB_pion;
   // Cut_CB_neutron = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Neutron_25_02_15.root", "Neutron");
   // Cut_neutron = Cut_CB_neutron; // This only needs to be here if we get simulation to show where we expect neutrons
