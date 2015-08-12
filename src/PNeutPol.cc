@@ -44,6 +44,8 @@ Bool_t	PNeutPol::Start()
   Cut_proton = Cut_CB_proton;
   Cut_CB_pion = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Pion_29_07_15.root", "Pion");
   Cut_pion = Cut_CB_pion;
+  Cut_CB_ROI = OpenCutFile("configfiles/cuts/CB_DeltaE-E_ROI_05_08_15.root", "ROI");
+  Cut_ROI = Cut_CB_ROI;
   // Cut_CB_neutron = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Neutron_25_02_15.root", "Neutron");
   // Cut_neutron = Cut_CB_neutron; // This only needs to be here if we get simulation to show where we expect neutrons
   cout << endl;
@@ -59,6 +61,8 @@ Bool_t	PNeutPol::Start()
   {
       MCData = kFALSE;
   }
+
+  if (MCData == kTRUE) MCHists();
 
   TraverseValidEvents(); // This loops over each event as in old file and calls ProcessEvent() each loop
 
@@ -76,6 +80,7 @@ void	PNeutPol::ProcessEvent()
   if ( MCData == kTRUE)
   {
       MCSmearing(); // Smear dE values for MC data
+          pPIDElement = GetDetectorHits()->GetPIDHits(0);
   }
   //for (Int_t i=0; i < NTrack; i++){ // Currently nothing relies upon i!
 
@@ -167,6 +172,7 @@ void	PNeutPol::ProcessEvent()
     if (nBanana == kFALSE && (zWCRec-zWC > 20 || zWCRec-zWC < -20)) continue;
     //if (Cut_proton -> IsInside(En, dEn) == kFALSE) continue; //If the neutron is inside the proton region drop out
     // This has been done as the neutrons in the proton region have potentially not scattered in the PID
+
     FillHists(); // Fill histograms with data generated
 
     //}
@@ -263,6 +269,8 @@ Double_t PNeutPol::PNProp(Int_t ProtonParticleNumber) // Define properties of pr
       En = E2;
       dEp = dE1;
       dEn = dE2;
+      pPIDElement = GetDetectorHits()->GetPIDHits(0);
+      nPIDElement = GetDetectorHits()->GetPIDHits(1);
     }
 
   if(ProtonParticleNumber == 2)
@@ -276,9 +284,11 @@ Double_t PNeutPol::PNProp(Int_t ProtonParticleNumber) // Define properties of pr
       En = E1;
       dEp = dE2;
       dEn = dE1;
+      pPIDElement = GetDetectorHits()->GetPIDHits(1);
+      nPIDElement = GetDetectorHits()->GetPIDHits(0);
     }
 
-  return Zp, Zn, zdiff, mmp, mmn, Ep, En, dEp, dEn;
+  return Zp, Zn, zdiff, mmp, mmn, Ep, En, dEp, dEn, pPIDElement, nPIDElement;
 }
 
 TLorentzVector PNeutPol::PNVect(Int_t ProtonParticleNumber) // Define vectors for p and n in similar manner to properties above
@@ -429,6 +439,8 @@ PNeutPol::PNeutPol() // Define a load of histograms to fill
   PhiSc525Cut = new GH1( "Phi_Scattered_525MeV_Cut", "Phi_Scattered_525MeV_Cut", 36, -180, 180);
   PhiSc575Cut = new GH1( "Phi_Scattered_575MeV_Cut", "Phi_Scattered_575MeV_Cut", 36, -180, 180);
 
+  PhiScROI = new GH1( "Phi_Scattered_ROI", "Scattetred Proton Phi Distribution in Rotated Frame in ROI", 36, -180, 180 );
+
   PhiSc_In = new GH1( "Phi_Scattered_In", "Scattetred Proton Phi Distribution in Rotated Frame", 36, -180, 180 );
   PhiSc125_In = new GH1( "Phi_Scattered_125MeV_In", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 125pm25MeV", 36, -180, 180);
   PhiSc175_In = new GH1( "Phi_Scattered_175MeV_In", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 175pm25MeV", 36, -180, 180);
@@ -482,13 +494,20 @@ PNeutPol::PNeutPol() // Define a load of histograms to fill
   E_dE = new GH2("E_dE", "EdE Plot", 150, 0, 500, 150, 0, 7);
   E_dE_Proton = new GH2("E_dE_Proton", "EdE Plot for Protons", 150, 0, 500, 150, 0, 7);
   E_dE_Neutron = new GH2("E_dE_Neutron", "EdE Plot for Neutrons", 150, 0, 500, 150, 0, 7);
+  E_dE_ROI = new GH2("E_dE_ROI", "EdE Plot in ROI", 150, 0, 500, 150, 0, 7);
+  E_dE_ROI_p = new GH2("E_dE_ROI_p", "EdE Plot in ROI for Protons", 150, 0, 500, 150, 0, 7);
+  E_dE_ROI_n = new GH2("E_dE_ROI_n", "EdE Plot in ROI for Neutrons", 150, 0, 500, 150, 0, 7);
+  //E_dE_LowPhi = new GH2("E_dE_LowPhi", "EdE Plot for Low Phi Events", 150, 0, 500, 150, 0, 7);
+  //E_dE_LowPhi_p = new GH2("E_dE_LowPhi_p", "EdE Plot for Low Phi Events for Protons", 150, 0, 500, 150, 0, 7);
+  //E_dE_LowPhi_n = new GH2("E_dE_LowPhi_n", "EdE Plot for Low Phi Events for Neutrons", 150, 0, 500, 150, 0, 7);
+  //PhiScLow = new GH1( "Phi_Scattered_Low", "Phi_Scattered", 36, -180, 180);
   //ThetanCM_PhinCM = new GH2 ("ThetaCM_vs_PhiCM_Neutron", "ThetaCM_vs_PhiCM_Neutron", 180, 0, 180, 180, -180, 180);
   //Thetan_Vs_Phin_Lab = new GH2("Theta vs Phi Lab" , "Theta vs Phi Lab", 180, 0, 180, 180, -180, 180);
   // Theta_Vs_Phi = new GH2("Theta vs Phi" , "Theta vs Phi", 180, 0, 50, 180, -180, 180); //These plots aren't showing what it used to, not sure if correct/still useful or not
   //PhiSc_dEn = new GH2("PhiSc_dEn" , "PhiSc_dEn", 180, -180, 180, 180, 0, 10);
   //mmE = new GH2 ("mmE", "Missing_Mass_as_a_Function_of_Energy", 200, 0, 600, 200, 850, 1050);
-  PhidEFixp = new GH2 ("PhidEFixp", "Phi_dE_Distribution", 180, -180, 180, 180, 0, 5);
-  PhidECorrFixp = new GH2 ("PhidECorrFixp", "Phi_dECorr_Distribution", 180, -180, 180, 180, 0, 5);
+  //PhidEFixp = new GH2 ("PhidEFixp", "Phi_dE_Distribution", 180, -180, 180, 180, 0, 5);
+  //PhidECorrFixp = new GH2 ("PhidECorrFixp", "Phi_dECorr_Distribution", 180, -180, 180, 180, 0, 5);
 
 }
 
@@ -530,9 +549,63 @@ void PNeutPol::FillHists()
   //PhiSc_dEn -> Fill(ScattPhi, dEn, TaggerTime);
   //mmE ->Fill(Ep, mmp, TaggerTime);
   //if (((Ep > 82 && Ep < 118) == kTRUE) && ((Thetap > 81 && Thetap < 99) == kTRUE))
-  PhidEFixp->Fill(Phip, (dEp*sin(GVp.Theta())), TaggerTime);
+  //PhidEFixp->Fill(Phip, (dEp*sin(GVp.Theta())), TaggerTime);
   //if (((Ep > 82 && Ep < 118) == kTRUE) && ((Thetap > 81 && Thetap < 99) == kTRUE))
-  PhidECorrFixp->Fill(Phip, dEp, TaggerTime);
+  //PhidECorrFixp->Fill(Phip, dEp, TaggerTime);
+
+  if(Cut_ROI -> IsInside(Ep, dEp) == kTRUE)
+  {
+    E_dE_ROI->Fill(Ep, dEp, TaggerTime);
+    E_dE_ROI_p->Fill(Ep, dEp, TaggerTime);
+  }
+
+  if(Cut_ROI -> IsInside(En, dEn) == kTRUE)
+  {
+    E_dE_ROI->Fill(En, dEn, TaggerTime);
+    E_dE_ROI_n->Fill(En, dEn, TaggerTime);
+    PhiScROI->Fill(ScattPhi, TaggerTime);
+  }
+
+ // if (-10 < ScattPhi && ScattPhi < 10) // Disabled when not needed, these slow down process a lot
+  //{
+    //  E_dE_LowPhi->Fill(Ep, dEp, TaggerTime);
+    //  E_dE_LowPhi->Fill(En, dEn, TaggerTime);
+    //  E_dE_LowPhi_p->Fill(Ep, dEp, TaggerTime);
+    //  E_dE_LowPhi_n->Fill(En, dEn, TaggerTime);
+    //  PhiScLow->Fill(ScattPhi, TaggerTime);
+  //}
+
+
+  if (MCData == kTRUE && nBanana == kTRUE)
+    {
+            EgMC_In->Fill(EGamma, TaggerTime);
+            ThetapMC_In->Fill(Thetap, TaggerTime);
+            ThetanMC_In->Fill(Thetan, TaggerTime);
+            ThetanMC_Rec_In->Fill(ThetanCalc, TaggerTime);
+            EpMC_In->Fill(Ep, TaggerTime);
+            EnMC_In->Fill(En, TaggerTime);
+            PID_Phi_In->Fill(nPIDElement, Phin, TaggerTime);
+            PID_Theta_In->Fill(nPIDElement, Thetan, TaggerTime);
+            Thetan_dE_MC_In->Fill(dEn, Thetan, TaggerTime);
+            ThetanRec_dE_MC_In->Fill(dEn, ThetanCalc, TaggerTime);
+            Phin_dE_MC_In->Fill(dEn, Phin, TaggerTime);
+    }
+
+  if (MCData == kTRUE && nBanana == kFALSE)
+    {
+            EgMC_Out->Fill(EGamma, TaggerTime);
+            ThetapMC_Out->Fill(Thetap, TaggerTime);
+            ThetanMC_Out->Fill(Thetan, TaggerTime);
+            ThetanMC_Rec_Out->Fill(ThetanCalc, TaggerTime);
+            EpMC_Out->Fill(Ep, TaggerTime);
+            EnMC_Out->Fill(En, TaggerTime);
+            PID_Phi_Out->Fill(nPIDElement, Phin , TaggerTime);
+            PID_Theta_Out->Fill(nPIDElement, Thetan , TaggerTime);
+            Thetan_dE_MC_Out->Fill(dEn, Thetan, TaggerTime);
+            ThetanRec_dE_MC_Out->Fill(dEn, ThetanCalc, TaggerTime);
+            Phin_dE_MC_Out->Fill(dEn, Phin, TaggerTime);
+
+    }
 
   // Fill PhiScattering angles and ThetaCM angles for various energy regions
   if ( 100 < EGamma && EGamma < 200) CM150->Fill(ThetapB, TaggerTime);
@@ -640,6 +713,32 @@ void PNeutPol::FillHists()
 
     }
   }
+}
+
+void PNeutPol::MCHists()
+{
+  EgMC_In = new GH1("EgMC_In", "Photon Energy Distribution (MC In)", 100, 100 , 900);
+  ThetapMC_In = new GH1("ThetapMC_In", "Proton Theta Distribution (MC In)", 180, 0 , 180);
+  ThetanMC_In = new GH1("ThetanMC_In", "Neutron Theta Distribution (MC In)", 180, 0 , 180);
+  ThetanMC_Rec_In = new GH1("ThetanMC_Rec_In", "Neutron Reconstructed Theta Distribution (MC In)", 180, 0 , 180);
+  EpMC_In = new GH1("EpMC_In", "Proton Energy Distribution (MC In)", 100, 0 , 500);
+  EnMC_In = new GH1("EnMC_In", "Neutron Energy Distribution (MC In)", 100, 0 , 500);
+  EgMC_Out = new GH1("EgMC_Out", "Photon Energy Distribution (MC Out)", 100, 100 , 900);
+  ThetapMC_Out = new GH1("ThetapMC_Out", "Proton Theta Distribution (MC Out)", 180, 0 , 180);
+  ThetanMC_Out = new GH1("ThetanMC_Out", "Neutron Theta Distribution (MC Out)", 180, 0 , 180);
+  ThetanMC_Rec_Out = new GH1("ThetanMC_Rec_Out", "Neutron Reconstructed Theta Distribution (MC Out)", 180, 0 , 180);
+  EpMC_Out = new GH1("EpMC_Out", "Proton Energy Distribution (MC Out)", 100, 0 , 500);
+  EnMC_Out = new GH1("EnMC_Out", "Neutron Energy Distribution (MC Out)", 100, 0 , 500);
+  PID_Phi_In = new GH2("PID_Phi_In", "PID Element vs Phi for Neutrons (MC In)", 24, 0, 24, 72, -180, 180);
+  PID_Phi_Out= new GH2("PID_Phi_Out", "PID Element vs Phi for Neutrons (MC Out)", 24, 0, 24, 72, -180, 180);
+  PID_Theta_In = new GH2("PID_Theta_In", "PID Element vs Theta for Neutrons (MC In)", 24, 0, 24, 36, 0, 180);
+  PID_Theta_Out = new GH2("PID_Theta_Out", "PID Element vs Theta for Neutrons (MC Out)", 24, 0, 24, 36, 0, 180);
+  Thetan_dE_MC_In = new GH2 ("Theta_dE_MC_In", "PID energy vs Neutron Theta Distribution (MC In)", 150, 0, 8, 36, 0, 180);
+  ThetanRec_dE_MC_In = new GH2 ("ThetaRec_dE_MC_In", "PID energy vs Neutron Reconstructed Theta Distribution (MC In)", 150, 0, 8, 36, 0, 180);
+  Phin_dE_MC_In  = new GH2 ("Phi_dE_MC_In", "PID energy vs Neutron Phi Distribution (MC In)", 150, 0, 8, 72, -180, 180);
+  Thetan_dE_MC_Out = new GH2 ("Theta_dE_MC_Out", "PID energy vs Neutron Theta Distribution (MC Out)", 150, 0, 3, 36, 0, 180);
+  ThetanRec_dE_MC_Out = new GH2 ("ThetaRec_dE_MC_Out", "PID energy vs Neutron Reconstructed Theta Distribution (MC Out)", 150, 0, 3, 36, 0, 180);
+  Phin_dE_MC_Out  = new GH2 ("Phi_dE_MC_Out", "PID energy vs Neutron Phi Distribution (MC Out)", 150, 0, 3, 72, -180, 180);
 }
 
 Bool_t	PNeutPol::Write(){

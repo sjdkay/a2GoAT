@@ -81,6 +81,8 @@ private:
   double_t ScattThetaLab;
   double_t ScattTheta;
   double_t ScattPhi;
+  double_t pPIDElement;
+  double_t nPIDElement;
 
   Bool_t nBanana;
   Bool_t MCData;
@@ -163,6 +165,8 @@ private:
   GH1* PhiSc525Cut;
   GH1* PhiSc575Cut;
 
+  GH1* PhiScROI;
+
   GH1* PhiSc_In;
   GH1* PhiSc125_In;
   GH1* PhiSc175_In;
@@ -214,28 +218,56 @@ private:
   GH2* E_dE;
   GH2* E_dE_Proton;
   GH2* E_dE_Neutron;
-  GH2* ThetanCM_PhinCM;
-  GH2* Thetan_Vs_Phin_Lab;
-  GH2* Theta_Vs_Phi;
-  GH2* PhiSc_dEn;
-  GH2* mmE;
-  GH2* PhidEFixp;
-  GH2* PhidECorrFixp;
+  GH2* E_dE_ROI;
+  GH2* E_dE_ROI_p;
+  GH2* E_dE_ROI_n;
+  //GH2* ThetanCM_PhinCM;
+  //GH2* Thetan_Vs_Phin_Lab;
+  //GH2* Theta_Vs_Phi;
+  //GH2* PhiSc_dEn;
+  //GH2* mmE;
+  //GH2* PhidEFixp;
+  //GH2* PhidECorrFixp;
+
+  //GH2* E_dE_LowPhi;
+  //GH2* E_dE_LowPhi_p;
+  //GH2* E_dE_LowPhi_n;
+  //GH1* PhiScLow;
+
+  GH1* EgMC_In;
+  GH1* ThetapMC_In;
+  GH1* ThetanMC_In;
+  GH1* ThetanMC_Rec_In;
+  GH1* EpMC_In;
+  GH1* EnMC_In;
+  GH1* EgMC_Out;
+  GH1* ThetapMC_Out;
+  GH1* ThetanMC_Out;
+  GH1* ThetanMC_Rec_Out;
+  GH1* EpMC_Out;
+  GH1* EnMC_Out;
+  GH2* PID_Phi_In;
+  GH2* PID_Phi_Out;
+  GH2* PID_Theta_In;
+  GH2* PID_Theta_Out;
+  GH2* Thetan_dE_MC_In;
+  GH2* ThetanRec_dE_MC_In;
+  GH2* Phin_dE_MC_In;
+  GH2* Thetan_dE_MC_Out;
+  GH2* ThetanRec_dE_MC_Out;
+  GH2* Phin_dE_MC_Out;
 
   char cutfilename[256];
   char cutname[256];
   TFile* CutFile;
   TCutG* Cut;
   TCutG* Cut_proton;
-  TCutG* Cut_proton_4Sig;
-  TCutG* Cut_proton_Full;
   TCutG* Cut_pion;
+  TCutG* Cut_ROI;
   TCutG* Cut_neutron;
   TCutG* Cut_CB_proton;
-  TCutG* Cut_CB_proton_4Sig;
-  TCutG* Cut_CB_proton_Full;
   TCutG* Cut_CB_pion;
-  TCutG* Cut_CB_neutron;
+  TCutG* Cut_CB_ROI;
 
 protected:
     virtual Bool_t  Start();
@@ -249,6 +281,7 @@ public:
     virtual ~PNeutPol();
     virtual Bool_t  Init();
     TCutG* OpenCutFile(Char_t* filename, Char_t* cutname);
+    void MCHists();
     Int_t GetEvent();
     TLorentzVector InitialVect();
     Double_t InitialProp();
