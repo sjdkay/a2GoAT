@@ -90,6 +90,8 @@ void	PNeutPol::ProcessEvent()
     TaggerTime = GetTagger()->GetTaggedTime(j); // Get tagged time for event
     EGamma = (GetTagger()->GetTaggedEnergy(j)); // Get Photon energy for event
 
+    if (dE1 < 0.5 || dE2 < 0.5) continue; // Cut out low PID energy events
+
     // If neither particle is in the proton banana region continue
     if (Cut_proton -> IsInside(E1, dE1) == kFALSE && Cut_proton -> IsInside(E2, dE2) == kFALSE) continue; // if neither particle is in proton region drop out
     if (Cut_proton -> IsInside(E1, dE1) == kFALSE && Cut_pion -> IsInside(E1, dE1) == kFALSE) continue; // If not in proton or pion region drop out
