@@ -80,7 +80,7 @@ void	PNeutPol::ProcessEvent()
   if ( MCData == kTRUE)
   {
       MCSmearing(); // Smear dE values for MC data
-          pPIDElement = GetDetectorHits()->GetPIDHits(0);
+      pPIDElement = GetDetectorHits()->GetPIDHits(0);
   }
   //for (Int_t i=0; i < NTrack; i++){ // Currently nothing relies upon i!
 
@@ -193,27 +193,27 @@ void	PNeutPol::ProcessScalerRead()
 
 TCutG*	PNeutPol::OpenCutFile(Char_t* filename, Char_t* cutname)
 {
-	CutFile = new TFile(filename, "READ");
-
-    if( !CutFile || !CutFile->IsOpen() ) {
-        cerr << "Can't open cut file: " << filename << endl;
-        throw false;
+  CutFile = new TFile(filename, "READ");
+	
+  if( !CutFile || !CutFile->IsOpen() ) {
+    cerr << "Can't open cut file: " << filename << endl;
+    throw false;
     }
 
-    // Try to find a TCutG with the name we want
-    // GetObject checks the type to be TCutG,
-    // see http://root.cern.ch/root/html534/TDirectory.html#TDirectory:GetObject
-    CutFile->GetObject(cutname, Cut);
-
-    if( !Cut ) {
-        cerr << "Could not find a TCutG with the name " << cutname << " in " << filename << endl;
-        throw false;
-    }
-
-	TCutG* Cut_clone = Cut;
-	CutFile->Close();
-	cout << "cut file " << filename << " opened (Cut-name = " << cutname << ")"<< endl;
-	return Cut_clone;
+  // Try to find a TCutG with the name we want
+  // GetObject checks the type to be TCutG,
+  // see http://root.cern.ch/root/html534/TDirectory.html#TDirectory:GetObject
+  CutFile->GetObject(cutname, Cut);
+  
+  if( !Cut ) {
+    cerr << "Could not find a TCutG with the name " << cutname << " in " << filename << endl;
+    throw false;
+  }
+  
+  TCutG* Cut_clone = Cut;
+  CutFile->Close();
+  cout << "cut file " << filename << " opened (Cut-name = " << cutname << ")"<< endl;
+  return Cut_clone;
 }
 
 Int_t PNeutPol::GetEvent() // Gets basic info on particles for event
