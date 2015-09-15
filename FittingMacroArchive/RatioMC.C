@@ -8,6 +8,18 @@ void RatioMC(){
   double HighMax;
   double AvgMax;
   double ratio[10][36];
+  double P1[10];
+  double P1Err[10];
+  double P2[10];
+  double P2Err[10];
+  double P3[10];
+  double P3Err[10];
+  double Par1[10];
+  double Par1Err[10];
+  double Par2[10];
+  double Par2Err[10];
+  double Par3[10];
+  double Par3Err[10];
 
   TFile *f = new TFile("Physics_10e7_6_12_08_15_2.root");
   TText *warn = new TText(0, 0 ,"PRELIMINARY");
@@ -19,7 +31,6 @@ void RatioMC(){
         TH1D *hist = (TH1D*)f->Get("Phi_Scattered_125MeV");
         Char_t* RatioPDF = "./Ratio_125MeV.pdf";
         Char_t* RatioPNG = "./Ratio_125MeV.png";
-        Char_t* RatioROOT = "./Ratio_125MeV.root";
         RebinVal = 1;
       }
 
@@ -29,7 +40,6 @@ void RatioMC(){
         TH1D *hist = (TH1D*)f->Get("Phi_Scattered_175MeV");
         Char_t* RatioPDF = "./Ratio_175MeV.pdf";
         Char_t* RatioPNG = "./Ratio_175MeV.png";
-        Char_t* RatioROOT = "./Ratio_175MeV.root";
         RebinVal = 1;
       }
 
@@ -39,7 +49,6 @@ void RatioMC(){
         TH1D *hist = (TH1D*)f->Get("Phi_Scattered_225MeV");
         Char_t* RatioPDF = "./Ratio_225MeV.pdf";
         Char_t* RatioPNG = "./Ratio_225MeV.png";
-        Char_t* RatioROOT = "./Ratio_225MeV.root";
         RebinVal = 1;
       }
 
@@ -48,7 +57,6 @@ void RatioMC(){
         TH1D *hist = (TH1D*)f->Get("Phi_Scattered_275MeV");
         Char_t* RatioPDF = "./Ratio_275MeV.pdf";
         Char_t* RatioPNG = "./Ratio_275MeV.png";
-        Char_t* RatioROOT = "./Ratio_275MeV.root";
         RebinVal = 1;
       }
 
@@ -57,7 +65,6 @@ void RatioMC(){
         TH1D *hist = (TH1D*)f->Get("Phi_Scattered_325MeV");
         Char_t* RatioPDF = "./Ratio_325MeV.pdf";
         Char_t* RatioPNG = "./Ratio_325MeV.png";
-        Char_t* RatioROOT = "./Ratio_325MeV.root";
         RebinVal = 1;
       }
 
@@ -66,7 +73,6 @@ void RatioMC(){
         TH1D *hist = (TH1D*)f->Get("Phi_Scattered_375MeV");
         Char_t* RatioPDF = "./Ratio_375MeV.pdf";
         Char_t* RatioPNG = "./Ratio_375MeV.png";
-        Char_t* RatioROOT = "./Ratio_375MeV.root";
         RebinVal = 2;
       }
 
@@ -75,7 +81,6 @@ void RatioMC(){
         TH1D *hist = (TH1D*)f->Get("Phi_Scattered_425MeV");
         Char_t* RatioPDF = "./Ratio_425MeV.pdf";
         Char_t* RatioPNG = "./Ratio_425MeV.png";
-        Char_t* RatioROOT = "./Ratio_425MeV.root";
         RebinVal = 2;
       }
 
@@ -84,7 +89,6 @@ void RatioMC(){
         TH1D *hist = (TH1D*)f->Get("Phi_Scattered_475MeV");
         Char_t* RatioPDF = "./Ratio_475MeV.pdf";
         Char_t* RatioPNG = "./Ratio_475MeV.png";
-        Char_t* RatioROOT = "./Ratio_475MeV.root";
         RebinVal = 2;
       }
 
@@ -93,7 +97,6 @@ void RatioMC(){
         TH1D *hist = (TH1D*)f->Get("Phi_Scattered_525MeV");
         Char_t* RatioPDF = "./Ratio_525MeV.pdf";
         Char_t* RatioPNG = "./Ratio_525MeV.png";
-        Char_t* RatioROOT = "./Ratio_525MeV.root";
         RebinVal = 2;
       }
 
@@ -102,7 +105,6 @@ void RatioMC(){
         TH1D *hist = (TH1D*)f->Get("Phi_Scattered_575MeV");
         Char_t* RatioPDF = "./Ratio_575MeV.pdf";
         Char_t* RatioPNG = "./Ratio_575MeV.png";
-        Char_t* RatioROOT = "./Ratio_575MeV.root";
         RebinVal = 2;
       }
 
@@ -188,12 +190,54 @@ void RatioMC(){
     gr->Draw("SAMEP");
     gr->Fit("pol2");
     pol2->SetLineColor(2);
-    pol2->Draw("SAMES")
+    pol2->Draw("SAMES");
     gPad->Update();
+
+    double Param1 = pol2->GetParameter(0);
+    double Param1Error = pol2->GetParError(0);
+    double Param2 = pol2->GetParameter(1);
+    double Param2Error = pol2->GetParError(1);
+    double Param3 = pol2->GetParameter(2);
+    double Param3Error = pol2->GetParError(2);
+
+    P1[i] = Param1;
+    P1Err[i] = Param1Error;
+    P2[i] = Param2;
+    P2Err[i] = Param2Error;
+    P3[i] = Param3;
+    P3Err[i]= Param3Error;
 
     canvas->SaveAs(filename = RatioPDF);
     canvas->SaveAs(filename = RatioPNG);
-    canvas->SaveAs(filename = RatioROOT);
 
   }
+
+    TFile f1("MCParameters.root", "RECREATE");
+
+    TTree* tree = new TTree("Parameter Values", "Tree of Values");
+
+    tree->Branch("Par1", &Par1, "Par1[10]/D");
+    tree->Branch("Par1Err", &Par1Err, "Par1Err[10]/D");
+    tree->Branch("Par2", &Par2, "Par2[10]/D");
+    tree->Branch("Par2Err", &Par2Err, "Par2Err[10]/D");
+    tree->Branch("Par3", &Par3, "Par3[10]/D");
+    tree->Branch("Par3Err", &Par3Err, "Par3Err[10]/D");
+
+    for (Int_t m = 0; m < 10; m++){
+
+        Par1[m] = P1[m];
+        Par1Err[m] = P1Err[m];
+        Par2[m] = P2[m];
+        Par2Err[m] = P2Err[m];
+        Par3[m] = P3[m];
+        Par3Err[m] = P3Err[m];
+
+    }
+
+    tree->Fill();
+
+    f1.Write();
+
+  // Need to save parameters array as some sort of tree
+
 }
