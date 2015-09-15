@@ -14,12 +14,12 @@ void RatioMCOut_Cut(){
   double P2Err[10];
   double P3[10];
   double P3Err[10];
-  double Par1[10];
-  double Par1Err[10];
-  double Par2[10];
-  double Par2Err[10];
-  double Par3[10];
-  double Par3Err[10];
+  double Par1;
+  double Par1Err;
+  double Par2;
+  double Par2Err;
+  double Par3;
+  double Par3Err;
 
   TFile *f = new TFile("Physics_10e7_6_12_08_15_2.root");
   TText *warn = new TText(0, 0 ,"PRELIMINARY");
@@ -231,27 +231,26 @@ void RatioMCOut_Cut(){
 
     TFile f1("MCOutParametersCut.root", "RECREATE");
 
-    TTree* tree = new TTree("Parameter Values", "Tree of Values");
+    TTree* tree = new TTree("Parameter_Values", "Tree_of_Values");
 
-    tree->Branch("Par1", &Par1, "Par1[10]/D");
-    tree->Branch("Par1Err", &Par1Err, "Par1Err[10]/D");
-    tree->Branch("Par2", &Par2, "Par2[10]/D");
-    tree->Branch("Par2Err", &Par2Err, "Par2Err[10]/D");
-    tree->Branch("Par3", &Par3, "Par3[10]/D");
-    tree->Branch("Par3Err", &Par3Err, "Par3Err[10]/D");
+    tree->Branch("Par1", &Par1, "Par1/D");
+    tree->Branch("Par1Err", &Par1Err, "Par1Err/D");
+    tree->Branch("Par2", &Par2, "Par2/D");
+    tree->Branch("Par2Err", &Par2Err, "Par2Err/D");
+    tree->Branch("Par3", &Par3, "Par3/D");
+    tree->Branch("Par3Err", &Par3Err, "Par3Err/D");
 
     for (Int_t m = 0; m < 10; m++){
 
-        Par1[m] = P1[m];
-        Par1Err[m] = P1Err[m];
-        Par2[m] = P2[m];
-        Par2Err[m] = P2Err[m];
-        Par3[m] = P3[m];
-        Par3Err[m] = P3Err[m];
+        Par1 = P1[m];
+        Par1Err = P1Err[m];
+        Par2 = P2[m];
+        Par2Err = P2Err[m];
+        Par3 = P3[m];
+        Par3Err = P3Err[m];
+        tree->Fill();
 
     }
-
-    tree->Fill();
 
     f1.Write();
 
