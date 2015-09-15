@@ -188,34 +188,30 @@ void RatioMC(){
     gr->SetMarkerColor(4);
     gr->SetMarkerSize(1.5);
     gr->Draw("SAMEP");
-    gr->Fit("pol2");
+    gr->Fit("pol2"); //Fit 2nd order polynomial to graph
     pol2->SetLineColor(2);
-    pol2->Draw("SAMES");
+    pol2->Draw("SAMES"); // Draw fit on same plot
     gPad->Update();
 
-    double Param1 = pol2->GetParameter(0);
-    double Param1Error = pol2->GetParError(0);
-    double Param2 = pol2->GetParameter(1);
-    double Param2Error = pol2->GetParError(1);
-    double Param3 = pol2->GetParameter(2);
-    double Param3Error = pol2->GetParError(2);
+    P1[i] = pol2->GetParameter(0); // Extract fit parameters
+    P1Err[i] = pol2->GetParError(0);
+    P2[i] = pol2->GetParameter(1);
+    P2Err[i] = pol2->GetParError(1);
+    P3[i] = pol2->GetParameter(2);
+    P3Err[i] = pol2->GetParError(2);
 
-    P1[i] = Param1;
-    P1Err[i] = Param1Error;
-    P2[i] = Param2;
-    P2Err[i] = Param2Error;
-    P3[i] = Param3;
-    P3Err[i]= Param3Error;
-
-    canvas->SaveAs(filename = RatioPDF);
+    canvas->SaveAs(filename = RatioPDF); // Save graph as pdf/png
     canvas->SaveAs(filename = RatioPNG);
 
   }
 
+    // Define new file to store fit parameters
     TFile f1("MCParameters.root", "RECREATE");
 
+    //Define new tree to store parameters in
     TTree* tree = new TTree("Parameter_Values", "Tree_of_Values");
 
+    // Define branches to store parameters, (Branch Name, Variable, Type of Variable)
     tree->Branch("Par1", &Par1, "Par1/D");
     tree->Branch("Par1Err", &Par1Err, "Par1Err/D");
     tree->Branch("Par2", &Par2, "Par2/D");
@@ -223,6 +219,7 @@ void RatioMC(){
     tree->Branch("Par3", &Par3, "Par3/D");
     tree->Branch("Par3Err", &Par3Err, "Par3Err/D");
 
+    // Fill branches (and hence tree) with corresponding parameters from above
     for (Int_t m = 0; m < 10; m++){
 
         Par1 = P1[m];

@@ -274,9 +274,11 @@ void CosFitMC(){
   canvas->SaveAs("./Y_OffsetEGamma_MC.pdf");
   canvas->SaveAs("./Y_OffsetEGamma_MC.png");
 
+  // Open relevant parameter file
   TFile *f1= TFile::Open("MCParameters.root");
   TTree *t1 = (TTree*)f1->Get("Parameter_Values");
 
+  // Fit is p1 + p1*x + p2*x^2
   Double_t Parameters[10][6];
   Double_t Par1, Par1Err, Par2, Par2Err, Par3, Par3Err;
 
@@ -287,8 +289,7 @@ void CosFitMC(){
   t1->SetBranchAddress("Par3", &Par3);
   t1->SetBranchAddress("Par3Err", &Par3Err);
 
-
-
+  // Read parameters from tree and assign them to array
   for (Int_t k = 0; k < 10; k++){
 
         Parameter_Values->GetEntry(k);

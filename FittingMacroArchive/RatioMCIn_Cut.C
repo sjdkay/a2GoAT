@@ -193,19 +193,12 @@ void RatioMCIn_Cut(){
     pol2->Draw("SAMES");
     gPad->Update();
 
-    double Param1 = pol2->GetParameter(0);
-    double Param1Error = pol2->GetParError(0);
-    double Param2 = pol2->GetParameter(1);
-    double Param2Error = pol2->GetParError(1);
-    double Param3 = pol2->GetParameter(2);
-    double Param3Error = pol2->GetParError(2);
-
-    P1[i] = Param1;
-    P1Err[i] = Param1Error;
-    P2[i] = Param2;
-    P2Err[i] = Param2Error;
-    P3[i] = Param3;
-    P3Err[i]= Param3Error;
+    P1[i] = pol2->GetParameter(0); // Extract fit parameters
+    P1Err[i] = pol2->GetParError(0);
+    P2[i] = pol2->GetParameter(1);
+    P2Err[i] = pol2->GetParError(1);
+    P3[i] = pol2->GetParameter(2);
+    P3Err[i] = pol2->GetParError(2);
 
     canvas->SaveAs(filename = RatioPDF);
     canvas->SaveAs(filename = RatioPNG);
