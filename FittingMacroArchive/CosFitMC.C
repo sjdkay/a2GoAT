@@ -27,6 +27,14 @@ void CosFitMC(){
   double PolErr[10];
   double Y_OffCorr[10];
   double Y_OffCorrErr[10];
+  double P1;
+  double P2;
+  double P3;
+  double Phi;
+  double PolyVal;
+  double F;
+  double BinValue;
+  double AdjBinValue;
 
   TF1 *CosFit = new TF1("CosFit",  fitf, -180.0, 180.0, 2);
   CosFit->SetParLimits(0, -1000, 1000);
@@ -36,7 +44,39 @@ void CosFitMC(){
   TFile *f = new TFile("Physics_10e7_6_12_08_15_2.root");
   TText *warn = new TText(0, 0 ,"PRELIMINARY");
 
+    // Open relevant parameter file
+  TFile *f1= TFile::Open("MCParameters.root");
+  TTree *t1 = (TTree*)f1->Get("Parameter_Values");
+
+  // Fit is p1 + p1*x + p2*x^2
+  Double_t Parameters[10][6];
+  Double_t Par1, Par1Err, Par2, Par2Err, Par3, Par3Err;
+
+  t1->SetBranchAddress("Par1", &Par1);
+  t1->SetBranchAddress("Par1Err", &Par1Err);
+  t1->SetBranchAddress("Par2", &Par2);
+  t1->SetBranchAddress("Par2Err", &Par2Err);
+  t1->SetBranchAddress("Par3", &Par3);
+  t1->SetBranchAddress("Par3Err", &Par3Err);
+
+  // Read parameters from tree and assign them to array
+  for (Int_t k = 0; k < 10; k++){
+
+        Parameter_Values->GetEntry(k);
+        Parameters[k][0] = Par1;
+        Parameters[k][1] = Par1Err;
+        Parameters[k][2] = Par2;
+        Parameters[k][3] = Par2Err;
+        Parameters[k][4] = Par3;
+        Parameters[k][5] = Par3Err;
+
+  }
+
   for(Int_t i = 0; i < 10; i++){
+
+    P1 = 0;
+    P2 = 0;
+    P3 = 0;
 
     if(i==0){
         Char_t* Title = "PhiScatt in Scattered Proton Frame at 125 +/- 25 MeV; PhiScatt125MeV";
@@ -157,6 +197,25 @@ void CosFitMC(){
     hist->SetMarkerStyle(1);
     hist->SetLineColor(2);
     hist->Rebin(RebinVal);
+
+    // Below is the function that applies the correction for the real data
+  //  BinWidth = RebinVal*10; // Default bin size is 10 degrees so x by 10
+  //  nBins = hist->GetSize() - 2; // -2 as otherwise under/overflow included
+  //  P1 = Parameters[i][0];
+ //   P2 = Parameters[i][2];
+  //  P3 = Parameters[i][4];
+
+  //  for (Int_t m = 0; m < nBins; m++){
+
+   //     Phi = ((-180 + (BinWidth/2)) + (m*BinWidth));
+    //    PolyVal = ((P1) + ((P2)*Phi) + ((P3)*(Phi*Phi)));
+    //    F = 1/PolyVal;
+      //  BinValue = hist->GetBinContent(m+1);
+       // AdjBinValue = BinValue * F; // Function to adjust value of histogram to be fitted to
+       // hist->SetBinContent(m+1, AdjBinValue);
+
+    //}
+
     hist->Draw("EHISTSAMES");
     hist->Fit("CosFit", "LL");
     CosFit->SetLineColor(4);
@@ -169,8 +228,6 @@ void CosFitMC(){
     AmpErr[i] = CosFit->GetParError(1);
     Y_Off[i]  = CosFit->GetParameter(0);
     Y_OffErr[i] = CosFit->GetParError(0);
-
-    BinWidth = RebinVal*10; // Default bin size is 10 degrees so x by 10
 
     Pol[i] = Amp[i]/APow;
     PolErr[i] = AmpErr[i]/APow;
@@ -273,33 +330,5 @@ void CosFitMC(){
   warn->Draw("SAME");
   canvas->SaveAs("./Y_OffsetEGamma_MC.pdf");
   canvas->SaveAs("./Y_OffsetEGamma_MC.png");
-
-  // Open relevant parameter file
-  TFile *f1= TFile::Open("MCParameters.root");
-  TTree *t1 = (TTree*)f1->Get("Parameter_Values");
-
-  // Fit is p1 + p1*x + p2*x^2
-  Double_t Parameters[10][6];
-  Double_t Par1, Par1Err, Par2, Par2Err, Par3, Par3Err;
-
-  t1->SetBranchAddress("Par1", &Par1);
-  t1->SetBranchAddress("Par1Err", &Par1Err);
-  t1->SetBranchAddress("Par2", &Par2);
-  t1->SetBranchAddress("Par2Err", &Par2Err);
-  t1->SetBranchAddress("Par3", &Par3);
-  t1->SetBranchAddress("Par3Err", &Par3Err);
-
-  // Read parameters from tree and assign them to array
-  for (Int_t k = 0; k < 10; k++){
-
-        Parameter_Values->GetEntry(k);
-        Parameters[k][0] = Par1;
-        Parameters[k][1] = Par1Err;
-        Parameters[k][2] = Par2;
-        Parameters[k][3] = Par2Err;
-        Parameters[k][4] = Par3;
-        Parameters[k][5] = Par3Err;
-
-  }
 
 }

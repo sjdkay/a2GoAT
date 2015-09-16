@@ -27,6 +27,14 @@ void CosFit(){
   double PolErr[10];
   double Y_OffCorr[10];
   double Y_OffCorrErr[10];
+  double P1;
+  double P2;
+  double P3;
+  double Phi;
+  double PolyVal;
+  double F;
+  double BinValue;
+  double AdjBinValue;
 
   TF1 *CosFit = new TF1("CosFit",  fitf, -180.0, 180.0, 2); //Give a name and range to the fitting funcion
   CosFit->SetParLimits(0, -1000, 1000);
@@ -62,6 +70,10 @@ void CosFit(){
   }
 
   for(Int_t i = 0; i < 10; i++){ // Select plots/names based on values of i
+
+    P1 = 0;
+    P2 = 0;
+    P3 = 0;
 
     if(i==0){
         Char_t* Title = "PhiScatt in Scattered Proton Frame at 125 +/- 25 MeV; PhiScatt125MeV"; // Set title of output graph
@@ -182,6 +194,25 @@ void CosFit(){
     hist->SetMarkerStyle(1); // Style options for graph
     hist->SetLineColor(2);
     hist->Rebin(RebinVal);
+
+    BinWidth = RebinVal*10; // Default bin size is 10 degrees so x by 10
+    nBins = hist->GetSize() - 2; // -2 as otherwise under/overflow included
+    P1 = Parameters[i][0];
+    P2 = Parameters[i][2];
+    P3 = Parameters[i][4];
+
+    // This loop corrects the data for the false assymetries in the MC data
+    for (Int_t m = 0; m < nBins; m++){
+
+        Phi = ((-180 + (BinWidth/2)) + (m*BinWidth));
+        PolyVal = ((P1) + ((P2)*Phi) + ((P3)*(Phi*Phi)));
+        F = 1/PolyVal;
+        BinValue = hist->GetBinContent(m+1);
+        AdjBinValue = BinValue * F; // Function to adjust value of histogram to be fitted to
+        hist->SetBinContent(m+1, AdjBinValue);
+
+    }
+
     hist->Draw("EHISTSAMES"); // Draw the histogram with errors
     hist->Fit("CosFit", "LL"); // Fit Cosine function to histogram using a log likelihood fit
     CosFit->SetLineColor(4);
@@ -194,8 +225,6 @@ void CosFit(){
     AmpErr[i] = CosFit->GetParError(1);
     Y_Off[i]  = CosFit->GetParameter(0);
     Y_OffErr[i] = CosFit->GetParError(0);
-
-    BinWidth = RebinVal*10; // Default bin size is 10 degrees so x by 10
 
     Pol[i] = Amp[i]/APow;
     PolErr[i] = AmpErr[i]/APow;
