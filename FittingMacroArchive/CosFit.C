@@ -9,7 +9,7 @@ Double_t fitf(Double_t *x,Double_t *par)
 }
 
 void CosFit(){
-
+  // Define a bunch of arrays to be used later
   double x[10] = {125, 175, 225, 275, 325, 375, 425, 475, 525, 575};
   double xLiu[19]={172, 200, 248, 299, 228, 237, 249, 296, 346, 401, 446, 305, 355, 407, 460, 341, 352, 401, 436};
   double xLiuErr[19]={13, 7, 8, 13, 7, 7, 8 ,10, 12, 15, 19, 9, 11, 13, 16, 10, 10, 12, 14};
@@ -22,29 +22,54 @@ void CosFit(){
   double AmpErr[10];
   double Y_Off[10];
   double Y_OffErr[10];
-  double APow = 0.5;
+  double APow = 0.1;
   double Pol[10];
   double PolErr[10];
   double Y_OffCorr[10];
   double Y_OffCorrErr[10];
 
-  TF1 *CosFit = new TF1("CosFit",  fitf, -180.0, 180.0, 2);
+  TF1 *CosFit = new TF1("CosFit",  fitf, -180.0, 180.0, 2); //Give a name and range to the fitting funcion
   CosFit->SetParLimits(0, -1000, 1000);
   CosFit->SetParLimits(1, -1, 1);
-  CosFit->SetParNames("Y_Offset", "Amplitdue");
+  CosFit->SetParNames("Y_Offset", "Amplitdue"); //Name the parameters
 
-  TFile *f = new TFile("PhysicsTotal32_03_06_15.root");
-  TText *warn = new TText(0, 0 ,"PRELIMINARY");
+  TFile *f = new TFile("PhysicsTotal5_14_08_15.root"); // Open the latest PTotal file to load histograms from
+  TText *warn = new TText(0, 0 ,"PRELIMINARY"); // Preliminary warning label text
 
-  for(Int_t i = 0; i < 10; i++){
+  TFile *f1= TFile::Open("MCParameters.root");
+  TTree *t1 = (TTree*)f1->Get("Parameter_Values");
+
+  Double_t Parameters[10][6];
+  Double_t Par1, Par1Err, Par2, Par2Err, Par3, Par3Err;
+
+  t1->SetBranchAddress("Par1", &Par1);
+  t1->SetBranchAddress("Par1Err", &Par1Err);
+  t1->SetBranchAddress("Par2", &Par2);
+  t1->SetBranchAddress("Par2Err", &Par2Err);
+  t1->SetBranchAddress("Par3", &Par3);
+  t1->SetBranchAddress("Par3Err", &Par3Err);
+
+  for (Int_t k = 0; k < 10; k++){
+
+    Parameter_Values->GetEntry(k);
+    Parameters[k][0] = Par1;
+    Parameters[k][1] = Par1Err;
+    Parameters[k][2] = Par2;
+    Parameters[k][3] = Par2Err;
+    Parameters[k][4] = Par3;
+    Parameters[k][5] = Par3Err;
+
+  }
+
+  for(Int_t i = 0; i < 10; i++){ // Select plots/names based on values of i
 
     if(i==0){
-        Char_t* Title = "PhiScatt in Scattered Proton Frame at 125 +/- 25 MeV; PhiScatt125MeV";
-        TH1D *hist = (TH1D*)f->Get("Phi_Scattered_125MeV");
-        Char_t* GraphPDF = "./CosFit_125MeV.pdf";
+        Char_t* Title = "PhiScatt in Scattered Proton Frame at 125 +/- 25 MeV; PhiScatt125MeV"; // Set title of output graph
+        TH1D *hist = (TH1D*)f->Get("Phi_Scattered_125MeV"); // Select the correct histogram
+        Char_t* GraphPDF = "./CosFit_125MeV.pdf"; // Name the output images
         Char_t* GraphPNG = "./CosFit_125MeV.png";
-        RebinVal = 2;
-        Float_t yMax = 200;
+        RebinVal = 1; // Rebin the plot as needed
+        Float_t yMax = 400; // Set limit on y axis of plot
       }
 
     if(i==1){
@@ -52,8 +77,8 @@ void CosFit(){
         TH1D *hist = (TH1D*)f->Get("Phi_Scattered_175MeV");
         Char_t* GraphPDF = "./CosFit_175MeV.pdf";
         Char_t* GraphPNG = "./CosFit_175MeV.png";
-        RebinVal = 2;
-        Float_t yMax = 250;
+        RebinVal = 1;
+        Float_t yMax = 750;
       }
 
     if(i==2){
@@ -61,8 +86,8 @@ void CosFit(){
         TH1D *hist = (TH1D*)f->Get("Phi_Scattered_225MeV");
         Char_t* GraphPDF = "./CosFit_225MeV.pdf";
         Char_t* GraphPNG = "./CosFit_225MeV.png";
-        RebinVal = 5;
-        Float_t yMax = 550;
+        RebinVal = 1;
+        Float_t yMax = 850;
       }
 
     if(i==3){
@@ -70,8 +95,8 @@ void CosFit(){
         TH1D *hist = (TH1D*)f->Get("Phi_Scattered_275MeV");
         Char_t* GraphPDF = "./CosFit_275MeV.pdf";
         Char_t* GraphPNG = "./CosFit_275MeV.png";
-        RebinVal = 2;
-        Float_t yMax = 250;
+        RebinVal = 1;
+        Float_t yMax = 800;
       }
 
     if(i==4){
@@ -79,8 +104,8 @@ void CosFit(){
         TH1D *hist = (TH1D*)f->Get("Phi_Scattered_325MeV");
         Char_t* GraphPDF = "./CosFit_325MeV.pdf";
         Char_t* GraphPNG = "./CosFit_325MeV.png";
-        RebinVal = 5;
-        Float_t yMax = 250;
+        RebinVal = 1;
+        Float_t yMax = 500;
       }
 
     if(i==5){
@@ -88,7 +113,7 @@ void CosFit(){
         TH1D *hist = (TH1D*)f->Get("Phi_Scattered_375MeV");
         Char_t* GraphPDF = "./CosFit_375MeV.pdf";
         Char_t* GraphPNG = "./CosFit_375MeV.png";
-        RebinVal = 10;
+        RebinVal = 1;
         Float_t yMax = 250;
       }
 
@@ -97,8 +122,8 @@ void CosFit(){
         TH1D *hist = (TH1D*)f->Get("Phi_Scattered_425MeV");
         Char_t* GraphPDF = "./CosFit_425MeV.pdf";
         Char_t* GraphPNG = "./CosFit_425MeV.png";
-        RebinVal = 20;
-        Float_t yMax = 200;
+        RebinVal = 1;
+        Float_t yMax = 100;
       }
 
     if(i==7){
@@ -106,8 +131,8 @@ void CosFit(){
         TH1D *hist = (TH1D*)f->Get("Phi_Scattered_475MeV");
         Char_t* GraphPDF = "./CosFit_475MeV.pdf";
         Char_t* GraphPNG = "./CosFit_475MeV.png";
-        RebinVal = 10;
-        Float_t yMax = 80;
+        RebinVal = 2;
+        Float_t yMax = 100;
       }
 
     if(i==8){
@@ -115,7 +140,7 @@ void CosFit(){
         TH1D *hist = (TH1D*)f->Get("Phi_Scattered_525MeV");
         Char_t* GraphPDF = "./CosFit_525MeV.pdf";
         Char_t* GraphPNG = "./CosFit_525MeV.png";
-        RebinVal = 20;
+        RebinVal = 2;
         Float_t yMax = 60;
       }
 
@@ -124,8 +149,8 @@ void CosFit(){
         TH1D *hist = (TH1D*)f->Get("Phi_Scattered_575MeV");
         Char_t* GraphPDF = "./CosFit_575MeV.pdf";
         Char_t* GraphPNG = "./CosFit_575MeV.png";
-        RebinVal = 10;
-        Float_t yMax = 30;
+        RebinVal = 2;
+        Float_t yMax = 50;
       }
 
     TCanvas *canvas = new TCanvas("canvas","canvas",1000,10,550,400);
@@ -154,27 +179,27 @@ void CosFit(){
     hr = canvas->DrawFrame(xMin,yMin,xMax,yMax);
     hr->SetTitle(hrTitle);
 
-    hist->SetMarkerStyle(1);
+    hist->SetMarkerStyle(1); // Style options for graph
     hist->SetLineColor(2);
     hist->Rebin(RebinVal);
-    hist->Draw("EHISTSAMES");
-    hist->Fit("CosFit");
+    hist->Draw("EHISTSAMES"); // Draw the histogram with errors
+    hist->Fit("CosFit", "LL"); // Fit Cosine function to histogram using a log likelihood fit
     CosFit->SetLineColor(4);
-    CosFit->Draw("SAMES");
+    CosFit->Draw("SAMES"); // Draw the resulting fit
     warn->Draw("SAMES");
     gStyle->SetOptFit(0111);
-    gPad->Update();
+    gPad->Update(); // Refresh plot
 
-    Amp[i] = CosFit->GetParameter(1);
+    Amp[i] = CosFit->GetParameter(1); // Add values of the fit to an array
     AmpErr[i] = CosFit->GetParError(1);
     Y_Off[i]  = CosFit->GetParameter(0);
     Y_OffErr[i] = CosFit->GetParError(0);
 
-    BinWidth = RebinVal;
+    BinWidth = RebinVal*10; // Default bin size is 10 degrees so x by 10
 
     Pol[i] = Amp[i]/APow;
     PolErr[i] = AmpErr[i]/APow;
-    Y_OffCorr[i] = Y_Off[i]/BinWidth;
+    Y_OffCorr[i] = Y_Off[i]/BinWidth; // Adjust the differential cross section for the width of the bins used
     Y_OffCorrErr[i] = Y_OffCorr[i]/BinWidth;
 
     canvas->SaveAs(filename = GraphPDF);
@@ -211,7 +236,7 @@ void CosFit(){
   TGraphErrors *LiuData;
   TGraphErrors *IkedaData;
 
-  PolEGamma  = new TGraphErrors(10,x,Pol,0,PolErr);
+  PolEGamma  = new TGraphErrors(10,x,Pol,0,PolErr); // Add existing data to polarisation plot
   LiuData = new TGraphErrors(19, xLiu, PrevDataLiu, xLiuErr, PrevDataLiuErr);
   IkedaData = new TGraphErrors(19, xIkeda, PrevDataIkeda,0 , PrevDataIkedaErr);
   PolEGamma->SetMarkerColor(1);
@@ -228,7 +253,7 @@ void CosFit(){
   IkedaData->SetMarkerSize(0.5);
   IkedaData->Draw("ESAMEP");
   warn->Draw("SAME");
-  leg = new TLegend(0.75, 0.75, 0.95, 0.95);
+  leg = new TLegend(0.75, 0.75, 0.95, 0.95); // Add legend to plot
   leg->AddEntry(PolEGamma, "Current Data", "ep");
   leg->AddEntry(LiuData, "Liu 1968", "ep");
   leg->AddEntry(IkedaData, "Ikeda 1980", "ep");

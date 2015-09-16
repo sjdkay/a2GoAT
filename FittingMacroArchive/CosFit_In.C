@@ -8,8 +8,8 @@ Double_t fitf(Double_t *x,Double_t *par)
     return fitval;
 }
 
-void CosFitCut(){
-  // Define a bunch of arrays to be used later
+void CosFit_In(){
+
   double x[10] = {125, 175, 225, 275, 325, 375, 425, 475, 525, 575};
   double xLiu[19]={172, 200, 248, 299, 228, 237, 249, 296, 346, 401, 446, 305, 355, 407, 460, 341, 352, 401, 436};
   double xLiuErr[19]={13, 7, 8, 13, 7, 7, 8 ,10, 12, 15, 19, 9, 11, 13, 16, 10, 10, 12, 14};
@@ -28,15 +28,15 @@ void CosFitCut(){
   double Y_OffCorr[10];
   double Y_OffCorrErr[10];
 
-  TF1 *CosFit = new TF1("CosFit",  fitf, -180.0, 180.0, 2); //Give a name and range to the fitting funcion
+  TF1 *CosFit = new TF1("CosFit",  fitf, -180.0, 180.0, 2);
   CosFit->SetParLimits(0, -1000, 1000);
   CosFit->SetParLimits(1, -1, 1);
-  CosFit->SetParNames("Y_Offset", "Amplitdue"); //Name the parameters
+  CosFit->SetParNames("Y_Offset", "Amplitdue");
 
-  TFile *f = new TFile("PhysicsTotal5_14_08_15.root"); // Open the latest PTotal file to load histograms from
-  TText *warn = new TText(0, 0 ,"PRELIMINARY"); // Preliminary warning label text
+  TFile *f = new TFile("PhysicsTotal5_14_08_15.root");
+  TText *warn = new TText(0, 0 ,"PRELIMINARY");
 
-  TFile *f1= TFile::Open("MCParameters.root");
+  TFile *f1= TFile::Open("MCInParameters.root");
   TTree *t1 = (TTree*)f1->Get("Parameter_Values");
 
   Double_t Parameters[10][6];
@@ -61,96 +61,96 @@ void CosFitCut(){
 
   }
 
-  for(Int_t i = 0; i < 10; i++){ // Select plots/names based on values of i
+  for(Int_t i = 0; i < 10; i++){
 
     if(i==0){
-        Char_t* Title = "PhiScatt in Scattered Proton Frame at 125 +/- 25 MeV; PhiScatt125MeV"; // Set title of output graph
-        TH1D *hist = (TH1D*)f->Get("Phi_Scattered_125MeV_Cut"); // Select the correct histogram
-        Char_t* GraphPDF = "./CosFit_125MeV_Cut.pdf"; // Name the output images
-        Char_t* GraphPNG = "./CosFit_125MeV_Cut.png";
-        RebinVal = 1; // Rebin the plot as needed
-        Float_t yMax = 400; // Set limit on y axis of plot
+        Char_t* Title = "PhiScatt in Scattered Proton Frame at 125 +/- 25 MeV; PhiScatt125MeV";
+        TH1D *hist = (TH1D*)f->Get("Phi_Scattered_125MeV_In");
+        Char_t* GraphPDF = "./CosFit_125MeV_In.pdf";
+        Char_t* GraphPNG = "./CosFit_125MeV_In.png";
+        RebinVal = 1;
+        Float_t yMax = 200;
       }
 
     if(i==1){
         Char_t* Title = "PhiScatt in Scattered Proton Frame at 175 +/- 25 MeV; PhiScatt175MeV";
-        TH1D *hist = (TH1D*)f->Get("Phi_Scattered_175MeV_Cut");
-        Char_t* GraphPDF = "./CosFit_175MeV_Cut.pdf";
-        Char_t* GraphPNG = "./CosFit_175MeV_Cut.png";
+        TH1D *hist = (TH1D*)f->Get("Phi_Scattered_175MeV_In");
+        Char_t* GraphPDF = "./CosFit_175MeV_In.pdf";
+        Char_t* GraphPNG = "./CosFit_175MeV_In.png";
         RebinVal = 1;
-        Float_t yMax = 750;
+        Float_t yMax = 600;
       }
 
     if(i==2){
         Char_t* Title = "PhiScatt in Scattered Proton Frame at 225 +/- 25 MeV; PhiScatt225MeV";
-        TH1D *hist = (TH1D*)f->Get("Phi_Scattered_225MeV_Cut");
-        Char_t* GraphPDF = "./CosFit_225MeV_Cut.pdf";
-        Char_t* GraphPNG = "./CosFit_225MeV_Cut.png";
-        RebinVal = 1;
-        Float_t yMax = 850;
-      }
-
-    if(i==3){
-        Char_t* Title = "PhiScatt in Scattered Proton Frame at 275 +/- 25 MeV; PhiScatt275MeV";
-        TH1D *hist = (TH1D*)f->Get("Phi_Scattered_275MeV_Cut");
-        Char_t* GraphPDF = "./CosFit_275MeV_Cut.pdf";
-        Char_t* GraphPNG = "./CosFit_275MeV_Cut.png";
+        TH1D *hist = (TH1D*)f->Get("Phi_Scattered_225MeV_In");
+        Char_t* GraphPDF = "./CosFit_225MeV_In.pdf";
+        Char_t* GraphPNG = "./CosFit_225MeV_In.png";
         RebinVal = 1;
         Float_t yMax = 800;
       }
 
+    if(i==3){
+        Char_t* Title = "PhiScatt in Scattered Proton Frame at 275 +/- 25 MeV; PhiScatt275MeV";
+        TH1D *hist = (TH1D*)f->Get("Phi_Scattered_275MeV_In");
+        Char_t* GraphPDF = "./CosFit_275MeV_In.pdf";
+        Char_t* GraphPNG = "./CosFit_275MeV_In.png";
+        RebinVal = 1;
+        Float_t yMax = 700;
+      }
+
     if(i==4){
         Char_t* Title = "PhiScatt in Scattered Proton Frame at 325 +/- 25 MeV; PhiScatt325MeV";
-        TH1D *hist = (TH1D*)f->Get("Phi_Scattered_325MeV_Cut");
-        Char_t* GraphPDF = "./CosFit_325MeV_Cut.pdf";
-        Char_t* GraphPNG = "./CosFit_325MeV_Cut.png";
+        TH1D *hist = (TH1D*)f->Get("Phi_Scattered_325MeV_In");
+        Char_t* GraphPDF = "./CosFit_325MeV_In.pdf";
+        Char_t* GraphPNG = "./CosFit_325MeV_In.png";
         RebinVal = 1;
         Float_t yMax = 500;
       }
 
     if(i==5){
         Char_t* Title = "PhiScatt in Scattered Proton Frame at 375 +/- 25 MeV; PhiScatt375MeV";
-        TH1D *hist = (TH1D*)f->Get("Phi_Scattered_375MeV_Cut");
-        Char_t* GraphPDF = "./CosFit_375MeV_Cut.pdf";
-        Char_t* GraphPNG = "./CosFit_375MeV_Cut.png";
+        TH1D *hist = (TH1D*)f->Get("Phi_Scattered_375MeV_In");
+        Char_t* GraphPDF = "./CosFit_375MeV_In.pdf";
+        Char_t* GraphPNG = "./CosFit_375MeV_In.png";
         RebinVal = 1;
         Float_t yMax = 250;
       }
 
     if(i==6){
         Char_t* Title = "PhiScatt in Scattered Proton Frame at 425 +/- 25 MeV; PhiScatt425MeV";
-        TH1D *hist = (TH1D*)f->Get("Phi_Scattered_425MeV_Cut");
-        Char_t* GraphPDF = "./CosFit_425MeV_Cut.pdf";
-        Char_t* GraphPNG = "./CosFit_425MeV_Cut.png";
+        TH1D *hist = (TH1D*)f->Get("Phi_Scattered_425MeV_In");
+        Char_t* GraphPDF = "./CosFit_425MeV_In.pdf";
+        Char_t* GraphPNG = "./CosFit_425MeV_In.png";
         RebinVal = 1;
         Float_t yMax = 100;
       }
 
     if(i==7){
         Char_t* Title = "PhiScatt in Scattered Proton Frame at 475 +/- 25 MeV; PhiScatt475MeV";
-        TH1D *hist = (TH1D*)f->Get("Phi_Scattered_475MeV_Cut");
-        Char_t* GraphPDF = "./CosFit_475MeV_Cut.pdf";
-        Char_t* GraphPNG = "./CosFit_475MeV_Cut.png";
+        TH1D *hist = (TH1D*)f->Get("Phi_Scattered_475MeV_In");
+        Char_t* GraphPDF = "./CosFit_475MeV_In.pdf";
+        Char_t* GraphPNG = "./CosFit_475MeV_In.png";
         RebinVal = 2;
         Float_t yMax = 100;
       }
 
     if(i==8){
         Char_t* Title = "PhiScatt in Scattered Proton Frame at 525 +/- 25 MeV; PhiScatt525MeV";
-        TH1D *hist = (TH1D*)f->Get("Phi_Scattered_525MeV_Cut");
-        Char_t* GraphPDF = "./CosFit_525MeV_Cut.pdf";
-        Char_t* GraphPNG = "./CosFit_525MeV_Cut.png";
+        TH1D *hist = (TH1D*)f->Get("Phi_Scattered_525MeV_In");
+        Char_t* GraphPDF = "./CosFit_525MeV_In.pdf";
+        Char_t* GraphPNG = "./CosFit_525MeV_In.png";
         RebinVal = 2;
         Float_t yMax = 60;
       }
 
     if(i==9){
         Char_t* Title = "PhiScatt in Scattered Proton Frame at 575 +/- 25 MeV; PhiScatt575MeV";
-        TH1D *hist = (TH1D*)f->Get("Phi_Scattered_575MeV_Cut");
-        Char_t* GraphPDF = "./CosFit_575MeV_Cut.pdf";
-        Char_t* GraphPNG = "./CosFit_575MeV_Cut.png";
+        TH1D *hist = (TH1D*)f->Get("Phi_Scattered_575MeV_In");
+        Char_t* GraphPDF = "./CosFit_575MeV_In.pdf";
+        Char_t* GraphPNG = "./CosFit_575MeV_In.png";
         RebinVal = 2;
-        Float_t yMax = 50;
+        Float_t yMax = 40;
       }
 
     TCanvas *canvas = new TCanvas("canvas","canvas",1000,10,550,400);
@@ -179,27 +179,27 @@ void CosFitCut(){
     hr = canvas->DrawFrame(xMin,yMin,xMax,yMax);
     hr->SetTitle(hrTitle);
 
-    hist->SetMarkerStyle(1); // Style options for graph
+    hist->SetMarkerStyle(1);
     hist->SetLineColor(2);
     hist->Rebin(RebinVal);
-    hist->Draw("EHISTSAMES"); // Draw the histogram with errors
-    hist->Fit("CosFit", "LL"); // Fit Cosine function to histogram using a log likelihood fit
+    hist->Draw("EHISTSAMES");
+    hist->Fit("CosFit", "LL");
     CosFit->SetLineColor(4);
-    CosFit->Draw("SAMES"); // Draw the resulting fit
+    CosFit->Draw("SAMES");
     warn->Draw("SAMES");
     gStyle->SetOptFit(0111);
-    gPad->Update(); // Refresh plot
+    gPad->Update();
 
-    Amp[i] = CosFit->GetParameter(1); // Add values of the fit to an array
+    Amp[i] = CosFit->GetParameter(1);
     AmpErr[i] = CosFit->GetParError(1);
     Y_Off[i]  = CosFit->GetParameter(0);
     Y_OffErr[i] = CosFit->GetParError(0);
 
-    BinWidth = RebinVal*10; // Default bin size is 10 degrees so x by 10
+    BinWidth = RebinVal*10;
 
     Pol[i] = Amp[i]/APow;
     PolErr[i] = AmpErr[i]/APow;
-    Y_OffCorr[i] = Y_Off[i]/BinWidth; // Adjust the differential cross section for the width of the bins used
+    Y_OffCorr[i] = Y_Off[i]/BinWidth;
     Y_OffCorrErr[i] = Y_OffCorr[i]/BinWidth;
 
     canvas->SaveAs(filename = GraphPDF);
@@ -236,7 +236,7 @@ void CosFitCut(){
   TGraphErrors *LiuData;
   TGraphErrors *IkedaData;
 
-  PolEGamma  = new TGraphErrors(10,x,Pol,0,PolErr); // Add existing data to polarisation plot
+  PolEGamma  = new TGraphErrors(10,x,Pol,0,PolErr);
   LiuData = new TGraphErrors(19, xLiu, PrevDataLiu, xLiuErr, PrevDataLiuErr);
   IkedaData = new TGraphErrors(19, xIkeda, PrevDataIkeda,0 , PrevDataIkedaErr);
   PolEGamma->SetMarkerColor(1);
@@ -253,13 +253,13 @@ void CosFitCut(){
   IkedaData->SetMarkerSize(0.5);
   IkedaData->Draw("ESAMEP");
   warn->Draw("SAME");
-  leg = new TLegend(0.75, 0.75, 0.95, 0.95); // Add legend to plot
+  leg = new TLegend(0.75, 0.75, 0.95, 0.95);
   leg->AddEntry(PolEGamma, "Current Data", "ep");
   leg->AddEntry(LiuData, "Liu 1968", "ep");
   leg->AddEntry(IkedaData, "Ikeda 1980", "ep");
   leg->Draw("Same");
-  canvas->SaveAs("./PolEGammaCut.pdf");
-  canvas->SaveAs("./PolEGammaCut.png");
+  canvas->SaveAs("./PolEGamma_In.pdf");
+  canvas->SaveAs("./PolEGamma_In.png");
 
   TCanvas *canvas = new TCanvas("canvas","canvas",1000,10,550,400);
 
@@ -296,7 +296,7 @@ void CosFitCut(){
   Y_OffsetEGamma->Draw("P");
   Y_OffsetEGamma->Draw("E1");
   warn->Draw("SAME");
-  canvas->SaveAs("./Y_OffsetEGammaCut.pdf");
-  canvas->SaveAs("./Y_OffsetEGammaCut.png");
+  canvas->SaveAs("./Y_OffsetEGamma_In.pdf");
+  canvas->SaveAs("./Y_OffsetEGamma_In.png");
 
 }
