@@ -254,8 +254,8 @@ void CosFit(){
 
   xMin = 0;
   xMax = 700;
-  yMin = -2;
-  yMax = 1;
+  yMin = -10;
+  yMax = 10;
 
   strcpy(hrTitle, "Polarisation as a Function of Photon Energy");
   hr = canvas->DrawFrame(xMin,yMin,xMax,yMax);

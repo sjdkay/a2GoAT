@@ -194,7 +194,7 @@ void	PNeutPol::ProcessScalerRead()
 TCutG*	PNeutPol::OpenCutFile(Char_t* filename, Char_t* cutname)
 {
   CutFile = new TFile(filename, "READ");
-	
+
   if( !CutFile || !CutFile->IsOpen() ) {
     cerr << "Can't open cut file: " << filename << endl;
     throw false;
@@ -204,12 +204,12 @@ TCutG*	PNeutPol::OpenCutFile(Char_t* filename, Char_t* cutname)
   // GetObject checks the type to be TCutG,
   // see http://root.cern.ch/root/html534/TDirectory.html#TDirectory:GetObject
   CutFile->GetObject(cutname, Cut);
-  
+
   if( !Cut ) {
     cerr << "Could not find a TCutG with the name " << cutname << " in " << filename << endl;
     throw false;
   }
-  
+
   TCutG* Cut_clone = Cut;
   CutFile->Close();
   cout << "cut file " << filename << " opened (Cut-name = " << cutname << ")"<< endl;
@@ -390,7 +390,7 @@ PNeutPol::PNeutPol() // Define a load of histograms to fill
   MM_Proton = new GH1("MM_Proton", 	"MM_Proton", 	 	300,   800, 1100);
   MM_Neutron = new GH1("MM_Neutron", 	"MM_Neutron", 	 	300,  800, 1100);
 
-  // TaggerAccScal = new TH1D("TaggerAccScal","TaggerAccScal",352,0,352);
+  //TaggerAccScal = new TH1D("TaggerAccScal","TaggerAccScal",352,0,352);
 
   Ek = new GH1( "Ek", "Particle Energy Distribution", 100, 0, 500 );
   Eg = new GH1( "Eg", "Photon Energy Distribution", 100, 100, 900 );
@@ -441,7 +441,7 @@ PNeutPol::PNeutPol() // Define a load of histograms to fill
   PhiSc525Cut = new GH1( "Phi_Scattered_525MeV_Cut", "Phi_Scattered_525MeV_Cut", 36, -180, 180);
   PhiSc575Cut = new GH1( "Phi_Scattered_575MeV_Cut", "Phi_Scattered_575MeV_Cut", 36, -180, 180);
 
-  PhiScROI = new GH1( "Phi_Scattered_ROI", "Scattetred Proton Phi Distribution in Rotated Frame in ROI", 36, -180, 180 );
+  //PhiScROI = new GH1( "Phi_Scattered_ROI", "Scattetred Proton Phi Distribution in Rotated Frame in ROI", 36, -180, 180 );
 
   PhiSc_In = new GH1( "Phi_Scattered_In", "Scattetred Proton Phi Distribution in Rotated Frame", 36, -180, 180 );
   PhiSc125_In = new GH1( "Phi_Scattered_125MeV_In", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 125pm25MeV", 36, -180, 180);
@@ -496,9 +496,9 @@ PNeutPol::PNeutPol() // Define a load of histograms to fill
   E_dE = new GH2("E_dE", "EdE Plot", 150, 0, 500, 150, 0, 7);
   E_dE_Proton = new GH2("E_dE_Proton", "EdE Plot for Protons", 150, 0, 500, 150, 0, 7);
   E_dE_Neutron = new GH2("E_dE_Neutron", "EdE Plot for Neutrons", 150, 0, 500, 150, 0, 7);
-  E_dE_ROI = new GH2("E_dE_ROI", "EdE Plot in ROI", 150, 0, 500, 150, 0, 7);
-  E_dE_ROI_p = new GH2("E_dE_ROI_p", "EdE Plot in ROI for Protons", 150, 0, 500, 150, 0, 7);
-  E_dE_ROI_n = new GH2("E_dE_ROI_n", "EdE Plot in ROI for Neutrons", 150, 0, 500, 150, 0, 7);
+  //E_dE_ROI = new GH2("E_dE_ROI", "EdE Plot in ROI", 150, 0, 500, 150, 0, 7);
+  //E_dE_ROI_p = new GH2("E_dE_ROI_p", "EdE Plot in ROI for Protons", 150, 0, 500, 150, 0, 7);
+  //E_dE_ROI_n = new GH2("E_dE_ROI_n", "EdE Plot in ROI for Neutrons", 150, 0, 500, 150, 0, 7);
   //E_dE_LowPhi = new GH2("E_dE_LowPhi", "EdE Plot for Low Phi Events", 150, 0, 500, 150, 0, 7);
   //E_dE_LowPhi_p = new GH2("E_dE_LowPhi_p", "EdE Plot for Low Phi Events for Protons", 150, 0, 500, 150, 0, 7);
   //E_dE_LowPhi_n = new GH2("E_dE_LowPhi_n", "EdE Plot for Low Phi Events for Neutrons", 150, 0, 500, 150, 0, 7);
@@ -555,18 +555,18 @@ void PNeutPol::FillHists()
   //if (((Ep > 82 && Ep < 118) == kTRUE) && ((Thetap > 81 && Thetap < 99) == kTRUE))
   //PhidECorrFixp->Fill(Phip, dEp, TaggerTime);
 
-  if(Cut_ROI -> IsInside(Ep, dEp) == kTRUE)
-  {
-    E_dE_ROI->Fill(Ep, dEp, TaggerTime);
-    E_dE_ROI_p->Fill(Ep, dEp, TaggerTime);
-  }
+ // if(Cut_ROI -> IsInside(Ep, dEp) == kTRUE)
+ // {
+ //   E_dE_ROI->Fill(Ep, dEp, TaggerTime);
+ //   E_dE_ROI_p->Fill(Ep, dEp, TaggerTime);
+ // }
 
-  if(Cut_ROI -> IsInside(En, dEn) == kTRUE)
-  {
-    E_dE_ROI->Fill(En, dEn, TaggerTime);
-    E_dE_ROI_n->Fill(En, dEn, TaggerTime);
-    PhiScROI->Fill(ScattPhi, TaggerTime);
-  }
+  //if(Cut_ROI -> IsInside(En, dEn) == kTRUE)
+  //{
+  //  E_dE_ROI->Fill(En, dEn, TaggerTime);
+  //  E_dE_ROI_n->Fill(En, dEn, TaggerTime);
+  //  PhiScROI->Fill(ScattPhi, TaggerTime);
+  //}
 
  // if (-10 < ScattPhi && ScattPhi < 10) // Disabled when not needed, these slow down process a lot
   //{
@@ -578,7 +578,7 @@ void PNeutPol::FillHists()
   //}
 
 
-  if (MCData == kTRUE && nBanana == kTRUE)
+  if (MCData == kTRUE && nBanana == kTRUE) // Fill some histograms for MC data
     {
             EgMC_In->Fill(EGamma, TaggerTime);
             ThetapMC_In->Fill(Thetap, TaggerTime);

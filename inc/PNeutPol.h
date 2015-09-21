@@ -165,7 +165,7 @@ private:
   GH1* PhiSc525Cut;
   GH1* PhiSc575Cut;
 
-  GH1* PhiScROI;
+  // GH1* PhiScROI;
 
   GH1* PhiSc_In;
   GH1* PhiSc125_In;
@@ -218,9 +218,9 @@ private:
   GH2* E_dE;
   GH2* E_dE_Proton;
   GH2* E_dE_Neutron;
-  GH2* E_dE_ROI;
-  GH2* E_dE_ROI_p;
-  GH2* E_dE_ROI_n;
+  //GH2* E_dE_ROI;
+  //GH2* E_dE_ROI_p;
+  //GH2* E_dE_ROI_n;
   //GH2* ThetanCM_PhinCM;
   //GH2* Thetan_Vs_Phin_Lab;
   //GH2* Theta_Vs_Phi;
