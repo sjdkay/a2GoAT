@@ -27,6 +27,14 @@ void CosFitCut(){
   double PolErr[10];
   double Y_OffCorr[10];
   double Y_OffCorrErr[10];
+  double P1;
+  double P2;
+  double P3;
+  double Phi;
+  double PolyVal;
+  double F;
+  double BinValue;
+  double AdjBinValue;
 
   TF1 *CosFit = new TF1("CosFit",  fitf, -180.0, 180.0, 2); //Give a name and range to the fitting funcion
   CosFit->SetParLimits(0, -1000, 1000);
@@ -36,7 +44,7 @@ void CosFitCut(){
   TFile *f = new TFile("PhysicsTotal5_14_08_15.root"); // Open the latest PTotal file to load histograms from
   TText *warn = new TText(0, 0 ,"PRELIMINARY"); // Preliminary warning label text
 
-  TFile *f1= TFile::Open("MCParameters.root");
+  TFile *f1= TFile::Open("MCParametersCut.root");
   TTree *t1 = (TTree*)f1->Get("Parameter_Values");
 
   Double_t Parameters[10][6];
@@ -69,7 +77,7 @@ void CosFitCut(){
         Char_t* GraphPDF = "./CosFit_125MeV_Cut.pdf"; // Name the output images
         Char_t* GraphPNG = "./CosFit_125MeV_Cut.png";
         RebinVal = 1; // Rebin the plot as needed
-        Float_t yMax = 400; // Set limit on y axis of plot
+        Float_t yMax = 600; // Set limit on y axis of plot
       }
 
     if(i==1){
@@ -87,7 +95,7 @@ void CosFitCut(){
         Char_t* GraphPDF = "./CosFit_225MeV_Cut.pdf";
         Char_t* GraphPNG = "./CosFit_225MeV_Cut.png";
         RebinVal = 1;
-        Float_t yMax = 850;
+        Float_t yMax = 750;
       }
 
     if(i==3){
@@ -96,7 +104,7 @@ void CosFitCut(){
         Char_t* GraphPDF = "./CosFit_275MeV_Cut.pdf";
         Char_t* GraphPNG = "./CosFit_275MeV_Cut.png";
         RebinVal = 1;
-        Float_t yMax = 800;
+        Float_t yMax = 600;
       }
 
     if(i==4){
@@ -105,7 +113,7 @@ void CosFitCut(){
         Char_t* GraphPDF = "./CosFit_325MeV_Cut.pdf";
         Char_t* GraphPNG = "./CosFit_325MeV_Cut.png";
         RebinVal = 1;
-        Float_t yMax = 500;
+        Float_t yMax = 400;
       }
 
     if(i==5){
@@ -114,7 +122,7 @@ void CosFitCut(){
         Char_t* GraphPDF = "./CosFit_375MeV_Cut.pdf";
         Char_t* GraphPNG = "./CosFit_375MeV_Cut.png";
         RebinVal = 1;
-        Float_t yMax = 250;
+        Float_t yMax = 150;
       }
 
     if(i==6){
@@ -132,7 +140,7 @@ void CosFitCut(){
         Char_t* GraphPDF = "./CosFit_475MeV_Cut.pdf";
         Char_t* GraphPNG = "./CosFit_475MeV_Cut.png";
         RebinVal = 2;
-        Float_t yMax = 100;
+        Float_t yMax = 70;
       }
 
     if(i==8){
@@ -141,7 +149,7 @@ void CosFitCut(){
         Char_t* GraphPDF = "./CosFit_525MeV_Cut.pdf";
         Char_t* GraphPNG = "./CosFit_525MeV_Cut.png";
         RebinVal = 2;
-        Float_t yMax = 60;
+        Float_t yMax = 100;
       }
 
     if(i==9){
@@ -150,7 +158,7 @@ void CosFitCut(){
         Char_t* GraphPDF = "./CosFit_575MeV_Cut.pdf";
         Char_t* GraphPNG = "./CosFit_575MeV_Cut.png";
         RebinVal = 2;
-        Float_t yMax = 50;
+        Float_t yMax = 100;
       }
 
     TCanvas *canvas = new TCanvas("canvas","canvas",1000,10,550,400);
@@ -182,6 +190,25 @@ void CosFitCut(){
     hist->SetMarkerStyle(1); // Style options for graph
     hist->SetLineColor(2);
     hist->Rebin(RebinVal);
+
+    BinWidth = RebinVal*10; // Default bin size is 10 degrees so x by 10
+    nBins = hist->GetSize() - 2; // -2 as otherwise under/overflow included
+    P1 = Parameters[i][0];
+    P2 = Parameters[i][2];
+    P3 = Parameters[i][4];
+
+    // This loop corrects the data for the false assymetries in the MC data
+    for (Int_t m = 0; m < nBins; m++){
+
+        Phi = ((-180 + (BinWidth/2)) + (m*BinWidth));
+        PolyVal = ((P1) + ((P2)*Phi) + ((P3)*(Phi*Phi)));
+        F = 1/PolyVal;
+        BinValue = hist->GetBinContent(m+1);
+        AdjBinValue = BinValue * F; // Function to adjust value of histogram to be fitted to
+        hist->SetBinContent(m+1, AdjBinValue);
+
+    }
+
     hist->Draw("EHISTSAMES"); // Draw the histogram with errors
     hist->Fit("CosFit", "LL"); // Fit Cosine function to histogram using a log likelihood fit
     CosFit->SetLineColor(4);
@@ -195,7 +222,6 @@ void CosFitCut(){
     Y_Off[i]  = CosFit->GetParameter(0);
     Y_OffErr[i] = CosFit->GetParError(0);
 
-    BinWidth = RebinVal*10; // Default bin size is 10 degrees so x by 10
 
     Pol[i] = Amp[i]/APow;
     PolErr[i] = AmpErr[i]/APow;

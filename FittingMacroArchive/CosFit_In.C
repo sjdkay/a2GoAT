@@ -27,6 +27,14 @@ void CosFit_In(){
   double PolErr[10];
   double Y_OffCorr[10];
   double Y_OffCorrErr[10];
+  double P1;
+  double P2;
+  double P3;
+  double Phi;
+  double PolyVal;
+  double F;
+  double BinValue;
+  double AdjBinValue;
 
   TF1 *CosFit = new TF1("CosFit",  fitf, -180.0, 180.0, 2);
   CosFit->SetParLimits(0, -1000, 1000);
@@ -69,7 +77,7 @@ void CosFit_In(){
         Char_t* GraphPDF = "./CosFit_125MeV_In.pdf";
         Char_t* GraphPNG = "./CosFit_125MeV_In.png";
         RebinVal = 1;
-        Float_t yMax = 200;
+        Float_t yMax = 300;
       }
 
     if(i==1){
@@ -78,7 +86,7 @@ void CosFit_In(){
         Char_t* GraphPDF = "./CosFit_175MeV_In.pdf";
         Char_t* GraphPNG = "./CosFit_175MeV_In.png";
         RebinVal = 1;
-        Float_t yMax = 600;
+        Float_t yMax = 800;
       }
 
     if(i==2){
@@ -96,7 +104,7 @@ void CosFit_In(){
         Char_t* GraphPDF = "./CosFit_275MeV_In.pdf";
         Char_t* GraphPNG = "./CosFit_275MeV_In.png";
         RebinVal = 1;
-        Float_t yMax = 700;
+        Float_t yMax = 800;
       }
 
     if(i==4){
@@ -105,7 +113,7 @@ void CosFit_In(){
         Char_t* GraphPDF = "./CosFit_325MeV_In.pdf";
         Char_t* GraphPNG = "./CosFit_325MeV_In.png";
         RebinVal = 1;
-        Float_t yMax = 500;
+        Float_t yMax = 750;
       }
 
     if(i==5){
@@ -123,7 +131,7 @@ void CosFit_In(){
         Char_t* GraphPDF = "./CosFit_425MeV_In.pdf";
         Char_t* GraphPNG = "./CosFit_425MeV_In.png";
         RebinVal = 1;
-        Float_t yMax = 100;
+        Float_t yMax = 200;
       }
 
     if(i==7){
@@ -132,7 +140,7 @@ void CosFit_In(){
         Char_t* GraphPDF = "./CosFit_475MeV_In.pdf";
         Char_t* GraphPNG = "./CosFit_475MeV_In.png";
         RebinVal = 2;
-        Float_t yMax = 100;
+        Float_t yMax = 70;
       }
 
     if(i==8){
@@ -141,7 +149,7 @@ void CosFit_In(){
         Char_t* GraphPDF = "./CosFit_525MeV_In.pdf";
         Char_t* GraphPNG = "./CosFit_525MeV_In.png";
         RebinVal = 2;
-        Float_t yMax = 60;
+        Float_t yMax = 100;
       }
 
     if(i==9){
@@ -150,7 +158,7 @@ void CosFit_In(){
         Char_t* GraphPDF = "./CosFit_575MeV_In.pdf";
         Char_t* GraphPNG = "./CosFit_575MeV_In.png";
         RebinVal = 2;
-        Float_t yMax = 40;
+        Float_t yMax = 100;
       }
 
     TCanvas *canvas = new TCanvas("canvas","canvas",1000,10,550,400);
@@ -182,6 +190,25 @@ void CosFit_In(){
     hist->SetMarkerStyle(1);
     hist->SetLineColor(2);
     hist->Rebin(RebinVal);
+
+    BinWidth = RebinVal*10; // Default bin size is 10 degrees so x by 10
+    nBins = hist->GetSize() - 2; // -2 as otherwise under/overflow included
+    P1 = Parameters[i][0];
+    P2 = Parameters[i][2];
+    P3 = Parameters[i][4];
+
+    // This loop corrects the data for the false assymetries in the MC data
+    for (Int_t m = 0; m < nBins; m++){
+
+        Phi = ((-180 + (BinWidth/2)) + (m*BinWidth));
+        PolyVal = ((P1) + ((P2)*Phi) + ((P3)*(Phi*Phi)));
+        F = 1/PolyVal;
+        BinValue = hist->GetBinContent(m+1);
+        AdjBinValue = BinValue * F; // Function to adjust value of histogram to be fitted to
+        hist->SetBinContent(m+1, AdjBinValue);
+
+    }
+
     hist->Draw("EHISTSAMES");
     hist->Fit("CosFit", "LL");
     CosFit->SetLineColor(4);
@@ -194,8 +221,6 @@ void CosFit_In(){
     AmpErr[i] = CosFit->GetParError(1);
     Y_Off[i]  = CosFit->GetParameter(0);
     Y_OffErr[i] = CosFit->GetParError(0);
-
-    BinWidth = RebinVal*10;
 
     Pol[i] = Amp[i]/APow;
     PolErr[i] = AmpErr[i]/APow;

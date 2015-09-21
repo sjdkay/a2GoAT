@@ -81,7 +81,7 @@ void CosFit(){
         Char_t* GraphPDF = "./CosFit_125MeV.pdf"; // Name the output images
         Char_t* GraphPNG = "./CosFit_125MeV.png";
         RebinVal = 1; // Rebin the plot as needed
-        Float_t yMax = 400; // Set limit on y axis of plot
+        Float_t yMax = 750; // Set limit on y axis of plot
       }
 
     if(i==1){
@@ -90,7 +90,7 @@ void CosFit(){
         Char_t* GraphPDF = "./CosFit_175MeV.pdf";
         Char_t* GraphPNG = "./CosFit_175MeV.png";
         RebinVal = 1;
-        Float_t yMax = 750;
+        Float_t yMax = 1000;
       }
 
     if(i==2){
@@ -99,7 +99,7 @@ void CosFit(){
         Char_t* GraphPDF = "./CosFit_225MeV.pdf";
         Char_t* GraphPNG = "./CosFit_225MeV.png";
         RebinVal = 1;
-        Float_t yMax = 850;
+        Float_t yMax = 1000;
       }
 
     if(i==3){
@@ -108,7 +108,7 @@ void CosFit(){
         Char_t* GraphPDF = "./CosFit_275MeV.pdf";
         Char_t* GraphPNG = "./CosFit_275MeV.png";
         RebinVal = 1;
-        Float_t yMax = 800;
+        Float_t yMax = 1000;
       }
 
     if(i==4){
@@ -117,7 +117,7 @@ void CosFit(){
         Char_t* GraphPDF = "./CosFit_325MeV.pdf";
         Char_t* GraphPNG = "./CosFit_325MeV.png";
         RebinVal = 1;
-        Float_t yMax = 500;
+        Float_t yMax = 750;
       }
 
     if(i==5){
@@ -135,7 +135,7 @@ void CosFit(){
         Char_t* GraphPDF = "./CosFit_425MeV.pdf";
         Char_t* GraphPNG = "./CosFit_425MeV.png";
         RebinVal = 1;
-        Float_t yMax = 100;
+        Float_t yMax = 200;
       }
 
     if(i==7){
@@ -153,7 +153,7 @@ void CosFit(){
         Char_t* GraphPDF = "./CosFit_525MeV.pdf";
         Char_t* GraphPNG = "./CosFit_525MeV.png";
         RebinVal = 2;
-        Float_t yMax = 60;
+        Float_t yMax = 250;
       }
 
     if(i==9){
@@ -162,7 +162,7 @@ void CosFit(){
         Char_t* GraphPDF = "./CosFit_575MeV.pdf";
         Char_t* GraphPNG = "./CosFit_575MeV.png";
         RebinVal = 2;
-        Float_t yMax = 50;
+        Float_t yMax = 200;
       }
 
     TCanvas *canvas = new TCanvas("canvas","canvas",1000,10,550,400);
