@@ -146,6 +146,17 @@ add_executable(NeutPol
    )
 target_link_libraries(NeutPol ${LIBS} ${ROOT_LIBRARIES})
 
+add_executable(NeutPol_NoPID
+   ${GOAT_BASE}
+   ${GOAT_GHIST}
+   inc/PPhysics.h
+   src/PPhysics.cc
+   inc/PNeutPol_NoPID.h
+   src/PNeutPol_NoPID.cc
+   src/NeutPol_NoPID_main.cc
+   )
+target_link_libraries(NeutPol_NoPID ${LIBS} ${ROOT_LIBRARIES})
+
 add_executable(ProtPol
    ${GOAT_BASE}
    ${GOAT_GHIST}

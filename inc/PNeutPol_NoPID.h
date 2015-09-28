@@ -1,5 +1,5 @@
-#ifndef __PNeutPol_h__
-#define __PNeutPol_h__
+#ifndef __PNeutPol_NoPID_h__
+#define __PNeutPol_NoPID_h__
 
 #include <iostream>
 #include <fstream>
@@ -14,7 +14,7 @@ using namespace std;
 #include "TRandom2.h"
 #include "TMath.h"
 
-class	PNeutPol : public PPhysics
+class	PNeutPol_NoPID : public PPhysics
 {
 private:
 
@@ -165,62 +165,9 @@ private:
   GH1* PhiSc525Cut;
   GH1* PhiSc575Cut;
 
-  // GH1* PhiScROI;
-
-  GH1* PhiSc_In;
-  GH1* PhiSc125_In;
-  GH1* PhiSc175_In;
-  GH1* PhiSc225_In;
-  GH1* PhiSc275_In;
-  GH1* PhiSc325_In;
-  GH1* PhiSc375_In;
-  GH1* PhiSc425_In;
-  GH1* PhiSc475_In;
-  GH1* PhiSc525_In;
-  GH1* PhiSc575_In;
-
-  GH1* PhiSc_Out;
-  GH1* PhiSc125_Out;
-  GH1* PhiSc175_Out;
-  GH1* PhiSc225_Out;
-  GH1* PhiSc275_Out;
-  GH1* PhiSc325_Out;
-  GH1* PhiSc375_Out;
-  GH1* PhiSc425_Out;
-  GH1* PhiSc475_Out;
-  GH1* PhiSc525_Out;
-  GH1* PhiSc575_Out;
-
-  GH1* PhiScCut_In;
-  GH1* PhiSc125Cut_In;
-  GH1* PhiSc175Cut_In;
-  GH1* PhiSc225Cut_In;
-  GH1* PhiSc275Cut_In;
-  GH1* PhiSc325Cut_In;
-  GH1* PhiSc375Cut_In;
-  GH1* PhiSc425Cut_In;
-  GH1* PhiSc475Cut_In;
-  GH1* PhiSc525Cut_In;
-  GH1* PhiSc575Cut_In;
-
-  GH1* PhiScCut_Out;
-  GH1* PhiSc125Cut_Out;
-  GH1* PhiSc175Cut_Out;
-  GH1* PhiSc225Cut_Out;
-  GH1* PhiSc275Cut_Out;
-  GH1* PhiSc325Cut_Out;
-  GH1* PhiSc375Cut_Out;
-  GH1* PhiSc425Cut_Out;
-  GH1* PhiSc475Cut_Out;
-  GH1* PhiSc525Cut_Out;
-  GH1* PhiSc575Cut_Out;
-
   GH2* E_dE;
   GH2* E_dE_Proton;
   GH2* E_dE_Neutron;
-  //GH2* E_dE_ROI;
-  //GH2* E_dE_ROI_p;
-  //GH2* E_dE_ROI_n;
   //GH2* ThetanCM_PhinCM;
   //GH2* Thetan_Vs_Phin_Lab;
   //GH2* Theta_Vs_Phi;
@@ -277,8 +224,8 @@ protected:
 
 public:
 
-    PNeutPol();
-    virtual ~PNeutPol();
+    PNeutPol_NoPID();
+    virtual ~PNeutPol_NoPID();
     virtual Bool_t  Init();
     TCutG* OpenCutFile(Char_t* filename, Char_t* cutname);
     void MCHists();
