@@ -168,6 +168,17 @@ add_executable(ProtPol
    )
 target_link_libraries(ProtPol ${LIBS} ${ROOT_LIBRARIES})
 
+add_executable(1pi0
+   ${GOAT_BASE}
+   ${GOAT_GHIST}
+   inc/PPhysics.h
+   src/PPhysics.cc
+   inc/P1pi0.h
+   src/P1pi0.cc
+   src/1pi0_main.cc
+   )
+target_link_libraries(1pi0 ${LIBS} ${ROOT_LIBRARIES})
+
 add_executable(MC_Analysis_1_Part
    ${GOAT_BASE}
    ${GOAT_GHIST}
