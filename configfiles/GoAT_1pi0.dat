@@ -2,6 +2,11 @@
 # Global Config file for a GoAT analysis
 #=======================================================================
 
+# This config looks for two gammas interacting in polarimeter to produce
+# two charge pions. Can't use PID to identify these however as we have
+# the polarimeter AFTER the PID!
+# Use physics analysis to select only nPIDHits = 0 events!
+
 #-----------------------------------------------------------------------
 # General Setup
 #-----------------------------------------------------------------------
@@ -13,7 +18,7 @@ CheckCBStability: 1
 #-----------------------------------------------------------------------
 # Particle Reconstruction
 #-----------------------------------------------------------------------
-Do-Particle-Reconstruction: 1
+Do-Particle-Reconstruction: 0
 
 #Consider just removing cuts entirely and doing them purely in the Physics analysis
 
@@ -21,7 +26,7 @@ Do-Charged-Particle-Reconstruction: 1
 Cut-dE-E-CB-Proton: 	configfiles/cuts/CB_DeltaE-E_Proton_29_07_15.root Proton
 Cut-dE-E-CB-Pion:    	configfiles/cuts/CB_DeltaE-E_Pion_29_07_15.root Pion
 
-Do-Meson-Reconstruction: 1
+Do-Meson-Reconstruction: 0
 Cut-IM-Width-Pi0: 20
 Cut-IM-Width-Eta: 44
 Cut-IM-Width-Eta-Prime: 60
@@ -47,9 +52,8 @@ SortRaw-CBEnergySum:	10+
 Sort-NParticles: 	2=          2+       0-
 
 #				Type 	Number	Theta-min 	Theta-max
-Sort-Particle:	protons	0- 		0			180
-Sort-Particle:  charged  0-		0			180
-Sort-Particle:  photons  2=		0			180
+Sort-Particle:  charged  2=		0			180
+Sort-Particle:  photons  0-		0			180
 
 # Note: (I'll put this here while we don't have a manual)
 # the charged and neutral particle cuts are additional 

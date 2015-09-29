@@ -179,6 +179,17 @@ add_executable(1pi0
    )
 target_link_libraries(1pi0 ${LIBS} ${ROOT_LIBRARIES})
 
+add_executable(2pi0
+   ${GOAT_BASE}
+   ${GOAT_GHIST}
+   inc/PPhysics.h
+   src/PPhysics.cc
+   inc/P2pi0.h
+   src/P2pi0.cc
+   src/2pi0_main.cc
+   )
+target_link_libraries(2pi0 ${LIBS} ${ROOT_LIBRARIES})
+
 add_executable(MC_Analysis_1_Part
    ${GOAT_BASE}
    ${GOAT_GHIST}
@@ -189,6 +200,8 @@ add_executable(MC_Analysis_1_Part
    src/MC_Analysis_1_Part_main.cc
    )
 target_link_libraries(MC_Analysis_1_Part ${LIBS} ${ROOT_LIBRARIES})
+
+
 
 # install some scripts to the bin directory
 # by creating symlinks
