@@ -86,6 +86,8 @@ private:
 
   Bool_t nBanana;
   Bool_t MCData;
+  Bool_t Proton1;
+  Bool_t Proton2;
 
   TLorentzVector GV1;
   TLorentzVector GV2;
@@ -234,6 +236,10 @@ private:
   //GH2* E_dE_LowPhi_n;
   //GH1* PhiScLow;
 
+  TLorentzVector MCTrueVect1;
+  TLorentzVector MCTrueVect2;
+
+
   GH1* EgMC_In;
   GH1* ThetapMC_In;
   GH1* ThetanMC_In;
@@ -285,7 +291,8 @@ public:
     Int_t GetEvent();
     TLorentzVector InitialVect();
     Double_t InitialProp();
-    Double_t MCTrue();
+    Double_t MCTrueValues();
+    TLorentzVector MCTrueVectors();
     Double_t MCSmearing();
     Double_t PNProp(Int_t ProtonParticleNumber);
     TLorentzVector PNVect(Int_t ProtonParticleNumber);

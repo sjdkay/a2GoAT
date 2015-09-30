@@ -75,15 +75,11 @@ void	PNeutPol::ProcessEvent()
   GetEvent(); // Function gets number of tracks/protons/pions e.t.c.
   if (NRoo !=0) return; // Goes to next event if any "rootinos" found
   if (NTrack !=2) return; // Ensures two track event
-  if (GetTracks()->GetMWPC0Energy(0) == 0 || GetTracks()->GetMWPC0Energy(1) == 0 ) return;
-  if (GetTracks()->GetMWPC1Energy(0) == 0 || GetTracks()->GetMWPC1Energy(1) == 0 ) return;
   InitialVect(); // Function gets vectors of identified tracks and returns them
   InitialProp(); // Function gets initial properties (energy, vertex e.t.c.) of identified tracks
   if ( MCData == kTRUE)
   {
       MCSmearing(); // Smear dE values for MC data
-      MCTrue(); // Get MC True data and evaluate it
-      pPIDElement = GetDetectorHits()->GetPIDHits(0);
   }
   //for (Int_t i=0; i < NTrack; i++){ // Currently nothing relies upon i!
 
@@ -154,6 +150,15 @@ void	PNeutPol::ProcessEvent()
       PNVect(2);
 
     }
+
+      if ( MCData == kTRUE)
+      {
+
+      MCTrueValues();
+      MCTrueVectors();
+      //cout << GetGeant()->GetTrueID(0) << "   " << GetGeant()->GetTrueID(1) << endl;
+
+      }
 
     if( Zp > 60 || Zp < -60) continue; // Cut if proton vertex not where we expect it to be
     if(Cut_proton -> IsInside(En, dEn) == kTRUE) nBanana = kTRUE; // Set flag to true or false depending upon location of neutron
@@ -261,13 +266,24 @@ Double_t PNeutPol::MCSmearing() // Smear dE values for MC data to represent Ener
   return dE1, dE2;
 }
 
-Double_t PNeutPol::MCTrue()
+Double_t PNeutPol::MCTrueValues()
 {
 
-    //Unsure how to actually extract MC true data from its relevant tree?
     Double_t Example = 5;
-    // Get MC True info and do some stuff
     return Example;
+
+}
+
+TLorentzVector PNeutPol::MCTrueVectors()
+{
+
+    MCTrueVect1 = GetGeant()->GetTrueVector(0);
+    MCTrueVect2 = GetGeant()->GetTrueVector(1);
+
+    //cout << GV1(3) << "   " << GV2(3) << "   " << MCTrueVect1(3)*1000 << "   " << MCTrueVect2(3)*1000 << endl;
+
+
+    return MCTrueVect1, MCTrueVect2;
 
 }
 
@@ -286,6 +302,8 @@ Double_t PNeutPol::PNProp(Int_t ProtonParticleNumber) // Define properties of pr
       dEn = dE2;
       pPIDElement = GetDetectorHits()->GetPIDHits(0);
       nPIDElement = GetDetectorHits()->GetPIDHits(1);
+      Proton1 = kTRUE;
+      Proton2 = kFALSE;
     }
 
   if(ProtonParticleNumber == 2)
@@ -301,6 +319,9 @@ Double_t PNeutPol::PNProp(Int_t ProtonParticleNumber) // Define properties of pr
       dEn = dE1;
       pPIDElement = GetDetectorHits()->GetPIDHits(1);
       nPIDElement = GetDetectorHits()->GetPIDHits(0);
+      Proton1 = kFALSE;
+      Proton2 = kTRUE;
+
     }
 
   return Zp, Zn, zdiff, mmp, mmn, Ep, En, dEp, dEn, pPIDElement, nPIDElement;
