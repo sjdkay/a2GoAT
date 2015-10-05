@@ -22,7 +22,9 @@ private:
 
   Int_t NTag;
   Int_t NTrack;
+  Int_t NPhotons;
   Int_t i;
+  Int_t k;
 
   double_t Time;
   double_t TaggerTime;

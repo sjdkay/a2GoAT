@@ -282,7 +282,6 @@ TLorentzVector PNeutPol::MCTrueVectors()
 
     //cout << GV1(3) << "   " << GV2(3) << "   " << MCTrueVect1(3)*1000 << "   " << MCTrueVect2(3)*1000 << endl;
 
-
     return MCTrueVect1, MCTrueVect2;
 
 }
@@ -300,8 +299,6 @@ Double_t PNeutPol::PNProp(Int_t ProtonParticleNumber) // Define properties of pr
       En = E2;
       dEp = dE1;
       dEn = dE2;
-      pPIDElement = GetDetectorHits()->GetPIDHits(0);
-      nPIDElement = GetDetectorHits()->GetPIDHits(1);
       Proton1 = kTRUE;
       Proton2 = kFALSE;
     }
@@ -317,14 +314,12 @@ Double_t PNeutPol::PNProp(Int_t ProtonParticleNumber) // Define properties of pr
       En = E1;
       dEp = dE2;
       dEn = dE1;
-      pPIDElement = GetDetectorHits()->GetPIDHits(1);
-      nPIDElement = GetDetectorHits()->GetPIDHits(0);
       Proton1 = kFALSE;
       Proton2 = kTRUE;
 
     }
 
-  return Zp, Zn, zdiff, mmp, mmn, Ep, En, dEp, dEn, pPIDElement, nPIDElement;
+  return Zp, Zn, zdiff, mmp, mmn, Ep, En, dEp, dEn;
 }
 
 TLorentzVector PNeutPol::PNVect(Int_t ProtonParticleNumber) // Define vectors for p and n in similar manner to properties above
@@ -620,8 +615,6 @@ void PNeutPol::FillHists()
             ThetanMC_Rec_In->Fill(ThetanCalc, TaggerTime);
             EpMC_In->Fill(Ep, TaggerTime);
             EnMC_In->Fill(En, TaggerTime);
-            PID_Phi_In->Fill(nPIDElement, Phin, TaggerTime);
-            PID_Theta_In->Fill(nPIDElement, Thetan, TaggerTime);
             Thetan_dE_MC_In->Fill(dEn, Thetan, TaggerTime);
             ThetanRec_dE_MC_In->Fill(dEn, ThetanCalc, TaggerTime);
             Phin_dE_MC_In->Fill(dEn, Phin, TaggerTime);
@@ -635,8 +628,6 @@ void PNeutPol::FillHists()
             ThetanMC_Rec_Out->Fill(ThetanCalc, TaggerTime);
             EpMC_Out->Fill(Ep, TaggerTime);
             EnMC_Out->Fill(En, TaggerTime);
-            PID_Phi_Out->Fill(nPIDElement, Phin , TaggerTime);
-            PID_Theta_Out->Fill(nPIDElement, Thetan , TaggerTime);
             Thetan_dE_MC_Out->Fill(dEn, Thetan, TaggerTime);
             ThetanRec_dE_MC_Out->Fill(dEn, ThetanCalc, TaggerTime);
             Phin_dE_MC_Out->Fill(dEn, Phin, TaggerTime);
@@ -765,10 +756,6 @@ void PNeutPol::MCHists()
   ThetanMC_Rec_Out = new GH1("ThetanMC_Rec_Out", "Neutron Reconstructed Theta Distribution (MC Out)", 180, 0 , 180);
   EpMC_Out = new GH1("EpMC_Out", "Proton Energy Distribution (MC Out)", 100, 0 , 500);
   EnMC_Out = new GH1("EnMC_Out", "Neutron Energy Distribution (MC Out)", 100, 0 , 500);
-  PID_Phi_In = new GH2("PID_Phi_In", "PID Element vs Phi for Neutrons (MC In)", 24, 0, 24, 72, -180, 180);
-  PID_Phi_Out= new GH2("PID_Phi_Out", "PID Element vs Phi for Neutrons (MC Out)", 24, 0, 24, 72, -180, 180);
-  PID_Theta_In = new GH2("PID_Theta_In", "PID Element vs Theta for Neutrons (MC In)", 24, 0, 24, 36, 0, 180);
-  PID_Theta_Out = new GH2("PID_Theta_Out", "PID Element vs Theta for Neutrons (MC Out)", 24, 0, 24, 36, 0, 180);
   Thetan_dE_MC_In = new GH2 ("Theta_dE_MC_In", "PID energy vs Neutron Theta Distribution (MC In)", 150, 0, 8, 36, 0, 180);
   ThetanRec_dE_MC_In = new GH2 ("ThetaRec_dE_MC_In", "PID energy vs Neutron Reconstructed Theta Distribution (MC In)", 150, 0, 8, 36, 0, 180);
   Phin_dE_MC_In  = new GH2 ("Phi_dE_MC_In", "PID energy vs Neutron Phi Distribution (MC In)", 150, 0, 8, 72, -180, 180);

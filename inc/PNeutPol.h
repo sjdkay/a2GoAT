@@ -81,8 +81,6 @@ private:
   double_t ScattThetaLab;
   double_t ScattTheta;
   double_t ScattPhi;
-  double_t pPIDElement;
-  double_t nPIDElement;
 
   Bool_t nBanana;
   Bool_t MCData;
@@ -252,10 +250,6 @@ private:
   GH1* ThetanMC_Rec_Out;
   GH1* EpMC_Out;
   GH1* EnMC_Out;
-  GH2* PID_Phi_In;
-  GH2* PID_Phi_Out;
-  GH2* PID_Theta_In;
-  GH2* PID_Theta_Out;
   GH2* Thetan_dE_MC_In;
   GH2* ThetanRec_dE_MC_In;
   GH2* Phin_dE_MC_In;

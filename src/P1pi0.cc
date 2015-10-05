@@ -49,6 +49,7 @@ void	P1pi0::ProcessEvent()
 {
   GetEvent(); // Function gets number of tracks/protons/pions e.t.c.
   if (NTrack !=2) return; // Ensures two track event
+  if (NPhotons != 0) return;
   InitialVect(); // Function gets vectors of identified tracks and returns them
   InitialProp(); // Function gets initial properties (energy, vertex e.t.c.) of identified tracks
   //MCTrue(); // Get MC True data and evaluate it
@@ -60,8 +61,8 @@ void	P1pi0::ProcessEvent()
     TaggerTime = GetTagger()->GetTaggedTime(j); // Get tagged time for event
     EGamma = (GetTagger()->GetTaggedEnergy(j)); // Get Photon energy for event
 
-    if (PIDHits1 != 0 || PIDHits2 !=0) continue;
-    if (MWPCHits_1 == 0 && MWPCHits_2 == 0) continue;
+    if (PIDHits1 != 0 || PIDHits2 !=0) continue; // If either track has hit in PID continue
+    if (MWPCHits_1 == 0 || MWPCHits_2 == 0) continue; // If either track does NOT have hit in MWPC continue
 
     i++;
 
@@ -86,7 +87,8 @@ Int_t P1pi0::GetEvent() // Gets basic info on particles for event
 {
   NTrack = GetTracks()->GetNTracks();
   NTag = GetTagger()->GetNTagged();
-  return NTrack, NTag;
+  NPhotons = GetPhotons()->GetNParticles();
+  return NTrack, NTag, NPhotons;
 }
 
 TLorentzVector P1pi0::InitialVect() // Defines initial vectors
