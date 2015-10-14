@@ -26,6 +26,19 @@ private:
   Int_t NTag;
   Int_t NTrack;
   Int_t i;
+  Int_t k;
+
+  Int_t PIDEle1;
+  Int_t PIDEle2;
+  double_t PIDElePhi1;
+  double_t PIDElePhi2;
+  double_t PIDEleRec1;
+  double_t PIDEleRec2;
+  double_t PIDElement;
+  double_t PIDDiffMeas1;
+  double_t PIDDiffMeas2;
+  double_t PIDDiffRecMeas1;
+  double_t PIDDiffRecMeas2;
 
   double_t Time;
   double_t TaggerTime;
@@ -41,6 +54,10 @@ private:
   double_t B;
   double_t Theta1;
   double_t Theta2;
+  double_t Phi1;
+  double_t Phi2;
+  double_t Phi1Rec;
+  double_t Phi2Rec;
   double_t ThetapB;
   double_t ThetanB;
   double_t PhipB;
@@ -89,6 +106,8 @@ private:
 
   TLorentzVector GV1;
   TLorentzVector GV2;
+  TLorentzVector GV1Rec;
+  TLorentzVector GV2Rec;
   TLorentzVector GVpB;
   TLorentzVector GVnB;
   TLorentzVector GVp;
@@ -285,6 +304,10 @@ public:
     Int_t GetEvent();
     TLorentzVector InitialVect();
     Double_t InitialProp();
+    Int_t DetectorElements();
+    TLorentzVector ReconstructVectors();
+    Int_t ReconstructDetElements();
+    Double_t PIDElementsFromPhi(Double_t PhiVal);
     Double_t MCTrueValues();
     TLorentzVector MCTrueVectors();
     Double_t MCSmearing();

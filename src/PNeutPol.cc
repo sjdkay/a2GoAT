@@ -32,6 +32,7 @@ Bool_t	PNeutPol::Start()
   SetAsPhysicsFile();
 
   i = 0; // Integer counter
+  k = 0;
   d = 54.2; // Distance from centre of target to centre of PID
   NP = 0; // Set number of Protons to 0 before checking
   NPi = 0; // Set number of pions to 0 before checking
@@ -66,6 +67,8 @@ Bool_t	PNeutPol::Start()
 
   TraverseValidEvents(); // This loops over each event as in old file and calls ProcessEvent() each loop
 
+  cout << k << endl;
+
   return kTRUE;
 }
 
@@ -77,6 +80,8 @@ void	PNeutPol::ProcessEvent()
   if (NTrack !=2) return; // Ensures two track event
   InitialVect(); // Function gets vectors of identified tracks and returns them
   InitialProp(); // Function gets initial properties (energy, vertex e.t.c.) of identified tracks
+  DetectorElements();
+
   if ( MCData == kTRUE)
   {
       MCSmearing(); // Smear dE values for MC data
@@ -102,10 +107,26 @@ void	PNeutPol::ProcessEvent()
     Gamma3 = Gamma.Vect(); // Convert photon beam 4-vector to 3-vector
     B = (Deut + Gamma).Beta(); // Calculte Beta
     b = TVector3(0., 0., B); // Define boost vector
-    mm1 = ((Gamma + Deut) - GV2).M(); // Calculate missing mass of each particle
-    mm2 = ((Gamma + Deut) - GV1).M();
+    ReconstructVectors();
+    ReconstructDetElements();
+    PIDDiffMeas1 = abs (PIDEle1 - PIDElePhi1);
+    PIDDiffMeas2 = abs (PIDEle2 - PIDElePhi2);
+    PIDDiffRecMeas1 = abs (PIDEle1 - PIDEleRec1);
+    PIDDiffRecMeas2 = abs (PIDEle2 - PIDEleRec2);
+    mm1 = GV1Rec.M(); // Calculate missing mass of each particle
+    mm2 = GV2Rec.M();
     mm1Diff = abs(Mn-mm1); // Look at difference of missing mass from neutron mass
     mm2Diff = abs(Mn-mm2);
+
+    if ((PIDDiffMeas1 < 2) && (PIDDiffMeas2 > 1)) { // If Measured values for track 1 look correct but 2 do not, assume 1 is good P
+
+        if (PIDDiffRecMeas2 < 1) k++;// If 1 is good P then reconstructing 2 should give correct PID element hit for 2
+    }
+
+    if ((PIDDiffMeas2 < 2) && (PIDDiffMeas1 > 1)) {
+
+        if (PIDDiffRecMeas1 < 1) k++;
+    }
 
     //}
 
@@ -168,7 +189,6 @@ void	PNeutPol::ProcessEvent()
     //GVpUnadjE = GVp(3); // Take the initial energy of the proton
     //GVp(3) = GVpUnadjE + mmadj; // Add on the adjustment from the missing mass to the energy of the 4-vector
     mmn = ((Gamma+Deut)-GVn).M(); // Recalculate mmn using the Neutron vector with a corrected mass
-    GVnCalc = ((Gamma + Deut) - GVp); // Calculate the original neutron 4-vector from conservation of 4 momenta
     GVp3 = GVp.Vect(); // Generate some 3-vectors from the 4-vectors we have
     GVn3 = GVn.Vect();
     GVnCalc3 = GVnCalc.Vect();
@@ -245,6 +265,8 @@ Double_t PNeutPol::InitialProp() // Defines initial particle properties
 {
   Theta1 = (GV1.Theta()) * TMath::RadToDeg();
   Theta2 = (GV2.Theta()) * TMath::RadToDeg();
+  Phi1 = (GV1.Phi()) * TMath::RadToDeg();
+  Phi2 = (GV2.Phi()) * TMath::RadToDeg();
   z1 = GetTracks()->GetPseudoVertexZ(0);
   z2 = GetTracks()->GetPseudoVertexZ(1);
   E1 = GetTracks()->GetClusterEnergy(0);
@@ -252,7 +274,73 @@ Double_t PNeutPol::InitialProp() // Defines initial particle properties
   dE1 = GetTracks()->GetVetoEnergy(0);
   dE2 = GetTracks()->GetVetoEnergy(1);
 
-  return Theta1, Theta2, z1, z2, E1, E2, dE1, dE2; // Returns various quantities used in later functions
+  return Theta1, Theta2, Phi1, Phi2, z1, z2, E1, E2, dE1, dE2; // Returns various quantities used in later functions
+}
+
+Int_t PNeutPol::DetectorElements()
+{
+
+    PIDEle1 = GetTracks()->GetCentralVeto(0);
+    PIDEle2 = GetTracks()->GetCentralVeto(1);
+    PIDElePhi1 = PIDElementsFromPhi(Phi1);
+    PIDElePhi2 = PIDElementsFromPhi(Phi2);
+
+    return PIDEle1, PIDEle2, PIDElePhi1, PIDElePhi2;
+
+}
+
+TLorentzVector PNeutPol::ReconstructVectors()
+{
+
+    GV1Rec = (Gamma + Deut) - GV2; //Assume GV2 correct, reconstruct 1st vector
+    GV2Rec = (Gamma + Deut) - GV1;
+
+    return GV1Rec, GV2Rec;
+
+}
+
+Int_t PNeutPol::ReconstructDetElements()
+{
+
+    Phi1Rec = (GV1Rec.Phi()) * TMath::RadToDeg();
+    Phi2Rec = (GV2Rec.Phi()) * TMath::RadToDeg();
+    PIDEleRec1 = PIDElementsFromPhi(Phi1Rec);
+    PIDEleRec2 = PIDElementsFromPhi(Phi2Rec);
+
+    return PIDEleRec1, PIDEleRec2;
+
+}
+
+Double_t PNeutPol::PIDElementsFromPhi(Double_t PhiVal)
+{
+
+    if (PhiVal < 180 && PhiVal > 165 ) PIDElement = 0;
+    if ( PhiVal < 165 && PhiVal > 150 ) PIDElement = 1;
+    if ( PhiVal < 150 && PhiVal > 135 ) PIDElement = 2;
+    if ( PhiVal < 135 && PhiVal > 120 ) PIDElement = 3;
+    if ( PhiVal < 120 && PhiVal > 105 ) PIDElement = 4;
+    if ( PhiVal < 105 && PhiVal > 90 ) PIDElement = 5;
+    if ( PhiVal < 90 && PhiVal > 75 ) PIDElement = 6;
+    if ( PhiVal < 75 && PhiVal > 60 ) PIDElement = 7;
+    if ( PhiVal < 60 && PhiVal > 45 )  PIDElement = 8;
+    if ( PhiVal < 45 && PhiVal > 30 ) PIDElement = 9;
+    if ( PhiVal < 30 && PhiVal > 15 ) PIDElement = 10;
+    if ( PhiVal < 15 && PhiVal > 0 ) PIDElement = 11;
+    if ( PhiVal < 0 && PhiVal > -15 ) PIDElement = 12;
+    if ( PhiVal < -15 && PhiVal > -30 ) PIDElement = 13;
+    if ( PhiVal < -30 && PhiVal > -45 ) PIDElement = 14;
+    if ( PhiVal < -45 && PhiVal > -60 ) PIDElement = 15;
+    if ( PhiVal < -60 && PhiVal > -75 ) PIDElement = 16;
+    if ( PhiVal < -75 && PhiVal > -90 ) PIDElement = 17;
+    if ( PhiVal < -90 && PhiVal > -105 ) PIDElement = 18;
+    if ( PhiVal < -105 && PhiVal > -120 ) PIDElement = 19;
+    if ( PhiVal < -120 && PhiVal > -135 ) PIDElement = 20;
+    if ( PhiVal < -135 && PhiVal > -150 ) PIDElement = 21;
+    if ( PhiVal < -150 && PhiVal > -165 ) PIDElement = 22;
+    if ( PhiVal < -165 && PhiVal > -180 ) PIDElement = 23;
+
+    return PIDElement;
+
 }
 
 Double_t PNeutPol::MCSmearing() // Smear dE values for MC data to represent Energy resolution of PID
@@ -329,6 +417,7 @@ TLorentzVector PNeutPol::PNVect(Int_t ProtonParticleNumber) // Define vectors fo
       GVp = GV1;
       GV2 = GetTracks()->GetVector(1, Mn);
       GVn = GV2;
+      GVnCalc = GV2Rec;
     }
 
   if(ProtonParticleNumber == 2)
@@ -337,6 +426,7 @@ TLorentzVector PNeutPol::PNVect(Int_t ProtonParticleNumber) // Define vectors fo
       GVp = GV2;
       GV1 = GetTracks()->GetVector(0, Mn); // Since we've decided this particle is a neutron, set its mass to Mn
       GVn = GV1; // The neutron vector as measured by the vertex information
+      GVnCalc = GV1Rec;
     }
   return GVp, GVn;
 }
