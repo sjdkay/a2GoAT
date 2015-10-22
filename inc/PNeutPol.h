@@ -237,6 +237,8 @@ private:
   GH2* E_dE;
   GH2* E_dE_Proton;
   GH2* E_dE_Neutron;
+  GH2* Thetap_Ep;
+  GH2* Thetan_En;
   //GH2* E_dE_ROI;
   //GH2* E_dE_ROI_p;
   //GH2* E_dE_ROI_n;
@@ -256,6 +258,17 @@ private:
   TLorentzVector MCTrueVect1;
   TLorentzVector MCTrueVect2;
 
+  Int_t MCTrueID1;
+  Int_t MCTrueID2;
+
+  double_t MCTheta1;
+  double_t MCTheta2;
+  double_t MCE1;
+  double_t MCE2;
+  double_t MCTheta1True;
+  double_t MCTheta2True;
+  double_t MCE1True;
+  double_t MCE2True;
 
   GH1* EgMC_In;
   GH1* ThetapMC_In;
@@ -275,6 +288,10 @@ private:
   GH2* Thetan_dE_MC_Out;
   GH2* ThetanRec_dE_MC_Out;
   GH2* Phin_dE_MC_Out;
+  GH2* MCThetap_Ep;
+  GH2* MCThetan_En;
+  GH2* MCThetap_Ep_True;
+  GH2* MCThetan_En_True;
 
   char cutfilename[256];
   char cutname[256];
@@ -308,7 +325,7 @@ public:
     TLorentzVector ReconstructVectors();
     Int_t ReconstructDetElements();
     Double_t PIDElementsFromPhi(Double_t PhiVal);
-    Double_t MCTrueValues();
+    Int_t MCTrueID();
     TLorentzVector MCTrueVectors();
     Double_t MCSmearing();
     Double_t PNProp(Int_t ProtonParticleNumber);

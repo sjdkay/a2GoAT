@@ -85,6 +85,12 @@ void	PNeutPol::ProcessEvent()
   if ( MCData == kTRUE)
   {
       MCSmearing(); // Smear dE values for MC data
+      MCTrueID();
+      MCTrueVectors();
+      MCTheta1True = (MCTrueVect1.Theta()) * TMath::RadToDeg();
+      MCTheta2True = (MCTrueVect2.Theta()) * TMath::RadToDeg();
+      MCE1True = (MCTrueVect1.Energy()*1000)-Mp; // *1000 to get MeV
+      MCE2True = (MCTrueVect2.Energy()*1000)-Mn;
   }
   //for (Int_t i=0; i < NTrack; i++){ // Currently nothing relies upon i!
 
@@ -93,6 +99,18 @@ void	PNeutPol::ProcessEvent()
     // Time = ( GetTagger()->GetTaggedTime(j) - GetTracks()->GetTime(i) ); // maybe move this to AFTER the cuts once the Eg-EpSum loop has been checked?
     TaggerTime = GetTagger()->GetTaggedTime(j); // Get tagged time for event
     EGamma = (GetTagger()->GetTaggedEnergy(j)); // Get Photon energy for event
+
+    if (MCData == kTRUE)
+    {
+        MCTheta1 = (GetTracks()->GetVector(0, Mp)).Theta() * TMath::RadToDeg();
+        MCTheta2 = (GetTracks()->GetVector(1, Mp)).Theta() * TMath::RadToDeg();
+        MCE1 = GetTracks()->GetClusterEnergy(0);
+        MCE2 = GetTracks()->GetClusterEnergy(1);
+        MCThetap_Ep -> Fill(MCTheta1, MCE1, TaggerTime);
+        MCThetan_En -> Fill(MCTheta2, MCE2, TaggerTime);
+        MCThetap_Ep_True -> Fill(MCTheta1True, MCE1True, TaggerTime);
+        MCThetan_En_True -> Fill(MCTheta2True, MCE2True, TaggerTime);
+    }
 
     if (dE1 < 0.5 || dE2 < 0.5) continue; // Cut out low PID energy events
 
@@ -171,15 +189,6 @@ void	PNeutPol::ProcessEvent()
       PNVect(2);
 
     }
-
-      if ( MCData == kTRUE)
-      {
-
-      MCTrueValues();
-      MCTrueVectors();
-      //cout << GetGeant()->GetTrueID(0) << "   " << GetGeant()->GetTrueID(1) << endl;
-
-      }
 
     if( Zp > 60 || Zp < -60) continue; // Cut if proton vertex not where we expect it to be
     if(Cut_proton -> IsInside(En, dEn) == kTRUE) nBanana = kTRUE; // Set flag to true or false depending upon location of neutron
@@ -354,11 +363,12 @@ Double_t PNeutPol::MCSmearing() // Smear dE values for MC data to represent Ener
   return dE1, dE2;
 }
 
-Double_t PNeutPol::MCTrueValues()
+Int_t PNeutPol::MCTrueID()
 {
 
-    Double_t Example = 5;
-    return Example;
+    MCTrueID1 = GetGeant()->GetTrueID(0);
+    MCTrueID2 = GetGeant()->GetTrueID(1);
+    return MCTrueID1, MCTrueID2;
 
 }
 
@@ -615,6 +625,8 @@ PNeutPol::PNeutPol() // Define a load of histograms to fill
   E_dE = new GH2("E_dE", "EdE Plot", 150, 0, 500, 150, 0, 7);
   E_dE_Proton = new GH2("E_dE_Proton", "EdE Plot for Protons", 150, 0, 500, 150, 0, 7);
   E_dE_Neutron = new GH2("E_dE_Neutron", "EdE Plot for Neutrons", 150, 0, 500, 150, 0, 7);
+  Thetap_Ep = new GH2("Thetap_Ep", "Theta vs Energy for Protons", 90, 10, 170, 200, 0, 600);
+  Thetan_En = new GH2("Thetan_En", "Theta vs Energy for Neutrons", 90, 10, 170, 200, 0, 600);
   //E_dE_ROI = new GH2("E_dE_ROI", "EdE Plot in ROI", 150, 0, 500, 150, 0, 7);
   //E_dE_ROI_p = new GH2("E_dE_ROI_p", "EdE Plot in ROI for Protons", 150, 0, 500, 150, 0, 7);
   //E_dE_ROI_n = new GH2("E_dE_ROI_n", "EdE Plot in ROI for Neutrons", 150, 0, 500, 150, 0, 7);
@@ -673,6 +685,8 @@ void PNeutPol::FillHists()
   //PhidEFixp->Fill(Phip, (dEp*sin(GVp.Theta())), TaggerTime);
   //if (((Ep > 82 && Ep < 118) == kTRUE) && ((Thetap > 81 && Thetap < 99) == kTRUE))
   //PhidECorrFixp->Fill(Phip, dEp, TaggerTime);
+  Thetap_Ep->Fill(Thetap, Ep, TaggerTime);
+  Thetan_En->Fill(Thetan, En, TaggerTime);
 
  // if(Cut_ROI -> IsInside(Ep, dEp) == kTRUE)
  // {
@@ -852,6 +866,10 @@ void PNeutPol::MCHists()
   Thetan_dE_MC_Out = new GH2 ("Theta_dE_MC_Out", "PID energy vs Neutron Theta Distribution (MC Out)", 150, 0, 3, 36, 0, 180);
   ThetanRec_dE_MC_Out = new GH2 ("ThetaRec_dE_MC_Out", "PID energy vs Neutron Reconstructed Theta Distribution (MC Out)", 150, 0, 3, 36, 0, 180);
   Phin_dE_MC_Out  = new GH2 ("Phi_dE_MC_Out", "PID energy vs Neutron Phi Distribution (MC Out)", 150, 0, 3, 72, -180, 180);
+  MCThetap_Ep = new GH2("MCThetap_Ep", "Theta vs Energy for Protons in MC Data", 90, 10, 170, 200, 0, 600);
+  MCThetan_En = new GH2("MCThetan_En", "Theta vs Energy for Neutrons in MC Data", 90, 10, 170, 200, 0, 600);
+  MCThetap_Ep_True = new GH2("MCThetap_Ep_True", "True Theta vs Energy for Protons in MC Data", 90, 10, 170, 200, 0, 600);
+  MCThetan_En_True = new GH2("MCThetan_En_True", "True Theta vs Energy for Neutrons in MC Data", 90, 10, 170, 200, 0, 600);
 }
 
 Bool_t	PNeutPol::Write(){
