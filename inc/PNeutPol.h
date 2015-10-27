@@ -75,6 +75,10 @@ private:
   double_t Zn;
   double_t zWCRec;
   double_t zWC;
+  double_t zWCRec1;
+  double_t zWC1;
+  double_t zWCRec2;
+  double_t zWC2;
   double_t Thetap;
   double_t Thetan;
   double_t ThetanCalc;
@@ -112,14 +116,20 @@ private:
   TLorentzVector GVnB;
   TLorentzVector GVp;
   TLorentzVector GVn;
+  TLorentzVector GVpCalc;
   TLorentzVector GVnCalc;
   TLorentzVector Gamma;
   TLorentzVector Deut;
   TLorentzVector boostvector;
+  TVector3 GV1_3;
+  TVector3 GV2_3;
+  TVector3 GV1Rec_3;
+  TVector3 GV2Rec_3;
   TVector3 b;
   TVector3 Gamma3;
   TVector3 GVp3;
   TVector3 GVn3;
+  TVector3 GVpCalc3;
   TVector3 GVnCalc3;
   TVector3 fX;
   TVector3 fY;
@@ -148,6 +158,12 @@ private:
   GH1* Z_WireChamber;
   GH1* Z_WireChamberRec;
   GH1* Z_WireChamberDifference;
+  GH1* Z1_WireChamber;
+  GH1* Z1_WireChamberRec;
+  GH1* Z1_WireChamberDifference;
+  GH1* Z2_WireChamber;
+  GH1* Z2_WireChamberRec;
+  GH1* Z2_WireChamberDifference;
   GH1* ThetaCMProton;
   GH1* ThetaCMNeutron;
   GH1* PhiCMProton;
@@ -334,7 +350,7 @@ public:
     Double_t NeutronEnergy();
     Double_t LabBoost();
     Double_t LabScatter();
-    Double_t WCVertex();
+    Double_t WCVertex(TVector3 MeasuredVector, TVector3 ReconstructedVector, double_t ReconstructorZ, double_t MeasuredZ);
     Double_t nFrameScatter();
     void FillHists();
 

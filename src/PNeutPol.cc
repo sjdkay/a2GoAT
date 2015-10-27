@@ -79,6 +79,8 @@ void	PNeutPol::ProcessEvent()
   if (NRoo !=0) return; // Goes to next event if any "rootinos" found
   if (NTrack !=2) return; // Ensures two track event
   InitialVect(); // Function gets vectors of identified tracks and returns them
+  GV1_3 = GV1.Vect();
+  GV2_3 = GV2.Vect();
   InitialProp(); // Function gets initial properties (energy, vertex e.t.c.) of identified tracks
   DetectorElements();
 
@@ -126,6 +128,8 @@ void	PNeutPol::ProcessEvent()
     B = (Deut + Gamma).Beta(); // Calculte Beta
     b = TVector3(0., 0., B); // Define boost vector
     ReconstructVectors();
+    GV1Rec_3 = GV1Rec.Vect();
+    GV2Rec_3 = GV2Rec.Vect();
     ReconstructDetElements();
     PIDDiffMeas1 = abs (PIDEle1 - PIDElePhi1);
     PIDDiffMeas2 = abs (PIDEle2 - PIDElePhi2);
@@ -135,6 +139,20 @@ void	PNeutPol::ProcessEvent()
     mm2 = GV2Rec.M();
     mm1Diff = abs(Mn-mm1); // Look at difference of missing mass from neutron mass
     mm2Diff = abs(Mn-mm2);
+
+    //WCVertex(GV1_3, GV1Rec_3, z2, z1); // ZWC vertex calculation and filling before cuts
+    //zWC1 = zWC;
+    //zWCRec1 = zWCRec;
+    //WCVertex(GV2_3, GV2Rec_3, z1, z2);
+    //zWC2 = zWC;
+    //zWCRec2 = zWCRec;
+
+    //Z1_WireChamber -> Fill(zWC1, TaggerTime);
+    //Z1_WireChamberRec -> Fill(zWCRec1, TaggerTime);
+    //Z1_WireChamberDifference -> Fill ((zWCRec1 - zWC1), TaggerTime);
+    //Z2_WireChamber -> Fill(zWC2, TaggerTime);
+    //Z2_WireChamberRec -> Fill(zWCRec2, TaggerTime);
+    //Z2_WireChamberDifference -> Fill ((zWCRec2 - zWC2), TaggerTime);
 
     if ((PIDDiffMeas1 < 2) && (PIDDiffMeas2 > 1)) { // If Measured values for track 1 look correct but 2 do not, assume 1 is good P
 
@@ -148,47 +166,47 @@ void	PNeutPol::ProcessEvent()
 
     //}
 
-    // Cut on MM before looking at regions, require both MM values to look good
-    if ( ((mm1 < 850 || mm1 > 1050) == kTRUE) || (((mm2 < 850 || mm2 > 1050)) == kTRUE)) continue; // If either missing mass is outside of the range, drop out
+    // Cut on MM before looking at regions, require BOTH of the MM values to look good
+    if ( ((mm1 < 850 || mm1 > 1050) == kTRUE) || (((mm2 < 850 || mm2 > 1050)) == kTRUE) ) continue; // If either missing mass is outside of the range, drop out
 
     FillTime(*GetProtons(),time);
     FillTimeCut(*GetProtons(),time_cut);
 
-    //if (i == 0) { // First loop sees if both are inside the protons region, checks only once per event on FIRST track
+    // Check difference between values and look at region particle is in
 
     if (Cut_proton -> IsInside(E1, dE1) == kTRUE && Cut_proton -> IsInside(E2, dE2) == kTRUE) {
 
-      if (mm1Diff < mm2Diff) { //If mm1 closer to nucleon than mm2, particle 2 is the "Good event" i.e. the initial proton
+        if (mm1Diff < mm2Diff) { //If mm1 closer to nucleon than mm2, particle 2 is the "Good event" i.e. the initial proton
 
-        PNProp(2); //These functions are given the particle number of the proton (2 here)
-        PNVect(2); // They return the vectors and properties of the neutron and proton from this
+            PNProp(2); //These functions are given the particle number of the proton (2 here)
+            PNVect(2); // They return the vectors and properties of the neutron and proton from this
 
-      }
+        }
 
-      if (mm1Diff > mm2Diff) { // If mm2 closer to nucleon than mm1, particle 1 is the "Good event"
+        if (mm1Diff > mm2Diff) { // If mm2 closer to nucleon than mm1, particle 1 is the "Good event"
 
-        PNProp(1);
-        PNVect(1);
+            PNProp(1);
+            PNVect(1);
 
-      }
+        }
     }
 
     // Now do loops which check if only one of the protons is inside the proton banana
 
     else if (Cut_proton -> IsInside(E1, dE1) == kTRUE && Cut_proton -> IsInside(E2, dE2) == kFALSE) {
 
-	  // The 'Good' proton is the one in the banana, in this case particle 1
+        // The 'Good' proton is the one in the banana, in this case particle 1
         PNProp(1);
         PNVect(1);
 
-    }
+        }
 
     else if (Cut_proton -> IsInside(E2, dE2) == kTRUE && Cut_proton -> IsInside(E1, dE1) == kFALSE) {
 
-      PNProp(2);
-      PNVect(2);
+        PNProp(2);
+        PNVect(2);
 
-    }
+        }
 
     if( Zp > 60 || Zp < -60) continue; // Cut if proton vertex not where we expect it to be
     if(Cut_proton -> IsInside(En, dEn) == kTRUE) nBanana = kTRUE; // Set flag to true or false depending upon location of neutron
@@ -200,13 +218,28 @@ void	PNeutPol::ProcessEvent()
     mmn = ((Gamma+Deut)-GVn).M(); // Recalculate mmn using the Neutron vector with a corrected mass
     GVp3 = GVp.Vect(); // Generate some 3-vectors from the 4-vectors we have
     GVn3 = GVn.Vect();
+    GVpCalc3 = GVpCalc.Vect();
     GVnCalc3 = GVnCalc.Vect();
+
+    WCVertex(GVn3, GVnCalc3, Zp, Zn); // ZWC vertex calculation and filling after cuts, ZWC1 = reconstruct with p
+    zWC1 = zWC;
+    zWCRec1 = zWCRec;
+    WCVertex(GVp3, GVpCalc3, z1, z2); // ZWC2 = Reconstruct with Neutron
+    zWC2 = zWC;
+    zWCRec2 = zWCRec;
+
+    Z1_WireChamber -> Fill(zWC1, TaggerTime);
+    Z1_WireChamberRec -> Fill(zWCRec1, TaggerTime);
+    Z1_WireChamberDifference -> Fill ((zWCRec1 - zWC1), TaggerTime);
+    Z2_WireChamber -> Fill(zWC2, TaggerTime);
+    Z2_WireChamberRec -> Fill(zWCRec2, TaggerTime);
+    Z2_WireChamberDifference -> Fill ((zWCRec2 - zWC2), TaggerTime);
 
     NeutronEnergy(); // Calculate the neutron energy in two ways and look at difference
     LabBoost(); // Boost particles in lab frame and return results
     LabScatter(); // Work out scattering angle in lab frame and return results
     nFrameScatter(); // Work out neutron scattering in its frame and return results
-    WCVertex(); // Calculate Z vertex location in WC from measured and reconstructed vectors
+    WCVertex(GVn3, GVnCalc3, Zp, Zn); // Calculate Z vertex location in WC from measured and reconstructed vectors
     if (ScattTheta > 90) continue;
     if (nBanana == kFALSE && (zWCRec-zWC > 20 || zWCRec-zWC < -20)) continue;
     //if (Cut_proton -> IsInside(En, dEn) == kFALSE) continue; //If the neutron is inside the proton region drop out
@@ -427,6 +460,7 @@ TLorentzVector PNeutPol::PNVect(Int_t ProtonParticleNumber) // Define vectors fo
       GVp = GV1;
       GV2 = GetTracks()->GetVector(1, Mn);
       GVn = GV2;
+      GVpCalc = GV1Rec;
       GVnCalc = GV2Rec;
     }
 
@@ -436,9 +470,11 @@ TLorentzVector PNeutPol::PNVect(Int_t ProtonParticleNumber) // Define vectors fo
       GVp = GV2;
       GV1 = GetTracks()->GetVector(0, Mn); // Since we've decided this particle is a neutron, set its mass to Mn
       GVn = GV1; // The neutron vector as measured by the vertex information
+      GVpCalc = GV2Rec;
       GVnCalc = GV1Rec;
     }
-  return GVp, GVn;
+
+  return GVp, GVn, GVpCalc, GVnCalc;
 }
 
 Double_t PNeutPol::NeutronEnergy() // Calculate the neutron energy from the reconstructed n vector and from kinematics
@@ -479,13 +515,13 @@ Double_t PNeutPol::LabScatter()
 }
 
 
-Double_t PNeutPol::WCVertex() // Calculate location of WC Z vertex for measured and reconstructed vector
+Double_t PNeutPol::WCVertex(TVector3 MeasuredVector, TVector3 ReconstructedVector, double_t ReconstructorZ, double_t MeasuredZ) // Calculate location of WC Z vertex for measured and reconstructed vector
 {
-
-  lrec = d/(tan(GVnCalc3.Theta())); // Calculate how far along from interaction point the PID interaction was
-  zWCRec = Zp + lrec; // Assume Zp is correct so neutron actually did come from here
-  l = d/tan(GVn3.Theta());
-  zWC = Zn + l; // The location of the interaction point as determined by the detected proton
+  // ReconstructorZ = Z vertex of the particle we are using to reconstruct track of other, Measured Z = Z vertex of as measured of the particle we're reconstructing
+  lrec = d/(tan(ReconstructedVector.Theta())); // Calculate how far along from interaction point the PID interaction was
+  zWCRec = ReconstructorZ + lrec; // Assume Zp is correct so neutron actually did come from here
+  l = d/tan(MeasuredVector.Theta());
+  zWC = MeasuredZ + l; // The location of the interaction point as determined by the detected proton
 
   return zWCRec, zWC;
 }
@@ -534,6 +570,12 @@ PNeutPol::PNeutPol() // Define a load of histograms to fill
   Z_WireChamber = new GH1("Z_Wire_Chamber", "Wire Chamber Z Vertex Distribution", 300, -150, 150 );
   Z_WireChamberRec = new GH1("Z_Wire_Chamber_Reconstructed", "Reconstructed Wire Chamber Z Vertex Distribution", 300, -150, 150 );
   Z_WireChamberDifference = new GH1("Z_Wire_Chamber_Difference", "Wire Chamber Z Vertex Difference Distribution", 300, -150, 150 );
+  Z1_WireChamber = new GH1("Neutron_Z_Wire_Chamber", "Neutron Wire Chamber Z Vertex Distribution", 300, -150, 150 );
+  Z1_WireChamberRec = new GH1("Neutron_Z_Wire_Chamber_Reconstructed", "Neutron Reconstructed Wire Chamber Z Vertex Distribution", 300, -150, 150 );
+  Z1_WireChamberDifference = new GH1("Neutron_Z_Wire_Chamber_Difference", "Neutron Wire Chamber Z Vertex Difference Distribution", 300, -150, 150 );
+  Z2_WireChamber = new GH1("Proton_Z_Wire_Chamber", "Proton Wire Chamber Z Vertex Distribution", 300, -150, 150 );
+  Z2_WireChamberRec = new GH1("Proton_Z_Wire_Chamber_Reconstructed", "Proton Reconstructed Wire Chamber Z Vertex Distribution", 300, -150, 150 );
+  Z2_WireChamberDifference = new GH1("Proton_Z_Wire_Chamber_Difference", "Proton Wire Chamber Z Vertex Difference Distribution", 300, -150, 150 );
   ThetaCMProton = new GH1( "ThetaCMProton", " Proton Theta (CM) Distribution", 180, 0, 180 );
   ThetaCMNeutron = new GH1( "ThetaCMNeutron", "Neutron Theta (CM) Distribution", 180, 0, 180 );
   PhiCMProton = new GH1 ("PhiCMProton", "Proton Phi (CM) Distribution", 36, -180, 180);
