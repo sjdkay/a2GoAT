@@ -201,7 +201,16 @@ add_executable(MC_Analysis_1_Part
    )
 target_link_libraries(MC_Analysis_1_Part ${LIBS} ${ROOT_LIBRARIES})
 
-
+add_executable(PolTest
+   ${GOAT_BASE}
+   ${GOAT_GHIST}
+   inc/PPhysics.h
+   src/PPhysics.cc
+   inc/PPolTest.h
+   src/PPolTest.cc
+   src/PolTest_main.cc
+   )
+target_link_libraries(PolTest ${LIBS} ${ROOT_LIBRARIES})
 
 # install some scripts to the bin directory
 # by creating symlinks

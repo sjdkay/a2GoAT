@@ -334,6 +334,9 @@ public:
     virtual Bool_t  Init();
     TCutG* OpenCutFile(Char_t* filename, Char_t* cutname);
     void MCHists();
+    void ParticleSelection();
+    void AlternativeParticleSelection();
+    Bool_t MCDataCheck();
     Int_t GetEvent();
     TLorentzVector InitialVect();
     Double_t InitialProp();

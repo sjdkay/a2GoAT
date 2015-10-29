@@ -51,17 +51,7 @@ Bool_t	PNeutPol::Start()
   // Cut_neutron = Cut_CB_neutron; // This only needs to be here if we get simulation to show where we expect neutrons
   cout << endl;
 
-  if (GetScalers()->GetNEntries() == 0) // MC Data has no scaler entries so if 0, data gets a flag to denote it as MC
-  {
-      MCData = kTRUE;
-      TRandom2 *rGen = new TRandom2(0); // Define new random generator for use in MC smearing fn
-  }
-
-  else if (GetScalers()->GetNEntries() != 0) // This flag is listed as false if the number of scaler entries does not equal 0
-
-  {
-      MCData = kFALSE;
-  }
+  MCDataCheck();
 
   if (MCData == kTRUE) MCHists();
 
@@ -166,47 +156,23 @@ void	PNeutPol::ProcessEvent()
 
     //}
 
-    // Cut on MM before looking at regions, require BOTH of the MM values to look good
-    if ( ((mm1 < 850 || mm1 > 1050) == kTRUE) || (((mm2 < 850 || mm2 > 1050)) == kTRUE) ) continue; // If either missing mass is outside of the range, drop out
-
     FillTime(*GetProtons(),time);
     FillTimeCut(*GetProtons(),time_cut);
 
-    // Check difference between values and look at region particle is in
+    // Cut on MM before looking at regions, require BOTH of the MM values to look good
+    if ( ((mm1 < 850 || mm1 > 1050) == kTRUE) || ((mm2 < 850 || mm2 > 1050) == kTRUE) ) continue; // If both bad continue
+    ParticleSelection(); // Normal particle selection, looks at MM difference and regions particles are in
 
-    if (Cut_proton -> IsInside(E1, dE1) == kTRUE && Cut_proton -> IsInside(E2, dE2) == kTRUE) {
-
-        if (mm1Diff < mm2Diff) { //If mm1 closer to nucleon than mm2, particle 2 is the "Good event" i.e. the initial proton
-
-            PNProp(2); //These functions are given the particle number of the proton (2 here)
-            PNVect(2); // They return the vectors and properties of the neutron and proton from this
-
-        }
-
-        if (mm1Diff > mm2Diff) { // If mm2 closer to nucleon than mm1, particle 1 is the "Good event"
-
-            PNProp(1);
-            PNVect(1);
-
-        }
-    }
-
-    // Now do loops which check if only one of the protons is inside the proton banana
-
-    else if (Cut_proton -> IsInside(E1, dE1) == kTRUE && Cut_proton -> IsInside(E2, dE2) == kFALSE) {
-
-        // The 'Good' proton is the one in the banana, in this case particle 1
-        PNProp(1);
-        PNVect(1);
-
-        }
-
-    else if (Cut_proton -> IsInside(E2, dE2) == kTRUE && Cut_proton -> IsInside(E1, dE1) == kFALSE) {
-
-        PNProp(2);
-        PNVect(2);
-
-        }
+    // More complicated selection, different cases for different mm regions
+    //if( ((( mm1 > 850 ) == kTRUE) && ((mm1 < 1050) == kTRUE)) && ((( mm1 > 850 ) == kTRUE) && ((mm1 < 1050) == kTRUE)) ){
+    //ParticleSelection(); // Case where both look good
+    //}
+    // If mm1 good and mm2 bad OR mm1 bad mm2 good
+   // else if ( ((((mm1 > 850) ==kTRUE) && ((mm1 < 1050) == kTRUE)) && ((mm2 < 850 || mm2 > 1050) == kTRUE) ) || ((((mm2 > 850) ==kTRUE) && ((mm2 < 1050) == kTRUE)) && ((mm1 < 850 || mm1 > 1050) == kTRUE) ) )   {
+    //if ( ((mm1 < 800 || mm1 >1300 ) == kTRUE) || ((mm2 < 800 || mm2 >1300 ) == kTRUE) ) continue; //Check that neither one is outside of a slightly larger mm range
+    //AlternativeParticleSelection(); // Case where one looks good but other does not
+    //}
+    //else if ( (( mm1 < 850 || mm1 > 1050) == kTRUE) && (( mm2 < 850 || mm2 > 1050) == kTRUE) ) continue; // If both bad drop out
 
     if( Zp > 60 || Zp < -60) continue; // Cut if proton vertex not where we expect it to be
     if(Cut_proton -> IsInside(En, dEn) == kTRUE) nBanana = kTRUE; // Set flag to true or false depending upon location of neutron
@@ -284,6 +250,23 @@ TCutG*	PNeutPol::OpenCutFile(Char_t* filename, Char_t* cutname)
   CutFile->Close();
   cout << "cut file " << filename << " opened (Cut-name = " << cutname << ")"<< endl;
   return Cut_clone;
+}
+
+Bool_t PNeutPol::MCDataCheck(){
+
+  if (GetScalers()->GetNEntries() == 0) // MC Data has no scaler entries so if 0, data gets a flag to denote it as MC
+  {
+      MCData = kTRUE;
+      TRandom2 *rGen = new TRandom2(0); // Define new random generator for use in MC smearing fn
+  }
+
+  else if (GetScalers()->GetNEntries() != 0) // This flag is listed as false if the number of scaler entries does not equal 0
+
+  {
+      MCData = kFALSE;
+  }
+
+  return MCData;
 }
 
 Int_t PNeutPol::GetEvent() // Gets basic info on particles for event
@@ -414,6 +397,58 @@ TLorentzVector PNeutPol::MCTrueVectors()
     //cout << GV1(3) << "   " << GV2(3) << "   " << MCTrueVect1(3)*1000 << "   " << MCTrueVect2(3)*1000 << endl;
 
     return MCTrueVect1, MCTrueVect2;
+
+}
+
+void PNeutPol::ParticleSelection(){
+
+    if (Cut_proton -> IsInside(E1, dE1) == kTRUE && Cut_proton -> IsInside(E2, dE2) == kTRUE) {
+
+        if (mm1Diff < mm2Diff) { //If mm1 closer to nucleon than mm2, particle 2 is the "Good event" i.e. the initial proton
+
+            PNProp(2); //These functions are given the particle number of the proton (2 here)
+            PNVect(2); // They return the vectors and properties of the neutron and proton from this
+
+        }
+
+        if (mm1Diff > mm2Diff) { // If mm2 closer to nucleon than mm1, particle 1 is the "Good event"
+
+            PNProp(1);
+            PNVect(1);
+
+        }
+    }
+
+    // Now do loops which check if only one of the protons is inside the proton banana
+
+    else if (Cut_proton -> IsInside(E1, dE1) == kTRUE && Cut_proton -> IsInside(E2, dE2) == kFALSE) {
+
+        // The 'Good' proton is the one in the banana, in this case particle 1
+        PNProp(1);
+        PNVect(1);
+
+    }
+
+    else if (Cut_proton -> IsInside(E2, dE2) == kTRUE && Cut_proton -> IsInside(E1, dE1) == kFALSE) {
+
+        PNProp(2);
+        PNVect(2);
+
+    }
+
+}
+
+void PNeutPol::AlternativeParticleSelection()
+{
+
+    if (((((mm1 > 850) ==kTRUE) && ((mm1 < 1050) == kTRUE)) && ((mm2 < 850 || mm2 > 1050) == kTRUE) )){
+    PNProp(2); // Here mm1 is good and mm2 is bad, therefore particle 2 is taken to be the proton
+    }
+
+    if (((((mm2 > 850) ==kTRUE) && ((mm2 < 1050) == kTRUE)) && ((mm1 < 850 || mm1 > 1050) == kTRUE) )){
+    PNProp(1); // Here mm2 is good and mm1 is bad, therefore particle 1 is taken to be the proton
+    }
+
 
 }
 
