@@ -31,7 +31,7 @@ Bool_t	PPolTest::Start()
   MCDataCheck();
 
   if (MCData == kFALSE){
-    cout << "Error : Input file is not an MC File" << endl;
+    cout << "ERROR: Input file is not an MC File" << endl;
     cout << "This code is only designed to work with an MC input" << endl;
     return kFALSE;
   }
@@ -90,14 +90,32 @@ void	PPolTest::ProcessEvent()
   // If our proton is going into CB expect it to produce a track
   // Do NOT expect neutron to give a track is it is going into TAPS which is switched off in the simulation currently
 
-  GetDetectorHits(); // Get # of hits in various detectors, expect a hit in all for a proton
+  if (NTrack != 1) return; // In the case we want there should only be one track
 
+  GetDetectorHitInfo(); // Get # of hits in various detectors, expect a hit in all for a proton
+  cout << CBHits << endl; // Just to test
+  if ((CBHits == 0 || (PIDHits == 0)) || (MWPCHits == 0)) return; // If any of the detectors we expect a hit in does not detect a hit drop out
+  GetTrackVector();
+  GetTrackInfo(); // Get info for the track
+  MCSmearing(); // Smear dE values
+  k++; // At this point add to our second counter, these are the events where the proton has been detected
+  // Do we want to check this track looks like a proton here first or not? (EdE)
+
+  // At this stage we should probably add our values to plots just to see what energy protons we're left with for a given photon energy
+  // need to background subtract at this stage though as we need to use the tagger info
+  // We probably want to plot both the measured energy and the actual MC energy the particle had
+  // Note we may need to add a tagger loop earlier to look at the energy each proton had for all the forward neutrons
+  // Not just the ones we end up detecting
 
    for (Int_t j = 0; j < GetTagger()->GetNTagged(); j++){
 
-   }
+    // Time = ( GetTagger()->GetTaggedTime(j) - GetTracks()->GetTime(i) ); // maybe move this to AFTER the cuts once the Eg-EpSum loop has been checked?
+    TaggerTime = GetTagger()->GetTaggedTime(j); // Get tagged time for event
+    EGamma = (GetTagger()->GetTaggedEnergy(j)); // Get Photon energy for event
 
-  FillHists(); // Fill histograms with data generated
+    FillHists(); // Fill histograms with data generated
+
+   }
 
     //}
 
@@ -161,6 +179,7 @@ Int_t PPolTest::GetEvent() // Gets basic info on particles for event
   NPi = GetChargedPions()->GetNParticles();
   NRoo = GetRootinos()->GetNParticles();
   NTag = GetTagger()->GetNTagged();
+
   return NTrack, NP, NPi, NRoo, NTag;
 }
 
@@ -169,6 +188,7 @@ Int_t PPolTest::MCTrueID()
 
     MCTrueID1 = GetGeant()->GetTrueID(0);
     MCTrueID2 = GetGeant()->GetTrueID(1);
+
     return MCTrueID1, MCTrueID2;
 
 }
@@ -176,32 +196,34 @@ Int_t PPolTest::MCTrueID()
 Bool_t PPolTest::ParticleAssignment(){
 
     if (MCTrueID1 == 14){
-        Proton1 == kTRUE;
-        Proton2 == kFALSE;
+        Proton1 = kTRUE;
+        Proton2 = kFALSE;
     }
 
     if (MCTrueID2 == 14){
-        Proton1 == kFALSE;
-        Proton2 == kTRUE;
+        Proton1 = kFALSE;
+        Proton2 = kTRUE;
     }
 
 
     if (MCTrueID1 == 13){
-        Neutron1 == kTRUE;
-        Neutron2 == kFALSE;
+        Neutron1 = kTRUE;
+        Neutron2 = kFALSE;
     }
 
     if (MCTrueID2 == 13){
-        Neutron1 == kFALSE;
-        Neutron2 == kTRUE;
+        Neutron1 = kFALSE;
+        Neutron2 = kTRUE;
     }
 
     else{
-        Proton1 == kFALSE;
-        Proton2 == kFALSE;
-        Neutron1 == kFALSE;
-        Neutron2 == kFALSE;
+        Proton1 = kFALSE;
+        Proton2 = kFALSE;
+        Neutron1 = kFALSE;
+        Neutron2 = kFALSE;
     }
+
+    return Proton1, Proton2, Neutron1, Neutron2;
 
 }
 
@@ -225,17 +247,48 @@ Double_t PPolTest::GetTrueTheta(){
     ProtonTrueVect = GetGeant()->GetTrueVector(0);
     ProtonTrue3Vect = ProtonTrueVect.Vect();
     ThetapTrue = ProtonTrue3Vect.Theta() * TMath::RadToDeg();
+    EpTrue = ProtonTrueVect(0)- Mp;
     }
 
     if (Proton2 == kTRUE){
     ProtonTrueVect = GetGeant()->GetTrueVector(1);
     ProtonTrue3Vect = ProtonTrueVect.Vect();
     ThetapTrue = ProtonTrue3Vect.Theta() * TMath::RadToDeg();
+    EpTrue = ProtonTrueVect(1)- Mp;
     }
 
-    else if ((Proton1 == kFALSE) && (Proton2 == kFALSE)) ThetapTrue = 1000;
+    else if ((Proton1 == kFALSE) && (Proton2 == kFALSE)) ThetapTrue = 1000, EpTrue = 0;
 
-    return ThetanTrue, ThetapTrue;
+    return ThetanTrue, ThetapTrue, EpTrue;
+
+}
+
+Int_t PPolTest::GetDetectorHitInfo(){
+
+    PIDHits = GetDetectorHits()->GetPIDHits(0);
+    MWPCHits = GetDetectorHits()->GetMWPCHits(0);
+    CBHits = GetDetectorHits()->GetNaIHits(0);
+
+    return PIDHits, MWPCHits, CBHits;
+
+}
+
+TLorentzVector PPolTest::GetTrackVector(){
+
+  GV1 = GetTracks()->GetVector(0, Mp);
+
+  return GV1;
+
+}
+
+Double_t PPolTest::GetTrackInfo(){
+
+  Theta1 = (GV1.Theta()) * TMath::RadToDeg();
+  Phi1 = (GV1.Phi()) * TMath::RadToDeg();
+  z1 = GetTracks()->GetPseudoVertexZ(0);
+  E1 = GetTracks()->GetClusterEnergy(0);
+
+  return Theta1, Phi1, z1, E1; // Returns various quantities used in later functions
 
 }
 
@@ -245,6 +298,18 @@ PPolTest::PPolTest() // Define a load of histograms to fill
   time = new GH1("time", 	"time", 	1400, -700, 700);
   time_cut = new GH1("time_cut", 	"time_cut", 	1400, -700, 700);
 
+  EgThetaEp = new GH3("EgThetaEp", "Proton Energy as a Fn of Eg and Theta", 400, 0, 1600, 60, 0, 180, 200, 0, 800 );
+  EgThetaEpTrue = new GH3("EgThetaEp", "True Proton Energy as a Fn of Eg and True Theta", 400, 0, 1600, 60, 0, 180, 200, 0, 800 );
+
+}
+
+Double_t PPolTest::MCSmearing() // Smear dE values for MC data to represent Energy resolution of PID
+{
+  dE1 = rGen.Gaus(GetTracks()->GetVetoEnergy(0) , (0.29*(sqrt(GetTracks()->GetVetoEnergy(0)))));
+
+  if (dE1 < 0) dE1 = 0.01;
+
+  return dE1;
 }
 
 void PPolTest::FillHists()
