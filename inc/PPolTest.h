@@ -76,6 +76,8 @@ private:
   GH2* TrueThetapThetan;
   GH2* ThetapEpTrue;
   GH2* ThetapEp;
+  GH2* EpEgTrue;
+  GH2* EpEg;
 
   GH3* TrueEgThetapEp;
   GH3* TrueEgThetanEn;

@@ -95,6 +95,7 @@ void	PPolTest::ProcessEvent()
     TrueThetan->Fill(ThetanTrue, TaggerTime);
     TrueThetapThetan->Fill(ThetapTrue, ThetanTrue, TaggerTime);
     ThetapEpTrue->Fill(ThetapTrue, EpTrue, TaggerTime);
+    EpEgTrue->Fill(EpTrue, EgTrue, TaggerTime);
     //TrueEgThetapEp->Fill(EgTrue, ThetapTrue, EpTrue, TaggerTime); // Cause a seg fault currently, too big?
     //TrueEgThetanEn->Fill(EgTrue, ThetanTrue, EnTrue, TaggerTime);
 
@@ -242,7 +243,7 @@ Double_t PPolTest::GetTrueTheta(){
     ThetanTrue = NeutronTrue3Vect.Theta() * TMath::RadToDeg();
     EnTrue = (NeutronTrueVect(3)*1000) - Mn;
     TrueGamma = GetGeant()->GetBeam();
-    EgTrue = TrueGamma(0)*1000;
+    EgTrue = TrueGamma(3)*1000;
     }
 
     if (Neutron2 == kTRUE){
@@ -251,7 +252,7 @@ Double_t PPolTest::GetTrueTheta(){
     ThetanTrue = NeutronTrue3Vect.Theta() * TMath::RadToDeg();
     EnTrue = (NeutronTrueVect(3)*1000) - Mn;
     TrueGamma = GetGeant()->GetBeam();
-    EgTrue = TrueGamma(0)*1000;
+    EgTrue = TrueGamma(3)*1000;
     }
 
     else if ((Neutron1 == kFALSE) && (Neutron2 == kFALSE)) ThetanTrue = 1000;
@@ -262,7 +263,7 @@ Double_t PPolTest::GetTrueTheta(){
     ThetapTrue = ProtonTrue3Vect.Theta() * TMath::RadToDeg();
     EpTrue = (ProtonTrueVect(3)*1000)- Mp; // In this case the value in brackets is the component of the vector!
     TrueGamma = GetGeant()->GetBeam();
-    EgTrue = TrueGamma(0)*1000;
+    EgTrue = TrueGamma(3)*1000;
     }
 
     if (Proton2 == kTRUE){
@@ -271,7 +272,7 @@ Double_t PPolTest::GetTrueTheta(){
     ThetapTrue = ProtonTrue3Vect.Theta() * TMath::RadToDeg();
     EpTrue = (ProtonTrueVect(3)*1000)- Mp;
     TrueGamma = GetGeant()->GetBeam();
-    EgTrue = TrueGamma(0)*1000;
+    EgTrue = TrueGamma(3)*1000;
     }
 
     else if ((Proton1 == kFALSE) && (Proton2 == kFALSE)) ThetapTrue = 1000, EpTrue = 0, EnTrue = 0;
@@ -319,13 +320,15 @@ PPolTest::PPolTest() // Define a load of histograms to fill
   TrueThetan = new GH1 ("TrueThetan", "True Theta of Neutron", 90, 0, 180);
 
   TrueThetapThetan = new GH2("TrueThetapThetan", "True Theta for Proton vs True Theta for Neutron", 90, 0, 180, 90, 0, 180);
-  ThetapEpTrue = new GH2("ThetapEpTrue", "True Theta vs Energy for Protons", 90, 0, 180, 200, 0, 800);
+  ThetapEpTrue = new GH2("ThetapEpTrue", "True Theta vs Energy for Protons", 90, 0, 180, 200, 0, 400);
   ThetapEp = new GH2("ThetapEp", "Theta vs Energy for Protons", 90, 0, 180, 200, 0, 800);
+  EpEgTrue = new GH2("EpEgTrue", "True Proton Energy vs True Photon Energy", 200, 0, 400, 400, 0, 1600);
+  EpEg = new GH2("EpEg", "Proton Energy vs Photon Energy", 200, 0, 400, 400, 0, 1600);
 
   //TrueEgThetapEp = new GH3 ("TrueEgThetapEp", "Proton Energy as Fn of Eg and Theta (all TRUE values)", 400, 0, 1600, 60, 0, 180, 200, 0, 800 );
   //TrueEgThetapEp = new GH3 ("TrueEgThetapEn", "Neutron Energy as Fn of Eg and Theta (all TRUE values)", 400, 0, 1600, 60, 0, 180, 200, 0, 800 );
   EgThetaEp = new GH3("EgThetaEp", "Proton Energy as a Fn of Eg and Theta", 400, 0, 1600, 60, 0, 180, 200, 0, 800 );
-  EgThetaEpTrue = new GH3("EgThetaEpTrue", "True Proton Energy as a Fn of Eg and True Theta", 400, 0, 1600, 60, 0, 180, 200, 0, 800 );
+  EgThetaEpTrue = new GH3("EgThetaEpTrue", "True Proton Energy as a Fn of Eg and True Theta", 400, 0, 1600, 60, 0, 180, 200, 0, 400 );
 
 }
 
@@ -343,6 +346,7 @@ void PPolTest::FillHists()
     ThetapEp->Fill(Theta1, E1, TaggerTime);
     EgThetaEp->Fill(EGamma, Theta1, E1, TaggerTime);
     EgThetaEpTrue->Fill(EGamma, ThetapTrue, EpTrue, TaggerTime);
+    EpEg->Fill(E1, EGamma, TaggerTime);
 }
 
 
