@@ -46,9 +46,12 @@ private:
   double_t z1;
   double_t E1;
   double_t EpTrue;
+  double_t EnTrue;
+  double_t EgTrue;
   double_t dE1;
 
   TLorentzVector Gamma;
+  TLorentzVector TrueGamma;
   TLorentzVector Deut;
   TLorentzVector NeutronTrueVect;
   TLorentzVector ProtonTrueVect;
@@ -67,7 +70,15 @@ private:
 
   GH1* time;
   GH1* time_cut;
+  GH1* TrueThetap;
+  GH1* TrueThetan;
 
+  GH2* TrueThetapThetan;
+  GH2* ThetapEpTrue;
+  GH2* ThetapEp;
+
+  GH3* TrueEgThetapEp;
+  GH3* TrueEgThetanEn;
   GH3* EgThetaEp;
   GH3* EgThetaEpTrue;
 
