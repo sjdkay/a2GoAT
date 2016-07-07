@@ -32,7 +32,7 @@ Bool_t	PNeutPol::Start()
   SetAsPhysicsFile();
 
   i = 0; // Integer counter
-  k = 0;
+ // k = 0;
   d = 54.2; // Distance from centre of target to centre of PID
   NP = 0; // Set number of Protons to 0 before checking
   NPi = 0; // Set number of pions to 0 before checking
@@ -57,7 +57,7 @@ Bool_t	PNeutPol::Start()
 
   TraverseValidEvents(); // This loops over each event as in old file and calls ProcessEvent() each loop
 
-  cout << k << endl;
+  //cout << k << endl;
 
   return kTRUE;
 }
@@ -121,10 +121,10 @@ void	PNeutPol::ProcessEvent()
     GV1Rec_3 = GV1Rec.Vect();
     GV2Rec_3 = GV2Rec.Vect();
     ReconstructDetElements();
-    PIDDiffMeas1 = abs (PIDEle1 - PIDElePhi1);
-    PIDDiffMeas2 = abs (PIDEle2 - PIDElePhi2);
-    PIDDiffRecMeas1 = abs (PIDEle1 - PIDEleRec1);
-    PIDDiffRecMeas2 = abs (PIDEle2 - PIDEleRec2);
+    //PIDDiffMeas1 = abs (PIDEle1 - PIDElePhi1);
+    //PIDDiffMeas2 = abs (PIDEle2 - PIDElePhi2);
+    //PIDDiffRecMeas1 = abs (PIDEle1 - PIDEleRec1);
+    //PIDDiffRecMeas2 = abs (PIDEle2 - PIDEleRec2);
     mm1 = GV1Rec.M(); // Calculate missing mass of each particle
     mm2 = GV2Rec.M();
     mm1Diff = abs(Mn-mm1); // Look at difference of missing mass from neutron mass
@@ -144,15 +144,15 @@ void	PNeutPol::ProcessEvent()
     //Z2_WireChamberRec -> Fill(zWCRec2, TaggerTime);
     //Z2_WireChamberDifference -> Fill ((zWCRec2 - zWC2), TaggerTime);
 
-    if ((PIDDiffMeas1 < 2) && (PIDDiffMeas2 > 1)) { // If Measured values for track 1 look correct but 2 do not, assume 1 is good P
+    //if ((PIDDiffMeas1 < 2) && (PIDDiffMeas2 > 1)) { // If Measured values for track 1 look correct but 2 do not, assume 1 is good P
 
-        if (PIDDiffRecMeas2 < 1) k++;// If 1 is good P then reconstructing 2 should give correct PID element hit for 2
-    }
+     //   if (PIDDiffRecMeas2 < 1) k++;// If 1 is good P then reconstructing 2 should give correct PID element hit for 2
+   // }
 
-    if ((PIDDiffMeas2 < 2) && (PIDDiffMeas1 > 1)) {
+   // if ((PIDDiffMeas2 < 2) && (PIDDiffMeas1 > 1)) {
 
-        if (PIDDiffRecMeas1 < 1) k++;
-    }
+    //    if (PIDDiffRecMeas1 < 1) k++;
+    //}
 
     //}
 

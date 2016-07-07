@@ -34,7 +34,7 @@ public:
             Double_t        GetMass(const Int_t index)          const   {return mass[index];}
     const   Double_t*       GetMass()                           const   {return mass; }
             Int_t           GetTrackIndex(const Int_t index)    const   {return trackIndex[index];}
-    const   Int_t*          GetTrackIndex()                     const   {return trackIndex; }
+    const   Int_t*          GetTrackIndex()                     const   {return trackIndex;}
 
     inline          TLorentzVector Particle(const Int_t particle);
     inline  const   TLorentzVector Particle(const Int_t particle) const;

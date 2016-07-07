@@ -213,7 +213,6 @@ Bool_t PPolTest::ParticleAssignment(){
         Proton2 = kTRUE;
     }
 
-
     if (MCTrueID1 == 13){
         Neutron1 = kTRUE;
         Neutron2 = kFALSE;

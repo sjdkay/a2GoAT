@@ -22,14 +22,19 @@ private:
 
   Int_t NP;
   Int_t NPi;
+  Int_t NPi0;
   Int_t NRoo;
+  Int_t NPhotons;
   Int_t NTag;
   Int_t NTrack;
   Int_t MCTrueID1;
   Int_t MCTrueID2;
-  Int_t PIDHits;
-  Int_t MWPCHits;
-  Int_t CBHits;
+  Int_t PIDHits1;
+  Int_t MWPCHits1;
+  Int_t CBHits1;
+  Int_t PIDHits2;
+  Int_t MWPCHits2;
+  Int_t CBHits2;
 
   double_t i;
   double_t k;
@@ -38,6 +43,10 @@ private:
   double_t EGamma;
   double_t Mn;
   double_t Mp;
+  double_t MpiC;
+  double_t Mpi0;
+  double_t MN;
+  double_t MPi;
   double_t d;
   double_t ThetaNTrue;
   double_t ThetaPiTrue;
@@ -114,10 +123,14 @@ public:
     Int_t MCTrueID();
     Bool_t ParticleAssignment();
     Double_t GetTrueTheta();
-    Int_t GetDetectorHitInfo();
+    Int_t GetDetectorHitInfoChargedPi();
+    Int_t GetDetectorHitInfoNeutralPi();
     TLorentzVector GetTrackVector();
     Double_t GetTrackInfo();
     Double_t MCSmearing();
+    TLorentzVector GetTrackVectorPi0();
+    Double_t GetTrackInfoPi0();
+    Double_t MCSmearingPi0();
     void FillHists();
 
 };

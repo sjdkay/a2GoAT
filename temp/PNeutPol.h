@@ -1,5 +1,5 @@
-#ifndef __PNeutPol_NoPID_h__
-#define __PNeutPol_NoPID_h__
+#ifndef __PNeutPol_h__
+#define __PNeutPol_h__
 
 #include <iostream>
 #include <fstream>
@@ -14,7 +14,7 @@ using namespace std;
 #include "TRandom2.h"
 #include "TMath.h"
 
-class	PNeutPol_NoPID : public PPhysics
+class	PNeutPol : public PPhysics
 {
 private:
 
@@ -26,6 +26,7 @@ private:
   Int_t NTag;
   Int_t NTrack;
   Int_t i;
+  Int_t k;
 
   double_t Time;
   double_t TaggerTime;
@@ -41,6 +42,10 @@ private:
   double_t B;
   double_t Theta1;
   double_t Theta2;
+  double_t Phi1;
+  double_t Phi2;
+  double_t Phi1Rec;
+  double_t Phi2Rec;
   double_t ThetapB;
   double_t ThetanB;
   double_t PhipB;
@@ -58,6 +63,10 @@ private:
   double_t Zn;
   double_t zWCRec;
   double_t zWC;
+  double_t zWCRec1;
+  double_t zWC1;
+  double_t zWCRec2;
+  double_t zWC2;
   double_t Thetap;
   double_t Thetan;
   double_t ThetanCalc;
@@ -81,26 +90,36 @@ private:
   double_t ScattThetaLab;
   double_t ScattTheta;
   double_t ScattPhi;
-  double_t pPIDElement;
-  double_t nPIDElement;
+  double_t MWPC_E0_n;
+  double_t MWPC_E1_n;
 
   Bool_t nBanana;
   Bool_t MCData;
+  Bool_t Proton1;
+  Bool_t Proton2;
 
   TLorentzVector GV1;
   TLorentzVector GV2;
+  TLorentzVector GV1Rec;
+  TLorentzVector GV2Rec;
   TLorentzVector GVpB;
   TLorentzVector GVnB;
   TLorentzVector GVp;
   TLorentzVector GVn;
+  TLorentzVector GVpCalc;
   TLorentzVector GVnCalc;
   TLorentzVector Gamma;
   TLorentzVector Deut;
   TLorentzVector boostvector;
+  TVector3 GV1_3;
+  TVector3 GV2_3;
+  TVector3 GV1Rec_3;
+  TVector3 GV2Rec_3;
   TVector3 b;
   TVector3 Gamma3;
   TVector3 GVp3;
   TVector3 GVn3;
+  TVector3 GVpCalc3;
   TVector3 GVnCalc3;
   TVector3 fX;
   TVector3 fY;
@@ -129,6 +148,12 @@ private:
   GH1* Z_WireChamber;
   GH1* Z_WireChamberRec;
   GH1* Z_WireChamberDifference;
+  GH1* Z1_WireChamber;
+  GH1* Z1_WireChamberRec;
+  GH1* Z1_WireChamberDifference;
+  GH1* Z2_WireChamber;
+  GH1* Z2_WireChamberRec;
+  GH1* Z2_WireChamberDifference;
   GH1* ThetaCMProton;
   GH1* ThetaCMNeutron;
   GH1* PhiCMProton;
@@ -164,22 +189,29 @@ private:
   GH1* PhiSc475Cut;
   GH1* PhiSc525Cut;
   GH1* PhiSc575Cut;
+  GH1* MWPCEnergy0_n;
+  GH1* MWPCEnergy1_n;
 
   GH2* E_dE;
   GH2* E_dE_Proton;
   GH2* E_dE_Neutron;
-  //GH2* ThetanCM_PhinCM;
-  //GH2* Thetan_Vs_Phin_Lab;
-  //GH2* Theta_Vs_Phi;
-  //GH2* PhiSc_dEn;
-  //GH2* mmE;
-  //GH2* PhidEFixp;
-  //GH2* PhidECorrFixp;
+  GH2* Thetap_Ep;
+  GH2* Thetan_En;
 
-  //GH2* E_dE_LowPhi;
-  //GH2* E_dE_LowPhi_p;
-  //GH2* E_dE_LowPhi_n;
-  //GH1* PhiScLow;
+  TLorentzVector MCTrueVect1;
+  TLorentzVector MCTrueVect2;
+
+  Int_t MCTrueID1;
+  Int_t MCTrueID2;
+
+  double_t MCTheta1;
+  double_t MCTheta2;
+  double_t MCE1;
+  double_t MCE2;
+  double_t MCTheta1True;
+  double_t MCTheta2True;
+  double_t MCE1True;
+  double_t MCE2True;
 
   GH1* EgMC_In;
   GH1* ThetapMC_In;
@@ -193,16 +225,16 @@ private:
   GH1* ThetanMC_Rec_Out;
   GH1* EpMC_Out;
   GH1* EnMC_Out;
-  GH2* PID_Phi_In;
-  GH2* PID_Phi_Out;
-  GH2* PID_Theta_In;
-  GH2* PID_Theta_Out;
   GH2* Thetan_dE_MC_In;
   GH2* ThetanRec_dE_MC_In;
   GH2* Phin_dE_MC_In;
   GH2* Thetan_dE_MC_Out;
   GH2* ThetanRec_dE_MC_Out;
   GH2* Phin_dE_MC_Out;
+  GH2* MCThetap_Ep;
+  GH2* MCThetan_En;
+  GH2* MCThetap_Ep_True;
+  GH2* MCThetan_En_True;
 
   char cutfilename[256];
   char cutname[256];
@@ -224,15 +256,20 @@ protected:
 
 public:
 
-    PNeutPol_NoPID();
-    virtual ~PNeutPol_NoPID();
+    PNeutPol();
+    virtual ~PNeutPol();
     virtual Bool_t  Init();
     TCutG* OpenCutFile(Char_t* filename, Char_t* cutname);
     void MCHists();
+    void ParticleSelection();
+    void AlternativeParticleSelection();
+    Bool_t MCDataCheck();
     Int_t GetEvent();
     TLorentzVector InitialVect();
     Double_t InitialProp();
-    Double_t MCTrue();
+    TLorentzVector ReconstructVectors();
+    Int_t MCTrueID();
+    TLorentzVector MCTrueVectors();
     Double_t MCSmearing();
     Double_t PNProp(Int_t ProtonParticleNumber);
     TLorentzVector PNVect(Int_t ProtonParticleNumber);
@@ -240,7 +277,7 @@ public:
     Double_t NeutronEnergy();
     Double_t LabBoost();
     Double_t LabScatter();
-    Double_t WCVertex();
+    Double_t WCVertex(TVector3 MeasuredVector, TVector3 ReconstructedVector, double_t ReconstructorZ, double_t MeasuredZ);
     Double_t nFrameScatter();
     void FillHists();
 
