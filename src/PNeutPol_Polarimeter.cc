@@ -91,7 +91,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
   // Drop out on ANY other condition (for now)
   else
   {
-  continue;
+  return;
   }
 
   if ( MCData == kTRUE)
