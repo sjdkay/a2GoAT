@@ -72,6 +72,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
   GV1_3 = GV1.Vect();
   GV2_3 = GV2.Vect();
   InitialProp(); // Function gets initial properties (energy, vertex e.t.c.) of identified tracks
+  DetHits(); // Function gets MWPC and PID hits for each track
   DetectorElements();
 
   if ( MCData == kTRUE)
@@ -255,6 +256,15 @@ Double_t PNeutPol_Polarimeter::InitialProp() // Defines initial particle propert
   dE2 = GetTracks()->GetVetoEnergy(1);
 
   return Theta1, Theta2, Phi1, Phi2, z1, z2, E1, E2, dE1, dE2; // Returns various quantities used in later functions
+}
+
+Int_t PNeutPol_Polarimeter::DetHits()
+{
+    PIDHits1 = GetPID()->GetPIDHits(0);
+    PIDHits2 = GetPID()->GetPIDHits(1);
+    MWPCHits1 = GetMWPC()->GetMWPCHits(0);
+    MWPCHits2 = GetMWPC()->GetMWPCHits(1);
+    return PIDHits1, PIDHits2, MWPCHits1, MWPCHits2;
 }
 
 Int_t PNeutPol_Polarimeter::DetectorElements()

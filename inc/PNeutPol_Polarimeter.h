@@ -28,6 +28,10 @@ private:
   Int_t i;
   Int_t k;
 
+  Int_t PIDHits1;
+  Int_t PIDHits2;
+  Int_t MWPCHits1;
+  Int_t MWPCHits2;
   Int_t PIDEle1;
   Int_t PIDEle2;
   double_t PIDElePhi1;
@@ -275,6 +279,7 @@ public:
     Int_t GetEvent();
     TLorentzVector InitialVect();
     Double_t InitialProp();
+    Int_t DetHits();
     Int_t DetectorElements();
     TLorentzVector ReconstructVectors();
     Int_t ReconstructDetElements();
