@@ -260,10 +260,10 @@ Double_t PNeutPol_Polarimeter::InitialProp() // Defines initial particle propert
 
 Int_t PNeutPol_Polarimeter::DetHits()
 {
-    PIDHits1 = GetPID()->GetPIDHits(0);
-    PIDHits2 = GetPID()->GetPIDHits(1);
-    MWPCHits1 = GetMWPC()->GetMWPCHits(0);
-    MWPCHits2 = GetMWPC()->GetMWPCHits(1);
+    PIDHits1 = GeDetectorHits()->GetPIDHits(0);
+    PIDHits2 = GeDetectorHits()->GetPIDHits(1);
+    MWPCHits1 = GeDetectorHits()->GetMWPCHits(0);
+    MWPCHits2 = GeDetectorHits()->GetMWPCHits(1);
     return PIDHits1, PIDHits2, MWPCHits1, MWPCHits2;
 }
 
