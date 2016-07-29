@@ -39,8 +39,7 @@ SortRaw-NTracks:     2-		2+		0-
 
 # Sort on Trigger conditions (Crystal Ball Energy Sum)
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-SortRaw-CBEnergySum:	10+
-
+SortRaw-CBEnergySum:	100+
 
 # Sort on reconstructed particle properties
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

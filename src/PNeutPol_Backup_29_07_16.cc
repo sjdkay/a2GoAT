@@ -45,10 +45,10 @@ Bool_t	PNeutPol::Start()
   Cut_proton = Cut_CB_proton;
   Cut_CB_pion = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Pion_29_07_15.root", "Pion");
   Cut_pion = Cut_CB_pion;
-  //Cut_CB_ROI = OpenCutFile("configfiles/cuts/CB_DeltaE-E_ROI_05_08_15.root", "ROI");
-  //Cut_ROI = Cut_CB_ROI; // Uncomment these two if you want some ROI cut to be loaded and used
-  //Cut_CB_neutron = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Neutron_25_02_15.root", "Neutron");
-  //Cut_neutron = Cut_CB_neutron; // This only needs to be here if we get simulation to show where we expect neutrons
+  Cut_CB_ROI = OpenCutFile("configfiles/cuts/CB_DeltaE-E_ROI_05_08_15.root", "ROI");
+  Cut_ROI = Cut_CB_ROI;
+  // Cut_CB_neutron = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Neutron_25_02_15.root", "Neutron");
+  // Cut_neutron = Cut_CB_neutron; // This only needs to be here if we get simulation to show where we expect neutrons
   cout << endl;
 
   MCDataCheck();
@@ -110,10 +110,40 @@ void	PNeutPol::ProcessEvent()
     GV1Rec_3 = GV1Rec.Vect();
     GV2Rec_3 = GV2Rec.Vect();
     ReconstructDetElements();
+    //PIDDiffMeas1 = abs (PIDEle1 - PIDElePhi1);
+    //PIDDiffMeas2 = abs (PIDEle2 - PIDElePhi2);
+    //PIDDiffRecMeas1 = abs (PIDEle1 - PIDEleRec1);
+    //PIDDiffRecMeas2 = abs (PIDEle2 - PIDEleRec2);
     mm1 = GV1Rec.M(); // Calculate missing mass of each particle
     mm2 = GV2Rec.M();
     mm1Diff = abs(Mn-mm1); // Look at difference of missing mass from neutron mass
     mm2Diff = abs(Mn-mm2);
+
+    //WCVertex(GV1_3, GV1Rec_3, z2, z1); // ZWC vertex calculation and filling before cuts
+    //zWC1 = zWC;
+    //zWCRec1 = zWCRec;
+    //WCVertex(GV2_3, GV2Rec_3, z1, z2);
+    //zWC2 = zWC;
+    //zWCRec2 = zWCRec;
+
+    //Z1_WireChamber -> Fill(zWC1, TaggerTime);
+    //Z1_WireChamberRec -> Fill(zWCRec1, TaggerTime);
+    //Z1_WireChamberDifference -> Fill ((zWCRec1 - zWC1), TaggerTime);
+    //Z2_WireChamber -> Fill(zWC2, TaggerTime);
+    //Z2_WireChamberRec -> Fill(zWCRec2, TaggerTime);
+    //Z2_WireChamberDifference -> Fill ((zWCRec2 - zWC2), TaggerTime);
+
+    //if ((PIDDiffMeas1 < 2) && (PIDDiffMeas2 > 1)) { // If Measured values for track 1 look correct but 2 do not, assume 1 is good P
+
+     //   if (PIDDiffRecMeas2 < 1) k++;// If 1 is good P then reconstructing 2 should give correct PID element hit for 2
+   // }
+
+   // if ((PIDDiffMeas2 < 2) && (PIDDiffMeas1 > 1)) {
+
+    //    if (PIDDiffRecMeas1 < 1) k++;
+    //}
+
+    //}
 
     FillTime(*GetProtons(),time);
     FillTimeCut(*GetProtons(),time_cut);
@@ -122,10 +152,24 @@ void	PNeutPol::ProcessEvent()
     if ( ((mm1 < 850 || mm1 > 1050) == kTRUE) || ((mm2 < 850 || mm2 > 1050) == kTRUE) ) continue; // If both bad continue
     ParticleSelection(); // Normal particle selection, looks at MM difference and regions particles are in
 
+    // More complicated selection, different cases for different mm regions
+    //if( ((( mm1 > 850 ) == kTRUE) && ((mm1 < 1050) == kTRUE)) && ((( mm1 > 850 ) == kTRUE) && ((mm1 < 1050) == kTRUE)) ){
+    //ParticleSelection(); // Case where both look good
+    //}
+    // If mm1 good and mm2 bad OR mm1 bad mm2 good
+   // else if ( ((((mm1 > 850) ==kTRUE) && ((mm1 < 1050) == kTRUE)) && ((mm2 < 850 || mm2 > 1050) == kTRUE) ) || ((((mm2 > 850) ==kTRUE) && ((mm2 < 1050) == kTRUE)) && ((mm1 < 850 || mm1 > 1050) == kTRUE) ) )   {
+    //if ( ((mm1 < 800 || mm1 >1300 ) == kTRUE) || ((mm2 < 800 || mm2 >1300 ) == kTRUE) ) continue; //Check that neither one is outside of a slightly larger mm range
+    //AlternativeParticleSelection(); // Case where one looks good but other does not
+    //}
+    //else if ( (( mm1 < 850 || mm1 > 1050) == kTRUE) && (( mm2 < 850 || mm2 > 1050) == kTRUE) ) continue; // If both bad drop out
+
     if( Zp > 60 || Zp < -60) continue; // Cut if proton vertex not where we expect it to be
     if(Cut_proton -> IsInside(En, dEn) == kTRUE) nBanana = kTRUE; // Set flag to true or false depending upon location of neutron
     if(Cut_proton -> IsInside(En, dEn) == kFALSE) nBanana = kFALSE; // Is it in or out of proton banana?
 
+    //mmadj = mmp - Mn; // Look at difference from what the missing mass SHOULD be
+    //GVpUnadjE = GVp(3); // Take the initial energy of the proton
+    //GVp(3) = GVpUnadjE + mmadj; // Add on the adjustment from the missing mass to the energy of the 4-vector
     mmn = ((Gamma+Deut)-GVn).M(); // Recalculate mmn using the Neutron vector with a corrected mass
     GVp3 = GVp.Vect(); // Generate some 3-vectors from the 4-vectors we have
     GVn3 = GVn.Vect();
@@ -153,6 +197,9 @@ void	PNeutPol::ProcessEvent()
     WCVertex(GVn3, GVnCalc3, Zp, Zn); // Calculate Z vertex location in WC from measured and reconstructed vectors
     if (ScattTheta > 90) continue;
     if (nBanana == kFALSE && (zWCRec-zWC > 20 || zWCRec-zWC < -20)) continue;
+    //if (Cut_proton -> IsInside(En, dEn) == kFALSE) continue; //If the neutron is inside the proton region drop out
+    // This has been done as the neutrons in the proton region have potentially not scattered in the PID
+
 
     if (MCData == kTRUE)
     {
@@ -348,6 +395,8 @@ TLorentzVector PNeutPol::MCTrueVectors()
 
     MCTrueVect1 = GetGeant()->GetTrueVector(0);
     MCTrueVect2 = GetGeant()->GetTrueVector(1);
+
+    //cout << GV1(3) << "   " << GV2(3) << "   " << MCTrueVect1(3)*1000 << "   " << MCTrueVect2(3)*1000 << endl;
 
     return MCTrueVect1, MCTrueVect2;
 
@@ -600,6 +649,56 @@ PNeutPol::PNeutPol() // Define a load of histograms to fill
   PhiSc525Cut = new GH1( "Phi_Scattered_525MeV_Cut", "Phi_Scattered_525MeV_Cut", 36, -180, 180);
   PhiSc575Cut = new GH1( "Phi_Scattered_575MeV_Cut", "Phi_Scattered_575MeV_Cut", 36, -180, 180);
 
+  //PhiScROI = new GH1( "Phi_Scattered_ROI", "Scattetred Proton Phi Distribution in Rotated Frame in ROI", 36, -180, 180 );
+
+  PhiSc_In = new GH1( "Phi_Scattered_In", "Scattetred Proton Phi Distribution in Rotated Frame", 36, -180, 180 );
+  PhiSc125_In = new GH1( "Phi_Scattered_125MeV_In", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 125pm25MeV", 36, -180, 180);
+  PhiSc175_In = new GH1( "Phi_Scattered_175MeV_In", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 175pm25MeV", 36, -180, 180);
+  PhiSc225_In = new GH1( "Phi_Scattered_225MeV_In", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 225pm25MeV", 36, -180, 180);
+  PhiSc275_In = new GH1( "Phi_Scattered_275MeV_In", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 275pm25MeV", 36, -180, 180);
+  PhiSc325_In = new GH1( "Phi_Scattered_325MeV_In", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 325pm25MeV", 36, -180, 180);
+  PhiSc375_In = new GH1( "Phi_Scattered_375MeV_In", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 375pm25MeV", 36, -180, 180);
+  PhiSc425_In = new GH1( "Phi_Scattered_425MeV_In", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 425pm25MeV", 36, -180, 180);
+  PhiSc475_In = new GH1( "Phi_Scattered_475MeV_In", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 475pm25MeV", 36, -180, 180);
+  PhiSc525_In = new GH1( "Phi_Scattered_525MeV_In", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 525pm25MeV", 36, -180, 180);
+  PhiSc575_In = new GH1( "Phi_Scattered_575MeV_In", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 575pm25MeV", 36, -180, 180);
+
+  PhiSc_Out = new GH1( "Phi_Scattered_Out", "Scattetred Proton Phi Distribution in Rotated Frame", 36, -180, 180 );
+  PhiSc125_Out = new GH1( "Phi_Scattered_125MeV_Out", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 125pm25MeV", 36, -180, 180);
+  PhiSc175_Out = new GH1( "Phi_Scattered_175MeV_Out", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 175pm25MeV", 36, -180, 180);
+  PhiSc225_Out = new GH1( "Phi_Scattered_225MeV_Out", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 225pm25MeV", 36, -180, 180);
+  PhiSc275_Out = new GH1( "Phi_Scattered_275MeV_Out", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 275pm25MeV", 36, -180, 180);
+  PhiSc325_Out = new GH1( "Phi_Scattered_325MeV_Out", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 325pm25MeV", 36, -180, 180);
+  PhiSc375_Out = new GH1( "Phi_Scattered_375MeV_Out", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 375pm25MeV", 36, -180, 180);
+  PhiSc425_Out = new GH1( "Phi_Scattered_425MeV_Out", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 425pm25MeV", 36, -180, 180);
+  PhiSc475_Out = new GH1( "Phi_Scattered_475MeV_Out", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 475pm25MeV", 36, -180, 180);
+  PhiSc525_Out = new GH1( "Phi_Scattered_525MeV_Out", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 525pm25MeV", 36, -180, 180);
+  PhiSc575_Out = new GH1( "Phi_Scattered_575MeV_Out", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 575pm25MeV", 36, -180, 180);
+
+  PhiScCut_In = new GH1( "Phi_Scattered_Cut_In", "Scattetred Proton Phi Distribution in Rotated Frame With Cut on Incident Theta", 36, -180, 180 );
+  PhiSc125Cut_In = new GH1( "Phi_Scattered_125MeV_Cut_In", "Phi_Scattered_125MeV_Cut", 36, -180, 180);
+  PhiSc175Cut_In = new GH1( "Phi_Scattered_175MeV_Cut_In", "Phi_Scattered_175MeV_Cut", 36, -180, 180);
+  PhiSc225Cut_In = new GH1( "Phi_Scattered_225MeV_Cut_In", "Phi_Scattered_225MeV_Cut", 36, -180, 180);
+  PhiSc275Cut_In = new GH1( "Phi_Scattered_275MeV_Cut_In", "Phi_Scattered_275MeV_Cut", 36, -180, 180);
+  PhiSc325Cut_In = new GH1( "Phi_Scattered_325MeV_Cut_In", "Phi_Scattered_325MeV_Cut", 36, -180, 180);
+  PhiSc375Cut_In = new GH1( "Phi_Scattered_375MeV_Cut_In", "Phi_Scattered_375MeV_Cut", 36, -180, 180);
+  PhiSc425Cut_In = new GH1( "Phi_Scattered_425MeV_Cut_In", "Phi_Scattered_425MeV_Cut", 36, -180, 180);
+  PhiSc475Cut_In = new GH1( "Phi_Scattered_475MeV_Cut_In", "Phi_Scattered_475MeV_Cut", 36, -180, 180);
+  PhiSc525Cut_In = new GH1( "Phi_Scattered_525MeV_Cut_In", "Phi_Scattered_525MeV_Cut", 36, -180, 180);
+  PhiSc575Cut_In = new GH1( "Phi_Scattered_575MeV_Cut_In", "Phi_Scattered_575MeV_Cut", 36, -180, 180);
+
+  PhiScCut_Out = new GH1( "Phi_Scattered_Cut_Out", "Scattetred Proton Phi Distribution in Rotated Frame With Cut on Incident Theta", 36, -180, 180 );
+  PhiSc125Cut_Out = new GH1( "Phi_Scattered_125MeV_Cut_Out", "Phi_Scattered_125MeV_Cut", 36, -180, 180);
+  PhiSc175Cut_Out = new GH1( "Phi_Scattered_175MeV_Cut_Out", "Phi_Scattered_175MeV_Cut", 36, -180, 180);
+  PhiSc225Cut_Out = new GH1( "Phi_Scattered_225MeV_Cut_Out", "Phi_Scattered_225MeV_Cut", 36, -180, 180);
+  PhiSc275Cut_Out = new GH1( "Phi_Scattered_275MeV_Cut_Out", "Phi_Scattered_275MeV_Cut", 36, -180, 180);
+  PhiSc325Cut_Out = new GH1( "Phi_Scattered_325MeV_Cut_Out", "Phi_Scattered_325MeV_Cut", 36, -180, 180);
+  PhiSc375Cut_Out = new GH1( "Phi_Scattered_375MeV_Cut_Out", "Phi_Scattered_375MeV_Cut", 36, -180, 180);
+  PhiSc425Cut_Out = new GH1( "Phi_Scattered_425MeV_Cut_Out", "Phi_Scattered_425MeV_Cut", 36, -180, 180);
+  PhiSc475Cut_Out = new GH1( "Phi_Scattered_475MeV_Cut_Out", "Phi_Scattered_475MeV_Cut", 36, -180, 180);
+  PhiSc525Cut_Out = new GH1( "Phi_Scattered_525MeV_Cut_Out", "Phi_Scattered_525MeV_Cut", 36, -180, 180);
+  PhiSc575Cut_Out = new GH1( "Phi_Scattered_575MeV_Cut_Out", "Phi_Scattered_575MeV_Cut", 36, -180, 180);
+
   // PhiScCut = new GH1( "Phi Scattered Cut", "Phi Scattered Cut", 160, 0, 160 );
 
   E_dE = new GH2("E_dE", "EdE Plot", 150, 0, 500, 150, 0, 7);
@@ -607,6 +706,20 @@ PNeutPol::PNeutPol() // Define a load of histograms to fill
   E_dE_Neutron = new GH2("E_dE_Neutron", "EdE Plot for Neutrons", 150, 0, 500, 150, 0, 7);
   Thetap_Ep = new GH2("Thetap_Ep", "Theta vs Energy for Protons", 90, 10, 170, 200, 0, 600);
   Thetan_En = new GH2("Thetan_En", "Theta vs Energy for Neutrons", 90, 10, 170, 200, 0, 600);
+  //E_dE_ROI = new GH2("E_dE_ROI", "EdE Plot in ROI", 150, 0, 500, 150, 0, 7);
+  //E_dE_ROI_p = new GH2("E_dE_ROI_p", "EdE Plot in ROI for Protons", 150, 0, 500, 150, 0, 7);
+  //E_dE_ROI_n = new GH2("E_dE_ROI_n", "EdE Plot in ROI for Neutrons", 150, 0, 500, 150, 0, 7);
+  //E_dE_LowPhi = new GH2("E_dE_LowPhi", "EdE Plot for Low Phi Events", 150, 0, 500, 150, 0, 7);
+  //E_dE_LowPhi_p = new GH2("E_dE_LowPhi_p", "EdE Plot for Low Phi Events for Protons", 150, 0, 500, 150, 0, 7);
+  //E_dE_LowPhi_n = new GH2("E_dE_LowPhi_n", "EdE Plot for Low Phi Events for Neutrons", 150, 0, 500, 150, 0, 7);
+  //PhiScLow = new GH1( "Phi_Scattered_Low", "Phi_Scattered", 36, -180, 180);
+  //ThetanCM_PhinCM = new GH2 ("ThetaCM_vs_PhiCM_Neutron", "ThetaCM_vs_PhiCM_Neutron", 180, 0, 180, 180, -180, 180);
+  //Thetan_Vs_Phin_Lab = new GH2("Theta vs Phi Lab" , "Theta vs Phi Lab", 180, 0, 180, 180, -180, 180);
+  // Theta_Vs_Phi = new GH2("Theta vs Phi" , "Theta vs Phi", 180, 0, 50, 180, -180, 180); //These plots aren't showing what it used to, not sure if correct/still useful or not
+  //PhiSc_dEn = new GH2("PhiSc_dEn" , "PhiSc_dEn", 180, -180, 180, 180, 0, 10);
+  //mmE = new GH2 ("mmE", "Missing_Mass_as_a_Function_of_Energy", 200, 0, 600, 200, 850, 1050);
+  //PhidEFixp = new GH2 ("PhidEFixp", "Phi_dE_Distribution", 180, -180, 180, 180, 0, 5);
+  //PhidECorrFixp = new GH2 ("PhidECorrFixp", "Phi_dECorr_Distribution", 180, -180, 180, 180, 0, 5);
 
 }
 
@@ -640,10 +753,42 @@ void PNeutPol::FillHists()
   ENeutronKinCalc->Fill(EnKinCalc, TaggerTime);
   ENeutronDiff->Fill(EnKinCalc - EnVectCalc, TaggerTime);
   ThetaScLab -> Fill(abs(Thetan), TaggerTime);
+  //Thetan_Vs_Phin_Lab -> Fill(abs(Thetan), Phin, TaggerTime); // We want Phi of scattered p and theta of scattered p in lab frame?
+  //ThetanCM_PhinCM ->Fill(ThetanB, PhinB, TaggerTime);
   ThetaSc -> Fill(ScattTheta, TaggerTime);
   PhiSc -> Fill(ScattPhi, TaggerTime);
+  //Theta_Vs_Phi -> Fill(ScattTheta, ScattPhi, TaggerTime);
+  //PhiSc_dEn -> Fill(ScattPhi, dEn, TaggerTime);
+  //mmE ->Fill(Ep, mmp, TaggerTime);
+  //if (((Ep > 82 && Ep < 118) == kTRUE) && ((Thetap > 81 && Thetap < 99) == kTRUE))
+  //PhidEFixp->Fill(Phip, (dEp*sin(GVp.Theta())), TaggerTime);
+  //if (((Ep > 82 && Ep < 118) == kTRUE) && ((Thetap > 81 && Thetap < 99) == kTRUE))
+  //PhidECorrFixp->Fill(Phip, dEp, TaggerTime);
   Thetap_Ep->Fill(Thetap, Ep, TaggerTime);
   Thetan_En->Fill(Thetan, En, TaggerTime);
+
+ // if(Cut_ROI -> IsInside(Ep, dEp) == kTRUE)
+ // {
+ //   E_dE_ROI->Fill(Ep, dEp, TaggerTime);
+ //   E_dE_ROI_p->Fill(Ep, dEp, TaggerTime);
+ // }
+
+  //if(Cut_ROI -> IsInside(En, dEn) == kTRUE)
+  //{
+  //  E_dE_ROI->Fill(En, dEn, TaggerTime);
+  //  E_dE_ROI_n->Fill(En, dEn, TaggerTime);
+  //  PhiScROI->Fill(ScattPhi, TaggerTime);
+  //}
+
+ // if (-10 < ScattPhi && ScattPhi < 10) // Disabled when not needed, these slow down process a lot
+  //{
+    //  E_dE_LowPhi->Fill(Ep, dEp, TaggerTime);
+    //  E_dE_LowPhi->Fill(En, dEn, TaggerTime);
+    //  E_dE_LowPhi_p->Fill(Ep, dEp, TaggerTime);
+    //  E_dE_LowPhi_n->Fill(En, dEn, TaggerTime);
+    //  PhiScLow->Fill(ScattPhi, TaggerTime);
+  //}
+
 
   if (MCData == kTRUE && nBanana == kTRUE) // Fill some histograms for MC data
     {
@@ -690,6 +835,42 @@ void PNeutPol::FillHists()
   if ( 500 < EGamma && EGamma < 550) PhiSc525->Fill(ScattPhi, TaggerTime);
   if ( 550 < EGamma && EGamma < 600) PhiSc575->Fill(ScattPhi, TaggerTime);
 
+  if (nBanana == kTRUE)
+  {
+
+    PhiSc_In -> Fill(ScattPhi, TaggerTime);
+
+    if ( 100 < EGamma && EGamma < 150) PhiSc125_In->Fill(ScattPhi, TaggerTime);
+    if ( 150 < EGamma && EGamma < 200) PhiSc175_In->Fill(ScattPhi, TaggerTime);
+    if ( 200 < EGamma && EGamma < 250) PhiSc225_In->Fill(ScattPhi, TaggerTime);
+    if ( 250 < EGamma && EGamma < 300) PhiSc275_In->Fill(ScattPhi, TaggerTime);
+    if ( 300 < EGamma && EGamma < 350) PhiSc325_In->Fill(ScattPhi, TaggerTime);
+    if ( 350 < EGamma && EGamma < 400) PhiSc375_In->Fill(ScattPhi, TaggerTime);
+    if ( 400 < EGamma && EGamma < 450) PhiSc425_In->Fill(ScattPhi, TaggerTime);
+    if ( 450 < EGamma && EGamma < 500) PhiSc475_In->Fill(ScattPhi, TaggerTime);
+    if ( 500 < EGamma && EGamma < 550) PhiSc525_In->Fill(ScattPhi, TaggerTime);
+    if ( 550 < EGamma && EGamma < 600) PhiSc575_In->Fill(ScattPhi, TaggerTime);
+
+  }
+
+  if (nBanana == kFALSE)
+  {
+
+    PhiSc_Out -> Fill(ScattPhi, TaggerTime);
+
+    if ( 100 < EGamma && EGamma < 150) PhiSc125_Out->Fill(ScattPhi, TaggerTime);
+    if ( 150 < EGamma && EGamma < 200) PhiSc175_Out->Fill(ScattPhi, TaggerTime);
+    if ( 200 < EGamma && EGamma < 250) PhiSc225_Out->Fill(ScattPhi, TaggerTime);
+    if ( 250 < EGamma && EGamma < 300) PhiSc275_Out->Fill(ScattPhi, TaggerTime);
+    if ( 300 < EGamma && EGamma < 350) PhiSc325_Out->Fill(ScattPhi, TaggerTime);
+    if ( 350 < EGamma && EGamma < 400) PhiSc375_Out->Fill(ScattPhi, TaggerTime);
+    if ( 400 < EGamma && EGamma < 450) PhiSc425_Out->Fill(ScattPhi, TaggerTime);
+    if ( 450 < EGamma && EGamma < 500) PhiSc475_Out->Fill(ScattPhi, TaggerTime);
+    if ( 500 < EGamma && EGamma < 550) PhiSc525_Out->Fill(ScattPhi, TaggerTime);
+    if ( 550 < EGamma && EGamma < 600) PhiSc575_Out->Fill(ScattPhi, TaggerTime);
+
+  }
+
 
   if(ThetanCalc > 50 && ThetanCalc < 130){
 
@@ -706,6 +887,41 @@ void PNeutPol::FillHists()
     if ( 500 < EGamma && EGamma < 550) PhiSc525Cut->Fill(ScattPhi, TaggerTime);
     if ( 550 < EGamma && EGamma < 600) PhiSc575Cut->Fill(ScattPhi, TaggerTime);
 
+    if (nBanana == kTRUE)
+    {
+
+        PhiScCut_In -> Fill(ScattPhi, TaggerTime);
+
+        if ( 100 < EGamma && EGamma < 150) PhiSc125Cut_In->Fill(ScattPhi, TaggerTime);
+        if ( 150 < EGamma && EGamma < 200) PhiSc175Cut_In->Fill(ScattPhi, TaggerTime);
+        if ( 200 < EGamma && EGamma < 250) PhiSc225Cut_In->Fill(ScattPhi, TaggerTime);
+        if ( 250 < EGamma && EGamma < 300) PhiSc275Cut_In->Fill(ScattPhi, TaggerTime);
+        if ( 300 < EGamma && EGamma < 350) PhiSc325Cut_In->Fill(ScattPhi, TaggerTime);
+        if ( 350 < EGamma && EGamma < 400) PhiSc375Cut_In->Fill(ScattPhi, TaggerTime);
+        if ( 400 < EGamma && EGamma < 450) PhiSc425Cut_In->Fill(ScattPhi, TaggerTime);
+        if ( 450 < EGamma && EGamma < 500) PhiSc475Cut_In->Fill(ScattPhi, TaggerTime);
+        if ( 500 < EGamma && EGamma < 550) PhiSc525Cut_In->Fill(ScattPhi, TaggerTime);
+        if ( 550 < EGamma && EGamma < 600) PhiSc575Cut_In->Fill(ScattPhi, TaggerTime);
+
+    }
+
+    if (nBanana == kFALSE)
+    {
+
+        PhiScCut_Out -> Fill(ScattPhi, TaggerTime);
+
+        if ( 100 < EGamma && EGamma < 150) PhiSc125Cut_Out->Fill(ScattPhi, TaggerTime);
+        if ( 150 < EGamma && EGamma < 200) PhiSc175Cut_Out->Fill(ScattPhi, TaggerTime);
+        if ( 200 < EGamma && EGamma < 250) PhiSc225Cut_Out->Fill(ScattPhi, TaggerTime);
+        if ( 250 < EGamma && EGamma < 300) PhiSc275Cut_Out->Fill(ScattPhi, TaggerTime);
+        if ( 300 < EGamma && EGamma < 350) PhiSc325Cut_Out->Fill(ScattPhi, TaggerTime);
+        if ( 350 < EGamma && EGamma < 400) PhiSc375Cut_Out->Fill(ScattPhi, TaggerTime);
+        if ( 400 < EGamma && EGamma < 450) PhiSc425Cut_Out->Fill(ScattPhi, TaggerTime);
+        if ( 450 < EGamma && EGamma < 500) PhiSc475Cut_Out->Fill(ScattPhi, TaggerTime);
+        if ( 500 < EGamma && EGamma < 550) PhiSc525Cut_Out->Fill(ScattPhi, TaggerTime);
+        if ( 550 < EGamma && EGamma < 600) PhiSc575Cut_Out->Fill(ScattPhi, TaggerTime);
+
+    }
   }
 }
 
