@@ -157,6 +157,17 @@ add_executable(NeutPol_NoPID
    )
 target_link_libraries(NeutPol_NoPID ${LIBS} ${ROOT_LIBRARIES})
 
+add_executable(NeutPol_Polarimeter
+   ${GOAT_BASE}
+   ${GOAT_GHIST}
+   inc/PPhysics.h
+   src/PPhysics.cc
+   inc/PNeutPol_Polarimeter.h
+   src/PNeutPol_Polarimeter.cc
+   src/NeutPol_Polarimeter_main.cc
+   )
+target_link_libraries(NeutPol_Polarimeter ${LIBS} ${ROOT_LIBRARIES})
+
 add_executable(ProtPol
    ${GOAT_BASE}
    ${GOAT_GHIST}
