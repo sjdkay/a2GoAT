@@ -73,7 +73,26 @@ void	PNeutPol_Polarimeter::ProcessEvent()
   GV2_3 = GV2.Vect();
   InitialProp(); // Function gets initial properties (energy, vertex e.t.c.) of identified tracks
   DetHits(); // Function gets MWPC and PID hits for each track
-  DetectorElements();
+
+  // If track 1 only gives signals in MWPC it is the neutron
+  if(((PIDHits1 == 0) && (MWPCHits1 != 0)) && ((PIDHits2 != 0) && (MWPCHits2 != 0)))
+  {
+    Proton1 = kFALSE;
+    Proton2 = kTRUE;
+  }
+
+  // If track 2 only gives signals in MWPC it is the neutron
+  else if(((PIDHits1 != 0) && (MWPCHits1 != 0)) && ((PIDHits2 == 0) && (MWPCHits2 != 0)))
+  {
+    Proton1 = kTRUE;
+    Proton2 = kFALSE;
+  }
+
+  // Drop out on ANY other condition (for now)
+  else
+  {
+  continue;
+  }
 
   if ( MCData == kTRUE)
   {
@@ -110,7 +129,6 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     ReconstructVectors();
     GV1Rec_3 = GV1Rec.Vect();
     GV2Rec_3 = GV2Rec.Vect();
-    ReconstructDetElements();
     mm1 = GV1Rec.M(); // Calculate missing mass of each particle
     mm2 = GV2Rec.M();
     mm1Diff = abs(Mn-mm1); // Look at difference of missing mass from neutron mass
@@ -121,9 +139,21 @@ void	PNeutPol_Polarimeter::ProcessEvent()
 
     // Cut on MM before looking at regions, require BOTH of the MM values to look good
     if ( ((mm1 < 850 || mm1 > 1050) == kTRUE) || ((mm2 < 850 || mm2 > 1050) == kTRUE) ) continue; // If both bad continue
-    ParticleSelection(); // Normal particle selection, looks at MM difference and regions particles are in
 
-    if( Zp > 60 || Zp < -60) continue; // Cut if proton vertex not where we expect it to be
+    if (Proton1 == kTRUE)
+    {
+        PNProp(1);
+        PNVect(1);
+    }
+
+    if (Proton2 == kTRUE)
+    {
+        PNProp(2);
+        PNVect(2);
+    }
+
+    // Remove WC cut for now
+    //if( Zp > 60 || Zp < -60) continue; // Cut if proton vertex not where we expect it to be
     if(Cut_proton -> IsInside(En, dEn) == kTRUE) nBanana = kTRUE; // Set flag to true or false depending upon location of neutron
     if(Cut_proton -> IsInside(En, dEn) == kFALSE) nBanana = kFALSE; // Is it in or out of proton banana?
 
@@ -267,18 +297,6 @@ Int_t PNeutPol_Polarimeter::DetHits()
     return PIDHits1, PIDHits2, MWPCHits1, MWPCHits2;
 }
 
-Int_t PNeutPol_Polarimeter::DetectorElements()
-{
-
-    PIDEle1 = GetTracks()->GetCentralVeto(0);
-    PIDEle2 = GetTracks()->GetCentralVeto(1);
-    PIDElePhi1 = PIDElementsFromPhi(Phi1);
-    PIDElePhi2 = PIDElementsFromPhi(Phi2);
-
-    return PIDEle1, PIDEle2, PIDElePhi1, PIDElePhi2;
-
-}
-
 TLorentzVector PNeutPol_Polarimeter::ReconstructVectors()
 {
 
@@ -286,50 +304,6 @@ TLorentzVector PNeutPol_Polarimeter::ReconstructVectors()
     GV2Rec = (Gamma + Deut) - GV1;
 
     return GV1Rec, GV2Rec;
-
-}
-
-Int_t PNeutPol_Polarimeter::ReconstructDetElements()
-{
-
-    Phi1Rec = (GV1Rec.Phi()) * TMath::RadToDeg();
-    Phi2Rec = (GV2Rec.Phi()) * TMath::RadToDeg();
-    PIDEleRec1 = PIDElementsFromPhi(Phi1Rec);
-    PIDEleRec2 = PIDElementsFromPhi(Phi2Rec);
-
-    return PIDEleRec1, PIDEleRec2;
-
-}
-
-Double_t PNeutPol_Polarimeter::PIDElementsFromPhi(Double_t PhiVal)
-{
-
-    if (PhiVal < 180 && PhiVal > 165 ) PIDElement = 0;
-    if ( PhiVal < 165 && PhiVal > 150 ) PIDElement = 1;
-    if ( PhiVal < 150 && PhiVal > 135 ) PIDElement = 2;
-    if ( PhiVal < 135 && PhiVal > 120 ) PIDElement = 3;
-    if ( PhiVal < 120 && PhiVal > 105 ) PIDElement = 4;
-    if ( PhiVal < 105 && PhiVal > 90 ) PIDElement = 5;
-    if ( PhiVal < 90 && PhiVal > 75 ) PIDElement = 6;
-    if ( PhiVal < 75 && PhiVal > 60 ) PIDElement = 7;
-    if ( PhiVal < 60 && PhiVal > 45 )  PIDElement = 8;
-    if ( PhiVal < 45 && PhiVal > 30 ) PIDElement = 9;
-    if ( PhiVal < 30 && PhiVal > 15 ) PIDElement = 10;
-    if ( PhiVal < 15 && PhiVal > 0 ) PIDElement = 11;
-    if ( PhiVal < 0 && PhiVal > -15 ) PIDElement = 12;
-    if ( PhiVal < -15 && PhiVal > -30 ) PIDElement = 13;
-    if ( PhiVal < -30 && PhiVal > -45 ) PIDElement = 14;
-    if ( PhiVal < -45 && PhiVal > -60 ) PIDElement = 15;
-    if ( PhiVal < -60 && PhiVal > -75 ) PIDElement = 16;
-    if ( PhiVal < -75 && PhiVal > -90 ) PIDElement = 17;
-    if ( PhiVal < -90 && PhiVal > -105 ) PIDElement = 18;
-    if ( PhiVal < -105 && PhiVal > -120 ) PIDElement = 19;
-    if ( PhiVal < -120 && PhiVal > -135 ) PIDElement = 20;
-    if ( PhiVal < -135 && PhiVal > -150 ) PIDElement = 21;
-    if ( PhiVal < -150 && PhiVal > -165 ) PIDElement = 22;
-    if ( PhiVal < -165 && PhiVal > -180 ) PIDElement = 23;
-
-    return PIDElement;
 
 }
 
@@ -363,58 +337,6 @@ TLorentzVector PNeutPol_Polarimeter::MCTrueVectors()
 
 }
 
-void PNeutPol_Polarimeter::ParticleSelection(){
-
-    if (Cut_proton -> IsInside(E1, dE1) == kTRUE && Cut_proton -> IsInside(E2, dE2) == kTRUE) {
-
-        if (mm1Diff < mm2Diff) { //If mm1 closer to nucleon than mm2, particle 2 is the "Good event" i.e. the initial proton
-
-            PNProp(2); //These functions are given the particle number of the proton (2 here)
-            PNVect(2); // They return the vectors and properties of the neutron and proton from this
-
-        }
-
-        if (mm1Diff > mm2Diff) { // If mm2 closer to nucleon than mm1, particle 1 is the "Good event"
-
-            PNProp(1);
-            PNVect(1);
-
-        }
-    }
-
-    // Now do loops which check if only one of the protons is inside the proton banana
-
-    else if (Cut_proton -> IsInside(E1, dE1) == kTRUE && Cut_proton -> IsInside(E2, dE2) == kFALSE) {
-
-        // The 'Good' proton is the one in the banana, in this case particle 1
-        PNProp(1);
-        PNVect(1);
-
-    }
-
-    else if (Cut_proton -> IsInside(E2, dE2) == kTRUE && Cut_proton -> IsInside(E1, dE1) == kFALSE) {
-
-        PNProp(2);
-        PNVect(2);
-
-    }
-
-}
-
-void PNeutPol_Polarimeter::AlternativeParticleSelection()
-{
-
-    if (((((mm1 > 850) ==kTRUE) && ((mm1 < 1050) == kTRUE)) && ((mm2 < 850 || mm2 > 1050) == kTRUE) )){
-    PNProp(2); // Here mm1 is good and mm2 is bad, therefore particle 2 is taken to be the proton
-    }
-
-    if (((((mm2 > 850) ==kTRUE) && ((mm2 < 1050) == kTRUE)) && ((mm1 < 850 || mm1 > 1050) == kTRUE) )){
-    PNProp(1); // Here mm2 is good and mm1 is bad, therefore particle 1 is taken to be the proton
-    }
-
-
-}
-
 Double_t PNeutPol_Polarimeter::PNProp(Int_t ProtonParticleNumber) // Define properties of proton and neutron from particles that correspond to each
 {
   if(ProtonParticleNumber == 1)
@@ -428,8 +350,6 @@ Double_t PNeutPol_Polarimeter::PNProp(Int_t ProtonParticleNumber) // Define prop
       En = E2;
       dEp = dE1;
       dEn = dE2;
-      Proton1 = kTRUE;
-      Proton2 = kFALSE;
     }
 
   if(ProtonParticleNumber == 2)
@@ -443,8 +363,6 @@ Double_t PNeutPol_Polarimeter::PNProp(Int_t ProtonParticleNumber) // Define prop
       En = E1;
       dEp = dE2;
       dEn = dE1;
-      Proton1 = kFALSE;
-      Proton2 = kTRUE;
 
     }
 

@@ -32,17 +32,6 @@ private:
   Int_t PIDHits2;
   Int_t MWPCHits1;
   Int_t MWPCHits2;
-  Int_t PIDEle1;
-  Int_t PIDEle2;
-  double_t PIDElePhi1;
-  double_t PIDElePhi2;
-  double_t PIDEleRec1;
-  double_t PIDEleRec2;
-  double_t PIDElement;
-  double_t PIDDiffMeas1;
-  double_t PIDDiffMeas2;
-  double_t PIDDiffRecMeas1;
-  double_t PIDDiffRecMeas2;
 
   double_t Time;
   double_t TaggerTime;
@@ -273,17 +262,12 @@ public:
     virtual Bool_t  Init();
     TCutG* OpenCutFile(Char_t* filename, Char_t* cutname);
     void MCHists();
-    void ParticleSelection();
-    void AlternativeParticleSelection();
     Bool_t MCDataCheck();
     Int_t GetEvent();
     TLorentzVector InitialVect();
     Double_t InitialProp();
     Int_t DetHits();
-    Int_t DetectorElements();
     TLorentzVector ReconstructVectors();
-    Int_t ReconstructDetElements();
-    Double_t PIDElementsFromPhi(Double_t PhiVal);
     Int_t MCTrueID();
     TLorentzVector MCTrueVectors();
     Double_t MCSmearing();
