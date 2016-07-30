@@ -109,6 +109,8 @@ void	PNeutPol_Polarimeter::ProcessEvent()
 
   for (Int_t j = 0; j < GetTagger()->GetNTagged(); j++){
 
+    cout << PIDHits1 << "   " << MWPCHits1 << "   " << PIDHits2 << "    " << MWPCHits2 << endl;
+
     // Time = ( GetTagger()->GetTaggedTime(j) - GetTracks()->GetTime(i) ); // maybe move this to AFTER the cuts once the Eg-EpSum loop has been checked?
     TaggerTime = GetTagger()->GetTaggedTime(j); // Get tagged time for event
     EGamma = (GetTagger()->GetTaggedEnergy(j)); // Get Photon energy for event
@@ -202,7 +204,6 @@ void	PNeutPol_Polarimeter::ProcessEvent()
         MCThetan_En_True -> Fill(MCTheta2True, MCE2True, TaggerTime);
     }
 
-    cout << PIDHits1 << "   " << MWPCHits1 << "   " << PIDHits2 << "    " << MWPCHits2 << endl;
     FillHists(); // Fill histograms with data generated
 
     //}
