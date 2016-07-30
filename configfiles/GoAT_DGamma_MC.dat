@@ -6,7 +6,7 @@
 # General Setup
 #-----------------------------------------------------------------------
 
-Period-Macro:	100000
+Period-Macro:	1000
 
 CheckCBStability: 1 
 
@@ -47,7 +47,6 @@ Sort-NParticles: 	2-          2+       0-
 
 #				Type 	Number	Theta-min 	Theta-max
 Sort-Particle:	protons	1+ 		0			180
-Sort-Particle:  charged  2=		0			180
 
 # Note: (I'll put this here while we don't have a manual)
 # the charged and neutral particle cuts are additional 

@@ -297,7 +297,6 @@ Int_t PNeutPol_Polarimeter::DetectorCheck()
 {
     Detectors1 = GetTracks()->GetDetectors(0); //Gets number for detectors that registered hits
     Detectors2 = GetTracks()->GetDetectors(1); // 7 = NaI + PID + MWPC, 5 = NaI + MWPC
-    cout << Detectors1 << "    " << Detectors2 << endl;
     return Detectors1, Detectors2;
 }
 
