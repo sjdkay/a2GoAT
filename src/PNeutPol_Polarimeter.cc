@@ -72,7 +72,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
   GV1_3 = GV1.Vect();
   GV2_3 = GV2.Vect();
   InitialProp(); // Function gets initial properties (energy, vertex e.t.c.) of identified tracks
-  DetHits(); // Function gets MWPC and PID hits for each track
+  DetectorCheck(); // Function checks detector numbers for each track
 
   // If track 1 only gives signals in MWPC it is the neutron
   if((Detectors1 == 7) && (Detectors2 == 5))
