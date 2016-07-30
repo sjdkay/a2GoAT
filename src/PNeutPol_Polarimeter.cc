@@ -146,10 +146,15 @@ void	PNeutPol_Polarimeter::ProcessEvent()
         PNVect(1);
     }
 
-    if (Proton2 == kTRUE)
+    else if (Proton2 == kTRUE)
     {
         PNProp(2);
         PNVect(2);
+    }
+
+    else
+    {
+        continue;
     }
 
     // Remove WC cut for now
@@ -197,6 +202,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
         MCThetan_En_True -> Fill(MCTheta2True, MCE2True, TaggerTime);
     }
 
+    cout << PIDHits1 << "   " << MWPCHits1 << "   " << PIDHits2 << "    " << MWPCHits2 << endl;
     FillHists(); // Fill histograms with data generated
 
     //}
