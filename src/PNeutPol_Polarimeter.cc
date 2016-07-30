@@ -79,6 +79,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
   {
     Proton1 = kTRUE;
     Proton2 = kFALSE;
+    cout << Detectors1 << "   " << Detectors2 << endl;
   }
 
   // If track 2 only gives signals in MWPC it is the neutron
@@ -86,6 +87,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
   {
     Proton1 = kFALSE;
     Proton2 = kTRUE;
+    cout << Detectors1 << "   " << Detectors2 << endl;
   }
 
   // Drop out on ANY other condition (for now)
@@ -113,7 +115,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     TaggerTime = GetTagger()->GetTaggedTime(j); // Get tagged time for event
     EGamma = (GetTagger()->GetTaggedEnergy(j)); // Get Photon energy for event
 
-    if (dE1 < 0.5 || dE2 < 0.5) continue; // Cut out low PID energy events
+    //if (dE1 < 0.5 || dE2 < 0.5) continue; // Cut out low PID energy events // This won't work if PID has no hits as we desire!
 
     // If neither particle is in the proton banana region continue
     if (Cut_proton -> IsInside(E1, dE1) == kFALSE && Cut_proton -> IsInside(E2, dE2) == kFALSE) continue; // if neither particle is in proton region drop out
