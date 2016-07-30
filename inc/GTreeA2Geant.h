@@ -122,7 +122,6 @@ public:
     virtual Float_t                 GetTAPSVetoHitEnergy(const UInt_t n) const throw (std::out_of_range);
     virtual const Float_t * const   GetTAPSVetoHitEnergies() const;
 
-
     virtual Int_t                   GetNMWPCHits() const;
     virtual Int_t                   GetMWPCIndex( const UInt_t n )  const throw (std::out_of_range);
     virtual const Int_t * const     GetMWPCHitIndices() const;

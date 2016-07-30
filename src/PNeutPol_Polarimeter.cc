@@ -75,17 +75,17 @@ void	PNeutPol_Polarimeter::ProcessEvent()
   DetHits(); // Function gets MWPC and PID hits for each track
 
   // If track 1 only gives signals in MWPC it is the neutron
-  if(((PIDHits1 == 0) && (MWPCHits1 != 0)) && ((PIDHits2 != 0) && (MWPCHits2 != 0)))
-  {
-    Proton1 = kFALSE;
-    Proton2 = kTRUE;
-  }
-
-  // If track 2 only gives signals in MWPC it is the neutron
-  else if(((PIDHits1 != 0) && (MWPCHits1 != 0)) && ((PIDHits2 == 0) && (MWPCHits2 != 0)))
+  if((Detectors1 == 7) && (Detectors2 == 5))
   {
     Proton1 = kTRUE;
     Proton2 = kFALSE;
+  }
+
+  // If track 2 only gives signals in MWPC it is the neutron
+  else if((Detectors1 == 5) && (Detectors2 == 7))
+  {
+    Proton1 = kFALSE;
+    Proton2 = kTRUE;
   }
 
   // Drop out on ANY other condition (for now)
@@ -293,13 +293,12 @@ Double_t PNeutPol_Polarimeter::InitialProp() // Defines initial particle propert
   return Theta1, Theta2, Phi1, Phi2, z1, z2, E1, E2, dE1, dE2; // Returns various quantities used in later functions
 }
 
-Int_t PNeutPol_Polarimeter::DetHits()
+Int_t PNeutPol_Polarimeter::DetectorCheck()
 {
-    PIDHits1 = GetDetectorHits()->GetPIDHits(0);
-    PIDHits2 = GetDetectorHits()->GetPIDHits(1);
-    MWPCHits1 = GetDetectorHits()->GetMWPCHits(0);
-    MWPCHits2 = GetDetectorHits()->GetMWPCHits(1);
-    return PIDHits1, PIDHits2, MWPCHits1, MWPCHits2;
+    Detectors1 = GetTracks()->GetDetectors(0); //Gets number for detectors that registered hits
+    Detectors2 = GetTracks()->GetDetectors(1); // 7 = NaI + PID + MWPC, 5 = NaI + MWPC
+    cout << Detectors1 << "    " << Detectors2 << endl;
+    return Detectors1, Detectors2;
 }
 
 TLorentzVector PNeutPol_Polarimeter::ReconstructVectors()
