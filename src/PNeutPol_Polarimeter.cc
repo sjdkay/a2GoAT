@@ -32,7 +32,7 @@ Bool_t	PNeutPol_Polarimeter::Start()
   SetAsPhysicsFile();
 
   i = 0; // Integer counter
- // k = 0;
+  k = 0;
   d = 54.2; // Distance from centre of target to centre of PID
   NP = 0; // Set number of Protons to 0 before checking
   NPi = 0; // Set number of pions to 0 before checking
@@ -57,7 +57,7 @@ Bool_t	PNeutPol_Polarimeter::Start()
 
   TraverseValidEvents(); // This loops over each event as in old file and calls ProcessEvent() each loop
 
-  //cout << k << endl;
+  cout << k << endl;
 
   return kTRUE;
 }
@@ -75,7 +75,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
   DetectorCheck(); // Function checks detector numbers for each track
 
   // If track 1 only gives signals in MWPC it is the neutron
-  if((Detectors1 == 7) && (Detectors2 == 5))
+  if((Detectors1 == 7) && (Detectors2 == 1))
   {
     Proton1 = kTRUE;
     Proton2 = kFALSE;
@@ -83,7 +83,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
   }
 
   // If track 2 only gives signals in MWPC it is the neutron
-  else if((Detectors1 == 5) && (Detectors2 == 7))
+  else if((Detectors1 == 1) && (Detectors2 == 7))
   {
     Proton1 = kFALSE;
     Proton2 = kTRUE;
@@ -204,6 +204,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
         MCThetan_En_True -> Fill(MCTheta2True, MCE2True, TaggerTime);
     }
 
+    k++;
     FillHists(); // Fill histograms with data generated
 
     //}
