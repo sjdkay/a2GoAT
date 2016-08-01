@@ -96,7 +96,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
   return;
   }
 
-  cout << dE1 << "   " << dE2 << "   " << GV2 (0) << "   " << GV2 (1) << "   " << GV2 (2) << "   " << GV2 (3) << endl;
+  cout << z1 << "   " << z2 << "   " << GV1 (0) << "   " << GV1 (1) << "   " << GV1 (2) << "   " << GV1 (3) << endl;
 
   if ( MCData == kTRUE)
   {
