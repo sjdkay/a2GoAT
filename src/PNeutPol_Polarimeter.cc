@@ -96,8 +96,6 @@ void	PNeutPol_Polarimeter::ProcessEvent()
   return;
   }
 
-  cout << z1 << "   " << z2 << "   " << GV1 (0) << "   " << GV1 (1) << "   " << GV1 (2) << "   " << GV1 (3) << endl;
-
   if ( MCData == kTRUE)
   {
       MCSmearing(); // Smear dE values for MC data
@@ -120,9 +118,9 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     //if (dE1 < 0.5 || dE2 < 0.5) continue; // Cut out low PID energy events // This won't work if PID has no hits as we desire!
 
     // If neither particle is in the proton banana region continue
-    if (Cut_proton -> IsInside(E1, dE1) == kFALSE && Cut_proton -> IsInside(E2, dE2) == kFALSE) continue; // if neither particle is in proton region drop out
-    if (Cut_proton -> IsInside(E1, dE1) == kFALSE && Cut_pion -> IsInside(E1, dE1) == kFALSE) continue; // If not in proton or pion region drop out
-    if (Cut_proton -> IsInside(E2, dE2) == kFALSE && Cut_pion -> IsInside(E2, dE2) == kFALSE) continue;
+    //if (Cut_proton -> IsInside(E1, dE1) == kFALSE && Cut_proton -> IsInside(E2, dE2) == kFALSE) continue; // if neither particle is in proton region drop out
+    //if (Cut_proton -> IsInside(E1, dE1) == kFALSE && Cut_pion -> IsInside(E1, dE1) == kFALSE) continue; // If not in proton or pion region drop out
+    //if (Cut_proton -> IsInside(E2, dE2) == kFALSE && Cut_pion -> IsInside(E2, dE2) == kFALSE) continue;
 
     //if (i == 0) { // These properties get defined for each photon
 
