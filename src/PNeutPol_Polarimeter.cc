@@ -126,6 +126,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
 
   for (Int_t j = 0; j < GetTagger()->GetNTagged(); j++){
 
+    cout << DetectorsSum << endl;
     // Time = ( GetTagger()->GetTaggedTime(j) - GetTracks()->GetTime(i) ); // maybe move this to AFTER the cuts once the Eg-EpSum loop has been checked?
     TaggerTime = GetTagger()->GetTaggedTime(j); // Get tagged time for event
     EGamma = (GetTagger()->GetTaggedEnergy(j)); // Get Photon energy for event
@@ -177,8 +178,9 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     GVnCalc3 = GVnCalc.Vect();
 
     if ((mmn < 850) || (mmn > 1050)) continue; //If missing mass for particle that we think is the neutron is not correct, continue
+    cout << "Survived MM cut!" << endl;
     if (Cut_proton -> IsInside(Ep, dEp) == kFALSE) continue; // If proton not in banana drop out
-
+    cout << "Survived Proton banana cut!" << endl;
 
     LabBoost(); // Boost particles in lab frame and return results
     LabScatter(); // Work out scattering angle in lab frame and return results
