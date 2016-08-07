@@ -73,6 +73,9 @@ void	PNeutPol_Polarimeter::ProcessEvent()
   GV2_3 = GV2.Vect();
   InitialProp(); // Function gets initial properties (energy, vertex e.t.c.) of identified tracks
   DetectorCheck(); // Function checks detector numbers for each track
+  DetectorsSum = Detectors1 + Detectors2; // To make splitting into separate histograms less of a pain in the arse
+
+  cout << DetectorsSum << endl;
 
   // Currently try to accept only MWPC+PID+NaI and NaI + MWPC OR Only NaI events
   // If track 1 only gives signals in MWPC it is the neutron
@@ -108,8 +111,6 @@ void	PNeutPol_Polarimeter::ProcessEvent()
   {
   return;
   }
-
-  DetectorsSum = Detectors1 + Detectors2; // To make splitting into separate histograms less of a pain in the arse
 
   if ( MCData == kTRUE)
   {
