@@ -503,12 +503,12 @@ void PNeutPol_Polarimeter::FillHists()
   MM_Proton->Fill(mmp, TaggerTime);
   E_dE->Fill(Ep, dEp, TaggerTime);
   E_dE->Fill(En, dEn, TaggerTime);
-  E_dE_p->Fill(Ep,dEp, TaggerTime);
+  E_dE_p->Fill(Ep, dEp, TaggerTime);
   E_dE_n->Fill(En, dEn, TaggerTime);
-  EkEg->Fill(Ep, Eg, TaggerTime);
-  EkEg->Fill(En, Eg, TaggerTime);
-  EkEg_p->Fill(Ep,Eg, TaggerTime);
-  EkEg_n->Fill(En, Eg, TaggerTime);
+  EkEg->Fill(Ep, EGamma, TaggerTime);
+  EkEg->Fill(En, EGamma, TaggerTime);
+  EkEg_p->Fill(Ep, EGamma, TaggerTime);
+  EkEg_n->Fill(En, EGamma, TaggerTime);
 
   if (DetectorsSum == 8) {
 
@@ -525,12 +525,12 @@ void PNeutPol_Polarimeter::FillHists()
     MM_Proton_DetSum8->Fill(mmp, TaggerTime);
     E_dE_DetSum8->Fill(Ep, dEp, TaggerTime);
     E_dE_DetSum8->Fill(En, dEn, TaggerTime);
-    E_dE_p_DetSum8->Fill(Ep,dEp, TaggerTime);
+    E_dE_p_DetSum8->Fill(Ep, dEp, TaggerTime);
     E_dE_n_DetSum8->Fill(En, dEn, TaggerTime);
-    EkEg_DetSum8->Fill(Ep, Eg, TaggerTime);
-    EkEg_DetSum8->Fill(En, Eg, TaggerTime);
-    EkEg_p_DetSum8->Fill(Ep,Eg, TaggerTime);
-    EkEg_n_DetSum8->Fill(En, Eg, TaggerTime);
+    EkEg_DetSum8->Fill(Ep, EGamma, TaggerTime);
+    EkEg_DetSum8->Fill(En, EGamma, TaggerTime);
+    EkEg_p_DetSum8->Fill(Ep, EGamma, TaggerTime);
+    EkEg_n_DetSum8->Fill(En, EGamma, TaggerTime);
 
   }
 
@@ -549,12 +549,12 @@ void PNeutPol_Polarimeter::FillHists()
     MM_Proton_DetSum12->Fill(mmp, TaggerTime);
     E_dE_DetSum12->Fill(Ep, dEp, TaggerTime);
     E_dE_DetSum12->Fill(En, dEn, TaggerTime);
-    E_dE_p_DetSum12->Fill(Ep,dEp, TaggerTime);
+    E_dE_p_DetSum12->Fill(Ep, dEp, TaggerTime);
     E_dE_n_DetSum12->Fill(En, dEn, TaggerTime);
-    EkEg_DetSum12->Fill(Ep, Eg, TaggerTime);
-    EkEg_DetSum12->Fill(En, Eg, TaggerTime);
-    EkEg_p_DetSum12->Fill(Ep,Eg, TaggerTime);
-    EkEg_n_DetSum12->Fill(En, Eg, TaggerTime);
+    EkEg_DetSum12->Fill(Ep, EGamma, TaggerTime);
+    EkEg_DetSum12->Fill(En, EGamma, TaggerTime);
+    EkEg_p_DetSum12->Fill(Ep, EGamma, TaggerTime);
+    EkEg_n_DetSum12->Fill(En, EGamma, TaggerTime);
 
   }
 
