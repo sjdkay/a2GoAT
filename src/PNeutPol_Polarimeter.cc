@@ -475,15 +475,15 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   E_dE_p_DetSum12 = new GH2("E_dE_p_DetSum12", "EdE Plot for Protons DetSum12", 150, 0, 500, 150, 0, 7);
   E_dE_n_DetSum12 = new GH2("E_dE_n_DetSum12", "EdE Plot for Neutrons DetSum12", 150, 0, 500, 150, 0, 7);
 
-  EkEg = new GH2("EkEg", "Ek vs Eg for all Particles", 100, 0, 500, 200, 100, 1600);
-  EkEg_p = new GH2("EkEg_p", "Ek vs Eg for all Protons", 100, 0, 500, 200, 100, 1600);
-  EkEg_n = new GH2("EkEg_n", "Ek vs Eg for all Neutrons", 100, 0, 500, 200, 100, 1600);
-  EkEg_DetSum8 = new GH2("EkEg_DetSum8", "Ek vs Eg for all Particles DetSum8", 100, 0, 500, 200, 100, 1600);
-  EkEg_p_DetSum8 = new GH2("EkEg_p_DetSum8", "Ek vs Eg for all Protons DetSum8", 100, 0, 500, 200, 100, 1600);
-  EkEg_n_DetSum8 = new GH2("EkEg_n_DetSum8", "Ek vs Eg for all Neutrons DetSum8", 100, 0, 500, 200, 100, 1600);
-  EkEg_DetSum12 = new GH2("EkEg_DetSum12", "Ek vs Eg for all Particles DetSum12", 100, 0, 500, 200, 100, 1600);
-  EkEg_p_DetSum12 = new GH2("EkEg_p_DetSum12", "Ek vs Eg for all Protons DetSum12", 100, 0, 500, 200, 100, 1600);
-  EkEg_n_DetSum12 = new GH2("EkEg_n_DetSum12", "Ek vs Eg for all Neutrons DetSum12", 100, 0, 500, 200, 100, 1600);
+  EkEg = new GH2("EkEg", "Ek vs Eg for all Particles", 150, 0, 500, 150, 100, 1600);
+  EkEg_p = new GH2("EkEg_p", "Ek vs Eg for all Protons", 150, 0, 500, 150, 100, 1600);
+  EkEg_n = new GH2("EkEg_n", "Ek vs Eg for all Neutrons", 150, 0, 500, 150, 100, 1600);
+  EkEg_DetSum8 = new GH2("EkEg_DetSum8", "Ek vs Eg for all Particles DetSum8", 150, 0, 500, 150, 100, 1600);
+  EkEg_p_DetSum8 = new GH2("EkEg_p_DetSum8", "Ek vs Eg for all Protons DetSum8", 150, 0, 500, 150, 100, 1600);
+  EkEg_n_DetSum8 = new GH2("EkEg_n_DetSum8", "Ek vs Eg for all Neutrons DetSum8", 150, 0, 500, 150, 100, 1600);
+  EkEg_DetSum12 = new GH2("EkEg_DetSum12", "Ek vs Eg for all Particles DetSum12", 150, 0, 500, 150, 100, 1600);
+  EkEg_p_DetSum12 = new GH2("EkEg_p_DetSum12", "Ek vs Eg for all Protons DetSum12", 150, 0, 500, 150, 100, 1600);
+  EkEg_n_DetSum12 = new GH2("EkEg_n_DetSum12", "Ek vs Eg for all Neutrons DetSum12", 150, 0, 500, 150, 100, 1600);
 
 }
 
