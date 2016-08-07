@@ -556,6 +556,8 @@ void PNeutPol_Polarimeter::FillHists()
     EkEg_p_DetSum12->Fill(Ep,Eg, TaggerTime);
     EkEg_n_DetSum12->Fill(En, Eg, TaggerTime);
 
+  }
+
 }
 
 void PNeutPol_Polarimeter::MCHists()
