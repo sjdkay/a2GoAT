@@ -97,6 +97,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
   {
     Proton1 = kTRUE;
     Proton2 = kFALSE;
+    cout << Detectors1 << "   " << Detectors2 << endl;
   }
 
   // If track 2 only gives signals in MWPC it is the neutron
@@ -104,6 +105,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
   {
     Proton1 = kFALSE;
     Proton2 = kTRUE;
+    cout << Detectors1 << "   " << Detectors2 << endl;
   }
 
   // Drop out on ANY other condition (for now)
