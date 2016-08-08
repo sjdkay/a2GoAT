@@ -179,7 +179,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     GVnCalc3 = GVnCalc.Vect();
 
     if ((mmn < 850) || (mmn > 1050)) continue; //If missing mass for particle that we think is the neutron is not correct, continue
-    //if (Cut_proton -> IsInside(Ep, dEp) == kFALSE) continue; // If proton not in banana drop out
+    if (Cut_proton -> IsInside(Ep, dEp) == kFALSE) continue; // If proton not in banana drop out
 
     LabBoost(); // Boost particles in lab frame and return results
     LabScatter(); // Work out scattering angle in lab frame and return results
