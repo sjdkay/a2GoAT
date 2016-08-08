@@ -97,7 +97,6 @@ void	PNeutPol_Polarimeter::ProcessEvent()
   {
     Proton1 = kTRUE;
     Proton2 = kFALSE;
-    cout << Detectors1 << "   " << Detectors2 << endl;
   }
 
   // If track 2 only gives signals in MWPC it is the neutron
@@ -105,13 +104,12 @@ void	PNeutPol_Polarimeter::ProcessEvent()
   {
     Proton1 = kFALSE;
     Proton2 = kTRUE;
-    cout << Detectors1 << "   " << Detectors2 << endl;
   }
 
   // Drop out on ANY other condition (for now)
   else
   {
-  return;
+    return;
   }
 
   if ( MCData == kTRUE)
@@ -179,9 +177,9 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     GVn3 = GVn.Vect();
     GVpCalc3 = GVpCalc.Vect();
     GVnCalc3 = GVnCalc.Vect();
-
+    if (DetectorsSum == 12) cout << "MMCut next" << endl;
     if ((mmn < 850) || (mmn > 1050)) continue; //If missing mass for particle that we think is the neutron is not correct, continue
-    //cout << "Survived MM cut!" << endl;
+    if(DetectorsSum == 12) cout << "Survived MM cut!" << endl;
     if (Cut_proton -> IsInside(Ep, dEp) == kFALSE) continue; // If proton not in banana drop out
     //cout << "Survived Proton banana cut!" << endl;
 
