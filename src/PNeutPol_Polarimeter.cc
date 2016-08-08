@@ -177,10 +177,11 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     GVn3 = GVn.Vect();
     GVpCalc3 = GVpCalc.Vect();
     GVnCalc3 = GVnCalc.Vect();
-    if (DetectorsSum == 12) cout << "MMCut next" << endl;
+
     if ((mmn < 850) || (mmn > 1050)) continue; //If missing mass for particle that we think is the neutron is not correct, continue
-    if(DetectorsSum == 12) cout << "Survived MM cut!" << endl;
+    if(DetectorsSum == 12) cout << "P Banana cut next!" << endl;
     if (Cut_proton -> IsInside(Ep, dEp) == kFALSE) continue; // If proton not in banana drop out
+    if (DetectorsSum == 12) cout << "Survived P Banana cut" << endl;
     //cout << "Survived Proton banana cut!" << endl;
 
     LabBoost(); // Boost particles in lab frame and return results
