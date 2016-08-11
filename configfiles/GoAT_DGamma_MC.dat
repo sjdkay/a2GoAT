@@ -6,7 +6,7 @@
 # General Setup
 #-----------------------------------------------------------------------
 
-Period-Macro:	1000
+Period-Macro:	100000
 
 CheckCBStability: 1 
 
