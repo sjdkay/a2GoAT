@@ -73,27 +73,12 @@ void	PNeutPol_Polarimeter::ProcessEvent()
   GV2_3 = GV2.Vect();
   InitialProp(); // Function gets initial properties (energy, vertex e.t.c.) of identified tracks
   DetectorCheck(); // Function checks detector numbers for each track
-  DetectorsSum = Detectors1 + Detectors2; // To make splitting into separate histograms less of a pain in the arse
 
   //cout << DetectorsSum << endl;
 
   // Currently try to accept only MWPC+PID+NaI and NaI + MWPC OR Only NaI events
   // If track 1 only gives signals in MWPC it is the neutron
-  if((Detectors1 == 7) && (Detectors2 == 1))
-  {
-    Proton1 = kTRUE;
-    Proton2 = kFALSE;
-    //cout << Detectors1 << "   " << Detectors2 << endl;
-  }
-
-  // If track 2 only gives signals in MWPC it is the neutron
-  else if((Detectors1 == 1) && (Detectors2 == 7))
-  {
-    Proton1 = kFALSE;
-    Proton2 = kTRUE;
-  }
-
-  else if((Detectors1 == 7) && (Detectors2 == 5))
+  if((Detectors1 == 7) && (Detectors2 == 5))
   {
     Proton1 = kTRUE;
     Proton2 = kFALSE;
@@ -435,58 +420,23 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
 
   Zp_Vert = new GH1("Zp_Vertex", "Proton Z Vertex Distribution", 300, -150, 150 );
   Zn_Vert = new GH1("Zn_Vertex", "Neutron Z Vertex Distribution", 300, -150, 150 );
-  Zp_Vert_DetSum8 = new GH1("Zp_Vertex_DetSum8", "Proton Z Vertex Distribution DetSum8", 300, -150, 150 );
-  Zn_Vert_DetSum8 = new GH1("Zn_Vertex_DetSum8", "Neutron Z Vertex Distribution DetSum8", 300, -150, 150 );
-  Zp_Vert_DetSum12 = new GH1("Zp_Vertex_DetSum12", "Proton Z Vertex Distribution DetSum12", 300, -150, 150 );
-  Zn_Vert_DetSum12 = new GH1("Zn_Vertex_DetSum12", "Neutron Z Vertex Distribution DetSum12", 300, -150, 150 );
   Ekp = new GH1( "Ekp", "Proton Energy Distribution", 100, 0, 500 );
   Ekn = new GH1( "Ekn", "Neutron Energy Distribution", 100, 0, 500 );
-  Ekp_DetSum8 = new GH1( "Ekp_DetSum8", "Proton Energy Distribution DetSum8", 100, 0, 500 );
-  Ekn_DetSum8 = new GH1( "Ekn_DetSum8", "Neutron Energy Distribution DetSum8", 100, 0, 500 );
-  Ekp_DetSum12 = new GH1( "Ekp_DetSum12", "Proton Energy Distribution DetSum12", 100, 0, 500 );
-  Ekn_DetSum12 = new GH1( "Ekn_DetSum12", "Neutron Energy Distribution DetSum12", 100, 0, 500 );
   EkSum = new GH1( "Ek Sum", "Particle Energy Sum Distribution", 300, 0, 900 );
-  EkSum_DetSum8 = new GH1( "Ek Sum DetSum8", "Particle Energy Sum Distribution DetSum8", 300, 0, 900 );
-  EkSum_DetSum12 = new GH1( "Ek Sum DetsSum13", "Particle Energy Sum Distribution DetSum12", 300, 0, 900 );
   Eg = new GH1( "Eg", "Photon Energy Distribution", 200, 100, 1600 );
-  Eg_DetSum8 = new GH1( "Eg_DetSum8", "Photon Energy Distribution DetSum8", 200, 100, 1600 );
-  Eg_DetSum12 = new GH1( "Eg_DetSum12", "Photon Energy Distribution DetSum 12", 200, 100, 1600 );
   ThetaProt = new GH1( "ThetaProt", " Proton Theta Distribution", 180, 0, 180 );
-  ThetaProt_DetSum8 = new GH1( "ThetaProt_DetSum8", " Proton Theta Distribution DetSum8", 180, 0, 180 );
-  ThetaProt_DetSum12 = new GH1( "ThetaProt_DetSum12", " Proton Theta Distribution DetSum12", 180, 0, 180 );
   ThetaNeut = new GH1( "ThetaNeut", " Neutron Theta Distribution", 180, 0, 180 );
-  ThetaNeut_DetSum8 = new GH1( "ThetaNeut_DetSum8", " Neutron Theta Distribution DetSum8", 180, 0, 180 );
-  ThetaNeut_DetSum12 = new GH1( "ThetaNeut_DetSum12", " Neutron Theta Distribution DetSum12", 180, 0, 180 );
   PhiProt = new GH1( "PhiProt", " Proton Phi Distribution", 180, -180, 180 );
-  PhiProt_DetSum8 = new GH1( "PhiProt_DetSum8", " Proton Phi Distribution DetSum8", 180, -180, 180 );
-  PhiProt_DetSum12 = new GH1( "PhiProt_DetSum12", " Proton Phi Distribution DetSum12", 180, -180, 180 );
   PhiNeut = new GH1( "PhiNeut", " Neutron Phi Distribution", 180, -180, 180 );
-  PhiNeut_DetSum8 = new GH1( "PhiNeut_DetSum8", " Neutron Phi Distribution DetSum8", 180, -180, 180 );
-  PhiNeut_DetSum12 = new GH1( "PhiNeut_DetSum12", " Neutron Phi Distribution DetSum12", 180, -180, 180 );
   MM_Proton = new GH1("MM_Proton", 	"MM_Proton", 	 	300,   800, 1100);
-  MM_Proton_DetSum8 = new GH1("MM_Proton_DetSum8", 	"MM_Proton DetSum8", 	 	300,   800, 1100);
-  MM_Proton_DetSum12 = new GH1("MM_Proton_DetSum12", 	"MM_Proton DetSum12", 	 	300,   800, 1100);
 
   E_dE = new GH2("E_dE", "EdE Plot", 125, 0, 500, 125, 0, 7);
   E_dE_p = new GH2("E_dE_p", "EdE Plot for Protons", 125, 0, 500, 125, 0, 7);
   E_dE_n = new GH2("E_dE_n", "EdE Plot for Neutrons", 125, 0, 500, 125, 0, 7);
-  E_dE_DetSum8 = new GH2("E_dE_DetSum8", "EdE Plot DetSum8", 125, 0, 500, 125, 0, 7);
-  E_dE_p_DetSum8 = new GH2("E_dE_p_DetSum8", "EdE Plot for Protons DetSum8", 125, 0, 500, 125, 0, 7);
-  E_dE_n_DetSum8 = new GH2("E_dE_n_DetSum8", "EdE Plot for Neutrons DetSum8", 125, 0, 500, 125, 0, 7);
-  E_dE_DetSum12 = new GH2("E_dE_DetSum12", "EdE Plot DetSum12", 125, 0, 500, 125, 0, 7);
-  E_dE_p_DetSum12 = new GH2("E_dE_p_DetSum12", "EdE Plot for Protons DetSum12", 125, 0, 500, 125, 0, 7);
-  E_dE_n_DetSum12 = new GH2("E_dE_n_DetSum12", "EdE Plot for Neutrons DetSum12", 125, 0, 500, 125, 0, 7);
 
   EkEg = new GH2("EkEg", "Ek vs Eg for all Particles", 100, 0, 500, 100, 100, 1600);
   EkEg_p = new GH2("EkEg_p", "Ek vs Eg for all Protons", 100, 0, 500, 100, 100, 1600);
   EkEg_n = new GH2("EkEg_n", "Ek vs Eg for all Neutrons", 100, 0, 500, 100, 100, 1600);
-  EkEg_DetSum8 = new GH2("EkEg_DetSum8", "Ek vs Eg for all Particles DetSum8", 100, 0, 500, 100, 100, 1600);
-  EkEg_p_DetSum8 = new GH2("EkEg_p_DetSum8", "Ek vs Eg for all Protons DetSum8", 100, 0, 500, 100, 100, 1600);
-  EkEg_n_DetSum8 = new GH2("EkEg_n_DetSum8", "Ek vs Eg for all Neutrons DetSum8", 100, 0, 500, 100, 100, 1600);
-  EkEg_DetSum12 = new GH2("EkEg_DetSum12", "Ek vs Eg for all Particles DetSum12", 100, 0, 500, 100, 100, 1600);
-  EkEg_p_DetSum12 = new GH2("EkEg_p_DetSum12", "Ek vs Eg for all Protons DetSum12", 100, 0, 500, 100, 100, 1600);
-  EkEg_n_DetSum12 = new GH2("EkEg_n_DetSum12", "Ek vs Eg for all Neutrons DetSum12", 100, 0, 500, 100, 100, 1600);
-
 }
 
 void PNeutPol_Polarimeter::FillHists()
@@ -511,54 +461,6 @@ void PNeutPol_Polarimeter::FillHists()
   EkEg->Fill(En, EGamma, TaggerTime);
   EkEg_p->Fill(Ep, EGamma, TaggerTime);
   EkEg_n->Fill(En, EGamma, TaggerTime);
-
-  if (DetectorsSum == 8) {
-
-    Zp_Vert_DetSum8->Fill(Zp, TaggerTime);
-    Zn_Vert_DetSum8->Fill(Zn, TaggerTime);
-    Ekp_DetSum8->Fill(Ep, TaggerTime);
-    Ekn_DetSum8->Fill(En, TaggerTime);
-    EkSum_DetSum8->Fill((Ep + En),TaggerTime);
-    Eg_DetSum8->Fill(EGamma, TaggerTime);
-    ThetaProt_DetSum8->Fill(Thetap, TaggerTime);
-    ThetaNeut_DetSum8->Fill(Thetan, TaggerTime);
-    PhiProt_DetSum8->Fill(Phip, TaggerTime);
-    PhiNeut_DetSum8->Fill(Phin, TaggerTime);
-    MM_Proton_DetSum8->Fill(mmp, TaggerTime);
-    E_dE_DetSum8->Fill(Ep, dEp, TaggerTime);
-    E_dE_DetSum8->Fill(En, dEn, TaggerTime);
-    E_dE_p_DetSum8->Fill(Ep, dEp, TaggerTime);
-    E_dE_n_DetSum8->Fill(En, dEn, TaggerTime);
-    EkEg_DetSum8->Fill(Ep, EGamma, TaggerTime);
-    EkEg_DetSum8->Fill(En, EGamma, TaggerTime);
-    EkEg_p_DetSum8->Fill(Ep, EGamma, TaggerTime);
-    EkEg_n_DetSum8->Fill(En, EGamma, TaggerTime);
-
-  }
-
-  else if (DetectorsSum == 12) {
-
-    Zp_Vert_DetSum12->Fill(Zp, TaggerTime);
-    Zn_Vert_DetSum12->Fill(Zn, TaggerTime);
-    Ekp_DetSum12->Fill(Ep, TaggerTime);
-    Ekn_DetSum12->Fill(En, TaggerTime);
-    EkSum_DetSum12->Fill((Ep + En),TaggerTime);
-    Eg_DetSum12->Fill(EGamma, TaggerTime);
-    ThetaProt_DetSum12->Fill(Thetap, TaggerTime);
-    ThetaNeut_DetSum12->Fill(Thetan, TaggerTime);
-    PhiProt_DetSum12->Fill(Phip, TaggerTime);
-    PhiNeut_DetSum12->Fill(Phin, TaggerTime);
-    MM_Proton_DetSum12->Fill(mmp, TaggerTime);
-    E_dE_DetSum12->Fill(Ep, dEp, TaggerTime);
-    E_dE_DetSum12->Fill(En, dEn, TaggerTime);
-    E_dE_p_DetSum12->Fill(Ep, dEp, TaggerTime);
-    E_dE_n_DetSum12->Fill(En, dEn, TaggerTime);
-    EkEg_DetSum12->Fill(Ep, EGamma, TaggerTime);
-    EkEg_DetSum12->Fill(En, EGamma, TaggerTime);
-    EkEg_p_DetSum12->Fill(Ep, EGamma, TaggerTime);
-    EkEg_n_DetSum12->Fill(En, EGamma, TaggerTime);
-
-  }
 
 }
 
