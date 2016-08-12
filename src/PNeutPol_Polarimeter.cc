@@ -146,7 +146,6 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     PhiDiff = abs(Phip-PhinRec);
     // Cut on difference between Phip and PhinRec next - If Diff =/= 180 cut
     if ((PhiDiff < 165) || (PhiDiff > 195)) continue;
-    cout << "Survived PhiDiff cut" << endl;
 
     //FillTime(*GetProtons(),time); Needs to be get tracks not protons now
     //FillTimeCut(*GetProtons(),time_cut);
