@@ -69,8 +69,6 @@ void	PNeutPol_Polarimeter::ProcessEvent()
   if (NRoo !=0) return; // Goes to next event if any "rootinos" found
   if (NTrack !=2) return; // Ensures two track event
   InitialVect(); // Function gets vectors of identified tracks and returns them
-  GV1_3 = GV1.Vect();
-  GV2_3 = GV2.Vect();
   InitialProp(); // Function gets initial properties (energy, vertex e.t.c.) of identified tracks
   DetectorCheck(); // Function checks detector numbers for each track
 
