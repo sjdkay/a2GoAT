@@ -48,8 +48,6 @@ private:
   double_t Theta2;
   double_t Phi1;
   double_t Phi2;
-  double_t Phi1Rec;
-  double_t Phi2Rec;
   double_t mm1Diff;
   double_t mm2Diff;
   double_t d;
@@ -74,6 +72,7 @@ private:
   double_t Phin;
   double_t PhinRec;
   double_t ThetaWCn;
+  double_t PhiDiff;
   double_t E1;
   double_t E2;
   double_t Ep;

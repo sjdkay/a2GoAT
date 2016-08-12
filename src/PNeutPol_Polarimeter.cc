@@ -143,8 +143,10 @@ void	PNeutPol_Polarimeter::ProcessEvent()
 
     ReconstructnVector(GVp3, Gamma3);
     LabScatter(); // Work out scattering angle in lab frame and return results
-    cout << Thetan << "   " << ThetanRec << "   " << Phin << "   " << PhinRec << endl;
+    PhiDiff = abs(Phip-PhinRec);
     // Cut on difference between Phip and PhinRec next - If Diff =/= 180 cut
+    if ((PhiDiff < 165) || (PhiDiff > 195)) continue;
+    cout << "Survived PhiDiff cut" << endl;
 
     //FillTime(*GetProtons(),time); Needs to be get tracks not protons now
     //FillTimeCut(*GetProtons(),time_cut);
