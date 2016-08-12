@@ -117,30 +117,6 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     TaggerTime = GetTagger()->GetTaggedTime(j); // Get tagged time for event
     EGamma = (GetTagger()->GetTaggedEnergy(j)); // Get Photon energy for event
 
-    //if (dE1 < 0.5 || dE2 < 0.5) continue; // Cut out low PID energy events // This won't work if PID has no hits as we desire!
-
-    // If neither particle is in the proton banana region continue
-    //if (Cut_proton -> IsInside(E1, dE1) == kFALSE && Cut_proton -> IsInside(E2, dE2) == kFALSE) continue; // if neither particle is in proton region drop out
-    //if (Cut_proton -> IsInside(E1, dE1) == kFALSE && Cut_pion -> IsInside(E1, dE1) == kFALSE) continue; // If not in proton or pion region drop out
-    //if (Cut_proton -> IsInside(E2, dE2) == kFALSE && Cut_pion -> IsInside(E2, dE2) == kFALSE) continue;
-
-    //if (i == 0) { // These properties get defined for each photon
-
-    Gamma = TLorentzVector (0., 0., EGamma , EGamma); // 4-Vector of Photon beam
-    Gamma3 = Gamma.Vect(); // Convert photon beam 4-vector to 3-vector
-    B = (Deut + Gamma).Beta(); // Calculte Beta
-    b = TVector3(0., 0., B); // Define boost vector
-    ReconstructVectors();
-    GV1Rec_3 = GV1Rec.Vect();
-    GV2Rec_3 = GV2Rec.Vect();
-    mm1 = GV1Rec.M(); // Calculate missing mass of each particle
-    mm2 = GV2Rec.M();
-    mm1Diff = abs(Mn-mm1); // Look at difference of missing mass from neutron mass
-    mm2Diff = abs(Mn-mm2);
-
-    FillTime(*GetProtons(),time);
-    FillTimeCut(*GetProtons(),time_cut);
-
     if (Proton1 == kTRUE)
     {
         PNProp(1);
@@ -158,19 +134,22 @@ void	PNeutPol_Polarimeter::ProcessEvent()
         continue;
     }
 
+    //if (i == 0) { // These properties get defined for each photon
+
     GVp3 = GVp.Vect(); // Generate some 3-vectors from the 4-vectors we have
     GVn3 = GVn.Vect();
-    GVpCalc3 = GVpCalc.Vect();
-    GVnCalc3 = GVnCalc.Vect();
+    Gamma = TLorentzVector (0., 0., EGamma , EGamma); // 4-Vector of Photon beam
+    Gamma3 = Gamma.Vect(); // Convert photon beam 4-vector to 3-vector
+    B = (Deut + Gamma).Beta(); // Calculate Beta
+    b = TVector3(0., 0., B); // Define boost vector
 
-    //Disabled cuts for now until later adjustment
-    //if ((mmn < 850) || (mmn > 1050)) continue; //If missing mass for particle that we think is the neutron is not correct, continue
-    //if (Cut_proton -> IsInside(Ep, dEp) == kFALSE) continue; // If proton not in banana drop out
-
-    LabBoost(); // Boost particles in lab frame and return results
+    ReconstructnVector(GVp3, Gamma3);
     LabScatter(); // Work out scattering angle in lab frame and return results
-    // Drop this for now need to think about it
-    //WCVertex(GVn3, GVnCalc3, Zp, Zn); // Calculate Z vertex location in WC from measured and reconstructed vectors
+    cout << Thetan << "   " << ThetanRec << "   " << Phin << "   " << PhinRec << endl;
+    // Cut on difference between Phip and PhinRec next - If Diff =/= 180 cut
+
+    //FillTime(*GetProtons(),time); Needs to be get tracks not protons now
+    //FillTimeCut(*GetProtons(),time_cut);
 
     if (MCData == kTRUE)
     {
@@ -280,14 +259,10 @@ Int_t PNeutPol_Polarimeter::DetectorCheck()
     return Detectors1, Detectors2;
 }
 
-TLorentzVector PNeutPol_Polarimeter::ReconstructVectors()
+TVector3 PNeutPol_Polarimeter::ReconstructnVector(TVector3 ProtonVect, TVector3 GammaVect)
 {
-
-    GV1Rec = (Gamma + Deut) - GV2; //Assume GV2 correct, reconstruct 1st vector
-    GV2Rec = (Gamma + Deut) - GV1;
-
-    return GV1Rec, GV2Rec;
-
+    GVn3Rec = GammaVect - ProtonVect;
+    return GVn3Rec;
 }
 
 Double_t PNeutPol_Polarimeter::MCSmearing() // Smear dE values for MC data to represent Energy resolution of PID
@@ -327,8 +302,6 @@ Double_t PNeutPol_Polarimeter::PNProp(Int_t ProtonParticleNumber) // Define prop
       Zp = z1; // First particle is proton, second neutron
       Zn = z2;
       zdiff = abs (Zp - Zn);
-      mmp = mm2;
-      mmn = mm1;
       Ep = E1;
       En = E2;
       dEp = dE1;
@@ -340,8 +313,6 @@ Double_t PNeutPol_Polarimeter::PNProp(Int_t ProtonParticleNumber) // Define prop
       Zp = z2; // First particle is neutron, second is proton
       Zn = z1;
       zdiff = abs (Zp - Zn);
-      mmp = mm1; // Note this looks incorrect but MM1 is the missing mass of particle 1 as calculated using particle 2, we have determined that particle 2 is the proton here
-      mmn = mm2;
       Ep = E2; // Therefore the quantity mmp is the amount of missing mass we see when we do a kinematics calculation USING the proton
       En = E1;
       dEp = dE2;
@@ -349,7 +320,7 @@ Double_t PNeutPol_Polarimeter::PNProp(Int_t ProtonParticleNumber) // Define prop
 
     }
 
-  return Zp, Zn, zdiff, mmp, mmn, Ep, En, dEp, dEn;
+  return Zp, Zn, zdiff, Ep, En, dEp, dEn;
 }
 
 TLorentzVector PNeutPol_Polarimeter::PNVect(Int_t ProtonParticleNumber) // Define vectors for p and n in similar manner to properties above
@@ -359,8 +330,6 @@ TLorentzVector PNeutPol_Polarimeter::PNVect(Int_t ProtonParticleNumber) // Defin
       GVp = GV1;
       GV2 = GetTracks()->GetVector(1, Mn);
       GVn = GV2;
-      GVpCalc = GV1Rec;
-      GVnCalc = GV2Rec;
     }
 
   if(ProtonParticleNumber == 2)
@@ -369,25 +338,9 @@ TLorentzVector PNeutPol_Polarimeter::PNVect(Int_t ProtonParticleNumber) // Defin
       GVp = GV2;
       GV1 = GetTracks()->GetVector(0, Mn); // Since we've decided this particle is a neutron, set its mass to Mn
       GVn = GV1; // The neutron vector as measured by the vertex information
-      GVpCalc = GV2Rec;
-      GVnCalc = GV1Rec;
     }
 
-  return GVp, GVn, GVpCalc, GVnCalc;
-}
-
-Double_t PNeutPol_Polarimeter::LabBoost() // Boost particles from lab frame to CM
-{
-  GVpB = GVp; //Reset the boost vector on each photon
-  GVnB = GVn;
-  GVpB.Boost(b); // Do boost after p/n identification now
-  GVnB.Boost(b);
-  ThetapB = (GVpB.Theta()) * TMath::RadToDeg();
-  ThetanB = (GVnB.Theta()) * TMath::RadToDeg();
-  PhipB = (GVpB.Phi()) * TMath::RadToDeg();
-  PhinB = (GVnB.Phi()) * TMath::RadToDeg();
-
-  return ThetapB, ThetanB, PhipB, PhinB;
+  return GVp, GVn;
 }
 
 Double_t PNeutPol_Polarimeter::LabScatter()
@@ -396,10 +349,10 @@ Double_t PNeutPol_Polarimeter::LabScatter()
   Phip = GVp3.Phi() * TMath::RadToDeg();
   Thetan = GVn3.Theta() * TMath::RadToDeg();
   Phin = GVn3.Phi() * TMath::RadToDeg();
-  ThetanCalc = abs(GVnCalc3.Theta() * TMath::RadToDeg());
-  PhinCalc = (GVnCalc3.Phi()) * TMath::RadToDeg();
+  ThetanRec = GVn3Rec.Theta() * TMath::RadToDeg();
+  PhinRec = GVn3Rec.Phi() * TMath::RadToDeg();
 
-  return Thetan, Phin, Thetap, Phip, ThetanCalc, PhinCalc;
+  return Thetan, Phin, Thetap, Phip, ThetanRec, PhinRec;
 }
 
 //Double_t PNeutPol::WCVertex(TVector3 MeasuredVector, TVector3 ReconstructedVector, double_t ReconstructorZ, double_t MeasuredZ) // Calculate location of WC Z vertex for measured and reconstructed vector
@@ -428,7 +381,6 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   ThetaNeut = new GH1( "ThetaNeut", " Neutron Theta Distribution", 180, 0, 180 );
   PhiProt = new GH1( "PhiProt", " Proton Phi Distribution", 180, -180, 180 );
   PhiNeut = new GH1( "PhiNeut", " Neutron Phi Distribution", 180, -180, 180 );
-  MM_Proton = new GH1("MM_Proton", 	"MM_Proton", 	 	300,   800, 1100);
 
   E_dE = new GH2("E_dE", "EdE Plot", 125, 0, 500, 125, 0, 7);
   E_dE_p = new GH2("E_dE_p", "EdE Plot for Protons", 125, 0, 500, 125, 0, 7);
@@ -452,7 +404,6 @@ void PNeutPol_Polarimeter::FillHists()
   ThetaNeut->Fill(Thetan, TaggerTime);
   PhiProt->Fill(Phip, TaggerTime);
   PhiNeut->Fill(Phin, TaggerTime);
-  MM_Proton->Fill(mmp, TaggerTime);
   E_dE->Fill(Ep, dEp, TaggerTime);
   E_dE->Fill(En, dEn, TaggerTime);
   E_dE_p->Fill(Ep, dEp, TaggerTime);

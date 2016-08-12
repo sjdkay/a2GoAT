@@ -50,10 +50,6 @@ private:
   double_t Phi2;
   double_t Phi1Rec;
   double_t Phi2Rec;
-  double_t ThetapB;
-  double_t ThetanB;
-  double_t PhipB;
-  double_t PhinB;
   double_t mm1Diff;
   double_t mm2Diff;
   double_t d;
@@ -73,10 +69,10 @@ private:
   double_t zWC2;
   double_t Thetap;
   double_t Thetan;
-  double_t ThetanCalc;
+  double_t ThetanRec;
   double_t Phip;
   double_t Phin;
-  double_t PhinCalc;
+  double_t PhinRec;
   double_t ThetaWCn;
   double_t E1;
   double_t E2;
@@ -102,31 +98,15 @@ private:
 
   TLorentzVector GV1;
   TLorentzVector GV2;
-  TLorentzVector GV1Rec;
-  TLorentzVector GV2Rec;
-  TLorentzVector GVpB;
-  TLorentzVector GVnB;
   TLorentzVector GVp;
   TLorentzVector GVn;
-  TLorentzVector GVpCalc;
-  TLorentzVector GVnCalc;
   TLorentzVector Gamma;
   TLorentzVector Deut;
-  TLorentzVector boostvector;
-  TVector3 GV1_3;
-  TVector3 GV2_3;
-  TVector3 GV1Rec_3;
-  TVector3 GV2Rec_3;
   TVector3 b;
   TVector3 Gamma3;
   TVector3 GVp3;
   TVector3 GVn3;
-  TVector3 GVpCalc3;
-  TVector3 GVnCalc3;
-  TVector3 fX;
-  TVector3 fY;
-  TVector3 fZ;
-  TVector3 nFrame;
+  TVector3 GVn3Rec;
 
   TRandom2 rGen;
 
@@ -142,7 +122,6 @@ private:
   GH1*  ThetaNeut;
   GH1*  PhiProt;
   GH1*  PhiNeut;
-  GH1*  MM_Proton;
 
   GH2* E_dE;
   GH2* E_dE_p;
@@ -196,13 +175,12 @@ public:
     TLorentzVector InitialVect();
     Double_t InitialProp();
     Int_t DetectorCheck();
-    TLorentzVector ReconstructVectors();
+    TVector3 ReconstructnVector (TVector3 ProtonVect, TVector3 GammaVect);
     Int_t MCTrueID();
     TLorentzVector MCTrueVectors();
     Double_t MCSmearing();
     Double_t PNProp(Int_t ProtonParticleNumber);
     TLorentzVector PNVect(Int_t ProtonParticleNumber);
-    Double_t LabBoost();
     Double_t LabScatter();
     Double_t WCVertex(TVector3 MeasuredVector, TVector3 ReconstructedVector, double_t ReconstructorZ, double_t MeasuredZ);
     void FillHists();
