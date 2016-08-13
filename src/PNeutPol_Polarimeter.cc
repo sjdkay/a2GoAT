@@ -311,7 +311,7 @@ Double_t PNeutPol_Polarimeter::PNProp(Int_t ProtonParticleNumber) // Define prop
       dEn = dE2;
       WC1pX = WC1X1;
       WC1pY = WC1Y1;
-      WC1ZX = WC1Z1;
+      WC1pZ = WC1Z1;
       WC1nX = WC1X2;
       WC1nY = WC1Y2;
       WC1nZ = WC1Z2;
@@ -328,7 +328,7 @@ Double_t PNeutPol_Polarimeter::PNProp(Int_t ProtonParticleNumber) // Define prop
       dEn = dE1;
       WC1pX = WC1X2;
       WC1pY = WC1Y2;
-      WC1ZX = WC1Z2;
+      WC1pZ = WC1Z2;
       WC1nX = WC1X1;
       WC1nY = WC1Y1;
       WC1nZ = WC1Z1;
