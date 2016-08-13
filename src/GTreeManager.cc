@@ -96,7 +96,7 @@ Bool_t  GTreeManager::TraverseEntries(const UInt_t min, const UInt_t max)
 
         eventParameters->SetEventNumber(i);
         countReconstructed = 0;
-        ProcessEvent();
+        ProcessEvent();		//CAM 07/07/16 want to alter to add i as a parameter so can use as an index in the chrisPPi0Example.
     }
 
     return kTRUE;

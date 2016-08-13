@@ -81,10 +81,10 @@ protected:
     TFile*          outputFile;
 
     //protected tree variables Getters
-    GTreeTrack*   GetTracks()             	    {return tracks;}
-    GTreeMWPCHit*       GetMWPCHitsChris()	    {return MWPCHitsChris;} //CAM 16/05/16
-    GTreeMWPCHit*	GetNMWPCHitsChris1()	    {return nChamberHitsin1;}//CAM 16/05/16
-    GTreeMWPCHit*	GetNMWPCHitsChris2()        {return nChamberHitsin2;}//CAM 16/05/16
+    GTreeTrack*         GetTracks()                 {return tracks;}
+    GTreeMWPCHit*       GetMWPCHitsChris()		    {return MWPCHitsChris;} //CAM 16/05/16
+    GTreeMWPCHit*	GetNMWPCHitsChris1()		    {return nChamberHitsin1;}//CAM 16/05/16
+    GTreeMWPCHit*	GetNMWPCHitsChris2()		    {return nChamberHitsin2;}//CAM 16/05/16
     GTreeTagger*        GetTagger()                 {return tagger;}
     GTreeLinPol*        GetLinpol()                 {return linpol;}
     GTreeTrigger*       GetTrigger()                {return trigger;}
@@ -109,10 +109,10 @@ protected:
     GTreeA2Geant*       GetGeant()                  {return geant;}
 
     //protected tree variables const Getters
-    const   GTreeTrack*   	GetTracks()             const       {return tracks;}
-    const   GTreeMWPCHit*	GetMWPCHitsChris()	const	    {return MWPCHitsChris;}	//CAM 16/05/16
-    const   GTreeMWPCHit*	GetNMWPCHitsChris1()	const	    {return nChamberHitsin1;}//CAM 16/05/16
-    const   GTreeMWPCHit*	GetNMWPCHitsChris2()	const	    {return nChamberHitsin2;}//CAM 16/05/16
+    const   GTreeTrack*         GetTracks()             const       {return tracks;}
+    const   GTreeMWPCHit*	GetMWPCHitsChris()		const	    {return MWPCHitsChris;}	//CAM 16/05/16
+    const   GTreeMWPCHit*	GetNMWPCHitsChris1()		const	    {return nChamberHitsin1;}//CAM 16/05/16
+    const   GTreeMWPCHit*	GetNMWPCHitsChris2()		const	    {return nChamberHitsin2;}//CAM 16/05/16
     const   GTreeTagger*        GetTagger()             const       {return tagger;}
     const   GTreeLinPol*        GetLinpol()             const       {return linpol;}
     const   GTreeTrigger*       GetTrigger()            const       {return trigger;}
