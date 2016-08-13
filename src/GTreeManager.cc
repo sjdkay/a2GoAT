@@ -18,6 +18,9 @@ GTreeManager::GTreeManager()    :
     readCorreleatedToScalerReadList(),
     writeList(),
     countReconstructed(0),
+    MWPCHitsChris(0),   //CAM 16/05/16
+    nChamberHitsin1(0), //CAM 16/05/16
+    nChamberHitsin2(0),
     tracks(0),
     tagger(0),
     linpol(0),
@@ -58,6 +61,9 @@ GTreeManager::GTreeManager()    :
     setupParameters = new GTreeSetupParameters(this);
     eventParameters = new GTreeEventParameters(this);
     detectorHits = new GTreeDetectorHits(this);
+    MWPCHitsChris = new GTreeMWPCHit(this,"MWPCHitsChris"); //CAM 16/05/16
+    nChamberHitsin1 = new GTreeMWPCHit(this,"nChamberHitsin1"); //CAM 16/05/16
+    nChamberHitsin2 = new GTreeMWPCHit(this,"nChamberHitsin2"); //CAM 16/05/16
     tracks = new GTreeTrack(this, "tracks");
     tagger = new GTreeTagger(this);
     trigger = new GTreeTrigger(this);

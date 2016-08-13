@@ -174,14 +174,12 @@ public:
     TLorentzVector InitialVect();
     Double_t InitialProp();
     Int_t DetectorCheck();
-    TVector3 ReconstructnVector (TVector3 ProtonVect, TVector3 GammaVect);
     Int_t MCTrueID();
     TLorentzVector MCTrueVectors();
     Double_t MCSmearing();
     Double_t PNProp(Int_t ProtonParticleNumber);
     TLorentzVector PNVect(Int_t ProtonParticleNumber);
-    Double_t LabScatter();
-    Double_t WCVertex(TVector3 MeasuredVector, TVector3 ReconstructedVector, double_t ReconstructorZ, double_t MeasuredZ);
+    Double_t LabAngles();
     void FillHists();
 
 };

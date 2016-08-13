@@ -140,13 +140,11 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     Gamma3 = Gamma.Vect(); // Convert photon beam 4-vector to 3-vector
     B = (Deut + Gamma).Beta(); // Calculate Beta
     b = TVector3(0., 0., B); // Define boost vector
+    LabAngles(); // Get angles in lab based on track info
 
-    ReconstructnVector(GVp3, Gamma3);
-    LabScatter(); // Work out scattering angle in lab frame and return results
-    PhiDiff = abs(Phip-PhinRec);
     // Cut on difference between Phip and PhinRec next - If Diff =/= 180 cut
-    if ((PhiDiff < 165) || (PhiDiff > 195)) continue;
-    cout << PhiDiff << endl;
+    //PhiDiff = abs (Phip - PhinRec);
+    //if ((PhiDiff < 165) || (PhiDiff > 195)) continue;
 
     //FillTime(*GetProtons(),time); Needs to be get tracks not protons now
     //FillTimeCut(*GetProtons(),time_cut);
@@ -259,12 +257,6 @@ Int_t PNeutPol_Polarimeter::DetectorCheck()
     return Detectors1, Detectors2;
 }
 
-TVector3 PNeutPol_Polarimeter::ReconstructnVector(TVector3 ProtonVect, TVector3 GammaVect)
-{
-    GVn3Rec = GammaVect - ProtonVect;
-    return GVn3Rec;
-}
-
 Double_t PNeutPol_Polarimeter::MCSmearing() // Smear dE values for MC data to represent Energy resolution of PID
 {
   dE1 = rGen.Gaus(GetTracks()->GetVetoEnergy(0) , (0.29*(sqrt(GetTracks()->GetVetoEnergy(0)))));
@@ -343,28 +335,15 @@ TLorentzVector PNeutPol_Polarimeter::PNVect(Int_t ProtonParticleNumber) // Defin
   return GVp, GVn;
 }
 
-Double_t PNeutPol_Polarimeter::LabScatter()
+Double_t PNeutPol_Polarimeter::LabAngles()
 {
   Thetap = GVp3.Theta() * TMath::RadToDeg(); // Lab frame angles for proton/neutron
   Phip = GVp3.Phi() * TMath::RadToDeg();
   Thetan = GVn3.Theta() * TMath::RadToDeg();
   Phin = GVn3.Phi() * TMath::RadToDeg();
-  ThetanRec = GVn3Rec.Theta() * TMath::RadToDeg();
-  PhinRec = GVn3Rec.Phi() * TMath::RadToDeg();
 
-  return Thetan, Phin, Thetap, Phip, ThetanRec, PhinRec;
+  return Thetan, Phin, Thetap, Phip;
 }
-
-//Double_t PNeutPol::WCVertex(TVector3 MeasuredVector, TVector3 ReconstructedVector, double_t ReconstructorZ, double_t MeasuredZ) // Calculate location of WC Z vertex for measured and reconstructed vector
-//{
-  // ReconstructorZ = Z vertex of the particle we are using to reconstruct track of other, Measured Z = Z vertex of as measured of the particle we're reconstructing
-  //lrec = d/(tan(ReconstructedVector.Theta())); // Calculate how far along from interaction point in target the polarimeter interaction point was
-  //zWCRec = ReconstructorZ + lrec; // Assume Zp is correct so neutron actually did come from here
-  //l = d/tan(MeasuredVector.Theta());
-  //zWC = MeasuredZ + l; // The location of the interaction point as determined by the detected proton
-
-  //return zWCRec, zWC;
-//}
 
 PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to fill
 {
