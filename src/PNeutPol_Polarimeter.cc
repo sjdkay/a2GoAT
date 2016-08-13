@@ -136,11 +136,16 @@ void	PNeutPol_Polarimeter::ProcessEvent()
 
     GVp3 = GVp.Vect(); // Generate some 3-vectors from the 4-vectors we have
     GVn3 = GVn.Vect();
+    WC3Vectp = (WC1pX, WC1pY, WC1pZ);
+    WC3Vectn = (WC1nX, WC1nY, WC1nZ);
+    WCAngles();
     Gamma = TLorentzVector (0., 0., EGamma , EGamma); // 4-Vector of Photon beam
     Gamma3 = Gamma.Vect(); // Convert photon beam 4-vector to 3-vector
     B = (Deut + Gamma).Beta(); // Calculate Beta
     b = TVector3(0., 0., B); // Define boost vector
     LabAngles(); // Get angles in lab based on track info
+
+    cout << WCThetap << "   " << Thetap << "   " << WCPhip << "   " << Phip << endl;
 
     // Cut on difference between Phip and PhinRec next - If Diff =/= 180 cut
     //PhiDiff = abs (Phip - PhinRec);
@@ -246,8 +251,14 @@ Double_t PNeutPol_Polarimeter::InitialProp() // Defines initial particle propert
   E2 = GetTracks()->GetClusterEnergy(1);
   dE1 = GetTracks()->GetVetoEnergy(0);
   dE2 = GetTracks()->GetVetoEnergy(1);
+  WC1X1 = GetMWPCHitsChris()->GetMWPCChamber1X(0);
+  WC1Y1 = GetMWPCHitsChris()->GetMWPCChamber1Y(0);
+  WC1Z1 = GetMWPCHitsChris()->GetMWPCChamber1Z(0);
+  WC1X2 = GetMWPCHitsChris()->GetMWPCChamber1X(1);
+  WC1Y2 = GetMWPCHitsChris()->GetMWPCChamber1Y(1);
+  WC1Z2 = GetMWPCHitsChris()->GetMWPCChamber1Z(1);
 
-  return Theta1, Theta2, Phi1, Phi2, z1, z2, E1, E2, dE1, dE2; // Returns various quantities used in later functions
+  return Theta1, Theta2, Phi1, Phi2, z1, z2, E1, E2, dE1, dE2, WC1X1, WC1X2, WC1Y1, WC1Y2, WC1Z1, WC1Z2; // Returns various quantities used in later functions
 }
 
 Int_t PNeutPol_Polarimeter::DetectorCheck()
@@ -298,6 +309,12 @@ Double_t PNeutPol_Polarimeter::PNProp(Int_t ProtonParticleNumber) // Define prop
       En = E2;
       dEp = dE1;
       dEn = dE2;
+      WC1pX = WC1X1;
+      WC1pY = WC1Y1;
+      WC1ZX = WC1Z1;
+      WC1nX = WC1X2;
+      WC1nY = WC1Y2;
+      WC1nZ = WC1Z2;
     }
 
   if(ProtonParticleNumber == 2)
@@ -309,10 +326,15 @@ Double_t PNeutPol_Polarimeter::PNProp(Int_t ProtonParticleNumber) // Define prop
       En = E1;
       dEp = dE2;
       dEn = dE1;
-
+      WC1pX = WC1X2;
+      WC1pY = WC1Y2;
+      WC1ZX = WC1Z2;
+      WC1nX = WC1X1;
+      WC1nY = WC1Y1;
+      WC1nZ = WC1Z1;
     }
 
-  return Zp, Zn, zdiff, Ep, En, dEp, dEn;
+  return Zp, Zn, zdiff, Ep, En, dEp, dEn, WC1nX, WC1nY, WC1nZ, WC1pX, WC1pY, WC1pZ;
 }
 
 TLorentzVector PNeutPol_Polarimeter::PNVect(Int_t ProtonParticleNumber) // Define vectors for p and n in similar manner to properties above
@@ -333,6 +355,16 @@ TLorentzVector PNeutPol_Polarimeter::PNVect(Int_t ProtonParticleNumber) // Defin
     }
 
   return GVp, GVn;
+}
+
+Double_t PNeutPol_Polarimeter::WCAngles()
+{
+  WCThetap = WC3Vectp.Theta() * TMath::RadToDeg(); // Angles from WC hit positons
+  WCPhip = WC3Vectp.Phi() * TMath::RadToDeg();
+  WCThetan = WC3Vectn.Theta() * TMath::RadToDeg();
+  WCPhin = WC3Vectn.Phi() * TMath::RadToDeg();
+
+  return WCThetap, WCThetan, WCPhip, WCPhin;
 }
 
 Double_t PNeutPol_Polarimeter::LabAngles()

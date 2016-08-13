@@ -48,6 +48,12 @@ private:
   double_t Theta2;
   double_t Phi1;
   double_t Phi2;
+  double_t WC1X1;
+  double_t WC1Y1;
+  double_t WC1Z1;
+  double_t WC1X2;
+  double_t WC1Y2;
+  double_t WC1Z2;
   double_t mm1Diff;
   double_t mm2Diff;
   double_t d;
@@ -59,6 +65,16 @@ private:
   double_t ln;
   double_t Zp;
   double_t Zn;
+  double_t WC1pX;
+  double_t WC1pY;
+  double_t WC1pZ;
+  double_t WC1nX;
+  double_t WC1nY;
+  double_t WC1nZ;
+  double_t WCThetap;
+  double_t WCThetan;
+  double_t WCPhip;
+  double_t WCPhin;
   double_t zWCRec;
   double_t zWC;
   double_t zWCRec1;
@@ -106,6 +122,8 @@ private:
   TVector3 GVp3;
   TVector3 GVn3;
   TVector3 GVn3Rec;
+  TVector3 WC3Vectp;
+  TVector3 WC3Vectn;
 
   TRandom2 rGen;
 
@@ -179,6 +197,7 @@ public:
     Double_t MCSmearing();
     Double_t PNProp(Int_t ProtonParticleNumber);
     TLorentzVector PNVect(Int_t ProtonParticleNumber);
+    Double_t WCAngles();
     Double_t LabAngles();
     void FillHists();
 
