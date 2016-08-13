@@ -144,7 +144,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     b = TVector3(0., 0., B); // Define boost vector
     LabAngles(); // Get angles in lab based on track info
 
-    cout << WC1pX << "   " << WC1pY << "   " << WC1pZ << endl;
+    cout << WC1X1 << "   " << WC1Y1 << "   " << WC1Z1 << endl;
 
     // Cut on difference between Phip and PhinRec next - If Diff =/= 180 cut
     //PhiDiff = abs (Phip - PhinRec);
