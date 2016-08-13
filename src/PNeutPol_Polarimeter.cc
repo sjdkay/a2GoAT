@@ -136,8 +136,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
 
     GVp3 = GVp.Vect(); // Generate some 3-vectors from the 4-vectors we have
     GVn3 = GVn.Vect();
-    WC3Vectp = (WC1pX, WC1pY, WC1pZ);
-    WC3Vectn = (WC1nX, WC1nY, WC1nZ);
+    WC3Vectors();
     WCAngles();
     Gamma = TLorentzVector (0., 0., EGamma , EGamma); // 4-Vector of Photon beam
     Gamma3 = Gamma.Vect(); // Convert photon beam 4-vector to 3-vector
@@ -355,6 +354,14 @@ TLorentzVector PNeutPol_Polarimeter::PNVect(Int_t ProtonParticleNumber) // Defin
     }
 
   return GVp, GVn;
+}
+
+TVector3 PNeutPol_Polarimeter::WC3Vectors()
+{
+    WC3Vectp.SetXYZ(WC1pX, WC1pY, WC1pZ);
+    WC3Vectn.SetXYZ(WC1nX, WC1nY, WC1nZ);
+
+    return WC3Vectp, WC3Vectn;
 }
 
 Double_t PNeutPol_Polarimeter::WCAngles()

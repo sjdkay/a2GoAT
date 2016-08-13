@@ -197,6 +197,7 @@ public:
     Double_t MCSmearing();
     Double_t PNProp(Int_t ProtonParticleNumber);
     TLorentzVector PNVect(Int_t ProtonParticleNumber);
+    TVector3 WC3Vectors();
     Double_t WCAngles();
     Double_t LabAngles();
     void FillHists();
