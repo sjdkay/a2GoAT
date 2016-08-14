@@ -411,7 +411,7 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   EkEg_p = new GH2("EkEg_p", "Ek vs Eg for all Protons", 100, 0, 500, 100, 100, 1600);
   EkEg_n = new GH2("EkEg_n", "Ek vs Eg for all Neutrons", 100, 0, 500, 100, 100, 1600);
 
-  Thetap_ThetaWCp = new GH2 ("Thetap_ThetaWCp", "Theta Track vs Theta WC for Protons", 90, 0, 180, 90, 0 180);
+  Thetap_ThetaWCp = new GH2 ("Thetap_ThetaWCp", "Theta Track vs Theta WC for Protons", 90, 0, 180, 90, 0, 180);
 }
 
 void PNeutPol_Polarimeter::FillHists()
