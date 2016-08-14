@@ -140,10 +140,10 @@ private:
   GH1*  PhiProt;
   GH1*  PhiNeut;
   GH1*  WCPhiDifference;
-  GH1*  WCThetaProt
-  GH1*  WCThetaNeut
-  GH1*  WCPhiProt
-  GH1*  WCPhiNeut
+  GH1*  WCThetaProt;
+  GH1*  WCThetaNeut;
+  GH1*  WCPhiProt;
+  GH1*  WCPhiNeut;
 
   GH2* E_dE;
   GH2* E_dE_p;
@@ -151,7 +151,7 @@ private:
   GH2* EkEg;
   GH2* EkEg_p;
   GH2* EkEg_n;
-  GH2* Thetap_ThetaWCp
+  GH2* Thetap_ThetaWCp;
 
   TLorentzVector MCTrueVect1;
   TLorentzVector MCTrueVect2;
