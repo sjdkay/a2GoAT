@@ -68,13 +68,9 @@ void	PNeutPol_Polarimeter::ProcessEvent()
   GetEvent(); // Function gets number of tracks/protons/pions e.t.c.
   if (NRoo !=0) return; // Goes to next event if any "rootinos" found
   if (NTrack !=2) return; // Ensures two track event
-  InitialVect(); // Function gets vectors of identified tracks and returns them
-  InitialProp(); // Function gets initial properties (energy, vertex e.t.c.) of identified tracks
   DetectorCheck(); // Function checks detector numbers for each track
 
-  //cout << DetectorsSum << endl;
-
-  // Currently try to accept only MWPC+PID+NaI and NaI + MWPC OR Only NaI events
+  // Currently try to accept only MWPC+PID+NaI and NaI + MWPC
   // If track 1 only gives signals in MWPC it is the neutron
   if((Detectors1 == 7) && (Detectors2 == 5))
   {
@@ -94,6 +90,9 @@ void	PNeutPol_Polarimeter::ProcessEvent()
   {
     return;
   }
+
+  InitialVect(); // Function gets vectors of identified tracks and returns them
+  InitialProp(); // Function gets initial properties (energy, vertex e.t.c.) of identified tracks
 
   if ( MCData == kTRUE)
   {
@@ -143,8 +142,6 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     B = (Deut + Gamma).Beta(); // Calculate Beta
     b = TVector3(0., 0., B); // Define boost vector
     LabAngles(); // Get angles in lab based on track info
-
-    cout << WC1X1 << "   " << WC1Y1 << "   " << WC1Z1 << endl;
 
     // Cut on difference between Phip and PhinRec next - If Diff =/= 180 cut
     //PhiDiff = abs (Phip - PhinRec);
@@ -250,8 +247,8 @@ Double_t PNeutPol_Polarimeter::InitialProp() // Defines initial particle propert
   E2 = GetTracks()->GetClusterEnergy(1);
   dE1 = GetTracks()->GetVetoEnergy(0);
   dE2 = GetTracks()->GetVetoEnergy(1);
-  WC1X1 = GetMWPCHitsChris()->GetMWPCChamber1X(0);
-  WC1Y1 = GetMWPCHitsChris()->GetMWPCChamber1Y(0);
+  WC1X1 = GetMWPCHitsChris()->GetMWPCChamber1X(0); // Don't need tree getters
+  WC1Y1 = GetMWPCHitsChris()->GetMWPCChamber1Y(0); // Just need fn to get these values directly
   WC1Z1 = GetMWPCHitsChris()->GetMWPCChamber1Z(0);
   WC1X2 = GetMWPCHitsChris()->GetMWPCChamber1X(1);
   WC1Y2 = GetMWPCHitsChris()->GetMWPCChamber1Y(1);
@@ -370,8 +367,9 @@ Double_t PNeutPol_Polarimeter::WCAngles()
   WCPhip = WC3Vectp.Phi() * TMath::RadToDeg();
   WCThetan = WC3Vectn.Theta() * TMath::RadToDeg();
   WCPhin = WC3Vectn.Phi() * TMath::RadToDeg();
+  PhiWCDiff = abs (WCPhip-WCPhin);
 
-  return WCThetap, WCThetan, WCPhip, WCPhin;
+  return WCThetap, WCThetan, WCPhip, WCPhin, PhiWCDiff;
 }
 
 Double_t PNeutPol_Polarimeter::LabAngles()
@@ -399,6 +397,11 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   ThetaNeut = new GH1( "ThetaNeut", " Neutron Theta Distribution", 180, 0, 180 );
   PhiProt = new GH1( "PhiProt", " Proton Phi Distribution", 180, -180, 180 );
   PhiNeut = new GH1( "PhiNeut", " Neutron Phi Distribution", 180, -180, 180 );
+  WCPhiDifference = new GH1 ("WCPhiDifference", "WC Phi Difference Between p and n", 180, 0, 360);
+  WCThetaProt = new GH1 ("WCThetaProt", "WC Theta for p", 180, 0, 180);
+  WCThetaNeut = new GH1 ("WCThetaNeut", "WC Theta for n", 180, 0, 180);
+  WCPhiProt = new GH1 ("WCPhiProt", "WC Phi for p", 180, -180, 180);
+  WCPhiNeut = new GH1 ("WCPhiNeut", "WC Phi for n", 180, -180, 180);
 
   E_dE = new GH2("E_dE", "EdE Plot", 125, 0, 500, 125, 0, 7);
   E_dE_p = new GH2("E_dE_p", "EdE Plot for Protons", 125, 0, 500, 125, 0, 7);
@@ -407,6 +410,8 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   EkEg = new GH2("EkEg", "Ek vs Eg for all Particles", 100, 0, 500, 100, 100, 1600);
   EkEg_p = new GH2("EkEg_p", "Ek vs Eg for all Protons", 100, 0, 500, 100, 100, 1600);
   EkEg_n = new GH2("EkEg_n", "Ek vs Eg for all Neutrons", 100, 0, 500, 100, 100, 1600);
+
+  Thetap_ThetaWCp = new GH2 ("Thetap_ThetaWCp", "Theta Track vs Theta WC for Protons", 90, 0, 180, 90, 0 180);
 }
 
 void PNeutPol_Polarimeter::FillHists()
@@ -422,6 +427,11 @@ void PNeutPol_Polarimeter::FillHists()
   ThetaNeut->Fill(Thetan, TaggerTime);
   PhiProt->Fill(Phip, TaggerTime);
   PhiNeut->Fill(Phin, TaggerTime);
+  WCPhiDifference->Fill(PhiWCDiff);
+  WCThetaProt->Fill(WCThetap, TaggerTime);
+  WCThetaNeut->Fill(WCThetan, TaggerTime);
+  WCPhiProt->Fill(WCPhip, TaggerTime);
+  WCPhiNeut->Fill(WCPhin, TaggerTime);
   E_dE->Fill(Ep, dEp, TaggerTime);
   E_dE->Fill(En, dEn, TaggerTime);
   E_dE_p->Fill(Ep, dEp, TaggerTime);
@@ -430,6 +440,7 @@ void PNeutPol_Polarimeter::FillHists()
   EkEg->Fill(En, EGamma, TaggerTime);
   EkEg_p->Fill(Ep, EGamma, TaggerTime);
   EkEg_n->Fill(En, EGamma, TaggerTime);
+  Thetap_ThetaWCp->Fill(Thetap, WCThetap, TaggerTime)
 
 }
 
