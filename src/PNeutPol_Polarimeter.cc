@@ -440,7 +440,7 @@ void PNeutPol_Polarimeter::FillHists()
   EkEg->Fill(En, EGamma, TaggerTime);
   EkEg_p->Fill(Ep, EGamma, TaggerTime);
   EkEg_n->Fill(En, EGamma, TaggerTime);
-  Thetap_ThetaWCp->Fill(Thetap, WCThetap, TaggerTime)
+  Thetap_ThetaWCp->Fill(Thetap, WCThetap, TaggerTime);
 
 }
 
