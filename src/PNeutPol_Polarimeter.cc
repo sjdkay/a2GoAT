@@ -145,7 +145,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
 
     KinEp = CalcKinEnergy(Thetap, EGamma);
 
-    cout << KinEp << "   " << Ep << endl
+    cout << KinEp << "   " << Ep << endl;
 
     // Cut on difference between Phip and PhinRec next - If Diff =/= 180 cut
     //PhiDiff = abs (Phip - PhinRec);
