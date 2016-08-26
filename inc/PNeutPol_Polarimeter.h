@@ -105,6 +105,7 @@ private:
   double_t ScattThetaLab;
   double_t ScattTheta;
   double_t ScattPhi;
+  double_t KinEp;
 
   Bool_t nBanana;
   Bool_t MCData;

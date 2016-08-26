@@ -143,6 +143,8 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     b = TVector3(0., 0., B); // Define boost vector
     LabAngles(); // Get angles in lab based on track info
 
+    CalcKinEnergy(Thetap, EGamma);
+
     // Cut on difference between Phip and PhinRec next - If Diff =/= 180 cut
     //PhiDiff = abs (Phip - PhinRec);
     //if ((PhiDiff < 165) || (PhiDiff > 195)) continue;
