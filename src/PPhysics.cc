@@ -207,7 +207,7 @@ Double_t PPhysics::CalcKinEnergy(Double_t ProtTheta, Double_t BeamEnergy)
     Double_t ProtThetaRad = ProtTheta*TMath::DegToRad(); // Convert input theta to radians
     Double_t Beta = cos(ProtThetaRad);
     Double_t P0 = BeamEnergy;
-    Double_t E0 = (BeamEnergy + targetmass); //Caution! Ensure both in same units!
+    Double_t E0 = (BeamEnergy + 1875.613); //Caution! Ensure both in same units! 1875.613 is Deuterium mass in MeV/C^2
     Double_t M2a = (E0*E0) - (P0*P0);
     Double_t M2b = (M2a + TMath::Power(938.272,2) - TMath::Power(939.565,2)); //M2a + proton mass squared - Neutron mass squared
 
@@ -220,7 +220,7 @@ Double_t PPhysics::CalcKinEnergy(Double_t ProtTheta, Double_t BeamEnergy)
     Double_t P_Energy_a = sqrt(TMath::Power(P,2) + TMath::Power(938.272,2));
     Double_t P_Energy_b = P_Energy_a - 938.272;
 
-    cout << targetmass << "    " << BeamEnergy << "    " << P_Energy_b << endl;
+    cout << BeamEnergy << "    " << P_Energy_b << endl;
 
     return P_Energy_b;
 }
