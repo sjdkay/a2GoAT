@@ -220,8 +220,6 @@ Double_t PPhysics::CalcKinEnergy(Double_t ProtTheta, Double_t BeamEnergy)
     Double_t P_Energy_a = sqrt(TMath::Power(P,2) + TMath::Power(938.272,2));
     Double_t P_Energy_b = P_Energy_a - 938.272;
 
-    cout << BeamEnergy << "    " << P_Energy_b << endl;
-
     return P_Energy_b;
 }
 
