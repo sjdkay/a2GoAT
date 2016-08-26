@@ -2,7 +2,7 @@
 
 #include "PPhysics.h"
 
-PPhysics::PPhysics() 
+PPhysics::PPhysics()
 {
 	TC_cut_min = 0;
 	TC_cut_max = 352;
@@ -33,7 +33,7 @@ void PPhysics::FillScalers(Int_t low_scaler_number, Int_t high_scaler_number, TH
 	    cout << "Error: FillScalers - histogram has insufficient bins for range" << endl;
 	    return;
 	}
-	
+
 	// To properly accumulate, create a histogram for this scaler read
 	// cloning input histogram means the axis will be equivalent
 	TH1* hist_current_SR = (TH1D*) hist->Clone();
@@ -49,7 +49,7 @@ void PPhysics::FillScalers(Int_t low_scaler_number, Int_t high_scaler_number, TH
     if (high_scaler_number > GetScalers()->GetNScalers())
 	{
 		cout << "FillScalers given scaler number outside range: " << high_scaler_number << endl;
-		cout << "Setting upper limit to "<< high_scaler_number << " and continuing" << endl;	
+		cout << "Setting upper limit to "<< high_scaler_number << " and continuing" << endl;
         high_scaler_number = GetScalers()->GetNScalers();
 	}
 
@@ -61,7 +61,7 @@ void PPhysics::FillScalers(Int_t low_scaler_number, Int_t high_scaler_number, TH
 
 	// Add to accumulated
 	hist->Add(hist_current_SR);
-}	
+}
 
 void PPhysics::FillMissingMass(const GTreeParticle& tree, TH1* Hprompt, TH1* Hrandom)
 {
@@ -88,7 +88,7 @@ void PPhysics::FillMissingMass(const GTreeParticle& tree, Int_t particle_index, 
     missingp4 = CalcMissingP4(tree, particle_index,tagger_index);
 
 	if (GHistBGSub::IsPrompt(time)) Hprompt->Fill(missingp4.M());
-	if (GHistBGSub::IsRandom(time)) Hrandom->Fill(missingp4.M());						
+	if (GHistBGSub::IsRandom(time)) Hrandom->Fill(missingp4.M());
 }
 
 void PPhysics::FillTime(const GTreeParticle& tree, TH1* Hist)
@@ -114,7 +114,7 @@ void PPhysics::FillTime(const GTreeParticle& tree, Int_t particle_index, TH1* Hi
     // Is tagger channel rejected by user?
         if(GetTagger()->GetTaggedChannel(j) < TC_cut_min) continue;
         if(GetTagger()->GetTaggedChannel(j) > TC_cut_max) continue;
-	
+
         time = GetTagger()->GetTaggedTime(j) - tree.GetTime(particle_index);
 	Hist->Fill(time);
 	}
@@ -180,12 +180,12 @@ void PPhysics::FillBeamAsymmetry(const GTreeParticle& tree, Int_t particle_index
 
     // calc particle time diff
     time = GetTagger()->GetTaggedTime(tagger_index) - tree.GetTime(particle_index);
-//    cout << "time " << time << endl; 
+//    cout << "time " << time << endl;
     // calc missing p4
     missingp4 = CalcMissingP4(tree, particle_index,tagger_index);
- //   cout << "MM " << missingp4.M() << endl;     
+ //   cout << "MM " << missingp4.M() << endl;
     if((missingp4.M() < MM_min) || (missingp4.M() > MM_max)) return;
-   
+
    if (GHistBGSub::IsPrompt(time)) Hprompt->Fill(tree.GetPhi(particle_index)); //cout << "prompt" << endl;}
    if (GHistBGSub::IsRandom(time)) Hrandom->Fill(tree.GetPhi(particle_index));	//cout << "random" << endl;}
 }
@@ -197,6 +197,30 @@ Double_t PPhysics::CalcCoplanarity(const GTreeParticle& tree1, Int_t particle_in
    Double_t phidiff = TMath::Abs(phi1 - phi2);
 
    return phidiff;
+}
+
+Double_t PPhysics::CalcKinEnergy(Double_t ProtTheta, Double_t BeamEnergy)
+{
+    // Adapted from fortran fn, function takes Proton theta and the beam energy
+    // to calculate the initial energy of the proton
+
+    Double_t ProtThetaRad = ProtTheta*TMath::DegToRad(); // Convert input theta to radians
+    Double_t Beta = cos(ProtThetaRad);
+    Double_t P0 = BeamEnergy;
+    Double_t E0 = (BeamEnergy + targetmass); //Caution! Ensure both in same units!
+    Double_t M2a = (E0*E0) - (P0*P0);
+    Double_t M2b = (M2a + TMath::Power(938.272,2) - TMath::Power(939.565,2)); //M2a + proton mass squared - Neutron mass squared
+
+    Double_t a = 4*(TMath::Power((Beta*P0),2) - TMath::Power(E0,2));
+    Double_t b = 4*Beta*M2b*P0;
+    Double_t c = TMath::Power(M2b,2) - 4*(TMath::Power((E0*938.272),2));
+
+    Double_t d = TMath::Power(b,2) - 4*a*c;
+    Double_t P = (-b -sqrt(d))/(2*a);
+    Double_t P_Energy_a = sqrt(TMath::Power(P,2) + TMath::Power(938.272,2));
+    Double_t P_Energy_b = P_Energy_a - 938.272;
+
+    return P_Energy_b;
 }
 
 // ----------------------------------------------------------------------------------------
@@ -230,7 +254,7 @@ void PPhysics::FillMissingMass(const GTreeParticle& tree, Int_t particle_index, 
 
     // calc particle time diff
     time = GetTagger()->GetTaggedTime(tagger_index) - tree.GetTime(particle_index);
-    
+
     // calc missing p4
     missingp4 = CalcMissingP4(tree, particle_index,tagger_index);
 
@@ -258,7 +282,7 @@ TLorentzVector PPhysics::CalcMissingP4(const GTreeParticle& tree, Int_t particle
 {
     particle	= tree.Particle(particle_index);
     beam 		= TLorentzVector(0.,0.,GetTagger()->GetTaggedEnergy(tagger_index),GetTagger()->GetTaggedEnergy(tagger_index));
-	missingp4 	= beam + target - particle;						
+	missingp4 	= beam + target - particle;
 
 	return missingp4;
 }
@@ -280,11 +304,11 @@ void PPhysics::FillBeamAsymmetry(const GTreeParticle& tree, Int_t particle_index
 
     // calc particle time diff
     time = GetTagger()->GetTaggedTime(tagger_index) - tree.GetTime(particle_index);
-    
+
     // calc missing p4
     missingp4 = CalcMissingP4(tree, particle_index,tagger_index);
     if((missingp4.M() < MM_min) || (missingp4.M() > MM_max)) return;
-   
+
    if(TaggerBinning)   gHist->Fill(tree.GetPhi(particle_index),time,GetTagger()->GetTaggedChannel(tagger_index));
    else gHist->Fill(tree.GetPhi(particle_index),time);
 
@@ -313,7 +337,7 @@ void PPhysics::FillTime(const GTreeParticle& tree, Int_t particle_index, GH1* gH
         // Is tagger channel rejected by user?
         if(GetTagger()->GetTaggedChannel(j) < TC_cut_min) continue;
         if(GetTagger()->GetTaggedChannel(j) > TC_cut_max) continue;
-	
+
         time = GetTagger()->GetTaggedTime(j) - tree.GetTime(particle_index);
 		gHist->Fill(time);
 	}
@@ -372,12 +396,12 @@ Bool_t 	PPhysics::InitBackgroundCuts()
 	// Set background cuts
 	Double_t p1, p2, r1, r2;
 	string config = ReadConfig("Set-Prompt-Cut");
-	if(strcmp(config.c_str(), "nokey") == 0) 
+	if(strcmp(config.c_str(), "nokey") == 0)
 		cout << "No BG subtraction - At least 1 prompt and random cut required" << endl;
 	else if(sscanf( config.c_str(), "%lf %lf\n", &p1, &p2) == 2)
 	{
 	   config = ReadConfig("Add-Random-Cut",0);
-	   if(strcmp(config.c_str(), "nokey") == 0) 
+	   if(strcmp(config.c_str(), "nokey") == 0)
 	   	cout << "No BG subtraction - At least 1 random cut required" << endl;
 	   else if(sscanf( config.c_str(), "%lf %lf\n", &r1, &r2) == 2)
 	   {
@@ -398,7 +422,7 @@ Bool_t 	PPhysics::InitBackgroundCuts()
 				cout << "random(" << r1 << "," << r2 << ") " << endl;
 
 				GHistBGSub::AddRandCut(r1,r2);
-			}		
+			}
 			instance++;
 		} while (strcmp(config.c_str(), "nokey") != 0);
 	   }
@@ -422,11 +446,11 @@ Bool_t 	PPhysics::InitTargetMass()
 	else if(sscanf( config.c_str(), "%lf\n", &mass) == 1)
 	{
 		cout << "Setting Target mass: " << mass << " MeV" << endl;
-		SetTarget(mass);		
+		SetTarget(mass);
 	}
-	else 
+	else
 	{
-		cout << "Target Mass not set correctly" << endl; 
+		cout << "Target Mass not set correctly" << endl;
 		return kFALSE;
 	}
 
@@ -451,13 +475,13 @@ Bool_t 	PPhysics::InitTaggerChannelCuts()
            cout << "Invalid tagger channel cut: " << tc2 << endl;
 		   return kFALSE;
 		}
-		
+
         cout << "Setting cut on tagger channels: " << tc1 << " to " << tc2 << endl;
 		SetTC_cut(tc1,tc2);
 	}
 	else if(strcmp(config.c_str(), "nokey") != 0)
 	{
-		cout << "Tagger Channel cut not set correctly" << endl; 
+		cout << "Tagger Channel cut not set correctly" << endl;
 		return kFALSE;
 	}
 

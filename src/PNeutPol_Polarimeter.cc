@@ -247,8 +247,8 @@ Double_t PNeutPol_Polarimeter::InitialProp() // Defines initial particle propert
   E2 = GetTracks()->GetClusterEnergy(1);
   dE1 = GetTracks()->GetVetoEnergy(0);
   dE2 = GetTracks()->GetVetoEnergy(1);
-  WC1X1 = GetMWPCHitsChris()->GetMWPCChamber1X(0); // Don't need tree getters
-  WC1Y1 = GetMWPCHitsChris()->GetMWPCChamber1Y(0); // Just need fn to get these values directly
+  WC1X1 = GetMWPCHitsChris()->GetMWPCChamber1X(0);
+  WC1Y1 = GetMWPCHitsChris()->GetMWPCChamber1Y(0);
   WC1Z1 = GetMWPCHitsChris()->GetMWPCChamber1Z(0);
   WC1X2 = GetMWPCHitsChris()->GetMWPCChamber1X(1);
   WC1Y2 = GetMWPCHitsChris()->GetMWPCChamber1Y(1);

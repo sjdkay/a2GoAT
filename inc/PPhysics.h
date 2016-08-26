@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <cstdio>
-#include <string> 
+#include <string>
 
 #include "GTreeManager.h"
 #include "GH1.h"
@@ -22,14 +22,14 @@ private:
 	Double_t Random_high1;
 	Double_t Random_low2;
 	Double_t Random_high2;
-	
+
 	Double_t PvR_ratio;
-		
+
 	TLorentzVector beam;
 	TLorentzVector target;
 	TLorentzVector particle;
 	TLorentzVector missingp4;
-	
+
 	Double_t time;
 	Bool_t 	Prompt;
 	Bool_t 	Random;
@@ -39,8 +39,8 @@ private:
 
 	Int_t TC_scaler_min;
 	Int_t TC_scaler_max;
-	
-	
+
+
 protected:
 
 
@@ -71,7 +71,7 @@ public:
 
 	void 	FillMass(const GTreeParticle& tree, GH1* gHist);
 	void 	FillMass(const GTreeParticle& tree, Int_t particle_index, GH1* gHist);
-				
+
 	void	SetTarget(Double_t mass) {target = TLorentzVector(0.,0.,0.,mass);}
 	TLorentzVector GetTarget() {return target;}
 
@@ -81,7 +81,7 @@ public:
 
 	void 	SetTC_scalers(Int_t sc_min, Int_t sc_max) { TC_scaler_min = sc_min; TC_scaler_max = sc_max; }
 	Int_t 	GetTC_scaler_min() { return TC_scaler_min;}
-	Int_t 	GetTC_scaler_max() { return TC_scaler_max;}	
+	Int_t 	GetTC_scaler_max() { return TC_scaler_max;}
 
 	// TH1 routines
 	void FillMissingMass(const GTreeParticle& tree, TH1* Hprompt, TH1* Hrandom);
@@ -100,6 +100,7 @@ public:
 	void FillBeamAsymmetry(const GTreeParticle& tree, Int_t particle_index, Int_t tagger_index, TH1* Hprompt, TH1* Hrandom, Double_t MM_min, Double_t MM_max);
 
 	Double_t CalcCoplanarity(const GTreeParticle& tree1, Int_t particle_index1, const GTreeParticle& tree2, Int_t particle_index2);
+    Double_t CalcKinEnergy(Double_t ProtTheta, Double_t BeamEnergy);
 
 	void FillScalers(Int_t low_scaler_number, Int_t high_scaler_number, TH1* hist);
 
