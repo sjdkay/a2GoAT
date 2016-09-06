@@ -37,7 +37,6 @@ Bool_t	PNeutPol_Polarimeter::Start()
   NP = 0; // Set number of Protons to 0 before checking
   NPi = 0; // Set number of pions to 0 before checking
   NRoo = 0; // Set number of Rootinos to 0 before checking
-  Deut = TLorentzVector (0., 0., 0., 1875.613); // 4-Vector of Deuterium target, assume at rest
   Mn = 939.565; // Mass of neutron in MeV
   Mp = 938.272; // Mass of proton in MeV
 
@@ -45,10 +44,6 @@ Bool_t	PNeutPol_Polarimeter::Start()
   Cut_proton = Cut_CB_proton;
   Cut_CB_pion = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Pion_29_07_15.root", "Pion");
   Cut_pion = Cut_CB_pion;
-  //Cut_CB_ROI = OpenCutFile("configfiles/cuts/CB_DeltaE-E_ROI_05_08_15.root", "ROI");
-  //Cut_ROI = Cut_CB_ROI; // Uncomment these two if you want some ROI cut to be loaded and used
-  //Cut_CB_neutron = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Neutron_25_02_15.root", "Neutron");
-  //Cut_neutron = Cut_CB_neutron; // This only needs to be here if we get simulation to show where we expect neutrons
   cout << endl;
 
   MCDataCheck();
@@ -118,6 +113,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     {
         PNProp(1);
         PNVect(1);
+
     }
 
     else if (Proton2 == kTRUE)
@@ -135,21 +131,15 @@ void	PNeutPol_Polarimeter::ProcessEvent()
 
     GVp3 = GVp.Vect(); // Generate some 3-vectors from the 4-vectors we have
     GVn3 = GVn.Vect();
-    WC3Vectors();
-    WCAngles();
-    Gamma = TLorentzVector (0., 0., EGamma , EGamma); // 4-Vector of Photon beam
-    Gamma3 = Gamma.Vect(); // Convert photon beam 4-vector to 3-vector
-    B = (Deut + Gamma).Beta(); // Calculate Beta
-    b = TVector3(0., 0., B); // Define boost vector
+    WC3Vectors(WC1pX, WC1pY, WC1pZ, WC1nX, WC1nY, WC1nZ);
+    WCAngles(WC3Vectp, WC3Vectn);
+
     LabAngles(); // Get angles in lab based on track info
 
     KinEp = CalcKinEnergy(Thetap, EGamma);
-
-    cout << KinEp << "   " << Ep << endl;
-
-    // Cut on difference between Phip and PhinRec next - If Diff =/= 180 cut
-    //PhiDiff = abs (Phip - PhinRec);
-    //if ((PhiDiff < 165) || (PhiDiff > 195)) continue;
+    KinEpWC = CalcKinEnergy(WCThetap, EGamma);
+    KinEpDiff = abs(KinEp - KinEpWC);
+    KinEDiff = abs(KinEpWC - Ep);
 
     //FillTime(*GetProtons(),time); Needs to be get tracks not protons now
     //FillTimeCut(*GetProtons(),time_cut);
@@ -189,9 +179,6 @@ TCutG*	PNeutPol_Polarimeter::OpenCutFile(Char_t* filename, Char_t* cutname)
     throw false;
     }
 
-  // Try to find a TCutG with the name we want
-  // GetObject checks the type to be TCutG,
-  // see http://root.cern.ch/root/html534/TDirectory.html#TDirectory:GetObject
   CutFile->GetObject(cutname, Cut);
 
   if( !Cut ) {
@@ -281,21 +268,18 @@ Double_t PNeutPol_Polarimeter::MCSmearing() // Smear dE values for MC data to re
 
 Int_t PNeutPol_Polarimeter::MCTrueID()
 {
-
     MCTrueID1 = GetGeant()->GetTrueID(0);
     MCTrueID2 = GetGeant()->GetTrueID(1);
-    return MCTrueID1, MCTrueID2;
 
+    return MCTrueID1, MCTrueID2;
 }
 
 TLorentzVector PNeutPol_Polarimeter::MCTrueVectors()
 {
-
     MCTrueVect1 = GetGeant()->GetTrueVector(0);
     MCTrueVect2 = GetGeant()->GetTrueVector(1);
 
     return MCTrueVect1, MCTrueVect2;
-
 }
 
 Double_t PNeutPol_Polarimeter::PNProp(Int_t ProtonParticleNumber) // Define properties of proton and neutron from particles that correspond to each
@@ -357,7 +341,7 @@ TLorentzVector PNeutPol_Polarimeter::PNVect(Int_t ProtonParticleNumber) // Defin
   return GVp, GVn;
 }
 
-TVector3 PNeutPol_Polarimeter::WC3Vectors()
+TVector3 PNeutPol_Polarimeter::WC3Vectors(Double_t WCpX, Double_t WCpY, Double_t WCpZ, Double_t WCnX, Double_t WCnY, Double_t WCnZ)
 {
     WC3Vectp.SetXYZ(WC1pX, WC1pY, WC1pZ);
     WC3Vectn.SetXYZ(WC1nX, WC1nY, WC1nZ);
@@ -365,12 +349,12 @@ TVector3 PNeutPol_Polarimeter::WC3Vectors()
     return WC3Vectp, WC3Vectn;
 }
 
-Double_t PNeutPol_Polarimeter::WCAngles()
+Double_t PNeutPol_Polarimeter::WCAngles(TVector3 MWPCp3Vector, TVector3 MWPCn3Vector)
 {
-  WCThetap = WC3Vectp.Theta() * TMath::RadToDeg(); // Angles from WC hit positons
-  WCPhip = WC3Vectp.Phi() * TMath::RadToDeg();
-  WCThetan = WC3Vectn.Theta() * TMath::RadToDeg();
-  WCPhin = WC3Vectn.Phi() * TMath::RadToDeg();
+  WCThetap = MWPCp3Vector.Theta() * TMath::RadToDeg(); // Angles from WC hit positons
+  WCPhip = MWPCp3Vector.Phi() * TMath::RadToDeg();
+  WCThetan = MWPCn3Vector.Theta() * TMath::RadToDeg();
+  WCPhin = MWPCn3Vector.Phi() * TMath::RadToDeg();
   PhiWCDiff = abs (WCPhip-WCPhin);
 
   return WCThetap, WCThetan, WCPhip, WCPhin, PhiWCDiff;
@@ -406,21 +390,29 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   WCThetaNeut = new GH1 ("WCThetaNeut", "WC Theta for n", 180, 0, 180);
   WCPhiProt = new GH1 ("WCPhiProt", "WC Phi for p", 180, -180, 180);
   WCPhiNeut = new GH1 ("WCPhiNeut", "WC Phi for n", 180, -180, 180);
+  EpKin = new GH1 ("EpKin", "Ep Calculated from Ep/Thetap", 100, 0, 500);
+  EpKinWCThetap = new GH1 ("EpKinWCThetap", "Ep Calculated from Ep/WCThetap", 100, 0, 500);
+  EpKinDiff = new GH1 ("EpKinDiff", "Difference Between EpKin EpKinWC", 100, 0, 500);
+  EpEKinDiff = new GH1 ("EpEKinDiff", "Difference Between EpKinWC Ep", 100, 0, 500);
+  WCXp = new GH1("WCXp", "WC X Position for Proton", 200, -100, 100);
+  WCYp = new GH1("WCYp", "WC Y Position for Proton", 200, -100, 100);
+  WCZp = new GH1("WCZp", "WC Z Position for Proton", 200, -500, 500);
+  WCXn = new GH1("WCXn", "WC X Position for Neutron", 200, -100, 100);
+  WCYn = new GH1("WCYn", "WC Y Position for Neutron", 200, -100, 100);
+  WCZn = new GH1("WCZn", "WC Z Position for Neutron", 200, -500, 500);
 
   E_dE = new GH2("E_dE", "EdE Plot", 125, 0, 500, 125, 0, 7);
-  E_dE_p = new GH2("E_dE_p", "EdE Plot for Protons", 125, 0, 500, 125, 0, 7);
-  E_dE_n = new GH2("E_dE_n", "EdE Plot for Neutrons", 125, 0, 500, 125, 0, 7);
 
   EkEg = new GH2("EkEg", "Ek vs Eg for all Particles", 100, 0, 500, 100, 100, 1600);
   EkEg_p = new GH2("EkEg_p", "Ek vs Eg for all Protons", 100, 0, 500, 100, 100, 1600);
   EkEg_n = new GH2("EkEg_n", "Ek vs Eg for all Neutrons", 100, 0, 500, 100, 100, 1600);
 
   Thetap_ThetaWCp = new GH2 ("Thetap_ThetaWCp", "Theta Track vs Theta WC for Protons", 90, 0, 180, 90, 0, 180);
+  Thetan_ThetaWCn = new GH2 ("Thetan_ThetaWCn", "Theta Track vs Theta WC for Neutrons", 90, 0, 180, 90, 0, 180);
 }
 
 void PNeutPol_Polarimeter::FillHists()
 {
-
   Zp_Vert->Fill(Zp, TaggerTime);
   Zn_Vert->Fill(Zn, TaggerTime);
   Ekp->Fill(Ep, TaggerTime);
@@ -436,16 +428,23 @@ void PNeutPol_Polarimeter::FillHists()
   WCThetaNeut->Fill(WCThetan, TaggerTime);
   WCPhiProt->Fill(WCPhip, TaggerTime);
   WCPhiNeut->Fill(WCPhin, TaggerTime);
-  E_dE->Fill(Ep, dEp, TaggerTime);
-  E_dE->Fill(En, dEn, TaggerTime);
-  E_dE_p->Fill(Ep, dEp, TaggerTime);
-  E_dE_n->Fill(En, dEn, TaggerTime);
+  E_dE->Fill(KinEpWC, dEp, TaggerTime);
   EkEg->Fill(Ep, EGamma, TaggerTime);
   EkEg->Fill(En, EGamma, TaggerTime);
   EkEg_p->Fill(Ep, EGamma, TaggerTime);
   EkEg_n->Fill(En, EGamma, TaggerTime);
   Thetap_ThetaWCp->Fill(Thetap, WCThetap, TaggerTime);
-
+  Thetan_ThetaWCn->Fill(Thetan, WCThetan, TaggerTime);
+  EpKin->Fill(KinEp, TaggerTime);
+  EpKinWCThetap->Fill(KinEpWC, TaggerTime);
+  EpKinDiff->Fill(KinEpDiff, TaggerTime);
+  EpEKinDiff->Fill(KinEDiff, TaggerTime);
+  WCXp->Fill(WC1pX, TaggerTime);
+  WCYp->Fill(WC1pY, TaggerTime);
+  WCZp->Fill(WC1pZ, TaggerTime);
+  WCXn->Fill(WC1nX, TaggerTime);
+  WCYn->Fill(WC1nY, TaggerTime);
+  WCZn->Fill(WC1nZ, TaggerTime);
 }
 
 void PNeutPol_Polarimeter::MCHists()
@@ -454,9 +453,6 @@ void PNeutPol_Polarimeter::MCHists()
 }
 
 Bool_t	PNeutPol_Polarimeter::Write(){
-  // Write some TH1s - currently none to write so commented out
-  // GTreeManager::Write(TaggerAccScal); // This spams the file with 2500+ histograms of "TaggerAccScal" so commented out
-
   // Write all GH1's easily
 
   GTreeManager::Write();

@@ -43,7 +43,6 @@ private:
   double_t mmn;
   double_t mmadj;
   double_t GVpUnadjE;
-  double_t B;
   double_t Theta1;
   double_t Theta2;
   double_t Phi1;
@@ -106,6 +105,9 @@ private:
   double_t ScattTheta;
   double_t ScattPhi;
   double_t KinEp;
+  double_t KinEpWC;
+  double_t KinEpDiff;
+  double_t KinEDiff;
 
   Bool_t nBanana;
   Bool_t MCData;
@@ -116,10 +118,6 @@ private:
   TLorentzVector GV2;
   TLorentzVector GVp;
   TLorentzVector GVn;
-  TLorentzVector Gamma;
-  TLorentzVector Deut;
-  TVector3 b;
-  TVector3 Gamma3;
   TVector3 GVp3;
   TVector3 GVn3;
   TVector3 GVn3Rec;
@@ -145,14 +143,23 @@ private:
   GH1*  WCThetaNeut;
   GH1*  WCPhiProt;
   GH1*  WCPhiNeut;
+  GH1*  EpKin;
+  GH1*  EpKinWCThetap;
+  GH1*  EpKinDiff;
+  GH1*  EpEKinDiff;
+  GH1*  WCXp;
+  GH1*  WCYp;
+  GH1*  WCZp;
+  GH1*  WCXn;
+  GH1*  WCYn;
+  GH1*  WCZn;
 
   GH2* E_dE;
-  GH2* E_dE_p;
-  GH2* E_dE_n;
   GH2* EkEg;
   GH2* EkEg_p;
   GH2* EkEg_n;
   GH2* Thetap_ThetaWCp;
+  GH2* Thetan_ThetaWCn;
 
   TLorentzVector MCTrueVect1;
   TLorentzVector MCTrueVect2;
@@ -204,8 +211,8 @@ public:
     Double_t MCSmearing();
     Double_t PNProp(Int_t ProtonParticleNumber);
     TLorentzVector PNVect(Int_t ProtonParticleNumber);
-    TVector3 WC3Vectors();
-    Double_t WCAngles();
+    TVector3 WC3Vectors(Double_t WCpX, Double_t WCpY, Double_t WCpZ, Double_t WCnX, Double_t WCnY, Double_t WCnZ);
+    Double_t WCAngles(TVector3 MWPCp3Vector, TVector3 MWPCn3Vector);
     Double_t LabAngles();
     void FillHists();
 
