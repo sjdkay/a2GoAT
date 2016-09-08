@@ -25,8 +25,6 @@ private:
   Int_t NRoo;
   Int_t NTag;
   Int_t NTrack;
-  Int_t i;
-  Int_t k;
 
   Int_t Detectors1;
   Int_t Detectors2;
@@ -126,8 +124,9 @@ private:
 
   TRandom2 rGen;
 
-  GH1*	time;
-  GH1*	time_cut;
+  TH1D*	time;
+  TH1D*	time_cut;
+
   GH1*  Zp_Vert;
   GH1*  Zn_Vert;
   GH1*  Ekp;
@@ -155,6 +154,7 @@ private:
   GH1*  WCZn;
 
   GH2* E_dE;
+  GH2* E_dE_ThetaCut;
   GH2* EkEg;
   GH2* EkEg_p;
   GH2* EkEg_n;

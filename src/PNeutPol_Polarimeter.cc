@@ -31,8 +31,6 @@ Bool_t	PNeutPol_Polarimeter::Start()
 
   SetAsPhysicsFile();
 
-  i = 0; // Integer counter
-  k = 0;
   d = 52; // Distance from centre of target to centre of Polarimeter
   NP = 0; // Set number of Protons to 0 before checking
   NPi = 0; // Set number of pions to 0 before checking
@@ -51,8 +49,6 @@ Bool_t	PNeutPol_Polarimeter::Start()
   if (MCData == kTRUE) MCHists();
 
   TraverseValidEvents(); // This loops over each event as in old file and calls ProcessEvent() each loop
-
-  //cout << k << endl;
 
   return kTRUE;
 }
@@ -100,12 +96,8 @@ void	PNeutPol_Polarimeter::ProcessEvent()
       MCE2True = (MCTrueVect2.Energy()*1000)-Mn;
   }
 
-  //for (Int_t i=0; i < NTrack; i++){ // Currently nothing relies upon i!
-
   for (Int_t j = 0; j < GetTagger()->GetNTagged(); j++){
 
-    //cout << DetectorsSum << endl;
-    // Time = ( GetTagger()->GetTaggedTime(j) - GetTracks()->GetTime(i) ); // maybe move this to AFTER the cuts once the Eg-EpSum loop has been checked?
     TaggerTime = GetTagger()->GetTaggedTime(j); // Get tagged time for event
     EGamma = (GetTagger()->GetTaggedEnergy(j)); // Get Photon energy for event
 
@@ -113,7 +105,6 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     {
         PNProp(1);
         PNVect(1);
-
     }
 
     else if (Proton2 == kTRUE)
@@ -127,8 +118,6 @@ void	PNeutPol_Polarimeter::ProcessEvent()
         continue;
     }
 
-    //if (i == 0) { // These properties get defined for each photon
-
     GVp3 = GVp.Vect(); // Generate some 3-vectors from the 4-vectors we have
     GVn3 = GVn.Vect();
     WC3Vectors(WC1pX, WC1pY, WC1pZ, WC1nX, WC1nY, WC1nZ);
@@ -139,10 +128,9 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     KinEp = CalcKinEnergy(Thetap, EGamma);
     KinEpWC = CalcKinEnergy(WCThetap, EGamma);
     KinEpDiff = abs(KinEp - KinEpWC);
-    KinEDiff = abs(KinEpWC - Ep);
+    KinEDiff = abs(KinEp - Ep);
 
-    //FillTime(*GetProtons(),time); Needs to be get tracks not protons now
-    //FillTimeCut(*GetProtons(),time_cut);
+    if (KinEDiff > 100) continue; // If difference between CB energy and calculated Energy for proton > 100MeV continue
 
     if (MCData == kTRUE)
     {
@@ -156,12 +144,8 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     //k++;
     FillHists(); // Fill histograms with data generated
 
-    //}
+
   }
-
-  // cout << endl; // Use to separate out events
-
-  //}
 }
 
 void	PNeutPol_Polarimeter::ProcessScalerRead()
@@ -372,8 +356,8 @@ Double_t PNeutPol_Polarimeter::LabAngles()
 
 PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to fill
 {
-  time = new GH1("time", 	"time", 	1400, -700, 700);
-  time_cut = new GH1("time_cut", 	"time_cut", 	1400, -700, 700);
+  time = new TH1D("time", 	"time", 	1400, -700, 700);
+  time_cut = new TH1D("time_cut", 	"time_cut", 	1400, -700, 700);
 
   Zp_Vert = new GH1("Zp_Vertex", "Proton Z Vertex Distribution", 300, -150, 150 );
   Zn_Vert = new GH1("Zn_Vertex", "Neutron Z Vertex Distribution", 300, -150, 150 );
@@ -392,8 +376,8 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   WCPhiNeut = new GH1 ("WCPhiNeut", "WC Phi for n", 180, -180, 180);
   EpKin = new GH1 ("EpKin", "Ep Calculated from Ep/Thetap", 100, 0, 500);
   EpKinWCThetap = new GH1 ("EpKinWCThetap", "Ep Calculated from Ep/WCThetap", 100, 0, 500);
-  EpKinDiff = new GH1 ("EpKinDiff", "Difference Between EpKin EpKinWC", 100, 0, 500);
-  EpEKinDiff = new GH1 ("EpEKinDiff", "Difference Between EpKinWC Ep", 100, 0, 500);
+  EpKinDiff = new GH1 ("EpKinDiff", "Difference Between EpKin & EpKinWC", 100, 0, 500);
+  EpEKinDiff = new GH1 ("EpEKinDiff", "Difference Between EpKin & Ep", 100, 0, 500);
   WCXp = new GH1("WCXp", "WC X Position for Proton", 200, -100, 100);
   WCYp = new GH1("WCYp", "WC Y Position for Proton", 200, -100, 100);
   WCZp = new GH1("WCZp", "WC Z Position for Proton", 200, -500, 500);
@@ -402,6 +386,7 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   WCZn = new GH1("WCZn", "WC Z Position for Neutron", 200, -500, 500);
 
   E_dE = new GH2("E_dE", "EdE Plot", 125, 0, 500, 125, 0, 7);
+  E_dE_ThetaCut = new GH2 ("E_dE_ThetaCut", "EdE Plot with Theta Cut (35 -45)", 125, 0, 500, 125, 0, 7);
 
   EkEg = new GH2("EkEg", "Ek vs Eg for all Particles", 100, 0, 500, 100, 100, 1600);
   EkEg_p = new GH2("EkEg_p", "Ek vs Eg for all Protons", 100, 0, 500, 100, 100, 1600);
@@ -413,6 +398,9 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
 
 void PNeutPol_Polarimeter::FillHists()
 {
+  time->Fill(TaggerTime);
+  if (-5 < TaggerTime && TaggerTime < 20) time_cut->Fill(TaggerTime);
+
   Zp_Vert->Fill(Zp, TaggerTime);
   Zn_Vert->Fill(Zn, TaggerTime);
   Ekp->Fill(Ep, TaggerTime);
@@ -428,7 +416,7 @@ void PNeutPol_Polarimeter::FillHists()
   WCThetaNeut->Fill(WCThetan, TaggerTime);
   WCPhiProt->Fill(WCPhip, TaggerTime);
   WCPhiNeut->Fill(WCPhin, TaggerTime);
-  E_dE->Fill(KinEpWC, dEp, TaggerTime);
+  E_dE->Fill(KinEp, dEp, TaggerTime);
   EkEg->Fill(Ep, EGamma, TaggerTime);
   EkEg->Fill(En, EGamma, TaggerTime);
   EkEg_p->Fill(Ep, EGamma, TaggerTime);
@@ -445,6 +433,8 @@ void PNeutPol_Polarimeter::FillHists()
   WCXn->Fill(WC1nX, TaggerTime);
   WCYn->Fill(WC1nY, TaggerTime);
   WCZn->Fill(WC1nZ, TaggerTime);
+
+  if( 35 < Thetap && Thetap < 45) E_dE_ThetaCut->Fill(KinEp, dEp, TaggerTime);
 }
 
 void PNeutPol_Polarimeter::MCHists()

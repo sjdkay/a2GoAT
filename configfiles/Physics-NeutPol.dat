@@ -3,7 +3,7 @@
 #=======================================================================
 #
 # Set prompt and random windows (standard library and GH1 library)
-Set-Prompt-Cut: -12 10
+Set-Prompt-Cut: -5 20
 Add-Random-Cut: -170 -35
 Add-Random-Cut: 35 275
 
