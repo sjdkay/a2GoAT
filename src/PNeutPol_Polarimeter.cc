@@ -134,6 +134,8 @@ void	PNeutPol_Polarimeter::ProcessEvent()
 
     if (KinEDiff > 100) continue; // If difference between CB energy and calculated Energy for proton > 100MeV continue
 
+    if (165 < PhiWCDiff || 195 > PhiWCDiff) continue; //Cut on a coplanarity condition
+
     if (MCData == kTRUE)
     {
         // Get some MCTrue parameters and MAYBE fill some histograms with them
