@@ -100,13 +100,12 @@ void	PNeutPol_Polarimeter::ProcessEvent()
 
     TaggerTime = GetTagger()->GetTaggedTime(j); // Get tagged time for event
     EGamma = (GetTagger()->GetTaggedEnergy(j)); // Get Photon energy for event
-    if (EGamma < 400 || EGamma > 600) continue;
 
     if (Proton1 == kTRUE)
     {
         PNProp(1);
         PNVect(1);
-        PIDEle = GetTracks()->GetCentralVeto(0);
+        PIDEle = GetTracks()->GetCentralVeto(0); // Gets PID element hit for proton
     }
 
     else if (Proton2 == kTRUE)
@@ -393,56 +392,7 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
 
   EpEpKinDiff= new GH2 ("EpEpkinDiff", "Proton CB Energy as fn of EpEKinDiff", 100, 0, 500, 100, 0, 200);
 
-  E_dE_Ele1 = new GH2("E_dE_Ele1", "EdE Plot for PID Element 1", 125, 0, 500, 125, 0, 5);
-  E_dE_Ele2 = new GH2("E_dE_Ele2", "EdE Plot for PID Element 2", 125, 0, 500, 125, 0, 5);
-  E_dE_Ele3 = new GH2("E_dE_Ele3", "EdE Plot for PID Element 3", 125, 0, 500, 125, 0, 5);
-  E_dE_Ele4 = new GH2("E_dE_Ele4", "EdE Plot for PID Element 4", 125, 0, 500, 125, 0, 5);
-  E_dE_Ele5 = new GH2("E_dE_Ele5", "EdE Plot for PID Element 5", 125, 0, 500, 125, 0, 5);
-  E_dE_Ele6 = new GH2("E_dE_Ele6", "EdE Plot for PID Element 6", 125, 0, 500, 125, 0, 5);
-  //E_dE_Ele7 = new GH2("E_dE_Ele7", "EdE Plot for PID Element 7", 125, 0, 500, 125, 0, 5);
-  //E_dE_Ele8 = new GH2("E_dE_Ele8", "EdE Plot for PID Element 8", 125, 0, 500, 125, 0, 5);
-  //E_dE_Ele9 = new GH2("E_dE_Ele9", "EdE Plot for PID Element 9", 125, 0, 500, 125, 0, 5);
-  //E_dE_Ele10 = new GH2("E_dE_Ele10", "EdE Plot for PID Element 10", 125, 0, 500, 125, 0, 5);
-  //E_dE_Ele11 = new GH2("E_dE_Ele11", "EdE Plot for PID Element 11", 125, 0, 500, 125, 0, 5);
-  //E_dE_Ele12 = new GH2("E_dE_Ele12", "EdE Plot for PID Element 12", 125, 0, 500, 125, 0, 5);
-  //E_dE_Ele13 = new GH2("E_dE_Ele13", "EdE Plot for PID Element 13", 125, 0, 500, 125, 0, 5);
-  //E_dE_Ele14 = new GH2("E_dE_Ele14", "EdE Plot for PID Element 14", 125, 0, 500, 125, 0, 5);
-  //E_dE_Ele15 = new GH2("E_dE_Ele15", "EdE Plot for PID Element 15", 125, 0, 500, 125, 0, 5);
-  //E_dE_Ele16 = new GH2("E_dE_Ele16", "EdE Plot for PID Element 16", 125, 0, 500, 125, 0, 5);
-  //E_dE_Ele17 = new GH2("E_dE_Ele17", "EdE Plot for PID Element 17", 125, 0, 500, 125, 0, 5);
-  //E_dE_Ele18 = new GH2("E_dE_Ele18", "EdE Plot for PID Element 18", 125, 0, 500, 125, 0, 5);
-  //E_dE_Ele19 = new GH2("E_dE_Ele19", "EdE Plot for PID Element 19", 125, 0, 500, 125, 0, 5);
-  //E_dE_Ele20 = new GH2("E_dE_Ele20", "EdE Plot for PID Element 20", 125, 0, 500, 125, 0, 5);
-  //E_dE_Ele21 = new GH2("E_dE_Ele21", "EdE Plot for PID Element 21", 125, 0, 500, 125, 0, 5);
-  //E_dE_Ele22 = new GH2("E_dE_Ele22", "EdE Plot for PID Element 22", 125, 0, 500, 125, 0, 5);
-  //E_dE_Ele23 = new GH2("E_dE_Ele23", "EdE Plot for PID Element 23", 125, 0, 500, 125, 0, 5);
-  //E_dE_Ele24 = new GH2("E_dE_Ele24", "EdE Plot for PID Element 24", 125, 0, 500, 125, 0, 5);
-
   ThetaPidE = new GH2("ThetaPidE", "Theta as fn of PID Energy", 100, 0, 180, 100, 0, 5);
-  ThetaPidE1 = new GH2("ThetaPidE1", "Theta as fn of PID Energy for Element 1", 100, 0, 180, 100, 0, 5);
-  ThetaPidE2 = new GH2("ThetaPidE2", "Theta as fn of PID Energy for Element 2", 100, 0, 180, 100, 0, 5);
-  ThetaPidE3 = new GH2("ThetaPidE3", "Theta as fn of PID Energy for Element 3", 100, 0, 180, 100, 0, 5);
-  ThetaPidE4 = new GH2("ThetaPidE4", "Theta as fn of PID Energy for Element 4", 100, 0, 180, 100, 0, 5);
-  ThetaPidE5 = new GH2("ThetaPidE5", "Theta as fn of PID Energy for Element 5", 100, 0, 180, 100, 0, 5);
-  ThetaPidE6= new GH2("ThetaPidE6", "Theta as fn of PID Energy for Element 6", 100, 0, 180, 100, 0, 5);
-  //ThetaPidE7 = new GH2("ThetaPidE7", "Theta as fn of PID Energy for Element 7", 100, 0, 180, 100, 0, 5);
-  //ThetaPidE8 = new GH2("ThetaPidE8", "Theta as fn of PID Energy for Element 8", 100, 0, 180, 100, 0, 5);
-  //ThetaPidE9 = new GH2("ThetaPidE9", "Theta as fn of PID Energy for Element 9", 100, 0, 180, 100, 0, 5);
-  //ThetaPidE10 = new GH2("ThetaPidE10", "Theta as fn of PID Energy for Element 10", 100, 0, 180, 100, 0, 5);
-  //ThetaPidE11 = new GH2("ThetaPidE11", "Theta as fn of PID Energy for Element 11", 100, 0, 180, 100, 0, 5);
-  //ThetaPidE12 = new GH2("ThetaPidE12", "Theta as fn of PID Energy for Element 12", 100, 0, 180, 100, 0, 5);
-  //ThetaPidE13 = new GH2("ThetaPidE13", "Theta as fn of PID Energy for Element 13", 100, 0, 180, 100, 0, 5);
-  //ThetaPidE14 = new GH2("ThetaPidE14", "Theta as fn of PID Energy for Element 14", 100, 0, 180, 100, 0, 5);
-  //ThetaPidE15 = new GH2("ThetaPidE15", "Theta as fn of PID Energy for Element 15", 100, 0, 180, 100, 0, 5);
-  //ThetaPidE16 = new GH2("ThetaPidE16", "Theta as fn of PID Energy for Element 16", 100, 0, 180, 100, 0, 5);
-  //ThetaPidE17 = new GH2("ThetaPidE17", "Theta as fn of PID Energy for Element 17", 100, 0, 180, 100, 0, 5);
-  //ThetaPidE18 = new GH2("ThetaPidE18", "Theta as fn of PID Energy for Element 18", 100, 0, 180, 100, 0, 5);
-  //ThetaPidE19 = new GH2("ThetaPidE19", "Theta as fn of PID Energy for Element 19", 100, 0, 180, 100, 0, 5);
-  //ThetaPidE20 = new GH2("ThetaPidE20", "Theta as fn of PID Energy for Element 20", 100, 0, 180, 100, 0, 5);
-  //ThetaPidE21 = new GH2("ThetaPidE21", "Theta as fn of PID Energy for Element 21", 100, 0, 180, 100, 0, 5);
-  //ThetaPidE22 = new GH2("ThetaPidE22", "Theta as fn of PID Energy for Element 22", 100, 0, 180, 100, 0, 5);
-  //ThetaPidE23 = new GH2("ThetaPidE23", "Theta as fn of PID Energy for Element 23", 100, 0, 180, 100, 0, 5);
-  //ThetaPidE24 = new GH2("ThetaPidE24", "Theta as fn of PID Energy for Element 24", 100, 0, 180, 100, 0, 5);
 }
 
 void PNeutPol_Polarimeter::FillHists()
@@ -480,58 +430,8 @@ void PNeutPol_Polarimeter::FillHists()
   if( 35 < Thetap && Thetap < 45) E_dE_ThetaCut->Fill(KinEp, dEp, TaggerTime);
   if( 35 < Thetap && Thetap < 45) ECB_dE_ThetaCut->Fill(Ep, dEp, TaggerTime);
 
-  if(PIDEle == 0) E_dE_Ele1->Fill(KinEp, dEp, TaggerTime);
-  if(PIDEle == 1) E_dE_Ele2->Fill(KinEp, dEp, TaggerTime);
-  if(PIDEle == 2) E_dE_Ele3->Fill(KinEp, dEp, TaggerTime);
-  if(PIDEle == 3) E_dE_Ele4->Fill(KinEp, dEp, TaggerTime);
-  if(PIDEle == 4) E_dE_Ele5->Fill(KinEp, dEp, TaggerTime);
-  if(PIDEle == 5) E_dE_Ele6->Fill(KinEp, dEp, TaggerTime);
-  //if(PIDEle == 6) E_dE_Ele7->Fill(KinEp, dEp, TaggerTime);
-  //if(PIDEle == 7) E_dE_Ele8->Fill(KinEp, dEp, TaggerTime);
-  //if(PIDEle == 8) E_dE_Ele9->Fill(KinEp, dEp, TaggerTime);
-  //if(PIDEle == 9) E_dE_Ele10->Fill(KinEp, dEp, TaggerTime);
-  //if(PIDEle == 10) E_dE_Ele11->Fill(KinEp, dEp, TaggerTime);
-  //if(PIDEle == 11) E_dE_Ele12->Fill(KinEp, dEp, TaggerTime);
-  //if(PIDEle == 12) E_dE_Ele13->Fill(KinEp, dEp, TaggerTime);
-  //if(PIDEle == 13) E_dE_Ele14->Fill(KinEp, dEp, TaggerTime);
-  //if(PIDEle == 14) E_dE_Ele15->Fill(KinEp, dEp, TaggerTime);
-  //if(PIDEle == 15) E_dE_Ele16->Fill(KinEp, dEp, TaggerTime);
-  //if(PIDEle == 16) E_dE_Ele17->Fill(KinEp, dEp, TaggerTime);
-  //if(PIDEle == 17) E_dE_Ele18->Fill(KinEp, dEp, TaggerTime);
-  //if(PIDEle == 18) E_dE_Ele19->Fill(KinEp, dEp, TaggerTime);
-  //if(PIDEle == 19) E_dE_Ele20->Fill(KinEp, dEp, TaggerTime);
-  //if(PIDEle == 20) E_dE_Ele21->Fill(KinEp, dEp, TaggerTime);
-  //if(PIDEle == 21) E_dE_Ele22->Fill(KinEp, dEp, TaggerTime);
-  //if(PIDEle == 22) E_dE_Ele23->Fill(KinEp, dEp, TaggerTime);
-  //if(PIDEle == 23) E_dE_Ele24->Fill(KinEp, dEp, TaggerTime);
-
   if (200 < KinEp && KinEp < 240){
-
     ThetaPidE->Fill(Thetap, dEp, TaggerTime);
-    if(PIDEle == 0) ThetaPidE1->Fill(Thetap, dEp, TaggerTime);
-    if(PIDEle == 1) ThetaPidE2->Fill(Thetap, dEp, TaggerTime);
-    if(PIDEle == 2) ThetaPidE3->Fill(Thetap, dEp, TaggerTime);
-    if(PIDEle == 3) ThetaPidE4->Fill(Thetap, dEp, TaggerTime);
-    if(PIDEle == 4) ThetaPidE5->Fill(Thetap, dEp, TaggerTime);
-    if(PIDEle == 5) ThetaPidE6->Fill(Thetap, dEp, TaggerTime);
-    //if(PIDEle == 6) ThetaPidE7->Fill(Thetap, dEp, TaggerTime);
-    //if(PIDEle == 7) ThetaPidE8->Fill(Thetap, dEp, TaggerTime);
-    //if(PIDEle == 8) ThetaPidE9->Fill(Thetap, dEp, TaggerTime);
-    //if(PIDEle == 9) ThetaPidE10->Fill(Thetap, dEp, TaggerTime);
-    //if(PIDEle == 10) ThetaPidE11->Fill(Thetap, dEp, TaggerTime);
-    //if(PIDEle == 11) ThetaPidE12->Fill(Thetap, dEp, TaggerTime);
-    //if(PIDEle == 12) ThetaPidE13->Fill(Thetap, dEp, TaggerTime);
-    //if(PIDEle == 13) ThetaPidE14->Fill(Thetap, dEp, TaggerTime);
-    //if(PIDEle == 14) ThetaPidE15->Fill(Thetap, dEp, TaggerTime);
-    //if(PIDEle == 15) ThetaPidE16->Fill(Thetap, dEp, TaggerTime);
-    //if(PIDEle == 16) ThetaPidE17->Fill(Thetap, dEp, TaggerTime);
-    //if(PIDEle == 17) ThetaPidE18->Fill(Thetap, dEp, TaggerTime);
-    //if(PIDEle == 18) ThetaPidE19->Fill(Thetap, dEp, TaggerTime);
-    //if(PIDEle == 19) ThetaPidE20->Fill(Thetap, dEp, TaggerTime);
-    //if(PIDEle == 20) ThetaPidE21->Fill(Thetap, dEp, TaggerTime);
-    //if(PIDEle == 21) ThetaPidE22->Fill(Thetap, dEp, TaggerTime);
-    //if(PIDEle == 22) ThetaPidE23->Fill(Thetap, dEp, TaggerTime);
-    //if(PIDEle == 23) ThetaPidE24->Fill(Thetap, dEp, TaggerTime);
   }
 
 }
