@@ -130,6 +130,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     LabAngles(); // Get angles in lab based on track info
 
     KinEp = CalcKinEnergy(WCThetap, EGamma);
+    KinEpMB = CalcKinEnergyMB(Ep, WCThetap);
     KinEDiff = abs(KinEp - Ep);
 
     if (KinEDiff > 100) continue; // If difference between CB energy and calculated Energy for proton > 100MeV continue
@@ -379,6 +380,7 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   WCPhiProt = new GH1 ("WCPhiProt", "WC Phi for p", 180, -180, 180);
   WCPhiNeut = new GH1 ("WCPhiNeut", "WC Phi for n", 180, -180, 180);
   EpKin = new GH1 ("EpKin", "Ep Calculated from Ep/Thetap", 100, 0, 500);
+  EpKinMB = new GH1 ("EpKinMB", "Ep Calculated from MB Parametrisation ", 100, 0, 500);
   EpEKinDiff = new GH1 ("EpEKinDiff", "Difference Between EpKin & Ep", 100, 0, 500);
   WCXp = new GH1("WCXp", "WC X Position for Proton", 200, -100, 100);
   WCYp = new GH1("WCYp", "WC Y Position for Proton", 200, -100, 100);
@@ -393,6 +395,7 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   ECB_dE_ThetaCut = new GH2 ("ECB_dE_ThetaCut", "CBEdE Plot with Theta (35 -45)", 100, 0, 500, 100, 0, 5);
 
   EpEpKinDiff= new GH2 ("EpEpkinDiff", "Proton CB Energy as fn of EpEKinDiff", 100, 0, 500, 100, 0, 200);
+  EpKinEpKinMBDiff= new GH2 ("EpkinEpKinMBDiff", "Proton EpKin vs EpKinMB", 100, 0, 500, 100, 0, 500);
 
   ThetaPidE = new GH2("ThetaPidE", "Theta as fn of PID Energy", 100, 0, 180, 100, 0, 5);
 }
@@ -420,8 +423,10 @@ void PNeutPol_Polarimeter::FillHists()
   E_dE->Fill(KinEp, dEp, TaggerTime);
   ECB_dE->Fill(Ep, dEp, TaggerTime);
   EpKin->Fill(KinEp, TaggerTime);
+  EpKinMB->Fill(KinEpMB, TaggerTime);
   EpEKinDiff->Fill(KinEDiff, TaggerTime);
   EpEpKinDiff->Fill(Ep, KinEDiff, TaggerTime);
+  EpKinEpKinMBDiff->Fill(KinEp, KinEpMB, TaggerTime);
   WCXp->Fill(WC1pX, TaggerTime);
   WCYp->Fill(WC1pY, TaggerTime);
   WCZp->Fill(WC1pZ, TaggerTime);

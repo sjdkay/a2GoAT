@@ -107,6 +107,7 @@ private:
   double_t KinEpWC;
   double_t KinEpDiff;
   double_t KinEDiff;
+  double_t KinEpMB;
 
   Bool_t nBanana;
   Bool_t MCData;
@@ -144,6 +145,7 @@ private:
   GH1*  WCPhiProt;
   GH1*  WCPhiNeut;
   GH1*  EpKin;
+  GH1*  EpKinMB;
   GH1*  EpEKinDiff;
   GH1*  WCXp;
   GH1*  WCYp;
@@ -157,6 +159,7 @@ private:
   GH2* ECB_dE;
   GH2* ECB_dE_ThetaCut;
   GH2* EpEpKinDiff;
+  GH2* EpKinEpKinMBDiff;
   GH2* ThetaPidE;
 
   TLorentzVector MCTrueVect1;

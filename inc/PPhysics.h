@@ -22,6 +22,9 @@ private:
 	Double_t Random_high1;
 	Double_t Random_low2;
 	Double_t Random_high2;
+	Double_t A;
+	Double_t B;
+	Double_t C;
 
 	Double_t PvR_ratio;
 
@@ -101,6 +104,10 @@ public:
 
 	Double_t CalcCoplanarity(const GTreeParticle& tree1, Int_t particle_index1, const GTreeParticle& tree2, Int_t particle_index2);
     Double_t CalcKinEnergy(Double_t ProtTheta, Double_t BeamEnergy);
+    Double_t CalcKinEnergyMB(Double_t ProtE, Double_t ProtTheta);
+    Double_t CoeffA(Double_t ProtTheta);
+    Double_t CoeffB(Double_t ProtTheta);
+    Double_t CoeffC(Double_t ProtTheta);
 
 	void FillScalers(Int_t low_scaler_number, Int_t high_scaler_number, TH1* hist);
 

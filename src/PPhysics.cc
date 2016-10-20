@@ -223,6 +223,42 @@ Double_t PPhysics::CalcKinEnergy(Double_t ProtTheta, Double_t BeamEnergy)
     return P_Energy_b;
 }
 
+Double_t PPhysics::CalcKinEnergyMB(Double_t ProtE, Double_t ProtTheta){
+
+    A = CoeffA(ProtTheta);
+    B = CoeffB(ProtTheta);
+    C = CoeffC(ProtTheta);
+
+    Double_t EKinMB = (A*exp(B*ProtE)) + C;
+
+    return EKinMB;
+}
+
+Double_t PPhysics::CoeffA(Double_t ProtTheta){
+
+    Double_t Theta = ProtTheta * TMath::DegToRad();
+    Double_t CoeA = 201.915 - (57.9314*sin(Theta));
+
+    return CoeA;
+}
+
+Double_t PPhysics::CoeffB(Double_t ProtTheta){
+
+    Double_t Theta = ProtTheta * TMath::DegToRad();
+    Double_t CoeB = -0.000800067 - (0.00451967*sin(Theta));
+
+    return CoeB;
+}
+
+Double_t PPhysics::CoeffC(Double_t ProtTheta){
+
+    Double_t Theta = ProtTheta * TMath::DegToRad();
+    Double_t CoeC = -82.3023 + (23.2409*sin(Theta));
+
+    return CoeC;
+}
+
+
 // ----------------------------------------------------------------------------------------
 // GH1 routines
 // ----------------------------------------------------------------------------------------
