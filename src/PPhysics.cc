@@ -223,18 +223,20 @@ Double_t PPhysics::CalcKinEnergy(Double_t ProtTheta, Double_t BeamEnergy)
     return P_Energy_b;
 }
 
+// Calculate kinetic energy of proton from CB energy and proton angle with polarimeter in place
+// Uses parameterisation worked out by Mikhail Bashkanov
 Double_t PPhysics::CalcKinEnergyMB(Double_t ProtE, Double_t ProtTheta){
 
     A = CoeffA(ProtTheta);
     B = CoeffB(ProtTheta);
     C = CoeffC(ProtTheta);
 
-    Double_t EKinMB = (A*exp(B*ProtE)) + C;
+    Double_t EKinMB = (A*exp(B*ProtE)) + C + ProtE;
 
     return EKinMB;
 }
 
-Double_t PPhysics::CoeffA(Double_t ProtTheta){
+Double_t PPhysics::CoeffA(Double_t ProtTheta){ // Calculate Coefficient A for MB parameterisation
 
     Double_t Theta = ProtTheta * TMath::DegToRad();
     Double_t CoeA = 201.915 - (57.9314*sin(Theta));
@@ -242,7 +244,7 @@ Double_t PPhysics::CoeffA(Double_t ProtTheta){
     return CoeA;
 }
 
-Double_t PPhysics::CoeffB(Double_t ProtTheta){
+Double_t PPhysics::CoeffB(Double_t ProtTheta){ // Calculate Coefficient B for MB parameterisation
 
     Double_t Theta = ProtTheta * TMath::DegToRad();
     Double_t CoeB = -0.000800067 - (0.00451967*sin(Theta));
@@ -250,14 +252,13 @@ Double_t PPhysics::CoeffB(Double_t ProtTheta){
     return CoeB;
 }
 
-Double_t PPhysics::CoeffC(Double_t ProtTheta){
+Double_t PPhysics::CoeffC(Double_t ProtTheta){ // Calculate Coefficient C for MB parameterisation
 
     Double_t Theta = ProtTheta * TMath::DegToRad();
     Double_t CoeC = -82.3023 + (23.2409*sin(Theta));
 
     return CoeC;
 }
-
 
 // ----------------------------------------------------------------------------------------
 // GH1 routines

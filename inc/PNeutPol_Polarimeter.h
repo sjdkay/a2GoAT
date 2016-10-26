@@ -36,11 +36,6 @@ private:
   double_t EGamma;
   double_t Mn;
   double_t Mp;
-  double_t mm1;
-  double_t mm2;
-  double_t mmp;
-  double_t mmn;
-  double_t mmadj;
   double_t GVpUnadjE;
   double_t Theta1;
   double_t Theta2;
@@ -108,6 +103,13 @@ private:
   double_t KinEpDiff;
   double_t KinEDiff;
   double_t KinEpMB;
+  double_t EpTot;
+  double_t Pp;
+  double_t Ppx;
+  double_t Ppy;
+  double_t Ppz;
+  double_t MMpKin;
+  double_t MMpKinMB;
 
   Bool_t nBanana;
   Bool_t MCData;
@@ -118,6 +120,14 @@ private:
   TLorentzVector GV2;
   TLorentzVector GVp;
   TLorentzVector GVn;
+  TLorentzVector Gamma;
+  TLorentzVector Deut;
+  TLorentzVector P4Vect;
+  TLorentzVector N4Vect;
+  TLorentzVector RecKinProton;
+  TLorentzVector RecKinNeutron;
+  TLorentzVector RecKinMBProton;
+  TLorentzVector RecKinMBNeutron;
   TVector3 GVp3;
   TVector3 GVn3;
   TVector3 GVn3Rec;
@@ -147,20 +157,27 @@ private:
   GH1*  EpKin;
   GH1*  EpKinMB;
   GH1*  EpEKinDiff;
+  GH1*  EpKinEpKinMBDiff;
   GH1*  WCXp;
   GH1*  WCYp;
   GH1*  WCZp;
   GH1*  WCXn;
   GH1*  WCYn;
   GH1*  WCZn;
+  GH1*  MMp;
+  GH1*  MMpMB;
 
   GH2* E_dE;
   GH2* E_dE_ThetaCut;
   GH2* ECB_dE;
   GH2* ECB_dE_ThetaCut;
   GH2* EpEpKinDiff;
-  GH2* EpKinEpKinMBDiff;
+  GH2* EpKinEpKinMBDiffPTheta;
   GH2* ThetaPidE;
+  GH2* MMpKinEKin;
+  GH2* MMpKinEKinMB;
+  GH2* MMpKinTheta;
+  GH2* MMpKinThetaMB;
 
   TLorentzVector MCTrueVect1;
   TLorentzVector MCTrueVect2;
@@ -214,6 +231,8 @@ public:
     TLorentzVector PNVect(Int_t ProtonParticleNumber);
     TVector3 WC3Vectors(Double_t WCpX, Double_t WCpY, Double_t WCpZ, Double_t WCnX, Double_t WCnY, Double_t WCnZ);
     Double_t WCAngles(TVector3 MWPCp3Vector, TVector3 MWPCn3Vector);
+    TLorentzVector Proton4VectorKin(Double_t KinE, Double_t Theta, Double_t Phi);
+    TLorentzVector Neutron4VectorKin(TLorentzVector ProtonKinVector);
     Double_t LabAngles();
     void FillHists();
 
