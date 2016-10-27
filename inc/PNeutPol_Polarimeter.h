@@ -26,6 +26,10 @@ private:
   Int_t NTag;
   Int_t NTrack;
   Int_t PIDEle;
+  Int_t EventCounter;
+  Int_t EventCounterTrackCut;
+  Int_t EventCounterZCut;
+  Int_t EventCounterCoplanarCut;
 
   Int_t Detectors1;
   Int_t Detectors2;
@@ -145,6 +149,7 @@ private:
   GH1*  Ekn;
   GH1*  EkSum;
   GH1*  Eg;
+  GH1*  EgCut;
   GH1*  ThetaProt;
   GH1*  ThetaNeut;
   GH1*  PhiProt;
@@ -166,6 +171,8 @@ private:
   GH1*  WCZn;
   GH1*  MMp;
   GH1*  MMpMB;
+  GH1*  MMpCut;
+  GH1*  MMpMBCut;
 
   GH2* E_dE;
   GH2* E_dE_ThetaCut;
@@ -176,6 +183,8 @@ private:
   GH2* ThetaPidE;
   GH2* MMpKinEKin;
   GH2* MMpKinEKinMB;
+  GH2* MMpKinEKinCut;
+  GH2* MMpKinEKinMBCut;
   GH2* MMpKinTheta;
   GH2* MMpKinThetaMB;
 

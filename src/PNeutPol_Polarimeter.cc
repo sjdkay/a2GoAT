@@ -31,6 +31,10 @@ Bool_t	PNeutPol_Polarimeter::Start()
 
   SetAsPhysicsFile();
 
+  EventCounter = 0;
+  EventCounterTrackCut=0;
+  EventCounterZCut=0;
+  EventCounterCoplanarCut=0;
   d = 52; // Distance from centre of target to centre of Polarimeter
   NP = 0; // Set number of Protons to 0 before checking
   NPi = 0; // Set number of pions to 0 before checking
@@ -51,6 +55,8 @@ Bool_t	PNeutPol_Polarimeter::Start()
 
   TraverseValidEvents(); // This loops over each event as in old file and calls ProcessEvent() each loop
 
+  cout << EventCounter << " Events in file " << EventCounterTrackCut << " Events After Track Cut " << EventCounterZCut << " Events after Z cut " << EventCounterCoplanarCut << " Events after Coplanarity Cut" << endl;
+
   return kTRUE;
 }
 
@@ -58,6 +64,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
 {
 
   GetEvent(); // Function gets number of tracks/protons/pions e.t.c.
+  EventCounter++;
   if (NRoo !=0) return; // Goes to next event if any "rootinos" found
   if (NTrack !=2) return; // Ensures two track event
   DetectorCheck(); // Function checks detector numbers for each track
@@ -83,8 +90,42 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     return;
   }
 
+  EventCounterTrackCut++;
+
   InitialVect(); // Function gets vectors of identified tracks and returns them
   InitialProp(); // Function gets initial properties (energy, vertex e.t.c.) of identified tracks
+
+  if (Proton1 == kTRUE)
+    {
+        PNProp(1);
+        PNVect(1);
+        PIDEle = GetTracks()->GetCentralVeto(0); // Gets PID element hit for proton
+    }
+
+  else if (Proton2 == kTRUE)
+    {
+        PNProp(2);
+        PNVect(2);
+        PIDEle = GetTracks()->GetCentralVeto(1);
+    }
+
+  else
+    {
+        return;
+    }
+
+  GVp3 = GVp.Vect(); // Generate some 3-vectors from the 4-vectors we have
+  GVn3 = GVn.Vect();
+  WC3Vectors(WC1pX, WC1pY, WC1pZ, WC1nX, WC1nY, WC1nZ);
+  WCAngles(WC3Vectp, WC3Vectn);
+
+  if( Zp > 40 || Zp < -50) return;
+
+  EventCounterZCut++;
+
+  if ( PhiWCDiff > 195 || PhiWCDiff < 165) return; //Cut on a coplanarity condition
+
+  EventCounterCoplanarCut++;
 
   if ( MCData == kTRUE)
   {
@@ -103,32 +144,6 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     EGamma = (GetTagger()->GetTaggedEnergy(j)); // Get Photon energy for event
     Gamma = TLorentzVector (0., 0., EGamma , EGamma); // 4-Vector of Photon beam
 
-    if (Proton1 == kTRUE)
-    {
-        PNProp(1);
-        PNVect(1);
-        PIDEle = GetTracks()->GetCentralVeto(0); // Gets PID element hit for proton
-    }
-
-    else if (Proton2 == kTRUE)
-    {
-        PNProp(2);
-        PNVect(2);
-        PIDEle = GetTracks()->GetCentralVeto(1);
-    }
-
-    else
-    {
-        continue;
-    }
-
-    if( Zp > 40 || Zp < -50) continue;
-
-    GVp3 = GVp.Vect(); // Generate some 3-vectors from the 4-vectors we have
-    GVn3 = GVn.Vect();
-    WC3Vectors(WC1pX, WC1pY, WC1pZ, WC1nX, WC1nY, WC1nZ);
-    WCAngles(WC3Vectp, WC3Vectn);
-
     LabAngles(); // Get angles in lab based on track info
 
     KinEp = CalcKinEnergy(WCThetap, EGamma);
@@ -142,8 +157,6 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     MMpKinMB = RecKinMBNeutron.M();
 
     if (KinEDiff > 100) continue; // If difference between CB energy and calculated Energy for proton > 100MeV continue
-
-    if ( PhiWCDiff > 195 || PhiWCDiff < 165) continue; //Cut on a coplanarity condition
 
     if (MCData == kTRUE)
     {
@@ -399,6 +412,7 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   Ekn = new GH1( "Ekn", "Neutron Energy Distribution", 100, 0, 500 );
   EkSum = new GH1( "Ek Sum", "Particle Energy Sum Distribution", 300, 0, 900 );
   Eg = new GH1( "Eg", "Photon Energy Distribution", 200, 100, 1600 );
+  EgCut = new GH1( "EgCut", "Photon Energy Distribution (P Banana Cut)", 400, 100, 1600 );
   ThetaProt = new GH1( "ThetaProt", " Proton Theta Distribution", 180, 0, 180 );
   ThetaNeut = new GH1( "ThetaNeut", " Neutron Theta Distribution", 180, 0, 180 );
   PhiProt = new GH1( "PhiProt", " Proton Phi Distribution", 180, -180, 180 );
@@ -420,7 +434,8 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   WCZn = new GH1("WCZn", "WC Z Position for Neutron", 200, -500, 500);
   MMp = new GH1 ("MMp", "Missing mass seen by Proton", 400, 0, 2000);
   MMpMB= new GH1 ("MMpMB", "Missing mass seen by Proton (MB Kin)", 400, 0, 2000);
-
+  MMpCut= new GH1 ("MMpCut", "Missing mass seen by Proton (P Banana Cut)", 400, 0, 2000);
+  MMpMBCut= new GH1 ("MMpMBCut", "Missing mass seen by Proton (MB Kin, P Banana Cut)", 400, 0, 2000);
 
   E_dE = new GH2("E_dE", "EdE Plot", 100, 0, 500, 100, 0, 5);
   E_dE_ThetaCut = new GH2 ("E_dE_ThetaCut", "EdE Plot with Theta Cut (35 -45)", 100, 0, 500, 100, 0, 5);
@@ -429,10 +444,12 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
 
   EpEpKinDiff = new GH2 ("EpEpkinDiff", "Proton CB Energy as fn of EpEKinDiff", 100, 0, 500, 100, 0, 200);
   EpKinEpKinMBDiffPTheta = new GH2 ("EpkinEpKinMBDiffPTheta", "Proton EpKinEpKinMB Diff as fn of Proton Theta", 100, 0, 200, 100, 0, 180);
-  MMpKinEKin = new GH2 ("MMpKinEKin", "MM as seen by Proton as Fn of EKin", 200, 0, 2000, 200, 0, 500);
-  MMpKinEKinMB = new GH2 ("MMpKinEKinMB", "MM as seen by Proton as Fn of EKinMB", 200, 0, 2000, 200, 0, 500);
-  MMpKinTheta = new GH2 ("MMpKinTheta", "MM as seen by Proton as Fn of Theta", 200, 0, 2000, 200, 0, 180);
-  MMpKinThetaMB = new GH2 ("MMpKinThetaMB", "MM as seen by Proton (MB Kin) as Fn of Theta", 200, 0, 2000, 200, 0, 180);
+  MMpKinEKin = new GH2 ("MMpKinEKin", "MM as seen by Proton as Fn of EKin", 150, 0, 2000, 150, 0, 500);
+  MMpKinEKinMB = new GH2 ("MMpKinEKinMB", "MM as seen by Proton as Fn of EKinMB", 150, 0, 2000, 150, 0, 500);
+  MMpKinEKinCut = new GH2 ("MMpKinEKinCut", "MM as seen by Proton as Fn of EKin (P Banana Cut)", 150, 0, 2000, 150, 0, 500);
+  MMpKinEKinMBCut = new GH2 ("MMpKinEKinMBCut", "MM as seen by Proton as Fn of EKinMB (P Banana Cut)", 150, 0, 2000, 150, 0, 500);
+  MMpKinTheta = new GH2 ("MMpKinTheta", "MM as seen by Proton as Fn of Theta", 150, 0, 2000, 150, 0, 180);
+  MMpKinThetaMB = new GH2 ("MMpKinThetaMB", "MM as seen by Proton (MB Kin) as Fn of Theta", 150, 0, 2000, 150, 0, 180);
 
   ThetaPidE = new GH2("ThetaPidE", "Theta as fn of PID Energy", 100, 0, 180, 100, 0, 5);
 }
@@ -483,6 +500,15 @@ void PNeutPol_Polarimeter::FillHists()
 
   if (200 < KinEp && KinEp < 240){
     ThetaPidE->Fill(Thetap, dEp, TaggerTime);
+  }
+
+  if(Cut_proton -> IsInside(Ep, dEp) == kTRUE){
+
+    MMpCut->Fill(MMpKin, TaggerTime);
+    MMpMBCut->Fill(MMpKinMB, TaggerTime);
+    MMpKinEKinCut->Fill(MMpKin, KinEp, TaggerTime);
+    MMpKinEKinMBCut->Fill(MMpKinMB, KinEpMB, TaggerTime);
+    EgCut->Fill(EGamma, TaggerTime);
   }
 
 }
