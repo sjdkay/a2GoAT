@@ -199,7 +199,7 @@ Double_t PPhysics::CalcCoplanarity(const GTreeParticle& tree1, Int_t particle_in
    return phidiff;
 }
 
-Double_t PPhysics::CalcKinEnergy(Double_t ProtTheta, Double_t BeamEnergy)
+Double_t PPhysics::CalcKinEnergy(Double_t ProtTheta, Double_t BeamEnergy) // Not working correctly?
 {
     // Adapted from fortran fn, function takes Proton theta and the beam energy
     // to calculate the initial energy of the proton
