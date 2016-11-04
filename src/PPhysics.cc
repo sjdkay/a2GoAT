@@ -203,6 +203,7 @@ Double_t PPhysics::CalcKinEnergy(Double_t ProtTheta, Double_t BeamEnergy) // Not
 {
     // Adapted from fortran fn, function takes Proton theta and the beam energy
     // to calculate the initial energy of the proton
+    // Need to adjust this to be generic so it can be used for other 2 particle kinematics
 
     Double_t ProtThetaRad = ProtTheta*TMath::DegToRad(); // Convert input theta to radians
     Double_t Beta = cos(ProtThetaRad);
