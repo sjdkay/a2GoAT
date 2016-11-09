@@ -199,27 +199,28 @@ Double_t PPhysics::CalcCoplanarity(const GTreeParticle& tree1, Int_t particle_in
    return phidiff;
 }
 
-Double_t PPhysics::CalcKinEnergy(Double_t ProtTheta, Double_t BeamEnergy) // Not working correctly?
+Double_t PPhysics::CalcKinEnergy(Double_t PrimaryTheta, Double_t BeamEnergy, Double_t TargetMass, Double_t BeamMass, Double_t PrimaryMass, Double_t SecondaryMass) // Not working correctly?
 {
+    // Primary Theta/Mass is the angle of the particle we want to calculate the energy for
+    // Secondary mass is the mass of the other particle in the reaction
     // Adapted from fortran fn, function takes Proton theta and the beam energy
     // to calculate the initial energy of the proton
-    // Need to adjust this to be generic so it can be used for other 2 particle kinematics
 
-    Double_t ProtThetaRad = ProtTheta*TMath::DegToRad(); // Convert input theta to radians
-    Double_t Beta = cos(ProtThetaRad);
-    Double_t P0 = BeamEnergy;
-    Double_t E0 = (BeamEnergy + 1875.613); //Caution! Ensure both in same units! 1875.613 is Deuterium mass in MeV/C^2
+    Double_t PrimaryThetaRad = PrimaryTheta*TMath::DegToRad(); // Convert input theta to radians
+    Double_t Beta = cos(PrimaryThetaRad);
+    Double_t P0 = BeamEnergy + BeamMass;
+    Double_t E0 = (BeamEnergy + TargetMass); //Caution! Ensure both in same units! 1875.613 is Deuterium mass in MeV/C^2
     Double_t M2a = (E0*E0) - (P0*P0);
-    Double_t M2b = (M2a + TMath::Power(938.272,2) - TMath::Power(939.565,2)); //M2a + proton mass squared - Neutron mass squared
+    Double_t M2b = (M2a + TMath::Power(PrimaryMass,2) - TMath::Power(SecondaryMass,2)); //M2a + proton mass squared - Neutron mass squared
 
     Double_t a = 4*(TMath::Power((Beta*P0),2) - TMath::Power(E0,2));
     Double_t b = 4*Beta*M2b*P0;
-    Double_t c = TMath::Power(M2b,2) - 4*(TMath::Power((E0*938.272),2));
+    Double_t c = TMath::Power(M2b,2) - 4*(TMath::Power((E0*PrimaryMass),2));
 
     Double_t d = TMath::Power(b,2) - 4*a*c;
     Double_t P = (-b -sqrt(d))/(2*a);
-    Double_t P_Energy_a = sqrt(TMath::Power(P,2) + TMath::Power(938.272,2));
-    Double_t P_Energy_b = P_Energy_a - 938.272;
+    Double_t P_Energy_a = sqrt(TMath::Power(P,2) + TMath::Power(PrimaryMass,2));
+    Double_t P_Energy_b = P_Energy_a - PrimaryMass;
 
     return P_Energy_b;
 }

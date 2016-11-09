@@ -40,6 +40,7 @@ private:
   double_t EGamma;
   double_t Mn;
   double_t Mp;
+  double_t Md;
   double_t GVpUnadjE;
   double_t Theta1;
   double_t Theta2;

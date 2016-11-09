@@ -41,6 +41,7 @@ Bool_t	PNeutPol_Polarimeter::Start()
   NRoo = 0; // Set number of Rootinos to 0 before checking
   Mn = 939.565; // Mass of neutron in MeV
   Mp = 938.272; // Mass of proton in MeV
+  Md = 1875.613; //Mass of Deuterium in MeV
   Deut = TLorentzVector (0., 0., 0., 1875.613); // 4-Vector of Deuterium target, assume at rest
 
   Cut_CB_proton = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Proton_29_07_15.root", "Proton"); // These will need adjusting with new Acqu files
@@ -146,7 +147,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
 
     LabAngles(); // Get angles in lab based on track info
 
-    KinEp = CalcKinEnergy(WCThetap, EGamma);
+    KinEp = CalcKinEnergy(WCThetap, EGamma, Md, 0., Mp, Mn);
     KinEpMB = CalcKinEnergyMB(Ep, WCThetap);
     KinEDiff = abs(KinEp - Ep);
     RecKinProton = Proton4VectorKin(KinEp, WCThetap, WCPhip);
@@ -427,20 +428,20 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   EpEKinDiff = new GH1 ("EpEKinDiff", "Difference Between EpKin & Ep", 100, 0, 500);
   EpKinEpKinMBDiff= new GH1 ("EpkinEpKinMBDiff", "Proton EpKinEpKinMB Diff", 250, 0, 250);
   EpKinEpKinMBDiffCut= new GH1 ("EpkinEpKinMBDiffCut", "Proton EpKinEpKinMB Diff (P Banana Cut)", 250, 0, 250);
-  EpKinEpKinMBDiff300400MeV = new GH1 ("EpkinEpKinMBDiff300400MeV", "Proton EpKinEpKinMB Diff in 300-400 MeV Photon Bin", 250, 0, 250);
-  EpKinEpKinMBDiff400500MeV = new GH1 ("EpkinEpKinMBDiff400500MeV", "Proton EpKinEpKinMB Diff in 400-500 MeV Photon Bin", 250, 0, 250);
-  EpKinEpKinMBDiff500600MeV = new GH1 ("EpkinEpKinMBDiff500600MeV", "Proton EpKinEpKinMB Diff in 500-600 MeV Photon Bin", 250, 0, 250);
-  EpKinEpKinMBDiff600700MeV = new GH1 ("EpkinEpKinMBDiff600700MeV", "Proton EpKinEpKinMB Diff in 600-700 MeV Photon Bin", 250, 0, 250);
-  EpKinEpKinMBDiff700800MeV = new GH1 ("EpkinEpKinMBDiff700800MeV", "Proton EpKinEpKinMB Diff in 700-800 MeV Photon Bin", 250, 0, 250);
-  EpKinEpKinMBDiff800900MeV = new GH1 ("EpkinEpKinMBDiff800900MeV", "Proton EpKinEpKinMB Diff in 800-900 MeV Photon Bin", 250, 0, 250);
-  EpKinEpKinMBDiff9001000MeV = new GH1 ("EpkinEpKinMBDiff9001000MeV", "Proton EpKinEpKinMB Diff in 900-1000 MeV Photon Bin", 250, 0, 250);
-  EpKinEpKinMBDiff300400MeVCut = new GH1 ("EpkinEpKinMBDiff300400MeVCut", "Proton EpKinEpKinMB Diff in 300-400 MeV Photon Bin (P Banana Cut)", 250, 0, 250);
-  EpKinEpKinMBDiff400500MeVCut = new GH1 ("EpkinEpKinMBDiff400500MeVCut", "Proton EpKinEpKinMB Diff in 400-500 MeV Photon Bin (P Banana Cut)", 250, 0, 250);
-  EpKinEpKinMBDiff500600MeVCut = new GH1 ("EpkinEpKinMBDiff500600MeVCut", "Proton EpKinEpKinMB Diff in 500-600 MeV Photon Bin (P Banana Cut)", 250, 0, 250);
-  EpKinEpKinMBDiff600700MeVCut = new GH1 ("EpkinEpKinMBDiff600700MeVCut", "Proton EpKinEpKinMB Diff in 600-700 MeV Photon Bin (P Banana Cut)", 250, 0, 250);
-  EpKinEpKinMBDiff700800MeVCut = new GH1 ("EpkinEpKinMBDiff700800MeVCut", "Proton EpKinEpKinMB Diff in 700-800 MeV Photon Bin (P Banana Cut)", 250, 0, 250);
-  EpKinEpKinMBDiff800900MeVCut = new GH1 ("EpkinEpKinMBDiff800900MeVCut", "Proton EpKinEpKinMB Diff in 800-900 MeV Photon Bin (P Banana Cut)", 250, 0, 250);
-  EpKinEpKinMBDiff9001000MeVCut = new GH1 ("EpkinEpKinMBDiff9001000MeVCut", "Proton EpKinEpKinMB Diff in 900-1000 MeV Photon Bin (P Banana Cut)", 250, 0, 250);
+  EpKinEpKinMBDiff300400MeV = new GH1 ("EpkinEpKinMBDiff300400MeV", "Proton EpKinEpKinMB Diff in 300-400 MeV Photon Bin", 250, -250, 250);
+  EpKinEpKinMBDiff400500MeV = new GH1 ("EpkinEpKinMBDiff400500MeV", "Proton EpKinEpKinMB Diff in 400-500 MeV Photon Bin", 250, -250, 250);
+  EpKinEpKinMBDiff500600MeV = new GH1 ("EpkinEpKinMBDiff500600MeV", "Proton EpKinEpKinMB Diff in 500-600 MeV Photon Bin", 250, -2500, 250);
+  EpKinEpKinMBDiff600700MeV = new GH1 ("EpkinEpKinMBDiff600700MeV", "Proton EpKinEpKinMB Diff in 600-700 MeV Photon Bin", 250, -250, 250);
+  EpKinEpKinMBDiff700800MeV = new GH1 ("EpkinEpKinMBDiff700800MeV", "Proton EpKinEpKinMB Diff in 700-800 MeV Photon Bin", 250, -250, 250);
+  EpKinEpKinMBDiff800900MeV = new GH1 ("EpkinEpKinMBDiff800900MeV", "Proton EpKinEpKinMB Diff in 800-900 MeV Photon Bin", 250, -250, 250);
+  EpKinEpKinMBDiff9001000MeV = new GH1 ("EpkinEpKinMBDiff9001000MeV", "Proton EpKinEpKinMB Diff in 900-1000 MeV Photon Bin", 250, -250, 250);
+  EpKinEpKinMBDiff300400MeVCut = new GH1 ("EpkinEpKinMBDiff300400MeVCut", "Proton EpKinEpKinMB Diff in 300-400 MeV Photon Bin (P Banana Cut)", 250, -250, 250);
+  EpKinEpKinMBDiff400500MeVCut = new GH1 ("EpkinEpKinMBDiff400500MeVCut", "Proton EpKinEpKinMB Diff in 400-500 MeV Photon Bin (P Banana Cut)", 250, -250, 250);
+  EpKinEpKinMBDiff500600MeVCut = new GH1 ("EpkinEpKinMBDiff500600MeVCut", "Proton EpKinEpKinMB Diff in 500-600 MeV Photon Bin (P Banana Cut)", 250, -250, 250);
+  EpKinEpKinMBDiff600700MeVCut = new GH1 ("EpkinEpKinMBDiff600700MeVCut", "Proton EpKinEpKinMB Diff in 600-700 MeV Photon Bin (P Banana Cut)", 250, -250, 250);
+  EpKinEpKinMBDiff700800MeVCut = new GH1 ("EpkinEpKinMBDiff700800MeVCut", "Proton EpKinEpKinMB Diff in 700-800 MeV Photon Bin (P Banana Cut)", 250, -250, 250);
+  EpKinEpKinMBDiff800900MeVCut = new GH1 ("EpkinEpKinMBDiff800900MeVCut", "Proton EpKinEpKinMB Diff in 800-900 MeV Photon Bin (P Banana Cut)", 250, -250, 250);
+  EpKinEpKinMBDiff9001000MeVCut = new GH1 ("EpkinEpKinMBDiff9001000MeVCut", "Proton EpKinEpKinMB Diff in 900-1000 MeV Photon Bin (P Banana Cut)", 250, -250, 250);
 
   WCXp = new GH1("WCXp", "WC X Position for Proton", 200, -100, 100);
   WCYp = new GH1("WCYp", "WC Y Position for Proton", 200, -100, 100);
@@ -516,13 +517,13 @@ void PNeutPol_Polarimeter::FillHists()
 
   if (200 < KinEp && KinEp < 240) ThetaPidE->Fill(Thetap, dEp, TaggerTime);
 
-  if (300 <EGamma && EGamma < 400) EpKinEpKinMBDiff300400MeV->Fill(abs(KinEp - KinEpMB), TaggerTime);
-  if (400 <EGamma && EGamma < 500) EpKinEpKinMBDiff400500MeV->Fill(abs(KinEp - KinEpMB), TaggerTime);
-  if (500 <EGamma && EGamma < 600) EpKinEpKinMBDiff500600MeV->Fill(abs(KinEp - KinEpMB), TaggerTime);
-  if (600 <EGamma && EGamma < 700) EpKinEpKinMBDiff600700MeV->Fill(abs(KinEp - KinEpMB), TaggerTime);
-  if (700 <EGamma && EGamma < 800) EpKinEpKinMBDiff700800MeV->Fill(abs(KinEp - KinEpMB), TaggerTime);
-  if (800 <EGamma && EGamma < 900) EpKinEpKinMBDiff800900MeV->Fill(abs(KinEp - KinEpMB), TaggerTime);
-  if (900 <EGamma && EGamma < 1000) EpKinEpKinMBDiff9001000MeV->Fill(abs(KinEp - KinEpMB), TaggerTime);
+  if (300 <EGamma && EGamma < 400) EpKinEpKinMBDiff300400MeV->Fill(KinEp - KinEpMB, TaggerTime);
+  if (400 <EGamma && EGamma < 500) EpKinEpKinMBDiff400500MeV->Fill(KinEp - KinEpMB, TaggerTime);
+  if (500 <EGamma && EGamma < 600) EpKinEpKinMBDiff500600MeV->Fill(KinEp - KinEpMB, TaggerTime);
+  if (600 <EGamma && EGamma < 700) EpKinEpKinMBDiff600700MeV->Fill(KinEp - KinEpMB, TaggerTime);
+  if (700 <EGamma && EGamma < 800) EpKinEpKinMBDiff700800MeV->Fill(KinEp - KinEpMB, TaggerTime);
+  if (800 <EGamma && EGamma < 900) EpKinEpKinMBDiff800900MeV->Fill(KinEp - KinEpMB, TaggerTime);
+  if (900 <EGamma && EGamma < 1000) EpKinEpKinMBDiff9001000MeV->Fill(KinEp - KinEpMB, TaggerTime);
 
   if(Cut_proton -> IsInside(KinEp, dEp) == kTRUE)
   {
@@ -533,13 +534,13 @@ void PNeutPol_Polarimeter::FillHists()
     EgCut->Fill(EGamma, TaggerTime);
     EpKinEpKinMBDiffCut->Fill(abs(KinEp - KinEpMB), TaggerTime);
 
-    if (300 <EGamma && EGamma < 400) EpKinEpKinMBDiff300400MeVCut->Fill(abs(KinEp - KinEpMB), TaggerTime);
-    if (400 <EGamma && EGamma < 500) EpKinEpKinMBDiff400500MeVCut->Fill(abs(KinEp - KinEpMB), TaggerTime);
-    if (500 <EGamma && EGamma < 600) EpKinEpKinMBDiff500600MeVCut->Fill(abs(KinEp - KinEpMB), TaggerTime);
-    if (600 <EGamma && EGamma < 700) EpKinEpKinMBDiff600700MeVCut->Fill(abs(KinEp - KinEpMB), TaggerTime);
-    if (700 <EGamma && EGamma < 800) EpKinEpKinMBDiff700800MeVCut->Fill(abs(KinEp - KinEpMB), TaggerTime);
-    if (800 <EGamma && EGamma < 900) EpKinEpKinMBDiff800900MeVCut->Fill(abs(KinEp - KinEpMB), TaggerTime);
-    if (900 <EGamma && EGamma < 1000) EpKinEpKinMBDiff9001000MeVCut->Fill(abs(KinEp - KinEpMB), TaggerTime);
+    if (300 <EGamma && EGamma < 400) EpKinEpKinMBDiff300400MeVCut->Fill(KinEp - KinEpMB, TaggerTime);
+    if (400 <EGamma && EGamma < 500) EpKinEpKinMBDiff400500MeVCut->Fill(KinEp - KinEpMB, TaggerTime);
+    if (500 <EGamma && EGamma < 600) EpKinEpKinMBDiff500600MeVCut->Fill(KinEp - KinEpMB, TaggerTime);
+    if (600 <EGamma && EGamma < 700) EpKinEpKinMBDiff600700MeVCut->Fill(KinEp - KinEpMB, TaggerTime);
+    if (700 <EGamma && EGamma < 800) EpKinEpKinMBDiff700800MeVCut->Fill(KinEp - KinEpMB, TaggerTime);
+    if (800 <EGamma && EGamma < 900) EpKinEpKinMBDiff800900MeVCut->Fill(KinEp - KinEpMB, TaggerTime);
+    if (900 <EGamma && EGamma < 1000) EpKinEpKinMBDiff9001000MeVCut->Fill(KinEp - KinEpMB, TaggerTime);
   }
 
 }

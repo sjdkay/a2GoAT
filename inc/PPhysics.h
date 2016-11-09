@@ -103,7 +103,7 @@ public:
 	void FillBeamAsymmetry(const GTreeParticle& tree, Int_t particle_index, Int_t tagger_index, TH1* Hprompt, TH1* Hrandom, Double_t MM_min, Double_t MM_max);
 
 	Double_t CalcCoplanarity(const GTreeParticle& tree1, Int_t particle_index1, const GTreeParticle& tree2, Int_t particle_index2);
-    Double_t CalcKinEnergy(Double_t ProtTheta, Double_t BeamEnergy);
+    Double_t CalcKinEnergy(Double_t PrimaryTheta, Double_t BeamEnergy, Double_t TargetMass, Double_t BeamMass, Double_t PrimaryMass, Double_t SecondaryMass);
     Double_t CalcKinEnergyMB(Double_t ProtE, Double_t ProtTheta);
     Double_t CoeffA(Double_t ProtTheta);
     Double_t CoeffB(Double_t ProtTheta);
