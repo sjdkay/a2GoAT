@@ -210,17 +210,16 @@ Double_t PPhysics::CalcKinEnergy(Double_t PrimaryTheta, Double_t BeamEnergy, Dou
     Double_t Beta = cos(PrimaryThetaRad);
     Double_t P0 = BeamEnergy + BeamMass;
     Double_t E0 = (BeamEnergy + TargetMass); //Caution! Ensure both in same units! 1875.613 is Deuterium mass in MeV/C^2
-    Double_t M2a = (E0*E0) - (P0*P0);
-    Double_t M2b = (M2a + TMath::Power(PrimaryMass,2) - TMath::Power(SecondaryMass,2)); //M2a + proton mass squared - Neutron mass squared
+    Double_t M2 = (((TMath::Power(E0,2))-(TMath::Power(P0,2))) + (TMath::Power(PrimaryMass,2)) - (TMath::Power(SecondaryMass,2))); //M2a + proton mass squared - Neutron mass squared
 
-    Double_t a = 4*(TMath::Power((Beta*P0),2) - TMath::Power(E0,2));
-    Double_t b = 4*Beta*M2b*P0;
-    Double_t c = TMath::Power(M2b,2) - 4*(TMath::Power((E0*PrimaryMass),2));
+    Double_t a = 4*((TMath::Power((Beta*P0),2)) - (TMath::Power(E0,2)));
+    Double_t b = 4*Beta*M2*P0;
+    Double_t c = (TMath::Power(M2,2)) - (4*((TMath::Power((E0*PrimaryMass),2))));
 
-    Double_t d = TMath::Power(b,2) - 4*a*c;
-    Double_t P = (-b -sqrt(d))/(2*a);
-    Double_t P_Energy_a = sqrt(TMath::Power(P,2) + TMath::Power(PrimaryMass,2));
-    Double_t P_Energy_b = P_Energy_a - PrimaryMass;
+    Double_t d = (TMath::Power(b,2)) - (4*a*c);
+    Double_t P = (-b - (sqrt(d)))/(2*a); // Magnitude of 4-momentum for primary
+    Double_t P_Energy_a = sqrt((TMath::Power(P,2)) + (TMath::Power(PrimaryMass,2))); // Energy of primary
+    Double_t P_Energy_b = P_Energy_a - PrimaryMass; // Kinetic energy of primary
 
     return P_Energy_b;
 }

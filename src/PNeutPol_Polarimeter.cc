@@ -44,7 +44,7 @@ Bool_t	PNeutPol_Polarimeter::Start()
   Md = 1875.613; //Mass of Deuterium in MeV
   Deut = TLorentzVector (0., 0., 0., 1875.613); // 4-Vector of Deuterium target, assume at rest
 
-  Cut_CB_proton = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Proton_29_07_15.root", "Proton"); // These will need adjusting with new Acqu files
+  Cut_CB_proton = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Proton_9_11_16.root", "Proton"); // These will need adjusting with new Acqu files
   Cut_proton = Cut_CB_proton;
   Cut_CB_pion = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Pion_29_07_15.root", "Pion");
   Cut_pion = Cut_CB_pion;
@@ -455,9 +455,8 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   MMpMBCut= new GH1 ("MMpMBCut", "Missing mass seen by Proton (MB Kin, P Banana Cut)", 400, 0, 2000);
 
   E_dE = new GH2("E_dE", "EdE Plot", 100, 0, 500, 100, 0, 5);
-  E_dE_ThetaCut = new GH2 ("E_dE_ThetaCut", "EdE Plot with Theta Cut (35 -45)", 100, 0, 500, 100, 0, 5);
   ECB_dE = new GH2 ("ECB_dE", "CBEdE Plot", 100, 0, 500, 100, 0, 5);
-  ECB_dE_ThetaCut = new GH2 ("ECB_dE_ThetaCut", "CBEdE Plot with Theta (35 -45)", 100, 0, 500, 100, 0, 5);
+  ECB_dE_Cut = new GH2 ("ECB_dE_Cut", "CBEdE Plot (With cut on proton banana)", 100, 0, 500, 100, 0, 5);
 
   EpEpKinDiff = new GH2 ("EpEpkinDiff", "Proton CB Energy as fn of EpEKinDiff", 100, 0, 500, 100, 0, 200);
   EpKinEpKinMBDiffPTheta = new GH2 ("EpkinEpKinMBDiffPTheta", "Proton EpKinEpKinMB Diff as fn of Proton Theta", 100, 0, 200, 100, 0, 180);
@@ -468,7 +467,6 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   MMpKinTheta = new GH2 ("MMpKinTheta", "MM as seen by Proton as Fn of Theta", 150, 0, 2000, 150, 0, 180);
   MMpKinThetaMB = new GH2 ("MMpKinThetaMB", "MM as seen by Proton (MB Kin) as Fn of Theta", 150, 0, 2000, 150, 0, 180);
 
-  ThetaPidE = new GH2("ThetaPidE", "Theta as fn of PID Energy", 100, 0, 180, 100, 0, 5);
 }
 
 void PNeutPol_Polarimeter::FillHists()
@@ -512,11 +510,6 @@ void PNeutPol_Polarimeter::FillHists()
   MMpKinTheta->Fill(MMpKin, WCThetap, TaggerTime);
   MMpKinThetaMB->Fill(MMpKinMB, WCThetap, TaggerTime);
 
-  if( 35 < Thetap && Thetap < 45) E_dE_ThetaCut->Fill(KinEp, dEp, TaggerTime);
-  if( 35 < Thetap && Thetap < 45) ECB_dE_ThetaCut->Fill(Ep, dEp, TaggerTime);
-
-  if (200 < KinEp && KinEp < 240) ThetaPidE->Fill(Thetap, dEp, TaggerTime);
-
   if (300 <EGamma && EGamma < 400) EpKinEpKinMBDiff300400MeV->Fill(KinEp - KinEpMB, TaggerTime);
   if (400 <EGamma && EGamma < 500) EpKinEpKinMBDiff400500MeV->Fill(KinEp - KinEpMB, TaggerTime);
   if (500 <EGamma && EGamma < 600) EpKinEpKinMBDiff500600MeV->Fill(KinEp - KinEpMB, TaggerTime);
@@ -525,7 +518,7 @@ void PNeutPol_Polarimeter::FillHists()
   if (800 <EGamma && EGamma < 900) EpKinEpKinMBDiff800900MeV->Fill(KinEp - KinEpMB, TaggerTime);
   if (900 <EGamma && EGamma < 1000) EpKinEpKinMBDiff9001000MeV->Fill(KinEp - KinEpMB, TaggerTime);
 
-  if(Cut_proton -> IsInside(KinEp, dEp) == kTRUE)
+  if(Cut_proton -> IsInside(KinEpMB, dEp) == kTRUE)
   {
     MMpCut->Fill(MMpKin, TaggerTime);
     MMpMBCut->Fill(MMpKinMB, TaggerTime);
@@ -533,6 +526,7 @@ void PNeutPol_Polarimeter::FillHists()
     MMpKinEKinMBCut->Fill(MMpKinMB, KinEpMB, TaggerTime);
     EgCut->Fill(EGamma, TaggerTime);
     EpKinEpKinMBDiffCut->Fill(abs(KinEp - KinEpMB), TaggerTime);
+    ECB_dE_Cut->Fill(KinEpMB, dEp, TaggerTime);
 
     if (300 <EGamma && EGamma < 400) EpKinEpKinMBDiff300400MeVCut->Fill(KinEp - KinEpMB, TaggerTime);
     if (400 <EGamma && EGamma < 500) EpKinEpKinMBDiff400500MeVCut->Fill(KinEp - KinEpMB, TaggerTime);

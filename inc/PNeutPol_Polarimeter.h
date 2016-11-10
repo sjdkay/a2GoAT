@@ -191,12 +191,10 @@ private:
   GH1*  MMpMBCut;
 
   GH2* E_dE;
-  GH2* E_dE_ThetaCut;
   GH2* ECB_dE;
-  GH2* ECB_dE_ThetaCut;
+  GH2* ECB_dE_Cut;
   GH2* EpEpKinDiff;
   GH2* EpKinEpKinMBDiffPTheta;
-  GH2* ThetaPidE;
   GH2* MMpKinEKin;
   GH2* MMpKinEKinMB;
   GH2* MMpKinEKinCut;
