@@ -525,7 +525,7 @@ void PNeutPol_Polarimeter::FillHists()
     MMpKinEKinCut->Fill(MMpKin, KinEp, TaggerTime);
     MMpKinEKinMBCut->Fill(MMpKinMB, KinEpMB, TaggerTime);
     EgCut->Fill(EGamma, TaggerTime);
-    EpKinEpKinMBDiffCut->Fill(abs(KinEp - KinEpMB), TaggerTime);
+    EpKinEpKinMBDiffCut->Fill(KinEp - KinEpMB, TaggerTime);
     ECB_dE_Cut->Fill(KinEpMB, dEp, TaggerTime);
 
     if (300 <EGamma && EGamma < 400) EpKinEpKinMBDiff300400MeVCut->Fill(KinEp - KinEpMB, TaggerTime);
