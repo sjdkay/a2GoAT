@@ -426,8 +426,8 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   EpKin = new GH1 ("EpKin", "Ep Calculated from Ep/Thetap", 100, 0, 500);
   EpKinMB = new GH1 ("EpKinMB", "Ep Calculated from MB Parametrisation ", 100, 0, 500);
   EpEKinDiff = new GH1 ("EpEKinDiff", "Difference Between EpKin & Ep", 100, 0, 500);
-  EpKinEpKinMBDiff= new GH1 ("EpkinEpKinMBDiff", "Proton EpKinEpKinMB Diff", 250, 0, 250);
-  EpKinEpKinMBDiffCut= new GH1 ("EpkinEpKinMBDiffCut", "Proton EpKinEpKinMB Diff (P Banana Cut)", 250, 0, 250);
+  EpKinEpKinMBDiff= new GH1 ("EpkinEpKinMBDiff", "Proton EpKinEpKinMB Diff", 250, -250, 250);
+  EpKinEpKinMBDiffCut= new GH1 ("EpkinEpKinMBDiffCut", "Proton EpKinEpKinMB Diff (P Banana Cut)", 250, -250, 250);
   EpKinEpKinMBDiff300400MeV = new GH1 ("EpkinEpKinMBDiff300400MeV", "Proton EpKinEpKinMB Diff in 300-400 MeV Photon Bin", 250, -250, 250);
   EpKinEpKinMBDiff400500MeV = new GH1 ("EpkinEpKinMBDiff400500MeV", "Proton EpKinEpKinMB Diff in 400-500 MeV Photon Bin", 250, -250, 250);
   EpKinEpKinMBDiff500600MeV = new GH1 ("EpkinEpKinMBDiff500600MeV", "Proton EpKinEpKinMB Diff in 500-600 MeV Photon Bin", 250, -2500, 250);
@@ -495,8 +495,8 @@ void PNeutPol_Polarimeter::FillHists()
   EpKinMB->Fill(KinEpMB, TaggerTime);
   EpEKinDiff->Fill(KinEDiff, TaggerTime);
   EpEpKinDiff->Fill(Ep, KinEDiff, TaggerTime);
-  EpKinEpKinMBDiff->Fill(abs(KinEp - KinEpMB), TaggerTime);
-  EpKinEpKinMBDiffPTheta->Fill(abs(KinEp - KinEpMB), WCThetap, TaggerTime);
+  EpKinEpKinMBDiff->Fill(KinEp - KinEpMB, TaggerTime);
+  EpKinEpKinMBDiffPTheta->Fill(KinEp - KinEpMB, WCThetap, TaggerTime);
   WCXp->Fill(WC1pX, TaggerTime);
   WCYp->Fill(WC1pY, TaggerTime);
   WCZp->Fill(WC1pZ, TaggerTime);
