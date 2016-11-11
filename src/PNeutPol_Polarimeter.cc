@@ -162,6 +162,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
 
     KinEp = CalcKinEnergy(WCThetap, EGamma, Md, 0., Mp, Mn);
     KinEpMB = CalcKinEnergyMB(Ep, WCThetap);
+    KinEpMB2 = CalcKinEnergyMB2(WCThetap, EGamma, Md, 0., Mp, Mn);
     KinEDiff = abs(KinEp - Ep);
     RecKinProton = Proton4VectorKin(KinEp, WCThetap, WCPhip);
     RecKinNeutron = Neutron4VectorKin(RecKinProton);
@@ -169,6 +170,9 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     RecKinMBProton = Proton4VectorKin(KinEpMB, WCThetap, WCPhip);
     RecKinMBNeutron = Neutron4VectorKin(RecKinMBProton);
     MMpKinMB = RecKinMBNeutron.M();
+    RecKinMBProton2 = Proton4VectorKin(KinEpMB2, WCThetap, WCPhip);
+    RecKinMBNeutron2 = Neutron4VectorKin(RecKinMBProton2);
+    MMpKinMB = RecKinMBNeutron2.M();
 
     if (KinEDiff > 100) continue; // If difference between CB energy and calculated Energy for proton > 100MeV continue
 
@@ -464,8 +468,10 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   WCZn = new GH1("WCZn", "WC Z Position for Neutron", 200, -500, 500);
   MMp = new GH1 ("MMp", "Missing mass seen by Proton", 400, 0, 2000);
   MMpMB= new GH1 ("MMpMB", "Missing mass seen by Proton (MB Kin)", 400, 0, 2000);
+  MMpMB2= new GH1 ("MMpMB2", "Missing mass seen by Proton (MB Kin 2)", 400, 0, 2000);
   MMpCut= new GH1 ("MMpCut", "Missing mass seen by Proton (P Banana Cut)", 400, 0, 2000);
   MMpMBCut= new GH1 ("MMpMBCut", "Missing mass seen by Proton (MB Kin, P Banana Cut)", 400, 0, 2000);
+  MMpMB2Cut= new GH1 ("MMpMB2Cut", "Missing mass seen by Proton (MB Kin 2, P Banana Cut)", 400, 0, 2000);
 
   E_dE = new GH2("E_dE", "EdE Plot", 100, 0, 500, 100, 0, 5);
   ECB_dE = new GH2 ("ECB_dE", "CBEdE Plot", 100, 0, 500, 100, 0, 5);
@@ -518,6 +524,7 @@ void PNeutPol_Polarimeter::FillHists()
   WCZn->Fill(WC1nZ, TaggerTime);
   MMp->Fill(MMpKin, TaggerTime);
   MMpMB->Fill(MMpKinMB, TaggerTime);
+  MMpMB2->Fill(MMpKinMB2, TaggerTime);
   MMpKinEKin->Fill(MMpKin, KinEp, TaggerTime);
   MMpKinEKinMB->Fill(MMpKinMB, KinEpMB, TaggerTime);
   MMpKinTheta->Fill(MMpKin, WCThetap, TaggerTime);
@@ -535,6 +542,7 @@ void PNeutPol_Polarimeter::FillHists()
   {
     MMpCut->Fill(MMpKin, TaggerTime);
     MMpMBCut->Fill(MMpKinMB, TaggerTime);
+    MMpMB2Cut->Fill(MMpKinMB2, TaggerTime);
     MMpKinEKinCut->Fill(MMpKin, KinEp, TaggerTime);
     MMpKinEKinMBCut->Fill(MMpKinMB, KinEpMB, TaggerTime);
     EgCut->Fill(EGamma, TaggerTime);

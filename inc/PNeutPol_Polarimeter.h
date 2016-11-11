@@ -108,6 +108,7 @@ private:
   double_t KinEpDiff;
   double_t KinEDiff;
   double_t KinEpMB;
+  double_t KinEpMB2;
   double_t EpTot;
   double_t Pp;
   double_t Ppx;
@@ -115,6 +116,7 @@ private:
   double_t Ppz;
   double_t MMpKin;
   double_t MMpKinMB;
+  double_t MMpKinMB2;
 
   Bool_t nBanana;
   Bool_t MCData;
@@ -133,6 +135,8 @@ private:
   TLorentzVector RecKinNeutron;
   TLorentzVector RecKinMBProton;
   TLorentzVector RecKinMBNeutron;
+  TLorentzVector RecKinMBProton2;
+  TLorentzVector RecKinMBNeutron2;
   TVector3 GVp3;
   TVector3 GVn3;
   TVector3 GVn3Rec;
@@ -187,8 +191,10 @@ private:
   GH1*  WCZn;
   GH1*  MMp;
   GH1*  MMpMB;
+  GH1*  MMpMB2;
   GH1*  MMpCut;
   GH1*  MMpMBCut;
+  GH1*  MMpMB2Cut;
 
   GH2* E_dE;
   GH2* ECB_dE;

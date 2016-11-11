@@ -223,7 +223,28 @@ Double_t PPhysics::CalcKinEnergy(Double_t PrimaryTheta, Double_t BeamEnergy, Dou
     Double_t P_Energy_a = sqrt((TMath::Power(P,2)) + (TMath::Power(PrimaryMass,2))); // Energy of primary
     Double_t P_Energy_b = P_Energy_a - PrimaryMass; // Kinetic energy of primary
 
+    return P_Energy_b;
+}
+
+// Calculate kinetic energy of proton from CB energy and proton angle with polarimeter in place
+// Uses parameterisation worked out by Mikhail Bashkanov
+Double_t PPhysics::CalcKinEnergyMB(Double_t ProtE, Double_t ProtTheta){
+
+    A = CoeffA(ProtTheta);
+    B = CoeffB(ProtTheta);
+    C = CoeffC(ProtTheta);
+
+    Double_t EKinMB = (A*exp(B*ProtE)) + C + ProtE;
+
+    return EKinMB;
+}
+
+Double_t PPhysics::CalcKinEnergyMB2(Double_t PrimaryTheta, Double_t BeamEnergy, Double_t TargetMass, Double_t BeamMass, Double_t PrimaryMass, Double_t SecondaryMass)
+{
     // Mikhail version
+
+    Double_t PrimaryThetaRad = PrimaryTheta*TMath::DegToRad(); // Convert input theta to radians
+    Double_t Beta = cos(PrimaryThetaRad);
 
     Double_t E1MB = BeamEnergy + BeamMass;
     Double_t M1MB = BeamMass;
@@ -244,27 +265,13 @@ Double_t PPhysics::CalcKinEnergy(Double_t PrimaryTheta, Double_t BeamEnergy, Dou
     Double_t V3MB2 =4*V3MB;
     Double_t V4MB2 =4*V4MB;
 
-    Double_t e5MB =;
-    Double_t e6MB =;
+    Double_t e5MB = (V1MB + sqrt(V2MB2 + (V3MB2*TMath::Power(Beta,2))+(V4MB2*TMath::Power(Beta,4))))/2/(V5MB+(V6MB*TMath::Power(Beta,2)))-PrimaryMass;
+    Double_t e6MB = (V1MB + sqrt(V2MB2 - (V3MB2*TMath::Power(Beta,2))+(V4MB2*TMath::Power(Beta,4))))/2/(V5MB+(V6MB*TMath::Power(Beta,2)))-PrimaryMass;;
 
-    if()
+    if(PrimaryThetaRad < 0.5*acos(-1)) e4MB = e5MB;
+    else e4MB = e6MB;
 
-    Double_t pP4 =;
-
-    return P_Energy_b;
-}
-
-// Calculate kinetic energy of proton from CB energy and proton angle with polarimeter in place
-// Uses parameterisation worked out by Mikhail Bashkanov
-Double_t PPhysics::CalcKinEnergyMB(Double_t ProtE, Double_t ProtTheta){
-
-    A = CoeffA(ProtTheta);
-    B = CoeffB(ProtTheta);
-    C = CoeffC(ProtTheta);
-
-    Double_t EKinMB = (A*exp(B*ProtE)) + C + ProtE;
-
-    return EKinMB;
+    return e4MB;
 }
 
 Double_t PPhysics::CoeffA(Double_t ProtTheta){ // Calculate Coefficient A for MB parameterisation
