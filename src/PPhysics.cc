@@ -252,11 +252,11 @@ Double_t PPhysics::CalcKinEnergyMB2(Double_t PrimaryTheta, Double_t BeamEnergy, 
     Double_t P1MB = sqrt((TMath::Power(E1MB,2)) - (TMath::Power(M1MB,2)));
     Double_t P2MB = 0;
     Double_t A1MB = (2*M2MB) + (2*E1MB);
-    Double_t A2MB = ((TMath::Power(SecondaryMass,2)) - (TMath::Power(M1MB,2)) - ((TMath::Power(PrimaryMass,2)) - 2*E1MB*M2MB - (TMath::Power(M2MB,2))));
+    Double_t A2MB = ((TMath::Power(SecondaryMass,2)) - (TMath::Power(M1MB,2)) - ((TMath::Power(PrimaryMass,2)) - (2*E1MB*M2MB) - (TMath::Power(M2MB,2))));
 
-    Double_t V1MB = 2*A1MB - A2MB;
+    Double_t V1MB = 2*A1MB*A2MB;
     Double_t V2MB = 0.;
-    Double_t V3MB = -4*(TMath::Power(P1MB,2))*(((TMath::Power(PrimaryMass,2))*(TMath::Power(A1MB,2)))-(TMath::Power(A2MB,2)));
+    Double_t V3MB = (-4*(TMath::Power(P1MB,2)))*(((TMath::Power(PrimaryMass,2))*(TMath::Power(A1MB,2)))-(TMath::Power(A2MB,2)));
     Double_t V4MB = 16*(TMath::Power(PrimaryMass,2)*(TMath::Power(P1MB,4)));
     Double_t V5MB = TMath::Power(A1MB,2);
     Double_t V6MB = -4*TMath::Power(P1MB,2);
