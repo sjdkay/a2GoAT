@@ -174,6 +174,8 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     RecKinMBNeutron2 = Neutron4VectorKin(RecKinMBProton2);
     MMpKinMB = RecKinMBNeutron2.M();
 
+    cout << KinEp << "   " << KinEpMB2 << "   " << abs(KinEp-KinEpMB2) << endl;
+
     if (KinEDiff > 100) continue; // If difference between CB energy and calculated Energy for proton > 100MeV continue
 
     if (MCData == kTRUE)
