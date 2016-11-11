@@ -206,6 +206,8 @@ Double_t PPhysics::CalcKinEnergy(Double_t PrimaryTheta, Double_t BeamEnergy, Dou
     // Adapted from fortran fn, function takes Proton theta and the beam energy
     // to calculate the initial energy of the proton
 
+    // Fortran (Dan) Version
+
     Double_t PrimaryThetaRad = PrimaryTheta*TMath::DegToRad(); // Convert input theta to radians
     Double_t Beta = cos(PrimaryThetaRad);
     Double_t P0 = BeamEnergy + BeamMass;
@@ -220,6 +222,34 @@ Double_t PPhysics::CalcKinEnergy(Double_t PrimaryTheta, Double_t BeamEnergy, Dou
     Double_t P = (-b - (sqrt(d)))/(2*a); // Magnitude of 4-momentum for primary
     Double_t P_Energy_a = sqrt((TMath::Power(P,2)) + (TMath::Power(PrimaryMass,2))); // Energy of primary
     Double_t P_Energy_b = P_Energy_a - PrimaryMass; // Kinetic energy of primary
+
+    // Mikhail version
+
+    Double_t E1MB = BeamEnergy + BeamMass;
+    Double_t M1MB = BeamMass;
+    Double_t M2MB = TargetMass;
+    Double_t P1MB = sqrt((TMath::Power(E1MB,2)) - (TMath::Power(M1MB,2)))
+    Double_t P2MB = 0.;
+    Double_t A1MB = (2*M2MB) + (2*E1MB);
+    Double_t A2MB = ((TMath::Power(SecondaryMass,2)) - (TMath::Power(M1MB,2)) - ((TMath::Power(PrimaryMass,2)) - 2*E1MB*M2MB - (TMath::Power(M2MB,2))));
+
+    Double_t V1MB = 2*A1MB - A2MB;
+    Double_t V2MB = 0.;
+    Double_t V3MB = -4*(TMath::Power(P1MB,2))*(((TMath::Power(PrimaryMass,2))*(TMath::Power(A1MB,2)))-(TMath::Power(A2MB,2)));
+    Double_t V4MB = 16*(TMath::Power(PrimaryMass,2)*(TMath::Power(P1MB,4)));
+    Double_t V5MB = TMath::Power(A1MB,2);
+    Double_t V6MB = -4*TMath::Power(P1MB,2);
+
+    Double_t V2MB2 =0.;
+    Double_t V3MB2 =4*V3MB;
+    Double_t V4MB2 =4*V4MB;
+
+    Double_t e5MB =;
+    Double_t e6MB =;
+
+    if()
+
+    Double_t pP4 =;
 
     return P_Energy_b;
 }

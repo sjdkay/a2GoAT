@@ -70,15 +70,28 @@ void	PNeutPol_Polarimeter::ProcessEvent()
   if (NTrack !=2) return; // Ensures two track event
   DetectorCheck(); // Function checks detector numbers for each track
 
-  // Currently try to accept only MWPC+PID+NaI and NaI + MWPC
-  // If track 1 only gives signals in MWPC it is the neutron
-  if((Detectors1 == 7) && (Detectors2 == 5))
+  // Condition is to now keep any ALL + CB only or ALL + CB/MWPC events
+  // If track 1 only gives signals in CB it is the neutron
+  if((Detectors1 == 7) && (Detectors2 == 1))
   {
     Proton1 = kTRUE;
     Proton2 = kFALSE;
   }
 
-  // If track 2 only gives signals in MWPC it is the neutron
+  // If track 2 only gives signals in CB it is the neutron
+  else if((Detectors1 == 1) && (Detectors2 == 7))
+  {
+    Proton1 = kFALSE;
+    Proton2 = kTRUE;
+  }
+
+  else if((Detectors1 == 7) && (Detectors2 == 5))
+  {
+    Proton1 = kTRUE;
+    Proton2 = kFALSE;
+  }
+
+  // If track 2 only gives signals in MWPC and CB it is the neutron
   else if((Detectors1 == 5) && (Detectors2 == 7))
   {
     Proton1 = kFALSE;
