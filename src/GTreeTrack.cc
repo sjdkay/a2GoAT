@@ -43,6 +43,12 @@ void    GTreeTrack::SetBranchAdresses()
     inputTree->SetBranchAddress("pseudoVertexX", pseudoVertexX);
     inputTree->SetBranchAddress("pseudoVertexY", pseudoVertexY);
     inputTree->SetBranchAddress("pseudoVertexZ", pseudoVertexZ);
+    inputTree->SetBranchAddress("MWPC0PosX", MWPC0PosX);
+    inputTree->SetBranchAddress("MWPC0PosY", MWPC0PosY);
+    inputTree->SetBranchAddress("MWPC0PosZ", MWPC0PosZ);
+    inputTree->SetBranchAddress("MWPC1PosX", MWPC1PosX);
+    inputTree->SetBranchAddress("MWPC1PosY", MWPC1PosY);
+    inputTree->SetBranchAddress("MWPC1PosZ", MWPC1PosZ);
 }
 
 void    GTreeTrack::SetBranches()
@@ -62,6 +68,12 @@ void    GTreeTrack::SetBranches()
     outputTree->Branch("pseudoVertexX", pseudoVertexX, "pseudoVertexX[nTracks]/D");
     outputTree->Branch("pseudoVertexY", pseudoVertexY, "pseudoVertexY[nTracks]/D");
     outputTree->Branch("pseudoVertexZ", pseudoVertexZ, "pseudoVertexZ[nTracks]/D");
+    outputTree->Branch("MWPC0PosX", MWPC0PosX , "MWPC0PosX[nTracks]/D");
+    outputTree->Branch("MWPC0PosY", MWPC0PosY , "MWPC0PosY[nTracks]/D");
+    outputTree->Branch("MWPC0PosZ", MWPC0PosZ , "MWPC0PosZ[nTracks]/D");
+    outputTree->Branch("MWPC1PosX", MWPC1PosX , "MWPC1PosX[nTracks]/D");
+    outputTree->Branch("MWPC1PosY", MWPC1PosY , "MWPC1PosY[nTracks]/D");
+    outputTree->Branch("MWPC1PosZ", MWPC1PosZ , "MWPC1PosZ[nTracks]/D");
 }
 
 void    GTreeTrack::Print(const Bool_t All) const

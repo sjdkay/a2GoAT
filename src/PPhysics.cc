@@ -242,6 +242,7 @@ Double_t PPhysics::CalcKinEnergyMB(Double_t ProtE, Double_t ProtTheta){
 Double_t PPhysics::CalcKinEnergyMB2(Double_t PrimaryTheta, Double_t BeamEnergy, Double_t TargetMass, Double_t BeamMass, Double_t PrimaryMass, Double_t SecondaryMass)
 {
     // Mikhail version
+    // Working for some values but others return a NAN error!
 
     Double_t PrimaryThetaRad = PrimaryTheta*TMath::DegToRad(); // Convert input theta to radians
     Double_t Beta = cos(PrimaryThetaRad);

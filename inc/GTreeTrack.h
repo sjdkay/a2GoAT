@@ -43,6 +43,14 @@ private:
     Double_t    pseudoVertexX[GTreeTrack_MAX];
     Double_t    pseudoVertexY[GTreeTrack_MAX];
     Double_t    pseudoVertexZ[GTreeTrack_MAX];
+    //MWPC hit position
+    Double_t    MWPC0PosX[GTreeTrack_MAX];
+    Double_t    MWPC0PosY[GTreeTrack_MAX];
+    Double_t    MWPC0PosZ[GTreeTrack_MAX];
+    Double_t    MWPC1PosX[GTreeTrack_MAX];
+    Double_t    MWPC1PosY[GTreeTrack_MAX];
+    Double_t    MWPC1PosZ[GTreeTrack_MAX];
+
 
 protected:
     virtual void    SetBranchAdresses();
@@ -91,6 +99,21 @@ public:
             Double_t        GetPseudoVertexY(const Int_t index)       const	{return pseudoVertexY[index];}
     const	Double_t*       GetPseudoVertexZ()                        const	{return pseudoVertexZ;}
             Double_t        GetPseudoVertexZ(const Int_t index)       const	{return pseudoVertexZ[index];}
+
+    const	Double_t*       GetMWPC0PosX()                        const	{return MWPC0PosX;}
+    const	Double_t*       GetMWPC0PosY()                        const	{return MWPC0PosY;}
+    const	Double_t*       GetMWPC0PosZ()                        const	{return MWPC0PosZ;}
+    const	Double_t*       GetMWPC1PosX()                        const	{return MWPC1PosX;}
+    const	Double_t*       GetMWPC1PosY()                        const	{return MWPC1PosY;}
+    const	Double_t*       GetMWPC1PosZ()                        const	{return MWPC1PosZ;}
+
+   	Double_t       GetMWPC0PosX(const Int_t index)                        const	{return MWPC0PosX[index];}
+    Double_t       GetMWPC0PosY(const Int_t index)                        const	{return MWPC0PosY[index];}
+    Double_t       GetMWPC0PosZ(const Int_t index)                        const	{return MWPC0PosZ[index];}
+    Double_t       GetMWPC1PosX(const Int_t index)                        const	{return MWPC1PosX[index];}
+    Double_t       GetMWPC1PosY(const Int_t index)                        const	{return MWPC1PosY[index];}
+    Double_t       GetMWPC1PosZ(const Int_t index)                        const	{return MWPC1PosZ[index];}
+
     virtual void            Print(const Bool_t All = kFALSE)    const;
 
     friend  class GTreeParticle;
