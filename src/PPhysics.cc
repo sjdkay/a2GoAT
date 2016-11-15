@@ -267,10 +267,10 @@ Double_t PPhysics::CalcKinEnergyMB2(Double_t PrimaryTheta, Double_t BeamEnergy, 
     Double_t V4MB2 =4*V4MB;
 
     Double_t e5MB = (V1MB + sqrt(V2MB2 + (V3MB2*TMath::Power(Beta,2))+(V4MB2*TMath::Power(Beta,4))))/2/(V5MB+(V6MB*TMath::Power(Beta,2)))-PrimaryMass;
-    Double_t e6MB = (V1MB + sqrt(V2MB2 - (V3MB2*TMath::Power(Beta,2))+(V4MB2*TMath::Power(Beta,4))))/2/(V5MB+(V6MB*TMath::Power(Beta,2)))-PrimaryMass;;
+    Double_t e6MB = (V1MB - sqrt(V2MB2 + (V3MB2*TMath::Power(Beta,2))+(V4MB2*TMath::Power(Beta,4))))/2/(V5MB+(V6MB*TMath::Power(Beta,2)))-PrimaryMass;;
 
-    if(PrimaryThetaRad < 0.5*acos(-1) == kTRUE) e4MB = e5MB;
-    else if (PrimaryThetaRad < 0.5*acos(-1) == kFALSE) e4MB = e6MB;
+    if((PrimaryThetaRad < 0.5*acos(-1)) == kTRUE) e4MB = e5MB;
+    else if ((PrimaryThetaRad < 0.5*acos(-1)) == kFALSE) e4MB = e6MB;
 
     return e4MB;
 }

@@ -166,23 +166,7 @@ private:
   GH1*  WCPhiNeut;
   GH1*  EpKin;
   GH1*  EpKinMB;
-  GH1*  EpEKinDiff;
-  GH1*  EpKinEpKinMBDiff;
-  GH1*  EpKinEpKinMBDiffCut;
-  GH1*  EpKinEpKinMBDiff300400MeV;
-  GH1*  EpKinEpKinMBDiff400500MeV;
-  GH1*  EpKinEpKinMBDiff500600MeV;
-  GH1*  EpKinEpKinMBDiff600700MeV;
-  GH1*  EpKinEpKinMBDiff700800MeV;
-  GH1*  EpKinEpKinMBDiff800900MeV;
-  GH1*  EpKinEpKinMBDiff9001000MeV;
-  GH1*  EpKinEpKinMBDiff300400MeVCut;
-  GH1*  EpKinEpKinMBDiff400500MeVCut;
-  GH1*  EpKinEpKinMBDiff500600MeVCut;
-  GH1*  EpKinEpKinMBDiff600700MeVCut;
-  GH1*  EpKinEpKinMBDiff700800MeVCut;
-  GH1*  EpKinEpKinMBDiff800900MeVCut;
-  GH1*  EpKinEpKinMBDiff9001000MeVCut;
+
   GH1*  WCXp;
   GH1*  WCYp;
   GH1*  WCZp;
@@ -197,8 +181,7 @@ private:
   GH1*  MMpMB2Cut;
 
   GH2* E_dE;
-  GH2* ECB_dE;
-  GH2* ECB_dE_Cut;
+  GH2* E_dE_Cut;
   GH2* EpEpKinDiff;
   GH2* EpKinEpKinMBDiffPTheta;
   GH2* MMpKinEKin;
