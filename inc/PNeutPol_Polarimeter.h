@@ -190,21 +190,6 @@ private:
   GH2* MMpKinTheta;
   GH2* MMpKinThetaMB;
 
-  TLorentzVector MCTrueVect1;
-  TLorentzVector MCTrueVect2;
-
-  Int_t MCTrueID1;
-  Int_t MCTrueID2;
-
-  double_t MCTheta1;
-  double_t MCTheta2;
-  double_t MCE1;
-  double_t MCE2;
-  double_t MCTheta1True;
-  double_t MCTheta2True;
-  double_t MCE1True;
-  double_t MCE2True;
-
   char cutfilename[256];
   char cutname[256];
   TFile* CutFile;
@@ -229,15 +214,10 @@ public:
     virtual ~PNeutPol_Polarimeter();
     virtual Bool_t  Init();
     TCutG* OpenCutFile(Char_t* filename, Char_t* cutname);
-    void MCHists();
-    Bool_t MCDataCheck();
     Int_t GetEvent();
     TLorentzVector InitialVect();
     Double_t InitialProp();
     Int_t DetectorCheck();
-    Int_t MCTrueID();
-    TLorentzVector MCTrueVectors();
-    Double_t MCSmearing();
     Double_t PNProp(Int_t ProtonParticleNumber);
     TLorentzVector PNVect(Int_t ProtonParticleNumber);
     TVector3 WC3Vectors(Double_t WCpX, Double_t WCpY, Double_t WCpZ, Double_t WCnX, Double_t WCnY, Double_t WCnZ);
