@@ -182,7 +182,6 @@ private:
 
   GH2* E_dE;
   GH2* E_dE_Cut;
-  GH2* EpEpKinDiff;
   GH2* EpKinEpKinMBDiffPTheta;
   GH2* MMpKinEKin;
   GH2* MMpKinEKinMB;

@@ -50,10 +50,6 @@ Bool_t	PNeutPol_Polarimeter::Start()
   Cut_pion = Cut_CB_pion;
   cout << endl;
 
-  MCDataCheck();
-
-  if (MCData == kTRUE) MCHists();
-
   TraverseValidEvents(); // This loops over each event as in old file and calls ProcessEvent() each loop
 
   cout << EventCounter << " Events in file " << EventCounterTrackCut << " Events After Track Cut " << EventCounterZCut << " Events after Z cut " << EventCounterCoplanarCut << " Events after Coplanarity Cut" << endl;
@@ -141,17 +137,6 @@ void	PNeutPol_Polarimeter::ProcessEvent()
 
   EventCounterCoplanarCut++;
 
-  if ( MCData == kTRUE)
-  {
-      MCSmearing(); // Smear dE values for MC data
-      MCTrueID();
-      MCTrueVectors();
-      MCTheta1True = (MCTrueVect1.Theta()) * TMath::RadToDeg();
-      MCTheta2True = (MCTrueVect2.Theta()) * TMath::RadToDeg();
-      MCE1True = (MCTrueVect1.Energy()*1000)-Mp; // *1000 to get MeV
-      MCE2True = (MCTrueVect2.Energy()*1000)-Mn;
-  }
-
   for (Int_t j = 0; j < GetTagger()->GetNTagged(); j++){
 
     TaggerTime = GetTagger()->GetTaggedTime(j); // Get tagged time for event
@@ -175,15 +160,6 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     MMpKinMB2 = RecKinMBNeutron2.M();
 
     if (KinEDiff > 100) continue; // If difference between CB energy and calculated Energy for proton > 100MeV continue
-
-    if (MCData == kTRUE)
-    {
-        // Get some MCTrue parameters and MAYBE fill some histograms with them
-        MCTheta1 = (GetTracks()->GetVector(0, Mp)).Theta() * TMath::RadToDeg();
-        MCTheta2 = (GetTracks()->GetVector(1, Mp)).Theta() * TMath::RadToDeg();
-        MCE1 = GetTracks()->GetClusterEnergy(0);
-        MCE2 = GetTracks()->GetClusterEnergy(1);
-    }
 
     //k++;
     FillHists(); // Fill histograms with data generated
@@ -217,23 +193,6 @@ TCutG*	PNeutPol_Polarimeter::OpenCutFile(Char_t* filename, Char_t* cutname)
   CutFile->Close();
   cout << "cut file " << filename << " opened (Cut-name = " << cutname << ")"<< endl;
   return Cut_clone;
-}
-
-Bool_t PNeutPol_Polarimeter::MCDataCheck(){
-
-  if (GetScalers()->GetNEntries() == 0) // MC Data has no scaler entries so if 0, data gets a flag to denote it as MC
-  {
-      MCData = kTRUE;
-      TRandom2 *rGen = new TRandom2(0); // Define new random generator for use in MC smearing fn
-  }
-
-  else if (GetScalers()->GetNEntries() != 0) // This flag is listed as false if the number of scaler entries does not equal 0
-
-  {
-      MCData = kFALSE;
-  }
-
-  return MCData;
 }
 
 Int_t PNeutPol_Polarimeter::GetEvent() // Gets basic info on particles for event
@@ -288,33 +247,6 @@ Int_t PNeutPol_Polarimeter::DetectorCheck()
     Detectors1 = GetTracks()->GetDetectors(0); //Gets number for detectors that registered hits
     Detectors2 = GetTracks()->GetDetectors(1); // 7 = NaI + PID + MWPC, 5 = NaI + MWPC
     return Detectors1, Detectors2;
-}
-
-Double_t PNeutPol_Polarimeter::MCSmearing() // Smear dE values for MC data to represent Energy resolution of PID
-{
-  dE1 = rGen.Gaus(GetTracks()->GetVetoEnergy(0) , (0.29*(sqrt(GetTracks()->GetVetoEnergy(0)))));
-  dE2 = rGen.Gaus(GetTracks()->GetVetoEnergy(1) , (0.29*(sqrt(GetTracks()->GetVetoEnergy(1)))));
-
-  if (dE1 < 0) dE1 = 0.01;
-  if (dE2 < 0) dE2 = 0.01;
-
-  return dE1, dE2;
-}
-
-Int_t PNeutPol_Polarimeter::MCTrueID()
-{
-    MCTrueID1 = GetGeant()->GetTrueID(0);
-    MCTrueID2 = GetGeant()->GetTrueID(1);
-
-    return MCTrueID1, MCTrueID2;
-}
-
-TLorentzVector PNeutPol_Polarimeter::MCTrueVectors()
-{
-    MCTrueVect1 = GetGeant()->GetTrueVector(0);
-    MCTrueVect2 = GetGeant()->GetTrueVector(1);
-
-    return MCTrueVect1, MCTrueVect2;
 }
 
 Double_t PNeutPol_Polarimeter::PNProp(Int_t ProtonParticleNumber) // Define properties of proton and neutron from particles that correspond to each
@@ -524,11 +456,6 @@ void PNeutPol_Polarimeter::FillHists()
     EgCut->Fill(EGamma, TaggerTime);
     E_dE_Cut->Fill(KinEpMB, dEp, TaggerTime);
   }
-
-}
-
-void PNeutPol_Polarimeter::MCHists()
-{
 
 }
 
