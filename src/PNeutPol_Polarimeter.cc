@@ -66,12 +66,13 @@ void	PNeutPol_Polarimeter::ProcessEvent()
   if (NTrack !=2) return; // Ensures two track event
   DetectorCheck(); // Function checks detector numbers for each track
 
-  // Condition is to now keep any ALL + CB only or ALL + CB/MWPC events
-  // If track 1 only gives signals in CB it is the neutron
+   //Condition is to now keep any ALL + CB only or ALL + CB/MWPC events
+  //If track 1 only gives signals in CB it is the neutron
   if((Detectors1 == 7) && (Detectors2 == 1))
   {
     Proton1 = kTRUE;
     Proton2 = kFALSE;
+    if (GetTracks()->GetMWPC0Energy(0) == 0) return; // If no hit in first chamber for p drop out
   }
 
   // If track 2 only gives signals in CB it is the neutron
@@ -79,12 +80,15 @@ void	PNeutPol_Polarimeter::ProcessEvent()
   {
     Proton1 = kFALSE;
     Proton2 = kTRUE;
+    if (GetTracks()->GetMWPC0Energy(1) == 0) return; // If no hit in first chamber for p drop out
   }
 
   else if((Detectors1 == 7) && (Detectors2 == 5))
   {
     Proton1 = kTRUE;
     Proton2 = kFALSE;
+    if (GetTracks()->GetMWPC0Energy(0) == 0) return; // If no hit in first chamber for p drop out
+    if (GetTracks()->GetMWPC0Energy(1) == 0) return; // If no hit in first chamber for n drop out
   }
 
   // If track 2 only gives signals in MWPC and CB it is the neutron
@@ -92,6 +96,8 @@ void	PNeutPol_Polarimeter::ProcessEvent()
   {
     Proton1 = kFALSE;
     Proton2 = kTRUE;
+    if (GetTracks()->GetMWPC0Energy(1) == 0) return; // If no hit in first chamber for p drop out
+    if (GetTracks()->GetMWPC0Energy(0) == 0) return; // If no hit in first chamber for n drop out
   }
 
   // Drop out on ANY other condition (for now)
