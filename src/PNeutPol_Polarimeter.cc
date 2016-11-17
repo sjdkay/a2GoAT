@@ -109,14 +109,12 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     {
         PNProp(1);
         PNVect(1);
-        PIDEle = GetTracks()->GetCentralVeto(0); // Gets PID element hit for proton
     }
 
   else if (Proton2 == kTRUE)
     {
         PNProp(2);
         PNVect(2);
-        PIDEle = GetTracks()->GetCentralVeto(1);
     }
 
   else
@@ -133,7 +131,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
 
   EventCounterZCut++;
 
-  if ( PhiWCDiff > 195 || PhiWCDiff < 165) return; //Cut on a coplanarity condition
+  //if ( PhiWCDiff > 195 || PhiWCDiff < 165) return; //Cut on a coplanarity condition, does not work for 1/7 events with WC angles!
 
   EventCounterCoplanarCut++;
 

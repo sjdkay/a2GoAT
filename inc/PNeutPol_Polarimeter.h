@@ -25,7 +25,6 @@ private:
   Int_t NRoo;
   Int_t NTag;
   Int_t NTrack;
-  Int_t PIDEle;
   Int_t EventCounter;
   Int_t EventCounterTrackCut;
   Int_t EventCounterZCut;
