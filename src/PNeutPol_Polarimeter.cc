@@ -407,10 +407,10 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   WCZn = new GH1("WCZn", "WC Z Position for Neutron", 200, -500, 500);
   MMp = new GH1 ("MMp", "Missing mass seen by Proton", 400, 0, 2000);
   MMpEpCorrected = new GH1 ("MMpEpCorrected ", "Missing mass seen by Proton (E Loss Corrected)", 400, 0, 2000);
-  MMpMB= new GH1 ("MMpMB", "Missing mass seen by Proton (MB Kin)", 400, 0, 2000);
-  MMpCut= new GH1 ("MMpCut", "Missing mass seen by Proton (P Banana Cut)", 400, 0, 2000);
-  MMpEpCorrectedCut new GH1 ("MMpEpCorrectedCut", "Missing mass seen by Proton (E Loss Corrected, P Banana Cut)", 400, 0, 2000);
-  MMpMBCut= new GH1 ("MMpMB2Cut", "Missing mass seen by Proton (MB Kin , P Banana Cut)", 400, 0, 2000);
+  MMpMB = new GH1 ("MMpMB", "Missing mass seen by Proton (MB Kin)", 400, 0, 2000);
+  MMpCut = new GH1 ("MMpCut", "Missing mass seen by Proton (P Banana Cut)", 400, 0, 2000);
+  MMpEpCorrectedCut =  new GH1 ("MMpEpCorrectedCut", "Missing mass seen by Proton (E Loss Corrected, P Banana Cut)", 400, 0, 2000);
+  MMpMBCut = new GH1 ("MMpMB2Cut", "Missing mass seen by Proton (MB Kin , P Banana Cut)", 400, 0, 2000);
 
   E_dE = new GH2 ("E_dE", "EdE Plot With E Loss Adjustment", 100, 0, 500, 100, 0, 5);
   E_dE_Cut = new GH2 ("ECB_dE_Cut", "EdE Plot (With cut on proton banana + E Loss)", 100, 0, 500, 100, 0, 5);
