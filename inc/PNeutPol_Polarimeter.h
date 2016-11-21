@@ -133,10 +133,10 @@ private:
   TLorentzVector N4Vect;
   TLorentzVector RecKinProton;
   TLorentzVector RecKinNeutron;
+  TLorentzVector RecProtonEpCorr;
+  TLorentzVector RecNeutronEpCorr;
   TLorentzVector RecKinMBProton;
   TLorentzVector RecKinMBNeutron;
-  TLorentzVector RecKinMBProton2;
-  TLorentzVector RecKinMBNeutron2;
   TVector3 GVp3;
   TVector3 GVn3;
   TVector3 GVn3Rec;

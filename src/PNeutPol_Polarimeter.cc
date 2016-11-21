@@ -163,11 +163,11 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     MMpKin = RecKinNeutron.M();
 
     RecProtonEpCorr = Proton4VectorKin(EpCorr, WCThetap, WCPhip);
-    RecKinNeutronEpCorr = Neutron4VectorKin(RecKinProtonCorr);
-    MMpEpCorr = RecKinMBNeutron.M();
+    RecNeutronEpCorr = Neutron4VectorKin(RecProtonEpCorr);
+    MMpEpCorr = RecNeutronEpCorr.M();
 
     RecKinMBProton = Proton4VectorKin(KinEpMB, WCThetap, WCPhip);
-    RecKinMBNeutro2 = Neutron4VectorKin(RecKinMBProton);
+    RecKinMBNeutron = Neutron4VectorKin(RecKinMBProton);
     MMpKinMB = RecKinMBNeutron.M();
 
     if (KinEDiff > 100) continue; // If difference between CB energy and calculated Energy for proton > 100MeV continue
