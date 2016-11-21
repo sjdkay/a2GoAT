@@ -137,7 +137,10 @@ void	PNeutPol_Polarimeter::ProcessEvent()
 
   EventCounterZCut++;
 
-  //if ( PhiWCDiff > 195 || PhiWCDiff < 165) return; //Cut on a coplanarity condition, does not work for 1/7 events with WC angles!
+  // Made coplanarity cut great again, only used if have hit in MWPC for both
+  if (((Detectors1 == 7) && (Detectors2 == 5)) || ((Detectors1 == 5) && (Detectors2 == 7))){
+    if ( PhiWCDiff > 195 || PhiWCDiff < 165) return;
+  }
 
   EventCounterCoplanarCut++;
 
@@ -150,18 +153,22 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     LabAngles(); // Get angles in lab based on track info
 
     KinEp = CalcKinEnergy(WCThetap, EGamma, Md, 0., Mp, Mn);
-    KinEpMB = CalcKinEnergyMB(Ep, WCThetap);
-    KinEpMB2 = CalcKinEnergyMB2(WCThetap, EGamma, Md, 0., Mp, Mn);
-    KinEDiff = abs(KinEp - Ep);
+    EpCorr = EpPolCorrect(Ep, WCThetap);
+    KinEpMB = CalcKinEnergyMB(WCThetap, EGamma, Md, 0., Mp, Mn);
+    EpDiff = abs(EpCorr - Ep);
+    KinEDiff = KinEp - EpCorr;
+
     RecKinProton = Proton4VectorKin(KinEp, WCThetap, WCPhip);
     RecKinNeutron = Neutron4VectorKin(RecKinProton);
     MMpKin = RecKinNeutron.M();
+
+    RecProtonEpCorr = Proton4VectorKin(EpCorr, WCThetap, WCPhip);
+    RecKinNeutronEpCorr = Neutron4VectorKin(RecKinProtonCorr);
+    MMpEpCorr = RecKinMBNeutron.M();
+
     RecKinMBProton = Proton4VectorKin(KinEpMB, WCThetap, WCPhip);
-    RecKinMBNeutron = Neutron4VectorKin(RecKinMBProton);
+    RecKinMBNeutro2 = Neutron4VectorKin(RecKinMBProton);
     MMpKinMB = RecKinMBNeutron.M();
-    RecKinMBProton2 = Proton4VectorKin(KinEpMB2, WCThetap, WCPhip);
-    RecKinMBNeutron2 = Neutron4VectorKin(RecKinMBProton2);
-    MMpKinMB2 = RecKinMBNeutron2.M();
 
     if (KinEDiff > 100) continue; // If difference between CB energy and calculated Energy for proton > 100MeV continue
 
@@ -385,7 +392,12 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   WCPhiProt = new GH1 ("WCPhiProt", "WC Phi for p", 180, -180, 180);
   WCPhiNeut = new GH1 ("WCPhiNeut", "WC Phi for n", 180, -180, 180);
   EpKin = new GH1 ("EpKin", "Ep Calculated from Ep/Thetap", 100, 0, 500);
-  EpKinMB = new GH1 ("EpKinMB", "Ep Calculated from MB Parametrisation ", 100, 0, 500);
+  EpCorrected = new GH1 ("EpCorrected", "Ep Corrected for Energy Loss in Polarimeter ", 100, 0, 500);
+
+  EpKinEpCorrDiff = new GH1("EpKinEpCorrDiff", "Difference Between EpKin and EpCorr", 200, -250, 250);
+  EpEpCorrDiff = new GH1("EpEpCorrDiff", "Difference Between Ep and EpCorr", 200, 0, 500);
+  EpKinEpCorrDiffCut = new GH1("EpKinEpCorrDiffCut", "Difference Between EpKin and EpCorr (P Banana Cut)" , 200, -250, 250);
+  EpEpCorrDiffCut = new GH1("EpEpCorrDiffCut", "Difference Between Ep and EpCorr (P Banana Cut)", 200, 0, 500);
 
   WCXp = new GH1("WCXp", "WC X Position for Proton", 200, -100, 100);
   WCYp = new GH1("WCYp", "WC Y Position for Proton", 200, -100, 100);
@@ -394,23 +406,14 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   WCYn = new GH1("WCYn", "WC Y Position for Neutron", 200, -100, 100);
   WCZn = new GH1("WCZn", "WC Z Position for Neutron", 200, -500, 500);
   MMp = new GH1 ("MMp", "Missing mass seen by Proton", 400, 0, 2000);
+  MMpEpCorrected = new GH1 ("MMpEpCorrected ", "Missing mass seen by Proton (E Loss Corrected)", 400, 0, 2000);
   MMpMB= new GH1 ("MMpMB", "Missing mass seen by Proton (MB Kin)", 400, 0, 2000);
-  MMpMB2= new GH1 ("MMpMB2", "Missing mass seen by Proton (MB Kin 2)", 400, 0, 2000);
   MMpCut= new GH1 ("MMpCut", "Missing mass seen by Proton (P Banana Cut)", 400, 0, 2000);
-  MMpMBCut= new GH1 ("MMpMBCut", "Missing mass seen by Proton (MB Kin, P Banana Cut)", 400, 0, 2000);
-  MMpMB2Cut= new GH1 ("MMpMB2Cut", "Missing mass seen by Proton (MB Kin 2, P Banana Cut)", 400, 0, 2000);
+  MMpEpCorrectedCut new GH1 ("MMpEpCorrectedCut", "Missing mass seen by Proton (E Loss Corrected, P Banana Cut)", 400, 0, 2000);
+  MMpMBCut= new GH1 ("MMpMB2Cut", "Missing mass seen by Proton (MB Kin , P Banana Cut)", 400, 0, 2000);
 
   E_dE = new GH2 ("E_dE", "EdE Plot With E Loss Adjustment", 100, 0, 500, 100, 0, 5);
   E_dE_Cut = new GH2 ("ECB_dE_Cut", "EdE Plot (With cut on proton banana + E Loss)", 100, 0, 500, 100, 0, 5);
-
-  EpKinEpKinMBDiffPTheta = new GH2 ("EpkinEpKinMBDiffPTheta", "Proton EpKinEpKinMB Diff as fn of Proton Theta", 100, 0, 200, 100, 0, 180);
-  MMpKinEKin = new GH2 ("MMpKinEKin", "MM as seen by Proton as Fn of EKin", 150, 0, 2000, 150, 0, 500);
-  MMpKinEKinMB = new GH2 ("MMpKinEKinMB", "MM as seen by Proton as Fn of EKinMB", 150, 0, 2000, 150, 0, 500);
-  MMpKinEKinCut = new GH2 ("MMpKinEKinCut", "MM as seen by Proton as Fn of EKin (P Banana Cut)", 150, 0, 2000, 150, 0, 500);
-  MMpKinEKinMBCut = new GH2 ("MMpKinEKinMBCut", "MM as seen by Proton as Fn of EKinMB (P Banana Cut)", 150, 0, 2000, 150, 0, 500);
-  MMpKinTheta = new GH2 ("MMpKinTheta", "MM as seen by Proton as Fn of Theta", 150, 0, 2000, 150, 0, 180);
-  MMpKinThetaMB = new GH2 ("MMpKinThetaMB", "MM as seen by Proton (MB Kin) as Fn of Theta", 150, 0, 2000, 150, 0, 180);
-
 }
 
 void PNeutPol_Polarimeter::FillHists()
@@ -428,37 +431,39 @@ void PNeutPol_Polarimeter::FillHists()
   ThetaNeut->Fill(Thetan, TaggerTime);
   PhiProt->Fill(Phip, TaggerTime);
   PhiNeut->Fill(Phin, TaggerTime);
-  WCPhiDifference->Fill(PhiWCDiff);
   WCThetaProt->Fill(WCThetap, TaggerTime);
-  WCThetaNeut->Fill(WCThetan, TaggerTime);
   WCPhiProt->Fill(WCPhip, TaggerTime);
-  WCPhiNeut->Fill(WCPhin, TaggerTime);
-  E_dE->Fill(KinEpMB, dEp, TaggerTime);
+  E_dE->Fill(EpCorr, dEp, TaggerTime);
   EpKin->Fill(KinEp, TaggerTime);
-  EpKinMB->Fill(KinEpMB, TaggerTime);
+  EpCorrected->Fill(EpCorr, TaggerTime);
+  EpKinEpCorrDiff->Fill(KinEDiff, TaggerTime);
+  EpEpCorrDiff->Fill(EpDiff, TaggerTime);
   WCXp->Fill(WC1pX, TaggerTime);
   WCYp->Fill(WC1pY, TaggerTime);
   WCZp->Fill(WC1pZ, TaggerTime);
-  WCXn->Fill(WC1nX, TaggerTime);
-  WCYn->Fill(WC1nY, TaggerTime);
-  WCZn->Fill(WC1nZ, TaggerTime);
   MMp->Fill(MMpKin, TaggerTime);
+  MMpEpCorrected->Fill(MMpEpCorr, TaggerTime);
   MMpMB->Fill(MMpKinMB, TaggerTime);
-  MMpMB2->Fill(MMpKinMB2, TaggerTime);
-  MMpKinEKin->Fill(MMpKin, KinEp, TaggerTime);
-  MMpKinEKinMB->Fill(MMpKinMB, KinEpMB, TaggerTime);
-  MMpKinTheta->Fill(MMpKin, WCThetap, TaggerTime);
-  MMpKinThetaMB->Fill(MMpKinMB, WCThetap, TaggerTime);
+
+  if (((Detectors1 == 7) && (Detectors2 == 5)) || ((Detectors1 == 5) && (Detectors2 == 7)))
+  {
+    WCThetaNeut->Fill(WCThetan, TaggerTime);
+    WCPhiNeut->Fill(WCPhin, TaggerTime);
+    WCXn->Fill(WC1nX, TaggerTime);
+    WCYn->Fill(WC1nY, TaggerTime);
+    WCZn->Fill(WC1nZ, TaggerTime);
+    WCPhiDifference->Fill(PhiWCDiff);
+  }
 
   if(Cut_proton -> IsInside(KinEpMB, dEp) == kTRUE)
   {
+    EpKinEpCorrDiffCut->Fill(KinEDiff, TaggerTime);
+    EpEpCorrDiffCut->Fill(EpDiff, TaggerTime);
     MMpCut->Fill(MMpKin, TaggerTime);
+    MMpEpCorrectedCut->Fill(MMpEpCorr, TaggerTime);
     MMpMBCut->Fill(MMpKinMB, TaggerTime);
-    MMpMB2Cut->Fill(MMpKinMB2, TaggerTime);
-    MMpKinEKinCut->Fill(MMpKin, KinEp, TaggerTime);
-    MMpKinEKinMBCut->Fill(MMpKinMB, KinEpMB, TaggerTime);
     EgCut->Fill(EGamma, TaggerTime);
-    E_dE_Cut->Fill(KinEpMB, dEp, TaggerTime);
+    E_dE_Cut->Fill(EpCorr, dEp, TaggerTime);
   }
 
 }

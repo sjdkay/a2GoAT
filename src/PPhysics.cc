@@ -228,7 +228,7 @@ Double_t PPhysics::CalcKinEnergy(Double_t PrimaryTheta, Double_t BeamEnergy, Dou
 
 // Calculate kinetic energy of proton from CB energy and proton angle with polarimeter in place
 // Uses parameterisation worked out by Mikhail Bashkanov
-Double_t PPhysics::CalcKinEnergyMB(Double_t ProtE, Double_t ProtTheta){
+Double_t PPhysics::EpPolCorrect(Double_t ProtE, Double_t ProtTheta){
 
     A = CoeffA(ProtTheta);
     B = CoeffB(ProtTheta);
@@ -239,7 +239,7 @@ Double_t PPhysics::CalcKinEnergyMB(Double_t ProtE, Double_t ProtTheta){
     return EKinMB;
 }
 
-Double_t PPhysics::CalcKinEnergyMB2(Double_t PrimaryTheta, Double_t BeamEnergy, Double_t TargetMass, Double_t BeamMass, Double_t PrimaryMass, Double_t SecondaryMass)
+Double_t PPhysics::CalcKinEnergyMB(Double_t PrimaryTheta, Double_t BeamEnergy, Double_t TargetMass, Double_t BeamMass, Double_t PrimaryMass, Double_t SecondaryMass)
 {
     // Mikhail version
     // Working for some values but others return a NAN error!

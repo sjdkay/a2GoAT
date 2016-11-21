@@ -106,16 +106,17 @@ private:
   double_t KinEpWC;
   double_t KinEpDiff;
   double_t KinEDiff;
+  double_t EpDiff;
+  double_t EpCorr;
   double_t KinEpMB;
-  double_t KinEpMB2;
   double_t EpTot;
   double_t Pp;
   double_t Ppx;
   double_t Ppy;
   double_t Ppz;
   double_t MMpKin;
+  double_t MMpEpCorr;
   double_t MMpKinMB;
-  double_t MMpKinMB2;
 
   Bool_t nBanana;
   Bool_t MCData;
@@ -164,7 +165,11 @@ private:
   GH1*  WCPhiProt;
   GH1*  WCPhiNeut;
   GH1*  EpKin;
-  GH1*  EpKinMB;
+  GH1*  EpCorrected;
+  GH1*  EpKinEpCorrDiff;
+  GH1*  EpEpCorrDiff;
+  GH1*  EpKinEpCorrDiffCut;
+  GH1*  EpEpCorrDiffCut;
 
   GH1*  WCXp;
   GH1*  WCYp;
@@ -173,21 +178,14 @@ private:
   GH1*  WCYn;
   GH1*  WCZn;
   GH1*  MMp;
+  GH1*  MMpEpCorrected;
   GH1*  MMpMB;
-  GH1*  MMpMB2;
   GH1*  MMpCut;
+  GH1*  MMpEpCorrectedCut;
   GH1*  MMpMBCut;
-  GH1*  MMpMB2Cut;
 
   GH2* E_dE;
   GH2* E_dE_Cut;
-  GH2* EpKinEpKinMBDiffPTheta;
-  GH2* MMpKinEKin;
-  GH2* MMpKinEKinMB;
-  GH2* MMpKinEKinCut;
-  GH2* MMpKinEKinMBCut;
-  GH2* MMpKinTheta;
-  GH2* MMpKinThetaMB;
 
   char cutfilename[256];
   char cutname[256];

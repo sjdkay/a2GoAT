@@ -105,8 +105,8 @@ public:
 
 	Double_t CalcCoplanarity(const GTreeParticle& tree1, Int_t particle_index1, const GTreeParticle& tree2, Int_t particle_index2);
     Double_t CalcKinEnergy(Double_t PrimaryTheta, Double_t BeamEnergy, Double_t TargetMass, Double_t BeamMass, Double_t PrimaryMass, Double_t SecondaryMass);
-    Double_t CalcKinEnergyMB(Double_t ProtE, Double_t ProtTheta);
-    Double_t CalcKinEnergyMB2(Double_t PrimaryTheta, Double_t BeamEnergy, Double_t TargetMass, Double_t BeamMass, Double_t PrimaryMass, Double_t SecondaryMass);
+    Double_t EpPolCorrect(Double_t ProtE, Double_t ProtTheta);
+    Double_t CalcKinEnergyMB(Double_t PrimaryTheta, Double_t BeamEnergy, Double_t TargetMass, Double_t BeamMass, Double_t PrimaryMass, Double_t SecondaryMass);
 
     Double_t CoeffA(Double_t ProtTheta);
     Double_t CoeffB(Double_t ProtTheta);
