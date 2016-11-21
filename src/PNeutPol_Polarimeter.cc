@@ -420,7 +420,6 @@ void PNeutPol_Polarimeter::FillHists()
   if (-5 < TaggerTime && TaggerTime < 20) time_cut->Fill(TaggerTime);
 
   Zp_Vert->Fill(Zp, TaggerTime);
-  Zn_Vert->Fill(Zn, TaggerTime);
   Ekp->Fill(Ep, TaggerTime);
   Ekn->Fill(En, TaggerTime);
   EkSum->Fill((Ep + En),TaggerTime);
@@ -445,6 +444,7 @@ void PNeutPol_Polarimeter::FillHists()
 
   if (((Detectors1 == 7) && (Detectors2 == 5)) || ((Detectors1 == 5) && (Detectors2 == 7)))
   {
+    Zn_Vert->Fill(Zn, TaggerTime);
     WCThetaNeut->Fill(WCThetan, TaggerTime);
     WCPhiNeut->Fill(WCPhin, TaggerTime);
     WCXn->Fill(WC1nX, TaggerTime);
