@@ -170,7 +170,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     RecKinMBNeutron = Neutron4VectorKin(RecKinMBProton);
     MMpKinMB = RecKinMBNeutron.M();
 
-    if (KinEDiff > 100) continue; // If difference between CB energy and calculated Energy for proton > 100MeV continue
+    if (Abs(KinEDiff) > 100) continue; // If difference between CB energy and calculated Energy for proton > 100MeV continue
 
     //k++;
     FillHists(); // Fill histograms with data generated
@@ -394,10 +394,8 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   EpKin = new GH1 ("EpKin", "Ep Calculated from Ep/Thetap", 100, 0, 500);
   EpCorrected = new GH1 ("EpCorrected", "Ep Corrected for Energy Loss in Polarimeter ", 100, 0, 500);
 
-  EpKinEpCorrDiff = new GH1("EpKinEpCorrDiff", "Difference Between EpKin and EpCorr", 200, -250, 250);
-  EpEpCorrDiff = new GH1("EpEpCorrDiff", "Difference Between Ep and EpCorr", 200, 0, 500);
-  EpKinEpCorrDiffCut = new GH1("EpKinEpCorrDiffCut", "Difference Between EpKin and EpCorr (P Banana Cut)" , 200, -250, 250);
-  EpEpCorrDiffCut = new GH1("EpEpCorrDiffCut", "Difference Between Ep and EpCorr (P Banana Cut)", 200, 0, 500);
+  EpKinEpCorrDiff = new GH1("EpKinEpCorrDiff", "Difference Between EpKin and EpCorr", 150, -150, 150);
+  EpEpCorrDiff = new GH1("EpEpCorrDiff", "Difference Between Ep and EpCorr", 200, 0, 200);
 
   WCXp = new GH1("WCXp", "WC X Position for Proton", 200, -100, 100);
   WCYp = new GH1("WCYp", "WC Y Position for Proton", 200, -100, 100);
@@ -457,8 +455,6 @@ void PNeutPol_Polarimeter::FillHists()
 
   if(Cut_proton -> IsInside(KinEpMB, dEp) == kTRUE)
   {
-    EpKinEpCorrDiffCut->Fill(KinEDiff, TaggerTime);
-    EpEpCorrDiffCut->Fill(EpDiff, TaggerTime);
     MMpCut->Fill(MMpKin, TaggerTime);
     MMpEpCorrectedCut->Fill(MMpEpCorr, TaggerTime);
     MMpMBCut->Fill(MMpKinMB, TaggerTime);

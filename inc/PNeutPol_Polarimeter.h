@@ -168,8 +168,6 @@ private:
   GH1*  EpCorrected;
   GH1*  EpKinEpCorrDiff;
   GH1*  EpEpCorrDiff;
-  GH1*  EpKinEpCorrDiffCut;
-  GH1*  EpEpCorrDiffCut;
 
   GH1*  WCXp;
   GH1*  WCYp;
