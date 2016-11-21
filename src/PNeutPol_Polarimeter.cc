@@ -170,7 +170,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     RecKinMBNeutron = Neutron4VectorKin(RecKinMBProton);
     MMpKinMB = RecKinMBNeutron.M();
 
-    if (Abs(KinEDiff) > 100) continue; // If difference between CB energy and calculated Energy for proton > 100MeV continue
+    if (abs(KinEDiff) > 100) continue; // If difference between CB energy and calculated Energy for proton > 100MeV continue
 
     //k++;
     FillHists(); // Fill histograms with data generated
