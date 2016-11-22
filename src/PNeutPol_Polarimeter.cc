@@ -170,6 +170,8 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     RecKinMBNeutron = Neutron4VectorKin(RecKinMBProton);
     MMpKinMB = RecKinMBNeutron.M();
 
+    //cout << WCThetap << "   " << EGamma << "   " << KinEp << "   " << MMpKin << endl;
+
     if (abs(KinEDiff) > 100) continue; // If difference between CB energy and calculated Energy for proton > 100MeV continue
 
     //k++;
@@ -410,8 +412,30 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   MMpEpCorrectedCut =  new GH1 ("MMpEpCorrectedCut", "Missing mass seen by Proton (E Loss Corrected, P Banana Cut)", 400, 0, 2000);
   MMpMBCut = new GH1 ("MMpMB2Cut", "Missing mass seen by Proton (MB Kin , P Banana Cut)", 400, 0, 2000);
 
+  // MMp across photon E bins
+  MMp300400 = new GH1("MMp300400", "Missing mass as seen by Proton (300-400MeV Photon Energy)", 400, 0, 2000);
+  MMp400500 = new GH1("MMp400500", "Missing mass as seen by Proton (400-500MeV Photon Energy)", 400, 0, 2000);
+  MMp500600 = new GH1("MMp500600", "Missing mass as seen by Proton (500-600MeV Photon Energy)", 400, 0, 2000);
+  MMp600700 = new GH1("MMp600700", "Missing mass as seen by Proton (600-700MeV Photon Energy)", 400, 0, 2000);
+  MMp700800 = new GH1("MMp700800", "Missing mass as seen by Proton (700-800MeV Photon Energy)", 400, 0, 2000);
+  MMp800900 = new GH1("MMp800900", "Missing mass as seen by Proton (800-900MeV Photon Energy)", 400, 0, 2000);
+
   E_dE = new GH2 ("E_dE", "EdE Plot With E Loss Adjustment", 100, 0, 500, 100, 0, 5);
   E_dE_Cut = new GH2 ("ECB_dE_Cut", "EdE Plot (With cut on proton banana + E Loss)", 100, 0, 500, 100, 0, 5);
+
+  //MMp as fn of ThetaP/EpKin across Photon E bins
+  MMpThetap300400 = new GH2("MMpThetap300400", "MMp as a fn of WC Thetap (300-400MeV Photon Energy)", 150, 0, 2000, 150, 0, 180);
+  MMpThetap400500 = new GH2("MMpThetap400500", "MMp as a fn of WC Thetap (400-500MeV Photon Energy)", 150, 0, 2000, 150, 0, 180);
+  MMpThetap500600 = new GH2("MMpThetap500600", "MMp as a fn of WC Thetap (500-600MeV Photon Energy)", 150, 0, 2000, 150, 0, 180);
+  MMpThetap600700 = new GH2("MMpThetap600700", "MMp as a fn of WC Thetap (600-700MeV Photon Energy)", 150, 0, 2000, 150, 0, 180);
+  MMpThetap700800 = new GH2("MMpThetap700800", "MMp as a fn of WC Thetap (700-800MeV Photon Energy)", 150, 0, 2000, 150, 0, 180);
+  MMpThetap800900 = new GH2("MMpThetap800900", "MMp as a fn of WC Thetap (800-900MeV Photon Energy)", 150, 0, 2000, 150, 0, 180);
+  MMpEpKin300400 = new GH2("MMpEpKin300400", "MMp as a fn of EpKin (300-400MeV Photon Energy)", 150, 0, 2000, 150, 80, 500);
+  MMpEpKin400500 = new GH2("MMpEpKin400500", "MMp as a fn of EpKin (400-500MeV Photon Energy)", 150, 0, 2000, 150, 80, 500);
+  MMpEpKin500600 = new GH2("MMpEpKin500600", "MMp as a fn of EpKin (500-600MeV Photon Energy)", 150, 0, 2000, 150, 80, 500);
+  MMpEpKin600700 = new GH2("MMpEpKin600700", "MMp as a fn of EpKin (600-700MeV Photon Energy)", 150, 0, 2000, 150, 80, 500);
+  MMpEpKin700800 = new GH2("MMpEpKin700800", "MMp as a fn of EpKin (700-800MeV Photon Energy)", 150, 0, 2000, 150, 80, 500);
+  MMpEpKin800900 = new GH2("MMpEpKin800900", "MMp as a fn of EpKin (800-900MeV Photon Energy)", 150, 0, 2000, 150, 80, 500);
 }
 
 void PNeutPol_Polarimeter::FillHists()
@@ -460,6 +484,42 @@ void PNeutPol_Polarimeter::FillHists()
     MMpMBCut->Fill(MMpKinMB, TaggerTime);
     EgCut->Fill(EGamma, TaggerTime);
     E_dE_Cut->Fill(EpCorr, dEp, TaggerTime);
+  }
+
+  if(300 < EGamma && EGamma < 400){
+    MMp300400->Fill(MMpKin, TaggerTime);
+    MMpThetap300400->Fill(MMpKin, WCThetap, TaggerTime);
+    MMpEpKin300400->Fill(MMpKin, KinEp, TaggerTime);
+  }
+
+  else if(400 < EGamma && EGamma < 500){
+    MMp400500->Fill(MMpKin, TaggerTime);
+    MMpThetap400500->Fill(MMpKin, WCThetap, TaggerTime);
+    MMpEpKin400500->Fill(MMpKin, KinEp, TaggerTime);
+  }
+
+    else if(500 < EGamma && EGamma < 600){
+    MMp500600->Fill(MMpKin, TaggerTime);
+    MMpThetap500600->Fill(MMpKin, WCThetap, TaggerTime);
+    MMpEpKin500600->Fill(MMpKin, KinEp, TaggerTime);
+  }
+
+    else if(600 < EGamma && EGamma < 700){
+    MMp600700->Fill(MMpKin, TaggerTime);
+    MMpThetap600700->Fill(MMpKin, WCThetap, TaggerTime);
+    MMpEpKin600700->Fill(MMpKin, KinEp, TaggerTime);
+  }
+
+    else if(700 < EGamma && EGamma < 800){
+    MMp700800->Fill(MMpKin, TaggerTime);
+    MMpThetap700800->Fill(MMpKin, WCThetap, TaggerTime);
+    MMpEpKin700800->Fill(MMpKin, KinEp, TaggerTime);
+  }
+
+    else if(800 < EGamma && EGamma < 900){
+    MMp800900->Fill(MMpKin, TaggerTime);
+    MMpThetap800900->Fill(MMpKin, WCThetap, TaggerTime);
+    MMpEpKin800900->Fill(MMpKin, KinEp, TaggerTime);
   }
 
 }

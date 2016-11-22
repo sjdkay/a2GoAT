@@ -182,8 +182,29 @@ private:
   GH1*  MMpEpCorrectedCut;
   GH1*  MMpMBCut;
 
+  GH1* MMp300400;
+  GH1* MMp400500;
+  GH1* MMp500600;
+  GH1* MMp600700;
+  GH1* MMp700800;
+  GH1* MMp800900;
+
   GH2* E_dE;
   GH2* E_dE_Cut;
+
+  GH2* MMpThetap300400;
+  GH2* MMpThetap400500;
+  GH2* MMpThetap500600;
+  GH2* MMpThetap600700;
+  GH2* MMpThetap700800;
+  GH2* MMpThetap800900;
+
+  GH2* MMpEpKin300400;
+  GH2* MMpEpKin400500;
+  GH2* MMpEpKin500600;
+  GH2* MMpEpKin600700;
+  GH2* MMpEpKin700800;
+  GH2* MMpEpKin800900;
 
   char cutfilename[256];
   char cutname[256];
