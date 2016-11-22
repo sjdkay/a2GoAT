@@ -44,7 +44,7 @@ Bool_t	PNeutPol_Polarimeter::Start()
   Md = 1875.613; //Mass of Deuterium in MeV
   Deut = TLorentzVector (0., 0., 0., 1875.613); // 4-Vector of Deuterium target, assume at rest
 
-  Cut_CB_proton = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Proton_9_11_16.root", "Proton"); // These will need adjusting with new Acqu files
+  Cut_CB_proton = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Proton_22_11_16.root", "Proton"); // These will need adjusting with new Acqu files
   Cut_proton = Cut_CB_proton;
   Cut_CB_pion = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Pion_29_07_15.root", "Pion");
   Cut_pion = Cut_CB_pion;
