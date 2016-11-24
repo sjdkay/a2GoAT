@@ -158,21 +158,20 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     EpDiff = abs(EpCorr - Ep);
     KinEDiff = KinEp - EpCorr;
 
-    RecKinProton = Proton4VectorKin(KinEp, WCThetap, WCPhip);
+    RecKinProton = Proton4VectorKin(KinEp, WCThetapRad, WCPhipRad);
     RecKinNeutron = Neutron4VectorKin(RecKinProton);
     MMpKin = RecKinNeutron.M();
 
-    RecProtonEpCorr = Proton4VectorKin(EpCorr, WCThetap, WCPhip);
+    RecProtonEpCorr = Proton4VectorKin(EpCorr, WCThetapRad, WCPhipRad);
     RecNeutronEpCorr = Neutron4VectorKin(RecProtonEpCorr);
     MMpEpCorr = RecNeutronEpCorr.M();
 
-    RecKinMBProton = Proton4VectorKin(KinEpMB, WCThetap, WCPhip);
-    RecKinMBNeutron = Neutron4VectorKin(RecKinMBProton);
-    MMpKinMB = RecKinMBNeutron.M();
+    PN3Vect(RecKinProton, RecKinNeutron);
+    OpeningAngle = (P3Vect.Angle(N3Vect))*TMath::RadToDeg();
 
-    //cout << WCThetap << "   " << EGamma << "   " << KinEp << "   " << MMpKin << endl;
+    //cout << WCThetap << "   " << WCThetan << "   " << EGamma << "   " << KinEp << "   " << RecKinProton(0) << "   " <<  RecKinProton(1) << "   " << RecKinProton(2) << "   "  << MMpKin << endl;
 
-    if (abs(KinEDiff) > 100) continue; // If difference between CB energy and calculated Energy for proton > 100MeV continue
+    //if (abs(KinEDiff) > 100) continue; // If difference between CB energy and calculated Energy for proton > 100MeV continue
 
     //k++;
     FillHists(); // Fill histograms with data generated
@@ -332,12 +331,14 @@ TVector3 PNeutPol_Polarimeter::WC3Vectors(Double_t WCpX, Double_t WCpY, Double_t
 Double_t PNeutPol_Polarimeter::WCAngles(TVector3 MWPCp3Vector, TVector3 MWPCn3Vector)
 {
   WCThetap = MWPCp3Vector.Theta() * TMath::RadToDeg(); // Angles from WC hit positons
+  WCThetapRad = MWPCp3Vector.Theta();
   WCPhip = MWPCp3Vector.Phi() * TMath::RadToDeg();
+  WCPhipRad = MWPCp3Vector.Phi();
   WCThetan = MWPCn3Vector.Theta() * TMath::RadToDeg();
   WCPhin = MWPCn3Vector.Phi() * TMath::RadToDeg();
   PhiWCDiff = abs (WCPhip-WCPhin);
 
-  return WCThetap, WCThetan, WCPhip, WCPhin, PhiWCDiff;
+  return WCThetap, WCThetapRad, WCThetan, WCPhip, WCPhipRad, WCPhin, PhiWCDiff;
 }
 
 TLorentzVector PNeutPol_Polarimeter::Proton4VectorKin(Double_t KinE, Double_t Theta, Double_t Phi)
@@ -355,11 +356,20 @@ TLorentzVector PNeutPol_Polarimeter::Proton4VectorKin(Double_t KinE, Double_t Th
     return P4Vect;
 }
 
-TLorentzVector PNeutPol_Polarimeter::Neutron4VectorKin(TLorentzVector ProtonKinVector){
+TLorentzVector PNeutPol_Polarimeter::Neutron4VectorKin(TLorentzVector ProtonKinVector)
+{
 
     N4Vect = (Gamma + Deut) - ProtonKinVector;
 
     return N4Vect;
+}
+
+TVector3 PNeutPol_Polarimeter::PN3Vect(TLorentzVector Proton4Vector, TLorentzVector Neutron4Vector)
+{
+    P3Vect = Proton4Vector.Vect();
+    N3Vect = Neutron4Vector.Vect();
+
+    return P3Vect, N3Vect;
 }
 
 Double_t PNeutPol_Polarimeter::LabAngles()
@@ -395,6 +405,7 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   WCPhiNeut = new GH1 ("WCPhiNeut", "WC Phi for n", 180, -180, 180);
   EpKin = new GH1 ("EpKin", "Ep Calculated from Ep/Thetap", 100, 0, 500);
   EpCorrected = new GH1 ("EpCorrected", "Ep Corrected for Energy Loss in Polarimeter ", 100, 0, 500);
+  //OAngle = new GH1 ("OAngle", "Opening Angle between P and N Vectors", 200, 0, 360);
 
   EpKinEpCorrDiff = new GH1("EpKinEpCorrDiff", "Difference Between EpKin and EpCorr", 150, -150, 150);
   EpEpCorrDiff = new GH1("EpEpCorrDiff", "Difference Between Ep and EpCorr", 200, 0, 200);
@@ -405,14 +416,12 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   WCXn = new GH1("WCXn", "WC X Position for Neutron", 200, -100, 100);
   WCYn = new GH1("WCYn", "WC Y Position for Neutron", 200, -100, 100);
   WCZn = new GH1("WCZn", "WC Z Position for Neutron", 200, -500, 500);
-  MMp = new GH1 ("MMp", "Missing mass seen by Proton", 400, 0, 2000);
+  MMp = new GH1 ("MMp", "Missing mass seen by Proton", 400, 800, 1000);
   MMpEpCorrected = new GH1 ("MMpEpCorrected ", "Missing mass seen by Proton (E Loss Corrected)", 400, 0, 2000);
-  MMpMB = new GH1 ("MMpMB", "Missing mass seen by Proton (MB Kin)", 400, 0, 2000);
-  MMpCut = new GH1 ("MMpCut", "Missing mass seen by Proton (P Banana Cut)", 400, 0, 2000);
   MMpEpCorrectedCut =  new GH1 ("MMpEpCorrectedCut", "Missing mass seen by Proton (E Loss Corrected, P Banana Cut)", 400, 0, 2000);
-  MMpMBCut = new GH1 ("MMpMB2Cut", "Missing mass seen by Proton (MB Kin , P Banana Cut)", 400, 0, 2000);
 
   // MMp across photon E bins
+  MMp200300 = new GH1("MMp200300", "Missing mass as seen by Proton (200-300MeV Photon Energy)", 400, 0, 2000);
   MMp300400 = new GH1("MMp300400", "Missing mass as seen by Proton (300-400MeV Photon Energy)", 400, 0, 2000);
   MMp400500 = new GH1("MMp400500", "Missing mass as seen by Proton (400-500MeV Photon Energy)", 400, 0, 2000);
   MMp500600 = new GH1("MMp500600", "Missing mass as seen by Proton (500-600MeV Photon Energy)", 400, 0, 2000);
@@ -424,18 +433,20 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   E_dE_Cut = new GH2 ("ECB_dE_Cut", "EdE Plot (With cut on proton banana + E Loss)", 100, 0, 500, 100, 0, 5);
 
   //MMp as fn of ThetaP/EpKin across Photon E bins
+  MMpThetap200300 = new GH2("MMpThetap200300", "MMp as a fn of WC Thetap (200-300MeV Photon Energy)", 150, 0, 2000, 150, 0, 180);
   MMpThetap300400 = new GH2("MMpThetap300400", "MMp as a fn of WC Thetap (300-400MeV Photon Energy)", 150, 0, 2000, 150, 0, 180);
   MMpThetap400500 = new GH2("MMpThetap400500", "MMp as a fn of WC Thetap (400-500MeV Photon Energy)", 150, 0, 2000, 150, 0, 180);
   MMpThetap500600 = new GH2("MMpThetap500600", "MMp as a fn of WC Thetap (500-600MeV Photon Energy)", 150, 0, 2000, 150, 0, 180);
   MMpThetap600700 = new GH2("MMpThetap600700", "MMp as a fn of WC Thetap (600-700MeV Photon Energy)", 150, 0, 2000, 150, 0, 180);
   MMpThetap700800 = new GH2("MMpThetap700800", "MMp as a fn of WC Thetap (700-800MeV Photon Energy)", 150, 0, 2000, 150, 0, 180);
   MMpThetap800900 = new GH2("MMpThetap800900", "MMp as a fn of WC Thetap (800-900MeV Photon Energy)", 150, 0, 2000, 150, 0, 180);
+  MMpEpKin200300 = new GH2("MMpEpKin200300", "MMp as a fn of EpKin (200-300MeV Photon Energy)", 150, 0, 2000, 150, 80, 500);
   MMpEpKin300400 = new GH2("MMpEpKin300400", "MMp as a fn of EpKin (300-400MeV Photon Energy)", 150, 0, 2000, 150, 80, 500);
   MMpEpKin400500 = new GH2("MMpEpKin400500", "MMp as a fn of EpKin (400-500MeV Photon Energy)", 150, 0, 2000, 150, 80, 500);
   MMpEpKin500600 = new GH2("MMpEpKin500600", "MMp as a fn of EpKin (500-600MeV Photon Energy)", 150, 0, 2000, 150, 80, 500);
-  MMpEpKin600700 = new GH2("MMpEpKin600700", "MMp as a fn of EpKin (600-700MeV Photon Energy)", 150, 0, 2000, 150, 80, 500);
-  MMpEpKin700800 = new GH2("MMpEpKin700800", "MMp as a fn of EpKin (700-800MeV Photon Energy)", 150, 0, 2000, 150, 80, 500);
-  MMpEpKin800900 = new GH2("MMpEpKin800900", "MMp as a fn of EpKin (800-900MeV Photon Energy)", 150, 0, 2000, 150, 80, 500);
+  MMpEpKin600700 = new GH2("MMpEpKin600700", "MMp as a fn of EpKin (600-700MeV Photon Energy)", 150, 0, 2000, 150, 80, 750);
+  MMpEpKin700800 = new GH2("MMpEpKin700800", "MMp as a fn of EpKin (700-800MeV Photon Energy)", 150, 0, 2000, 150, 80, 1000);
+  MMpEpKin800900 = new GH2("MMpEpKin800900", "MMp as a fn of EpKin (800-900MeV Photon Energy)", 150, 0, 2000, 150, 80, 1000);
 }
 
 void PNeutPol_Polarimeter::FillHists()
@@ -464,7 +475,6 @@ void PNeutPol_Polarimeter::FillHists()
   WCZp->Fill(WC1pZ, TaggerTime);
   MMp->Fill(MMpKin, TaggerTime);
   MMpEpCorrected->Fill(MMpEpCorr, TaggerTime);
-  MMpMB->Fill(MMpKinMB, TaggerTime);
 
   if (((Detectors1 == 7) && (Detectors2 == 5)) || ((Detectors1 == 5) && (Detectors2 == 7)))
   {
@@ -479,49 +489,53 @@ void PNeutPol_Polarimeter::FillHists()
 
   if(Cut_proton -> IsInside(KinEpMB, dEp) == kTRUE)
   {
-    MMpCut->Fill(MMpKin, TaggerTime);
     MMpEpCorrectedCut->Fill(MMpEpCorr, TaggerTime);
-    MMpMBCut->Fill(MMpKinMB, TaggerTime);
     EgCut->Fill(EGamma, TaggerTime);
     E_dE_Cut->Fill(EpCorr, dEp, TaggerTime);
-  }
+    //OAngle->Fill(OpeningAngle, TaggerTime);
 
-  if(300 < EGamma && EGamma < 400){
-    MMp300400->Fill(MMpKin, TaggerTime);
-    MMpThetap300400->Fill(MMpKin, WCThetap, TaggerTime);
-    MMpEpKin300400->Fill(MMpKin, KinEp, TaggerTime);
-  }
+    if(200 < EGamma && EGamma < 300){
+        MMp200300->Fill(MMpEpCorr, TaggerTime);
+        MMpThetap200300->Fill(MMpEpCorr, WCThetap, TaggerTime);
+        MMpEpKin200300->Fill(MMpEpCorr, KinEp, TaggerTime);
+    }
 
-  else if(400 < EGamma && EGamma < 500){
-    MMp400500->Fill(MMpKin, TaggerTime);
-    MMpThetap400500->Fill(MMpKin, WCThetap, TaggerTime);
-    MMpEpKin400500->Fill(MMpKin, KinEp, TaggerTime);
-  }
+    else if(300 < EGamma && EGamma < 400){
+        MMp300400->Fill(MMpEpCorr, TaggerTime);
+        MMpThetap300400->Fill(MMpEpCorr, WCThetap, TaggerTime);
+        MMpEpKin300400->Fill(MMpEpCorr, KinEp, TaggerTime);
+    }
+
+    else if(400 < EGamma && EGamma < 500){
+        MMp400500->Fill(MMpEpCorr, TaggerTime);
+        MMpThetap400500->Fill(MMpEpCorr, WCThetap, TaggerTime);
+        MMpEpKin400500->Fill(MMpEpCorr, KinEp, TaggerTime);
+    }
 
     else if(500 < EGamma && EGamma < 600){
-    MMp500600->Fill(MMpKin, TaggerTime);
-    MMpThetap500600->Fill(MMpKin, WCThetap, TaggerTime);
-    MMpEpKin500600->Fill(MMpKin, KinEp, TaggerTime);
-  }
+        MMp500600->Fill(MMpEpCorr, TaggerTime);
+        MMpThetap500600->Fill(MMpEpCorr, WCThetap, TaggerTime);
+        MMpEpKin500600->Fill(MMpEpCorr, KinEp, TaggerTime);
+    }
 
     else if(600 < EGamma && EGamma < 700){
-    MMp600700->Fill(MMpKin, TaggerTime);
-    MMpThetap600700->Fill(MMpKin, WCThetap, TaggerTime);
-    MMpEpKin600700->Fill(MMpKin, KinEp, TaggerTime);
-  }
+        MMp600700->Fill(MMpEpCorr, TaggerTime);
+        MMpThetap600700->Fill(MMpEpCorr, WCThetap, TaggerTime);
+        MMpEpKin600700->Fill(MMpEpCorr, KinEp, TaggerTime);
+    }
 
     else if(700 < EGamma && EGamma < 800){
-    MMp700800->Fill(MMpKin, TaggerTime);
-    MMpThetap700800->Fill(MMpKin, WCThetap, TaggerTime);
-    MMpEpKin700800->Fill(MMpKin, KinEp, TaggerTime);
-  }
+        MMp700800->Fill(MMpEpCorr, TaggerTime);
+        MMpThetap700800->Fill(MMpEpCorr, WCThetap, TaggerTime);
+        MMpEpKin700800->Fill(MMpEpCorr, KinEp, TaggerTime);
+    }
 
     else if(800 < EGamma && EGamma < 900){
-    MMp800900->Fill(MMpKin, TaggerTime);
-    MMpThetap800900->Fill(MMpKin, WCThetap, TaggerTime);
-    MMpEpKin800900->Fill(MMpKin, KinEp, TaggerTime);
+        MMp800900->Fill(MMpEpCorr, TaggerTime);
+        MMpThetap800900->Fill(MMpEpCorr, WCThetap, TaggerTime);
+        MMpEpKin800900->Fill(MMpEpCorr, KinEp, TaggerTime);
+    }
   }
-
 }
 
 Bool_t	PNeutPol_Polarimeter::Write(){

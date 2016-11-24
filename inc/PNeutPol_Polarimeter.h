@@ -69,8 +69,10 @@ private:
   double_t WC1nY;
   double_t WC1nZ;
   double_t WCThetap;
+  double_t WCThetapRad;
   double_t WCThetan;
   double_t WCPhip;
+  double_t WCPhipRad;
   double_t WCPhin;
   double_t zWCRec;
   double_t zWC;
@@ -117,6 +119,7 @@ private:
   double_t MMpKin;
   double_t MMpEpCorr;
   double_t MMpKinMB;
+  double_t OpeningAngle;
 
   Bool_t nBanana;
   Bool_t MCData;
@@ -142,6 +145,8 @@ private:
   TVector3 GVn3Rec;
   TVector3 WC3Vectp;
   TVector3 WC3Vectn;
+  TVector3 P3Vect;
+  TVector3 N3Vect;
 
   TRandom2 rGen;
 
@@ -177,11 +182,10 @@ private:
   GH1*  WCZn;
   GH1*  MMp;
   GH1*  MMpEpCorrected;
-  GH1*  MMpMB;
-  GH1*  MMpCut;
   GH1*  MMpEpCorrectedCut;
-  GH1*  MMpMBCut;
+  //GH1*  OAngle;
 
+  GH1* MMp200300;
   GH1* MMp300400;
   GH1* MMp400500;
   GH1* MMp500600;
@@ -192,6 +196,7 @@ private:
   GH2* E_dE;
   GH2* E_dE_Cut;
 
+  GH2* MMpThetap200300;
   GH2* MMpThetap300400;
   GH2* MMpThetap400500;
   GH2* MMpThetap500600;
@@ -199,6 +204,7 @@ private:
   GH2* MMpThetap700800;
   GH2* MMpThetap800900;
 
+  GH2* MMpEpKin200300;
   GH2* MMpEpKin300400;
   GH2* MMpEpKin400500;
   GH2* MMpEpKin500600;
@@ -240,6 +246,7 @@ public:
     Double_t WCAngles(TVector3 MWPCp3Vector, TVector3 MWPCn3Vector);
     TLorentzVector Proton4VectorKin(Double_t KinE, Double_t Theta, Double_t Phi);
     TLorentzVector Neutron4VectorKin(TLorentzVector ProtonKinVector);
+    TVector3 PN3Vect(TLorentzVector Proton4Vector, TLorentzVector Neutron4Vector);
     Double_t LabAngles();
     void FillHists();
 
