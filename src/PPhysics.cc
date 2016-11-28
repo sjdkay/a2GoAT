@@ -316,6 +316,7 @@ Double_t PPhysics::ScatteredFrameAngles(TLorentzVector PrimaryVect, TLorentzVect
   Double_t ScattTheta = ScattZ * TMath::RadToDeg(); // Get the angle of the scattered particle in frame of initial particle
   Double_t ScattPhi = (atan2(cos(ScattY),cos(ScattX)))* TMath::RadToDeg();
 
+  cout << ScattTheta << "   " << ScattPhi << endl;
   return ScattTheta, ScattPhi;
 }
 
