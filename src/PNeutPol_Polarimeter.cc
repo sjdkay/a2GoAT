@@ -173,7 +173,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     PN3Vect(RecKinProton, RecKinNeutron);
     OpeningAngle = (N3Vect.Angle(GVn3))*TMath::RadToDeg();
 
-    ScatteredFrameAngles(RecProtonEpCorr,RecNeutronEpCorr);
+    ScatteredFrameAngles(RecProtonEpCorr, RecNeutronEpCorr, Gamma);
     cout << ScattTheta << "   " << ScattPhi << endl;
     if (ScattTheta > 90) continue;
 
