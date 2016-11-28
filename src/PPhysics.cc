@@ -303,7 +303,7 @@ Double_t PPhysics::ScatteredFrameAngles(TLorentzVector PrimaryVect, TLorentzVect
 {
   TVector3 PrimaryVect3 = PrimaryVect.Vect();
   TVector3 RecSecondaryVect3 = RecSecondaryVect.Vect();
-  TVector3 GammaVect3 = GammaVector.Vect();
+  TVector3 GammaVect3 = GammaVect.Vect();
   DefineScatteredAxes(PrimaryVect3, RecSecondaryVect3, GammaVect3);
   Double_t ScattZ = fZ.Angle(RecSecondaryVect3); // Gives the angles between the axes defined above and the Scattered Proton vector
   Double_t ScattY = fY.Angle(RecSecondaryVect3);
