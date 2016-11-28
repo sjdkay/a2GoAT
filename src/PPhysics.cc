@@ -299,6 +299,7 @@ Double_t PPhysics::CoeffC(Double_t ProtTheta){ // Calculate Coefficient C for MB
     return CoeC;
 }
 
+// Currently not working as intended?
 Double_t PPhysics::ScatteredFrameAngles(TLorentzVector PrimaryVect, TLorentzVector RecSecondaryVect, TLorentzVector GammaVect)
 {
   // Convert given TLorentzVectors to 3 vrctors
@@ -316,7 +317,7 @@ Double_t PPhysics::ScatteredFrameAngles(TLorentzVector PrimaryVect, TLorentzVect
   Double_t ScattTheta = ScattZ * TMath::RadToDeg(); // Get the angle of the scattered particle in frame of initial particle
   Double_t ScattPhi = (atan2(cos(ScattY),cos(ScattX)))* TMath::RadToDeg();
 
-  cout << ScattTheta << "   " << ScattPhi << endl;
+  //cout << ScattTheta << "   " << ScattPhi << endl;
   return ScattTheta, ScattPhi;
 }
 
