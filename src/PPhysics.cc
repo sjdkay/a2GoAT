@@ -312,7 +312,7 @@ Double_t PPhysics::ScatteredFrameAngles(TLorentzVector PrimaryVect, TLorentzVect
 
   return ScattTheta, ScattPhi;
 }
-S
+
 TVector3 PPhysics::DefineScatteredAxes(TVector3 PrimaryVector, TVector3 ReconstuctedSecondaryVector)
 {
   TVector3 fZ = (ReconstuctedNeutronVector.Unit()); // Define axes of the plane
