@@ -173,6 +173,10 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     PN3Vect(RecKinProton, RecKinNeutron);
     OpeningAngle = (N3Vect.Angle(GVn3))*TMath::RadToDeg();
 
+    ScatteredFrameAngles(RecProtonEpCorr,RecNeutronEpCorr);
+    cout << ScattTheta << "   " << ScattPhi << endl;
+    if (ScattTheta > 90) continue;
+
     //cout << WCThetap << "   " << WCThetan << "   " << EGamma << "   " << KinEp << "   " << RecKinProton(0) << "   " <<  RecKinProton(1) << "   " << RecKinProton(2) << "   "  << MMpKin << endl;
 
     //if (abs(KinEDiff) > 100) continue; // If difference between CB energy and calculated Energy for proton > 100MeV continue
@@ -407,6 +411,8 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   nCluster = new GH1 ("nCluster", "Cluster Size for Neutrons", 20, 0, 20);
   pClusterCut = new GH1 ("pClusterCut", "Cluster Size for Protons (P Banana Cut)", 20, 0, 20);
   nClusterCut= new GH1 ("nClusterCut", "Cluster Size for Neutrons (P Banana Cut)", 20, 0, 20);
+  ThetaSc =  new GH1( "Theta_Scattered", "Scattetred Proton Theta Distribution in Rotated Frame", 180, 0, 180 );
+  PhiSc = new GH1( "Phi_Scattered", "Scattetred Proton Phi Distribution in Rotated Frame", 36, -180, 180 );
 
   EpKinEpCorrDiff = new GH1("EpKinEpCorrDiff", "Difference Between EpKin and EpCorr", 150, -150, 150);
   EpEpCorrDiff = new GH1("EpEpCorrDiff", "Difference Between Ep and EpCorr", 200, 0, 200);
@@ -429,6 +435,21 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   MMp600700 = new GH1("MMp600700", "Missing mass as seen by Proton (600-700MeV Photon Energy)", 400, 0, 2000);
   MMp700800 = new GH1("MMp700800", "Missing mass as seen by Proton (700-800MeV Photon Energy)", 400, 0, 2000);
   MMp800900 = new GH1("MMp800900", "Missing mass as seen by Proton (800-900MeV Photon Energy)", 400, 0, 2000);
+
+  // Angles of neutron in scattered frame across EGamma bins
+  PhiSc275 = new GH1( "Phi_Scattered_275MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 275pm25MeV", 36, -180, 180);
+  PhiSc325 = new GH1( "Phi_Scattered_325MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 325pm25MeV", 36, -180, 180);
+  PhiSc375 = new GH1( "Phi_Scattered_375MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 375pm25MeV", 36, -180, 180);
+  PhiSc425 = new GH1( "Phi_Scattered_425MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 425pm25MeV", 36, -180, 180);
+  PhiSc475 = new GH1( "Phi_Scattered_475MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 475pm25MeV", 36, -180, 180);
+  PhiSc525 = new GH1( "Phi_Scattered_525MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 525pm25MeV", 36, -180, 180);
+  PhiSc575 = new GH1( "Phi_Scattered_575MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 575pm25MeV", 36, -180, 180);
+  PhiSc625 = new GH1( "Phi_Scattered_625MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 625pm25MeV", 36, -180, 180);
+  PhiSc675 = new GH1( "Phi_Scattered_675MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 675pm25MeV", 36, -180, 180);
+  PhiSc725 = new GH1( "Phi_Scattered_725MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 725pm25MeV", 36, -180, 180);
+  PhiSc775 = new GH1( "Phi_Scattered_775MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 775pm25MeV", 36, -180, 180);
+  PhiSc825 = new GH1( "Phi_Scattered_825MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 825pm25MeV", 36, -180, 180);
+  PhiSc875 = new GH1( "Phi_Scattered_875MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 875pm25MeV", 36, -180, 180)
 
   E_dE = new GH2 ("E_dE", "EdE Plot With E Loss Adjustment", 100, 0, 500, 100, 0, 5);
   E_dE_Cut = new GH2 ("ECB_dE_Cut", "EdE Plot (With cut on proton banana + E Loss)", 100, 0, 500, 100, 0, 5);
@@ -541,6 +562,21 @@ void PNeutPol_Polarimeter::FillHists()
         MMpThetap800900->Fill(MMpEpCorr, WCThetap, TaggerTime);
         MMpEpKin800900->Fill(MMpEpCorr, KinEp, TaggerTime);
     }
+
+  if ( 250 < EGamma && EGamma < 300) PhiSc275->Fill(ScattPhi, TaggerTime);
+  if ( 300 < EGamma && EGamma < 350) PhiSc325->Fill(ScattPhi, TaggerTime);
+  if ( 350 < EGamma && EGamma < 400) PhiSc375->Fill(ScattPhi, TaggerTime);
+  if ( 400 < EGamma && EGamma < 450) PhiSc425->Fill(ScattPhi, TaggerTime);
+  if ( 450 < EGamma && EGamma < 500) PhiSc475->Fill(ScattPhi, TaggerTime);
+  if ( 500 < EGamma && EGamma < 550) PhiSc525->Fill(ScattPhi, TaggerTime);
+  if ( 550 < EGamma && EGamma < 600) PhiSc575->Fill(ScattPhi, TaggerTime);
+  if ( 600 < EGamma && EGamma < 650) PhiSc625->Fill(ScattPhi, TaggerTime);
+  if ( 650 < EGamma && EGamma < 700) PhiSc675->Fill(ScattPhi, TaggerTime);
+  if ( 700 < EGamma && EGamma < 750) PhiSc725->Fill(ScattPhi, TaggerTime);
+  if ( 750 < EGamma && EGamma < 800) PhiSc775->Fill(ScattPhi, TaggerTime);
+  if ( 800 < EGamma && EGamma < 850) PhiSc825->Fill(ScattPhi, TaggerTime);
+  if ( 850 < EGamma && EGamma < 900) PhiSc875->Fill(ScattPhi, TaggerTime);
+
   }
 }
 

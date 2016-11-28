@@ -26,6 +26,8 @@ private:
 	Double_t B;
 	Double_t C;
 	Double_t e4MB;
+	Double_t ScattTheta;
+	Double_t ScattPhi;
 
 	Double_t PvR_ratio;
 
@@ -111,6 +113,9 @@ public:
     Double_t CoeffA(Double_t ProtTheta);
     Double_t CoeffB(Double_t ProtTheta);
     Double_t CoeffC(Double_t ProtTheta);
+
+    Double_t ScatteredFrameAngles(TLorentzVector PrimaryVect, TLorentzVector RecSecondaryVect);
+    TVector3 DefineScatteredAxes(TVector3 PrimaryVector, TVector3 ReconstuctedSecondaryVector);
 
 	void FillScalers(Int_t low_scaler_number, Int_t high_scaler_number, TH1* hist);
 

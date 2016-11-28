@@ -200,6 +200,22 @@ private:
   GH1* MMp700800;
   GH1* MMp800900;
 
+  GH1* ThetaSc;
+  GH1* PhiSc;
+  GH1* PhiSc275;
+  GH1* PhiSc325;
+  GH1* PhiSc375;
+  GH1* PhiSc425;
+  GH1* PhiSc475;
+  GH1* PhiSc525;
+  GH1* PhiSc575;
+  GH1* PhiSc625;
+  GH1* PhiSc675;
+  GH1* PhiSc725;
+  GH1* PhiSc775;
+  GH1* PhiSc825;
+  GH1* PhiSc875;
+
   GH2* E_dE;
   GH2* E_dE_Cut;
 
