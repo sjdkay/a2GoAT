@@ -31,6 +31,10 @@ private:
 
 	Double_t PvR_ratio;
 
+	TVector3 ScattXAxis;
+    TVector3 ScattYAxis;
+	TVector3 ScattZAxis;
+
 	TLorentzVector beam;
 	TLorentzVector target;
 	TLorentzVector particle;
@@ -115,7 +119,6 @@ public:
     Double_t CoeffC(Double_t ProtTheta);
 
     Double_t ScatteredFrameAngles(TLorentzVector PrimaryVect, TLorentzVector RecSecondaryVect, TLorentzVector GammaVect);
-    TVector3 DefineScatteredAxes(TVector3 PrimaryVector, TVector3 ReconstuctedSecondaryVector, TVector3 GammaVector);
 
 	void FillScalers(Int_t low_scaler_number, Int_t high_scaler_number, TH1* hist);
 

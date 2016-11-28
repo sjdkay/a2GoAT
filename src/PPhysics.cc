@@ -301,28 +301,23 @@ Double_t PPhysics::CoeffC(Double_t ProtTheta){ // Calculate Coefficient C for MB
 
 Double_t PPhysics::ScatteredFrameAngles(TLorentzVector PrimaryVect, TLorentzVector RecSecondaryVect, TLorentzVector GammaVect)
 {
+  // Convert given TLorentzVectors to 3 vrctors
   TVector3 PrimaryVect3 = PrimaryVect.Vect();
   TVector3 RecSecondaryVect3 = RecSecondaryVect.Vect();
   TVector3 GammaVect3 = GammaVect.Vect();
-  DefineScatteredAxes(PrimaryVect3, RecSecondaryVect3, GammaVect3);
-  Double_t ScattZ = fZ.Angle(RecSecondaryVect3); // Gives the angles between the axes defined above and the Scattered Proton vector
-  Double_t ScattY = fY.Angle(RecSecondaryVect3);
-  Double_t ScattX = fX.Angle(RecSecondaryVect3);
+  // Get Axes of scattered frame
+  TVector3 ScattXAxis = (RecSecondaryVect3.Unit());
+  TVector3 ScattYAxis = ((GammaVect3.Cross(PrimaryVect3)).Unit());
+  TVector3 ScattZAxis = ((ScattYAxis.Cross(ScattZAxis)).Unit());
+
+  Double_t ScattZ = ScattZAxis.Angle(RecSecondaryVect3); // Gives the angles between the axes defined above and the Scattered Proton vector
+  Double_t ScattY = ScattYAxis.Angle(RecSecondaryVect3);
+  Double_t ScattX = ScattXAxis.Angle(RecSecondaryVect3);
   Double_t ScattTheta = ScattZ * TMath::RadToDeg(); // Get the angle of the scattered particle in frame of initial particle
   Double_t ScattPhi = (atan2(cos(ScattY),cos(ScattX)))* TMath::RadToDeg();
 
   return ScattTheta, ScattPhi;
 }
-
-TVector3 PPhysics::DefineScatteredAxes(TVector3 PrimaryVector, TVector3 ReconstuctedSecondaryVector, TVector3 GammaVector)
-{
-  TVector3 fZ = (ReconstuctedSecondaryVector.Unit()); // Define axes of the plane
-  TVector3 fY = ((GammaVector.Cross(PrimaryVector)).Unit());
-  TVector3 fX = ((fY.Cross(fZ)).Unit());
-
-  return fX, fY, fZ;
-}
-
 
 // ----------------------------------------------------------------------------------------
 // GH1 routines
