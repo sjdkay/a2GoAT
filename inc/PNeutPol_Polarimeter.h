@@ -33,6 +33,8 @@ private:
   Int_t Detectors1;
   Int_t Detectors2;
   Int_t DetectorsSum;
+  Int_t pClusterSize;
+  Int_t nClusterSize;
 
   double_t Time;
   double_t TaggerTime;
@@ -183,7 +185,12 @@ private:
   GH1*  MMp;
   GH1*  MMpEpCorrected;
   GH1*  MMpEpCorrectedCut;
-  //GH1*  OAngle;
+  GH1*  OAngle;
+  GH1*  OAngleCut;
+  GH1*  pCluster;
+  GH1*  nCluster;
+  GH1*  pClusterCut;
+  GH1*  nClusterCut;
 
   GH1* MMp200300;
   GH1* MMp300400;

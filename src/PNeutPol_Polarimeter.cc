@@ -115,12 +115,16 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     {
         PNProp(1);
         PNVect(1);
+        pClusterSize = GetTracks()->GetClusterSize(0);
+        nClusterSize = GetTracks()->GetClusterSize(1);
     }
 
   else if (Proton2 == kTRUE)
     {
         PNProp(2);
         PNVect(2);
+        pClusterSize = GetTracks()->GetClusterSize(1);
+        nClusterSize = GetTracks()->GetClusterSize(0);
     }
 
   else
@@ -167,7 +171,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     MMpEpCorr = RecNeutronEpCorr.M();
 
     PN3Vect(RecKinProton, RecKinNeutron);
-    OpeningAngle = (P3Vect.Angle(N3Vect))*TMath::RadToDeg();
+    OpeningAngle = (N3Vect.Angle(GVn3))*TMath::RadToDeg();
 
     //cout << WCThetap << "   " << WCThetan << "   " << EGamma << "   " << KinEp << "   " << RecKinProton(0) << "   " <<  RecKinProton(1) << "   " << RecKinProton(2) << "   "  << MMpKin << endl;
 
@@ -242,14 +246,6 @@ Double_t PNeutPol_Polarimeter::InitialProp() // Defines initial particle propert
   WC1X2 = GetTracks()->GetMWPC0PosX(1);
   WC1Y2 = GetTracks()->GetMWPC0PosY(1);
   WC1Z2 = GetTracks()->GetMWPC0PosZ(1);
-
-  //Get Position from Chris' MWPC trees - outdated as of 15/11/16
-  //WC1X1 = GetMWPCHitsChris()->GetMWPCChamber1X(0);
-  //WC1Y1 = GetMWPCHitsChris()->GetMWPCChamber1Y(0);
-  //WC1Z1 = GetMWPCHitsChris()->GetMWPCChamber1Z(0);
-  //WC1X2 = GetMWPCHitsChris()->GetMWPCChamber1X(1);
-  //WC1Y2 = GetMWPCHitsChris()->GetMWPCChamber1Y(1);
-  //WC1Z2 = GetMWPCHitsChris()->GetMWPCChamber1Z(1);
 
   return Theta1, Theta2, Phi1, Phi2, z1, z2, E1, E2, dE1, dE2, WC1X1, WC1X2, WC1Y1, WC1Y2, WC1Z1, WC1Z2; // Returns various quantities used in later functions
 }
@@ -405,7 +401,12 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   WCPhiNeut = new GH1 ("WCPhiNeut", "WC Phi for n", 180, -180, 180);
   EpKin = new GH1 ("EpKin", "Ep Calculated from Ep/Thetap", 100, 0, 500);
   EpCorrected = new GH1 ("EpCorrected", "Ep Corrected for Energy Loss in Polarimeter ", 100, 0, 500);
-  //OAngle = new GH1 ("OAngle", "Opening Angle between P and N Vectors", 200, 0, 360);
+  OAngle = new GH1 ("OAngle", "Opening Angle between P and N Vectors", 200, 0, 360);
+  OAngleCut = new GH1 ("OAngleCut", "Opening Angle between P and N Vectors (P Banana Cut)", 200, 0, 360);
+  pCluster = new GH1 ("pCluster", "Cluster Size for Protons", 20, 0, 20);
+  nCluster = new GH1 ("nCluster", "Cluster Size for Neutrons", 20, 0, 20);
+  pClusterCut = new GH1 ("pClusterCut", "Cluster Size for Protons (P Banana Cut)", 20, 0, 20);
+  nClusterCut= new GH1 ("nClusterCut", "Cluster Size for Neutrons (P Banana Cut)", 20, 0, 20);
 
   EpKinEpCorrDiff = new GH1("EpKinEpCorrDiff", "Difference Between EpKin and EpCorr", 150, -150, 150);
   EpEpCorrDiff = new GH1("EpEpCorrDiff", "Difference Between Ep and EpCorr", 200, 0, 200);
@@ -444,9 +445,9 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   MMpEpKin300400 = new GH2("MMpEpKin300400", "MMp as a fn of EpKin (300-400MeV Photon Energy)", 150, 0, 2000, 150, 80, 500);
   MMpEpKin400500 = new GH2("MMpEpKin400500", "MMp as a fn of EpKin (400-500MeV Photon Energy)", 150, 0, 2000, 150, 80, 500);
   MMpEpKin500600 = new GH2("MMpEpKin500600", "MMp as a fn of EpKin (500-600MeV Photon Energy)", 150, 0, 2000, 150, 80, 500);
-  MMpEpKin600700 = new GH2("MMpEpKin600700", "MMp as a fn of EpKin (600-700MeV Photon Energy)", 150, 0, 2000, 150, 80, 750);
-  MMpEpKin700800 = new GH2("MMpEpKin700800", "MMp as a fn of EpKin (700-800MeV Photon Energy)", 150, 0, 2000, 150, 80, 1000);
-  MMpEpKin800900 = new GH2("MMpEpKin800900", "MMp as a fn of EpKin (800-900MeV Photon Energy)", 150, 0, 2000, 150, 80, 1000);
+  MMpEpKin600700 = new GH2("MMpEpKin600700", "MMp as a fn of EpKin (600-700MeV Photon Energy)", 150, 0, 2000, 150, 80, 500);
+  MMpEpKin700800 = new GH2("MMpEpKin700800", "MMp as a fn of EpKin (700-800MeV Photon Energy)", 150, 0, 2000, 150, 80, 500);
+  MMpEpKin800900 = new GH2("MMpEpKin800900", "MMp as a fn of EpKin (800-900MeV Photon Energy)", 150, 0, 2000, 150, 80, 500);
 }
 
 void PNeutPol_Polarimeter::FillHists()
@@ -475,6 +476,9 @@ void PNeutPol_Polarimeter::FillHists()
   WCZp->Fill(WC1pZ, TaggerTime);
   MMp->Fill(MMpKin, TaggerTime);
   MMpEpCorrected->Fill(MMpEpCorr, TaggerTime);
+  OAngle->Fill(OpeningAngle, TaggerTime);
+  pCluster->Fill(pClusterSize, TaggerTime);
+  nCluster->Fill(nClusterSize, TaggerTime);
 
   if (((Detectors1 == 7) && (Detectors2 == 5)) || ((Detectors1 == 5) && (Detectors2 == 7)))
   {
@@ -492,7 +496,9 @@ void PNeutPol_Polarimeter::FillHists()
     MMpEpCorrectedCut->Fill(MMpEpCorr, TaggerTime);
     EgCut->Fill(EGamma, TaggerTime);
     E_dE_Cut->Fill(EpCorr, dEp, TaggerTime);
-    //OAngle->Fill(OpeningAngle, TaggerTime);
+    OAngleCut->Fill(OpeningAngle, TaggerTime);
+    pClusterCut->Fill(pClusterSize, TaggerTime);
+    nClusterCut->Fill(nClusterSize, TaggerTime);
 
     if(200 < EGamma && EGamma < 300){
         MMp200300->Fill(MMpEpCorr, TaggerTime);
