@@ -100,15 +100,23 @@ void PlotSaver(){
   E_dE->SetXTitle("CB Energy/MeV");
   E_dE->SetYTitle("PID Energy/MeV");
   E_dE->Draw("Col");
+  TFile *f2 = new TFile("/scratch/Mainz_Software/a2GoAT/configfiles/cuts/CB_DeltaE-E_Proton_7_12_16.root"); // Open the proton cut file used
+  Proton->SetLineWidth(5);
+  Proton->Draw("Same");
   canvas5->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_15_11_16/E_dE_8.png");
   canvas5->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_15_11_16/E_dE_8.pdf");
+  TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_15_11_16/Physics_Total_8_05_12_16.root"); // Open the latest PTotal file to load histograms from
 
   // Banana plot showing cut region
   TCanvas *canvas6 = new TCanvas("canvas6","canvas6", 1920, 1080);
   ECB_dE_Cut->SetXTitle("CB Energy/MeV"); //Need to change this to E_dE_Cut for future Total files, GH2 was misnamed in code
   ECB_dE_Cut->SetYTitle("PID Energy/MeV");
   ECB_dE_Cut->Draw("Col");
+  TFile *f2 = new TFile("/scratch/Mainz_Software/a2GoAT/configfiles/cuts/CB_DeltaE-E_Proton_7_12_16.root"); // Open the proton cut file used
+  Proton->SetLineWidth(5);
+  Proton->Draw("Same");
   canvas6->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_15_11_16/E_dE_Cut_8.png");
   canvas6->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_15_11_16/E_dE_Cut_8.pdf");
+  TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_15_11_16/Physics_Total_8_05_12_16.root"); // Open the latest PTotal file to load histograms from
   
 }
