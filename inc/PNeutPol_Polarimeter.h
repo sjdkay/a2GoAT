@@ -122,6 +122,7 @@ private:
   double_t MMpEpCorr;
   double_t MMpKinMB;
   double_t OpeningAngle;
+  double_t ThetanDiff;
 
   Bool_t nBanana;
   Bool_t MCData;
@@ -191,6 +192,15 @@ private:
   GH1*  nCluster;
   GH1*  pClusterCut;
   GH1*  nClusterCut;
+  GH1*  ThetanWCThetanRecDiff;
+
+  GH1*  ThetanWCThetanRecDiff200300;
+  GH1*  ThetanWCThetanRecDiff300400;
+  GH1*  ThetanWCThetanRecDiff400500;
+  GH1*  ThetanWCThetanRecDiff500600;
+  GH1*  ThetanWCThetanRecDiff600700;
+  GH1*  ThetanWCThetanRecDiff700800;
+  GH1*  ThetanWCThetanRecDiff800900;
 
   GH1* MMp200300;
   GH1* MMp300400;
