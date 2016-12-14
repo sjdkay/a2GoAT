@@ -44,10 +44,14 @@ Bool_t	PNeutPol_Polarimeter::Start()
   Md = 1875.613; //Mass of Deuterium in MeV
   Deut = TLorentzVector (0., 0., 0., 1875.613); // 4-Vector of Deuterium target, assume at rest
 
-  Cut_CB_proton = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Proton_07_12_16.root", "Proton"); // These will need adjusting with new Acqu files
+  Cut_CB_proton = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Proton_7_12_16.root", "Proton"); // These will need adjusting with new Acqu files
   Cut_proton = Cut_CB_proton;
   Cut_CB_pion = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Pion_29_07_15.root", "Pion");
   Cut_pion = Cut_CB_pion;
+  Cut_CB_protonKinGood = OpenCutFile("CB_DeltaE-E_ProtonKinGood_14_12_16.root", "ProtonKinGood"); // These will need adjusting with new Acqu files
+  Cut_protonKinGood = Cut_CB_protonKinGood;
+  Cut_CB_protonKinBad = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Pion_29_07_15.root", "ProtonKinBad");
+  Cut_protonKinBad = Cut_CB_protonKinBad;
   cout << endl;
 
   TraverseValidEvents(); // This loops over each event as in old file and calls ProcessEvent() each loop
@@ -449,6 +453,7 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
 
   E_dE = new GH2 ("E_dE", "EdE Plot With E Loss Adjustment", 100, 0, 500, 100, 0, 5);
   E_dE_Cut = new GH2 ("E_dE_Cut", "EdE Plot (With cut on proton banana + E Loss)", 100, 0, 500, 100, 0, 5);
+  KinEp_dE = new GH2 ("KinEp_dE", "KinEpdE Plot", 100, 0, 500, 100, 0, 5);
 
   //MMp as fn of ThetaP/EpKin across Photon E bins
   MMpThetap200300 = new GH2("MMpThetap200300", "MMp as a fn of WC Thetap (200-300MeV Photon Energy)", 150, 0, 2000, 150, 0, 180);
@@ -484,6 +489,7 @@ void PNeutPol_Polarimeter::FillHists()
   WCThetaProt->Fill(WCThetap, TaggerTime);
   WCPhiProt->Fill(WCPhip, TaggerTime);
   E_dE->Fill(EpCorr, dEp, TaggerTime);
+  KinEp_dE->Fill(KinEp, dEp, TaggerTime);
   EpKin->Fill(KinEp, TaggerTime);
   EpCorrected->Fill(EpCorr, TaggerTime);
   EpKinEpCorrDiff->Fill(KinEDiff, TaggerTime);

@@ -228,6 +228,7 @@ private:
 
   GH2* E_dE;
   GH2* E_dE_Cut;
+  GH2* KinEp_dE;
 
   GH2* MMpThetap200300;
   GH2* MMpThetap300400;
@@ -251,10 +252,14 @@ private:
   TCutG* Cut;
   TCutG* Cut_proton;
   TCutG* Cut_pion;
+  TCutG* Cut_protonKinGood;
+  TCutG* Cut_protonKinBad;
   TCutG* Cut_ROI;
   TCutG* Cut_neutron;
   TCutG* Cut_CB_proton;
   TCutG* Cut_CB_pion;
+  TCutG* Cut_CB_protonKinGood;
+  TCutG* Cut_CB_protonKinBad;
   TCutG* Cut_CB_ROI;
 
 protected:
