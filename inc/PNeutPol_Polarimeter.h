@@ -156,52 +156,45 @@ private:
   TH1D*	time;
   TH1D*	time_cut;
 
-  GH1*  Zp_Vert;
-  GH1*  Zn_Vert;
-  GH1*  Ekp;
-  GH1*  Ekn;
-  GH1*  EkSum;
-  GH1*  Eg;
-  GH1*  EgCut;
-  GH1*  ThetaProt;
-  GH1*  ThetaNeut;
-  GH1*  PhiProt;
-  GH1*  PhiNeut;
-  GH1*  WCPhiDifference;
-  GH1*  WCThetaProt;
-  GH1*  WCThetaNeut;
-  GH1*  WCPhiProt;
-  GH1*  WCPhiNeut;
-  GH1*  EpKin;
-  GH1*  EpCorrected;
-  GH1*  EpKinEpCorrDiff;
-  GH1*  EpEpCorrDiff;
+  GH1* Zp_Vert;
+  GH1* Zn_Vert;
+  GH1* Ekp;
+  GH1* Ekn;
+  GH1* EkSum;
+  GH1* Eg;
+  GH1* ThetaProt;
+  GH1* ThetaNeut;
+  GH1* PhiProt;
+  GH1* PhiNeut;
+  GH1* WCPhiDifference;
+  GH1* WCThetaProt;
+  GH1* WCThetaNeut;
+  GH1* WCPhiProt;
+  GH1* WCPhiNeut;
+  GH1* EpKin;
+  GH1* EpCorrected;
+  GH1* EpKinEpCorrDiff;
+  GH1* EpEpCorrDiff;
 
-  GH1*  WCXp;
-  GH1*  WCYp;
-  GH1*  WCZp;
-  GH1*  WCXn;
-  GH1*  WCYn;
-  GH1*  WCZn;
-  GH1*  MMp;
-  GH1*  MMpEpCorrected;
-  GH1*  MMpEpCorrectedCut;
-  GH1*  OAngle;
-  GH1*  OAngleCut;
-  GH1*  pCluster;
-  GH1*  nCluster;
-  GH1*  pClusterCut;
-  GH1*  nClusterCut;
-  GH1*  ThetanWCThetanRecDiff;
+  GH1* WCXp;
+  GH1* WCYp;
+  GH1* WCZp;
+  GH1* WCXn;
+  GH1* WCYn;
+  GH1* WCZn;
+  GH1* MMp;
+  GH1* MMpEpCorrected;
+  GH1* OAngle;
+  GH1* pCluster;
+  GH1* nCluster;
 
-  GH1*  ThetanWCThetanRecDiff200300;
-  GH1*  ThetanWCThetanRecDiff300400;
-  GH1*  ThetanWCThetanRecDiff400500;
-  GH1*  ThetanWCThetanRecDiff500600;
-  GH1*  ThetanWCThetanRecDiff600700;
-  GH1*  ThetanWCThetanRecDiff700800;
-  GH1*  ThetanWCThetanRecDiff800900;
-
+  GH1* ThetanWCThetanRecDiff200300;
+  GH1* ThetanWCThetanRecDiff300400;
+  GH1* ThetanWCThetanRecDiff400500;
+  GH1* ThetanWCThetanRecDiff500600;
+  GH1* ThetanWCThetanRecDiff600700;
+  GH1* ThetanWCThetanRecDiff700800;
+  GH1* ThetanWCThetanRecDiff800900;
   GH1* MMp200300;
   GH1* MMp300400;
   GH1* MMp400500;
@@ -209,6 +202,12 @@ private:
   GH1* MMp600700;
   GH1* MMp700800;
   GH1* MMp800900;
+  GH1* pClusterCut;
+  GH1* nClusterCut;
+  GH1* EgCut;
+  GH1* MMpEpCorrectedCut;
+  GH1* OAngleCut;
+  GH1* ThetanWCThetanRecDiff;
 
   GH1* ThetaSc;
   GH1* PhiSc;
@@ -228,7 +227,10 @@ private:
 
   GH2* E_dE;
   GH2* E_dE_Cut;
+  GH2* E_dE_BadCut;
   GH2* KinEp_dE;
+  GH2* KinEp_dE_GoodCut;
+  GH2* KinEp_dE_BadCut;
 
   GH2* MMpThetap200300;
   GH2* MMpThetap300400;
@@ -245,6 +247,8 @@ private:
   GH2* MMpEpKin600700;
   GH2* MMpEpKin700800;
   GH2* MMpEpKin800900;
+
+  GH2* ThetapKinEpBadCut;
 
   char cutfilename[256];
   char cutname[256];

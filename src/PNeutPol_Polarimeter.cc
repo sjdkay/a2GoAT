@@ -48,9 +48,9 @@ Bool_t	PNeutPol_Polarimeter::Start()
   Cut_proton = Cut_CB_proton;
   Cut_CB_pion = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Pion_29_07_15.root", "Pion");
   Cut_pion = Cut_CB_pion;
-  Cut_CB_protonKinGood = OpenCutFile("CB_DeltaE-E_ProtonKinGood_14_12_16.root", "ProtonKinGood"); // These will need adjusting with new Acqu files
+  Cut_CB_protonKinGood = OpenCutFile("configfiles/cuts/CB_DeltaE-E_ProtonKinGood_15_12_16.root", "ProtonKinGood"); // These will need adjusting with new Acqu files
   Cut_protonKinGood = Cut_CB_protonKinGood;
-  Cut_CB_protonKinBad = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Pion_29_07_15.root", "ProtonKinBad");
+  Cut_CB_protonKinBad = OpenCutFile("configfiles/cuts/CB_DeltaE-E_ProtonKinBad_15_12_16.root", "ProtonKinBad");
   Cut_protonKinBad = Cut_CB_protonKinBad;
   cout << endl;
 
@@ -383,7 +383,6 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   Ekn = new GH1( "Ekn", "Neutron Energy Distribution", 100, 0, 500 );
   EkSum = new GH1( "Ek Sum", "Particle Energy Sum Distribution", 300, 0, 900 );
   Eg = new GH1( "Eg", "Photon Energy Distribution", 200, 100, 1600 );
-  EgCut = new GH1( "EgCut", "Photon Energy Distribution (P Banana Cut)", 400, 100, 1600 );
   ThetaProt = new GH1( "ThetaProt", " Proton Theta Distribution", 180, 0, 180 );
   ThetaNeut = new GH1( "ThetaNeut", " Neutron Theta Distribution", 180, 0, 180 );
   PhiProt = new GH1( "PhiProt", " Proton Phi Distribution", 180, -180, 180 );
@@ -396,12 +395,9 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   EpKin = new GH1 ("EpKin", "Ep Calculated from Ep/Thetap", 100, 0, 500);
   EpCorrected = new GH1 ("EpCorrected", "Ep Corrected for Energy Loss in Polarimeter ", 100, 0, 500);
   OAngle = new GH1 ("OAngle", "Opening Angle between P and N Vectors", 180, 0, 180);
-  OAngleCut = new GH1 ("OAngleCut", "Opening Angle between P and N Vectors (P Banana Cut)", 180, 0, 180);
   pCluster = new GH1 ("pCluster", "Cluster Size for Protons", 20, 0, 20);
   nCluster = new GH1 ("nCluster", "Cluster Size for Neutrons", 20, 0, 20);
-  pClusterCut = new GH1 ("pClusterCut", "Cluster Size for Protons (P Banana Cut)", 20, 0, 20);
-  nClusterCut= new GH1 ("nClusterCut", "Cluster Size for Neutrons (P Banana Cut)", 20, 0, 20);
-  ThetanWCThetanRecDiff = new GH1 ("ThetanWCThetanRecDiff", "Difference between ThetaWC and ThetaRec for n", 180, 0, 180);
+
   //ThetaSc =  new GH1( "Theta_Scattered", "Scattetred Proton Theta Distribution in Rotated Frame", 180, 0, 180 );
   //PhiSc = new GH1( "Phi_Scattered", "Scattetred Proton Phi Distribution in Rotated Frame", 36, -180, 180 );
 
@@ -416,7 +412,13 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   WCZn = new GH1("WCZn", "WC Z Position for Neutron", 200, -500, 500);
   MMp = new GH1 ("MMp", "Missing mass seen by Proton", 400, 800, 1000);
   MMpEpCorrected = new GH1 ("MMpEpCorrected", "Missing mass seen by Proton (E Loss Corrected)", 400, 0, 2000);
+
   MMpEpCorrectedCut =  new GH1 ("MMpEpCorrectedCut", "Missing mass seen by Proton (E Loss Corrected, P Banana Cut)", 400, 0, 2000);
+  pClusterCut = new GH1 ("pClusterCut", "Cluster Size for Protons (P Banana Cut)", 20, 0, 20);
+  nClusterCut= new GH1 ("nClusterCut", "Cluster Size for Neutrons (P Banana Cut)", 20, 0, 20);
+  ThetanWCThetanRecDiff = new GH1 ("ThetanWCThetanRecDiff", "Difference between ThetaWC and ThetaRec for n", 180, 0, 180);
+  OAngleCut = new GH1 ("OAngleCut", "Opening Angle between P and N Vectors (P Banana Cut)", 180, 0, 180);
+  EgCut = new GH1( "EgCut", "Photon Energy Distribution (P Banana Cut)", 400, 100, 1600 );
 
   // ThetaWCThetaRecDiff across EGamma Bins
   ThetanWCThetanRecDiff200300 = new GH1 ("ThetanWCThetanRecDiff200300", "Difference between ThetaWC and ThetaRec for n (200-300MeV Photon Energy)", 180, 0, 180);
@@ -453,7 +455,12 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
 
   E_dE = new GH2 ("E_dE", "EdE Plot With E Loss Adjustment", 100, 0, 500, 100, 0, 5);
   E_dE_Cut = new GH2 ("E_dE_Cut", "EdE Plot (With cut on proton banana + E Loss)", 100, 0, 500, 100, 0, 5);
+  E_dE_BadCut = new GH2 ("E_dE_BadCut", "EdE Plot (With BadKinEp Cut + E Loss)", 100, 0, 500, 100, 0, 5);
   KinEp_dE = new GH2 ("KinEp_dE", "KinEpdE Plot", 100, 0, 500, 100, 0, 5);
+  KinEp_dE_GoodCut = new GH2 ("KinEp_dE_GoodCut", "KinEpdE Plot With Good Proton Cut", 100, 0, 500, 100, 0, 5);
+  KinEp_dE_BadCut = new GH2 ("KinEp_dE_BadCut", "KinEpdE Plot With Bad Proton Cut", 100, 250, 750, 100, 0, 5);
+
+  ThetapKinEpBadCut = new GH2 ("ThetapKinEpBadCut", "WCThetap vs KinEp for P in Bad p Cut", 150, 0, 180, 150, 0, 1000);
 
   //MMp as fn of ThetaP/EpKin across Photon E bins
   MMpThetap200300 = new GH2("MMpThetap200300", "MMp as a fn of WC Thetap (200-300MeV Photon Energy)", 150, 0, 2000, 150, 0, 180);
@@ -510,11 +517,16 @@ void PNeutPol_Polarimeter::FillHists()
   WCZn->Fill(WC1nZ, TaggerTime);
   WCPhiDifference->Fill(PhiWCDiff);
 
-  if(Cut_proton -> IsInside(EpCorr, dEp) == kTRUE)
+  if(Cut_proton -> IsInside(EpCorr, dEp) == kTRUE){
+    E_dE_Cut->Fill(EpCorr, dEp, TaggerTime);
+  }
+
+  // Fill events inside good proton banana on KinEpdE plot
+  if(Cut_protonKinGood -> IsInside(KinEp, dEp) == kTRUE)
   {
+    KinEp_dE_GoodCut->Fill(KinEp, dEp, TaggerTime);
     MMpEpCorrectedCut->Fill(MMpEpCorr, TaggerTime);
     EgCut->Fill(EGamma, TaggerTime);
-    E_dE_Cut->Fill(EpCorr, dEp, TaggerTime);
     OAngleCut->Fill(OpeningAngle, TaggerTime);
     pClusterCut->Fill(pClusterSize, TaggerTime);
     nClusterCut->Fill(nClusterSize, TaggerTime);
@@ -584,6 +596,15 @@ void PNeutPol_Polarimeter::FillHists()
   //if ( 850 < EGamma && EGamma < 900) PhiSc875->Fill(ScattPhi, TaggerTime);
 
   }
+
+  //Fill KinEpdE plot for bad proton cut
+  if(Cut_protonKinBad -> IsInside(KinEp, dEp) == kTRUE)
+  {
+    KinEp_dE_BadCut->Fill(KinEp, dEp, TaggerTime);
+    E_dE_BadCut->Fill(EpCorr, dEp, TaggerTime);
+    ThetapKinEpBadCut->Fill(WCThetap, KinEp, TaggerTime);
+  }
+
 }
 
 Bool_t	PNeutPol_Polarimeter::Write(){
