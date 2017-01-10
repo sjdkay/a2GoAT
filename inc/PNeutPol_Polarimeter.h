@@ -104,8 +104,8 @@ private:
   double_t ScattY;
   double_t ScattZ;
   double_t ScattThetaLab;
-  double_t ScattTheta;
-  double_t ScattPhi;
+  double_t ThetanScatt;
+  double_t PhinScatt;
   double_t KinEp;
   double_t KinEpWC;
   double_t KinEpDiff;
@@ -278,17 +278,8 @@ public:
     virtual ~PNeutPol_Polarimeter();
     virtual Bool_t  Init();
     TCutG* OpenCutFile(Char_t* filename, Char_t* cutname);
-    Int_t GetEvent();
-    TLorentzVector InitialVect();
-    Double_t InitialProp();
-    Int_t DetectorCheck();
-    Double_t PNProp(Int_t ProtonParticleNumber);
-    TLorentzVector PNVect(Int_t ProtonParticleNumber);
-    TVector3 WC3Vectors(Double_t WCpX, Double_t WCpY, Double_t WCpZ, Double_t WCnX, Double_t WCnY, Double_t WCnZ);
-    Double_t WCAngles(TVector3 MWPCp3Vector, TVector3 MWPCn3Vector);
     TLorentzVector Proton4VectorKin(Double_t KinE, Double_t Theta, Double_t Phi);
     TLorentzVector Neutron4VectorKin(TLorentzVector ProtonKinVector);
-    TVector3 PN3Vect(TLorentzVector Proton4Vector, TLorentzVector Neutron4Vector);
     Double_t LabAngles();
     void FillHists();
 

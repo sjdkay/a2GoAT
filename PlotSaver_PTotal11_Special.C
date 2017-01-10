@@ -66,7 +66,7 @@ void PlotSaver_PTotal11_Special(){
   TCanvas *canvas3 = new TCanvas("canvas3","canvas3", 1920, 1080);
   MMpEpCorrected->SetLineColor(4);
   MMpEpCorrectedGoodCut->SetLineColor(2);
-  MMpEpCorrectedBadCut->SetLineColor(807);
+  MMpEpCorrectedBadCut->SetLineColor(3);
   MMpEpCorrected->SetTitle("Missing Mass as Seen by Proton");
   MMpEpCorrected->SetStats(kFALSE);
   leg = new TLegend(0.8, 0.80, 0.9, 0.90);
@@ -117,7 +117,7 @@ void PlotSaver_PTotal11_Special(){
   ThetanWCThetanRecDiff500600BadCut->SetLineColor(4);
   ThetanWCThetanRecDiff600700BadCut->SetLineColor(6);
   ThetanWCThetanRecDiff700800BadCut->SetLineColor(7);
-  ThetanWCThetanRecDiff800900BadCut->SetLineColor(807);
+  ThetanWCThetanRecDiff800900BadCut->SetLineColor(1);
   ThetanWCThetanRecDiff500600BadCut->SetTitle("Differnce Between ThetanWC and ThetanRec Across EGamma Bins (Bad p cut)");
   ThetanWCThetanRecDiff500600BadCut->SetStats(kFALSE);
   ThetanWCThetanRecDiff500600BadCut->Draw();
@@ -141,7 +141,7 @@ void PlotSaver_PTotal11_Special(){
   TCanvas *canvas6 = new TCanvas("canvas6","canvas6", 1920, 1080);
   OAngle->SetLineColor(4);
   OAngleGoodCut->SetLineColor(2);
-  OAngleBadCut->SetLineColor(807);
+  OAngleBadCut->SetLineColor(3);
   OAngle->SetTitle("Opening angle between P and N Vectors");
   OAngle->SetStats(kFALSE);
   leg = new TLegend(0.75, 0.80, 0.9, 0.90);
