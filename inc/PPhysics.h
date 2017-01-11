@@ -118,7 +118,7 @@ public:
     Double_t CoeffB(Double_t ProtTheta);
     Double_t CoeffC(Double_t ProtTheta);
 
-    TVector3 ScatteredFrameAngles(TLorentzVector PrimaryVect, TLorentzVector RecSecondaryVect, TLorentzVector GammaVect);
+    TVector3 ScatteredFrameAngles(TVector3 InitialVect, TVector3 RealPVect, TVector3 ScattVector, TLorentzVector GammaVect);
 
 	void FillScalers(Int_t low_scaler_number, Int_t high_scaler_number, TH1* hist);
 

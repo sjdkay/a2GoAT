@@ -103,66 +103,44 @@ void	PNeutPol_Polarimeter::ProcessEvent()
 
   EventCounterTrackCut++;
 
-  GV1 = GetTracks()->GetVector(0, Mp);
-  GV2 = GetTracks()->GetVector(1, Mp); // Set both to have proton mass for now
-  Theta1 = (GV1.Theta()) * TMath::RadToDeg();
-  Theta2 = (GV2.Theta()) * TMath::RadToDeg();
-  Phi1 = (GV1.Phi()) * TMath::RadToDeg();
-  Phi2 = (GV2.Phi()) * TMath::RadToDeg();
-  z1 = GetTracks()->GetPseudoVertexZ(0);
-  z2 = GetTracks()->GetPseudoVertexZ(1);
-  E1 = GetTracks()->GetClusterEnergy(0);
-  E2 = GetTracks()->GetClusterEnergy(1);
-  dE1 = GetTracks()->GetVetoEnergy(0);
-  dE2 = GetTracks()->GetVetoEnergy(1);
-  WC1X1 = GetTracks()->GetMWPC0PosX(0);
-  WC1Y1 = GetTracks()->GetMWPC0PosY(0);
-  WC1Z1 = GetTracks()->GetMWPC0PosZ(0);
-  WC1X2 = GetTracks()->GetMWPC0PosX(1);
-  WC1Y2 = GetTracks()->GetMWPC0PosY(1);
-  WC1Z2 = GetTracks()->GetMWPC0PosZ(1);
-
-
   if (Proton1 == kTRUE)
     {
-        Zp = z1; // First particle is proton, second neutron
-        Zn = z2;
+        GVp = GetTracks()->GetVector(0, Mp);
+        GVn = GetTracks()->GetVector(1, Mn);
+        Zp = GetTracks()->GetPseudoVertexZ(0); // First particle is proton, second neutron
+        Zn = GetTracks()->GetPseudoVertexZ(1);
         zdiff = abs (Zp - Zn);
-        Ep = E1;
-        En = E2;
-        dEp = dE1;
-        dEn = dE2;
-        WC1pX = WC1X1;
-        WC1pY = WC1Y1;
-        WC1pZ = WC1Z1;
-        WC1nX = WC1X2;
-        WC1nY = WC1Y2;
-        WC1nZ = WC1Z2;
-        GVp = GV1;
-        GV2 = GetTracks()->GetVector(1, Mn);
-        GVn = GV2;
+        Ep = GetTracks()->GetClusterEnergy(0);
+        En = GetTracks()->GetClusterEnergy(1);
+        dEp = GetTracks()->GetVetoEnergy(0);
+        dEn = GetTracks()->GetVetoEnergy(1);
+        WC1pX = GetTracks()->GetMWPC0PosX(0);
+        WC1pY = GetTracks()->GetMWPC0PosY(0);
+        WC1pZ = GetTracks()->GetMWPC0PosZ(0);
+        WC1nX = GetTracks()->GetMWPC0PosX(1);
+        WC1nY = GetTracks()->GetMWPC0PosY(1);
+        WC1nZ = GetTracks()->GetMWPC0PosZ(1);
         pClusterSize = GetTracks()->GetClusterSize(0);
         nClusterSize = GetTracks()->GetClusterSize(1);
     }
 
   else if (Proton2 == kTRUE)
     {
-        Zp = z2; // First particle is neutron, second is proton
-        Zn = z1;
+        GVp = GetTracks()->GetVector(1, Mp);
+        GVn = GetTracks()->GetVector(0, Mn);
+        Zp = GetTracks()->GetPseudoVertexZ(1); // First particle is neutron, second is proton
+        Zn = GetTracks()->GetPseudoVertexZ(0);
         zdiff = abs (Zp - Zn);
-        Ep = E2; // Therefore the quantity mmp is the amount of missing mass we see when we do a kinematics calculation USING the proton
-        En = E1;
-        dEp = dE2;
-        dEn = dE1;
-        WC1pX = WC1X2;
-        WC1pY = WC1Y2;
-        WC1pZ = WC1Z2;
-        WC1nX = WC1X1;
-        WC1nY = WC1Y1;
-        WC1nZ = WC1Z1;
-        GVp = GV2;
-        GV1 = GetTracks()->GetVector(0, Mn); // Since we've decided this particle is a neutron, set its mass to Mn
-        GVn = GV1; // The neutron vector as measured by the vertex information
+        Ep = GetTracks()->GetClusterEnergy(1); // Therefore the quantity mmp is the amount of missing mass we see when we do a kinematics calculation USING the proton
+        En = GetTracks()->GetClusterEnergy(0);
+        dEp = GetTracks()->GetVetoEnergy(1);
+        dEn = GetTracks()->GetVetoEnergy(0);
+        WC1pX = GetTracks()->GetMWPC0PosX(1);
+        WC1pY = GetTracks()->GetMWPC0PosY(1);
+        WC1pZ = GetTracks()->GetMWPC0PosZ(1);
+        WC1nX = GetTracks()->GetMWPC0PosX(0);
+        WC1nY = GetTracks()->GetMWPC0PosY(0);
+        WC1nZ = GetTracks()->GetMWPC0PosZ(0);
         pClusterSize = GetTracks()->GetClusterSize(1);
         nClusterSize = GetTracks()->GetClusterSize(0);
     }
@@ -176,12 +154,12 @@ void	PNeutPol_Polarimeter::ProcessEvent()
   GVn3 = GVn.Vect();
   WC3Vectp.SetXYZ(WC1pX, WC1pY, WC1pZ);
   WC3Vectn.SetXYZ(WC1nX, WC1nY, WC1nZ);
-  WCThetap = WC3Vectp.Theta() * TMath::RadToDeg(); // Angles from WC hit positons
+  WCThetap = WC3Vectp.Theta()*TMath::RadToDeg(); // Angles from WC hit positons
   WCThetapRad = WC3Vectp.Theta();
-  WCPhip = WC3Vectp.Phi() * TMath::RadToDeg();
+  WCPhip = WC3Vectp.Phi()*TMath::RadToDeg();
   WCPhipRad = WC3Vectp.Phi();
-  WCThetan = WC3Vectn.Theta() * TMath::RadToDeg();
-  WCPhin = WC3Vectn.Phi() * TMath::RadToDeg();
+  WCThetan = WC3Vectn.Theta()*TMath::RadToDeg();
+  WCPhin = WC3Vectn.Phi()*TMath::RadToDeg();
   PhiWCDiff = abs (WCPhip-WCPhin);
 
   if( Zp > 40 || Zp < -50) return;
@@ -198,10 +176,10 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     EGamma = (GetTagger()->GetTaggedEnergy(j)); // Get Photon energy for event
     Gamma = TLorentzVector (0., 0., EGamma , EGamma); // 4-Vector of Photon beam
 
-    Thetap = GVp3.Theta() * TMath::RadToDeg(); // Lab frame angles for proton/neutron
-    Phip = GVp3.Phi() * TMath::RadToDeg();
-    Thetan = GVn3.Theta() * TMath::RadToDeg();
-    Phin = GVn3.Phi() * TMath::RadToDeg();
+    Thetap = GVp3.Theta()*TMath::RadToDeg(); // Lab frame angles for proton/neutron
+    Phip = GVp3.Phi()*TMath::RadToDeg();
+    Thetan = GVn3.Theta()*TMath::RadToDeg();
+    Phin = GVn3.Phi()*TMath::RadToDeg();
 
     KinEp = CalcKinEnergy(WCThetap, EGamma, Md, 0., Mp, Mn);
     EpCorr = EpPolCorrect(Ep, WCThetap);
@@ -217,6 +195,8 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     RecProtonEpCorr = Proton4VectorKin(EpCorr, WCThetapRad, WCPhipRad);
     RecNeutronEpCorr = Neutron4VectorKin(RecProtonEpCorr);
     MMpEpCorr = RecNeutronEpCorr.M();
+    RecProtonEpCorr3 = RecProtonEpCorr.Vect();
+    RecNeutronEpCorr3 = RecNeutronEpCorr.Vect();
 
     P3Vect = RecKinProton.Vect();
     N3Vect = RecKinNeutron.Vect();
@@ -224,13 +204,11 @@ void	PNeutPol_Polarimeter::ProcessEvent()
 
     ThetanDiff = abs(ThetanRec - WCThetan);
 
-    TVector3 ScattAngles = ScatteredFrameAngles(RecProtonEpCorr, RecNeutronEpCorr, Gamma);
-    ThetanScatt = ScattAngles(0);
-    PhinScatt = ScattAngles(1);
+    TVector3 ScattAngles = ScatteredFrameAngles(RecNeutronEpCorr3, GVp3, GVn3, Gamma);
+    ScattTheta = ScattAngles(0);
+    ScattPhi = ScattAngles(1);
 
     //if (ScattTheta > 90) continue;
-
-    //cout << WCThetap << "   " << WCThetan << "   " << EGamma << "   " << KinEp << "   " << RecKinProton(0) << "   " <<  RecKinProton(1) << "   " << RecKinProton(2) << "   "  << MMpKin << endl;
 
     //if (abs(KinEDiff) > 100) continue; // If difference between CB energy and calculated Energy for proton > 100MeV continue
 
@@ -317,8 +295,8 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   pCluster = new GH1 ("pCluster", "Cluster Size for Protons", 20, 0, 20);
   nCluster = new GH1 ("nCluster", "Cluster Size for Neutrons", 20, 0, 20);
 
-  //ThetaSc =  new GH1( "Theta_Scattered", "Scattetred Proton Theta Distribution in Rotated Frame", 180, 0, 180 );
-  //PhiSc = new GH1( "Phi_Scattered", "Scattetred Proton Phi Distribution in Rotated Frame", 36, -180, 180 );
+  ThetaSc =  new GH1( "Theta_Scattered", "Scattetred Proton Theta Distribution in Rotated Frame", 180, 0, 180 );
+  PhiSc = new GH1( "Phi_Scattered", "Scattetred Proton Phi Distribution in Rotated Frame", 36, -180, 180 );
 
   EpKinEpCorrDiff = new GH1("EpKinEpCorrDiff", "Difference Between EpKin and EpCorr", 300, -300, 300);
   EpEpCorrDiff = new GH1("EpEpCorrDiff", "Difference Between Ep and EpCorr", 200, 0, 200);
@@ -358,19 +336,19 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   MMp800900 = new GH1("MMp800900", "Missing mass as seen by Proton (800-900MeV Photon Energy)", 400, 0, 2000);
 
   // Angles of neutron in scattered frame across EGamma bins
-  //PhiSc275 = new GH1( "Phi_Scattered_275MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 275pm25MeV", 36, -180, 180);
-  //PhiSc325 = new GH1( "Phi_Scattered_325MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 325pm25MeV", 36, -180, 180);
-  //PhiSc375 = new GH1( "Phi_Scattered_375MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 375pm25MeV", 36, -180, 180);
-  //PhiSc425 = new GH1( "Phi_Scattered_425MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 425pm25MeV", 36, -180, 180);
-  //PhiSc475 = new GH1( "Phi_Scattered_475MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 475pm25MeV", 36, -180, 180);
-  //PhiSc525 = new GH1( "Phi_Scattered_525MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 525pm25MeV", 36, -180, 180);
-  //PhiSc575 = new GH1( "Phi_Scattered_575MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 575pm25MeV", 36, -180, 180);
-  //PhiSc625 = new GH1( "Phi_Scattered_625MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 625pm25MeV", 36, -180, 180);
-  //PhiSc675 = new GH1( "Phi_Scattered_675MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 675pm25MeV", 36, -180, 180);
-  //PhiSc725 = new GH1( "Phi_Scattered_725MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 725pm25MeV", 36, -180, 180);
-  //PhiSc775 = new GH1( "Phi_Scattered_775MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 775pm25MeV", 36, -180, 180);
-  //PhiSc825 = new GH1( "Phi_Scattered_825MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 825pm25MeV", 36, -180, 180);
-  //PhiSc875 = new GH1( "Phi_Scattered_875MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 875pm25MeV", 36, -180, 180);
+  PhiSc275 = new GH1( "Phi_Scattered_275MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 275pm25MeV", 36, -180, 180);
+  PhiSc325 = new GH1( "Phi_Scattered_325MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 325pm25MeV", 36, -180, 180);
+  PhiSc375 = new GH1( "Phi_Scattered_375MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 375pm25MeV", 36, -180, 180);
+  PhiSc425 = new GH1( "Phi_Scattered_425MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 425pm25MeV", 36, -180, 180);
+  PhiSc475 = new GH1( "Phi_Scattered_475MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 475pm25MeV", 36, -180, 180);
+  PhiSc525 = new GH1( "Phi_Scattered_525MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 525pm25MeV", 36, -180, 180);
+  PhiSc575 = new GH1( "Phi_Scattered_575MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 575pm25MeV", 36, -180, 180);
+  PhiSc625 = new GH1( "Phi_Scattered_625MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 625pm25MeV", 36, -180, 180);
+  PhiSc675 = new GH1( "Phi_Scattered_675MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 675pm25MeV", 36, -180, 180);
+  PhiSc725 = new GH1( "Phi_Scattered_725MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 725pm25MeV", 36, -180, 180);
+  PhiSc775 = new GH1( "Phi_Scattered_775MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 775pm25MeV", 36, -180, 180);
+  PhiSc825 = new GH1( "Phi_Scattered_825MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 825pm25MeV", 36, -180, 180);
+  PhiSc875 = new GH1( "Phi_Scattered_875MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 875pm25MeV", 36, -180, 180);
 
   E_dE = new GH2 ("E_dE", "EdE Plot With E Loss Adjustment", 100, 0, 500, 100, 0, 5);
   E_dE_Cut = new GH2 ("E_dE_Cut", "EdE Plot (With cut on proton banana + E Loss)", 100, 0, 500, 100, 0, 5);
@@ -450,6 +428,8 @@ void PNeutPol_Polarimeter::FillHists()
     pClusterCut->Fill(pClusterSize, TaggerTime);
     nClusterCut->Fill(nClusterSize, TaggerTime);
     ThetanWCThetanRecDiff->Fill(ThetanDiff, TaggerTime);
+    ThetaSc -> Fill(ScattTheta, TaggerTime);
+    PhiSc -> Fill(ScattPhi, TaggerTime);
 
     if(200 < EGamma && EGamma < 300){
         MMp200300->Fill(MMpEpCorr, TaggerTime);
@@ -500,19 +480,19 @@ void PNeutPol_Polarimeter::FillHists()
         ThetanWCThetanRecDiff800900->Fill(ThetanDiff, TaggerTime);
     }
 
-  //if ( 250 < EGamma && EGamma < 300) PhiSc275->Fill(ScattPhi, TaggerTime);
-  //if ( 300 < EGamma && EGamma < 350) PhiSc325->Fill(ScattPhi, TaggerTime);
-  //if ( 350 < EGamma && EGamma < 400) PhiSc375->Fill(ScattPhi, TaggerTime);
-  //if ( 400 < EGamma && EGamma < 450) PhiSc425->Fill(ScattPhi, TaggerTime);
-  //if ( 450 < EGamma && EGamma < 500) PhiSc475->Fill(ScattPhi, TaggerTime);
-  //if ( 500 < EGamma && EGamma < 550) PhiSc525->Fill(ScattPhi, TaggerTime);
-  //if ( 550 < EGamma && EGamma < 600) PhiSc575->Fill(ScattPhi, TaggerTime);
-  //if ( 600 < EGamma && EGamma < 650) PhiSc625->Fill(ScattPhi, TaggerTime);
-  //if ( 650 < EGamma && EGamma < 700) PhiSc675->Fill(ScattPhi, TaggerTime);
-  //if ( 700 < EGamma && EGamma < 750) PhiSc725->Fill(ScattPhi, TaggerTime);
-  //if ( 750 < EGamma && EGamma < 800) PhiSc775->Fill(ScattPhi, TaggerTime);
-  //if ( 800 < EGamma && EGamma < 850) PhiSc825->Fill(ScattPhi, TaggerTime);
-  //if ( 850 < EGamma && EGamma < 900) PhiSc875->Fill(ScattPhi, TaggerTime);
+  if ( 250 < EGamma && EGamma < 300) PhiSc275->Fill(ScattPhi, TaggerTime);
+  if ( 300 < EGamma && EGamma < 350) PhiSc325->Fill(ScattPhi, TaggerTime);
+  if ( 350 < EGamma && EGamma < 400) PhiSc375->Fill(ScattPhi, TaggerTime);
+  if ( 400 < EGamma && EGamma < 450) PhiSc425->Fill(ScattPhi, TaggerTime);
+  if ( 450 < EGamma && EGamma < 500) PhiSc475->Fill(ScattPhi, TaggerTime);
+  if ( 500 < EGamma && EGamma < 550) PhiSc525->Fill(ScattPhi, TaggerTime);
+  if ( 550 < EGamma && EGamma < 600) PhiSc575->Fill(ScattPhi, TaggerTime);
+  if ( 600 < EGamma && EGamma < 650) PhiSc625->Fill(ScattPhi, TaggerTime);
+  if ( 650 < EGamma && EGamma < 700) PhiSc675->Fill(ScattPhi, TaggerTime);
+  if ( 700 < EGamma && EGamma < 750) PhiSc725->Fill(ScattPhi, TaggerTime);
+  if ( 750 < EGamma && EGamma < 800) PhiSc775->Fill(ScattPhi, TaggerTime);
+  if ( 800 < EGamma && EGamma < 850) PhiSc825->Fill(ScattPhi, TaggerTime);
+  if ( 850 < EGamma && EGamma < 900) PhiSc875->Fill(ScattPhi, TaggerTime);
 
   }
 
@@ -523,7 +503,6 @@ void PNeutPol_Polarimeter::FillHists()
     E_dE_BadCut->Fill(EpCorr, dEp, TaggerTime);
     ThetapKinEpBadCut->Fill(WCThetap, KinEp, TaggerTime);
   }
-
 }
 
 Bool_t	PNeutPol_Polarimeter::Write(){

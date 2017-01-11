@@ -300,27 +300,25 @@ Double_t PPhysics::CoeffC(Double_t ProtTheta){ // Calculate Coefficient C for MB
 }
 
 // Currently not working as intended?
-TVector3 PPhysics::ScatteredFrameAngles(TLorentzVector PrimaryVect, TLorentzVector RecSecondaryVect, TLorentzVector GammaVect)
+TVector3 PPhysics::ScatteredFrameAngles(TVector3 InitialVect, TVector3 RealPVect, TVector3 ScattVector, TLorentzVector GammaVect)
 {
-  TVector3 ScatteredAngles(0, 0, 0);
-  // Convert given TLorentzVectors to 3 vrctors
-  TVector3 PrimaryVect3 = PrimaryVect.Vect();
-  TVector3 RecSecondaryVect3 = RecSecondaryVect.Vect();
+  TVector3 ValueHolder(0, 0, 0);
+  // Convert given TLorentzVectors to 3 vectors
   TVector3 GammaVect3 = GammaVect.Vect();
   // Get Axes of scattered frame
-  TVector3 ScattZAxis = (RecSecondaryVect3.Unit());
-  TVector3 ScattYAxis = ((GammaVect3.Cross(PrimaryVect3)).Unit());
+  TVector3 ScattZAxis = (InitialVect.Unit()); // Z axis defined by reconstructed n vector
+  TVector3 ScattYAxis = ((GammaVect3.Cross(RealPVect)).Unit()); // Defined using the "real" proton and the photon vector
   TVector3 ScattXAxis = ((ScattYAxis.Cross(ScattZAxis)).Unit());
 
-  Double_t ScattZ = ScattZAxis.Angle(RecSecondaryVect3); // Gives the angles between the axes defined above and the Scattered Proton vector
-  Double_t ScattY = ScattYAxis.Angle(RecSecondaryVect3);
-  Double_t ScattX = ScattXAxis.Angle(RecSecondaryVect3);
-  Double_t ScattTheta = ScattZ * TMath::RadToDeg(); // Get the angle of the scattered particle in frame of initial particle
-  Double_t ScattPhi = (atan2(cos(ScattY),cos(ScattX)))* TMath::RadToDeg();
-  ScatteredAngles.SetX(ScattTheta);
-  ScatteredAngles.SetY(ScattPhi);
+  Double_t ScattZ = ScattZAxis.Angle(ScattVector); // Gives the angles between the axes defined above and the Scattered Proton vector
+  Double_t ScattY = ScattYAxis.Angle(ScattVector);
+  Double_t ScattX = ScattXAxis.Angle(ScattVector);
+  Double_t ScattTheta = ScattZ*TMath::RadToDeg(); // Get the angle of the scattered particle in frame of initial particle
+  Double_t ScattPhi = (atan2(cos(ScattY),cos(ScattX)))*TMath::RadToDeg();
+  ValueHolder.SetX(ScattTheta);
+  ValueHolder.SetY(ScattPhi);
 
-  return ScatteredAngles;
+  return ValueHolder;
 }
 
 // ----------------------------------------------------------------------------------------

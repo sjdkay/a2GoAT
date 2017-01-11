@@ -43,16 +43,6 @@ private:
   double_t Mp;
   double_t Md;
   double_t GVpUnadjE;
-  double_t Theta1;
-  double_t Theta2;
-  double_t Phi1;
-  double_t Phi2;
-  double_t WC1X1;
-  double_t WC1Y1;
-  double_t WC1Z1;
-  double_t WC1X2;
-  double_t WC1Y2;
-  double_t WC1Z2;
   double_t mm1Diff;
   double_t mm2Diff;
   double_t d;
@@ -90,22 +80,18 @@ private:
   double_t PhinRec;
   double_t ThetaWCn;
   double_t PhiWCDiff;
-  double_t E1;
-  double_t E2;
   double_t Ep;
   double_t En;
   double_t EnVectCalc;
   double_t EnKinCalc;
-  double_t dE1;
-  double_t dE2;
   double_t dEp;
   double_t dEn;
   double_t ScattX;
   double_t ScattY;
   double_t ScattZ;
   double_t ScattThetaLab;
-  double_t ThetanScatt;
-  double_t PhinScatt;
+  double_t ScattTheta;
+  double_t ScattPhi;
   double_t KinEp;
   double_t KinEpWC;
   double_t KinEpDiff;
@@ -150,6 +136,8 @@ private:
   TVector3 WC3Vectn;
   TVector3 P3Vect;
   TVector3 N3Vect;
+  TVector3 RecProtonEpCorr3;
+  TVector3 RecNeutronEpCorr3;
 
   TRandom2 rGen;
 
@@ -208,6 +196,8 @@ private:
   GH1* MMpEpCorrectedCut;
   GH1* OAngleCut;
   GH1* ThetanWCThetanRecDiff;
+  GH1* ScattFrameTheta;
+  GH1* ScattFramePhi;
 
   GH1* ThetaSc;
   GH1* PhiSc;
