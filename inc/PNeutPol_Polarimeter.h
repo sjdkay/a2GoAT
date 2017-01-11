@@ -33,8 +33,6 @@ private:
   Int_t Detectors1;
   Int_t Detectors2;
   Int_t DetectorsSum;
-  Int_t pClusterSize;
-  Int_t nClusterSize;
 
   double_t Time;
   double_t TaggerTime;
@@ -42,12 +40,6 @@ private:
   double_t Mn;
   double_t Mp;
   double_t Md;
-  double_t GVpUnadjE;
-  double_t mm1Diff;
-  double_t mm2Diff;
-  double_t d;
-  double_t lrec;
-  double_t l;
   double_t z1;
   double_t z2;
   double_t zdiff;
@@ -111,12 +103,10 @@ private:
   double_t ThetanDiff;
 
   Bool_t nBanana;
-  Bool_t MCData;
   Bool_t Proton1;
   Bool_t Proton2;
+  Bool_t BeamHelicity;
 
-  TLorentzVector GV1;
-  TLorentzVector GV2;
   TLorentzVector GVp;
   TLorentzVector GVn;
   TLorentzVector Gamma;
@@ -138,8 +128,6 @@ private:
   TVector3 N3Vect;
   TVector3 RecProtonEpCorr3;
   TVector3 RecNeutronEpCorr3;
-
-  TRandom2 rGen;
 
   TH1D*	time;
   TH1D*	time_cut;
@@ -173,8 +161,6 @@ private:
   GH1* MMp;
   GH1* MMpEpCorrected;
   GH1* OAngle;
-  GH1* pCluster;
-  GH1* nCluster;
 
   GH1* ThetanWCThetanRecDiff200300;
   GH1* ThetanWCThetanRecDiff300400;
@@ -190,8 +176,6 @@ private:
   GH1* MMp600700;
   GH1* MMp700800;
   GH1* MMp800900;
-  GH1* pClusterCut;
-  GH1* nClusterCut;
   GH1* EgCut;
   GH1* MMpEpCorrectedCut;
   GH1* OAngleCut;
@@ -217,10 +201,8 @@ private:
 
   GH2* E_dE;
   GH2* E_dE_Cut;
-  GH2* E_dE_BadCut;
   GH2* KinEp_dE;
   GH2* KinEp_dE_GoodCut;
-  GH2* KinEp_dE_BadCut;
 
   GH2* MMpThetap200300;
   GH2* MMpThetap300400;
@@ -238,8 +220,6 @@ private:
   GH2* MMpEpKin700800;
   GH2* MMpEpKin800900;
 
-  GH2* ThetapKinEpBadCut;
-
   char cutfilename[256];
   char cutname[256];
   TFile* CutFile;
@@ -248,13 +228,10 @@ private:
   TCutG* Cut_pion;
   TCutG* Cut_protonKinGood;
   TCutG* Cut_protonKinBad;
-  TCutG* Cut_ROI;
-  TCutG* Cut_neutron;
   TCutG* Cut_CB_proton;
   TCutG* Cut_CB_pion;
   TCutG* Cut_CB_protonKinGood;
   TCutG* Cut_CB_protonKinBad;
-  TCutG* Cut_CB_ROI;
 
 protected:
     virtual Bool_t  Start();
