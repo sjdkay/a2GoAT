@@ -203,6 +203,7 @@ private:
   GH2* E_dE_Cut;
   GH2* KinEp_dE;
   GH2* KinEp_dE_GoodCut;
+  GH2* ThetaScPhiSc;
 
   GH2* MMpThetap200300;
   GH2* MMpThetap300400;
