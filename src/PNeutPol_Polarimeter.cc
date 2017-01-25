@@ -424,8 +424,8 @@ void PNeutPol_Polarimeter::FillHists()
     PhiSc -> Fill(ScattPhi, TaggerTime);
     ThetaScPhiSc->Fill(ScattTheta, ScattPhi, TaggerTime);
 
-    if (BeamHelicity == kFALSE) PhiScNegHel->Fill(ScattPhi, TaggerTime);
-    if (BeamHelicity == kTRUE) PhiScPosHel->Fill(ScattPhi, TaggerTime);
+    //if (BeamHelicity == kFALSE) PhiScNegHel->Fill(ScattPhi, TaggerTime);
+    //if (BeamHelicity == kTRUE) PhiScPosHel->Fill(ScattPhi, TaggerTime);
 
     if(200 < EGamma && EGamma < 300){
         MMp200300->Fill(MMpEpCorr, TaggerTime);
