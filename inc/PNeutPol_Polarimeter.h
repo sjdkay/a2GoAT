@@ -200,6 +200,9 @@ private:
   GH1* PhiSc825;
   GH1* PhiSc875;
 
+  GH1* PhiScNegHel;
+  GH1* PhiScPosHel;
+
   GH2* E_dE;
   GH2* E_dE_Cut;
   GH2* KinEp_dE;

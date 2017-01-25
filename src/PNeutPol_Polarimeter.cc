@@ -170,8 +170,8 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     EGamma = (GetTagger()->GetTaggedEnergy(j)); // Get Photon energy for event
     Gamma = TLorentzVector (0., 0., EGamma , EGamma); // 4-Vector of Photon beam
     BeamHelicity = GetTrigger()->GetHelicity();
-    //if (BeamHelicity == kFALSE) cout << "False" << endl;
-    //else if (BeamHelicity == kTRUE) cout<< "True" <<endl;
+    if (BeamHelicity == kFALSE) cout << "False" << endl;
+    else if (BeamHelicity == kTRUE) cout<< "True" <<endl;
 
     Thetap = GVp3.Theta()*TMath::RadToDeg(); // Lab frame angles for proton/neutron
     Phip = GVp3.Phi()*TMath::RadToDeg();
@@ -346,6 +346,9 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   PhiSc825 = new GH1( "Phi_Scattered_825MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 825pm25MeV", 90, -180, 180);
   PhiSc875 = new GH1( "Phi_Scattered_875MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 875pm25MeV", 90, -180, 180);
 
+  PhiScNegHel = new GH1("PhiScNegHel", "Scattetred Proton Phi Distribution in Rotated Frame for -ve Helicity", 90, -180, 180);
+  PhiScPosHel = new GH1("PhiScPosHel", "Scattetred Proton Phi Distribution in Rotated Frame for +ve Helicity", 90, -180, 180);
+
   E_dE = new GH2 ("E_dE", "EdE Plot With E Loss Adjustment", 100, 0, 500, 100, 0, 5);
   E_dE_Cut = new GH2 ("E_dE_Cut", "EdE Plot (With cut on proton banana + E Loss)", 100, 0, 500, 100, 0, 5);
   KinEp_dE = new GH2 ("KinEp_dE", "KinEpdE Plot", 100, 0, 500, 100, 0, 5);
@@ -420,6 +423,9 @@ void PNeutPol_Polarimeter::FillHists()
     ThetaSc -> Fill(ScattTheta, TaggerTime);
     PhiSc -> Fill(ScattPhi, TaggerTime);
     ThetaScPhiSc->Fill(ScattTheta, ScattPhi, TaggerTime);
+
+    if (BeamHelicity == kFALSE) PhiScNegHel->Fill(ScattPhi, TaggerTime);
+    if (BeamHelicity == kTRUE) PhiScPosHel->Fill(ScattPhi, TaggerTime);
 
     if(200 < EGamma && EGamma < 300){
         MMp200300->Fill(MMpEpCorr, TaggerTime);
