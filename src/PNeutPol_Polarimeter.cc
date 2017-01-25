@@ -47,7 +47,7 @@ Bool_t	PNeutPol_Polarimeter::Start()
   Cut_proton = Cut_CB_proton;
   Cut_CB_pion = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Pion_29_07_15.root", "Pion");
   Cut_pion = Cut_CB_pion;
-  Cut_CB_protonKinGood = OpenCutFile("configfiles/cuts/CB_DeltaE-E_ProtonKinGood_15_12_16.root", "ProtonKinGood"); // These will need adjusting with new Acqu files
+  Cut_CB_protonKinGood = OpenCutFile("configfiles/cuts/CB_DeltaE-E_ProtonKinGood_20_1_17.root", "ProtonKinGood"); // These will need adjusting with new Acqu files
   Cut_protonKinGood = Cut_CB_protonKinGood;
   Cut_CB_protonKinBad = OpenCutFile("configfiles/cuts/CB_DeltaE-E_ProtonKinBad_15_12_16.root", "ProtonKinBad");
   Cut_protonKinBad = Cut_CB_protonKinBad;
@@ -205,6 +205,8 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     ScattTheta = ScattAngles(0);
     ScattPhi = ScattAngles(1);
 
+    if( 850 > MMpEpCorr || 1050 < MMpEpCorr) continue;
+
     //if (ScattTheta > 90) continue;
 
     //if (abs(KinEDiff) > 100) continue; // If difference between CB energy and calculated Energy for proton > 100MeV continue
@@ -308,6 +310,7 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   MMpEpCorrectedCut =  new GH1 ("MMpEpCorrectedCut", "Missing mass seen by Proton (E Loss Corrected, P Banana Cut)", 400, 0, 2000);
   ThetanWCThetanRecDiff = new GH1 ("ThetanWCThetanRecDiff", "Difference between ThetaWC and ThetaRec for n", 180, 0, 180);
   OAngleCut = new GH1 ("OAngleCut", "Opening Angle between P and N Vectors (P Banana Cut)", 180, 0, 180);
+  OAngleCut200400 = new GH1 ("OAngleCut200400", "Opening Angle between P and N Vectors (P Banana Cut, 200-400MeV Gamma)", 180, 0, 180);
   EgCut = new GH1( "EgCut", "Photon Energy Distribution (P Banana Cut)", 400, 100, 1600 );
 
   // ThetaWCThetaRecDiff across EGamma Bins
@@ -423,6 +426,7 @@ void PNeutPol_Polarimeter::FillHists()
         //MMpThetap200300->Fill(MMpEpCorr, WCThetap, TaggerTime);
         //MMpEpKin200300->Fill(MMpEpCorr, KinEp, TaggerTime);
         ThetanWCThetanRecDiff200300->Fill(ThetanDiff, TaggerTime);
+        OAngleCut200400->Fill(OpeningAngle, TaggerTime);
     }
 
     else if(300 < EGamma && EGamma < 400){
@@ -430,6 +434,7 @@ void PNeutPol_Polarimeter::FillHists()
         //MMpThetap300400->Fill(MMpEpCorr, WCThetap, TaggerTime);
         //MMpEpKin300400->Fill(MMpEpCorr, KinEp, TaggerTime);
         ThetanWCThetanRecDiff300400->Fill(ThetanDiff, TaggerTime);
+        OAngleCut200400->Fill(OpeningAngle, TaggerTime);
     }
 
     else if(400 < EGamma && EGamma < 500){

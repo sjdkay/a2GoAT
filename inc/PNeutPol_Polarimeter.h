@@ -179,6 +179,7 @@ private:
   GH1* EgCut;
   GH1* MMpEpCorrectedCut;
   GH1* OAngleCut;
+  GH1* OAngleCut200400;
   GH1* ThetanWCThetanRecDiff;
   GH1* ScattFrameTheta;
   GH1* ScattFramePhi;
