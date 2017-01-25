@@ -170,8 +170,8 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     EGamma = (GetTagger()->GetTaggedEnergy(j)); // Get Photon energy for event
     Gamma = TLorentzVector (0., 0., EGamma , EGamma); // 4-Vector of Photon beam
     BeamHelicity = GetTrigger()->GetHelicity();
-    if (BeamHelicity == kFALSE) cout << "False" << endl;
-    else if (BeamHelicity == kTRUE) cout<< "True" <<endl;
+    //if (BeamHelicity == kFALSE) cout << "False" << endl;
+    //else if (BeamHelicity == kTRUE) cout<< "True" <<endl;
 
     Thetap = GVp3.Theta()*TMath::RadToDeg(); // Lab frame angles for proton/neutron
     Phip = GVp3.Phi()*TMath::RadToDeg();
@@ -424,8 +424,8 @@ void PNeutPol_Polarimeter::FillHists()
     PhiSc -> Fill(ScattPhi, TaggerTime);
     ThetaScPhiSc->Fill(ScattTheta, ScattPhi, TaggerTime);
 
-    //if (BeamHelicity == kFALSE) PhiScNegHel->Fill(ScattPhi, TaggerTime);
-    //if (BeamHelicity == kTRUE) PhiScPosHel->Fill(ScattPhi, TaggerTime);
+    if (BeamHelicity == kFALSE) PhiScNegHel->Fill(ScattPhi, TaggerTime);
+    if (BeamHelicity == kTRUE) PhiScPosHel->Fill(ScattPhi, TaggerTime);
 
     if(200 < EGamma && EGamma < 300){
         MMp200300->Fill(MMpEpCorr, TaggerTime);
