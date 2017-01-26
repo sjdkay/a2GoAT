@@ -203,6 +203,34 @@ private:
   GH1* PhiScNegHel;
   GH1* PhiScPosHel;
 
+  GH1* PhiSc275NegHel;
+  GH1* PhiSc325NegHel;
+  GH1* PhiSc375NegHel;
+  GH1* PhiSc425NegHel;
+  GH1* PhiSc475NegHel;
+  GH1* PhiSc525NegHel;
+  GH1* PhiSc575NegHel;
+  GH1* PhiSc625NegHel;
+  GH1* PhiSc675NegHel;
+  GH1* PhiSc725NegHel;
+  GH1* PhiSc775NegHel;
+  GH1* PhiSc825NegHel;
+  GH1* PhiSc875NegHel;
+
+  GH1* PhiSc275PosHel;
+  GH1* PhiSc325PosHel;
+  GH1* PhiSc375PosHel;
+  GH1* PhiSc425PosHel;
+  GH1* PhiSc475PosHel;
+  GH1* PhiSc525PosHel;
+  GH1* PhiSc575PosHel;
+  GH1* PhiSc625PosHel;
+  GH1* PhiSc675PosHel;
+  GH1* PhiSc725PosHel;
+  GH1* PhiSc775PosHel;
+  GH1* PhiSc825PosHel;
+  GH1* PhiSc875PosHel;
+
   GH2* E_dE;
   GH2* E_dE_Cut;
   GH2* KinEp_dE;
