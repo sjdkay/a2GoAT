@@ -162,13 +162,6 @@ private:
   GH1* MMpEpCorrected;
   GH1* OAngle;
 
-  GH1* ThetanWCThetanRecDiff200300;
-  GH1* ThetanWCThetanRecDiff300400;
-  GH1* ThetanWCThetanRecDiff400500;
-  GH1* ThetanWCThetanRecDiff500600;
-  GH1* ThetanWCThetanRecDiff600700;
-  GH1* ThetanWCThetanRecDiff700800;
-  GH1* ThetanWCThetanRecDiff800900;
   GH1* MMp200300;
   GH1* MMp300400;
   GH1* MMp400500;
@@ -180,7 +173,6 @@ private:
   GH1* MMpEpCorrectedCut;
   GH1* OAngleCut;
   GH1* OAngleCut200400;
-  GH1* ThetanWCThetanRecDiff;
   GH1* ScattFrameTheta;
   GH1* ScattFramePhi;
 
@@ -236,22 +228,6 @@ private:
   GH2* KinEp_dE;
   GH2* KinEp_dE_GoodCut;
   GH2* ThetaScPhiSc;
-
-  GH2* MMpThetap200300;
-  GH2* MMpThetap300400;
-  GH2* MMpThetap400500;
-  GH2* MMpThetap500600;
-  GH2* MMpThetap600700;
-  GH2* MMpThetap700800;
-  GH2* MMpThetap800900;
-
-  GH2* MMpEpKin200300;
-  GH2* MMpEpKin300400;
-  GH2* MMpEpKin400500;
-  GH2* MMpEpKin500600;
-  GH2* MMpEpKin600700;
-  GH2* MMpEpKin700800;
-  GH2* MMpEpKin800900;
 
   char cutfilename[256];
   char cutname[256];

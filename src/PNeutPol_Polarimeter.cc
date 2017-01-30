@@ -207,7 +207,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
 
     if( 850 > MMpEpCorr || 1050 < MMpEpCorr) continue;
 
-    //if (ScattTheta > 90) continue;
+    if (ScattTheta > 40) continue;
 
     //if (abs(KinEDiff) > 100) continue; // If difference between CB energy and calculated Energy for proton > 100MeV continue
 
@@ -308,19 +308,9 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   MMpEpCorrected = new GH1 ("MMpEpCorrected", "Missing mass seen by Proton (E Loss Corrected)", 400, 0, 2000);
 
   MMpEpCorrectedCut =  new GH1 ("MMpEpCorrectedCut", "Missing mass seen by Proton (E Loss Corrected, P Banana Cut)", 400, 0, 2000);
-  ThetanWCThetanRecDiff = new GH1 ("ThetanWCThetanRecDiff", "Difference between ThetaWC and ThetaRec for n", 180, 0, 180);
   OAngleCut = new GH1 ("OAngleCut", "Opening Angle between P and N Vectors (P Banana Cut)", 180, 0, 180);
   OAngleCut200400 = new GH1 ("OAngleCut200400", "Opening Angle between P and N Vectors (P Banana Cut, 200-400MeV Gamma)", 180, 0, 180);
   EgCut = new GH1( "EgCut", "Photon Energy Distribution (P Banana Cut)", 400, 100, 1600 );
-
-  // ThetaWCThetaRecDiff across EGamma Bins
-  ThetanWCThetanRecDiff200300 = new GH1 ("ThetanWCThetanRecDiff200300", "Difference between ThetaWC and ThetaRec for n (200-300MeV Photon Energy)", 180, 0, 180);
-  ThetanWCThetanRecDiff300400 = new GH1 ("ThetanWCThetanRecDiff300400", "Difference between ThetaWC and ThetaRec for n (300-400MeV Photon Energy)", 180, 0, 180);
-  ThetanWCThetanRecDiff400500 = new GH1 ("ThetanWCThetanRecDiff400500", "Difference between ThetaWC and ThetaRec for n (400-500MeV Photon Energy)", 180, 0, 180);
-  ThetanWCThetanRecDiff500600 = new GH1 ("ThetanWCThetanRecDiff500600", "Difference between ThetaWC and ThetaRec for n (500-600MeV Photon Energy)", 180, 0, 180);
-  ThetanWCThetanRecDiff600700 = new GH1 ("ThetanWCThetanRecDiff600700", "Difference between ThetaWC and ThetaRec for n (600-700MeV Photon Energy)", 180, 0, 180);
-  ThetanWCThetanRecDiff700800 = new GH1 ("ThetanWCThetanRecDiff700800", "Difference between ThetaWC and ThetaRec for n (700-800MeV Photon Energy)", 180, 0, 180);
-  ThetanWCThetanRecDiff800900 = new GH1 ("ThetanWCThetanRecDiff800900", "Difference between ThetaWC and ThetaRec for n (800-900MeV Photon Energy)", 180, 0, 180);
 
   // MMp across photon E bins
   MMp200300 = new GH1("MMp200300", "Missing mass as seen by Proton (200-300MeV Photon Energy)", 400, 0, 2000);
@@ -385,21 +375,6 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   KinEp_dE_GoodCut = new GH2 ("KinEp_dE_GoodCut", "KinEpdE Plot With Good Proton Cut", 100, 0, 500, 100, 0, 5);
   ThetaScPhiSc = new GH2 ("ThetaScPhiSc", "Phi as a function of Theta (Both in rotated frame)", 100, 0, 180, 100, -180, 180);
 
-  //MMp as fn of ThetaP/EpKin across Photon E bins
-  //MMpThetap200300 = new GH2("MMpThetap200300", "MMp as a fn of WC Thetap (200-300MeV Photon Energy)", 150, 0, 2000, 150, 0, 180);
-  //MMpThetap300400 = new GH2("MMpThetap300400", "MMp as a fn of WC Thetap (300-400MeV Photon Energy)", 150, 0, 2000, 150, 0, 180);
-  //MMpThetap400500 = new GH2("MMpThetap400500", "MMp as a fn of WC Thetap (400-500MeV Photon Energy)", 150, 0, 2000, 150, 0, 180);
-  //MMpThetap500600 = new GH2("MMpThetap500600", "MMp as a fn of WC Thetap (500-600MeV Photon Energy)", 150, 0, 2000, 150, 0, 180);
-  //MMpThetap600700 = new GH2("MMpThetap600700", "MMp as a fn of WC Thetap (600-700MeV Photon Energy)", 150, 0, 2000, 150, 0, 180);
-  //MMpThetap700800 = new GH2("MMpThetap700800", "MMp as a fn of WC Thetap (700-800MeV Photon Energy)", 150, 0, 2000, 150, 0, 180);
-  //MMpThetap800900 = new GH2("MMpThetap800900", "MMp as a fn of WC Thetap (800-900MeV Photon Energy)", 150, 0, 2000, 150, 0, 180);
-  //MMpEpKin200300 = new GH2("MMpEpKin200300", "MMp as a fn of EpKin (200-300MeV Photon Energy)", 150, 0, 2000, 150, 80, 500);
-  //MMpEpKin300400 = new GH2("MMpEpKin300400", "MMp as a fn of EpKin (300-400MeV Photon Energy)", 150, 0, 2000, 150, 80, 500);
-  //MMpEpKin400500 = new GH2("MMpEpKin400500", "MMp as a fn of EpKin (400-500MeV Photon Energy)", 150, 0, 2000, 150, 80, 500);
-  //MMpEpKin500600 = new GH2("MMpEpKin500600", "MMp as a fn of EpKin (500-600MeV Photon Energy)", 150, 0, 2000, 150, 80, 500);
-  //MMpEpKin600700 = new GH2("MMpEpKin600700", "MMp as a fn of EpKin (600-700MeV Photon Energy)", 150, 0, 2000, 150, 80, 500);
-  //MMpEpKin700800 = new GH2("MMpEpKin700800", "MMp as a fn of EpKin (700-800MeV Photon Energy)", 150, 0, 2000, 150, 80, 500);
-  //MMpEpKin800900 = new GH2("MMpEpKin800900", "MMp as a fn of EpKin (800-900MeV Photon Energy)", 150, 0, 2000, 150, 80, 500);
 }
 
 void PNeutPol_Polarimeter::FillHists()
@@ -449,7 +424,6 @@ void PNeutPol_Polarimeter::FillHists()
     MMpEpCorrectedCut->Fill(MMpEpCorr, TaggerTime);
     EgCut->Fill(EGamma, TaggerTime);
     OAngleCut->Fill(OpeningAngle, TaggerTime);
-    ThetanWCThetanRecDiff->Fill(ThetanDiff, TaggerTime);
     ThetaSc -> Fill(ScattTheta, TaggerTime);
     PhiSc -> Fill(ScattPhi, TaggerTime);
     ThetaScPhiSc->Fill(ScattTheta, ScattPhi, TaggerTime);
@@ -459,53 +433,32 @@ void PNeutPol_Polarimeter::FillHists()
 
     if(200 < EGamma && EGamma < 300){
         MMp200300->Fill(MMpEpCorr, TaggerTime);
-        //MMpThetap200300->Fill(MMpEpCorr, WCThetap, TaggerTime);
-        //MMpEpKin200300->Fill(MMpEpCorr, KinEp, TaggerTime);
-        ThetanWCThetanRecDiff200300->Fill(ThetanDiff, TaggerTime);
         OAngleCut200400->Fill(OpeningAngle, TaggerTime);
     }
 
     else if(300 < EGamma && EGamma < 400){
         MMp300400->Fill(MMpEpCorr, TaggerTime);
-        //MMpThetap300400->Fill(MMpEpCorr, WCThetap, TaggerTime);
-        //MMpEpKin300400->Fill(MMpEpCorr, KinEp, TaggerTime);
-        ThetanWCThetanRecDiff300400->Fill(ThetanDiff, TaggerTime);
         OAngleCut200400->Fill(OpeningAngle, TaggerTime);
     }
 
     else if(400 < EGamma && EGamma < 500){
         MMp400500->Fill(MMpEpCorr, TaggerTime);
-        //MMpThetap400500->Fill(MMpEpCorr, WCThetap, TaggerTime);
-        //MMpEpKin400500->Fill(MMpEpCorr, KinEp, TaggerTime);
-        ThetanWCThetanRecDiff400500->Fill(ThetanDiff, TaggerTime);
     }
 
     else if(500 < EGamma && EGamma < 600){
         MMp500600->Fill(MMpEpCorr, TaggerTime);
-        //MMpThetap500600->Fill(MMpEpCorr, WCThetap, TaggerTime);
-        //MMpEpKin500600->Fill(MMpEpCorr, KinEp, TaggerTime);
-        ThetanWCThetanRecDiff500600->Fill(ThetanDiff, TaggerTime);
     }
 
     else if(600 < EGamma && EGamma < 700){
         MMp600700->Fill(MMpEpCorr, TaggerTime);
-        //MMpThetap600700->Fill(MMpEpCorr, WCThetap, TaggerTime);
-        //MMpEpKin600700->Fill(MMpEpCorr, KinEp, TaggerTime);
-        ThetanWCThetanRecDiff600700->Fill(ThetanDiff, TaggerTime);
     }
 
     else if(700 < EGamma && EGamma < 800){
         MMp700800->Fill(MMpEpCorr, TaggerTime);
-        //MMpThetap700800->Fill(MMpEpCorr, WCThetap, TaggerTime);
-        //MMpEpKin700800->Fill(MMpEpCorr, KinEp, TaggerTime);
-        ThetanWCThetanRecDiff700800->Fill(ThetanDiff, TaggerTime);
     }
 
     else if(800 < EGamma && EGamma < 900){
         MMp800900->Fill(MMpEpCorr, TaggerTime);
-        //MMpThetap800900->Fill(MMpEpCorr, WCThetap, TaggerTime);
-        //MMpEpKin800900->Fill(MMpEpCorr, KinEp, TaggerTime);
-        ThetanWCThetanRecDiff800900->Fill(ThetanDiff, TaggerTime);
     }
 
     if ( 250 < EGamma && EGamma < 300) {
@@ -513,61 +466,73 @@ void PNeutPol_Polarimeter::FillHists()
         if (BeamHelicity == kFALSE) PhiSc275NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc275PosHel->Fill(ScattPhi, TaggerTime);
     }
+
     else if ( 300 < EGamma && EGamma < 350) {
         PhiSc325->Fill(ScattPhi, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc325NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc325PosHel->Fill(ScattPhi, TaggerTime);
     }
+
     else if ( 350 < EGamma && EGamma < 400) {
         PhiSc375->Fill(ScattPhi, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc375NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc375PosHel->Fill(ScattPhi, TaggerTime);
     }
+
     else if ( 400 < EGamma && EGamma < 450) {
         PhiSc425->Fill(ScattPhi, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc425NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc425PosHel->Fill(ScattPhi, TaggerTime);
     }
+
     else if ( 450 < EGamma && EGamma < 500) {
         PhiSc475->Fill(ScattPhi, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc475NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc475PosHel->Fill(ScattPhi, TaggerTime);
     }
+
     else if ( 500 < EGamma && EGamma < 550) {
         PhiSc525->Fill(ScattPhi, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc525NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc525PosHel->Fill(ScattPhi, TaggerTime);
     }
+
     else if ( 550 < EGamma && EGamma < 600) {
         PhiSc575->Fill(ScattPhi, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc575NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc575PosHel->Fill(ScattPhi, TaggerTime);
     }
+
     else if ( 600 < EGamma && EGamma < 650) {
         PhiSc625->Fill(ScattPhi, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc625NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc625PosHel->Fill(ScattPhi, TaggerTime);
     }
+
     else if ( 650 < EGamma && EGamma < 700) {
         PhiSc675->Fill(ScattPhi, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc675NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc675PosHel->Fill(ScattPhi, TaggerTime);
     }
+
     else if ( 700 < EGamma && EGamma < 750) {
         PhiSc725->Fill(ScattPhi, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc725NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc725PosHel->Fill(ScattPhi, TaggerTime);
     }
+
     else if ( 750 < EGamma && EGamma < 800) {
         PhiSc775->Fill(ScattPhi, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc775NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc775PosHel->Fill(ScattPhi, TaggerTime);
     }
+
     else if ( 800 < EGamma && EGamma < 850) {
         PhiSc825->Fill(ScattPhi, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc825NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc825PosHel->Fill(ScattPhi, TaggerTime);
     }
+
     else if ( 850 < EGamma && EGamma < 900) {
         PhiSc875->Fill(ScattPhi, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc875NegHel->Fill(ScattPhi, TaggerTime);
