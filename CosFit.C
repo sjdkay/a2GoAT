@@ -267,7 +267,7 @@ void CosFit(){
 
   PolEGamma  = new TGraphErrors(10,x,Pol,0,PolErr); // Add existing data to polarisation plot
   LiuData = new TGraphErrors(19, xLiu, PrevDataLiu, xLiuErr, PrevDataLiuErr);
-  IkedaData = new TGraphErrors(19, xIkeda, PrevDataIkeda, 0 , PrevDataIkedaErr);
+  IkedaData = new TGraphErrors(19, xIkeda, PrevDataIkeda,0 , PrevDataIkedaErr);
   PolEGamma->SetMarkerColor(1);
   PolEGamma->SetMarkerStyle(5);
   PolEGamma->SetMarkerSize(0.5);

@@ -1,14 +1,27 @@
 #include "./includes.h"
 
+// define a function with 3 parameters
+Double_t fitf(Double_t *x,Double_t *par)
+{
+    Double_t fitval = 0;
+    fitval =  par[0] * (1+(par[1]*cos(x[0]*((TMath::Pi())/180))));
+    return fitval;
+}
+
 void Asymm(){
 
-     double NegHelnBin;
+     double NegHelnBins;
      double PosHelnBins;
      double NegHelBinValues[90];
      double PosHelBinValues[90];
      double DiffBinValues[90];
      double SumBinValues[90];
      double AsymmetryValues[90];
+
+     TF1 *CosFit = new TF1("CosFit",  fitf, -180.0, 180.0, 2); //Give a name and range to the fitting funcion
+     CosFit->SetParLimits(0, -1000, 1000);
+     CosFit->SetParLimits(1, -1, 1);
+     CosFit->SetParNames("Y_Offset", "Amplitdue"); //Name the parameters
 
      TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Amo/Physics_Total_7_3_2_17.root"); // Open the latest PTotal file to load histograms from
      NegHelnBins = PhiScNegHel->GetSize() - 2; // -2 as otherwise under/overflow included

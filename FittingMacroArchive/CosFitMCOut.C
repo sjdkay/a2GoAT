@@ -258,7 +258,6 @@ void CosFitMCOut(){
   yMin = 0;
   yMax = 30;
 
-
   strcpy(hrTitle, "Y_Offset as a Function of Photon Energy");
   hr = canvas->DrawFrame(xMin,yMin,xMax,yMax);
   hr->SetTitle(hrTitle);
@@ -287,8 +286,6 @@ void CosFitMCOut(){
   t1->SetBranchAddress("Par2Err", &Par2Err);
   t1->SetBranchAddress("Par3", &Par3);
   t1->SetBranchAddress("Par3Err", &Par3Err);
-
-
 
   for (Int_t k = 0; k < 10; k++){
 
