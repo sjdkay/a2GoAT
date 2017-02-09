@@ -2,7 +2,7 @@
 
 void PlotSaver(){
 
-  TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Amo/Physics_Total_3_27_1_17.root"); // Open the latest PTotal file to load histograms from
+  TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Amo/Physics_Total_7_3_2_17.root"); // Open the latest PTotal file to load histograms from
   TText *warn = new TText(0, 0 ,"PRELIMINARY"); // Preliminary warning label text
 
   // Missing mass (with banana cut) across various photon energy bins
@@ -32,8 +32,8 @@ void PlotSaver(){
   leg->AddEntry(MMp700800, "EGamma 700-800", "l");
   leg->AddEntry(MMp800900, "EGamma 800-900", "l");
   leg->Draw("Same");
-  canvas->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/MMpComparison_EGamma_3.png");
-  canvas->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/MMpComparison_EGamma_3.pdf");
+  canvas->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/MMpComparison_EGamma_7.png");
+  canvas->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/MMpComparison_EGamma_7.pdf");
 
   // Missing mass plot with/without banana cut
   TCanvas *canvas2 = new TCanvas("canvas2","canvas2", 1920, 1080);
@@ -47,8 +47,8 @@ void PlotSaver(){
   MMpEpCorrected->Draw();
   MMpEpCorrectedCut->Draw("Same");
   leg->Draw("Same");
-  canvas2->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/MMpEpCorr_CutComparison_3.png");
-  canvas2->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/MMpEpCorr_CutComparison_3.pdf");
+  canvas2->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/MMpEpCorr_CutComparison_7.png");
+  canvas2->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/MMpEpCorr_CutComparison_7.pdf");
 
   // Opening angle plot, comparison between full data and banana cut
   TCanvas *canvas4 = new TCanvas("canvas4","canvas4", 1920, 1080);
@@ -62,8 +62,8 @@ void PlotSaver(){
   OAngle->Draw();
   OAngleCut->Draw("Same");
   leg->Draw("Same");
-  canvas4->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/OAngle_CutComparison_3.png");
-  canvas4->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/OAngle_CutComparison_3.pdf");
+  canvas4->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/OAngle_CutComparison_7.png");
+  canvas4->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/OAngle_CutComparison_7.pdf");
 
   // Banana plot
   TCanvas *canvas5 = new TCanvas("canvas5","canvas5", 1920, 1080);
@@ -73,9 +73,9 @@ void PlotSaver(){
   TFile *f2 = new TFile("/scratch/Mainz_Software/a2GoAT/configfiles/cuts/CB_DeltaE-E_Proton_7_12_16.root"); // Open the proton cut file used
   Proton->SetLineWidth(5);
   Proton->Draw("Same");
-  canvas5->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/E_dE_3.png");
-  canvas5->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/E_dE_3.pdf");
-  TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Amo/Physics_Total_3_27_1_17.root"); // Open the latest PTotal file to load histograms from
+  canvas5->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/E_dE_7.png");
+  canvas5->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/E_dE_7.pdf");
+  TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Amo/Physics_Total_7_3_2_17.root"); // Open the latest PTotal file to load histograms from
 
   // Banana plot showing cut region
   TCanvas *canvas6 = new TCanvas("canvas6","canvas6", 1920, 1080);
@@ -85,37 +85,37 @@ void PlotSaver(){
   TFile *f2 = new TFile("/scratch/Mainz_Software/a2GoAT/configfiles/cuts/CB_DeltaE-E_Proton_7_12_16.root"); // Open the proton cut file used
   Proton->SetLineWidth(5);
   Proton->Draw("Same");
-  canvas6->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/E_dE_Cut_3.png");
-  canvas6->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/E_dE_Cut_3.pdf");
-  TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Amo/Physics_Total_3_27_1_17.root"); // Open the latest PTotal file to load histograms from
+  canvas6->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/E_dE_Cut_7.png");
+  canvas6->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/E_dE_Cut_7.pdf");
+  TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Amo/Physics_Total_7_3_2_17.root"); // Open the latest PTotal file to load histograms from
   
   // Banana plot for KinEpdEp
   TCanvas *canvas7 = new TCanvas("canvas7","canvas7", 1920, 1080);
   KinEp_dE->SetXTitle("KinEp/MeV");
   KinEp_dE->SetYTitle("PID Energy/MeV");
   KinEp_dE->Draw("Col");
-  TFile *f2 = new TFile("/scratch/Mainz_Software/a2GoAT/configfiles/cuts/CB_DeltaE-E_ProtonKinGood_20_1_17.root"); // Open the proton cut file used
+  TFile *f2 = new TFile("/scratch/Mainz_Software/a2GoAT/configfiles/cuts/CB_DeltaE-E_ProtonKinGood_03_02_17.root"); // Open the proton cut file used
   ProtonKinGood->SetLineWidth(5);
   ProtonKinGood->Draw("Same");
   TFile *f3 = new TFile("/scratch/Mainz_Software/a2GoAT/configfiles/cuts/CB_DeltaE-E_ProtonKinBad_15_12_16.root"); // Open the proton cut file used
   ProtonKinBad->SetLineWidth(5);
   ProtonKinBad->SetLineColor(2);
   ProtonKinBad->Draw("Same");
-  canvas7->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/KinEp_dE_3.png");
-  canvas7->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/KinEp_dE_3.pdf");
-  TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Amo/Physics_Total_3_27_1_17.root"); // Open the latest PTotal file to load histograms from
+  canvas7->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/KinEp_dE_7.png");
+  canvas7->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/KinEp_dE_7.pdf");
+  TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Amo/Physics_Total_7_3_2_17.root"); // Open the latest PTotal file to load histograms from
 
   // Banana plot showing good cut region for KinEpdEp
   TCanvas *canvas8 = new TCanvas("canvas8","canvas8", 1920, 1080);
   KinEp_dE_GoodCut->SetXTitle("KinEp/MeV");
   KinEp_dE_GoodCut->SetYTitle("PID Energy/MeV");
   KinEp_dE_GoodCut->Draw("Col");
-  TFile *f2 = new TFile("/scratch/Mainz_Software/a2GoAT/configfiles/cuts/CB_DeltaE-E_ProtonKinGood_20_1_17.root"); // Open the proton cut file used
+  TFile *f2 = new TFile("/scratch/Mainz_Software/a2GoAT/configfiles/cuts/CB_DeltaE-E_ProtonKinGood_03_02_17.root"); // Open the proton cut file used
   ProtonKinGood->SetLineWidth(5);
   ProtonKinGood->Draw("Same");
-  canvas8->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/KinEp_dE_GoodCut_3.png");
-  canvas8->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/KinEp_dE_GoodCut_3.pdf");
-  TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Amo/Physics_Total_3_27_1_17.root"); // Open the latest PTotal file to load histograms from
+  canvas8->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/KinEp_dE_GoodCut_7.png");
+  canvas8->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/KinEp_dE_GoodCut_7.pdf");
+  TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Amo/Physics_Total_7_3_2_17.root"); // Open the latest PTotal file to load histograms from
 
   // ThetaSc Plot
   TCanvas *canvas9 = new TCanvas("canvas9","canvas9", 1920, 1080);
@@ -123,17 +123,17 @@ void PlotSaver(){
   Theta_Scattered->SetLineColor(4);
   Theta_Scattered->SetStats(kFALSE);
   Theta_Scattered->Draw("Col");
-  canvas9->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/ThetaSc_3.png");
-  canvas9->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/ThetaSc_3.pdf");
+  canvas9->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/ThetaSc_7.png");
+  canvas9->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/ThetaSc_7.pdf");
 
   // PhiSc Plot
   TCanvas *canvas10 = new TCanvas("canvas10","canvas10", 1920, 1080);
-  Phi_Scattered->SetXTitle("Theta/Degrees");
+  Phi_Scattered->SetXTitle("Phi/Degrees");
   Phi_Scattered->SetLineColor(4);
   Phi_Scattered->SetStats(kFALSE);
   Phi_Scattered->Draw("Col");
-  canvas10->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/PhiSc_3.png");
-  canvas10->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/PhiSc_3.pdf");
+  canvas10->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/PhiSc_7.png");
+  canvas10->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/PhiSc_7.pdf");
 
   // PhiSc Plot across Photon E bins
   TCanvas *canvas11 = new TCanvas("canvas11","canvas11", 1920, 1080);
@@ -154,8 +154,8 @@ void PlotSaver(){
   leg->AddEntry(Phi_Scattered_475MeV, "EGamma 450-500", "l");
   leg->AddEntry(Phi_Scattered_525MeV, "EGamma 500-550", "l");
   leg->Draw("Same");
-  canvas11->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/PhiSc_EGamma_Low_3.png");
-  canvas11->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/PhiSc_EGamma_Low_3.pdf");
+  canvas11->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/PhiSc_EGamma_Low_7.png");
+  canvas11->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/PhiSc_EGamma_Low_7.pdf");
 
   // PhiSc Plot across Photon E bins
   TCanvas *canvas12 = new TCanvas("canvas12","canvas12", 1920, 1080);
@@ -185,8 +185,8 @@ void PlotSaver(){
   leg->AddEntry(Phi_Scattered_825MeV, "EGamma 800-850", "l");
   leg->AddEntry(Phi_Scattered_875MeV, "EGamma 850-900", "l");
   leg->Draw("Same");
-  canvas12->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/PhiSc_EGamma_High_3.png");
-  canvas12->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/PhiSc_EGamma_High_3.pdf");
+  canvas12->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/PhiSc_EGamma_High_7.png");
+  canvas12->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/PhiSc_EGamma_High_7.pdf");
 
   //PhiSc as fn of ThetaSc
   TCanvas *canvas13 = new TCanvas("canvas13","canvas13", 1920, 1080);
@@ -194,15 +194,33 @@ void PlotSaver(){
   ThetaScPhiSc->SetYTitle("PhiSc/Deg");
   ThetaScPhiSc->SetStats(kFALSE);
   ThetaScPhiSc->Draw("Col");
-  canvas13->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/ThetaScPhiSc_3.png");
-  canvas13->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/ThetaScPhiSc_3.pdf");
+  canvas13->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/ThetaScPhiSc_7.png");
+  canvas13->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/ThetaScPhiSc_7.pdf");
 
   //OAngle Egammacut
   TCanvas *canvas14 = new TCanvas("canvas14","canvas14", 1920, 1080);
   OAngleCut200400->SetXTitle("Opening Angle/Deg");
   OAngleCut200400->SetStats(kFALSE);
   OAngleCut200400->Draw();
-  canvas14->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/OAngleCut200400_3.png");
-  canvas14->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/OAngleCut200400_3.pdf");
+  canvas14->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/OAngleCut200400_7.png");
+  canvas14->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/OAngleCut200400_7.pdf");
+
+  //OAnglePhiDiffLab
+  TCanvas *canvas15 = new TCanvas("canvas15","canvas15", 1920, 1080);
+  OAnglePhiDiffLab->SetXTitle("Opening Angle/Deg");
+  OAnglePhiDiffLab->SetYTitle("PhiScLab/Deg");
+  OAnglePhiDiffLab->SetStats(kFALSE);
+  OAnglePhiDiffLab->Draw("Col");
+  canvas15->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/OAnglePhiDiffLab_7.png");
+  canvas15->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/OAnglePhiDiffLab_7.pdf");
+
+  //ThetaDiffPhiDiffLab
+  TCanvas *canvas16 = new TCanvas("canvas16","canvas16", 1920, 1080);
+  ThetaDiffPhiDiffLab->SetXTitle("ThetaDiff/Deg");
+  ThetaDiffPhiDiffLab->SetYTitle("PhiScLab/Deg");
+  ThetaDiffPhiDiffLab->SetStats(kFALSE);
+  ThetaDiffPhiDiffLab->Draw("Col");
+  canvas16->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/ThetaDiffPhiDiffLab_7.png");
+  canvas16->SaveAs("/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/ThetaDiffPhiDiffLab_7.pdf");
 
 }

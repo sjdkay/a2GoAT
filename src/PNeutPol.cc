@@ -151,7 +151,7 @@ void	PNeutPol::ProcessEvent()
     LabScatter(); // Work out scattering angle in lab frame and return results
     nFrameScatter(); // Work out neutron scattering in its frame and return results
     WCVertex(GVn3, GVnCalc3, Zp, Zn); // Calculate Z vertex location in WC from measured and reconstructed vectors
-    if (ScattTheta > 90) continue;
+    if (ScattTheta > 40) continue;
     if (nBanana == kFALSE && (zWCRec-zWC > 20 || zWCRec-zWC < -20)) continue;
 
     if (MCData == kTRUE)
@@ -165,6 +165,8 @@ void	PNeutPol::ProcessEvent()
         MCThetap_Ep_True -> Fill(MCTheta1True, MCE1True, TaggerTime);
         MCThetan_En_True -> Fill(MCTheta2True, MCE2True, TaggerTime);
     }
+
+    cout << ScattTheta << "    " << ScattPhi;
 
     FillHists(); // Fill histograms with data generated
 
