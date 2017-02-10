@@ -207,6 +207,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     ScattPhi = ScattAngles(1); // Phi is 2nd component
 
     if( 850 > MMpEpCorr || 1050 < MMpEpCorr) continue;
+    if (OpeningAngle > 30) continue;
 
     //if (ScattTheta > 40) continue;
 
