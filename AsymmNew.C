@@ -1,30 +1,51 @@
 #include "./includes.h"
 
+// define a function with 4 parameters
+Double_t fitf(Double_t *x,Double_t *par)
+{
+    Double_t fitval = 0;
+    fitval =  par[0] + ((par[1]*sin(x[0]*TMath::DegToRad()))/(1 + (par[2]*cos(x[0]*TMath::DegToRad()))));
+    return fitval;
+}
+
 void AsymmNew(){
 
-     double NegHelnBins;
-     double PosHelnBins;
-     double NegHelBinValues[90];
-     double PosHelBinValues[90];
-     double DiffBinValues[90];
-     double SumBinValues[90];
-     double AsymmetryValues[90];
-     double Amp[4][13]; // Format of arrays is Theta Bin Defined by i, Energy bin defined by j
-     double AmpErr[4][13];
+     double Offset[4][13]; // Format of arrays is Theta Bin Defined by i, Energy bin defined by j
+     double OffsetErr[4][13];
+     double SinAmp[4][13]; // Format of arrays is Theta Bin Defined by i, Energy bin defined by j
+     double SinAmpErr[4][13];
+     double CosAmp[4][13]; // Format of arrays is Theta Bin Defined by i, Energy bin defined by j
+     double CosAmpErr[4][13];
      Int_t i;
-     double AmpAllTheta;
-     double AmpAllThetaErr;
-     double AmpTheta010;
-     double AmpTheta010Err;
-     double AmpTheta1020;
-     double AmpTheta1020Err;
-     double AmpTheta2030;
-     double AmpTheta2030Err;
+     double OffsetAllTheta;
+     double OffsetAllThetaErr;
+     double OffsetTheta010;
+     double OffsetTheta010Err;
+     double OffsetTheta1020;
+     double OffsetTheta1020Err;
+     double OffsetTheta2030;
+     double OffsetTheta2030Err;
+     double SinAmpAllTheta;
+     double SinAmpAllThetaErr;
+     double SinAmpTheta010;
+     double SinAmpTheta010Err;
+     double SinAmpTheta1020;
+     double SinAmpTheta1020Err;
+     double SinAmpTheta2030;
+     double SinAmpTheta2030Err;
+     double CosAmpAllTheta;
+     double CosAmpAllThetaErr;
+     double CosAmpTheta010;
+     double CosAmpTheta010Err;
+     double CosAmpTheta1020;
+     double CosAmpTheta1020Err;
+     double CosAmpTheta2030;
+     double CosAmpTheta2030Err;
      
-     TF1 *SinFunc = new TF1("SinFit",  "[0]*sin(x*TMath::DegToRad())", -180.0, 180.0); //Give a name and range to the fitting funcion
-     SinFunc->SetParLimits(0, -1, 1);
-     SinFunc->SetParNames("Amplitdue"); //Name the parameters
-     SinFunc->SetParameter(0, 0);
+     
+     TF1 *AsymmFunc = new TF1("AsymmFit",  fitf, -180.0, 180.0, 3); //Give a name and range to the fitting funcion
+     AsymmFunc->SetParNames("Offset", "SinAmp", "CosAmp"); //Name the parameters
+     AsymmFunc->SetParameter(0, 0);
      TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Amo/Physics_Total_8_10_2_17.root"); // Open the latest PTotal file to load histograms from
 
      for(Int_t j=0; j < 13; j++){
@@ -136,24 +157,8 @@ void AsymmNew(){
        }
 
        TCanvas *canvas = new TCanvas("canvas","canvas", 1920, 1080);
-       TH1D *AsymmHist = new TH1D("AsymmHist", "", 90, -180, 180);
 
-       NegHelnBins = histNeg->GetSize() - 2; // -2 as otherwise under/overflow included
-       for (Int_t k = 0; k < NegHelnBins; k++){
-	 NegHelBinValues[k] = histNeg->GetBinContent(k+1);
-       }
-
-       PosHelnBins = histPos->GetSize() - 2; // -2 as otherwise under/overflow included
-       for (Int_t k = 0; k < PosHelnBins; k++){
-	 PosHelBinValues[k] = histPos->GetBinContent(k+1);
-       }
-
-       for (Int_t k = 0; k < PosHelnBins; k++){
-     	 DiffBinValues[k] = NegHelBinValues[k] - PosHelBinValues[k];
-	 SumBinValues[k] = NegHelBinValues[k] + PosHelBinValues[k];
-	 AsymmetryValues[k] = DiffBinValues[k]/SumBinValues[k];
-	 AsymmHist->SetBinContent(k+1, AsymmetryValues[k]);
-       }
+       AsymmHist = histNeg->GetAsymmetry(histPos);
 
        TPad *pad1 = new TPad("pad1","",0,0,1,1);
        pad1->Draw();
@@ -181,17 +186,24 @@ void AsymmNew(){
        AsymmHist->Rebin(2);
 
        AsymmHist->Draw("HISTSAMES"); // Draw the histogram
-       AsymmHist->Fit("SinFit"); // Fit sine function to histogram
-       SinFit->SetLineColor(4);
-       SinFit->Draw("SAMES"); // Draw the resulting fit
-       gStyle->SetOptFit(0111);
+       AsymmHist->Fit("AsymmFit", "LL"); // Fit sine function to histogram
+       AsymmFit->SetLineColor(4);
+       AsymmFit->Draw("SAMES"); // Draw the resulting fit
+       gStyle->SetOptFit(11);
+       gStyle->SetStatW(0.1);
+       gStyle->SetStatH(0.1);
        gPad->Update(); // Refresh plot
 
-       Amp[i][j] = SinFit->GetParameter(0); // Add values of the fit to an array
-       AmpErr[i][j] = SinFit->GetParError(0);
+       Offset[i][j] = AsymmFit->GetParameter(0); // Add values of the fit to an array
+       OffsetErr[i][j] = AsymmFit->GetParError(0);
+       SinAmp[i][j] = AsymmFit->GetParameter(1);
+       SinAmpErr[i][j] = AsymmFit->GetParError(1);
+       CosAmp[i][j] = AsymmFit->GetParameter(2);
+       CosAmpErr[i][j] = AsymmFit->GetParError(2);
 
        canvas->SaveAs(filename = GraphPDF);
        canvas->SaveAs(filename = GraphPNG);
+       canvas->Close();
        
      }
 
@@ -310,24 +322,8 @@ void AsymmNew(){
        }
 
        TCanvas *canvas = new TCanvas("canvas","canvas", 1920, 1080);
-       TH1D *AsymmHist = new TH1D("AsymmHist", "", 90, -180, 180);
 
-       NegHelnBins = histNeg->GetSize() - 2; // -2 as otherwise under/overflow included
-       for (Int_t k = 0; k < NegHelnBins; k++){
-	 NegHelBinValues[k] = histNeg->GetBinContent(k+1);
-       }
-
-       PosHelnBins = histPos->GetSize() - 2; // -2 as otherwise under/overflow included
-       for (Int_t k = 0; k < PosHelnBins; k++){
-	 PosHelBinValues[k] = histPos->GetBinContent(k+1);
-       }
-
-       for (Int_t k = 0; k < PosHelnBins; k++){
-     	 DiffBinValues[k] = NegHelBinValues[k] - PosHelBinValues[k];
-	 SumBinValues[k] = NegHelBinValues[k] + PosHelBinValues[k];
-	 AsymmetryValues[k] = DiffBinValues[k]/SumBinValues[k];
-	 AsymmHist->SetBinContent(k+1, AsymmetryValues[k]);
-       }
+       AsymmHist = histNeg->GetAsymmetry(histPos);
 
        TPad *pad1 = new TPad("pad1","",0,0,1,1);
        pad1->Draw();
@@ -354,17 +350,24 @@ void AsymmNew(){
        AsymmHist->SetLineColor(2);
 
        AsymmHist->Draw("HISTSAMES"); // Draw the histogram
-       AsymmHist->Fit("SinFit"); // Fit sine function to histogram
-       SinFit->SetLineColor(4);
-       SinFit->Draw("SAMES"); // Draw the resulting fit
-       gStyle->SetOptFit(0111);
+       AsymmHist->Fit("AsymmFit", "LL"); // Fit sine function to histogram
+       AsymmFit->SetLineColor(4);
+       AsymmFit->Draw("SAMES"); // Draw the resulting fit
+       gStyle->SetOptFit(11);
+       gStyle->SetStatW(0.1);
+       gStyle->SetStatH(0.1);
        gPad->Update(); // Refresh plot
 
-       Amp[i][j] = SinFit->GetParameter(0); // Add values of the fit to an array
-       AmpErr[i][j] = SinFit->GetParError(0);
+       Offset[i][j] = AsymmFit->GetParameter(0); // Add values of the fit to an array
+       OffsetErr[i][j] = AsymmFit->GetParError(0);
+       SinAmp[i][j] = AsymmFit->GetParameter(1);
+       SinAmpErr[i][j] = AsymmFit->GetParError(1);
+       CosAmp[i][j] = AsymmFit->GetParameter(2);
+       CosAmpErr[i][j] = AsymmFit->GetParError(2);
 
        canvas->SaveAs(filename = GraphPDF);
        canvas->SaveAs(filename = GraphPNG);
+       canvas->Close();
        
      }
 
@@ -483,24 +486,8 @@ void AsymmNew(){
        }
 
        TCanvas *canvas = new TCanvas("canvas","canvas", 1920, 1080);
-       TH1D *AsymmHist = new TH1D("AsymmHist", "", 90, -180, 180);
 
-       NegHelnBins = histNeg->GetSize() - 2; // -2 as otherwise under/overflow included
-       for (Int_t k = 0; k < NegHelnBins; k++){
-	 NegHelBinValues[k] = histNeg->GetBinContent(k+1);
-       }
-
-       PosHelnBins = histPos->GetSize() - 2; // -2 as otherwise under/overflow included
-       for (Int_t k = 0; k < PosHelnBins; k++){
-	 PosHelBinValues[k] = histPos->GetBinContent(k+1);
-       }
-
-       for (Int_t k = 0; k < PosHelnBins; k++){
-     	 DiffBinValues[k] = NegHelBinValues[k] - PosHelBinValues[k];
-	 SumBinValues[k] = NegHelBinValues[k] + PosHelBinValues[k];
-	 AsymmetryValues[k] = DiffBinValues[k]/SumBinValues[k];
-	 AsymmHist->SetBinContent(k+1, AsymmetryValues[k]);
-       }
+       AsymmHist = histNeg->GetAsymmetry(histPos);
 
        TPad *pad1 = new TPad("pad1","",0,0,1,1);
        pad1->Draw();
@@ -527,17 +514,24 @@ void AsymmNew(){
        AsymmHist->SetLineColor(2);
 
        AsymmHist->Draw("HISTSAMES"); // Draw the histogram
-       AsymmHist->Fit("SinFit"); // Fit sine function to histogram
-       SinFit->SetLineColor(4);
-       SinFit->Draw("SAMES"); // Draw the resulting fit
-       gStyle->SetOptFit(0111);
+       AsymmHist->Fit("AsymmFit", "LL"); // Fit sine function to histogram
+       AsymmFit->SetLineColor(4);
+       AsymmFit->Draw("SAMES"); // Draw the resulting fit
+       gStyle->SetOptFit(11);
+       gStyle->SetStatW(0.1);
+       gStyle->SetStatH(0.1);
        gPad->Update(); // Refresh plot
 
-       Amp[i][j] = SinFit->GetParameter(0); // Add values of the fit to an array
-       AmpErr[i][j] = SinFit->GetParError(0);
+       Offset[i][j] = AsymmFit->GetParameter(0); // Add values of the fit to an array
+       OffsetErr[i][j] = AsymmFit->GetParError(0);
+       SinAmp[i][j] = AsymmFit->GetParameter(1);
+       SinAmpErr[i][j] = AsymmFit->GetParError(1);
+       CosAmp[i][j] = AsymmFit->GetParameter(2);
+       CosAmpErr[i][j] = AsymmFit->GetParError(2);
 
        canvas->SaveAs(filename = GraphPDF);
        canvas->SaveAs(filename = GraphPNG);
+       canvas->Close();
        
      }
 
@@ -656,24 +650,8 @@ void AsymmNew(){
        }
 
        TCanvas *canvas = new TCanvas("canvas","canvas", 1920, 1080);
-       TH1D *AsymmHist = new TH1D("AsymmHist", "", 90, -180, 180);
 
-       NegHelnBins = histNeg->GetSize() - 2; // -2 as otherwise under/overflow included
-       for (Int_t k = 0; k < NegHelnBins; k++){
-	 NegHelBinValues[k] = histNeg->GetBinContent(k+1);
-       }
-
-       PosHelnBins = histPos->GetSize() - 2; // -2 as otherwise under/overflow included
-       for (Int_t k = 0; k < PosHelnBins; k++){
-	 PosHelBinValues[k] = histPos->GetBinContent(k+1);
-       }
-
-       for (Int_t k = 0; k < PosHelnBins; k++){
-     	 DiffBinValues[k] = NegHelBinValues[k] - PosHelBinValues[k];
-	 SumBinValues[k] = NegHelBinValues[k] + PosHelBinValues[k];
-	 AsymmetryValues[k] = DiffBinValues[k]/SumBinValues[k];
-	 AsymmHist->SetBinContent(k+1, AsymmetryValues[k]);
-       }
+       AsymmHist = histNeg->GetAsymmetry(histPos);
 
        TPad *pad1 = new TPad("pad1","",0,0,1,1);
        pad1->Draw();
@@ -700,17 +678,24 @@ void AsymmNew(){
        AsymmHist->SetLineColor(2);
 
        AsymmHist->Draw("HISTSAMES"); // Draw the histogram
-       AsymmHist->Fit("SinFit", "LL"); // Fit sine function to histogram
-       SinFit->SetLineColor(4);
-       SinFit->Draw("SAMES"); // Draw the resulting fit
-       gStyle->SetOptFit(0111);
+       AsymmHist->Fit("AsymmFit", "LL"); // Fit sine function to histogram
+       AsymmFit->SetLineColor(4);
+       AsymmFit->Draw("SAMES"); // Draw the resulting fit
+       gStyle->SetOptFit(11);
+       gStyle->SetStatW(0.1);
+       gStyle->SetStatH(0.1);
        gPad->Update(); // Refresh plot
 
-       Amp[i][j] = SinFit->GetParameter(0); // Add values of the fit to an array
-       AmpErr[i][j] = SinFit->GetParError(0);
+       Offset[i][j] = AsymmFit->GetParameter(0); // Add values of the fit to an array
+       OffsetErr[i][j] = AsymmFit->GetParError(0);
+       SinAmp[i][j] = AsymmFit->GetParameter(1);
+       SinAmpErr[i][j] = AsymmFit->GetParError(1);
+       CosAmp[i][j] = AsymmFit->GetParameter(2);
+       CosAmpErr[i][j] = AsymmFit->GetParError(2);
 
        canvas->SaveAs(filename = GraphPDF);
        canvas->SaveAs(filename = GraphPNG);
+       canvas->Close();
        
      }
 
@@ -721,26 +706,58 @@ void AsymmNew(){
     TTree* tree = new TTree("Parameter_Values", "Tree_of_Values");
 
     // Define branches to store parameters, (Branch Name, Variable, Type of Variable)
-    tree->Branch("AmpAllTheta", &AmpAllTheta, "AmpAllTheta/D");
-    tree->Branch("AmpAllThetaErr", &AmpAllThetaErr, "AmpAllThetaErr/D");
-    tree->Branch("AmpTheta010", &AmpTheta010, "AmpTheta010/D");
-    tree->Branch("AmpTheta010Err", &AmpTheta010Err, "AmpTheta010Err/D");
-    tree->Branch("AmpTheta1020", &AmpTheta1020, "AmpTheta1020/D");
-    tree->Branch("AmpTheta1020Err", &AmpTheta1020Err, "AmpTheta1020Err/D");
-    tree->Branch("AmpTheta2030", &AmpTheta2030, "AmpTheta2030/D");
-    tree->Branch("AmpTheta2030Err", &AmpTheta2030Err, "AmpTheta2030Err/D");
+    tree->Branch("OffsetAllTheta", &OffsetAllTheta, "OffsetAllTheta/D");
+    tree->Branch("OffsetAllThetaErr", &OffsetAllThetaErr, "OffsetAllThetaErr/D");
+    tree->Branch("OffsetTheta010", &OffsetTheta010, "OffsetTheta010/D");
+    tree->Branch("OffsetTheta010Err", &OffsetTheta010Err, "OffsetTheta010Err/D");
+    tree->Branch("OffsetTheta1020", &OffsetTheta1020, "OffsetTheta1020/D");
+    tree->Branch("OffsetTheta1020Err", &OffsetTheta1020Err, "OffsetTheta1020Err/D");
+    tree->Branch("OffsetTheta2030", &OffsetTheta2030, "OffsetTheta2030/D");
+    tree->Branch("OffsetTheta2030Err", &OffsetTheta2030Err, "OffsetTheta2030Err/D");
+    tree->Branch("SinAmpAllTheta", &SinAmpAllTheta, "SinAmpAllTheta/D");
+    tree->Branch("SinAmpAllThetaErr", &SinAmpAllThetaErr, "SinAmpAllThetaErr/D");
+    tree->Branch("SinAmpTheta010", &SinAmpTheta010, "SinAmpTheta010/D");
+    tree->Branch("SinAmpTheta010Err", &SinAmpTheta010Err, "SinAmpTheta010Err/D");
+    tree->Branch("SinAmpTheta1020", &SinAmpTheta1020, "SinAmpTheta1020/D");
+    tree->Branch("SinAmpTheta1020Err", &SinAmpTheta1020Err, "SinAmpTheta1020Err/D");
+    tree->Branch("SinAmpTheta2030", &SinAmpTheta2030, "SinAmpTheta2030/D");
+    tree->Branch("SinAmpTheta2030Err", &SinAmpTheta2030Err, "SinAmpTheta2030Err/D");
+    tree->Branch("CosAmpAllTheta", &CosAmpAllTheta, "CosAmpAllTheta/D");
+    tree->Branch("CosAmpAllThetaErr", &CosAmpAllThetaErr, "CosAmpAllThetaErr/D");
+    tree->Branch("CosAmpTheta010", &CosAmpTheta010, "CosAmpTheta010/D");
+    tree->Branch("CosAmpTheta010Err", &CosAmpTheta010Err, "CosAmpTheta010Err/D");
+    tree->Branch("CosAmpTheta1020", &CosAmpTheta1020, "CosAmpTheta1020/D");
+    tree->Branch("CosAmpTheta1020Err", &CosAmpTheta1020Err, "CosAmpTheta1020Err/D");
+    tree->Branch("CosAmpTheta2030", &CosAmpTheta2030, "CosAmpTheta2030/D");
+    tree->Branch("CosAmpTheta2030Err", &CosAmpTheta2030Err, "CosAmpTheta2030Err/D");
 
     // Fill branches (and hence tree) with corresponding parameters from above
     for (Int_t m = 0; m < 13; m++){
       
-      AmpAllTheta = Amp[0][m];
-      AmpAllThetaErr = AmpErr[0][m];
-      AmpTheta010 = Amp[1][m];
-      AmpTheta010Err = AmpErr[1][m];
-      AmpTheta1020 = Amp[2][m];
-      AmpTheta1020Err = AmpErr[2][m];
-      AmpTheta2030 = Amp[3][m];
-      AmpTheta2030Err = AmpErr[3][m];
+      OffsetAllTheta = Offset[0][m];
+      OffsetAllThetaErr = OffsetErr[0][m];
+      OffsetTheta010 = Offset[1][m];
+      OffsetTheta010Err = OffsetErr[1][m];
+      OffsetTheta1020 = Offset[2][m];
+      OffsetTheta1020Err = OffsetErr[2][m];
+      OffsetTheta2030 = Offset[3][m];
+      OffsetTheta2030Err = OffsetErr[3][m];
+      SinAmpAllTheta = SinAmp[0][m];
+      SinAmpAllThetaErr = SinAmpErr[0][m];
+      SinAmpTheta010 = SinAmp[1][m];
+      SinAmpTheta010Err = SinAmpErr[1][m];
+      SinAmpTheta1020 = SinAmp[2][m];
+      SinAmpTheta1020Err = SinAmpErr[2][m];
+      SinAmpTheta2030 = SinAmp[3][m];
+      SinAmpTheta2030Err = SinAmpErr[3][m];
+      CosAmpAllTheta = CosAmp[0][m];
+      CosAmpAllThetaErr = CosAmpErr[0][m];
+      CosAmpTheta010 = CosAmp[1][m];
+      CosAmpTheta010Err = CosAmpErr[1][m];
+      CosAmpTheta1020 = CosAmp[2][m];
+      CosAmpTheta1020Err = CosAmpErr[2][m];
+      CosAmpTheta2030 = CosAmp[3][m];
+      CosAmpTheta2030Err = CosAmpErr[3][m];
       tree->Fill();
 
     }
