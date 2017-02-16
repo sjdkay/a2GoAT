@@ -42,7 +42,6 @@ void AsymmNew(){
      double CosAmpTheta2030;
      double CosAmpTheta2030Err;
      
-     
      TF1 *AsymmFunc = new TF1("AsymmFit",  fitf, -180.0, 180.0, 3); //Give a name and range to the fitting funcion
      AsymmFunc->SetParNames("Offset", "SinAmp", "CosAmp"); //Name the parameters
      AsymmFunc->SetParameter(0, 0);
