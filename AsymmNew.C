@@ -45,6 +45,8 @@ void AsymmNew(){
      TF1 *AsymmFunc = new TF1("AsymmFit",  fitf, -180.0, 180.0, 3); //Give a name and range to the fitting funcion
      AsymmFunc->SetParNames("Offset", "SinAmp", "CosAmp"); //Name the parameters
      AsymmFunc->SetParameter(0, 0);
+     TF1 *SinFunc = new TF1("SinFit", "[0]*sin(x*TMath::DegToRad())", -180, 180);
+     SinFunc->SetParNames("InitialSinAmp");
      TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Amo/Physics_Total_8_10_2_17.root"); // Open the latest PTotal file to load histograms from
 
      for(Int_t j=0; j < 13; j++){
@@ -183,8 +185,15 @@ void AsymmNew(){
        AsymmHist->SetMarkerStyle(1); // Style options for graph
        AsymmHist->SetLineColor(2);
        AsymmHist->Rebin(2);
-
        AsymmHist->Draw("HISTSAMES"); // Draw the histogram
+       AsymmHist->Fit("SinFit", "LL");
+       SinFit->SetLineColor(1);
+       SinFit->Draw("SAMES");
+       AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
+       AsymmFunc->SetParError(1, SinFunc->GetParError(0));
+       AsymmFunc->SetParLimits(0, -2, 2);
+       AsymmFunc->SetParLimits(1, -1, 1);
+       AsymmFunc->SetParLimits(2, -1, 1);
        AsymmHist->Fit("AsymmFit", "LL"); // Fit sine function to histogram
        AsymmFit->SetLineColor(4);
        AsymmFit->Draw("SAMES"); // Draw the resulting fit
@@ -349,6 +358,14 @@ void AsymmNew(){
        AsymmHist->SetLineColor(2);
 
        AsymmHist->Draw("HISTSAMES"); // Draw the histogram
+       AsymmHist->Fit("SinFit", "LL");
+       SinFit->SetLineColor(1);
+       SinFit->Draw("SAMES");
+       AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
+       AsymmFunc->SetParError(1, SinFunc->GetParError(0));
+       AsymmFunc->SetParLimits(0, -2, 2);
+       AsymmFunc->SetParLimits(1, -1, 1);
+       AsymmFunc->SetParLimits(2, -1, 1);
        AsymmHist->Fit("AsymmFit", "LL"); // Fit sine function to histogram
        AsymmFit->SetLineColor(4);
        AsymmFit->Draw("SAMES"); // Draw the resulting fit
@@ -513,7 +530,15 @@ void AsymmNew(){
        AsymmHist->SetLineColor(2);
 
        AsymmHist->Draw("HISTSAMES"); // Draw the histogram
-       AsymmHist->Fit("AsymmFit", "LL"); // Fit sine function to histogram
+       AsymmHist->Fit("SinFit", "LL");
+       SinFit->SetLineColor(1);
+       SinFit->Draw("SAMES");
+       AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
+       AsymmFunc->SetParError(1, SinFunc->GetParError(0));
+       AsymmFunc->SetParLimits(0, -2, 2);
+       AsymmFunc->SetParLimits(1, -1, 1);
+       AsymmFunc->SetParLimits(2, -1, 1);
+       AsymmHist->Fit("AsymmFit", "LL"); // Fit sine function to histogram;
        AsymmFit->SetLineColor(4);
        AsymmFit->Draw("SAMES"); // Draw the resulting fit
        gStyle->SetOptFit(11);
@@ -677,6 +702,14 @@ void AsymmNew(){
        AsymmHist->SetLineColor(2);
 
        AsymmHist->Draw("HISTSAMES"); // Draw the histogram
+       AsymmHist->Fit("SinFit", "LL");
+       SinFit->SetLineColor(1);
+       SinFit->Draw("SAMES");
+       AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
+       AsymmFunc->SetParError(1, SinFunc->GetParError(0));
+       AsymmFunc->SetParLimits(0, -2, 2);
+       AsymmFunc->SetParLimits(1, -1, 1);
+       AsymmFunc->SetParLimits(2, -1, 1);
        AsymmHist->Fit("AsymmFit", "LL"); // Fit sine function to histogram
        AsymmFit->SetLineColor(4);
        AsymmFit->Draw("SAMES"); // Draw the resulting fit
