@@ -175,8 +175,8 @@ void AsymmNew(){
        
        Float_t xMin = -180;
        Float_t xMax = 180;
-       Float_t yMin = -2;
-       Float_t yMax = 2;
+       Float_t yMin = -1;
+       Float_t yMax = 1;
        
        strcpy(hrTitle, Title);
        hr = canvas->DrawFrame(xMin,yMin,xMax,yMax);
@@ -346,8 +346,8 @@ void AsymmNew(){
        
        Float_t xMin = -180;
        Float_t xMax = 180;
-       Float_t yMin = -2;
-       Float_t yMax = 2;
+       Float_t yMin = -1;
+       Float_t yMax = 1;
        
        strcpy(hrTitle, Title);
        hr = canvas->DrawFrame(xMin,yMin,xMax,yMax);
@@ -517,8 +517,8 @@ void AsymmNew(){
        
        Float_t xMin = -180;
        Float_t xMax = 180;
-       Float_t yMin = -2;
-       Float_t yMax = 2;
+       Float_t yMin = -1;
+       Float_t yMax = 1;
        
        strcpy(hrTitle, Title);
        hr = canvas->DrawFrame(xMin,yMin,xMax,yMax);
@@ -688,8 +688,8 @@ void AsymmNew(){
        
        Float_t xMin = -180;
        Float_t xMax = 180;
-       Float_t yMin = -2;
-       Float_t yMax = 2;
+       Float_t yMin = -1;
+       Float_t yMax = 1;
        
        strcpy(hrTitle, Title);
        hr = canvas->DrawFrame(xMin,yMin,xMax,yMax);
