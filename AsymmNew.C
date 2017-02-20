@@ -47,7 +47,7 @@ void AsymmNew(){
      AsymmFunc->SetParameter(0, 0);
      TF1 *SinFunc = new TF1("SinFit", "[0]*sin(x*TMath::DegToRad())", -180, 180);
      SinFunc->SetParNames("InitialSinAmp");
-     TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Amo/Physics_Total_8_10_2_17.root"); // Open the latest PTotal file to load histograms from
+     TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Amo/Physics_Total_9_20_2_17.root"); // Open the latest PTotal file to load histograms from
 
      for(Int_t j=0; j < 13; j++){
        
@@ -57,104 +57,104 @@ void AsymmNew(){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (275pm25MeV)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_275MeV_NegHel"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_275MeV_PosHel"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_275MeV_Asymm_8.png"; // Name the output images
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_275MeV_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_275MeV_Asymm_9.png"; // Name the output images
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_275MeV_Asymm_9.pdf";
        }
 
        if (j==1){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (325pm25MeV)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_325MeV_NegHel"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_325MeV_PosHel"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_325MeV_Asymm_8.png"; // Name the output images
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_325MeV_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_325MeV_Asymm_9.png"; // Name the output images
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_325MeV_Asymm_9.pdf";
        }
        
        if (j==2){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (375pm25MeV)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_375MeV_NegHel"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_375MeV_PosHel"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_375MeV_Asymm_8.png"; // Name the output images
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_375MeV_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_375MeV_Asymm_9.png"; // Name the output images
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_375MeV_Asymm_9.pdf";
        }
 
        if (j==3){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (425pm25MeV)"; // Set title of output graph
-		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_425MeV_PosHel"); // Select the correct histogram
+		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_425MeV_NegHel"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_425MeV_PosHel"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_425MeV_Asymm_8.png"; // Name the output images
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_425MeV_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_425MeV_Asymm_9.png"; // Name the output images
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_425MeV_Asymm_9.pdf";
        }
 
        if (j==4){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (475pm25MeV)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_475MeV_NegHel"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_475MeV_PosHel"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_475MeV_Asymm_8.png"; // Name the output images
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_475MeV_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_475MeV_Asymm_9.png"; // Name the output images
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_475MeV_Asymm_9.pdf";
        }
 
        if (j==5){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (525pm25MeV)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_525MeV_NegHel"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_525MeV_PosHel"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_525MeV_Asymm_8.png"; // Name the output images
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_525MeV_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_525MeV_Asymm_9.png"; // Name the output images
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_525MeV_Asymm_9.pdf";
        }
 
        if (j==6){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (575pm25MeV)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_575MeV_NegHel"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_575MeV_PosHel"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_575MeV_Asymm_8.png"; // Name the output images
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_575MeV_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_575MeV_Asymm_9.png"; // Name the output images
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_575MeV_Asymm_9.pdf";
        }
 
        if (j==7){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (625pm25MeV)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_625MeV_NegHel"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_625MeV_PosHel"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_625MeV_Asymm_8.png"; // Name the output images
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_625MeV_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_625MeV_Asymm_9.png"; // Name the output images
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_625MeV_Asymm_9.pdf";
        }
 
        if (j==8){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (675pm25MeV)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_675MeV_NegHel"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_675MeV_PosHel"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_675MeV_Asymm_8.png"; // Name the output images
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_675MeV_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_675MeV_Asymm_9.png"; // Name the output images
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_675MeV_Asymm_9.pdf";
        }
 
        if (j==9){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (725pm25MeV)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_725MeV_NegHel"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_725MeV_PosHel"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_725MeV_Asymm_8.png"; // Name the output images
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_725MeV_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_725MeV_Asymm_9.png"; // Name the output images
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_725MeV_Asymm_9.pdf";
        }
 
        if (j==10){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (775pm25MeV)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_775MeV_NegHel"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_775MeV_PosHel"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_775MeV_Asymm_8.png"; // Name the output images
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_775MeV_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_775MeV_Asymm_9.png"; // Name the output images
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_775MeV_Asymm_9.pdf";
        }
 
       if (j==11){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (825pm25MeV)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_825MeV_NegHel"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_825MeV_PosHel"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_825MeV_Asymm_8.png"; // Name the output images
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_825MeV_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_825MeV_Asymm_9.png"; // Name the output images
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_825MeV_Asymm_9.pdf";
        }
 
       if (j==12){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (875pm25MeV)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_875MeV_NegHel"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_875MeV_PosHel"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_875MeV_Asymm_8.png"; // Name the output images
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_875MeV_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_875MeV_Asymm_9.png"; // Name the output images
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_875MeV_Asymm_9.pdf";
        }
 
        TCanvas *canvas = new TCanvas("canvas","canvas", 1920, 1080);
@@ -184,8 +184,7 @@ void AsymmNew(){
        
        AsymmHist->SetMarkerStyle(1); // Style options for graph
        AsymmHist->SetLineColor(2);
-       AsymmHist->Rebin(2);
-       AsymmHist->Draw("HISTSAMES"); // Draw the histogram
+       AsymmHist->Draw("EHISTSAMES"); // Draw the histogram
        AsymmHist->Fit("SinFit", "LL");
        SinFit->SetLineColor(1);
        SinFit->Draw("SAMES");
@@ -229,104 +228,104 @@ void AsymmNew(){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (275pm25MeV, ThetaSc 0-10)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_275MeV_NegHelTheta010"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_275MeV_PosHelTheta010"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_275MeV_Theta010_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_275MeV_Theta010_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_275MeV_Theta010_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_275MeV_Theta010_Asymm_9.pdf";
        }
 
        if (j==1){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (325pm25MeV, ThetaSc 0-10)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_325MeV_NegHelTheta010"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_325MeV_PosHelTheta010"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_325MeV_Theta010_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_325MeV_Theta010_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_325MeV_Theta010_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_325MeV_Theta010_Asymm_9.pdf";
        }
        
        if (j==2){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (375pm25MeV, ThetaSc 0-10)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_375MeV_NegHelTheta010"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_375MeV_PosHelTheta010"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_375MeV_Theta010_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_375MeV_Theta010_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_375MeV_Theta010_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_375MeV_Theta010_Asymm_9.pdf";
        }
 
        if (j==3){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (425pm25MeV, ThetaSc 0-10)"; // Set title of output graph
-		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_425MeV_PosHelTheta010"); // Select the correct histogram
+		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_425MeV_NegHelTheta010"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_425MeV_PosHelTheta010"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_425MeV_Theta010_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_425MeV_Theta010_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_425MeV_Theta010_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_425MeV_Theta010_Asymm_9.pdf";
        }
 
        if (j==4){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (475pm25MeV, ThetaSc 0-10)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_475MeV_NegHelTheta010"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_475MeV_PosHelTheta010"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_475MeV_Theta010_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_475MeV_Theta010_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_475MeV_Theta010_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_475MeV_Theta010_Asymm_9.pdf";
        }
 
        if (j==5){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (525pm25MeV, ThetaSc 0-10)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_525MeV_NegHelTheta010"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_525MeV_PosHelTheta010"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_525MeV_Theta010_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_525MeV_Theta010_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_525MeV_Theta010_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_525MeV_Theta010_Asymm_9.pdf";
        }
 
        if (j==6){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (575pm25MeV, ThetaSc 0-10)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_575MeV_NegHelTheta010"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_575MeV_PosHelTheta010"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_575MeV_Theta010_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_575MeV_Theta010_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_575MeV_Theta010_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_575MeV_Theta010_Asymm_9.pdf";
        }
 
        if (j==7){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (625pm25MeV, ThetaSc 0-10)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_625MeV_NegHelTheta010"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_625MeV_PosHelTheta010"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_625MeV_Theta010_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_625MeV_Theta010_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_625MeV_Theta010_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_625MeV_Theta010_Asymm_9.pdf";
        }
 
        if (j==8){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (675pm25MeV, ThetaSc 0-10)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_675MeV_NegHelTheta010"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_675MeV_PosHelTheta010"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_675MeV_Theta010_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_675MeV_Theta010_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_675MeV_Theta010_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_675MeV_Theta010_Asymm_9.pdf";
        }
 
        if (j==9){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (725pm25MeV, ThetaSc 0-10)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_725MeV_NegHelTheta010"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_725MeV_PosHelTheta010"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_725MeV_Theta010_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_725MeV_Theta010_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_725MeV_Theta010_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_725MeV_Theta010_Asymm_9.pdf";
        }
 
        if (j==10){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (775pm25MeV, ThetaSc 0-10)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_775MeV_NegHelTheta010"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_775MeV_PosHelTheta010"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_775MeV_Theta010_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_775MeV_Theta010_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_775MeV_Theta010_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_775MeV_Theta010_Asymm_9.pdf";
        }
 
       if (j==11){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (825pm25MeV, ThetaSc 0-10)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_825MeV_NegHelTheta010"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_825MeV_PosHelTheta010"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_825MeV_Theta010_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_825MeV_Theta010_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_825MeV_Theta010_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_825MeV_Theta010_Asymm_9.pdf";
        }
 
       if (j==12){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (875pm25MeV, ThetaSc 0-10)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_875MeV_NegHelTheta010"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_875MeV_PosHelTheta010"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_875MeV_Theta010_Asymm_8.png";
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_875MeV_Theta010_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_875MeV_Theta010_Asymm_9.png";
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_875MeV_Theta010_Asymm_9.pdf";
        }
 
        TCanvas *canvas = new TCanvas("canvas","canvas", 1920, 1080);
@@ -356,8 +355,7 @@ void AsymmNew(){
        
        AsymmHist->SetMarkerStyle(1); // Style options for graph
        AsymmHist->SetLineColor(2);
-
-       AsymmHist->Draw("HISTSAMES"); // Draw the histogram
+       AsymmHist->Draw("EHISTSAMES"); // Draw the histogram
        AsymmHist->Fit("SinFit", "LL");
        SinFit->SetLineColor(1);
        SinFit->Draw("SAMES");
@@ -401,104 +399,104 @@ void AsymmNew(){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (275pm25MeV, ThetaSc 10-20)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_275MeV_NegHelTheta1020"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_275MeV_PosHelTheta1020"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_275MeV_Theta1020_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_275MeV_Theta1020_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_275MeV_Theta1020_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_275MeV_Theta1020_Asymm_9.pdf";
        }
 
        if (j==1){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (325pm25MeV, ThetaSc 10-20)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_325MeV_NegHelTheta1020"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_325MeV_PosHelTheta1020"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_325MeV_Theta1020_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_325MeV_Theta1020_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_325MeV_Theta1020_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_325MeV_Theta1020_Asymm_9.pdf";
        }
        
        if (j==2){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (375pm25MeV, ThetaSc 10-20)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_375MeV_NegHelTheta1020"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_375MeV_PosHelTheta1020"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_375MeV_Theta1020_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_375MeV_Theta1020_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_375MeV_Theta1020_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_375MeV_Theta1020_Asymm_9.pdf";
        }
 
        if (j==3){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (425pm25MeV, ThetaSc 10-20)"; // Set title of output graph
-		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_425MeV_PosHelTheta1020"); // Select the correct histogram
+		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_425MeV_NegHelTheta1020"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_425MeV_PosHelTheta1020"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_425MeV_Theta1020_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_425MeV_Theta1020_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_425MeV_Theta1020_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_425MeV_Theta1020_Asymm_9.pdf";
        }
 
        if (j==4){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (475pm25MeV, ThetaSc 10-20)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_475MeV_NegHelTheta1020"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_475MeV_PosHelTheta1020"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_475MeV_Theta1020_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_475MeV_Theta1020_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_475MeV_Theta1020_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_475MeV_Theta1020_Asymm_9.pdf";
        }
 
        if (j==5){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (525pm25MeV, ThetaSc 10-20)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_525MeV_NegHelTheta1020"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_525MeV_PosHelTheta1020"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_525MeV_Theta1020_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_525MeV_Theta1020_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_525MeV_Theta1020_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_525MeV_Theta1020_Asymm_9.pdf";
        }
 
        if (j==6){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (575pm25MeV, ThetaSc 10-20)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_575MeV_NegHelTheta1020"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_575MeV_PosHelTheta1020"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_575MeV_Theta1020_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_575MeV_Theta1020_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_575MeV_Theta1020_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_575MeV_Theta1020_Asymm_9.pdf";
        }
 
        if (j==7){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (625pm25MeV, ThetaSc 10-20)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_625MeV_NegHelTheta1020"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_625MeV_PosHelTheta1020"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_625MeV_Theta1020_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_625MeV_Theta1020_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_625MeV_Theta1020_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_625MeV_Theta1020_Asymm_9.pdf";
        }
 
        if (j==8){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (675pm25MeV, ThetaSc 10-20)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_675MeV_NegHelTheta1020"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_675MeV_PosHelTheta1020"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_675MeV_Theta1020_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_675MeV_Theta1020_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_675MeV_Theta1020_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_675MeV_Theta1020_Asymm_9.pdf";
        }
 
        if (j==9){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (725pm25MeV, ThetaSc 10-20)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_725MeV_NegHelTheta1020"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_725MeV_PosHelTheta1020"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_725MeV_Theta1020_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_725MeV_Theta1020_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_725MeV_Theta1020_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_725MeV_Theta1020_Asymm_9.pdf";
        }
 
        if (j==10){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (775pm25MeV, ThetaSc 10-20)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_775MeV_NegHelTheta1020"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_775MeV_PosHelTheta1020"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_775MeV_Theta1020_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_775MeV_Theta1020_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_775MeV_Theta1020_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_775MeV_Theta1020_Asymm_9.pdf";
        }
 
       if (j==11){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (825pm25MeV, ThetaSc 10-20)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_825MeV_NegHelTheta1020"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_825MeV_PosHelTheta1020"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_825MeV_Theta1020_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_825MeV_Theta1020_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_825MeV_Theta1020_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_825MeV_Theta1020_Asymm_9.pdf";
        }
 
       if (j==12){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (875pm25MeV, ThetaSc 10-20)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_875MeV_NegHelTheta1020"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_875MeV_PosHelTheta1020"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_875MeV_Theta1020_Asymm_8.png";
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_875MeV_Theta1020_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_875MeV_Theta1020_Asymm_9.png";
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_875MeV_Theta1020_Asymm_9.pdf";
        }
 
        TCanvas *canvas = new TCanvas("canvas","canvas", 1920, 1080);
@@ -528,8 +526,7 @@ void AsymmNew(){
        
        AsymmHist->SetMarkerStyle(1); // Style options for graph
        AsymmHist->SetLineColor(2);
-
-       AsymmHist->Draw("HISTSAMES"); // Draw the histogram
+       AsymmHist->Draw("EHISTSAMES"); // Draw the histogram
        AsymmHist->Fit("SinFit", "LL");
        SinFit->SetLineColor(1);
        SinFit->Draw("SAMES");
@@ -573,104 +570,104 @@ void AsymmNew(){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (275pm25MeV, ThetaSc 20-30)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_275MeV_NegHelTheta2030"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_275MeV_PosHelTheta2030"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_275MeV_Theta2030_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_275MeV_Theta2030_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_275MeV_Theta2030_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_275MeV_Theta2030_Asymm_9.pdf";
        }
 
        if (j==1){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (325pm25MeV, ThetaSc 20-30)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_325MeV_NegHelTheta2030"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_325MeV_PosHelTheta2030"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_325MeV_Theta2030_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_325MeV_Theta2030_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_325MeV_Theta2030_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_325MeV_Theta2030_Asymm_9.pdf";
        }
        
        if (j==2){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (375pm25MeV, ThetaSc 20-30)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_375MeV_NegHelTheta2030"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_375MeV_PosHelTheta2030"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_375MeV_Theta2030_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_375MeV_Theta2030_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_375MeV_Theta2030_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_375MeV_Theta2030_Asymm_9.pdf";
        }
 
        if (j==3){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (425pm25MeV, ThetaSc 20-30)"; // Set title of output graph
-		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_425MeV_PosHelTheta2030"); // Select the correct histogram
+		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_425MeV_NegHelTheta2030"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_425MeV_PosHelTheta2030"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_425MeV_Theta2030_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_425MeV_Theta2030_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_425MeV_Theta2030_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_425MeV_Theta2030_Asymm_9.pdf";
        }
 
        if (j==4){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (475pm25MeV, ThetaSc 20-30)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_475MeV_NegHelTheta2030"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_475MeV_PosHelTheta2030"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_475MeV_Theta2030_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_475MeV_Theta2030_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_475MeV_Theta2030_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_475MeV_Theta2030_Asymm_9.pdf";
        }
 
        if (j==5){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (525pm25MeV, ThetaSc 20-30)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_525MeV_NegHelTheta2030"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_525MeV_PosHelTheta2030"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_525MeV_Theta2030_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_525MeV_Theta2030_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_525MeV_Theta2030_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_525MeV_Theta2030_Asymm_9.pdf";
        }
 
        if (j==6){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (575pm25MeV, ThetaSc 20-30)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_575MeV_NegHelTheta2030"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_575MeV_PosHelTheta2030"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_575MeV_Theta2030_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_575MeV_Theta2030_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_575MeV_Theta2030_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_575MeV_Theta2030_Asymm_9.pdf";
        }
 
        if (j==7){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (625pm25MeV, ThetaSc 20-30)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_625MeV_NegHelTheta2030"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_625MeV_PosHelTheta2030"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_625MeV_Theta2030_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_625MeV_Theta2030_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_625MeV_Theta2030_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_625MeV_Theta2030_Asymm_9.pdf";
        }
 
        if (j==8){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (675pm25MeV, ThetaSc 20-30)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_675MeV_NegHelTheta2030"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_675MeV_PosHelTheta2030"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_675MeV_Theta2030_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_675MeV_Theta2030_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_675MeV_Theta2030_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_675MeV_Theta2030_Asymm_9.pdf";
        }
 
        if (j==9){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (725pm25MeV, ThetaSc 20-30)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_725MeV_NegHelTheta2030"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_725MeV_PosHelTheta2030"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_725MeV_Theta2030_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_725MeV_Theta2030_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_725MeV_Theta2030_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_725MeV_Theta2030_Asymm_9.pdf";
        }
 
        if (j==10){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (775pm25MeV, ThetaSc 20-30)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_775MeV_NegHelTheta2030"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_775MeV_PosHelTheta2030"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_775MeV_Theta2030_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_775MeV_Theta2030_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_775MeV_Theta2030_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_775MeV_Theta2030_Asymm_9.pdf";
        }
 
       if (j==11){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (825pm25MeV, ThetaSc 20-30)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_825MeV_NegHelTheta2030"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_825MeV_PosHelTheta2030"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_825MeV_Theta2030_Asymm_8.png"; 
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_825MeV_Theta2030_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_825MeV_Theta2030_Asymm_9.png"; 
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_825MeV_Theta2030_Asymm_9.pdf";
        }
 
       if (j==12){
 	         Char_t* Title = "Asymmetry in PhiSc Between -ve and +ve Helicity (875pm25MeV, ThetaSc 20-30)"; // Set title of output graph
 		 TH1D *histNeg = (TH1D*)f->Get("Phi_Scattered_875MeV_NegHelTheta2030"); // Select the correct histogram
 		 TH1D *histPos = (TH1D*)f->Get("Phi_Scattered_875MeV_PosHelTheta2030"); // Select the correct histogram
-		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_875MeV_Theta2030_Asymm_8.png";
-		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_875MeV_Theta2030_Asymm_8.pdf";
+		 Char_t* GraphPDF = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_875MeV_Theta2030_Asymm_9.png";
+		 Char_t* GraphPNG = "/home/s1427339/Documents/Hadron\ Physics/Aug_16_Data_Plots/GoAT_23_01_17/NegPosHel_875MeV_Theta2030_Asymm_9.pdf";
        }
 
        TCanvas *canvas = new TCanvas("canvas","canvas", 1920, 1080);
@@ -700,8 +697,7 @@ void AsymmNew(){
        
        AsymmHist->SetMarkerStyle(1); // Style options for graph
        AsymmHist->SetLineColor(2);
-
-       AsymmHist->Draw("HISTSAMES"); // Draw the histogram
+       AsymmHist->Draw("EHISTSAMES"); // Draw the histogram
        AsymmHist->Fit("SinFit", "LL");
        SinFit->SetLineColor(1);
        SinFit->Draw("SAMES");
