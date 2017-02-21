@@ -206,10 +206,10 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     ScattTheta = ScattAngles(0); // Theta is 1st component in vector fn returns above
     ScattPhi = ScattAngles(1); // Phi is 2nd component
 
-    if( 850 > MMpEpCorr || 1050 < MMpEpCorr) continue;
-    if (OpeningAngle > 30) continue;
-
-    //if (ScattTheta > 40) continue;
+    //if( 850 > MMpEpCorr || 1050 < MMpEpCorr) continue;
+    if (ScattTheta > 60) continue;
+    if (ScattPhi > 170) continue; // Exclude values  at edges for now
+    if (ScattPhi < -170) continue;
 
     //if (abs(KinEDiff) > 100) continue; // If difference between CB energy and calculated Energy for proton > 100MeV continue
 
@@ -323,142 +323,66 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   MMp800900 = new GH1("MMp800900", "Missing mass as seen by Proton (800-900MeV Photon Energy)", 400, 0, 2000);
 
   // Angles of neutron in scattered frame across EGamma bins
-  PhiSc275 = new GH1( "Phi_Scattered_275MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 275pm25MeV", 10, -180, 180);
-  PhiSc325 = new GH1( "Phi_Scattered_325MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 325pm25MeV", 10, -180, 180);
-  PhiSc375 = new GH1( "Phi_Scattered_375MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 375pm25MeV", 10, -180, 180);
-  PhiSc425 = new GH1( "Phi_Scattered_425MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 425pm25MeV", 10, -180, 180);
-  PhiSc475 = new GH1( "Phi_Scattered_475MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 475pm25MeV", 10, -180, 180);
-  PhiSc525 = new GH1( "Phi_Scattered_525MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 525pm25MeV", 10, -180, 180);
-  PhiSc575 = new GH1( "Phi_Scattered_575MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 575pm25MeV", 10, -180, 180);
-  PhiSc625 = new GH1( "Phi_Scattered_625MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 625pm25MeV", 10, -180, 180);
-  PhiSc675 = new GH1( "Phi_Scattered_675MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 675pm25MeV", 10, -180, 180);
-  PhiSc725 = new GH1( "Phi_Scattered_725MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 725pm25MeV", 10, -180, 180);
-  PhiSc775 = new GH1( "Phi_Scattered_775MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 775pm25MeV", 10, -180, 180);
-  PhiSc825 = new GH1( "Phi_Scattered_825MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 825pm25MeV", 10, -180, 180);
-  PhiSc875 = new GH1( "Phi_Scattered_875MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 875pm25MeV", 10, -180, 180);
+  PhiSc275 = new GH1( "Phi_Scattered_275MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 275pm25MeV", 2, -180, 180);
+  PhiSc325 = new GH1( "Phi_Scattered_325MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 325pm25MeV", 2, -180, 180);
+  PhiSc375 = new GH1( "Phi_Scattered_375MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 375pm25MeV", 2, -180, 180);
+  PhiSc425 = new GH1( "Phi_Scattered_425MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 425pm25MeV", 2, -180, 180);
+  PhiSc475 = new GH1( "Phi_Scattered_475MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 475pm25MeV", 2, -180, 180);
+  PhiSc525 = new GH1( "Phi_Scattered_525MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 525pm25MeV", 2, -180, 180);
+  PhiSc575 = new GH1( "Phi_Scattered_575MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 575pm25MeV", 2, -180, 180);
+  PhiSc625 = new GH1( "Phi_Scattered_625MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 625pm25MeV", 2, -180, 180);
+  PhiSc675 = new GH1( "Phi_Scattered_675MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 675pm25MeV", 2, -180, 180);
+  PhiSc725 = new GH1( "Phi_Scattered_725MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 725pm25MeV", 2, -180, 180);
+  PhiSc775 = new GH1( "Phi_Scattered_775MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 775pm25MeV", 2, -180, 180);
+  PhiSc825 = new GH1( "Phi_Scattered_825MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 825pm25MeV", 2, -180, 180);
+  PhiSc875 = new GH1( "Phi_Scattered_875MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 875pm25MeV", 2, -180, 180);
 
-  PhiScNegHel = new GH1("PhiScNegHel", "Scattetred Proton Phi Distribution in Rotated Frame for -ve Helicity", 10, -180, 180);
-  PhiScPosHel = new GH1("PhiScPosHel", "Scattetred Proton Phi Distribution in Rotated Frame for +ve Helicity", 10, -180, 180);
+  ThetaSc275 = new GH1( "Theta_Scattered_275MeV", "Scattetred Proton Theta Distribution in Rotated Frame for Photon Energies of 275pm25MeV", 180, 0, 180);
+  ThetaSc325 = new GH1( "Theta_Scattered_325MeV", "Scattetred Proton Theta Distribution in Rotated Frame for Photon Energies of 325pm25MeV", 180, 0, 180);
+  ThetaSc375 = new GH1( "Theta_Scattered_375MeV", "Scattetred Proton Theta Distribution in Rotated Frame for Photon Energies of 375pm25MeV", 180, 0, 180);
+  ThetaSc425 = new GH1( "Theta_Scattered_425MeV", "Scattetred Proton Theta Distribution in Rotated Frame for Photon Energies of 425pm25MeV", 180, 0, 180);
+  ThetaSc475 = new GH1( "Theta_Scattered_475MeV", "Scattetred Proton Theta Distribution in Rotated Frame for Photon Energies of 475pm25MeV", 180, 0, 180);
+  ThetaSc525 = new GH1( "Theta_Scattered_525MeV", "Scattetred Proton Theta Distribution in Rotated Frame for Photon Energies of 525pm25MeV", 180, 0, 180);
+  ThetaSc575 = new GH1( "Theta_Scattered_575MeV", "Scattetred Proton Theta Distribution in Rotated Frame for Photon Energies of 575pm25MeV", 180, 0, 180);
+  ThetaSc625 = new GH1( "Theta_Scattered_625MeV", "Scattetred Proton Theta Distribution in Rotated Frame for Photon Energies of 625pm25MeV", 180, 0, 180);
+  ThetaSc675 = new GH1( "Theta_Scattered_675MeV", "Scattetred Proton Theta Distribution in Rotated Frame for Photon Energies of 675pm25MeV", 180, 0, 180);
+  ThetaSc725 = new GH1( "Theta_Scattered_725MeV", "Scattetred Proton Theta Distribution in Rotated Frame for Photon Energies of 725pm25MeV", 180, 0, 180);
+  ThetaSc775 = new GH1( "Theta_Scattered_775MeV", "Scattetred Proton Theta Distribution in Rotated Frame for Photon Energies of 775pm25MeV", 180, 0, 180);
+  ThetaSc825 = new GH1( "Theta_Scattered_825MeV", "Scattetred Proton Theta Distribution in Rotated Frame for Photon Energies of 825pm25MeV", 180, 0, 180);
+  ThetaSc875 = new GH1( "Theta_Scattered_875MeV", "Scattetred Proton Theta Distribution in Rotated Frame for Photon Energies of 875pm25MeV", 180, 0, 180);
+
+  PhiScNegHel = new GH1("PhiScNegHel", "Scattetred Proton Phi Distribution in Rotated Frame for -ve Helicity", 2, -180, 180);
+  PhiScPosHel = new GH1("PhiScPosHel", "Scattetred Proton Phi Distribution in Rotated Frame for +ve Helicity", 2, -180, 180);
 
   // Angles of neutron in scattered frame across EGamma bins for negative helicity
-  PhiSc275NegHel = new GH1( "Phi_Scattered_275MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 275pm25MeV for -ve Helicity", 10, -180, 180);
-  PhiSc325NegHel = new GH1( "Phi_Scattered_325MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 325pm25MeV for -ve Helicity", 10, -180, 180);
-  PhiSc375NegHel = new GH1( "Phi_Scattered_375MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 375pm25MeV for -ve Helicity", 10, -180, 180);
-  PhiSc425NegHel = new GH1( "Phi_Scattered_425MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 425pm25MeV for -ve Helicity", 10, -180, 180);
-  PhiSc475NegHel = new GH1( "Phi_Scattered_475MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 475pm25MeV for -ve Helicity", 10, -180, 180);
-  PhiSc525NegHel = new GH1( "Phi_Scattered_525MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 525pm25MeV for -ve Helicity", 10, -180, 180);
-  PhiSc575NegHel = new GH1( "Phi_Scattered_575MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 575pm25MeV for -ve Helicity", 10, -180, 180);
-  PhiSc625NegHel = new GH1( "Phi_Scattered_625MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 625pm25MeV for -ve Helicity", 10, -180, 180);
-  PhiSc675NegHel = new GH1( "Phi_Scattered_675MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 675pm25MeV for -ve Helicity", 10, -180, 180);
-  PhiSc725NegHel = new GH1( "Phi_Scattered_725MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 725pm25MeV for -ve Helicity", 10, -180, 180);
-  PhiSc775NegHel = new GH1( "Phi_Scattered_775MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 775pm25MeV for -ve Helicity", 10, -180, 180);
-  PhiSc825NegHel = new GH1( "Phi_Scattered_825MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 825pm25MeV for -ve Helicity", 10, -180, 180);
-  PhiSc875NegHel = new GH1( "Phi_Scattered_875MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 875pm25MeV for -ve Helicity", 10, -180, 180);
+  PhiSc275NegHel = new GH1( "Phi_Scattered_275MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 275pm25MeV for -ve Helicity", 2, -180, 180);
+  PhiSc325NegHel = new GH1( "Phi_Scattered_325MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 325pm25MeV for -ve Helicity", 2, -180, 180);
+  PhiSc375NegHel = new GH1( "Phi_Scattered_375MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 375pm25MeV for -ve Helicity", 2, -180, 180);
+  PhiSc425NegHel = new GH1( "Phi_Scattered_425MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 425pm25MeV for -ve Helicity", 2, -180, 180);
+  PhiSc475NegHel = new GH1( "Phi_Scattered_475MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 475pm25MeV for -ve Helicity", 2, -180, 180);
+  PhiSc525NegHel = new GH1( "Phi_Scattered_525MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 525pm25MeV for -ve Helicity", 2, -180, 180);
+  PhiSc575NegHel = new GH1( "Phi_Scattered_575MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 575pm25MeV for -ve Helicity", 2, -180, 180);
+  PhiSc625NegHel = new GH1( "Phi_Scattered_625MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 625pm25MeV for -ve Helicity", 2, -180, 180);
+  PhiSc675NegHel = new GH1( "Phi_Scattered_675MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 675pm25MeV for -ve Helicity", 2, -180, 180);
+  PhiSc725NegHel = new GH1( "Phi_Scattered_725MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 725pm25MeV for -ve Helicity", 2, -180, 180);
+  PhiSc775NegHel = new GH1( "Phi_Scattered_775MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 775pm25MeV for -ve Helicity", 2, -180, 180);
+  PhiSc825NegHel = new GH1( "Phi_Scattered_825MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 825pm25MeV for -ve Helicity", 2, -180, 180);
+  PhiSc875NegHel = new GH1( "Phi_Scattered_875MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 875pm25MeV for -ve Helicity", 2, -180, 180);
 
   // Angles of neutron in scattered frame across EGamma bins for positive helicity
-  PhiSc275PosHel = new GH1( "Phi_Scattered_275MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 275pm25MeV for +ve Helicity", 10, -180, 180);
-  PhiSc325PosHel = new GH1( "Phi_Scattered_325MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 325pm25MeV for +ve Helicity", 10, -180, 180);
-  PhiSc375PosHel = new GH1( "Phi_Scattered_375MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 375pm25MeV for +ve Helicity", 10, -180, 180);
-  PhiSc425PosHel = new GH1( "Phi_Scattered_425MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 425pm25MeV for +ve Helicity", 10, -180, 180);
-  PhiSc475PosHel = new GH1( "Phi_Scattered_475MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 475pm25MeV for +ve Helicity", 10, -180, 180);
-  PhiSc525PosHel = new GH1( "Phi_Scattered_525MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 525pm25MeV for +ve Helicity", 10, -180, 180);
-  PhiSc575PosHel = new GH1( "Phi_Scattered_575MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 575pm25MeV for +ve Helicity", 10, -180, 180);
-  PhiSc625PosHel = new GH1( "Phi_Scattered_625MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 625pm25MeV for +ve Helicity", 10, -180, 180);
-  PhiSc675PosHel = new GH1( "Phi_Scattered_675MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 675pm25MeV for +ve Helicity", 10, -180, 180);
-  PhiSc725PosHel = new GH1( "Phi_Scattered_725MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 725pm25MeV for +ve Helicity", 10, -180, 180);
-  PhiSc775PosHel = new GH1( "Phi_Scattered_775MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 775pm25MeV for +ve Helicity", 10, -180, 180);
-  PhiSc825PosHel = new GH1( "Phi_Scattered_825MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 825pm25MeV for +ve Helicity", 10, -180, 180);
-  PhiSc875PosHel = new GH1( "Phi_Scattered_875MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 875pm25MeV for +ve Helicity", 10, -180, 180);
-
-  // Angles of neutron in scattered frame across EGamma bins for negative helicity Theta 0-10 Deg
-  PhiSc275NegHelTheta010 = new GH1( "Phi_Scattered_275MeV_NegHelTheta010", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 275pm25MeV for -ve Helicity Theta 0-10", 10, -180, 180);
-  PhiSc325NegHelTheta010 = new GH1( "Phi_Scattered_325MeV_NegHelTheta010", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 325pm25MeV for -ve Helicity Theta 0-10", 10, -180, 180);
-  PhiSc375NegHelTheta010 = new GH1( "Phi_Scattered_375MeV_NegHelTheta010", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 375pm25MeV for -ve Helicity Theta 0-10", 10, -180, 180);
-  PhiSc425NegHelTheta010 = new GH1( "Phi_Scattered_425MeV_NegHelTheta010", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 425pm25MeV for -ve Helicity Theta 0-10", 10, -180, 180);
-  PhiSc475NegHelTheta010 = new GH1( "Phi_Scattered_475MeV_NegHelTheta010", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 475pm25MeV for -ve Helicity Theta 0-10", 10, -180, 180);
-  PhiSc525NegHelTheta010 = new GH1( "Phi_Scattered_525MeV_NegHelTheta010", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 525pm25MeV for -ve Helicity Theta 0-10", 10, -180, 180);
-  PhiSc575NegHelTheta010 = new GH1( "Phi_Scattered_575MeV_NegHelTheta010", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 575pm25MeV for -ve Helicity Theta 0-10", 10, -180, 180);
-  PhiSc625NegHelTheta010 = new GH1( "Phi_Scattered_625MeV_NegHelTheta010", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 625pm25MeV for -ve Helicity Theta 0-10", 10, -180, 180);
-  PhiSc675NegHelTheta010 = new GH1( "Phi_Scattered_675MeV_NegHelTheta010", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 675pm25MeV for -ve Helicity Theta 0-10", 10, -180, 180);
-  PhiSc725NegHelTheta010 = new GH1( "Phi_Scattered_725MeV_NegHelTheta010", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 725pm25MeV for -ve Helicity Theta 0-10", 10, -180, 180);
-  PhiSc775NegHelTheta010 = new GH1( "Phi_Scattered_775MeV_NegHelTheta010", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 775pm25MeV for -ve Helicity Theta 0-10", 10, -180, 180);
-  PhiSc825NegHelTheta010 = new GH1( "Phi_Scattered_825MeV_NegHelTheta010", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 825pm25MeV for -ve Helicity Theta 0-10", 10, -180, 180);
-  PhiSc875NegHelTheta010 = new GH1( "Phi_Scattered_875MeV_NegHelTheta010", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 875pm25MeV for -ve Helicity Theta 0-10", 10, -180, 180);
-
-  // Angles of neutron in scattered frame across EGamma bins for positive helicity Theta 0-10 Deg
-  PhiSc275PosHelTheta010 = new GH1( "Phi_Scattered_275MeV_PosHelTheta010", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 275pm25MeV for +ve Helicity Theta 0-10", 10, -180, 180);
-  PhiSc325PosHelTheta010 = new GH1( "Phi_Scattered_325MeV_PosHelTheta010", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 325pm25MeV for +ve Helicity Theta 0-10", 10, -180, 180);
-  PhiSc375PosHelTheta010 = new GH1( "Phi_Scattered_375MeV_PosHelTheta010", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 375pm25MeV for +ve Helicity Theta 0-10", 10, -180, 180);
-  PhiSc425PosHelTheta010 = new GH1( "Phi_Scattered_425MeV_PosHelTheta010", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 425pm25MeV for +ve Helicity Theta 0-10", 10, -180, 180);
-  PhiSc475PosHelTheta010 = new GH1( "Phi_Scattered_475MeV_PosHelTheta010", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 475pm25MeV for +ve Helicity Theta 0-10", 10, -180, 180);
-  PhiSc525PosHelTheta010 = new GH1( "Phi_Scattered_525MeV_PosHelTheta010", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 525pm25MeV for +ve Helicity Theta 0-10", 10, -180, 180);
-  PhiSc575PosHelTheta010 = new GH1( "Phi_Scattered_575MeV_PosHelTheta010", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 575pm25MeV for +ve Helicity Theta 0-10", 10, -180, 180);
-  PhiSc625PosHelTheta010 = new GH1( "Phi_Scattered_625MeV_PosHelTheta010", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 625pm25MeV for +ve Helicity Theta 0-10", 10, -180, 180);
-  PhiSc675PosHelTheta010 = new GH1( "Phi_Scattered_675MeV_PosHelTheta010", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 675pm25MeV for +ve Helicity Theta 0-10", 10, -180, 180);
-  PhiSc725PosHelTheta010 = new GH1( "Phi_Scattered_725MeV_PosHelTheta010", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 725pm25MeV for +ve Helicity Theta 0-10", 10, -180, 180);
-  PhiSc775PosHelTheta010 = new GH1( "Phi_Scattered_775MeV_PosHelTheta010", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 775pm25MeV for +ve Helicity Theta 0-10", 10, -180, 180);
-  PhiSc825PosHelTheta010 = new GH1( "Phi_Scattered_825MeV_PosHelTheta010", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 825pm25MeV for +ve Helicity Theta 0-10", 10, -180, 180);
-  PhiSc875PosHelTheta010 = new GH1( "Phi_Scattered_875MeV_PosHelTheta010", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 875pm25MeV for +ve Helicity Theta 0-10", 10, -180, 180);
-
-  // Angles of neutron in scattered frame across EGamma bins for negative helicity Theta 10-20 Deg
-  PhiSc275NegHelTheta1020 = new GH1( "Phi_Scattered_275MeV_NegHelTheta1020", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 275pm25MeV for -ve Helicity Theta 10-20", 10, -180, 180);
-  PhiSc325NegHelTheta1020 = new GH1( "Phi_Scattered_325MeV_NegHelTheta1020", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 325pm25MeV for -ve Helicity Theta 10-20", 10, -180, 180);
-  PhiSc375NegHelTheta1020 = new GH1( "Phi_Scattered_375MeV_NegHelTheta1020", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 375pm25MeV for -ve Helicity Theta 10-20", 10, -180, 180);
-  PhiSc425NegHelTheta1020 = new GH1( "Phi_Scattered_425MeV_NegHelTheta1020", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 425pm25MeV for -ve Helicity Theta 10-20", 10, -180, 180);
-  PhiSc475NegHelTheta1020 = new GH1( "Phi_Scattered_475MeV_NegHelTheta1020", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 475pm25MeV for -ve Helicity Theta 10-20", 10, -180, 180);
-  PhiSc525NegHelTheta1020 = new GH1( "Phi_Scattered_525MeV_NegHelTheta1020", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 525pm25MeV for -ve Helicity Theta 10-20", 10, -180, 180);
-  PhiSc575NegHelTheta1020 = new GH1( "Phi_Scattered_575MeV_NegHelTheta1020", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 575pm25MeV for -ve Helicity Theta 10-20", 10, -180, 180);
-  PhiSc625NegHelTheta1020 = new GH1( "Phi_Scattered_625MeV_NegHelTheta1020", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 625pm25MeV for -ve Helicity Theta 10-20", 10, -180, 180);
-  PhiSc675NegHelTheta1020 = new GH1( "Phi_Scattered_675MeV_NegHelTheta1020", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 675pm25MeV for -ve Helicity Theta 10-20", 10, -180, 180);
-  PhiSc725NegHelTheta1020 = new GH1( "Phi_Scattered_725MeV_NegHelTheta1020", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 725pm25MeV for -ve Helicity Theta 10-20", 10, -180, 180);
-  PhiSc775NegHelTheta1020 = new GH1( "Phi_Scattered_775MeV_NegHelTheta1020", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 775pm25MeV for -ve Helicity Theta 10-20", 10, -180, 180);
-  PhiSc825NegHelTheta1020 = new GH1( "Phi_Scattered_825MeV_NegHelTheta1020", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 825pm25MeV for -ve Helicity Theta 10-20", 10, -180, 180);
-  PhiSc875NegHelTheta1020 = new GH1( "Phi_Scattered_875MeV_NegHelTheta1020", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 875pm25MeV for -ve Helicity Theta 10-20", 10, -180, 180);
-
-  // Angles of neutron in scattered frame across EGamma bins for positive helicity Theta 10-20 Deg
-  PhiSc275PosHelTheta1020 = new GH1( "Phi_Scattered_275MeV_PosHelTheta1020", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 275pm25MeV for +ve Helicity Theta 10-20", 10, -180, 180);
-  PhiSc325PosHelTheta1020 = new GH1( "Phi_Scattered_325MeV_PosHelTheta1020", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 325pm25MeV for +ve Helicity Theta 10-20", 10, -180, 180);
-  PhiSc375PosHelTheta1020 = new GH1( "Phi_Scattered_375MeV_PosHelTheta1020", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 375pm25MeV for +ve Helicity Theta 10-20", 10, -180, 180);
-  PhiSc425PosHelTheta1020 = new GH1( "Phi_Scattered_425MeV_PosHelTheta1020", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 425pm25MeV for +ve Helicity Theta 10-20", 10, -180, 180);
-  PhiSc475PosHelTheta1020 = new GH1( "Phi_Scattered_475MeV_PosHelTheta1020", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 475pm25MeV for +ve Helicity Theta 10-20", 10, -180, 180);
-  PhiSc525PosHelTheta1020 = new GH1( "Phi_Scattered_525MeV_PosHelTheta1020", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 525pm25MeV for +ve Helicity Theta 10-20", 10, -180, 180);
-  PhiSc575PosHelTheta1020 = new GH1( "Phi_Scattered_575MeV_PosHelTheta1020", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 575pm25MeV for +ve Helicity Theta 10-20", 10, -180, 180);
-  PhiSc625PosHelTheta1020 = new GH1( "Phi_Scattered_625MeV_PosHelTheta1020", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 625pm25MeV for +ve Helicity Theta 10-20", 10, -180, 180);
-  PhiSc675PosHelTheta1020 = new GH1( "Phi_Scattered_675MeV_PosHelTheta1020", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 675pm25MeV for +ve Helicity Theta 10-20", 10, -180, 180);
-  PhiSc725PosHelTheta1020 = new GH1( "Phi_Scattered_725MeV_PosHelTheta1020", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 725pm25MeV for +ve Helicity Theta 10-20", 10, -180, 180);
-  PhiSc775PosHelTheta1020 = new GH1( "Phi_Scattered_775MeV_PosHelTheta1020", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 775pm25MeV for +ve Helicity Theta 10-20", 10, -180, 180);
-  PhiSc825PosHelTheta1020 = new GH1( "Phi_Scattered_825MeV_PosHelTheta1020", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 825pm25MeV for +ve Helicity Theta 10-20", 10, -180, 180);
-  PhiSc875PosHelTheta1020 = new GH1( "Phi_Scattered_875MeV_PosHelTheta1020", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 875pm25MeV for +ve Helicity Theta 10-20", 10, -180, 180);
-
-  // Angles of neutron in scattered frame across EGamma bins for negative helicity Theta 20-30 Deg
-  PhiSc275NegHelTheta2030 = new GH1( "Phi_Scattered_275MeV_NegHelTheta2030", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 275pm25MeV for -ve Helicity Theta 20-30", 10, -180, 180);
-  PhiSc325NegHelTheta2030 = new GH1( "Phi_Scattered_325MeV_NegHelTheta2030", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 325pm25MeV for -ve Helicity Theta 20-30", 10, -180, 180);
-  PhiSc375NegHelTheta2030 = new GH1( "Phi_Scattered_375MeV_NegHelTheta2030", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 375pm25MeV for -ve Helicity Theta 20-30", 10, -180, 180);
-  PhiSc425NegHelTheta2030 = new GH1( "Phi_Scattered_425MeV_NegHelTheta2030", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 425pm25MeV for -ve Helicity Theta 20-30", 10, -180, 180);
-  PhiSc475NegHelTheta2030 = new GH1( "Phi_Scattered_475MeV_NegHelTheta2030", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 475pm25MeV for -ve Helicity Theta 20-30", 10, -180, 180);
-  PhiSc525NegHelTheta2030 = new GH1( "Phi_Scattered_525MeV_NegHelTheta2030", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 525pm25MeV for -ve Helicity Theta 20-30", 10, -180, 180);
-  PhiSc575NegHelTheta2030 = new GH1( "Phi_Scattered_575MeV_NegHelTheta2030", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 575pm25MeV for -ve Helicity Theta 20-30", 10, -180, 180);
-  PhiSc625NegHelTheta2030 = new GH1( "Phi_Scattered_625MeV_NegHelTheta2030", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 625pm25MeV for -ve Helicity Theta 20-30", 10, -180, 180);
-  PhiSc675NegHelTheta2030 = new GH1( "Phi_Scattered_675MeV_NegHelTheta2030", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 675pm25MeV for -ve Helicity Theta 20-30", 10, -180, 180);
-  PhiSc725NegHelTheta2030 = new GH1( "Phi_Scattered_725MeV_NegHelTheta2030", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 725pm25MeV for -ve Helicity Theta 20-30", 10, -180, 180);
-  PhiSc775NegHelTheta2030 = new GH1( "Phi_Scattered_775MeV_NegHelTheta2030", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 775pm25MeV for -ve Helicity Theta 20-30", 10, -180, 180);
-  PhiSc825NegHelTheta2030 = new GH1( "Phi_Scattered_825MeV_NegHelTheta2030", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 825pm25MeV for -ve Helicity Theta 20-30", 10, -180, 180);
-  PhiSc875NegHelTheta2030 = new GH1( "Phi_Scattered_875MeV_NegHelTheta2030", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 875pm25MeV for -ve Helicity Theta 20-30", 10, -180, 180);
-
-  // Angles of neutron in scattered frame across EGamma bins for positive helicity Theta 20-30 Deg
-  PhiSc275PosHelTheta2030 = new GH1( "Phi_Scattered_275MeV_PosHelTheta2030", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 275pm25MeV for +ve Helicity Theta 20-30", 10, -180, 180);
-  PhiSc325PosHelTheta2030 = new GH1( "Phi_Scattered_325MeV_PosHelTheta2030", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 325pm25MeV for +ve Helicity Theta 20-30", 10, -180, 180);
-  PhiSc375PosHelTheta2030 = new GH1( "Phi_Scattered_375MeV_PosHelTheta2030", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 375pm25MeV for +ve Helicity Theta 20-30", 10, -180, 180);
-  PhiSc425PosHelTheta2030 = new GH1( "Phi_Scattered_425MeV_PosHelTheta2030", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 425pm25MeV for +ve Helicity Theta 20-30", 10, -180, 180);
-  PhiSc475PosHelTheta2030 = new GH1( "Phi_Scattered_475MeV_PosHelTheta2030", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 475pm25MeV for +ve Helicity Theta 20-30", 10, -180, 180);
-  PhiSc525PosHelTheta2030 = new GH1( "Phi_Scattered_525MeV_PosHelTheta2030", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 525pm25MeV for +ve Helicity Theta 20-30", 10, -180, 180);
-  PhiSc575PosHelTheta2030 = new GH1( "Phi_Scattered_575MeV_PosHelTheta2030", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 575pm25MeV for +ve Helicity Theta 20-30", 10, -180, 180);
-  PhiSc625PosHelTheta2030 = new GH1( "Phi_Scattered_625MeV_PosHelTheta2030", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 625pm25MeV for +ve Helicity Theta 20-30", 10, -180, 180);
-  PhiSc675PosHelTheta2030 = new GH1( "Phi_Scattered_675MeV_PosHelTheta2030", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 675pm25MeV for +ve Helicity Theta 20-30", 10, -180, 180);
-  PhiSc725PosHelTheta2030 = new GH1( "Phi_Scattered_725MeV_PosHelTheta2030", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 725pm25MeV for +ve Helicity Theta 20-30", 10, -180, 180);
-  PhiSc775PosHelTheta2030 = new GH1( "Phi_Scattered_775MeV_PosHelTheta2030", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 775pm25MeV for +ve Helicity Theta 20-30", 10, -180, 180);
-  PhiSc825PosHelTheta2030 = new GH1( "Phi_Scattered_825MeV_PosHelTheta2030", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 825pm25MeV for +ve Helicity Theta 20-30", 10, -180, 180);
-  PhiSc875PosHelTheta2030 = new GH1( "Phi_Scattered_875MeV_PosHelTheta2030", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 875pm25MeV for +ve Helicity Theta 20-30", 10, -180, 180);
+  PhiSc275PosHel = new GH1( "Phi_Scattered_275MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 275pm25MeV for +ve Helicity", 2, -180, 180);
+  PhiSc325PosHel = new GH1( "Phi_Scattered_325MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 325pm25MeV for +ve Helicity", 2, -180, 180);
+  PhiSc375PosHel = new GH1( "Phi_Scattered_375MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 375pm25MeV for +ve Helicity", 2, -180, 180);
+  PhiSc425PosHel = new GH1( "Phi_Scattered_425MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 425pm25MeV for +ve Helicity", 2, -180, 180);
+  PhiSc475PosHel = new GH1( "Phi_Scattered_475MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 475pm25MeV for +ve Helicity", 2, -180, 180);
+  PhiSc525PosHel = new GH1( "Phi_Scattered_525MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 525pm25MeV for +ve Helicity", 2, -180, 180);
+  PhiSc575PosHel = new GH1( "Phi_Scattered_575MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 575pm25MeV for +ve Helicity", 2, -180, 180);
+  PhiSc625PosHel = new GH1( "Phi_Scattered_625MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 625pm25MeV for +ve Helicity", 2, -180, 180);
+  PhiSc675PosHel = new GH1( "Phi_Scattered_675MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 675pm25MeV for +ve Helicity", 2, -180, 180);
+  PhiSc725PosHel = new GH1( "Phi_Scattered_725MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 725pm25MeV for +ve Helicity", 2, -180, 180);
+  PhiSc775PosHel = new GH1( "Phi_Scattered_775MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 775pm25MeV for +ve Helicity", 2, -180, 180);
+  PhiSc825PosHel = new GH1( "Phi_Scattered_825MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 825pm25MeV for +ve Helicity", 2, -180, 180);
+  PhiSc875PosHel = new GH1( "Phi_Scattered_875MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 875pm25MeV for +ve Helicity", 2, -180, 180);
 
   E_dE = new GH2 ("E_dE", "EdE Plot With E Loss Adjustment", 100, 0, 500, 100, 0, 5);
   E_dE_Cut = new GH2 ("E_dE_Cut", "EdE Plot (With cut on proton banana + E Loss)", 100, 0, 500, 100, 0, 5);
@@ -552,245 +476,101 @@ void PNeutPol_Polarimeter::FillHists()
         MMp700800->Fill(MMpEpCorr, TaggerTime);
     }
 
-    else if(800 < EGamma && EGamma < 900){
+    else if(800 < EGamma && EGamma < 0){
         MMp800900->Fill(MMpEpCorr, TaggerTime);
     }
 
     if ( 250 < EGamma && EGamma < 300) {
         PhiSc275->Fill(ScattPhi, TaggerTime);
+        ThetaSc275->Fill(ScattTheta, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc275NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc275PosHel->Fill(ScattPhi, TaggerTime);
-        if (0 < OpeningAngle && OpeningAngle < 10){
-            if (BeamHelicity == kFALSE) PhiSc275NegHelTheta010->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc275PosHelTheta010->Fill(ScattPhi, TaggerTime);
-        }
-        else if (10 < OpeningAngle && OpeningAngle < 20){
-            if (BeamHelicity == kFALSE) PhiSc275NegHelTheta1020->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc275PosHelTheta1020->Fill(ScattPhi, TaggerTime);
-        }
-        else if (20 < OpeningAngle && OpeningAngle < 30){
-            if (BeamHelicity == kFALSE) PhiSc275NegHelTheta2030->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc275PosHelTheta2030->Fill(ScattPhi, TaggerTime);
-        }
     }
 
     else if ( 300 < EGamma && EGamma < 350) {
         PhiSc325->Fill(ScattPhi, TaggerTime);
+        ThetaSc325->Fill(ScattTheta, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc325NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc325PosHel->Fill(ScattPhi, TaggerTime);
-        if (0 < OpeningAngle && OpeningAngle < 10){
-            if (BeamHelicity == kFALSE) PhiSc325NegHelTheta010->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc325PosHelTheta010->Fill(ScattPhi, TaggerTime);
-        }
-        else if (10 < OpeningAngle && OpeningAngle < 20){
-            if (BeamHelicity == kFALSE) PhiSc325NegHelTheta1020->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc325PosHelTheta1020->Fill(ScattPhi, TaggerTime);
-        }
-        else if (20 < OpeningAngle && OpeningAngle < 30){
-            if (BeamHelicity == kFALSE) PhiSc325NegHelTheta2030->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc325PosHelTheta2030->Fill(ScattPhi, TaggerTime);
-        }
     }
 
     else if ( 350 < EGamma && EGamma < 400) {
         PhiSc375->Fill(ScattPhi, TaggerTime);
+        ThetaSc375->Fill(ScattTheta, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc375NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc375PosHel->Fill(ScattPhi, TaggerTime);
-        if (0 < OpeningAngle && OpeningAngle < 10){
-            if (BeamHelicity == kFALSE) PhiSc375NegHelTheta010->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc375PosHelTheta010->Fill(ScattPhi, TaggerTime);
-        }
-        else if (10 < OpeningAngle && OpeningAngle < 20){
-            if (BeamHelicity == kFALSE) PhiSc375NegHelTheta1020->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc375PosHelTheta1020->Fill(ScattPhi, TaggerTime);
-        }
-        else if (20 < OpeningAngle && OpeningAngle < 30){
-            if (BeamHelicity == kFALSE) PhiSc375NegHelTheta2030->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc375PosHelTheta2030->Fill(ScattPhi, TaggerTime);
-        }
     }
 
     else if ( 400 < EGamma && EGamma < 450) {
         PhiSc425->Fill(ScattPhi, TaggerTime);
+        ThetaSc425->Fill(ScattTheta, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc425NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc425PosHel->Fill(ScattPhi, TaggerTime);
-        if (0 < OpeningAngle && OpeningAngle < 10){
-            if (BeamHelicity == kFALSE) PhiSc425NegHelTheta010->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc425PosHelTheta010->Fill(ScattPhi, TaggerTime);
-        }
-        else if (10 < OpeningAngle && OpeningAngle < 20){
-            if (BeamHelicity == kFALSE) PhiSc425NegHelTheta1020->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc425PosHelTheta1020->Fill(ScattPhi, TaggerTime);
-        }
-        else if (20 < OpeningAngle && OpeningAngle < 30){
-            if (BeamHelicity == kFALSE) PhiSc425NegHelTheta2030->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc425PosHelTheta2030->Fill(ScattPhi, TaggerTime);
-        }
     }
 
     else if ( 450 < EGamma && EGamma < 500) {
         PhiSc475->Fill(ScattPhi, TaggerTime);
+        ThetaSc475->Fill(ScattTheta, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc475NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc475PosHel->Fill(ScattPhi, TaggerTime);
-        if (0 < OpeningAngle && OpeningAngle < 10){
-            if (BeamHelicity == kFALSE) PhiSc475NegHelTheta010->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc475PosHelTheta010->Fill(ScattPhi, TaggerTime);
-        }
-        else if (10 < OpeningAngle && OpeningAngle < 20){
-            if (BeamHelicity == kFALSE) PhiSc475NegHelTheta1020->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc475PosHelTheta1020->Fill(ScattPhi, TaggerTime);
-        }
-        else if (20 < OpeningAngle && OpeningAngle < 30){
-            if (BeamHelicity == kFALSE) PhiSc475NegHelTheta2030->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc475PosHelTheta2030->Fill(ScattPhi, TaggerTime);
-        }
     }
 
     else if ( 500 < EGamma && EGamma < 550) {
         PhiSc525->Fill(ScattPhi, TaggerTime);
+        ThetaSc525->Fill(ScattTheta, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc525NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc525PosHel->Fill(ScattPhi, TaggerTime);
-        if (0 < OpeningAngle && OpeningAngle < 10){
-            if (BeamHelicity == kFALSE) PhiSc525NegHelTheta010->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc525PosHelTheta010->Fill(ScattPhi, TaggerTime);
-        }
-        else if (10 < OpeningAngle && OpeningAngle < 20){
-            if (BeamHelicity == kFALSE) PhiSc525NegHelTheta1020->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc525PosHelTheta1020->Fill(ScattPhi, TaggerTime);
-        }
-        else if (20 < OpeningAngle && OpeningAngle < 30){
-            if (BeamHelicity == kFALSE) PhiSc525NegHelTheta2030->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc525PosHelTheta2030->Fill(ScattPhi, TaggerTime);
-        }
     }
 
     else if ( 550 < EGamma && EGamma < 600) {
         PhiSc575->Fill(ScattPhi, TaggerTime);
+        ThetaSc575->Fill(ScattTheta, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc575NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc575PosHel->Fill(ScattPhi, TaggerTime);
-        if (0 < OpeningAngle && OpeningAngle < 10){
-            if (BeamHelicity == kFALSE) PhiSc575NegHelTheta010->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc575PosHelTheta010->Fill(ScattPhi, TaggerTime);
-        }
-        else if (10 < OpeningAngle && OpeningAngle < 20){
-            if (BeamHelicity == kFALSE) PhiSc575NegHelTheta1020->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc575PosHelTheta1020->Fill(ScattPhi, TaggerTime);
-        }
-        else if (20 < OpeningAngle && OpeningAngle < 30){
-            if (BeamHelicity == kFALSE) PhiSc575NegHelTheta2030->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc575PosHelTheta2030->Fill(ScattPhi, TaggerTime);
-        }
     }
 
     else if ( 600 < EGamma && EGamma < 650) {
         PhiSc625->Fill(ScattPhi, TaggerTime);
+        ThetaSc625->Fill(ScattTheta, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc625NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc625PosHel->Fill(ScattPhi, TaggerTime);
-        if (0 < OpeningAngle && OpeningAngle < 10){
-            if (BeamHelicity == kFALSE) PhiSc625NegHelTheta010->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc625PosHelTheta010->Fill(ScattPhi, TaggerTime);
-        }
-        else if (10 < OpeningAngle && OpeningAngle < 20){
-            if (BeamHelicity == kFALSE) PhiSc625NegHelTheta1020->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc625PosHelTheta1020->Fill(ScattPhi, TaggerTime);
-        }
-        else if (20 < OpeningAngle && OpeningAngle < 30){
-            if (BeamHelicity == kFALSE) PhiSc625NegHelTheta2030->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc625PosHelTheta2030->Fill(ScattPhi, TaggerTime);
-        }
     }
 
     else if ( 650 < EGamma && EGamma < 700) {
         PhiSc675->Fill(ScattPhi, TaggerTime);
+        ThetaSc675->Fill(ScattTheta, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc675NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc675PosHel->Fill(ScattPhi, TaggerTime);
-        if (0 < OpeningAngle && OpeningAngle < 10){
-            if (BeamHelicity == kFALSE) PhiSc675NegHelTheta010->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc675PosHelTheta010->Fill(ScattPhi, TaggerTime);
-        }
-        else if (10 < OpeningAngle && OpeningAngle < 20){
-            if (BeamHelicity == kFALSE) PhiSc675NegHelTheta1020->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc675PosHelTheta1020->Fill(ScattPhi, TaggerTime);
-        }
-        else if (20 < OpeningAngle && OpeningAngle < 30){
-            if (BeamHelicity == kFALSE) PhiSc675NegHelTheta2030->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc675PosHelTheta2030->Fill(ScattPhi, TaggerTime);
-        }
     }
 
     else if ( 700 < EGamma && EGamma < 750) {
         PhiSc725->Fill(ScattPhi, TaggerTime);
+        ThetaSc725->Fill(ScattTheta, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc725NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc725PosHel->Fill(ScattPhi, TaggerTime);
-        if (0 < OpeningAngle && OpeningAngle < 10){
-            if (BeamHelicity == kFALSE) PhiSc725NegHelTheta010->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc725PosHelTheta010->Fill(ScattPhi, TaggerTime);
-        }
-        else if (10 < OpeningAngle && OpeningAngle < 20){
-            if (BeamHelicity == kFALSE) PhiSc725NegHelTheta1020->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc725PosHelTheta1020->Fill(ScattPhi, TaggerTime);
-        }
-        else if (20 < OpeningAngle && OpeningAngle < 30){
-            if (BeamHelicity == kFALSE) PhiSc725NegHelTheta2030->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc725PosHelTheta2030->Fill(ScattPhi, TaggerTime);
         }
     }
 
     else if ( 750 < EGamma && EGamma < 800) {
         PhiSc775->Fill(ScattPhi, TaggerTime);
+        ThetaSc775->Fill(ScattTheta, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc775NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc775PosHel->Fill(ScattPhi, TaggerTime);
-        if (0 < OpeningAngle && OpeningAngle < 10){
-            if (BeamHelicity == kFALSE) PhiSc775NegHelTheta010->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc775PosHelTheta010->Fill(ScattPhi, TaggerTime);
-        }
-        else if (10 < OpeningAngle && OpeningAngle < 20){
-            if (BeamHelicity == kFALSE) PhiSc775NegHelTheta1020->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc775PosHelTheta1020->Fill(ScattPhi, TaggerTime);
-        }
-        else if (20 < OpeningAngle && OpeningAngle < 30){
-            if (BeamHelicity == kFALSE) PhiSc775NegHelTheta2030->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc775PosHelTheta2030->Fill(ScattPhi, TaggerTime);
-        }
     }
 
     else if ( 800 < EGamma && EGamma < 850) {
         PhiSc825->Fill(ScattPhi, TaggerTime);
+        ThetaSc825->Fill(ScattTheta, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc825NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc825PosHel->Fill(ScattPhi, TaggerTime);
-        if (0 < OpeningAngle && OpeningAngle < 10){
-            if (BeamHelicity == kFALSE) PhiSc825NegHelTheta010->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc825PosHelTheta010->Fill(ScattPhi, TaggerTime);
-        }
-        else if (10 < OpeningAngle && OpeningAngle < 20){
-            if (BeamHelicity == kFALSE) PhiSc825NegHelTheta1020->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc825PosHelTheta1020->Fill(ScattPhi, TaggerTime);
-        }
-        else if (20 < OpeningAngle && OpeningAngle < 30){
-            if (BeamHelicity == kFALSE) PhiSc825NegHelTheta2030->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc825PosHelTheta2030->Fill(ScattPhi, TaggerTime);
-        }
     }
 
     else if ( 850 < EGamma && EGamma < 900) {
         PhiSc875->Fill(ScattPhi, TaggerTime);
+        ThetaSc875->Fill(ScattTheta, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc875NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc875PosHel->Fill(ScattPhi, TaggerTime);
-        if (0 < OpeningAngle && OpeningAngle < 10){
-            if (BeamHelicity == kFALSE) PhiSc875NegHelTheta010->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc875PosHelTheta010->Fill(ScattPhi, TaggerTime);
-        }
-        else if (10 < OpeningAngle && OpeningAngle < 20){
-            if (BeamHelicity == kFALSE) PhiSc875NegHelTheta1020->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc875PosHelTheta1020->Fill(ScattPhi, TaggerTime);
-        }
-        else if (20 < OpeningAngle && OpeningAngle < 30){
-            if (BeamHelicity == kFALSE) PhiSc875NegHelTheta2030->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc875PosHelTheta2030->Fill(ScattPhi, TaggerTime);
-        }
     }
-
-  }
 
 }
 

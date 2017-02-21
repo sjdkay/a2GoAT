@@ -192,6 +192,20 @@ private:
   GH1* PhiSc825;
   GH1* PhiSc875;
 
+  GH1* ThetaSc275;
+  GH1* ThetaSc325;
+  GH1* ThetaSc375;
+  GH1* ThetaSc425;
+  GH1* ThetaSc475;
+  GH1* ThetaSc525;
+  GH1* ThetaSc575;
+  GH1* ThetaSc625;
+  GH1* ThetaSc675;
+  GH1* ThetaSc725;
+  GH1* ThetaSc775;
+  GH1* ThetaSc825;
+  GH1* ThetaSc875;
+
   GH1* PhiScNegHel;
   GH1* PhiScPosHel;
 
@@ -222,90 +236,6 @@ private:
   GH1* PhiSc775PosHel;
   GH1* PhiSc825PosHel;
   GH1* PhiSc875PosHel;
-
-  GH1* PhiSc275NegHelTheta010;
-  GH1* PhiSc325NegHelTheta010;
-  GH1* PhiSc375NegHelTheta010;
-  GH1* PhiSc425NegHelTheta010;
-  GH1* PhiSc475NegHelTheta010;
-  GH1* PhiSc525NegHelTheta010;
-  GH1* PhiSc575NegHelTheta010;
-  GH1* PhiSc625NegHelTheta010;
-  GH1* PhiSc675NegHelTheta010;
-  GH1* PhiSc725NegHelTheta010;
-  GH1* PhiSc775NegHelTheta010;
-  GH1* PhiSc825NegHelTheta010;
-  GH1* PhiSc875NegHelTheta010;
-
-  GH1* PhiSc275PosHelTheta010;
-  GH1* PhiSc325PosHelTheta010;
-  GH1* PhiSc375PosHelTheta010;
-  GH1* PhiSc425PosHelTheta010;
-  GH1* PhiSc475PosHelTheta010;
-  GH1* PhiSc525PosHelTheta010;
-  GH1* PhiSc575PosHelTheta010;
-  GH1* PhiSc625PosHelTheta010;
-  GH1* PhiSc675PosHelTheta010;
-  GH1* PhiSc725PosHelTheta010;
-  GH1* PhiSc775PosHelTheta010;
-  GH1* PhiSc825PosHelTheta010;
-  GH1* PhiSc875PosHelTheta010;
-
-  GH1* PhiSc275NegHelTheta1020;
-  GH1* PhiSc325NegHelTheta1020;
-  GH1* PhiSc375NegHelTheta1020;
-  GH1* PhiSc425NegHelTheta1020;
-  GH1* PhiSc475NegHelTheta1020;
-  GH1* PhiSc525NegHelTheta1020;
-  GH1* PhiSc575NegHelTheta1020;
-  GH1* PhiSc625NegHelTheta1020;
-  GH1* PhiSc675NegHelTheta1020;
-  GH1* PhiSc725NegHelTheta1020;
-  GH1* PhiSc775NegHelTheta1020;
-  GH1* PhiSc825NegHelTheta1020;
-  GH1* PhiSc875NegHelTheta1020;
-
-  GH1* PhiSc275PosHelTheta1020;
-  GH1* PhiSc325PosHelTheta1020;
-  GH1* PhiSc375PosHelTheta1020;
-  GH1* PhiSc425PosHelTheta1020;
-  GH1* PhiSc475PosHelTheta1020;
-  GH1* PhiSc525PosHelTheta1020;
-  GH1* PhiSc575PosHelTheta1020;
-  GH1* PhiSc625PosHelTheta1020;
-  GH1* PhiSc675PosHelTheta1020;
-  GH1* PhiSc725PosHelTheta1020;
-  GH1* PhiSc775PosHelTheta1020;
-  GH1* PhiSc825PosHelTheta1020;
-  GH1* PhiSc875PosHelTheta1020;
-
-  GH1* PhiSc275NegHelTheta2030;
-  GH1* PhiSc325NegHelTheta2030;
-  GH1* PhiSc375NegHelTheta2030;
-  GH1* PhiSc425NegHelTheta2030;
-  GH1* PhiSc475NegHelTheta2030;
-  GH1* PhiSc525NegHelTheta2030;
-  GH1* PhiSc575NegHelTheta2030;
-  GH1* PhiSc625NegHelTheta2030;
-  GH1* PhiSc675NegHelTheta2030;
-  GH1* PhiSc725NegHelTheta2030;
-  GH1* PhiSc775NegHelTheta2030;
-  GH1* PhiSc825NegHelTheta2030;
-  GH1* PhiSc875NegHelTheta2030;
-
-  GH1* PhiSc275PosHelTheta2030;
-  GH1* PhiSc325PosHelTheta2030;
-  GH1* PhiSc375PosHelTheta2030;
-  GH1* PhiSc425PosHelTheta2030;
-  GH1* PhiSc475PosHelTheta2030;
-  GH1* PhiSc525PosHelTheta2030;
-  GH1* PhiSc575PosHelTheta2030;
-  GH1* PhiSc625PosHelTheta2030;
-  GH1* PhiSc675PosHelTheta2030;
-  GH1* PhiSc725PosHelTheta2030;
-  GH1* PhiSc775PosHelTheta2030;
-  GH1* PhiSc825PosHelTheta2030;
-  GH1* PhiSc875PosHelTheta2030;
 
   GH2* E_dE;
   GH2* E_dE_Cut;
