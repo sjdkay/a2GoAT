@@ -188,6 +188,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     RecKinNeutron = Neutron4VectorKin(RecKinProton);
     ThetanRec = (RecKinNeutron.Theta()) * TMath::RadToDeg();
     MMpKin = RecKinNeutron.M();
+    WCZnRec = 72/tan(RecKinNeutron.Theta());
 
     RecProtonEpCorr = Proton4VectorKin(EpCorr, WCThetapRad, WCPhipRad);
     RecNeutronEpCorr = Neutron4VectorKin(RecProtonEpCorr);
@@ -200,13 +201,13 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     OpeningAngle = (N3Vect.Angle(GVn3))*TMath::RadToDeg();
 
     ThetanDiff = abs(ThetanRec - WCThetan);
-    PhinDiff = PhinRec - WCPhin;
+    PhinDiff = abs(PhinRec - WCPhin);
 
     TVector3 ScattAngles = ScatteredFrameAngles(RecNeutronEpCorr3, GVp3, GVn3, Gamma);
     ScattTheta = ScattAngles(0); // Theta is 1st component in vector fn returns above
     ScattPhi = ScattAngles(1); // Phi is 2nd component
 
-    //if( 850 > MMpEpCorr || 1050 < MMpEpCorr) continue;
+    if ( 850 > MMpEpCorr || 1050 < MMpEpCorr) continue;
     if (ScattTheta > 60) continue;
     if (ScattPhi > 170) continue; // Exclude values  at edges for now
     if (ScattPhi < -170) continue;
@@ -292,6 +293,8 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   EpKin = new GH1 ("EpKin", "Ep Calculated from Ep/Thetap", 100, 0, 500);
   EpCorrected = new GH1 ("EpCorrected", "Ep Corrected for Energy Loss in Polarimeter ", 100, 0, 500);
   OAngle = new GH1 ("OAngle", "Opening Angle between P and N Vectors", 180, 0, 180);
+  WCZnRecon = new GH1 ("WCZnRecon", "WCZ Hit Position from Reconstructed n Vector", 200, 0, 400);
+  WCZnRecon = new GH1 ("WCZnRecon", "WCZ Hit Position from Reconstructed n Vector", 200, 0, 400);
 
   ThetaSc =  new GH1( "Theta_Scattered", "Scattetred Proton Theta Distribution in Rotated Frame", 180, 0, 180 );
   PhiSc = new GH1( "Phi_Scattered", "Scattetred Proton Phi Distribution in Rotated Frame", 90, -180, 180 );
@@ -386,11 +389,16 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
 
   E_dE = new GH2 ("E_dE", "EdE Plot With E Loss Adjustment", 100, 0, 500, 100, 0, 5);
   E_dE_Cut = new GH2 ("E_dE_Cut", "EdE Plot (With cut on proton banana + E Loss)", 100, 0, 500, 100, 0, 5);
+  E_dE_KinCut = new GH2 ("E_dE_KinCut", "EdE Plot (With cut on kinematic proton banana + E Loss)", 100, 0, 500, 100, 0, 5);
   KinEp_dE = new GH2 ("KinEp_dE", "KinEpdE Plot", 100, 0, 500, 100, 0, 5);
   KinEp_dE_GoodCut = new GH2 ("KinEp_dE_GoodCut", "KinEpdE Plot With Good Proton Cut", 100, 0, 500, 100, 0, 5);
   ThetaScPhiSc = new GH2 ("ThetaScPhiSc", "Phi as a function of Theta (Both in rotated frame)", 100, 0, 180, 100, -180, 180);
-  OAnglePhiDiffLab = new GH2 ("OAnglePhiDiffLab", "PhiScatt (Lab) as a function of Opening Angle (Lab)", 100, 0, 180, 100, -180, 180);
-  ThetaDiffPhiDiffLab = new GH2 ("ThetaDiffPhiDiffLab", "PhiScatt (Lab) as a function of ThetaScatt (Lab)", 100, 0, 180, 100, -180, 180);
+  E_KinEp = new GH2 ("E_KinEp", "Kinematic Energy of Proton as a function of CB energy", 100, 0, 500, 100, 0, 500);
+  E_KinEpCut = new GH2 ("E_KinEpCut", "Kinematic Energy of Proton as a function of CB energy (P Banana Cut)", 100, 0, 500, 100, 0, 500);
+  E_KinEp_BadKinCut = new GH2 ("E_KinEp_BadKinCut", "Kinematic Energy of Proton as a function of CB energy (Bad Kin Banana Cut)", 100, 0, 500, 100, 0, 500);
+  PhinDiffWCZRec = new GH2 ("PhinDiffWCZRec", "Difference between WC Phi and Reconstructed Phi as a fn of WCZ Hit Position", 100, 0, 200, 100, 0, 180);
+  PhinDiffWCZRec_Cut = new GH2 ("PhinDiffWCZRec_Cut", "Difference between WC Phi and Reconstructed Phi as a fn of WCZ Hit Position (P Banana Cut)", 100, 0, 200, 100, 0, 180);
+  PhinDiffWCZRec_KinCut = new GH2 ("PhinDiffWCZRec_KinCut", "Difference between WC Phi and Reconstructed Phi as a fn of WCZ Hit Position (Kin P Banana Cut)", 100, 0, 200, 100, 0, 180);
 
 }
 
@@ -422,6 +430,7 @@ void PNeutPol_Polarimeter::FillHists()
   MMp->Fill(MMpKin, TaggerTime);
   MMpEpCorrected->Fill(MMpEpCorr, TaggerTime);
   OAngle->Fill(OpeningAngle, TaggerTime);
+  WCZnRecon->Fill(WCZnRec, TaggerTime);
   Zn_Vert->Fill(Zn, TaggerTime);
   WCThetaNeut->Fill(WCThetan, TaggerTime);
   WCPhiNeut->Fill(WCPhin, TaggerTime);
@@ -429,9 +438,17 @@ void PNeutPol_Polarimeter::FillHists()
   WCYn->Fill(WC1nY, TaggerTime);
   WCZn->Fill(WC1nZ, TaggerTime);
   WCPhiDifference->Fill(PhiWCDiff);
+  E_KinEp->Fill(EpCorr, KinEp, TaggerTime);
+  PhinDiffWCZRec->Fill(WCZnRec, PhinDiff, TaggerTime);
+
 
   if(Cut_proton -> IsInside(EpCorr, dEp) == kTRUE){
     E_dE_Cut->Fill(EpCorr, dEp, TaggerTime);
+    PhinDiffWCZRec_Cut->Fill(WCZnRec, PhinDiff, TaggerTime);
+  }
+
+  if(Cut_CB_protonKinBad -> IsInside(KinEp, dEp) == kTRUE){
+    E_KinEp_BadKinCut-> Fill(EpCorr, KinEp, TaggerTime);
   }
 
   // Fill events inside good proton banana on KinEpdE plot
@@ -444,8 +461,9 @@ void PNeutPol_Polarimeter::FillHists()
     ThetaSc -> Fill(ScattTheta, TaggerTime);
     PhiSc -> Fill(ScattPhi, TaggerTime);
     ThetaScPhiSc->Fill(ScattTheta, ScattPhi, TaggerTime);
-    OAnglePhiDiffLab->Fill(OpeningAngle, PhinDiff, TaggerTime);
-    ThetaDiffPhiDiffLab->Fill(ThetanDiff, PhinDiff, TaggerTime);
+    E_KinEpCut->Fill(EpCorr, KinEp, TaggerTime);
+    E_dE_KinCut->Fill(EpCorr, dEp, TaggerTime);
+    PhinDiffWCZRec_KinCut->Fill(WCZnRec, PhinDiff, TaggerTime);
 
     if (BeamHelicity == kFALSE) PhiScNegHel->Fill(ScattPhi, TaggerTime);
     if (BeamHelicity == kTRUE) PhiScPosHel->Fill(ScattPhi, TaggerTime);
@@ -476,7 +494,7 @@ void PNeutPol_Polarimeter::FillHists()
         MMp700800->Fill(MMpEpCorr, TaggerTime);
     }
 
-    else if(800 < EGamma && EGamma < 0){
+    else if(800 < EGamma && EGamma < 900){
         MMp800900->Fill(MMpEpCorr, TaggerTime);
     }
 

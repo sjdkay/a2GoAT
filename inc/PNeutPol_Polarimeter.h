@@ -57,12 +57,7 @@ private:
   double_t WCPhip;
   double_t WCPhipRad;
   double_t WCPhin;
-  double_t zWCRec;
-  double_t zWC;
-  double_t zWCRec1;
-  double_t zWC1;
-  double_t zWCRec2;
-  double_t zWC2;
+  double_t WCZnRec;
   double_t Thetap;
   double_t Thetan;
   double_t ThetanRec;
@@ -161,6 +156,7 @@ private:
   GH1* MMp;
   GH1* MMpEpCorrected;
   GH1* OAngle;
+  GH1* WCZnRecon;
 
   GH1* MMp200300;
   GH1* MMp300400;
@@ -239,11 +235,16 @@ private:
 
   GH2* E_dE;
   GH2* E_dE_Cut;
+  GH2* E_dE_KinCut;
   GH2* KinEp_dE;
   GH2* KinEp_dE_GoodCut;
   GH2* ThetaScPhiSc;
-  GH2* OAnglePhiDiffLab;
-  GH2* ThetaDiffPhiDiffLab;
+  GH2* E_KinEp;
+  GH2* E_KinEpCut;
+  GH2* E_KinEp_BadKinCut;
+  GH2* PhinDiffWCZRec;
+  GH2* PhinDiffWCZRec_Cut;
+  GH2* PhinDiffWCZRec_KinCut;
 
   char cutfilename[256];
   char cutname[256];
