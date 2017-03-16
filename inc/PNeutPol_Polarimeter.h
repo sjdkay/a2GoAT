@@ -134,6 +134,7 @@ private:
   GH1* EkSum;
   GH1* Eg;
   GH1* ThetaProt;
+  GH1* ThetaProt655705;
   GH1* ThetaNeut;
   GH1* PhiProt;
   GH1* PhiNeut;
@@ -232,6 +233,8 @@ private:
   GH1* PhiSc775PosHel;
   GH1* PhiSc825PosHel;
   GH1* PhiSc875PosHel;
+
+  GH1* PhiScNumberComparison;
 
   GH2* E_dE;
   GH2* E_dE_Cut;

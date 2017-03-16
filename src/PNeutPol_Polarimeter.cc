@@ -282,6 +282,7 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   EkSum = new GH1( "Ek Sum", "Particle Energy Sum Distribution", 300, 0, 900 );
   Eg = new GH1( "Eg", "Photon Energy Distribution", 200, 100, 1600 );
   ThetaProt = new GH1( "ThetaProt", " Proton Theta Distribution", 180, 0, 180 );
+  ThetaProt655705 = new GH1 ("ThetaProt655705", "Proton Theta Distribution (655-705MeV EGamma)", 180, 0, 180);
   ThetaNeut = new GH1( "ThetaNeut", " Neutron Theta Distribution", 180, 0, 180 );
   PhiProt = new GH1( "PhiProt", " Proton Phi Distribution", 180, -180, 180 );
   PhiNeut = new GH1( "PhiNeut", " Neutron Phi Distribution", 180, -180, 180 );
@@ -387,6 +388,8 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   PhiSc825PosHel = new GH1( "Phi_Scattered_825MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 825pm25MeV for +ve Helicity", 2, -180, 180);
   PhiSc875PosHel = new GH1( "Phi_Scattered_875MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 875pm25MeV for +ve Helicity", 2, -180, 180);
 
+  PhiScNumberComparison = new GH1 ( "PhiScNumberComparison", "PhiSc in 655-705 MeV, Thetap 40-60", 2, -180, 180);
+
   E_dE = new GH2 ("E_dE", "EdE Plot With E Loss Adjustment", 100, 0, 500, 100, 0, 5);
   E_dE_Cut = new GH2 ("E_dE_Cut", "EdE Plot (With cut on proton banana + E Loss)", 100, 0, 500, 100, 0, 5);
   E_dE_KinCut = new GH2 ("E_dE_KinCut", "EdE Plot (With cut on kinematic proton banana + E Loss)", 100, 0, 500, 100, 0, 5);
@@ -467,6 +470,13 @@ void PNeutPol_Polarimeter::FillHists()
 
     if (BeamHelicity == kFALSE) PhiScNegHel->Fill(ScattPhi, TaggerTime);
     if (BeamHelicity == kTRUE) PhiScPosHel->Fill(ScattPhi, TaggerTime);
+
+    if ( 655 < EGamma && EGamma < 705){
+      ThetaProt655705->Fill(Thetap, TaggerTime);
+        if ( 40 < Thetap && Thetap < 60){
+            PhiScNumberComparison -> Fill(ScattPhi, TaggerTime);
+        }
+    }
 
     if(200 < EGamma && EGamma < 300){
         MMp200300->Fill(MMpEpCorr, TaggerTime);
