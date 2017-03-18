@@ -276,22 +276,9 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   time = new TH1D("time", 	"time", 	1400, -700, 700);
   time_cut = new TH1D("time_cut", 	"time_cut", 	1400, -700, 700);
 
-  Zp_Vert = new GH1("Zp_Vertex", "Proton Z Vertex Distribution", 300, -150, 150 );
-  Zn_Vert = new GH1("Zn_Vertex", "Neutron Z Vertex Distribution", 300, -150, 150 );
-  Ekp = new GH1( "Ekp", "Proton Energy Distribution", 100, 0, 500 );
-  Ekn = new GH1( "Ekn", "Neutron Energy Distribution", 100, 0, 500 );
-  EkSum = new GH1( "Ek Sum", "Particle Energy Sum Distribution", 300, 0, 900 );
   Eg = new GH1( "Eg", "Photon Energy Distribution", 200, 100, 1600 );
-  ThetaProt = new GH1( "ThetaProt", " Proton Theta Distribution", 180, 0, 180 );
   ThetaProt655705 = new GH1 ("ThetaProt655705", "Proton Theta Distribution (655-705MeV EGamma)", 180, 0, 180);
-  ThetaNeut = new GH1( "ThetaNeut", " Neutron Theta Distribution", 180, 0, 180 );
-  PhiProt = new GH1( "PhiProt", " Proton Phi Distribution", 180, -180, 180 );
-  PhiNeut = new GH1( "PhiNeut", " Neutron Phi Distribution", 180, -180, 180 );
   WCPhiDifference = new GH1 ("WCPhiDifference", "WC Phi Difference Between p and n", 180, 0, 360);
-  WCThetaProt = new GH1 ("WCThetaProt", "WC Theta for p", 180, 0, 180);
-  WCThetaNeut = new GH1 ("WCThetaNeut", "WC Theta for n", 180, 0, 180);
-  WCPhiProt = new GH1 ("WCPhiProt", "WC Phi for p", 180, -180, 180);
-  WCPhiNeut = new GH1 ("WCPhiNeut", "WC Phi for n", 180, -180, 180);
   EpKin = new GH1 ("EpKin", "Ep Calculated from Ep/Thetap", 100, 0, 500);
   EpCorrected = new GH1 ("EpCorrected", "Ep Corrected for Energy Loss in Polarimeter ", 100, 0, 500);
   OAngle = new GH1 ("OAngle", "Opening Angle between P and N Vectors", 180, 0, 180);
@@ -304,12 +291,6 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   EpKinEpCorrDiff = new GH1("EpKinEpCorrDiff", "Difference Between EpKin and EpCorr", 300, -300, 300);
   EpEpCorrDiff = new GH1("EpEpCorrDiff", "Difference Between Ep and EpCorr", 200, 0, 200);
 
-  WCXp = new GH1("WCXp", "WC X Position for Proton", 200, -100, 100);
-  WCYp = new GH1("WCYp", "WC Y Position for Proton", 200, -100, 100);
-  WCZp = new GH1("WCZp", "WC Z Position for Proton", 200, -500, 500);
-  WCXn = new GH1("WCXn", "WC X Position for Neutron", 200, -100, 100);
-  WCYn = new GH1("WCYn", "WC Y Position for Neutron", 200, -100, 100);
-  WCZn = new GH1("WCZn", "WC Z Position for Neutron", 200, -500, 500);
   MMp = new GH1 ("MMp", "Missing mass seen by Proton", 400, 800, 1000);
   MMpEpCorrected = new GH1 ("MMpEpCorrected", "Missing mass seen by Proton (E Loss Corrected)", 400, 0, 2000);
 
@@ -411,36 +392,18 @@ void PNeutPol_Polarimeter::FillHists()
   time->Fill(TaggerTime);
   if (-5 < TaggerTime && TaggerTime < 20) time_cut->Fill(TaggerTime);
 
-  Zp_Vert->Fill(Zp, TaggerTime);
-  Ekp->Fill(Ep, TaggerTime);
-  Ekn->Fill(En, TaggerTime);
-  EkSum->Fill((Ep + En),TaggerTime);
   Eg->Fill(EGamma, TaggerTime);
-  ThetaProt->Fill(Thetap, TaggerTime);
-  ThetaNeut->Fill(Thetan, TaggerTime);
-  PhiProt->Fill(Phip, TaggerTime);
-  PhiNeut->Fill(Phin, TaggerTime);
-  WCThetaProt->Fill(WCThetap, TaggerTime);
-  WCPhiProt->Fill(WCPhip, TaggerTime);
   E_dE->Fill(EpCorr, dEp, TaggerTime);
   KinEp_dE->Fill(KinEp, dEp, TaggerTime);
   EpKin->Fill(KinEp, TaggerTime);
   EpCorrected->Fill(EpCorr, TaggerTime);
   EpKinEpCorrDiff->Fill(KinEDiff, TaggerTime);
   EpEpCorrDiff->Fill(EpDiff, TaggerTime);
-  WCXp->Fill(WC1pX, TaggerTime);
-  WCYp->Fill(WC1pY, TaggerTime);
-  WCZp->Fill(WC1pZ, TaggerTime);
   MMp->Fill(MMpKin, TaggerTime);
   MMpEpCorrected->Fill(MMpEpCorr, TaggerTime);
   OAngle->Fill(OpeningAngle, TaggerTime);
   WCZnRecon->Fill(WCZnRec, TaggerTime);
   Zn_Vert->Fill(Zn, TaggerTime);
-  WCThetaNeut->Fill(WCThetan, TaggerTime);
-  WCPhiNeut->Fill(WCPhin, TaggerTime);
-  WCXn->Fill(WC1nX, TaggerTime);
-  WCYn->Fill(WC1nY, TaggerTime);
-  WCZn->Fill(WC1nZ, TaggerTime);
   WCPhiDifference->Fill(PhiWCDiff);
   E_KinEp->Fill(EpCorr, KinEp, TaggerTime);
   PhinDiffWCZRec->Fill(WCZnRec, PhinDiff, TaggerTime);

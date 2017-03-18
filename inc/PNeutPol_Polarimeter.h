@@ -127,33 +127,15 @@ private:
   TH1D*	time;
   TH1D*	time_cut;
 
-  GH1* Zp_Vert;
-  GH1* Zn_Vert;
-  GH1* Ekp;
-  GH1* Ekn;
   GH1* EkSum;
   GH1* Eg;
-  GH1* ThetaProt;
   GH1* ThetaProt655705;
-  GH1* ThetaNeut;
-  GH1* PhiProt;
-  GH1* PhiNeut;
   GH1* WCPhiDifference;
-  GH1* WCThetaProt;
-  GH1* WCThetaNeut;
-  GH1* WCPhiProt;
-  GH1* WCPhiNeut;
   GH1* EpKin;
   GH1* EpCorrected;
   GH1* EpKinEpCorrDiff;
   GH1* EpEpCorrDiff;
 
-  GH1* WCXp;
-  GH1* WCYp;
-  GH1* WCZp;
-  GH1* WCXn;
-  GH1* WCYn;
-  GH1* WCZn;
   GH1* MMp;
   GH1* MMpEpCorrected;
   GH1* OAngle;
