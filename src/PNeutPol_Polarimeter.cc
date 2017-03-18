@@ -208,7 +208,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     ScattTheta = ScattAngles(0); // Theta is 1st component in vector fn returns above
     ScattPhi = ScattAngles(1); // Phi is 2nd component
 
-    // if ( 850 > MMpEpCorr || 1050 < MMpEpCorr) continue;
+    if ( 850 > MMpEpCorr || 1050 < MMpEpCorr) continue;
     // if (ScattTheta > 60) continue;
     //if (ScattPhi > 170) continue; // Exclude values  at edges for now
     //if (ScattPhi < -170) continue;
@@ -403,7 +403,7 @@ void PNeutPol_Polarimeter::FillHists()
   MMpEpCorrected->Fill(MMpEpCorr, TaggerTime);
   OAngle->Fill(OpeningAngle, TaggerTime);
   WCZnRecon->Fill(WCZnRec, TaggerTime);
-  Zn_Vert->Fill(Zn, TaggerTime);
+  
   WCPhiDifference->Fill(PhiWCDiff);
   E_KinEp->Fill(EpCorr, KinEp, TaggerTime);
   PhinDiffWCZRec->Fill(WCZnRec, PhinDiff, TaggerTime);
