@@ -180,6 +180,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
 
     KinEp = CalcKinEnergy(WCThetap, EGamma, Md, 0., Mp, Mn);
     EpCorr = EpPolCorrect(Ep, WCThetap);
+    if(Cut_proton->IsInside(EpCorr, dEp) == kFALSE) continue; // If E loss correct proton is NOT inside p banana drop out
     KinEpMB = CalcKinEnergyMB(WCThetap, EGamma, Md, 0., Mp, Mn);
     EpDiff = abs(EpCorr - Ep);
     KinEDiff = KinEp - EpCorr;
@@ -207,10 +208,10 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     ScattTheta = ScattAngles(0); // Theta is 1st component in vector fn returns above
     ScattPhi = ScattAngles(1); // Phi is 2nd component
 
-    if ( 850 > MMpEpCorr || 1050 < MMpEpCorr) continue;
-    if (ScattTheta > 60) continue;
-    if (ScattPhi > 170) continue; // Exclude values  at edges for now
-    if (ScattPhi < -170) continue;
+    // if ( 850 > MMpEpCorr || 1050 < MMpEpCorr) continue;
+    // if (ScattTheta > 60) continue;
+    //if (ScattPhi > 170) continue; // Exclude values  at edges for now
+    //if (ScattPhi < -170) continue;
 
     //if (abs(KinEDiff) > 100) continue; // If difference between CB energy and calculated Energy for proton > 100MeV continue
 
