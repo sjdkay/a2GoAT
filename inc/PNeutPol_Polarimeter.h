@@ -40,6 +40,7 @@ private:
   double_t Mn;
   double_t Mp;
   double_t Md;
+  double_t Mpi;
   double_t z1;
   double_t z2;
   double_t ln;
@@ -60,12 +61,18 @@ private:
   double_t WCZnRec;
   double_t Thetap;
   double_t Thetan;
+  double_t ThetapRec;
   double_t ThetanRec;
+  double_t ThetaPiRec;
   double_t Phip;
   double_t Phin;
+  double_t PhipRec;
   double_t PhinRec;
+  double_t PhiPiRec;
   double_t ThetaWCn;
   double_t PhiWCDiff;
+  double_t ThetaPiRecDiff;
+  double_t ThetapRecDiff;
   double_t Ep;
   double_t En;
   double_t EnVectCalc;
@@ -79,20 +86,17 @@ private:
   double_t ScattTheta;
   double_t ScattPhi;
   double_t KinEp;
-  double_t KinEpWC;
-  double_t KinEpDiff;
+  double_t KinEpPi;
+  double_t KinPi;
   double_t KinEDiff;
   double_t EpDiff;
   double_t EpCorr;
-  double_t KinEpMB;
   double_t EpTot;
   double_t Pp;
   double_t Ppx;
   double_t Ppy;
   double_t Ppz;
-  double_t MMpKin;
   double_t MMpEpCorr;
-  double_t MMpKinMB;
   double_t OpeningAngle;
   double_t ThetanDiff;
   double_t PhinDiff;
@@ -106,14 +110,18 @@ private:
   TLorentzVector GVn;
   TLorentzVector Gamma;
   TLorentzVector Deut;
+  TLorentzVector Neut;
   TLorentzVector P4Vect;
   TLorentzVector N4Vect;
+  TLorentzVector Pi4Vect;
   TLorentzVector RecKinProton;
   TLorentzVector RecKinNeutron;
+  TLorentzVector RecKinProtonPi;
+  TLorentzVector RecKinPion;
+  TLorentzVector RecKinPionP;
+  TLorentzVector RecKinPPi;
   TLorentzVector RecProtonEpCorr;
   TLorentzVector RecNeutronEpCorr;
-  TLorentzVector RecKinMBProton;
-  TLorentzVector RecKinMBNeutron;
   TVector3 GVp3;
   TVector3 GVn3;
   TVector3 GVn3Rec;
@@ -136,7 +144,6 @@ private:
   GH1* EpKinEpCorrDiff;
   GH1* EpEpCorrDiff;
 
-  GH1* MMp;
   GH1* MMpEpCorrected;
   GH1* OAngle;
   GH1* WCZnRecon;
@@ -152,8 +159,11 @@ private:
   GH1* MMpEpCorrectedCut;
   GH1* OAngleCut;
   GH1* OAngleCut200400;
-  GH1* ScattFrameTheta;
-  GH1* ScattFramePhi;
+
+  GH1* ZpDist;
+  GH1* ZpPhiScatNeg180;
+  GH1* ZpPhiScat0;
+  GH1* ZpPhiScatPos180;
 
   GH1* ThetaSc;
   GH1* PhiSc;
@@ -216,8 +226,6 @@ private:
   GH1* PhiSc825PosHel;
   GH1* PhiSc875PosHel;
 
-  GH1* PhiScNumberComparison;
-
   GH2* E_dE;
   GH2* E_dE_Cut;
   GH2* E_dE_KinCut;
@@ -226,10 +234,14 @@ private:
   GH2* ThetaScPhiSc;
   GH2* E_KinEp;
   GH2* E_KinEpCut;
-  GH2* E_KinEp_BadKinCut;
   GH2* PhinDiffWCZRec;
   GH2* PhinDiffWCZRec_Cut;
   GH2* PhinDiffWCZRec_KinCut;
+
+  GH1* ThetaRecPiDiff;
+  GH2* ThetanThetaRecPi;
+  GH1* ThetaRecPDiff;
+  GH2* ThetanThetaRecP;
 
   char cutfilename[256];
   char cutname[256];
@@ -258,6 +270,7 @@ public:
     TCutG* OpenCutFile(Char_t* filename, Char_t* cutname);
     TLorentzVector Proton4VectorKin(Double_t KinE, Double_t Theta, Double_t Phi);
     TLorentzVector Neutron4VectorKin(TLorentzVector ProtonKinVector);
+    TLorentzVector Pion4VectorKin(TLorentzVector ProtonKinVector);
     Double_t LabAngles();
     void FillHists();
 
