@@ -181,20 +181,6 @@ private:
   GH1* PhiSc825;
   GH1* PhiSc875;
 
-  GH1* ThetaSc275;
-  GH1* ThetaSc325;
-  GH1* ThetaSc375;
-  GH1* ThetaSc425;
-  GH1* ThetaSc475;
-  GH1* ThetaSc525;
-  GH1* ThetaSc575;
-  GH1* ThetaSc625;
-  GH1* ThetaSc675;
-  GH1* ThetaSc725;
-  GH1* ThetaSc775;
-  GH1* ThetaSc825;
-  GH1* ThetaSc875;
-
   GH1* PhiScNegHel;
   GH1* PhiScPosHel;
 
@@ -235,13 +221,14 @@ private:
   GH2* E_KinEp;
   GH2* E_KinEpCut;
   GH2* PhinDiffWCZRec;
-  GH2* PhinDiffWCZRec_Cut;
   GH2* PhinDiffWCZRec_KinCut;
 
   GH1* ThetaRecPiDiff;
   GH2* ThetanThetaRecPi;
+  GH2* ThetanThetaRecPiDiff;
   GH1* ThetaRecPDiff;
   GH2* ThetanThetaRecP;
+  GH2* ThetanThetaRecPDiff;
 
   char cutfilename[256];
   char cutname[256];

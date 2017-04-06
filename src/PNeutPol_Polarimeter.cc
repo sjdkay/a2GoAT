@@ -43,7 +43,7 @@ Bool_t	PNeutPol_Polarimeter::Start()
   Md = 1875.613; //Mass of Deuterium in MeV
   Mpi = 139.57018; // Mass of charged pion in MeV
   Deut = TLorentzVector (0., 0., 0., 1875.613); // 4-Vector of Deuterium target, assume at rest
-  Deut = TLorentzVector (0., 0., 0., 939.565); // 4-Vector of Deuterium target, assume at rest
+  Neut = TLorentzVector (0., 0., 0., 939.565); // 4-Vector of Deuterium target, assume at rest
 
   Cut_CB_proton = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Proton_7_12_16.root", "Proton"); // These will need adjusting with new Acqu files
   Cut_proton = Cut_CB_proton;
@@ -157,12 +157,12 @@ void	PNeutPol_Polarimeter::ProcessEvent()
   WCPhin = WC3Vectn.Phi()*TMath::RadToDeg();
   PhiWCDiff = abs (WCPhip-WCPhin);
 
-  if( Zp > 60 || Zp < -60) return;
+  //if( Zp > 60 || Zp < -60) return;
   //if( Zp > 200 || Zp < 150) return; // Select out windows
 
   EventCounterZCut++;
 
-  if ( PhiWCDiff > 195 || PhiWCDiff < 165) return;
+  //if ( PhiWCDiff > 195 || PhiWCDiff < 165) return;
 
   EventCounterCoplanarCut++;
 
@@ -180,6 +180,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     Phip = GVp3.Phi()*TMath::RadToDeg();
     Thetan = GVn3.Theta()*TMath::RadToDeg();
     Phin = GVn3.Phi()*TMath::RadToDeg();
+
     EpCorr = EpPolCorrect(Ep, WCThetap);
     if(Cut_proton->IsInside(EpCorr, dEp) == kFALSE) continue; // If E loss correct proton is NOT inside p banana drop out
     EpDiff = abs(EpCorr - Ep);
@@ -211,8 +212,6 @@ void	PNeutPol_Polarimeter::ProcessEvent()
 
     KinEDiff = KinEp - EpCorr;
 
-    //if (ThetaPiRecDiff > 20) continue;
-
     RecProtonEpCorr = Proton4VectorKin(EpCorr, WCThetapRad, WCPhipRad);
     RecNeutronEpCorr = Neutron4VectorKin(RecProtonEpCorr);
     MMpEpCorr = RecNeutronEpCorr.M();
@@ -230,8 +229,9 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     ScattTheta = ScattAngles(0); // Theta is 1st component in vector fn returns above
     ScattPhi = ScattAngles(1); // Phi is 2nd component
 
-    if ( 850 > MMpEpCorr || 1050 < MMpEpCorr) continue;
-    if (ScattTheta > 60) continue;
+    if(ThetaPiRec > 20) continue;
+    //if ( 850 > MMpEpCorr || 1050 < MMpEpCorr) continue;
+    //if (ScattTheta > 60) continue;
     //if (ScattPhi > 170) continue; // Exclude values  at edges for now
     //if (ScattPhi < -170) continue;
 
@@ -357,20 +357,6 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   PhiSc825 = new GH1( "Phi_Scattered_825MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 825pm25MeV", 2, -180, 180);
   PhiSc875 = new GH1( "Phi_Scattered_875MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 875pm25MeV", 2, -180, 180);
 
-  ThetaSc275 = new GH1( "Theta_Scattered_275MeV", "Scattetred Proton Theta Distribution in Rotated Frame for Photon Energies of 275pm25MeV", 180, 0, 180);
-  ThetaSc325 = new GH1( "Theta_Scattered_325MeV", "Scattetred Proton Theta Distribution in Rotated Frame for Photon Energies of 325pm25MeV", 180, 0, 180);
-  ThetaSc375 = new GH1( "Theta_Scattered_375MeV", "Scattetred Proton Theta Distribution in Rotated Frame for Photon Energies of 375pm25MeV", 180, 0, 180);
-  ThetaSc425 = new GH1( "Theta_Scattered_425MeV", "Scattetred Proton Theta Distribution in Rotated Frame for Photon Energies of 425pm25MeV", 180, 0, 180);
-  ThetaSc475 = new GH1( "Theta_Scattered_475MeV", "Scattetred Proton Theta Distribution in Rotated Frame for Photon Energies of 475pm25MeV", 180, 0, 180);
-  ThetaSc525 = new GH1( "Theta_Scattered_525MeV", "Scattetred Proton Theta Distribution in Rotated Frame for Photon Energies of 525pm25MeV", 180, 0, 180);
-  ThetaSc575 = new GH1( "Theta_Scattered_575MeV", "Scattetred Proton Theta Distribution in Rotated Frame for Photon Energies of 575pm25MeV", 180, 0, 180);
-  ThetaSc625 = new GH1( "Theta_Scattered_625MeV", "Scattetred Proton Theta Distribution in Rotated Frame for Photon Energies of 625pm25MeV", 180, 0, 180);
-  ThetaSc675 = new GH1( "Theta_Scattered_675MeV", "Scattetred Proton Theta Distribution in Rotated Frame for Photon Energies of 675pm25MeV", 180, 0, 180);
-  ThetaSc725 = new GH1( "Theta_Scattered_725MeV", "Scattetred Proton Theta Distribution in Rotated Frame for Photon Energies of 725pm25MeV", 180, 0, 180);
-  ThetaSc775 = new GH1( "Theta_Scattered_775MeV", "Scattetred Proton Theta Distribution in Rotated Frame for Photon Energies of 775pm25MeV", 180, 0, 180);
-  ThetaSc825 = new GH1( "Theta_Scattered_825MeV", "Scattetred Proton Theta Distribution in Rotated Frame for Photon Energies of 825pm25MeV", 180, 0, 180);
-  ThetaSc875 = new GH1( "Theta_Scattered_875MeV", "Scattetred Proton Theta Distribution in Rotated Frame for Photon Energies of 875pm25MeV", 180, 0, 180);
-
   PhiScNegHel = new GH1("PhiScNegHel", "Scattetred Proton Phi Distribution in Rotated Frame for -ve Helicity", 2, -180, 180);
   PhiScPosHel = new GH1("PhiScPosHel", "Scattetred Proton Phi Distribution in Rotated Frame for +ve Helicity", 2, -180, 180);
 
@@ -406,19 +392,18 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
 
   ThetaRecPiDiff = new GH1 ("ThetaRecPiDiff", "Difference between ThetaPiRec and Thetan", 200, 0, 180);
   ThetanThetaRecPi = new GH2 ("ThetanThetaRecPi", "Thetan vs ThetaPiRec", 100, 0, 180, 100, 0, 180);
+  ThetanThetaRecPiDiff = new GH2 ("ThetanThetaRecPiDiff", "Thetan vs (ThetaPiRec - Thetan)", 100, 0, 180, 100, 0, 180);
   ThetaRecPDiff = new GH1 ("ThetaRecPDiff", "Difference between ThetaPRec and Thetan", 200, 0, 180);
   ThetanThetaRecP = new GH2 ("ThetanThetaRecP", "Thetan vs ThetaPRec", 100, 0, 180, 100, 0, 180);
+  ThetanThetaRecPDiff = new GH2 ("ThetanThetaRecPDiff", "Thetan vs (ThetaPRec - Thetan)", 100, 0, 180, 100, 0, 180);
 
   E_dE = new GH2 ("E_dE", "EdE Plot With E Loss Adjustment", 100, 0, 500, 100, 0, 5);
-  E_dE_Cut = new GH2 ("E_dE_Cut", "EdE Plot (With cut on proton banana + E Loss)", 100, 0, 500, 100, 0, 5);
   E_dE_KinCut = new GH2 ("E_dE_KinCut", "EdE Plot (With cut on kinematic proton banana + E Loss)", 100, 0, 500, 100, 0, 5);
   KinEp_dE = new GH2 ("KinEp_dE", "KinEpdE Plot", 100, 0, 500, 100, 0, 5);
-  KinEp_dE_GoodCut = new GH2 ("KinEp_dE_GoodCut", "KinEpdE Plot With Good Proton Cut", 100, 0, 500, 100, 0, 5);
+  //KinEp_dE_GoodCut = new GH2 ("KinEp_dE_GoodCut", "KinEpdE Plot With Good Proton Cut", 100, 0, 500, 100, 0, 5);
   ThetaScPhiSc = new GH2 ("ThetaScPhiSc", "Phi as a function of Theta (Both in rotated frame)", 100, 0, 180, 100, -180, 180);
   E_KinEp = new GH2 ("E_KinEp", "Kinematic Energy of Proton as a function of CB energy", 100, 0, 500, 100, 0, 500);
-  E_KinEpCut = new GH2 ("E_KinEpCut", "Kinematic Energy of Proton as a function of CB energy (P Banana Cut)", 100, 0, 500, 100, 0, 500);
   PhinDiffWCZRec = new GH2 ("PhinDiffWCZRec", "Difference between WC Phi and Reconstructed Phi as a fn of WCZ Hit Position", 100, 0, 200, 100, 0, 180);
-  PhinDiffWCZRec_Cut = new GH2 ("PhinDiffWCZRec_Cut", "Difference between WC Phi and Reconstructed Phi as a fn of WCZ Hit Position (P Banana Cut)", 100, 0, 200, 100, 0, 180);
   PhinDiffWCZRec_KinCut = new GH2 ("PhinDiffWCZRec_KinCut", "Difference between WC Phi and Reconstructed Phi as a fn of WCZ Hit Position (Kin P Banana Cut)", 100, 0, 200, 100, 0, 180);
 
 }
@@ -445,25 +430,21 @@ void PNeutPol_Polarimeter::FillHists()
   PhinDiffWCZRec->Fill(WCZnRec, PhinDiff, TaggerTime);
   ThetaRecPiDiff->Fill(ThetaPiRecDiff, TaggerTime);
   ThetanThetaRecPi->Fill(Thetan, ThetaPiRec, TaggerTime);
+  ThetanThetaRecPiDiff->Fill(Thetan, ThetaPiRecDiff, TaggerTime);
   ThetaRecPDiff->Fill(ThetapRecDiff, TaggerTime);
   ThetanThetaRecP->Fill(Thetan, ThetapRec, TaggerTime);
-
-  if(Cut_proton -> IsInside(EpCorr, dEp) == kTRUE){
-    E_dE_Cut->Fill(EpCorr, dEp, TaggerTime);
-    PhinDiffWCZRec_Cut->Fill(WCZnRec, PhinDiff, TaggerTime);
-  }
+  ThetanThetaRecPDiff->Fill(Thetan, ThetapRecDiff, TaggerTime);
 
   // Fill events inside good proton banana on KinEpdE plot
   if(Cut_protonKinGood -> IsInside(KinEp, dEp) == kTRUE)
   {
-    KinEp_dE_GoodCut->Fill(KinEp, dEp, TaggerTime);
+    //KinEp_dE_GoodCut->Fill(KinEp, dEp, TaggerTime);
     MMpEpCorrectedCut->Fill(MMpEpCorr, TaggerTime);
     EgCut->Fill(EGamma, TaggerTime);
     OAngleCut->Fill(OpeningAngle, TaggerTime);
     ThetaSc -> Fill(ScattTheta, TaggerTime);
     PhiSc -> Fill(ScattPhi, TaggerTime);
     ThetaScPhiSc->Fill(ScattTheta, ScattPhi, TaggerTime);
-    E_KinEpCut->Fill(EpCorr, KinEp, TaggerTime);
     E_dE_KinCut->Fill(EpCorr, dEp, TaggerTime);
     PhinDiffWCZRec_KinCut->Fill(WCZnRec, PhinDiff, TaggerTime);
 
@@ -514,70 +495,60 @@ void PNeutPol_Polarimeter::FillHists()
 
     if ( 250 < EGamma && EGamma < 300) {
         PhiSc275->Fill(ScattPhi, TaggerTime);
-        ThetaSc275->Fill(ScattTheta, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc275NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc275PosHel->Fill(ScattPhi, TaggerTime);
     }
 
     else if ( 300 < EGamma && EGamma < 350) {
         PhiSc325->Fill(ScattPhi, TaggerTime);
-        ThetaSc325->Fill(ScattTheta, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc325NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc325PosHel->Fill(ScattPhi, TaggerTime);
     }
 
     else if ( 350 < EGamma && EGamma < 400) {
         PhiSc375->Fill(ScattPhi, TaggerTime);
-        ThetaSc375->Fill(ScattTheta, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc375NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc375PosHel->Fill(ScattPhi, TaggerTime);
     }
 
     else if ( 400 < EGamma && EGamma < 450) {
         PhiSc425->Fill(ScattPhi, TaggerTime);
-        ThetaSc425->Fill(ScattTheta, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc425NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc425PosHel->Fill(ScattPhi, TaggerTime);
     }
 
     else if ( 450 < EGamma && EGamma < 500) {
         PhiSc475->Fill(ScattPhi, TaggerTime);
-        ThetaSc475->Fill(ScattTheta, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc475NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc475PosHel->Fill(ScattPhi, TaggerTime);
     }
 
     else if ( 500 < EGamma && EGamma < 550) {
         PhiSc525->Fill(ScattPhi, TaggerTime);
-        ThetaSc525->Fill(ScattTheta, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc525NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc525PosHel->Fill(ScattPhi, TaggerTime);
     }
 
     else if ( 550 < EGamma && EGamma < 600) {
         PhiSc575->Fill(ScattPhi, TaggerTime);
-        ThetaSc575->Fill(ScattTheta, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc575NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc575PosHel->Fill(ScattPhi, TaggerTime);
     }
 
     else if ( 600 < EGamma && EGamma < 650) {
         PhiSc625->Fill(ScattPhi, TaggerTime);
-        ThetaSc625->Fill(ScattTheta, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc625NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc625PosHel->Fill(ScattPhi, TaggerTime);
     }
 
     else if ( 650 < EGamma && EGamma < 700) {
         PhiSc675->Fill(ScattPhi, TaggerTime);
-        ThetaSc675->Fill(ScattTheta, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc675NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc675PosHel->Fill(ScattPhi, TaggerTime);
     }
 
     else if ( 700 < EGamma && EGamma < 750) {
         PhiSc725->Fill(ScattPhi, TaggerTime);
-        ThetaSc725->Fill(ScattTheta, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc725NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc725PosHel->Fill(ScattPhi, TaggerTime);
         }
@@ -585,21 +556,18 @@ void PNeutPol_Polarimeter::FillHists()
 
     else if ( 750 < EGamma && EGamma < 800) {
         PhiSc775->Fill(ScattPhi, TaggerTime);
-        ThetaSc775->Fill(ScattTheta, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc775NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc775PosHel->Fill(ScattPhi, TaggerTime);
     }
 
     else if ( 800 < EGamma && EGamma < 850) {
         PhiSc825->Fill(ScattPhi, TaggerTime);
-        ThetaSc825->Fill(ScattTheta, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc825NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc825PosHel->Fill(ScattPhi, TaggerTime);
     }
 
     else if ( 850 < EGamma && EGamma < 900) {
         PhiSc875->Fill(ScattPhi, TaggerTime);
-        ThetaSc875->Fill(ScattTheta, TaggerTime);
         if (BeamHelicity == kFALSE) PhiSc875NegHel->Fill(ScattPhi, TaggerTime);
         else if (BeamHelicity == kTRUE) PhiSc875PosHel->Fill(ScattPhi, TaggerTime);
     }
