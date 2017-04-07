@@ -1,5 +1,5 @@
-#ifndef __PNeutPol_Polarimeter_h__
-#define __PNeutPol_Polarimeter_h__
+#ifndef __PNeutPol_Polarimeter_Circ_h__
+#define __PNeutPol_Polarimeter_Circ_h__
 
 #include <iostream>
 #include <fstream>
@@ -14,7 +14,7 @@ using namespace std;
 #include "TRandom2.h"
 #include "TMath.h"
 
-class	PNeutPol_Polarimeter : public PPhysics
+class	PNeutPol_Polarimeter_Circ : public PPhysics
 {
 private:
 
@@ -251,8 +251,8 @@ protected:
 
 public:
 
-    PNeutPol_Polarimeter();
-    virtual ~PNeutPol_Polarimeter();
+    PNeutPol_Polarimeter_Circ();
+    virtual ~PNeutPol_Polarimeter_Circ();
     virtual Bool_t  Init();
     TCutG* OpenCutFile(Char_t* filename, Char_t* cutname);
     TLorentzVector Proton4VectorKin(Double_t KinE, Double_t Theta, Double_t Phi);

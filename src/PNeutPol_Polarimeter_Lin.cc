@@ -1,14 +1,15 @@
 // GoAT Physics analysis to identify neutrons from deuterium photodisintegration
 // Various properties of neutrons/protons identified plotted in histograms
 // Main aim is to determine spin polarisation of neutrons
+// For use on linearly polarised data files
 
-#include "PNeutPol_Polarimeter.h"
+#include "PNeutPol_Polarimeter_Lin.h"
 
-PNeutPol_Polarimeter::~PNeutPol_Polarimeter()
+PNeutPol_Polarimeter_Lin::~PNeutPol_Polarimeter_Lin()
 {
 }
 
-Bool_t	PNeutPol_Polarimeter::Init()
+Bool_t	PNeutPol_Polarimeter_Lin::Init()
 {
   cout << "Initialising physics analysis..." << endl;
   cout << "--------------------------------------------------" << endl << endl;
@@ -21,7 +22,7 @@ Bool_t	PNeutPol_Polarimeter::Init()
   return kTRUE;
 }
 
-Bool_t	PNeutPol_Polarimeter::Start()
+Bool_t	PNeutPol_Polarimeter_Lin::Start()
 {
   if(!IsGoATFile())
   {
@@ -62,7 +63,7 @@ Bool_t	PNeutPol_Polarimeter::Start()
   return kTRUE;
 }
 
-void	PNeutPol_Polarimeter::ProcessEvent()
+void	PNeutPol_Polarimeter_Lin::ProcessEvent()
 {
 
   NTrack = GetTracks()->GetNTracks();
@@ -157,7 +158,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
   WCPhin = WC3Vectn.Phi()*TMath::RadToDeg();
   PhiWCDiff = abs (WCPhip-WCPhin);
 
-  //if( Zp > 60 || Zp < -60) return;
+  //if( Zp > 60 || Zp < -60) return; // Particles selected out from other parts tend to be inside anyway, skip this?
   //if( Zp > 200 || Zp < 150) return; // Select out windows
 
   EventCounterZCut++;
@@ -172,9 +173,6 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     TaggerTime = GetTagger()->GetTaggedTime(j); // Get tagged time for event
     EGamma = (GetTagger()->GetTaggedEnergy(j)); // Get Photon energy for event
     Gamma = TLorentzVector (0., 0., EGamma , EGamma); // 4-Vector of Photon beam
-    BeamHelicity = GetTrigger()->GetHelicity();
-    //if (BeamHelicity == kFALSE) cout << "False" << endl;
-    //else if (BeamHelicity == kTRUE) cout<< "True" <<endl;
 
     Thetap = GVp3.Theta()*TMath::RadToDeg(); // Lab frame angles for proton/neutron
     Phip = GVp3.Phi()*TMath::RadToDeg();
@@ -243,13 +241,13 @@ void	PNeutPol_Polarimeter::ProcessEvent()
   }
 }
 
-void	PNeutPol_Polarimeter::ProcessScalerRead()
+void	PNeutPol_Polarimeter_Lin::ProcessScalerRead()
 {
 	// Fill Tagger Scalers // Currently this seems to fill the file with loads of "TaggerAccScal" histograms
 	//FillScalers(GetTC_scaler_min(),GetTC_scaler_max(),TaggerAccScal); // Don't know if these are needed so cut out for now
 }
 
-TCutG*	PNeutPol_Polarimeter::OpenCutFile(Char_t* filename, Char_t* cutname)
+TCutG*	PNeutPol_Polarimeter_Lin::OpenCutFile(Char_t* filename, Char_t* cutname)
 {
   CutFile = new TFile(filename, "READ");
 
@@ -271,7 +269,7 @@ TCutG*	PNeutPol_Polarimeter::OpenCutFile(Char_t* filename, Char_t* cutname)
   return Cut_clone;
 }
 
-TLorentzVector PNeutPol_Polarimeter::Proton4VectorKin(Double_t KinE, Double_t Theta, Double_t Phi)
+TLorentzVector PNeutPol_Polarimeter_Lin::Proton4VectorKin(Double_t KinE, Double_t Theta, Double_t Phi)
 {
     EpTot = KinE + Mp;
     Pp = sqrt (TMath::Power(EpTot,2) - TMath::Power(Mp,2));
@@ -286,7 +284,7 @@ TLorentzVector PNeutPol_Polarimeter::Proton4VectorKin(Double_t KinE, Double_t Th
     return P4Vect;
 }
 
-TLorentzVector PNeutPol_Polarimeter::Neutron4VectorKin(TLorentzVector ProtonKinVector)
+TLorentzVector PNeutPol_Polarimeter_Lin::Neutron4VectorKin(TLorentzVector ProtonKinVector)
 {
 
     N4Vect = (Gamma + Deut) - ProtonKinVector;
@@ -294,7 +292,7 @@ TLorentzVector PNeutPol_Polarimeter::Neutron4VectorKin(TLorentzVector ProtonKinV
     return N4Vect;
 }
 
-TLorentzVector PNeutPol_Polarimeter::Pion4VectorKin(TLorentzVector ProtonKinVector)
+TLorentzVector PNeutPol_Polarimeter_Lin::Pion4VectorKin(TLorentzVector ProtonKinVector)
 {
 
     Pi4Vect = (Gamma + Neut) - ProtonKinVector;
@@ -302,7 +300,7 @@ TLorentzVector PNeutPol_Polarimeter::Pion4VectorKin(TLorentzVector ProtonKinVect
     return Pi4Vect;
 }
 
-PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to fill
+PNeutPol_Polarimeter_Lin::PNeutPol_Polarimeter_Lin() // Define a load of histograms to fill
 {
   time = new TH1D("time", 	"time", 	1400, -700, 700);
   time_cut = new TH1D("time_cut", 	"time_cut", 	1400, -700, 700);
@@ -358,39 +356,6 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
   PhiSc825 = new GH1( "Phi_Scattered_825MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 825pm25MeV", 2, -180, 180);
   PhiSc875 = new GH1( "Phi_Scattered_875MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 875pm25MeV", 2, -180, 180);
 
-  PhiScNegHel = new GH1("PhiScNegHel", "Scattetred Proton Phi Distribution in Rotated Frame for -ve Helicity", 2, -180, 180);
-  PhiScPosHel = new GH1("PhiScPosHel", "Scattetred Proton Phi Distribution in Rotated Frame for +ve Helicity", 2, -180, 180);
-
-  // Angles of neutron in scattered frame across EGamma bins for negative helicity
-  PhiSc275NegHel = new GH1( "Phi_Scattered_275MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 275pm25MeV for -ve Helicity", 2, -180, 180);
-  PhiSc325NegHel = new GH1( "Phi_Scattered_325MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 325pm25MeV for -ve Helicity", 2, -180, 180);
-  PhiSc375NegHel = new GH1( "Phi_Scattered_375MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 375pm25MeV for -ve Helicity", 2, -180, 180);
-  PhiSc425NegHel = new GH1( "Phi_Scattered_425MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 425pm25MeV for -ve Helicity", 2, -180, 180);
-  PhiSc475NegHel = new GH1( "Phi_Scattered_475MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 475pm25MeV for -ve Helicity", 2, -180, 180);
-  PhiSc525NegHel = new GH1( "Phi_Scattered_525MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 525pm25MeV for -ve Helicity", 2, -180, 180);
-  PhiSc575NegHel = new GH1( "Phi_Scattered_575MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 575pm25MeV for -ve Helicity", 2, -180, 180);
-  PhiSc625NegHel = new GH1( "Phi_Scattered_625MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 625pm25MeV for -ve Helicity", 2, -180, 180);
-  PhiSc675NegHel = new GH1( "Phi_Scattered_675MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 675pm25MeV for -ve Helicity", 2, -180, 180);
-  PhiSc725NegHel = new GH1( "Phi_Scattered_725MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 725pm25MeV for -ve Helicity", 2, -180, 180);
-  PhiSc775NegHel = new GH1( "Phi_Scattered_775MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 775pm25MeV for -ve Helicity", 2, -180, 180);
-  PhiSc825NegHel = new GH1( "Phi_Scattered_825MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 825pm25MeV for -ve Helicity", 2, -180, 180);
-  PhiSc875NegHel = new GH1( "Phi_Scattered_875MeV_NegHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 875pm25MeV for -ve Helicity", 2, -180, 180);
-
-  // Angles of neutron in scattered frame across EGamma bins for positive helicity
-  PhiSc275PosHel = new GH1( "Phi_Scattered_275MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 275pm25MeV for +ve Helicity", 2, -180, 180);
-  PhiSc325PosHel = new GH1( "Phi_Scattered_325MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 325pm25MeV for +ve Helicity", 2, -180, 180);
-  PhiSc375PosHel = new GH1( "Phi_Scattered_375MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 375pm25MeV for +ve Helicity", 2, -180, 180);
-  PhiSc425PosHel = new GH1( "Phi_Scattered_425MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 425pm25MeV for +ve Helicity", 2, -180, 180);
-  PhiSc475PosHel = new GH1( "Phi_Scattered_475MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 475pm25MeV for +ve Helicity", 2, -180, 180);
-  PhiSc525PosHel = new GH1( "Phi_Scattered_525MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 525pm25MeV for +ve Helicity", 2, -180, 180);
-  PhiSc575PosHel = new GH1( "Phi_Scattered_575MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 575pm25MeV for +ve Helicity", 2, -180, 180);
-  PhiSc625PosHel = new GH1( "Phi_Scattered_625MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 625pm25MeV for +ve Helicity", 2, -180, 180);
-  PhiSc675PosHel = new GH1( "Phi_Scattered_675MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 675pm25MeV for +ve Helicity", 2, -180, 180);
-  PhiSc725PosHel = new GH1( "Phi_Scattered_725MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 725pm25MeV for +ve Helicity", 2, -180, 180);
-  PhiSc775PosHel = new GH1( "Phi_Scattered_775MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 775pm25MeV for +ve Helicity", 2, -180, 180);
-  PhiSc825PosHel = new GH1( "Phi_Scattered_825MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 825pm25MeV for +ve Helicity", 2, -180, 180);
-  PhiSc875PosHel = new GH1( "Phi_Scattered_875MeV_PosHel", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 875pm25MeV for +ve Helicity", 2, -180, 180);
-
   ThetaRecPiDiff = new GH1 ("ThetaRecPiDiff", "Difference between ThetaPiRec and Thetan", 200, 0, 180);
   ThetanThetaRecPi = new GH2 ("ThetanThetaRecPi", "Thetan vs ThetaPiRec", 100, 0, 180, 100, 0, 180);
   ThetanThetaRecPiDiff = new GH2 ("ThetanThetaRecPiDiff", "Thetan vs (ThetaPiRec - Thetan)", 100, 0, 180, 100, 0, 180);
@@ -409,7 +374,7 @@ PNeutPol_Polarimeter::PNeutPol_Polarimeter() // Define a load of histograms to f
 
 }
 
-void PNeutPol_Polarimeter::FillHists()
+void PNeutPol_Polarimeter_Lin::FillHists()
 {
   time->Fill(TaggerTime);
   if (-5 < TaggerTime && TaggerTime < 20) time_cut->Fill(TaggerTime);
@@ -461,9 +426,6 @@ void PNeutPol_Polarimeter::FillHists()
         ZpPhiScatPos180->Fill(Zp, TaggerTime);
     }
 
-    if (BeamHelicity == kFALSE) PhiScNegHel->Fill(ScattPhi, TaggerTime);
-    if (BeamHelicity == kTRUE) PhiScPosHel->Fill(ScattPhi, TaggerTime);
-
     if(200 < EGamma && EGamma < 300){
         MMp200300->Fill(MMpEpCorr, TaggerTime);
         OAngleCut200400->Fill(OpeningAngle, TaggerTime);
@@ -496,86 +458,60 @@ void PNeutPol_Polarimeter::FillHists()
 
     if ( 250 < EGamma && EGamma < 300) {
         PhiSc275->Fill(ScattPhi, TaggerTime);
-        if (BeamHelicity == kFALSE) PhiSc275NegHel->Fill(ScattPhi, TaggerTime);
-        else if (BeamHelicity == kTRUE) PhiSc275PosHel->Fill(ScattPhi, TaggerTime);
     }
 
     else if ( 300 < EGamma && EGamma < 350) {
         PhiSc325->Fill(ScattPhi, TaggerTime);
-        if (BeamHelicity == kFALSE) PhiSc325NegHel->Fill(ScattPhi, TaggerTime);
-        else if (BeamHelicity == kTRUE) PhiSc325PosHel->Fill(ScattPhi, TaggerTime);
     }
 
     else if ( 350 < EGamma && EGamma < 400) {
         PhiSc375->Fill(ScattPhi, TaggerTime);
-        if (BeamHelicity == kFALSE) PhiSc375NegHel->Fill(ScattPhi, TaggerTime);
-        else if (BeamHelicity == kTRUE) PhiSc375PosHel->Fill(ScattPhi, TaggerTime);
     }
 
     else if ( 400 < EGamma && EGamma < 450) {
         PhiSc425->Fill(ScattPhi, TaggerTime);
-        if (BeamHelicity == kFALSE) PhiSc425NegHel->Fill(ScattPhi, TaggerTime);
-        else if (BeamHelicity == kTRUE) PhiSc425PosHel->Fill(ScattPhi, TaggerTime);
     }
 
     else if ( 450 < EGamma && EGamma < 500) {
         PhiSc475->Fill(ScattPhi, TaggerTime);
-        if (BeamHelicity == kFALSE) PhiSc475NegHel->Fill(ScattPhi, TaggerTime);
-        else if (BeamHelicity == kTRUE) PhiSc475PosHel->Fill(ScattPhi, TaggerTime);
     }
 
     else if ( 500 < EGamma && EGamma < 550) {
         PhiSc525->Fill(ScattPhi, TaggerTime);
-        if (BeamHelicity == kFALSE) PhiSc525NegHel->Fill(ScattPhi, TaggerTime);
-        else if (BeamHelicity == kTRUE) PhiSc525PosHel->Fill(ScattPhi, TaggerTime);
     }
 
     else if ( 550 < EGamma && EGamma < 600) {
         PhiSc575->Fill(ScattPhi, TaggerTime);
-        if (BeamHelicity == kFALSE) PhiSc575NegHel->Fill(ScattPhi, TaggerTime);
-        else if (BeamHelicity == kTRUE) PhiSc575PosHel->Fill(ScattPhi, TaggerTime);
     }
 
     else if ( 600 < EGamma && EGamma < 650) {
         PhiSc625->Fill(ScattPhi, TaggerTime);
-        if (BeamHelicity == kFALSE) PhiSc625NegHel->Fill(ScattPhi, TaggerTime);
-        else if (BeamHelicity == kTRUE) PhiSc625PosHel->Fill(ScattPhi, TaggerTime);
     }
 
     else if ( 650 < EGamma && EGamma < 700) {
         PhiSc675->Fill(ScattPhi, TaggerTime);
-        if (BeamHelicity == kFALSE) PhiSc675NegHel->Fill(ScattPhi, TaggerTime);
-        else if (BeamHelicity == kTRUE) PhiSc675PosHel->Fill(ScattPhi, TaggerTime);
     }
 
     else if ( 700 < EGamma && EGamma < 750) {
         PhiSc725->Fill(ScattPhi, TaggerTime);
-        if (BeamHelicity == kFALSE) PhiSc725NegHel->Fill(ScattPhi, TaggerTime);
-        else if (BeamHelicity == kTRUE) PhiSc725PosHel->Fill(ScattPhi, TaggerTime);
         }
     }
 
     else if ( 750 < EGamma && EGamma < 800) {
         PhiSc775->Fill(ScattPhi, TaggerTime);
-        if (BeamHelicity == kFALSE) PhiSc775NegHel->Fill(ScattPhi, TaggerTime);
-        else if (BeamHelicity == kTRUE) PhiSc775PosHel->Fill(ScattPhi, TaggerTime);
     }
 
     else if ( 800 < EGamma && EGamma < 850) {
         PhiSc825->Fill(ScattPhi, TaggerTime);
-        if (BeamHelicity == kFALSE) PhiSc825NegHel->Fill(ScattPhi, TaggerTime);
-        else if (BeamHelicity == kTRUE) PhiSc825PosHel->Fill(ScattPhi, TaggerTime);
     }
 
     else if ( 850 < EGamma && EGamma < 900) {
         PhiSc875->Fill(ScattPhi, TaggerTime);
-        if (BeamHelicity == kFALSE) PhiSc875NegHel->Fill(ScattPhi, TaggerTime);
-        else if (BeamHelicity == kTRUE) PhiSc875PosHel->Fill(ScattPhi, TaggerTime);
     }
 
 }
 
-Bool_t	PNeutPol_Polarimeter::Write(){
+Bool_t	PNeutPol_Polarimeter_Lin::Write(){
   // Write all GH1's easily
 
   GTreeManager::Write();
