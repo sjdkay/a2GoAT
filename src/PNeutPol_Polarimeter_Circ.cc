@@ -186,16 +186,16 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
 
     // Gamma(d,p)n
     KinEp = CalcKinEnergy(WCThetap, EGamma, Md, 0., Mp, Mn); // Calculate kin E of proton assuming pn production
-    RecKinProton = Proton4VectorKin(KinEp, WCThetapRad, WCPhipRad);
-    RecKinNeutron = Neutron4VectorKin(RecKinProton);
+    RecKinProton = CProton4VectorKin(KinEp, WCThetapRad, WCPhipRad);
+    RecKinNeutron = CNeutron4VectorKin(RecKinProton);
     ThetanRec = (RecKinNeutron.Theta()) * TMath::RadToDeg();
     WCZnRec = 72/tan(RecKinNeutron.Theta());
 
     // Gamma(n,p)Pi (P detected correct)
     // Assume proton track is proton and "neutron" track is from charged pion
     KinEpPi = CalcKinEnergy(WCThetap, EGamma, Mn, 0, Mp, Mpi); // Calculate kin E of proton assuming g(n, p) pi
-    RecKinProtonPi = Proton4VectorKin(KinEpPi, WCThetapRad, WCPhipRad); // Get Proton 4 vector from calculated kin E
-    RecKinPion = Pion4VectorKin(RecKinProtonPi); // Get Pion 4 vector from 4 momenta conservation
+    RecKinProtonPi = CProton4VectorKin(KinEpPi, WCThetapRad, WCPhipRad); // Get Proton 4 vector from calculated kin E
+    RecKinPion = CPion4VectorKin(RecKinProtonPi); // Get Pion 4 vector from 4 momenta conservation
     ThetaPiRec = (RecKinPion.Theta())*TMath::RadToDeg();
     PhiPiRec = (RecKinPion.Phi())*TMath::RadToDeg();
     ThetaPiRecDiff = abs(ThetaPiRec - Thetan);
@@ -203,16 +203,16 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
     // Gamma(n,p)Pi (Pion detected correct)
     // Assume proton track is pion and "neutron" track is from proton
     KinPi = CalcKinEnergy(WCThetap, EGamma, Mn, 0, Mpi, Mp); // Calculate kin E of pion
-    RecKinPionP = Proton4VectorKin(KinPi, WCThetapRad, WCPhipRad); // Get Pion 4 vector from calculated kinE
-    RecKinPPi = Pion4VectorKin(RecKinPionP); // Get Proton 4 vector from 4 momenta conservation
+    RecKinPionP = CProton4VectorKin(KinPi, WCThetapRad, WCPhipRad); // Get Pion 4 vector from calculated kinE
+    RecKinPPi = CPion4VectorKin(RecKinPionP); // Get Proton 4 vector from 4 momenta conservation
     ThetapRec = (RecKinPPi.Theta())*TMath::RadToDeg();
     PhipRec = (RecKinPPi.Phi())*TMath::RadToDeg();
     ThetapRecDiff = abs (ThetapRec - Thetan);
 
     KinEDiff = KinEp - EpCorr;
 
-    RecProtonEpCorr = Proton4VectorKin(EpCorr, WCThetapRad, WCPhipRad);
-    RecNeutronEpCorr = Neutron4VectorKin(RecProtonEpCorr);
+    RecProtonEpCorr = CProton4VectorKin(EpCorr, WCThetapRad, WCPhipRad);
+    RecNeutronEpCorr = CNeutron4VectorKin(RecProtonEpCorr);
     MMpEpCorr = RecNeutronEpCorr.M();
     RecProtonEpCorr3 = RecProtonEpCorr.Vect();
     RecNeutronEpCorr3 = RecNeutronEpCorr.Vect();
@@ -228,13 +228,15 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
     ScattTheta = ScattAngles(0); // Theta is 1st component in vector fn returns above
     ScattPhi = ScattAngles(1); // Phi is 2nd component
 
+    cout << ScattPhi << endl;
+
     if(ThetaPiRec > 20) continue;
     //if ( 850 > MMpEpCorr || 1050 < MMpEpCorr) continue;
     //if (ScattTheta > 60) continue;
     //if (ScattPhi > 170) continue; // Exclude values  at edges for now
     //if (ScattPhi < -170) continue;
     if (ScattPhi > -165 && ScattPhi < 165) continue;
-    if(Cut_protonKinGood->IsInside(KinEp, dEp) == kTRUE) continue; // If inside Kinp banana drop out, quick test
+    if (Cut_protonKinGood->IsInside(KinEp, dEp) == kTRUE) continue; // If inside Kinp banana drop out, quick test
 
     //if (abs(KinEDiff) > 100) continue; // If difference between CB energy and calculated Energy for proton > 100MeV continue
 
@@ -271,7 +273,7 @@ TCutG*	PNeutPol_Polarimeter_Circ::OpenCutFile(Char_t* filename, Char_t* cutname)
   return Cut_clone;
 }
 
-TLorentzVector PNeutPol_Polarimeter_Circ::Proton4VectorKin(Double_t KinE, Double_t Theta, Double_t Phi)
+TLorentzVector PNeutPol_Polarimeter_Circ::CProton4VectorKin(Double_t KinE, Double_t Theta, Double_t Phi)
 {
     EpTot = KinE + Mp;
     Pp = sqrt (TMath::Power(EpTot,2) - TMath::Power(Mp,2));
@@ -286,7 +288,7 @@ TLorentzVector PNeutPol_Polarimeter_Circ::Proton4VectorKin(Double_t KinE, Double
     return P4Vect;
 }
 
-TLorentzVector PNeutPol_Polarimeter_Circ::Neutron4VectorKin(TLorentzVector ProtonKinVector)
+TLorentzVector PNeutPol_Polarimeter_Circ::CNeutron4VectorKin(TLorentzVector ProtonKinVector)
 {
 
     N4Vect = (Gamma + Deut) - ProtonKinVector;
@@ -294,7 +296,7 @@ TLorentzVector PNeutPol_Polarimeter_Circ::Neutron4VectorKin(TLorentzVector Proto
     return N4Vect;
 }
 
-TLorentzVector PNeutPol_Polarimeter_Circ::Pion4VectorKin(TLorentzVector ProtonKinVector)
+TLorentzVector PNeutPol_Polarimeter_Circ::CPion4VectorKin(TLorentzVector ProtonKinVector)
 {
 
     Pi4Vect = (Gamma + Neut) - ProtonKinVector;

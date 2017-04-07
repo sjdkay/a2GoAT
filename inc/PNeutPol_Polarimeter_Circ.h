@@ -255,9 +255,9 @@ public:
     virtual ~PNeutPol_Polarimeter_Circ();
     virtual Bool_t  Init();
     TCutG* OpenCutFile(Char_t* filename, Char_t* cutname);
-    TLorentzVector Proton4VectorKin(Double_t KinE, Double_t Theta, Double_t Phi);
-    TLorentzVector Neutron4VectorKin(TLorentzVector ProtonKinVector);
-    TLorentzVector Pion4VectorKin(TLorentzVector ProtonKinVector);
+    TLorentzVector CProton4VectorKin(Double_t KinE, Double_t Theta, Double_t Phi);
+    TLorentzVector CNeutron4VectorKin(TLorentzVector ProtonKinVector);
+    TLorentzVector CPion4VectorKin(TLorentzVector ProtonKinVector);
     Double_t LabAngles();
     void FillHists();
 

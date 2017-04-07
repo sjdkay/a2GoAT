@@ -185,16 +185,16 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
 
     // Gamma(d,p)n
     KinEp = CalcKinEnergy(WCThetap, EGamma, Md, 0., Mp, Mn); // Calculate kin E of proton assuming pn production
-    RecKinProton = Proton4VectorKin(KinEp, WCThetapRad, WCPhipRad);
-    RecKinNeutron = Neutron4VectorKin(RecKinProton);
+    RecKinProton = LProton4VectorKin(KinEp, WCThetapRad, WCPhipRad);
+    RecKinNeutron = LNeutron4VectorKin(RecKinProton);
     ThetanRec = (RecKinNeutron.Theta()) * TMath::RadToDeg();
     WCZnRec = 72/tan(RecKinNeutron.Theta());
 
     // Gamma(n,p)Pi (P detected correct)
     // Assume proton track is proton and "neutron" track is from charged pion
     KinEpPi = CalcKinEnergy(WCThetap, EGamma, Mn, 0, Mp, Mpi); // Calculate kin E of proton assuming g(n, p) pi
-    RecKinProtonPi = Proton4VectorKin(KinEpPi, WCThetapRad, WCPhipRad); // Get Proton 4 vector from calculated kin E
-    RecKinPion = Pion4VectorKin(RecKinProtonPi); // Get Pion 4 vector from 4 momenta conservation
+    RecKinProtonPi = LProton4VectorKin(KinEpPi, WCThetapRad, WCPhipRad); // Get Proton 4 vector from calculated kin E
+    RecKinPion = LPion4VectorKin(RecKinProtonPi); // Get Pion 4 vector from 4 momenta conservation
     ThetaPiRec = (RecKinPion.Theta())*TMath::RadToDeg();
     PhiPiRec = (RecKinPion.Phi())*TMath::RadToDeg();
     ThetaPiRecDiff = abs(ThetaPiRec - Thetan);
@@ -202,16 +202,16 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
     // Gamma(n,p)Pi (Pion detected correct)
     // Assume proton track is pion and "neutron" track is from proton
     KinPi = CalcKinEnergy(WCThetap, EGamma, Mn, 0, Mpi, Mp); // Calculate kin E of pion
-    RecKinPionP = Proton4VectorKin(KinPi, WCThetapRad, WCPhipRad); // Get Pion 4 vector from calculated kinE
-    RecKinPPi = Pion4VectorKin(RecKinPionP); // Get Proton 4 vector from 4 momenta conservation
+    RecKinPionP = LProton4VectorKin(KinPi, WCThetapRad, WCPhipRad); // Get Pion 4 vector from calculated kinE
+    RecKinPPi = LPion4VectorKin(RecKinPionP); // Get Proton 4 vector from 4 momenta conservation
     ThetapRec = (RecKinPPi.Theta())*TMath::RadToDeg();
     PhipRec = (RecKinPPi.Phi())*TMath::RadToDeg();
     ThetapRecDiff = abs (ThetapRec - Thetan);
 
     KinEDiff = KinEp - EpCorr;
 
-    RecProtonEpCorr = Proton4VectorKin(EpCorr, WCThetapRad, WCPhipRad);
-    RecNeutronEpCorr = Neutron4VectorKin(RecProtonEpCorr);
+    RecProtonEpCorr = LProton4VectorKin(EpCorr, WCThetapRad, WCPhipRad);
+    RecNeutronEpCorr = LNeutron4VectorKin(RecProtonEpCorr);
     MMpEpCorr = RecNeutronEpCorr.M();
     RecProtonEpCorr3 = RecProtonEpCorr.Vect();
     RecNeutronEpCorr3 = RecNeutronEpCorr.Vect();
@@ -269,7 +269,7 @@ TCutG*	PNeutPol_Polarimeter_Lin::OpenCutFile(Char_t* filename, Char_t* cutname)
   return Cut_clone;
 }
 
-TLorentzVector PNeutPol_Polarimeter_Lin::Proton4VectorKin(Double_t KinE, Double_t Theta, Double_t Phi)
+TLorentzVector PNeutPol_Polarimeter_Lin::LProton4VectorKin(Double_t KinE, Double_t Theta, Double_t Phi)
 {
     EpTot = KinE + Mp;
     Pp = sqrt (TMath::Power(EpTot,2) - TMath::Power(Mp,2));
@@ -284,7 +284,7 @@ TLorentzVector PNeutPol_Polarimeter_Lin::Proton4VectorKin(Double_t KinE, Double_
     return P4Vect;
 }
 
-TLorentzVector PNeutPol_Polarimeter_Lin::Neutron4VectorKin(TLorentzVector ProtonKinVector)
+TLorentzVector PNeutPol_Polarimeter_Lin::LNeutron4VectorKin(TLorentzVector ProtonKinVector)
 {
 
     N4Vect = (Gamma + Deut) - ProtonKinVector;
@@ -292,7 +292,7 @@ TLorentzVector PNeutPol_Polarimeter_Lin::Neutron4VectorKin(TLorentzVector Proton
     return N4Vect;
 }
 
-TLorentzVector PNeutPol_Polarimeter_Lin::Pion4VectorKin(TLorentzVector ProtonKinVector)
+TLorentzVector PNeutPol_Polarimeter_Lin::LPion4VectorKin(TLorentzVector ProtonKinVector)
 {
 
     Pi4Vect = (Gamma + Neut) - ProtonKinVector;
