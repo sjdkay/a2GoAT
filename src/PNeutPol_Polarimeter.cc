@@ -182,7 +182,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     Phin = GVn3.Phi()*TMath::RadToDeg();
 
     EpCorr = EpPolCorrect(Ep, WCThetap);
-    if(Cut_proton->IsInside(EpCorr, dEp) == kFALSE) continue; // If E loss correct proton is NOT inside p banana drop out
+    //if(Cut_proton->IsInside(EpCorr, dEp) == kFALSE) continue; // If E loss correct proton is NOT inside p banana drop out
     EpDiff = abs(EpCorr - Ep);
 
     // Gamma(d,p)n
@@ -234,6 +234,7 @@ void	PNeutPol_Polarimeter::ProcessEvent()
     //if (ScattTheta > 60) continue;
     //if (ScattPhi > 170) continue; // Exclude values  at edges for now
     //if (ScattPhi < -170) continue;
+    if (ScattPhi < -165 || ScattPhi > 165) continue;
 
     //if (abs(KinEDiff) > 100) continue; // If difference between CB energy and calculated Energy for proton > 100MeV continue
 
