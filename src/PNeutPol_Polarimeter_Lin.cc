@@ -232,7 +232,7 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
     //if (ScattTheta > 60) continue;
     //if (ScattPhi > 170) continue; // Exclude values  at edges for now
     //if (ScattPhi < -170) continue;
-    if (ScattPhi < -165 || ScattPhi > 165) continue;
+    //if (ScattPhi < -165 || ScattPhi > 165) continue;
 
     //if (abs(KinEDiff) > 100) continue; // If difference between CB energy and calculated Energy for proton > 100MeV continue
 
@@ -314,8 +314,8 @@ PNeutPol_Polarimeter_Lin::PNeutPol_Polarimeter_Lin() // Define a load of histogr
   WCZnRecon = new GH1 ("WCZnRecon", "WCZ Hit Position from Reconstructed n Vector", 200, 0, 400);
   WCZnRecon = new GH1 ("WCZnRecon", "WCZ Hit Position from Reconstructed n Vector", 200, 0, 400);
 
-  ThetaSc =  new GH1( "Theta_Scattered", "Scattetred Proton Theta Distribution in Rotated Frame", 180, 0, 180 );
-  PhiSc = new GH1( "Phi_Scattered", "Scattetred Proton Phi Distribution in Rotated Frame", 90, -180, 180 );
+  ThetaSc =  new GH1( "Theta_Scattered", "Scattered Proton Theta Distribution in Rotated Frame", 180, 0, 180 );
+  PhiSc = new GH1( "Phi_Scattered", "Scattered Proton Phi Distribution in Rotated Frame", 90, -180, 180 );
 
   EpKinEpCorrDiff = new GH1("EpKinEpCorrDiff", "Difference Between EpKin and EpCorr", 300, -300, 300);
   EpEpCorrDiff = new GH1("EpEpCorrDiff", "Difference Between Ep and EpCorr", 200, 0, 200);
@@ -342,19 +342,49 @@ PNeutPol_Polarimeter_Lin::PNeutPol_Polarimeter_Lin() // Define a load of histogr
   MMp800900 = new GH1("MMp800900", "Missing mass as seen by Proton (800-900MeV Photon Energy)", 400, 0, 2000);
 
   // Angles of neutron in scattered frame across EGamma bins
-  PhiSc275 = new GH1( "Phi_Scattered_275MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 275pm25MeV", 2, -180, 180);
-  PhiSc325 = new GH1( "Phi_Scattered_325MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 325pm25MeV", 2, -180, 180);
-  PhiSc375 = new GH1( "Phi_Scattered_375MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 375pm25MeV", 2, -180, 180);
-  PhiSc425 = new GH1( "Phi_Scattered_425MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 425pm25MeV", 2, -180, 180);
-  PhiSc475 = new GH1( "Phi_Scattered_475MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 475pm25MeV", 2, -180, 180);
-  PhiSc525 = new GH1( "Phi_Scattered_525MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 525pm25MeV", 2, -180, 180);
-  PhiSc575 = new GH1( "Phi_Scattered_575MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 575pm25MeV", 2, -180, 180);
-  PhiSc625 = new GH1( "Phi_Scattered_625MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 625pm25MeV", 2, -180, 180);
-  PhiSc675 = new GH1( "Phi_Scattered_675MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 675pm25MeV", 2, -180, 180);
-  PhiSc725 = new GH1( "Phi_Scattered_725MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 725pm25MeV", 2, -180, 180);
-  PhiSc775 = new GH1( "Phi_Scattered_775MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 775pm25MeV", 2, -180, 180);
-  PhiSc825 = new GH1( "Phi_Scattered_825MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 825pm25MeV", 2, -180, 180);
-  PhiSc875 = new GH1( "Phi_Scattered_875MeV", "Scattetred Proton Phi Distribution in Rotated Frame for Photon Energies of 875pm25MeV", 2, -180, 180);
+  PhiSc275 = new GH1( "Phi_Scattered_275MeV", "Scattered Proton Phi Distribution in Rotated Frame for Photon Energies of 275pm25MeV", 2, -180, 180);
+  PhiSc325 = new GH1( "Phi_Scattered_325MeV", "Scattered Proton Phi Distribution in Rotated Frame for Photon Energies of 325pm25MeV", 2, -180, 180);
+  PhiSc375 = new GH1( "Phi_Scattered_375MeV", "Scattered Proton Phi Distribution in Rotated Frame for Photon Energies of 375pm25MeV", 2, -180, 180);
+  PhiSc425 = new GH1( "Phi_Scattered_425MeV", "Scattered Proton Phi Distribution in Rotated Frame for Photon Energies of 425pm25MeV", 2, -180, 180);
+  PhiSc475 = new GH1( "Phi_Scattered_475MeV", "Scattered Proton Phi Distribution in Rotated Frame for Photon Energies of 475pm25MeV", 2, -180, 180);
+  PhiSc525 = new GH1( "Phi_Scattered_525MeV", "Scattered Proton Phi Distribution in Rotated Frame for Photon Energies of 525pm25MeV", 2, -180, 180);
+  PhiSc575 = new GH1( "Phi_Scattered_575MeV", "Scattered Proton Phi Distribution in Rotated Frame for Photon Energies of 575pm25MeV", 2, -180, 180);
+  PhiSc625 = new GH1( "Phi_Scattered_625MeV", "Scattered Proton Phi Distribution in Rotated Frame for Photon Energies of 625pm25MeV", 2, -180, 180);
+  PhiSc675 = new GH1( "Phi_Scattered_675MeV", "Scattered Proton Phi Distribution in Rotated Frame for Photon Energies of 675pm25MeV", 2, -180, 180);
+  PhiSc725 = new GH1( "Phi_Scattered_725MeV", "Scattered Proton Phi Distribution in Rotated Frame for Photon Energies of 725pm25MeV", 2, -180, 180);
+  PhiSc775 = new GH1( "Phi_Scattered_775MeV", "Scattered Proton Phi Distribution in Rotated Frame for Photon Energies of 775pm25MeV", 2, -180, 180);
+  PhiSc825 = new GH1( "Phi_Scattered_825MeV", "Scattered Proton Phi Distribution in Rotated Frame for Photon Energies of 825pm25MeV", 2, -180, 180);
+  PhiSc875 = new GH1( "Phi_Scattered_875MeV", "Scattered Proton Phi Distribution in Rotated Frame for Photon Energies of 875pm25MeV", 2, -180, 180);
+
+ // Proton Phi dists across EGamma bins
+  Phip275 = new GH1( "Phip_275MeV", "Proton Phi Distribution for Photon Energies of 275pm25MeV", 180, -180, 180);
+  Phip325 = new GH1( "Phip_325MeV", "Proton Phi Distribution for Photon Energies of 325pm25MeV", 180, -180, 180);
+  Phip375 = new GH1( "Phip_375MeV", "Proton Phi Distribution for Photon Energies of 375pm25MeV", 180, -180, 180);
+  Phip425 = new GH1( "Phip_425MeV", "Proton Phi Distribution for Photon Energies of 425pm25MeV", 180, -180, 180);
+  Phip475 = new GH1( "Phip_475MeV", "Proton Phi Distribution for Photon Energies of 475pm25MeV", 180, -180, 180);
+  Phip525 = new GH1( "Phip_525MeV", "Proton Phi Distribution for Photon Energies of 525pm25MeV", 180, -180, 180);
+  Phip575 = new GH1( "Phip_575MeV", "Proton Phi Distribution for Photon Energies of 575pm25MeV", 180, -180, 180);
+  Phip625 = new GH1( "Phip_625MeV", "Proton Phi Distribution for Photon Energies of 625pm25MeV", 180, -180, 180);
+  Phip675 = new GH1( "Phip_675MeV", "Proton Phi Distribution for Photon Energies of 675pm25MeV", 180, -180, 180);
+  Phip725 = new GH1( "Phip_725MeV", "Proton Phi Distribution for Photon Energies of 725pm25MeV", 180, -180, 180);
+  Phip775 = new GH1( "Phip_775MeV", "Proton Phi Distribution for Photon Energies of 775pm25MeV", 180, -180, 180);
+  Phip825 = new GH1( "Phip_825MeV", "Proton Phi Distribution for Photon Energies of 825pm25MeV", 180, -180, 180);
+  Phip875 = new GH1( "Phip_875MeV", "Proton Phi Distribution for Photon Energies of 875pm25MeV", 180, -180, 180);
+
+ // Angles of neutron in scattered frame across EGamma bins
+  Phin275 = new GH1( "Phin_275MeV", "Neutron Phi Distribution for Photon Energies of 275pm25MeV", 180, -180, 180);
+  Phin325 = new GH1( "Phin_325MeV", "Neutron Phi Distribution for Photon Energies of 325pm25MeV", 180, -180, 180);
+  Phin375 = new GH1( "Phin_375MeV", "Neutron Phi Distribution for Photon Energies of 375pm25MeV", 180, -180, 180);
+  Phin425 = new GH1( "Phin_425MeV", "Neutron Phi Distribution for Photon Energies of 425pm25MeV", 180, -180, 180);
+  Phin475 = new GH1( "Phin_475MeV", "Neutron Phi Distribution for Photon Energies of 475pm25MeV", 180, -180, 180);
+  Phin525 = new GH1( "Phin_525MeV", "Neutron Phi Distribution for Photon Energies of 525pm25MeV", 180, -180, 180);
+  Phin575 = new GH1( "Phin_575MeV", "Neutron Phi Distribution for Photon Energies of 575pm25MeV", 180, -180, 180);
+  Phin625 = new GH1( "Phin_625MeV", "Neutron Phi Distribution for Photon Energies of 625pm25MeV", 180, -180, 180);
+  Phin675 = new GH1( "Phin_675MeV", "Neutron Phi Distribution for Photon Energies of 675pm25MeV", 180, -180, 180);
+  Phin725 = new GH1( "Phin_725MeV", "Neutron Phi Distribution for Photon Energies of 725pm25MeV", 180, -180, 180);
+  Phin775 = new GH1( "Phin_775MeV", "Neutron Phi Distribution for Photon Energies of 775pm25MeV", 180, -180, 180);
+  Phin825 = new GH1( "Phin_825MeV", "Neutron Phi Distribution for Photon Energies of 825pm25MeV", 180, -180, 180);
+  Phin875 = new GH1( "Phin_875MeV", "Neutron Phi Distribution for Photon Energies of 875pm25MeV", 180, -180, 180);
 
   ThetaRecPiDiff = new GH1 ("ThetaRecPiDiff", "Difference between ThetaPiRec and Thetan", 200, 0, 180);
   ThetanThetaRecPi = new GH2 ("ThetanThetaRecPi", "Thetan vs ThetaPiRec", 100, 0, 180, 100, 0, 180);
@@ -376,139 +406,164 @@ PNeutPol_Polarimeter_Lin::PNeutPol_Polarimeter_Lin() // Define a load of histogr
 
 void PNeutPol_Polarimeter_Lin::FillHists()
 {
-  time->Fill(TaggerTime);
-  if (-5 < TaggerTime && TaggerTime < 20) time_cut->Fill(TaggerTime);
+    time->Fill(TaggerTime);
+    if (-5 < TaggerTime && TaggerTime < 20) time_cut->Fill(TaggerTime);
 
-  Eg->Fill(EGamma, TaggerTime);
-  E_dE->Fill(EpCorr, dEp, TaggerTime);
-  KinEp_dE->Fill(KinEp, dEp, TaggerTime);
-  EpKin->Fill(KinEp, TaggerTime);
-  EpCorrected->Fill(EpCorr, TaggerTime);
-  EpKinEpCorrDiff->Fill(KinEDiff, TaggerTime);
-  EpEpCorrDiff->Fill(EpDiff, TaggerTime);
-  MMpEpCorrected->Fill(MMpEpCorr, TaggerTime);
-  OAngle->Fill(OpeningAngle, TaggerTime);
-  WCZnRecon->Fill(WCZnRec, TaggerTime);
-  ZpDist->Fill(Zp, TaggerTime);
+    Eg->Fill(EGamma, TaggerTime);
+    E_dE->Fill(EpCorr, dEp, TaggerTime);
+    KinEp_dE->Fill(KinEp, dEp, TaggerTime);
+    EpKin->Fill(KinEp, TaggerTime);
+    EpCorrected->Fill(EpCorr, TaggerTime);
+    EpKinEpCorrDiff->Fill(KinEDiff, TaggerTime);
+    EpEpCorrDiff->Fill(EpDiff, TaggerTime);
+    MMpEpCorrected->Fill(MMpEpCorr, TaggerTime);
+    OAngle->Fill(OpeningAngle, TaggerTime);
+    WCZnRecon->Fill(WCZnRec, TaggerTime);
+    ZpDist->Fill(Zp, TaggerTime);
 
-  WCPhiDifference->Fill(PhiWCDiff);
-  E_KinEp->Fill(EpCorr, KinEp, TaggerTime);
-  PhinDiffWCZRec->Fill(WCZnRec, PhinDiff, TaggerTime);
-  ThetaRecPiDiff->Fill(ThetaPiRecDiff, TaggerTime);
-  ThetanThetaRecPi->Fill(Thetan, ThetaPiRec, TaggerTime);
-  ThetanThetaRecPiDiff->Fill(Thetan, ThetaPiRecDiff, TaggerTime);
-  ThetaRecPDiff->Fill(ThetapRecDiff, TaggerTime);
-  ThetanThetaRecP->Fill(Thetan, ThetapRec, TaggerTime);
-  ThetanThetaRecPDiff->Fill(Thetan, ThetapRecDiff, TaggerTime);
+    WCPhiDifference->Fill(PhiWCDiff);
+    E_KinEp->Fill(EpCorr, KinEp, TaggerTime);
+    PhinDiffWCZRec->Fill(WCZnRec, PhinDiff, TaggerTime);
+    ThetaRecPiDiff->Fill(ThetaPiRecDiff, TaggerTime);
+    ThetanThetaRecPi->Fill(Thetan, ThetaPiRec, TaggerTime);
+    ThetanThetaRecPiDiff->Fill(Thetan, ThetaPiRecDiff, TaggerTime);
+    ThetaRecPDiff->Fill(ThetapRecDiff, TaggerTime);
+    ThetanThetaRecP->Fill(Thetan, ThetapRec, TaggerTime);
+    ThetanThetaRecPDiff->Fill(Thetan, ThetapRecDiff, TaggerTime);
 
-  // Fill events inside good proton banana on KinEpdE plot
-  if(Cut_protonKinGood -> IsInside(KinEp, dEp) == kTRUE)
-  {
-    //KinEp_dE_GoodCut->Fill(KinEp, dEp, TaggerTime);
-    MMpEpCorrectedCut->Fill(MMpEpCorr, TaggerTime);
-    EgCut->Fill(EGamma, TaggerTime);
-    OAngleCut->Fill(OpeningAngle, TaggerTime);
-    ThetaSc -> Fill(ScattTheta, TaggerTime);
-    PhiSc -> Fill(ScattPhi, TaggerTime);
-    ThetaScPhiSc->Fill(ScattTheta, ScattPhi, TaggerTime);
-    E_dE_KinCut->Fill(EpCorr, dEp, TaggerTime);
-    PhinDiffWCZRec_KinCut->Fill(WCZnRec, PhinDiff, TaggerTime);
+    // Fill events inside good proton banana on KinEpdE plot
+    if(Cut_protonKinGood -> IsInside(KinEp, dEp) == kTRUE)
+    {
+        //KinEp_dE_GoodCut->Fill(KinEp, dEp, TaggerTime);
+        MMpEpCorrectedCut->Fill(MMpEpCorr, TaggerTime);
+        EgCut->Fill(EGamma, TaggerTime);
+        OAngleCut->Fill(OpeningAngle, TaggerTime);
+        ThetaSc -> Fill(ScattTheta, TaggerTime);
+        PhiSc -> Fill(ScattPhi, TaggerTime);
+        ThetaScPhiSc->Fill(ScattTheta, ScattPhi, TaggerTime);
+        E_dE_KinCut->Fill(EpCorr, dEp, TaggerTime);
+        PhinDiffWCZRec_KinCut->Fill(WCZnRec, PhinDiff, TaggerTime);
 
-    if(ScattPhi < -165){
-        ZpPhiScatNeg180->Fill(Zp, TaggerTime);
-    }
+        if(ScattPhi < -165){
+            ZpPhiScatNeg180->Fill(Zp, TaggerTime);
+        }
 
-    if(ScattPhi < 15 && ScattPhi > -15){
-        ZpPhiScat0->Fill(Zp, TaggerTime);
-    }
+        if(ScattPhi < 15 && ScattPhi > -15){
+            ZpPhiScat0->Fill(Zp, TaggerTime);
+        }
 
-    if(ScattPhi > 165){
-        ZpPhiScatPos180->Fill(Zp, TaggerTime);
-    }
+        if(ScattPhi > 165){
+            ZpPhiScatPos180->Fill(Zp, TaggerTime);
+        }
 
-    if(200 < EGamma && EGamma < 300){
-        MMp200300->Fill(MMpEpCorr, TaggerTime);
-        OAngleCut200400->Fill(OpeningAngle, TaggerTime);
-    }
+        if(200 < EGamma && EGamma < 300){
+            MMp200300->Fill(MMpEpCorr, TaggerTime);
+            OAngleCut200400->Fill(OpeningAngle, TaggerTime);
+        }
 
-    else if(300 < EGamma && EGamma < 400){
-        MMp300400->Fill(MMpEpCorr, TaggerTime);
-        OAngleCut200400->Fill(OpeningAngle, TaggerTime);
-    }
+        else if(300 < EGamma && EGamma < 400){
+            MMp300400->Fill(MMpEpCorr, TaggerTime);
+            OAngleCut200400->Fill(OpeningAngle, TaggerTime);
+        }
 
-    else if(400 < EGamma && EGamma < 500){
-        MMp400500->Fill(MMpEpCorr, TaggerTime);
-    }
+        else if(400 < EGamma && EGamma < 500){
+            MMp400500->Fill(MMpEpCorr, TaggerTime);
+        }
 
-    else if(500 < EGamma && EGamma < 600){
-        MMp500600->Fill(MMpEpCorr, TaggerTime);
-    }
+        else if(500 < EGamma && EGamma < 600){
+            MMp500600->Fill(MMpEpCorr, TaggerTime);
+        }
 
-    else if(600 < EGamma && EGamma < 700){
-        MMp600700->Fill(MMpEpCorr, TaggerTime);
-    }
+        else if(600 < EGamma && EGamma < 700){
+            MMp600700->Fill(MMpEpCorr, TaggerTime);
+        }
 
-    else if(700 < EGamma && EGamma < 800){
-        MMp700800->Fill(MMpEpCorr, TaggerTime);
-    }
+        else if(700 < EGamma && EGamma < 800){
+            MMp700800->Fill(MMpEpCorr, TaggerTime);
+        }
 
-    else if(800 < EGamma && EGamma < 900){
-        MMp800900->Fill(MMpEpCorr, TaggerTime);
-    }
+        else if(800 < EGamma && EGamma < 900){
+            MMp800900->Fill(MMpEpCorr, TaggerTime);
+        }
 
-    if ( 250 < EGamma && EGamma < 300) {
-        PhiSc275->Fill(ScattPhi, TaggerTime);
-    }
+        if ( 250 < EGamma && EGamma < 300) {
+            PhiSc275->Fill(ScattPhi, TaggerTime);
+            Phip275->Fill(WCPhip, TaggerTime);
+            Phin275->Fill(PhinRec, TaggerTime);
+        }
 
-    else if ( 300 < EGamma && EGamma < 350) {
-        PhiSc325->Fill(ScattPhi, TaggerTime);
-    }
+        else if ( 300 < EGamma && EGamma < 350) {
+            PhiSc325->Fill(ScattPhi, TaggerTime);
+            Phip325->Fill(WCPhip, TaggerTime);
+            Phin325->Fill(PhinRec, TaggerTime);
+        }
 
-    else if ( 350 < EGamma && EGamma < 400) {
-        PhiSc375->Fill(ScattPhi, TaggerTime);
-    }
+        else if ( 350 < EGamma && EGamma < 400) {
+            PhiSc375->Fill(ScattPhi, TaggerTime);
+            Phip375->Fill(WCPhip, TaggerTime);
+            Phin375->Fill(PhinRec, TaggerTime);
+        }
 
-    else if ( 400 < EGamma && EGamma < 450) {
-        PhiSc425->Fill(ScattPhi, TaggerTime);
-    }
+        else if ( 400 < EGamma && EGamma < 450) {
+            PhiSc425->Fill(ScattPhi, TaggerTime);
+            Phip425->Fill(WCPhip, TaggerTime);
+            Phin425->Fill(PhinRec, TaggerTime);
+        }
 
-    else if ( 450 < EGamma && EGamma < 500) {
-        PhiSc475->Fill(ScattPhi, TaggerTime);
-    }
+        else if ( 450 < EGamma && EGamma < 500) {
+            PhiSc475->Fill(ScattPhi, TaggerTime);
+            Phip475->Fill(WCPhip, TaggerTime);
+            Phin475->Fill(PhinRec, TaggerTime);
+        }
 
-    else if ( 500 < EGamma && EGamma < 550) {
-        PhiSc525->Fill(ScattPhi, TaggerTime);
-    }
+        else if ( 500 < EGamma && EGamma < 550) {
+            PhiSc525->Fill(ScattPhi, TaggerTime);
+            Phip525->Fill(WCPhip, TaggerTime);
+            Phin525->Fill(PhinRec, TaggerTime);
+        }
 
-    else if ( 550 < EGamma && EGamma < 600) {
-        PhiSc575->Fill(ScattPhi, TaggerTime);
-    }
+        else if ( 550 < EGamma && EGamma < 600) {
+            PhiSc575->Fill(ScattPhi, TaggerTime);
+            Phip575->Fill(WCPhip, TaggerTime);
+            Phin575->Fill(PhinRec, TaggerTime);
+        }
 
-    else if ( 600 < EGamma && EGamma < 650) {
-        PhiSc625->Fill(ScattPhi, TaggerTime);
-    }
+        else if ( 600 < EGamma && EGamma < 650) {
+            PhiSc625->Fill(ScattPhi, TaggerTime);
+            Phip625->Fill(WCPhip, TaggerTime);
+            Phin625->Fill(PhinRec, TaggerTime);
+        }
 
-    else if ( 650 < EGamma && EGamma < 700) {
-        PhiSc675->Fill(ScattPhi, TaggerTime);
-    }
+        else if ( 650 < EGamma && EGamma < 700) {
+            PhiSc675->Fill(ScattPhi, TaggerTime);
+            Phip675->Fill(WCPhip, TaggerTime);
+            Phin675->Fill(PhinRec, TaggerTime);
+        }
 
-    else if ( 700 < EGamma && EGamma < 750) {
-        PhiSc725->Fill(ScattPhi, TaggerTime);
+        else if ( 700 < EGamma && EGamma < 750) {
+            PhiSc725->Fill(ScattPhi, TaggerTime);
+            Phip725->Fill(WCPhip, TaggerTime);
+            Phin725->Fill(PhinRec, TaggerTime);
+            }
+
+        else if ( 750 < EGamma && EGamma < 800) {
+            PhiSc775->Fill(ScattPhi, TaggerTime);
+            Phip775->Fill(WCPhip, TaggerTime);
+            Phin775->Fill(PhinRec, TaggerTime);
+        }
+
+        else if ( 800 < EGamma && EGamma < 850) {
+            PhiSc825->Fill(ScattPhi, TaggerTime);
+            Phip825->Fill(WCPhip, TaggerTime);
+            Phin825->Fill(PhinRec, TaggerTime);
+        }
+
+        else if ( 850 < EGamma && EGamma < 900) {
+            PhiSc875->Fill(ScattPhi, TaggerTime);
+            Phip875->Fill(WCPhip, TaggerTime);
+            Phin875->Fill(PhinRec, TaggerTime);
         }
     }
-
-    else if ( 750 < EGamma && EGamma < 800) {
-        PhiSc775->Fill(ScattPhi, TaggerTime);
-    }
-
-    else if ( 800 < EGamma && EGamma < 850) {
-        PhiSc825->Fill(ScattPhi, TaggerTime);
-    }
-
-    else if ( 850 < EGamma && EGamma < 900) {
-        PhiSc875->Fill(ScattPhi, TaggerTime);
-    }
-
 }
 
 Bool_t	PNeutPol_Polarimeter_Lin::Write(){

@@ -180,6 +180,34 @@ private:
   GH1* PhiSc825;
   GH1* PhiSc875;
 
+  GH1* Phip275;
+  GH1* Phip325;
+  GH1* Phip375;
+  GH1* Phip425;
+  GH1* Phip475;
+  GH1* Phip525;
+  GH1* Phip575;
+  GH1* Phip625;
+  GH1* Phip675;
+  GH1* Phip725;
+  GH1* Phip775;
+  GH1* Phip825;
+  GH1* Phip875;
+
+  GH1* Phin275;
+  GH1* Phin325;
+  GH1* Phin375;
+  GH1* Phin425;
+  GH1* Phin475;
+  GH1* Phin525;
+  GH1* Phin575;
+  GH1* Phin625;
+  GH1* Phin675;
+  GH1* Phin725;
+  GH1* Phin775;
+  GH1* Phin825;
+  GH1* Phin875;
+
   GH2* E_dE;
   GH2* E_dE_Cut;
   GH2* E_dE_KinCut;
