@@ -232,7 +232,7 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
     ScattTheta = ScattAngles(0); // Theta is 1st component in vector fn returns above
     ScattPhi = ScattAngles(1); // Phi is 2nd component
 
-    if(Cut_protonKinGood -> IsInside(KinEp, dEp) == kFALSE); // If E loss correct proton is NOT inside p banana drop out
+    if(Cut_protonKinGood -> IsInside(KinEp, dEp) == kFALSE) continue; // If E loss correct proton is NOT inside p banana drop out
     if(ThetaPiRec > 20) continue;
     //if ( 850 > MMpEpCorr || 1050 < MMpEpCorr) continue;
     if (ScattTheta > 60) continue;
