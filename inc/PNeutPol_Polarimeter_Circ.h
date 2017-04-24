@@ -142,6 +142,8 @@ private:
   GH1* EpKin;
   GH1* EpCorrected;
   GH1* EpKinEpCorrDiff;
+  GH1* EpKinEpCorrDiffGood;
+  GH1* EpKinEpCorrDiffBad;
   GH1* EpEpCorrDiff;
 
   GH1* MMpEpCorrected;
@@ -222,6 +224,7 @@ private:
   GH2* E_KinEpCut;
   GH2* PhinDiffWCZRec;
   GH2* PhinDiffWCZRec_KinCut;
+  GH2* ThetaDiffPhiDiff;
 
   GH1* ThetaRecPiDiff;
   GH2* ThetanThetaRecPi;
