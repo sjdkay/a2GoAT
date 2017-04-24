@@ -185,7 +185,6 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
     Phin = GVn3.Phi()*TMath::RadToDeg();
 
     EpCorr = EpPolCorrect(Ep, WCThetap);
-    if(Cut_proton->IsInside(EpCorr, dEp) == kFALSE) continue; // If E loss correct proton is NOT inside p banana drop out
     EpDiff = abs(EpCorr - Ep);
 
     // Gamma(d,p)n
@@ -233,6 +232,7 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
     ScattTheta = ScattAngles(0); // Theta is 1st component in vector fn returns above
     ScattPhi = ScattAngles(1); // Phi is 2nd component
 
+    if(Cut_protonKinGood -> IsInside(KinEp, dEp) == kFALSE); // If E loss correct proton is NOT inside p banana drop out
     if(ThetaPiRec > 20) continue;
     //if ( 850 > MMpEpCorr || 1050 < MMpEpCorr) continue;
     if (ScattTheta > 60) continue;
@@ -543,7 +543,7 @@ PNeutPol_Polarimeter_Lin::PNeutPol_Polarimeter_Lin() // Define a load of histogr
   ThetaScPhiSc = new GH2 ("ThetaScPhiSc", "Phi as a function of Theta (Both in rotated frame)", 100, 0, 180, 100, -180, 180);
   E_KinEp = new GH2 ("E_KinEp", "Kinematic Energy of Proton as a function of CB energy", 100, 0, 500, 100, 0, 500);
   PhinDiffWCZRec = new GH2 ("PhinDiffWCZRec", "Difference between WC Phi and Reconstructed Phi as a fn of WCZ Hit Position", 100, 0, 200, 100, 0, 180);
-  PhinDiffWCZRec_KinCut = new GH2 ("PhinDiffWCZRec_KinCut", "Difference between WC Phi and Reconstructed Phi as a fn of WCZ Hit Position (Kin P Banana Cut)", 100, 0, 200, 100, 0, 180);
+  PhinDiffWCZRec_KinCut = new GH2 ("PhinDiffWCZRec_KinCut", "Difference between WC Phi and Reconstructed Phi as a fn of WCZ Hit Position (Kin P Banana Cut)", 200, -300, 300, 200, 0, 180);
 
 }
 
