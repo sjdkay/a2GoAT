@@ -312,7 +312,6 @@ PNeutPol_Polarimeter_Lin::PNeutPol_Polarimeter_Lin() // Define a load of histogr
   time_cut = new TH1D("time_cut", 	"time_cut", 	1400, -700, 700);
 
   Eg = new GH1( "Eg", "Photon Energy Distribution", 200, 100, 1600 );
-  ThetaProt655705 = new GH1 ("ThetaProt655705", "Proton Theta Distribution (655-705MeV EGamma)", 180, 0, 180);
   WCPhiDifference = new GH1 ("WCPhiDifference", "WC Phi Difference Between p and n", 180, 0, 360);
   EpKin = new GH1 ("EpKin", "Ep Calculated from Ep/Thetap", 100, 0, 500);
   EpCorrected = new GH1 ("EpCorrected", "Ep Corrected for Energy Loss in Polarimeter ", 100, 0, 500);

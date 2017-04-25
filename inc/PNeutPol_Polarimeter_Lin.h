@@ -140,7 +140,6 @@ private:
 
   GH1* EkSum;
   GH1* Eg;
-  GH1* ThetaProt655705;
   GH1* WCPhiDifference;
   GH1* EpKin;
   GH1* EpCorrected;
