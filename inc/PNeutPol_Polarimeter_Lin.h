@@ -29,6 +29,7 @@ private:
   Int_t EventCounterTrackCut;
   Int_t EventCounterZCut;
   Int_t EventCounterCoplanarCut;
+  Int_t EventNum;
 
   Int_t Detectors1;
   Int_t Detectors2;
@@ -157,10 +158,7 @@ private:
   GH1* MMp600700;
   GH1* MMp700800;
   GH1* MMp800900;
-  GH1* EgCut;
-  GH1* MMpEpCorrectedCut;
-  GH1* OAngleCut;
-  GH1* OAngleCut200400;
+  GH1* OAngle200400;
 
   GH1* ZpDist;
   GH1* ZpPhiScatNeg180;
@@ -340,7 +338,6 @@ private:
 
   GH2* E_dE;
   GH2* E_dE_Cut;
-  GH2* E_dE_KinCut;
   GH2* KinEp_dE;
   GH2* KinEp_dE_GoodCut;
   GH2* ThetaScPhiSc;

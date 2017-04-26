@@ -30,12 +30,6 @@ void ParaPerp_Combiner(){
   EpEpCorrDiff_Para->SetName("EpEpCorrDiff_Para");
   TH1D* MMpEpCorrected_Para = (TH1D*)f->Get("MMpEpCorrected")->Clone();
   MMpEpCorrected_Para->SetName("MMpEpCorrected_Para");
-  TH1D* MMpEpCorrectedCut_Para = (TH1D*)f->Get("MMpEpCorrectedCut")->Clone();
-  MMpEpCorrectedCut_Para->SetName("MMpEpCorrectedCut_Para");
-  TH1D* OAngleCut_Para = (TH1D*)f->Get("OAngleCut")->Clone();
-  OAngleCut_Para->SetName("OAngleCut_Para");
-  TH1D* EgCut_Para = (TH1D*)f->Get("EgCut")->Clone();
-  EgCut_Para->SetName("EgCut_Para");
   TH1D* ZpDist_Para = (TH1D*)f->Get("ZpDist")->Clone();
   ZpDist_Para->SetName("ZpDist_Para");
   TH1D* ZpPhiScatNeg180_Para = (TH1D*)f->Get("ZpPhiScatNeg180")->Clone();
@@ -392,8 +386,6 @@ void ParaPerp_Combiner(){
   ThetanThetaRecPDiff_Para->SetName("ThetanThetaRecPDiff_Para");
   TH2D* E_dE_Para = (TH2D*)f->Get("E_dE")->Clone();
   E_dE_Para->SetName("E_dE_Para");
-  TH2D* E_dE_KinCut_Para = (TH2D*)f->Get("E_dE_KinCut")->Clone();
-  E_dE_KinCut_Para->SetName("E_dE_KinCut_Para");
   TH2D* KinEp_dE_Para = (TH2D*)f->Get("KinEp_dE")->Clone();
   KinEp_dE_Para->SetName("KinEp_dE_Para");
   TH2D* ThetaScPhiSc_Para = (TH2D*)f->Get("ThetaScPhiSc")->Clone();
@@ -402,8 +394,6 @@ void ParaPerp_Combiner(){
   E_KinEp_Para->SetName("E_KinEp_Para");
   TH2D* PhinDiffWCZRec_Para = (TH2D*)f->Get("PhinDiffWCZRec")->Clone();
   PhinDiffWCZRec_Para->SetName(" PhinDiffWCZRec_Para");
-  TH2D* PhinDiffWCZRec_KinCut_Para = (TH2D*)f->Get("PhinDiffWCZRec_KinCut")->Clone();
-  PhinDiffWCZRec_KinCut_Para->SetName("PhinDiffWCZRec_KinCut_Para");
 
   ////////////////////////////////////////////////////
   ////////////////////////////////////////////////////
@@ -439,12 +429,6 @@ void ParaPerp_Combiner(){
   EpEpCorrDiff_Perp->SetName("EpEpCorrDiff_Perp");
   TH1D* MMpEpCorrected_Perp = (TH1D*)f1->Get("MMpEpCorrected")->Clone();
   MMpEpCorrected_Perp->SetName("MMpEpCorrected_Perp");
-  TH1D* MMpEpCorrectedCut_Perp = (TH1D*)f1->Get("MMpEpCorrectedCut")->Clone();
-  MMpEpCorrectedCut_Perp->SetName("MMpEpCorrectedCut_Perp");
-  TH1D* OAngleCut_Perp = (TH1D*)f1->Get("OAngleCut")->Clone();
-  OAngleCut_Perp->SetName("OAngleCut_Perp");
-  TH1D* EgCut_Perp = (TH1D*)f1->Get("EgCut")->Clone();
-  EgCut_Perp->SetName("EgCut_Perp");
   TH1D* ZpDist_Perp = (TH1D*)f1->Get("ZpDist")->Clone();
   ZpDist_Perp->SetName("ZpDist_Perp");
   TH1D* ZpPhiScatNeg180_Perp = (TH1D*)f1->Get("ZpPhiScatNeg180")->Clone();
@@ -801,8 +785,6 @@ void ParaPerp_Combiner(){
   ThetanThetaRecPDiff_Perp->SetName("ThetanThetaRecPDiff_Perp");
   TH2D* E_dE_Perp = (TH2D*)f1->Get("E_dE")->Clone();
   E_dE_Perp->SetName("E_dE_Perp");
-  TH2D* E_dE_KinCut_Perp = (TH2D*)f1->Get("E_dE_KinCut")->Clone();
-  E_dE_KinCut_Perp->SetName("E_dE_KinCut_Perp");
   TH2D* KinEp_dE_Perp = (TH2D*)f1->Get("KinEp_dE")->Clone();
   KinEp_dE_Perp->SetName("KinEp_dE_Perp");
   TH2D* ThetaScPhiSc_Perp = (TH2D*)f1->Get("ThetaScPhiSc")->Clone();
@@ -811,8 +793,6 @@ void ParaPerp_Combiner(){
   E_KinEp_Perp->SetName("E_KinEp_Perp");
   TH2D* PhinDiffWCZRec_Perp = (TH2D*)f1->Get("PhinDiffWCZRec")->Clone();
   PhinDiffWCZRec_Perp->SetName(" PhinDiffWCZRec_Perp");
-  TH2D* PhinDiffWCZRec_KinCut_Perp = (TH2D*)f1->Get("PhinDiffWCZRec_KinCut")->Clone();
-  PhinDiffWCZRec_KinCut_Perp->SetName("PhinDiffWCZRec_KinCut_Perp");
 
   ////////////////////////////////////////////////////
   ////////////////////////////////////////////////////
@@ -835,9 +815,6 @@ void ParaPerp_Combiner(){
   EpKinEpCorrDiff_Para->Write();
   EpEpCorrDiff_Para->Write();
   MMpEpCorrected_Para->Write();
-  MMpEpCorrectedCut_Para->Write();
-  OAngleCut_Para->Write();
-  EgCut_Para->Write();
   ZpDist_Para->Write();
   ZpPhiScatNeg180_Para->Write();
   ZpPhiScat0_Para->Write();
@@ -1011,13 +988,11 @@ void ParaPerp_Combiner(){
   ThetaRecPDiff_Para->Write();
   ThetanThetaRecP_Para->Write();
   ThetanThetaRecPDiff_Para->Write();
-  E_dE_Para->Write();
-  E_dE_KinCut_Para->Write();
+  E_dE_Para->Write();;
   KinEp_dE_Para->Write();
   ThetaScPhiSc_Para->Write();
   E_KinEp_Para->Write();
   PhinDiffWCZRec_Para->Write();
-  PhinDiffWCZRec_KinCut_Para->Write();
 
   ////////////////////////////////////////////////////
   ////////////////////////////////////////////////////
@@ -1038,9 +1013,6 @@ void ParaPerp_Combiner(){
   EpKinEpCorrDiff_Perp->Write();
   EpEpCorrDiff_Perp->Write();
   MMpEpCorrected_Perp->Write();
-  MMpEpCorrectedCut_Perp->Write();
-  OAngleCut_Perp->Write();
-  EgCut_Perp->Write();
   ZpDist_Perp->Write();
   ZpPhiScatNeg180_Perp->Write();
   ZpPhiScat0_Perp->Write();
@@ -1215,12 +1187,10 @@ void ParaPerp_Combiner(){
   ThetanThetaRecP_Perp->Write();
   ThetanThetaRecPDiff_Perp->Write();
   E_dE_Perp->Write();
-  E_dE_KinCut_Perp->Write();
   KinEp_dE_Perp->Write();
   ThetaScPhiSc_Perp->Write();
   E_KinEp_Perp->Write();
   PhinDiffWCZRec_Perp->Write();
-  PhinDiffWCZRec_KinCut_Perp->Write();
 
   f2.Write();
  

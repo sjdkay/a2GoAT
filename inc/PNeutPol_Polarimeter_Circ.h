@@ -29,6 +29,7 @@ private:
   Int_t EventCounterTrackCut;
   Int_t EventCounterZCut;
   Int_t EventCounterCoplanarCut;
+  EventNum = GetEventNumber();
 
   Int_t Detectors1;
   Int_t Detectors2;
@@ -142,8 +143,6 @@ private:
   GH1* EpKin;
   GH1* EpCorrected;
   GH1* EpKinEpCorrDiff;
-  GH1* EpKinEpCorrDiffGood;
-  GH1* EpKinEpCorrDiffBad;
   GH1* EpEpCorrDiff;
 
   GH1* MMpEpCorrected;
@@ -157,10 +156,6 @@ private:
   GH1* MMp600700;
   GH1* MMp700800;
   GH1* MMp800900;
-  GH1* EgCut;
-  GH1* MMpEpCorrectedCut;
-  GH1* OAngleCut;
-  GH1* OAngleCut200400;
 
   GH1* ZpDist;
   GH1* ZpPhiScatNeg180;
@@ -215,15 +210,10 @@ private:
   GH1* PhiSc875PosHel;
 
   GH2* E_dE;
-  GH2* E_dE_Cut;
-  GH2* E_dE_KinCut;
   GH2* KinEp_dE;
-  GH2* KinEp_dE_GoodCut;
   GH2* ThetaScPhiSc;
   GH2* E_KinEp;
-  GH2* E_KinEpCut;
   GH2* PhinDiffWCZRec;
-  GH2* PhinDiffWCZRec_KinCut;
   GH2* ThetaDiffPhiDiff;
 
   GH1* ThetaRecPiDiff;

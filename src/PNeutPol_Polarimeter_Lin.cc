@@ -104,6 +104,7 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
   }
 
   EventCounterTrackCut++;
+  EventNum = GetEventNumber();
 
   if (Proton1 == kTRUE)
   {
@@ -323,13 +324,8 @@ PNeutPol_Polarimeter_Lin::PNeutPol_Polarimeter_Lin() // Define a load of histogr
 
   EpKinEpCorrDiff = new GH1("EpKinEpCorrDiff", "Difference Between EpKin and EpCorr", 300, -300, 300);
   EpEpCorrDiff = new GH1("EpEpCorrDiff", "Difference Between Ep and EpCorr", 200, 0, 200);
-
+  OAngle200400 = new GH1 ("OAngle200400", "Opening Angle between P and N Vectors (P Banana Cut, 200-400MeV Gamma)", 180, 0, 180);
   MMpEpCorrected = new GH1 ("MMpEpCorrected", "Missing mass seen by Proton (E Loss Corrected)", 400, 0, 2000);
-
-  MMpEpCorrectedCut =  new GH1 ("MMpEpCorrectedCut", "Missing mass seen by Proton (E Loss Corrected, P Banana Cut)", 400, 0, 2000);
-  OAngleCut = new GH1 ("OAngleCut", "Opening Angle between P and N Vectors (P Banana Cut)", 180, 0, 180);
-  OAngleCut200400 = new GH1 ("OAngleCut200400", "Opening Angle between P and N Vectors (P Banana Cut, 200-400MeV Gamma)", 180, 0, 180);
-  EgCut = new GH1( "EgCut", "Photon Energy Distribution (P Banana Cut)", 400, 100, 1600 );
 
   ZpDist = new GH1 ("ZpDist", "Proton Pseudo Z Vertex Distribution", 200, -400, 400);
   ZpPhiScatNeg180 = new GH1("ZpPhiScatNeg180", "Proton Pseudo Vertex Z for events with PhiSc ~ -ve180", 200, -200, 200);
@@ -535,7 +531,6 @@ PNeutPol_Polarimeter_Lin::PNeutPol_Polarimeter_Lin() // Define a load of histogr
   ThetanThetaRecPDiff = new GH2 ("ThetanThetaRecPDiff", "Thetan vs (ThetaPRec - Thetan)", 100, 0, 180, 100, 0, 180);
 
   E_dE = new GH2 ("E_dE", "EdE Plot With E Loss Adjustment", 100, 0, 500, 100, 0, 5);
-  E_dE_KinCut = new GH2 ("E_dE_KinCut", "EdE Plot (With cut on kinematic proton banana + E Loss)", 100, 0, 500, 100, 0, 5);
   KinEp_dE = new GH2 ("KinEp_dE", "KinEpdE Plot", 100, 0, 500, 100, 0, 5);
   //KinEp_dE_GoodCut = new GH2 ("KinEp_dE_GoodCut", "KinEpdE Plot With Good Proton Cut", 100, 0, 500, 100, 0, 5);
   ThetaScPhiSc = new GH2 ("ThetaScPhiSc", "Phi as a function of Theta (Both in rotated frame)", 100, 0, 180, 100, -180, 180);
@@ -572,467 +567,458 @@ void PNeutPol_Polarimeter_Lin::FillHists()
     ThetanThetaRecP->Fill(Thetan, ThetapRec, TaggerTime);
     ThetanThetaRecPDiff->Fill(Thetan, ThetapRecDiff, TaggerTime);
 
-    // Fill events inside good proton banana on KinEpdE plot
-    if(Cut_protonKinGood -> IsInside(KinEp, dEp) == kTRUE)
-    {
-        //KinEp_dE_GoodCut->Fill(KinEp, dEp, TaggerTime);
-        MMpEpCorrectedCut->Fill(MMpEpCorr, TaggerTime);
-        EgCut->Fill(EGamma, TaggerTime);
-        OAngleCut->Fill(OpeningAngle, TaggerTime);
-        ThetaSc -> Fill(ScattTheta, TaggerTime);
-        PhiSc -> Fill(ScattPhi, TaggerTime);
-        ThetaScPhiSc->Fill(ScattTheta, ScattPhi, TaggerTime);
-        E_dE_KinCut->Fill(EpCorr, dEp, TaggerTime);
-        PhinDiffWCZRec_KinCut->Fill(WCZnRec, PhinDiff, TaggerTime);
+    ThetaSc -> Fill(ScattTheta, TaggerTime);
+    PhiSc -> Fill(ScattPhi, TaggerTime);
+    ThetaScPhiSc->Fill(ScattTheta, ScattPhi, TaggerTime);
+    PhinDiffWCZRec_KinCut->Fill(WCZnRec, PhinDiff, TaggerTime);
 
-        if(ScattPhi < -165){
-            ZpPhiScatNeg180->Fill(Zp, TaggerTime);
+    if(ScattPhi < -165){
+        ZpPhiScatNeg180->Fill(Zp, TaggerTime);
+    }
+
+    if(ScattPhi < 15 && ScattPhi > -15){
+        ZpPhiScat0->Fill(Zp, TaggerTime);
+    }
+
+    if(ScattPhi > 165){
+        ZpPhiScatPos180->Fill(Zp, TaggerTime);
+    }
+
+    if(200 < EGamma && EGamma < 300){
+        MMp200300->Fill(MMpEpCorr, TaggerTime);
+        OAngle200400->Fill(OpeningAngle, TaggerTime);
+    }
+
+    else if(300 < EGamma && EGamma < 400){
+        MMp300400->Fill(MMpEpCorr, TaggerTime);
+        OAngle200400->Fill(OpeningAngle, TaggerTime);
+    }
+
+    else if(400 < EGamma && EGamma < 500){
+        MMp400500->Fill(MMpEpCorr, TaggerTime);
+    }
+
+    else if(500 < EGamma && EGamma < 600){
+        MMp500600->Fill(MMpEpCorr, TaggerTime);
+    }
+
+    else if(600 < EGamma && EGamma < 700){
+        MMp600700->Fill(MMpEpCorr, TaggerTime);
+    }
+
+    else if(700 < EGamma && EGamma < 800){
+        MMp700800->Fill(MMpEpCorr, TaggerTime);
+    }
+
+    else if(800 < EGamma && EGamma < 900){
+        MMp800900->Fill(MMpEpCorr, TaggerTime);
+    }
+
+    if ( 400 < EGamma && EGamma < 420) {
+        PhiSc410->Fill(ScattPhi, TaggerTime);
+
+        if(0 < ThetapCM && ThetapCM < 30){
+            Phip410CM1->Fill(WCPhip, TaggerTime);
+            Phin410CM1->Fill(PhinRec, TaggerTime);
         }
 
-        if(ScattPhi < 15 && ScattPhi > -15){
-            ZpPhiScat0->Fill(Zp, TaggerTime);
+        else if(30 < ThetapCM && ThetapCM < 60){
+            Phip410CM2->Fill(WCPhip, TaggerTime);
+            Phin410CM2->Fill(PhinRec, TaggerTime);
         }
 
-        if(ScattPhi > 165){
-            ZpPhiScatPos180->Fill(Zp, TaggerTime);
+        else if(60 < ThetapCM && ThetapCM < 90){
+            Phip410CM3->Fill(WCPhip, TaggerTime);
+            Phin410CM3->Fill(PhinRec, TaggerTime);
         }
 
-        if(200 < EGamma && EGamma < 300){
-            MMp200300->Fill(MMpEpCorr, TaggerTime);
-            OAngleCut200400->Fill(OpeningAngle, TaggerTime);
+        else if(90 < ThetapCM && ThetapCM < 120){
+            Phip410CM4->Fill(WCPhip, TaggerTime);
+            Phin410CM4->Fill(PhinRec, TaggerTime);
         }
 
-        else if(300 < EGamma && EGamma < 400){
-            MMp300400->Fill(MMpEpCorr, TaggerTime);
-            OAngleCut200400->Fill(OpeningAngle, TaggerTime);
+        else if(120 < ThetapCM && ThetapCM < 150){
+            Phip410CM5->Fill(WCPhip, TaggerTime);
+            Phin410CM5->Fill(PhinRec, TaggerTime);
         }
 
-        else if(400 < EGamma && EGamma < 500){
-            MMp400500->Fill(MMpEpCorr, TaggerTime);
+        else if(150 < ThetapCM && ThetapCM < 180){
+            Phip410CM6->Fill(WCPhip, TaggerTime);
+            Phin410CM6->Fill(PhinRec, TaggerTime);
+        }
+    }
+
+    else if ( 420 < EGamma && EGamma < 440) {
+        PhiSc430->Fill(ScattPhi, TaggerTime);
+
+        if(0 < ThetapCM && ThetapCM < 30){
+            Phip430CM1->Fill(WCPhip, TaggerTime);
+            Phin430CM1->Fill(PhinRec, TaggerTime);
         }
 
-        else if(500 < EGamma && EGamma < 600){
-            MMp500600->Fill(MMpEpCorr, TaggerTime);
+        else if(30 < ThetapCM && ThetapCM < 60){
+            Phip430CM2->Fill(WCPhip, TaggerTime);
+            Phin430CM2->Fill(PhinRec, TaggerTime);
         }
 
-        else if(600 < EGamma && EGamma < 700){
-            MMp600700->Fill(MMpEpCorr, TaggerTime);
+        else if(60 < ThetapCM && ThetapCM < 90){
+            Phip430CM3->Fill(WCPhip, TaggerTime);
+            Phin430CM3->Fill(PhinRec, TaggerTime);
         }
 
-        else if(700 < EGamma && EGamma < 800){
-            MMp700800->Fill(MMpEpCorr, TaggerTime);
+        else if(90 < ThetapCM && ThetapCM < 120){
+            Phip430CM4->Fill(WCPhip, TaggerTime);
+            Phin430CM4->Fill(PhinRec, TaggerTime);
         }
 
-        else if(800 < EGamma && EGamma < 900){
-            MMp800900->Fill(MMpEpCorr, TaggerTime);
+        else if(120 < ThetapCM && ThetapCM < 150){
+            Phip430CM5->Fill(WCPhip, TaggerTime);
+            Phin430CM5->Fill(PhinRec, TaggerTime);
         }
 
-        if ( 400 < EGamma && EGamma < 420) {
-            PhiSc410->Fill(ScattPhi, TaggerTime);
+        else if(150 < ThetapCM && ThetapCM < 180){
+            Phip430CM6->Fill(WCPhip, TaggerTime);
+            Phin430CM6->Fill(PhinRec, TaggerTime);
+        }
+    }
 
-            if(0 < ThetapCM && ThetapCM < 30){
-                Phip410CM1->Fill(WCPhip, TaggerTime);
-                Phin410CM1->Fill(PhinRec, TaggerTime);
-                }
+    else if ( 440 < EGamma && EGamma < 460) {
+        PhiSc450->Fill(ScattPhi, TaggerTime);
 
-            else if(30 < ThetapCM && ThetapCM < 60){
-                Phip410CM2->Fill(WCPhip, TaggerTime);
-                Phin410CM2->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(60 < ThetapCM && ThetapCM < 90){
-                Phip410CM3->Fill(WCPhip, TaggerTime);
-                Phin410CM3->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(90 < ThetapCM && ThetapCM < 120){
-                Phip410CM4->Fill(WCPhip, TaggerTime);
-                Phin410CM4->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(120 < ThetapCM && ThetapCM < 150){
-                Phip410CM5->Fill(WCPhip, TaggerTime);
-                Phin410CM5->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(150 < ThetapCM && ThetapCM < 180){
-                Phip410CM6->Fill(WCPhip, TaggerTime);
-                Phin410CM6->Fill(PhinRec, TaggerTime);
-                }
+        if(0 < ThetapCM && ThetapCM < 30){
+            Phip450CM1->Fill(WCPhip, TaggerTime);
+            Phin450CM1->Fill(PhinRec, TaggerTime);
         }
 
-        else if ( 420 < EGamma && EGamma < 440) {
-            PhiSc430->Fill(ScattPhi, TaggerTime);
-
-            if(0 < ThetapCM && ThetapCM < 30){
-                Phip430CM1->Fill(WCPhip, TaggerTime);
-                Phin430CM1->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(30 < ThetapCM && ThetapCM < 60){
-                Phip430CM2->Fill(WCPhip, TaggerTime);
-                Phin430CM2->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(60 < ThetapCM && ThetapCM < 90){
-                Phip430CM3->Fill(WCPhip, TaggerTime);
-                Phin430CM3->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(90 < ThetapCM && ThetapCM < 120){
-                Phip430CM4->Fill(WCPhip, TaggerTime);
-                Phin430CM4->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(120 < ThetapCM && ThetapCM < 150){
-                Phip430CM5->Fill(WCPhip, TaggerTime);
-                Phin430CM5->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(150 < ThetapCM && ThetapCM < 180){
-                Phip430CM6->Fill(WCPhip, TaggerTime);
-                Phin430CM6->Fill(PhinRec, TaggerTime);
-                }
+        else if(30 < ThetapCM && ThetapCM < 60){
+            Phip450CM2->Fill(WCPhip, TaggerTime);
+            Phin450CM2->Fill(PhinRec, TaggerTime);
         }
 
-        else if ( 440 < EGamma && EGamma < 460) {
-            PhiSc450->Fill(ScattPhi, TaggerTime);
-
-            if(0 < ThetapCM && ThetapCM < 30){
-                Phip450CM1->Fill(WCPhip, TaggerTime);
-                Phin450CM1->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(30 < ThetapCM && ThetapCM < 60){
-                Phip450CM2->Fill(WCPhip, TaggerTime);
-                Phin450CM2->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(60 < ThetapCM && ThetapCM < 90){
-                Phip450CM3->Fill(WCPhip, TaggerTime);
-                Phin450CM3->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(90 < ThetapCM && ThetapCM < 120){
-                Phip450CM4->Fill(WCPhip, TaggerTime);
-                Phin450CM4->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(120 < ThetapCM && ThetapCM < 150){
-                Phip450CM5->Fill(WCPhip, TaggerTime);
-                Phin450CM5->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(150 < ThetapCM && ThetapCM < 180){
-                Phip450CM6->Fill(WCPhip, TaggerTime);
-                Phin450CM6->Fill(PhinRec, TaggerTime);
-                }
+        else if(60 < ThetapCM && ThetapCM < 90){
+            Phip450CM3->Fill(WCPhip, TaggerTime);
+            Phin450CM3->Fill(PhinRec, TaggerTime);
         }
 
-        else if ( 460 < EGamma && EGamma < 480) {
-            PhiSc470->Fill(ScattPhi, TaggerTime);
-
-            if(0 < ThetapCM && ThetapCM < 30){
-                Phip470CM1->Fill(WCPhip, TaggerTime);
-                Phin470CM1->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(30 < ThetapCM && ThetapCM < 60){
-                Phip470CM2->Fill(WCPhip, TaggerTime);
-                Phin470CM2->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(60 < ThetapCM && ThetapCM < 90){
-                Phip470CM3->Fill(WCPhip, TaggerTime);
-                Phin470CM3->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(90 < ThetapCM && ThetapCM < 120){
-                Phip470CM4->Fill(WCPhip, TaggerTime);
-                Phin470CM4->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(120 < ThetapCM && ThetapCM < 150){
-                Phip470CM5->Fill(WCPhip, TaggerTime);
-                Phin470CM5->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(150 < ThetapCM && ThetapCM < 180){
-                Phip470CM6->Fill(WCPhip, TaggerTime);
-                Phin470CM6->Fill(PhinRec, TaggerTime);
-                }
+        else if(90 < ThetapCM && ThetapCM < 120){
+            Phip450CM4->Fill(WCPhip, TaggerTime);
+            Phin450CM4->Fill(PhinRec, TaggerTime);
         }
 
-        else if ( 480 < EGamma && EGamma < 500) {
-            PhiSc490->Fill(ScattPhi, TaggerTime);
-
-            if(0 < ThetapCM && ThetapCM < 30){
-                Phip490CM1->Fill(WCPhip, TaggerTime);
-                Phin490CM1->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(30 < ThetapCM && ThetapCM < 60){
-                Phip490CM2->Fill(WCPhip, TaggerTime);
-                Phin490CM2->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(60 < ThetapCM && ThetapCM < 90){
-                Phip490CM3->Fill(WCPhip, TaggerTime);
-                Phin490CM3->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(90 < ThetapCM && ThetapCM < 120){
-                Phip490CM4->Fill(WCPhip, TaggerTime);
-                Phin490CM4->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(120 < ThetapCM && ThetapCM < 150){
-                Phip490CM5->Fill(WCPhip, TaggerTime);
-                Phin490CM5->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(150 < ThetapCM && ThetapCM < 180){
-                Phip490CM6->Fill(WCPhip, TaggerTime);
-                Phin490CM6->Fill(PhinRec, TaggerTime);
-                }
+        else if(120 < ThetapCM && ThetapCM < 150){
+            Phip450CM5->Fill(WCPhip, TaggerTime);
+            Phin450CM5->Fill(PhinRec, TaggerTime);
         }
 
-        else if ( 500 < EGamma && EGamma < 520) {
-            PhiSc510->Fill(ScattPhi, TaggerTime);
+        else if(150 < ThetapCM && ThetapCM < 180){
+            Phip450CM6->Fill(WCPhip, TaggerTime);
+            Phin450CM6->Fill(PhinRec, TaggerTime);
+        }
+    }
 
-            if(0 < ThetapCM && ThetapCM < 30){
-                Phip510CM1->Fill(WCPhip, TaggerTime);
-                Phin510CM1->Fill(PhinRec, TaggerTime);
-                }
+    else if ( 460 < EGamma && EGamma < 480) {
+        PhiSc470->Fill(ScattPhi, TaggerTime);
 
-            else if(30 < ThetapCM && ThetapCM < 60){
-                Phip510CM2->Fill(WCPhip, TaggerTime);
-                Phin510CM2->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(60 < ThetapCM && ThetapCM < 90){
-                Phip510CM3->Fill(WCPhip, TaggerTime);
-                Phin510CM3->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(90 < ThetapCM && ThetapCM < 120){
-                Phip510CM4->Fill(WCPhip, TaggerTime);
-                Phin510CM4->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(120 < ThetapCM && ThetapCM < 150){
-                Phip510CM5->Fill(WCPhip, TaggerTime);
-                Phin510CM5->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(150 < ThetapCM && ThetapCM < 180){
-                Phip510CM6->Fill(WCPhip, TaggerTime);
-                Phin510CM6->Fill(PhinRec, TaggerTime);
-                }
+        if(0 < ThetapCM && ThetapCM < 30){
+            Phip470CM1->Fill(WCPhip, TaggerTime);
+            Phin470CM1->Fill(PhinRec, TaggerTime);
         }
 
-        else if ( 520 < EGamma && EGamma < 540) {
-            PhiSc530->Fill(ScattPhi, TaggerTime);
-
-            if(0 < ThetapCM && ThetapCM < 30){
-                Phip530CM1->Fill(WCPhip, TaggerTime);
-                Phin530CM1->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(30 < ThetapCM && ThetapCM < 60){
-                Phip530CM2->Fill(WCPhip, TaggerTime);
-                Phin530CM2->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(60 < ThetapCM && ThetapCM < 90){
-                Phip530CM3->Fill(WCPhip, TaggerTime);
-                Phin530CM3->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(90 < ThetapCM && ThetapCM < 120){
-                Phip530CM4->Fill(WCPhip, TaggerTime);
-                Phin530CM4->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(120 < ThetapCM && ThetapCM < 150){
-                Phip530CM5->Fill(WCPhip, TaggerTime);
-                Phin530CM5->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(150 < ThetapCM && ThetapCM < 180){
-                Phip530CM6->Fill(WCPhip, TaggerTime);
-                Phin530CM6->Fill(PhinRec, TaggerTime);
-                }
+        else if(30 < ThetapCM && ThetapCM < 60){
+            Phip470CM2->Fill(WCPhip, TaggerTime);
+            Phin470CM2->Fill(PhinRec, TaggerTime);
         }
 
-        else if ( 540 < EGamma && EGamma < 560) {
-            PhiSc550->Fill(ScattPhi, TaggerTime);
-
-            if(0 < ThetapCM && ThetapCM < 30){
-                Phip550CM1->Fill(WCPhip, TaggerTime);
-                Phin550CM1->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(30 < ThetapCM && ThetapCM < 60){
-                Phip550CM2->Fill(WCPhip, TaggerTime);
-                Phin550CM2->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(60 < ThetapCM && ThetapCM < 90){
-                Phip550CM3->Fill(WCPhip, TaggerTime);
-                Phin550CM3->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(90 < ThetapCM && ThetapCM < 120){
-                Phip550CM4->Fill(WCPhip, TaggerTime);
-                Phin550CM4->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(120 < ThetapCM && ThetapCM < 150){
-                Phip550CM5->Fill(WCPhip, TaggerTime);
-                Phin550CM5->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(150 < ThetapCM && ThetapCM < 180){
-                Phip550CM6->Fill(WCPhip, TaggerTime);
-                Phin550CM6->Fill(PhinRec, TaggerTime);
-                }
+        else if(60 < ThetapCM && ThetapCM < 90){
+            Phip470CM3->Fill(WCPhip, TaggerTime);
+            Phin470CM3->Fill(PhinRec, TaggerTime);
         }
 
-        else if ( 560 < EGamma && EGamma < 580) {
-            PhiSc570->Fill(ScattPhi, TaggerTime);
-
-            if(0 < ThetapCM && ThetapCM < 30){
-                Phip570CM1->Fill(WCPhip, TaggerTime);
-                Phin570CM1->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(30 < ThetapCM && ThetapCM < 60){
-                Phip570CM2->Fill(WCPhip, TaggerTime);
-                Phin570CM2->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(60 < ThetapCM && ThetapCM < 90){
-                Phip570CM3->Fill(WCPhip, TaggerTime);
-                Phin570CM3->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(90 < ThetapCM && ThetapCM < 120){
-                Phip570CM4->Fill(WCPhip, TaggerTime);
-                Phin570CM4->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(120 < ThetapCM && ThetapCM < 150){
-                Phip570CM5->Fill(WCPhip, TaggerTime);
-                Phin570CM5->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(150 < ThetapCM && ThetapCM < 180){
-                Phip570CM6->Fill(WCPhip, TaggerTime);
-                Phin570CM6->Fill(PhinRec, TaggerTime);
-                }
+        else if(90 < ThetapCM && ThetapCM < 120){
+            Phip470CM4->Fill(WCPhip, TaggerTime);
+            Phin470CM4->Fill(PhinRec, TaggerTime);
         }
 
-        else if ( 580 < EGamma && EGamma < 600) {
-            PhiSc590->Fill(ScattPhi, TaggerTime);
-
-            if(0 < ThetapCM && ThetapCM < 30){
-                Phip590CM1->Fill(WCPhip, TaggerTime);
-                Phin590CM1->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(30 < ThetapCM && ThetapCM < 60){
-                Phip590CM2->Fill(WCPhip, TaggerTime);
-                Phin590CM2->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(60 < ThetapCM && ThetapCM < 90){
-                Phip590CM3->Fill(WCPhip, TaggerTime);
-                Phin590CM3->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(90 < ThetapCM && ThetapCM < 120){
-                Phip590CM4->Fill(WCPhip, TaggerTime);
-                Phin590CM4->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(120 < ThetapCM && ThetapCM < 150){
-                Phip590CM5->Fill(WCPhip, TaggerTime);
-                Phin590CM5->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(150 < ThetapCM && ThetapCM < 180){
-                Phip590CM6->Fill(WCPhip, TaggerTime);
-                Phin590CM6->Fill(PhinRec, TaggerTime);
-                }
+        else if(120 < ThetapCM && ThetapCM < 150){
+            Phip470CM5->Fill(WCPhip, TaggerTime);
+            Phin470CM5->Fill(PhinRec, TaggerTime);
         }
 
-        else if ( 600 < EGamma && EGamma < 620) {
-            PhiSc610->Fill(ScattPhi, TaggerTime);
+        else if(150 < ThetapCM && ThetapCM < 180){
+            Phip470CM6->Fill(WCPhip, TaggerTime);
+            Phin470CM6->Fill(PhinRec, TaggerTime);
+        }
+    }
 
-            if(0 < ThetapCM && ThetapCM < 30){
-                Phip610CM1->Fill(WCPhip, TaggerTime);
-                Phin610CM1->Fill(PhinRec, TaggerTime);
-                }
+    else if ( 480 < EGamma && EGamma < 500) {
+        PhiSc490->Fill(ScattPhi, TaggerTime);
 
-            else if(30 < ThetapCM && ThetapCM < 60){
-                Phip610CM2->Fill(WCPhip, TaggerTime);
-                Phin610CM2->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(60 < ThetapCM && ThetapCM < 90){
-                Phip610CM3->Fill(WCPhip, TaggerTime);
-                Phin610CM3->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(90 < ThetapCM && ThetapCM < 120){
-                Phip610CM4->Fill(WCPhip, TaggerTime);
-                Phin610CM4->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(120 < ThetapCM && ThetapCM < 150){
-                Phip610CM5->Fill(WCPhip, TaggerTime);
-                Phin610CM5->Fill(PhinRec, TaggerTime);
-                }
-
-            else if(150 < ThetapCM && ThetapCM < 180){
-                Phip610CM6->Fill(WCPhip, TaggerTime);
-                Phin610CM6->Fill(PhinRec, TaggerTime);
-                }
+        if(0 < ThetapCM && ThetapCM < 30){
+            Phip490CM1->Fill(WCPhip, TaggerTime);
+            Phin490CM1->Fill(PhinRec, TaggerTime);
         }
 
-        else if ( 620 < EGamma && EGamma < 640) {
-            PhiSc630->Fill(ScattPhi, TaggerTime);
+        else if(30 < ThetapCM && ThetapCM < 60){
+            Phip490CM2->Fill(WCPhip, TaggerTime);
+            Phin490CM2->Fill(PhinRec, TaggerTime);
+        }
 
-            if(0 < ThetapCM && ThetapCM < 30){
-                Phip630CM1->Fill(WCPhip, TaggerTime);
-                Phin630CM1->Fill(PhinRec, TaggerTime);
-                }
+        else if(60 < ThetapCM && ThetapCM < 90){
+            Phip490CM3->Fill(WCPhip, TaggerTime);
+            Phin490CM3->Fill(PhinRec, TaggerTime);
+        }
 
-            else if(30 < ThetapCM && ThetapCM < 60){
-                Phip630CM2->Fill(WCPhip, TaggerTime);
-                Phin630CM2->Fill(PhinRec, TaggerTime);
-                }
+        else if(90 < ThetapCM && ThetapCM < 120){
+            Phip490CM4->Fill(WCPhip, TaggerTime);
+            Phin490CM4->Fill(PhinRec, TaggerTime);
+        }
 
-            else if(60 < ThetapCM && ThetapCM < 90){
-                Phip630CM3->Fill(WCPhip, TaggerTime);
-                Phin630CM3->Fill(PhinRec, TaggerTime);
-                }
+        else if(120 < ThetapCM && ThetapCM < 150){
+            Phip490CM5->Fill(WCPhip, TaggerTime);
+            Phin490CM5->Fill(PhinRec, TaggerTime);
+        }
 
-            else if(90 < ThetapCM && ThetapCM < 120){
-                Phip630CM4->Fill(WCPhip, TaggerTime);
-                Phin630CM4->Fill(PhinRec, TaggerTime);
-                }
+        else if(150 < ThetapCM && ThetapCM < 180){
+            Phip490CM6->Fill(WCPhip, TaggerTime);
+            Phin490CM6->Fill(PhinRec, TaggerTime);
+        }
+    }
 
-            else if(120 < ThetapCM && ThetapCM < 150){
-                Phip630CM5->Fill(WCPhip, TaggerTime);
-                Phin630CM5->Fill(PhinRec, TaggerTime);
-                }
+    else if ( 500 < EGamma && EGamma < 520) {
+        PhiSc510->Fill(ScattPhi, TaggerTime);
 
-            else if(150 < ThetapCM && ThetapCM < 180){
-                Phip630CM6->Fill(WCPhip, TaggerTime);
-                Phin630CM6->Fill(PhinRec, TaggerTime);
-                }
+        if(0 < ThetapCM && ThetapCM < 30){
+            Phip510CM1->Fill(WCPhip, TaggerTime);
+            Phin510CM1->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(30 < ThetapCM && ThetapCM < 60){
+            Phip510CM2->Fill(WCPhip, TaggerTime);
+            Phin510CM2->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(60 < ThetapCM && ThetapCM < 90){
+            Phip510CM3->Fill(WCPhip, TaggerTime);
+            Phin510CM3->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(90 < ThetapCM && ThetapCM < 120){
+            Phip510CM4->Fill(WCPhip, TaggerTime);
+            Phin510CM4->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(120 < ThetapCM && ThetapCM < 150){
+            Phip510CM5->Fill(WCPhip, TaggerTime);
+            Phin510CM5->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(150 < ThetapCM && ThetapCM < 180){
+            Phip510CM6->Fill(WCPhip, TaggerTime);
+            Phin510CM6->Fill(PhinRec, TaggerTime);
+        }
+    }
+
+    else if ( 520 < EGamma && EGamma < 540) {
+        PhiSc530->Fill(ScattPhi, TaggerTime);
+
+        if(0 < ThetapCM && ThetapCM < 30){
+            Phip530CM1->Fill(WCPhip, TaggerTime);
+            Phin530CM1->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(30 < ThetapCM && ThetapCM < 60){
+            Phip530CM2->Fill(WCPhip, TaggerTime);
+            Phin530CM2->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(60 < ThetapCM && ThetapCM < 90){
+            Phip530CM3->Fill(WCPhip, TaggerTime);
+            Phin530CM3->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(90 < ThetapCM && ThetapCM < 120){
+            Phip530CM4->Fill(WCPhip, TaggerTime);
+            Phin530CM4->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(120 < ThetapCM && ThetapCM < 150){
+            Phip530CM5->Fill(WCPhip, TaggerTime);
+            Phin530CM5->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(150 < ThetapCM && ThetapCM < 180){
+            Phip530CM6->Fill(WCPhip, TaggerTime);
+            Phin530CM6->Fill(PhinRec, TaggerTime);
+        }
+    }
+
+    else if ( 540 < EGamma && EGamma < 560) {
+        PhiSc550->Fill(ScattPhi, TaggerTime);
+
+        if(0 < ThetapCM && ThetapCM < 30){
+            Phip550CM1->Fill(WCPhip, TaggerTime);
+            Phin550CM1->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(30 < ThetapCM && ThetapCM < 60){
+            Phip550CM2->Fill(WCPhip, TaggerTime);
+            Phin550CM2->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(60 < ThetapCM && ThetapCM < 90){
+            Phip550CM3->Fill(WCPhip, TaggerTime);
+            Phin550CM3->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(90 < ThetapCM && ThetapCM < 120){
+            Phip550CM4->Fill(WCPhip, TaggerTime);
+            Phin550CM4->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(120 < ThetapCM && ThetapCM < 150){
+            Phip550CM5->Fill(WCPhip, TaggerTime);
+            Phin550CM5->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(150 < ThetapCM && ThetapCM < 180){
+            Phip550CM6->Fill(WCPhip, TaggerTime);
+            Phin550CM6->Fill(PhinRec, TaggerTime);
+        }
+    }
+
+    else if ( 560 < EGamma && EGamma < 580) {
+        PhiSc570->Fill(ScattPhi, TaggerTime);
+
+        if(0 < ThetapCM && ThetapCM < 30){
+            Phip570CM1->Fill(WCPhip, TaggerTime);
+            Phin570CM1->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(30 < ThetapCM && ThetapCM < 60){
+            Phip570CM2->Fill(WCPhip, TaggerTime);
+            Phin570CM2->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(60 < ThetapCM && ThetapCM < 90){
+            Phip570CM3->Fill(WCPhip, TaggerTime);
+            Phin570CM3->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(90 < ThetapCM && ThetapCM < 120){
+            Phip570CM4->Fill(WCPhip, TaggerTime);
+            Phin570CM4->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(120 < ThetapCM && ThetapCM < 150){
+            Phip570CM5->Fill(WCPhip, TaggerTime);
+            Phin570CM5->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(150 < ThetapCM && ThetapCM < 180){
+            Phip570CM6->Fill(WCPhip, TaggerTime);
+            Phin570CM6->Fill(PhinRec, TaggerTime);
+        }
+    }
+
+    else if ( 580 < EGamma && EGamma < 600) {
+        PhiSc590->Fill(ScattPhi, TaggerTime);
+
+        if(0 < ThetapCM && ThetapCM < 30){
+            Phip590CM1->Fill(WCPhip, TaggerTime);
+            Phin590CM1->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(30 < ThetapCM && ThetapCM < 60){
+            Phip590CM2->Fill(WCPhip, TaggerTime);
+            Phin590CM2->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(60 < ThetapCM && ThetapCM < 90){
+            Phip590CM3->Fill(WCPhip, TaggerTime);
+            Phin590CM3->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(90 < ThetapCM && ThetapCM < 120){
+            Phip590CM4->Fill(WCPhip, TaggerTime);
+            Phin590CM4->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(120 < ThetapCM && ThetapCM < 150){
+            Phip590CM5->Fill(WCPhip, TaggerTime);
+            Phin590CM5->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(150 < ThetapCM && ThetapCM < 180){
+            Phip590CM6->Fill(WCPhip, TaggerTime);
+            Phin590CM6->Fill(PhinRec, TaggerTime);
+        }
+    }
+
+    else if ( 600 < EGamma && EGamma < 620) {
+        PhiSc610->Fill(ScattPhi, TaggerTime);
+
+        if(0 < ThetapCM && ThetapCM < 30){
+            Phip610CM1->Fill(WCPhip, TaggerTime);
+            Phin610CM1->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(30 < ThetapCM && ThetapCM < 60){
+            Phip610CM2->Fill(WCPhip, TaggerTime);
+            Phin610CM2->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(60 < ThetapCM && ThetapCM < 90){
+            Phip610CM3->Fill(WCPhip, TaggerTime);
+            Phin610CM3->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(90 < ThetapCM && ThetapCM < 120){
+            Phip610CM4->Fill(WCPhip, TaggerTime);
+            Phin610CM4->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(120 < ThetapCM && ThetapCM < 150){
+            Phip610CM5->Fill(WCPhip, TaggerTime);
+            Phin610CM5->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(150 < ThetapCM && ThetapCM < 180){
+            Phip610CM6->Fill(WCPhip, TaggerTime);
+            Phin610CM6->Fill(PhinRec, TaggerTime);
+        }
+    }
+
+    else if ( 620 < EGamma && EGamma < 640) {
+        PhiSc630->Fill(ScattPhi, TaggerTime);
+
+        if(0 < ThetapCM && ThetapCM < 30){
+            Phip630CM1->Fill(WCPhip, TaggerTime);
+            Phin630CM1->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(30 < ThetapCM && ThetapCM < 60){
+            Phip630CM2->Fill(WCPhip, TaggerTime);
+            Phin630CM2->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(60 < ThetapCM && ThetapCM < 90){
+            Phip630CM3->Fill(WCPhip, TaggerTime);
+            Phin630CM3->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(90 < ThetapCM && ThetapCM < 120){
+            Phip630CM4->Fill(WCPhip, TaggerTime);
+            Phin630CM4->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(120 < ThetapCM && ThetapCM < 150){
+            Phip630CM5->Fill(WCPhip, TaggerTime);
+            Phin630CM5->Fill(PhinRec, TaggerTime);
+        }
+
+        else if(150 < ThetapCM && ThetapCM < 180){
+            Phip630CM6->Fill(WCPhip, TaggerTime);
+            Phin630CM6->Fill(PhinRec, TaggerTime);
         }
     }
 }

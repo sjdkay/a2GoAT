@@ -104,6 +104,7 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
   }
 
   EventCounterTrackCut++;
+  EventNum = GetEventNumber();
 
   if (Proton1 == kTRUE)
   {
@@ -317,17 +318,8 @@ PNeutPol_Polarimeter_Circ::PNeutPol_Polarimeter_Circ() // Define a load of histo
   PhiSc = new GH1( "Phi_Scattered", "Scattered Proton Phi Distribution in Rotated Frame", 90, -180, 180 );
 
   EpKinEpCorrDiff = new GH1("EpKinEpCorrDiff", "Difference Between EpKin and EpCorr", 300, -300, 300);
-  EpKinEpCorrDiffGood = new GH1("EpKinEpCorrDiffGood", "Difference Between EpKin and EpCorr (Inside p banana)", 300, -300, 300);
-  EpKinEpCorrDiffBad = new GH1("EpKinEpCorrDiffBad", "Difference Between EpKin and EpCorr (Outside p banana)", 300, -300, 300);
-
   EpEpCorrDiff = new GH1("EpEpCorrDiff", "Difference Between Ep and EpCorr", 200, 0, 200);
-
   MMpEpCorrected = new GH1 ("MMpEpCorrected", "Missing mass seen by Proton (E Loss Corrected)", 400, 0, 2000);
-
-  MMpEpCorrectedCut =  new GH1 ("MMpEpCorrectedCut", "Missing mass seen by Proton (E Loss Corrected, P Banana Cut)", 400, 0, 2000);
-  OAngleCut = new GH1 ("OAngleCut", "Opening Angle between P and N Vectors (P Banana Cut)", 180, 0, 180);
-  OAngleCut200400 = new GH1 ("OAngleCut200400", "Opening Angle between P and N Vectors (P Banana Cut, 200-400MeV Gamma)", 180, 0, 180);
-  EgCut = new GH1( "EgCut", "Photon Energy Distribution (P Banana Cut)", 400, 100, 1600 );
 
   ZpDist = new GH1 ("ZpDist", "Proton Pseudo Z Vertex Distribution", 200, -400, 400);
   ZpPhiScatNeg180 = new GH1("ZpPhiScatNeg180", "Proton Pseudo Vertex Z for events with PhiSc ~ -ve180", 200, -200, 200);
@@ -399,13 +391,11 @@ PNeutPol_Polarimeter_Circ::PNeutPol_Polarimeter_Circ() // Define a load of histo
   ThetanThetaRecPDiff = new GH2 ("ThetanThetaRecPDiff", "Thetan vs (ThetaPRec - Thetan)", 100, 0, 180, 100, 0, 180);
 
   E_dE = new GH2 ("E_dE", "EdE Plot With E Loss Adjustment", 100, 0, 500, 100, 0, 5);
-  E_dE_KinCut = new GH2 ("E_dE_KinCut", "EdE Plot (With cut on kinematic proton banana + E Loss)", 100, 0, 500, 100, 0, 5);
   KinEp_dE = new GH2 ("KinEp_dE", "KinEpdE Plot", 100, 0, 500, 100, 0, 5);
   //KinEp_dE_GoodCut = new GH2 ("KinEp_dE_GoodCut", "KinEpdE Plot With Good Proton Cut", 100, 0, 500, 100, 0, 5);
   ThetaScPhiSc = new GH2 ("ThetaScPhiSc", "Phi as a function of Theta (Both in rotated frame)", 100, 0, 180, 100, -180, 180);
   E_KinEp = new GH2 ("E_KinEp", "Kinematic Energy of Proton as a function of CB energy", 100, 0, 500, 100, 0, 500);
   PhinDiffWCZRec = new GH2 ("PhinDiffWCZRec", "Difference between WC Phi and Reconstructed Phi as a fn of WCZ Hit Position", 100, 0, 200, 100, 0, 180);
-  PhinDiffWCZRec_KinCut = new GH2 ("PhinDiffWCZRec_KinCut", "Difference between WC Phi and Reconstructed Phi as a fn of WCZ Hit Position (Kin P Banana Cut)", 200, -300, 300, 200, 0, 180);
   ThetaDiffPhiDiff = new GH2 ("ThetaDiffPhiDiff", "PhiDiff as a Fn of ThetaDiff (Detected-Rec)", 100, 0, 180, 100, 0, 180);
 
 }
@@ -438,150 +428,129 @@ void PNeutPol_Polarimeter_Circ::FillHists()
     ThetanThetaRecPDiff->Fill(Thetan, ThetapRecDiff, TaggerTime);
     ThetaDiffPhiDiff->Fill((abs(Thetan-ThetanRec)), (abs(Phin-PhinRec)), TaggerTime );
 
-    if(Cut_proton -> IsInside(EpCorr, dEp) == kTRUE){
-        EpKinEpCorrDiffGood->Fill(KinEDiff, TaggerTime);
+    ThetaSc -> Fill(ScattTheta, TaggerTime);
+    PhiSc -> Fill(ScattPhi, TaggerTime);
+    ThetaScPhiSc->Fill(ScattTheta, ScattPhi, TaggerTime);
+
+    if(ScattPhi < -165){
+        ZpPhiScatNeg180->Fill(Zp, TaggerTime);
     }
 
-    else if(Cut_proton -> IsInside(EpCorr, dEp) == kFALSE){
-        EpKinEpCorrDiffBad->Fill(KinEDiff, TaggerTime);
+    if(ScattPhi < 15 && ScattPhi > -15){
+        ZpPhiScat0->Fill(Zp, TaggerTime);
     }
 
+    if(ScattPhi > 165){
+        ZpPhiScatPos180->Fill(Zp, TaggerTime);
+    }
 
-  // Fill events inside good proton banana on KinEpdE plot
-    if(Cut_protonKinGood -> IsInside(KinEp, dEp) == kTRUE)
-    {
-        //KinEp_dE_GoodCut->Fill(KinEp, dEp, TaggerTime);
-        MMpEpCorrectedCut->Fill(MMpEpCorr, TaggerTime);
-        EgCut->Fill(EGamma, TaggerTime);
-        OAngleCut->Fill(OpeningAngle, TaggerTime);
-        ThetaSc -> Fill(ScattTheta, TaggerTime);
-        PhiSc -> Fill(ScattPhi, TaggerTime);
-        ThetaScPhiSc->Fill(ScattTheta, ScattPhi, TaggerTime);
-        E_dE_KinCut->Fill(EpCorr, dEp, TaggerTime);
-        PhinDiffWCZRec_KinCut->Fill(WCZnRec, PhinDiff, TaggerTime);
+    if (BeamHelicity == kFALSE) PhiScNegHel->Fill(ScattPhi, TaggerTime);
+    if (BeamHelicity == kTRUE) PhiScPosHel->Fill(ScattPhi, TaggerTime);
 
-        if(ScattPhi < -165){
-            ZpPhiScatNeg180->Fill(Zp, TaggerTime);
-        }
+    if(200 < EGamma && EGamma < 300){
+        MMp200300->Fill(MMpEpCorr, TaggerTime);
+    }
 
-        if(ScattPhi < 15 && ScattPhi > -15){
-            ZpPhiScat0->Fill(Zp, TaggerTime);
-        }
+    else if(300 < EGamma && EGamma < 400){
+        MMp300400->Fill(MMpEpCorr, TaggerTime);
+    }
 
-        if(ScattPhi > 165){
-            ZpPhiScatPos180->Fill(Zp, TaggerTime);
-        }
+    else if(400 < EGamma && EGamma < 500){
+        MMp400500->Fill(MMpEpCorr, TaggerTime);
+    }
 
-        if (BeamHelicity == kFALSE) PhiScNegHel->Fill(ScattPhi, TaggerTime);
-        if (BeamHelicity == kTRUE) PhiScPosHel->Fill(ScattPhi, TaggerTime);
+    else if(500 < EGamma && EGamma < 600){
+        MMp500600->Fill(MMpEpCorr, TaggerTime);
+    }
 
-        if(200 < EGamma && EGamma < 300){
-            MMp200300->Fill(MMpEpCorr, TaggerTime);
-            OAngleCut200400->Fill(OpeningAngle, TaggerTime);
-        }
+    else if(600 < EGamma && EGamma < 700){
+        MMp600700->Fill(MMpEpCorr, TaggerTime);
+    }
 
-        else if(300 < EGamma && EGamma < 400){
-            MMp300400->Fill(MMpEpCorr, TaggerTime);
-            OAngleCut200400->Fill(OpeningAngle, TaggerTime);
-        }
+    else if(700 < EGamma && EGamma < 800){
+        MMp700800->Fill(MMpEpCorr, TaggerTime);
+    }
 
-        else if(400 < EGamma && EGamma < 500){
-            MMp400500->Fill(MMpEpCorr, TaggerTime);
-        }
+    else if(800 < EGamma && EGamma < 900){
+        MMp800900->Fill(MMpEpCorr, TaggerTime);
+    }
 
-        else if(500 < EGamma && EGamma < 600){
-            MMp500600->Fill(MMpEpCorr, TaggerTime);
-        }
+    if ( 250 < EGamma && EGamma < 300) {
+        PhiSc275->Fill(ScattPhi, TaggerTime);
+        if (BeamHelicity == kFALSE) PhiSc275NegHel->Fill(ScattPhi, TaggerTime);
+        else if (BeamHelicity == kTRUE) PhiSc275PosHel->Fill(ScattPhi, TaggerTime);
+    }
 
-        else if(600 < EGamma && EGamma < 700){
-            MMp600700->Fill(MMpEpCorr, TaggerTime);
-        }
+    else if ( 300 < EGamma && EGamma < 350) {
+        PhiSc325->Fill(ScattPhi, TaggerTime);
+        if (BeamHelicity == kFALSE) PhiSc325NegHel->Fill(ScattPhi, TaggerTime);
+        else if (BeamHelicity == kTRUE) PhiSc325PosHel->Fill(ScattPhi, TaggerTime);
+    }
 
-        else if(700 < EGamma && EGamma < 800){
-            MMp700800->Fill(MMpEpCorr, TaggerTime);
-        }
+    else if ( 350 < EGamma && EGamma < 400) {
+        PhiSc375->Fill(ScattPhi, TaggerTime);
+        if (BeamHelicity == kFALSE) PhiSc375NegHel->Fill(ScattPhi, TaggerTime);
+        else if (BeamHelicity == kTRUE) PhiSc375PosHel->Fill(ScattPhi, TaggerTime);
+    }
 
-        else if(800 < EGamma && EGamma < 900){
-            MMp800900->Fill(MMpEpCorr, TaggerTime);
-        }
+    else if ( 400 < EGamma && EGamma < 450) {
+        PhiSc425->Fill(ScattPhi, TaggerTime);
+        if (BeamHelicity == kFALSE) PhiSc425NegHel->Fill(ScattPhi, TaggerTime);
+        else if (BeamHelicity == kTRUE) PhiSc425PosHel->Fill(ScattPhi, TaggerTime);
+    }
 
-        if ( 250 < EGamma && EGamma < 300) {
-            PhiSc275->Fill(ScattPhi, TaggerTime);
-            if (BeamHelicity == kFALSE) PhiSc275NegHel->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc275PosHel->Fill(ScattPhi, TaggerTime);
-        }
+    else if ( 450 < EGamma && EGamma < 500) {
+        PhiSc475->Fill(ScattPhi, TaggerTime);
+        if (BeamHelicity == kFALSE) PhiSc475NegHel->Fill(ScattPhi, TaggerTime);
+        else if (BeamHelicity == kTRUE) PhiSc475PosHel->Fill(ScattPhi, TaggerTime);
+    }
 
-        else if ( 300 < EGamma && EGamma < 350) {
-            PhiSc325->Fill(ScattPhi, TaggerTime);
-            if (BeamHelicity == kFALSE) PhiSc325NegHel->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc325PosHel->Fill(ScattPhi, TaggerTime);
-        }
+    else if ( 500 < EGamma && EGamma < 550) {
+        PhiSc525->Fill(ScattPhi, TaggerTime);
+        if (BeamHelicity == kFALSE) PhiSc525NegHel->Fill(ScattPhi, TaggerTime);
+        else if (BeamHelicity == kTRUE) PhiSc525PosHel->Fill(ScattPhi, TaggerTime);
+    }
 
-        else if ( 350 < EGamma && EGamma < 400) {
-            PhiSc375->Fill(ScattPhi, TaggerTime);
-            if (BeamHelicity == kFALSE) PhiSc375NegHel->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc375PosHel->Fill(ScattPhi, TaggerTime);
-        }
+    else if ( 550 < EGamma && EGamma < 600) {
+        PhiSc575->Fill(ScattPhi, TaggerTime);
+        if (BeamHelicity == kFALSE) PhiSc575NegHel->Fill(ScattPhi, TaggerTime);
+        else if (BeamHelicity == kTRUE) PhiSc575PosHel->Fill(ScattPhi, TaggerTime);
+    }
 
-        else if ( 400 < EGamma && EGamma < 450) {
-            PhiSc425->Fill(ScattPhi, TaggerTime);
-            if (BeamHelicity == kFALSE) PhiSc425NegHel->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc425PosHel->Fill(ScattPhi, TaggerTime);
-        }
+    else if ( 600 < EGamma && EGamma < 650) {
+        PhiSc625->Fill(ScattPhi, TaggerTime);
+        if (BeamHelicity == kFALSE) PhiSc625NegHel->Fill(ScattPhi, TaggerTime);
+        else if (BeamHelicity == kTRUE) PhiSc625PosHel->Fill(ScattPhi, TaggerTime);
+    }
 
-        else if ( 450 < EGamma && EGamma < 500) {
-            PhiSc475->Fill(ScattPhi, TaggerTime);
-            if (BeamHelicity == kFALSE) PhiSc475NegHel->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc475PosHel->Fill(ScattPhi, TaggerTime);
-        }
+    else if ( 650 < EGamma && EGamma < 700) {
+        PhiSc675->Fill(ScattPhi, TaggerTime);
+        if (BeamHelicity == kFALSE) PhiSc675NegHel->Fill(ScattPhi, TaggerTime);
+        else if (BeamHelicity == kTRUE) PhiSc675PosHel->Fill(ScattPhi, TaggerTime);
+    }
 
-        else if ( 500 < EGamma && EGamma < 550) {
-            PhiSc525->Fill(ScattPhi, TaggerTime);
-            if (BeamHelicity == kFALSE) PhiSc525NegHel->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc525PosHel->Fill(ScattPhi, TaggerTime);
-        }
+    else if ( 700 < EGamma && EGamma < 750) {
+        PhiSc725->Fill(ScattPhi, TaggerTime);
+        if (BeamHelicity == kFALSE) PhiSc725NegHel->Fill(ScattPhi, TaggerTime);
+        else if (BeamHelicity == kTRUE) PhiSc725PosHel->Fill(ScattPhi, TaggerTime);
+    }
 
-        else if ( 550 < EGamma && EGamma < 600) {
-            PhiSc575->Fill(ScattPhi, TaggerTime);
-            if (BeamHelicity == kFALSE) PhiSc575NegHel->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc575PosHel->Fill(ScattPhi, TaggerTime);
-        }
+    else if ( 750 < EGamma && EGamma < 800) {
+        PhiSc775->Fill(ScattPhi, TaggerTime);
+        if (BeamHelicity == kFALSE) PhiSc775NegHel->Fill(ScattPhi, TaggerTime);
+        else if (BeamHelicity == kTRUE) PhiSc775PosHel->Fill(ScattPhi, TaggerTime);
+    }
 
-        else if ( 600 < EGamma && EGamma < 650) {
-            PhiSc625->Fill(ScattPhi, TaggerTime);
-            if (BeamHelicity == kFALSE) PhiSc625NegHel->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc625PosHel->Fill(ScattPhi, TaggerTime);
-        }
+    else if ( 800 < EGamma && EGamma < 850) {
+        PhiSc825->Fill(ScattPhi, TaggerTime);
+        if (BeamHelicity == kFALSE) PhiSc825NegHel->Fill(ScattPhi, TaggerTime);
+        else if (BeamHelicity == kTRUE) PhiSc825PosHel->Fill(ScattPhi, TaggerTime);
+    }
 
-        else if ( 650 < EGamma && EGamma < 700) {
-            PhiSc675->Fill(ScattPhi, TaggerTime);
-            if (BeamHelicity == kFALSE) PhiSc675NegHel->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc675PosHel->Fill(ScattPhi, TaggerTime);
-        }
-
-        else if ( 700 < EGamma && EGamma < 750) {
-            PhiSc725->Fill(ScattPhi, TaggerTime);
-            if (BeamHelicity == kFALSE) PhiSc725NegHel->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc725PosHel->Fill(ScattPhi, TaggerTime);
-        }
-
-        else if ( 750 < EGamma && EGamma < 800) {
-            PhiSc775->Fill(ScattPhi, TaggerTime);
-            if (BeamHelicity == kFALSE) PhiSc775NegHel->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc775PosHel->Fill(ScattPhi, TaggerTime);
-        }
-
-        else if ( 800 < EGamma && EGamma < 850) {
-            PhiSc825->Fill(ScattPhi, TaggerTime);
-            if (BeamHelicity == kFALSE) PhiSc825NegHel->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc825PosHel->Fill(ScattPhi, TaggerTime);
-        }
-
-        else if ( 850 < EGamma && EGamma < 900) {
-            PhiSc875->Fill(ScattPhi, TaggerTime);
-            if (BeamHelicity == kFALSE) PhiSc875NegHel->Fill(ScattPhi, TaggerTime);
-            else if (BeamHelicity == kTRUE) PhiSc875PosHel->Fill(ScattPhi, TaggerTime);
-        }
+    else if ( 850 < EGamma && EGamma < 900) {
+        PhiSc875->Fill(ScattPhi, TaggerTime);
+        if (BeamHelicity == kFALSE) PhiSc875NegHel->Fill(ScattPhi, TaggerTime);
+        else if (BeamHelicity == kTRUE) PhiSc875PosHel->Fill(ScattPhi, TaggerTime);
     }
 }
 
