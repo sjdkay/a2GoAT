@@ -9,10 +9,30 @@ void SigmaAsymm(){
   double pCosAmpErr[6][12];
   double nCosAmp[6][12]; // Format of array is Theta bin (x) by Egamma bin (y), 6 theta bins of 30, 12 20MeV Egamma bins
   double nCosAmpErr[6][12];
-  double pCosA;
-  double pCosAErr;
-  double nCosA;
-  double nCosAErr;
+  double pCosACM1;
+  double pCosAErrCM1;
+  double nCosACM1;
+  double nCosAErrCM1;
+  double pCosACM2;
+  double pCosAErrCM2;
+  double nCosACM2;
+  double nCosAErrCM2;
+  double pCosACM3;
+  double pCosAErrCM3;
+  double nCosACM3;
+  double nCosAErrCM3;
+  double pCosACM4;
+  double pCosAErrCM4;
+  double nCosACM4;
+  double nCosAErrCM4;
+  double pCosACM5;
+  double pCosAErrCM5;
+  double nCosACM5;
+  double nCosAErrCM5;
+  double pCosACM6;
+  double pCosAErrCM6;
+  double nCosACM6;
+  double nCosAErrCM6;
 
   TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/ParaPerp_Total_9_Combined.root"); // Open the latest PTotal combined file to load histograms from
   NPara = Eg_Para->GetEntries();
@@ -1238,23 +1258,58 @@ void SigmaAsymm(){
   TTree* tree = new TTree("Parameter_Values", "Tree_of_Values");
   
   // Define branches to store parameters, (Branch Name, Variable, Type of Variable)
-  tree->Branch("pCosAmp", &pCosA, "pCosA/D");
-  tree->Branch("pCosAmpErr", &pCosAErr, "pCosAErr/D");
-  tree->Branch("nCosAmp", &nCosA, "nCosA/D");
-  tree->Branch("nCosAmpErr", &nCosAErr, "nCosAErr/D");
-  
+  tree->Branch("pCosAmpCM1", &pCosACM1, "pCosACM1/D");
+  tree->Branch("pCosAmpErrCM1", &pCosAErrCM1, "pCosAErrCM1/D");
+  tree->Branch("nCosAmpCM1", &nCosACM1, "nCosACM1/D");
+  tree->Branch("nCosAmpErrCM1", &nCosAErrCM1, "nCosAErrCM1/D");
+  tree->Branch("pCosAmpCM2", &pCosACM2, "pCosACM2/D");
+  tree->Branch("pCosAmpErrCM2", &pCosAErrCM2, "pCosAErrCM2/D");
+  tree->Branch("nCosAmpCM2", &nCosACM2, "nCosACM2/D");
+  tree->Branch("nCosAmpErrCM2", &nCosAErrCM2, "nCosAErrCM2/D");
+  tree->Branch("pCosAmpCM3", &pCosACM3, "pCosACM3/D");
+  tree->Branch("pCosAmpErrCM3", &pCosAErrCM3, "pCosAErrCM3/D");
+  tree->Branch("nCosAmpCM3", &nCosACM3, "nCosACM3/D");
+  tree->Branch("nCosAmpErrCM3", &nCosAErrCM3, "nCosAErrCM3/D");
+  tree->Branch("pCosAmpCM4", &pCosACM4, "pCosACM4/D");
+  tree->Branch("pCosAmpErrCM4", &pCosAErrCM4, "pCosAErrCM4/D");
+  tree->Branch("nCosAmpCM4", &nCosACM4, "nCosACM4/D");
+  tree->Branch("nCosAmpErrCM4", &nCosAErrCM4, "nCosAErrCM4/D");
+  tree->Branch("pCosAmpCM5", &pCosACM5, "pCosACM5/D");
+  tree->Branch("pCosAmpErrCM5", &pCosAErrCM5, "pCosAErrCM5/D");
+  tree->Branch("nCosAmpCM5", &nCosACM5, "nCosACM5/D");
+  tree->Branch("nCosAmpErrCM5", &nCosAErrCM5, "nCosAErrCM5/D");
+  tree->Branch("pCosAmpCM6", &pCosACM6, "pCosACM6/D");
+  tree->Branch("pCosAmpErrCM6", &pCosAErrCM6, "pCosAErrCM6/D");
+  tree->Branch("nCosAmpCM6", &nCosACM6, "nCosACM6/D");
+  tree->Branch("nCosAmpErrCM6", &nCosAErrCM6, "nCosAErrCM6/D");
+
   // Fill branches (and hence tree) with corresponding parameters from above
-  for (Int_t i = 0; i < 6; i++){
-    for (Int_t m = 0; m < 12; m++){
-    
-      pCosA = pCosAmp[i][m];
-      pCosAErr = pCosAmpErr[i][m];
-      nCosA = nCosAmp[i][m];
-      nCosAErr = nCosAmpErr[i][m];
-    
-      tree->Fill();
-    
-    }
+  for (Int_t m = 0; m < 12; m++){
+    pCosACM1 = pCosAmp[0][m];
+    pCosAErrCM1 = pCosAmpErr[0][m];
+    nCosACM1 = nCosAmp[0][m];
+    nCosAErrCM1 = nCosAmpErr[0][m];
+    pCosACM2 = pCosAmp[1][m];
+    pCosAErrCM2 = pCosAmpErr[1][m];
+    nCosACM2 = nCosAmp[1][m];
+    nCosAErrCM2 = nCosAmpErr[1][m];
+    pCosACM3 = pCosAmp[2][m];
+    pCosAErrCM3 = pCosAmpErr[2][m];
+    nCosACM3 = nCosAmp[2][m];
+    nCosAErrCM3 = nCosAmpErr[2][m];
+    pCosACM4 = pCosAmp[3][m];
+    pCosAErrCM4 = pCosAmpErr[3][m];
+    nCosACM4 = nCosAmp[3][m];
+    nCosAErrCM4 = nCosAmpErr[3][m];
+    pCosACM5 = pCosAmp[4][m];
+    pCosAErrCM5 = pCosAmpErr[4][m];
+    nCosACM5 = nCosAmp[4][m];
+    nCosAErrCM5 = nCosAmpErr[4][m];
+    pCosACM6 = pCosAmp[5][m];
+    pCosAErrCM6 = pCosAmpErr[5][m];
+    nCosACM6 = nCosAmp[5][m];
+    nCosAErrCM6 = nCosAmpErr[5][m];
+    tree->Fill();
   }
 
   f1.Write();
