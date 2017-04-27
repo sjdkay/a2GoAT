@@ -70,10 +70,10 @@ void Sigma(){
     pErrValuesCM5[k] = pCosAmpErrCM5;
     nValuesCM5[k] = nCosAmpCM5;
     nErrValuesCM5[k] = nCosAmpErrCM5;
-    pValuesCM5[k] = pCosAmpCM6;
-    pErrValuesCM5[k] = pCosAmpErrCM6;
-    nValuesCM5[k] = nCosAmpCM6;
-    nErrValuesCM5[k] = nCosAmpErrCM6;
+    pValuesCM6[k] = pCosAmpCM6;
+    pErrValuesCM6[k] = pCosAmpErrCM6;
+    nValuesCM6[k] = nCosAmpCM6;
+    nErrValuesCM6[k] = nCosAmpErrCM6;
   }
 
   TFile *f2= TFile::Open("/scratch/Mainz_Software/a2GoAT/LinPol_Aug16.root"); // Open linear polarisation plot
@@ -106,7 +106,7 @@ void Sigma(){
     nSigmaErrValuesCM5[i] = nErrValuesCM5[i]/(Graph->Eval((410+(i*20)),0));
     nSigmaValuesCM6[i] = nValuesCM6[i]/(Graph->Eval((410+(i*20)),0));
     nSigmaErrValuesCM6[i] = nErrValuesCM6[i]/(Graph->Eval((410+(i*20)),0));
-
+    
   }
 
   TFile f3("Sigma_Plots.root", "RECREATE");
