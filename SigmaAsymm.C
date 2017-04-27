@@ -9,6 +9,11 @@ void SigmaAsymm(){
   double pCosAmpErr[6][12];
   double nCosAmp[6][12]; // Format of array is Theta bin (x) by Egamma bin (y), 6 theta bins of 30, 12 20MeV Egamma bins
   double nCosAmpErr[6][12];
+  double pCosA;
+  double pCosAErr;
+  double nCosA;
+  double nCosAErr;
+
   TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/ParaPerp_Total_9_Combined.root"); // Open the latest PTotal combined file to load histograms from
   NPara = Eg_Para->GetEntries();
   NPerp = Eg_Perp->GetEntries();
@@ -1228,6 +1233,29 @@ void SigmaAsymm(){
   ParaPerpAsymmPhin_590MeVCM6->Write();
   ParaPerpAsymmPhin_610MeVCM6->Write();
   ParaPerpAsymmPhin_630MeVCM6->Write();
+
+  //Define new tree to store parameters in
+  TTree* tree = new TTree("Parameter_Values", "Tree_of_Values");
+  
+  // Define branches to store parameters, (Branch Name, Variable, Type of Variable)
+  tree->Branch("pCosAmp", &pCosA, "pCosA/D");
+  tree->Branch("pCosAmpErr", &pCosAErr, "pCosAErr/D");
+  tree->Branch("nCosAmp", &nCosA, "nCosA/D");
+  tree->Branch("nCosAmpErr", &nCosAErr, "nCosAErr/D");
+  
+  // Fill branches (and hence tree) with corresponding parameters from above
+  for (Int_t i = 0; i < 6; i++){
+    for (Int_t m = 0; m < 12; m++){
+    
+      pCosA = pCosAmp[i][m];
+      pCosAErr = pCosAmpErr[i][m];
+      nCosA = nCosAmp[i][m];
+      nCosAErr = nCosAmpErr[i][m];
+    
+      tree->Fill();
+    
+    }
+  }
 
   f1.Write();
 
