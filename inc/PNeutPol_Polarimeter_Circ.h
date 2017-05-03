@@ -29,7 +29,6 @@ private:
   Int_t EventCounterTrackCut;
   Int_t EventCounterZCut;
   Int_t EventCounterCoplanarCut;
-  EventNum = GetEventNumber();
 
   Int_t Detectors1;
   Int_t Detectors2;

@@ -2,147 +2,232 @@
 
 void Sigma(){
 
-  TFile *f1= TFile::Open("/scratch/Mainz_Software/a2GoAT/ParaPerpAsymm_Total_9.root");
+  TFile *f1= TFile::Open("/scratch/Mainz_Software/a2GoAT/ParaPerpAsymm_Total_10.root");
   TTree *t1 = (TTree*)f1->Get("Parameter_Values");
 
-  Double_t pValuesCM1[12], pValuesCM2[12], pValuesCM3[12], pValuesCM4[12], pValuesCM5[12], pValuesCM6[12];
-  Double_t nValuesCM1[12], nValuesCM2[12], nValuesCM3[12], nValuesCM4[12], nValuesCM5[12], nValuesCM6[12];
-  Double_t pErrValuesCM1[12], pErrValuesCM2[12], pErrValuesCM3[12], pErrValuesCM4[12], pErrValuesCM5[12], pErrValuesCM6[12];
-  Double_t nErrValuesCM1[12], nErrValuesCM2[12], nErrValuesCM3[12], nErrValuesCM4[12], nErrValuesCM5[12], nErrValuesCM6[12];
-  Double_t pSigmaValuesCM1[12], pSigmaValuesCM2[12], pSigmaValuesCM3[12], pSigmaValuesCM4[12], pSigmaValuesCM5[12], pSigmaValuesCM6[12];
-  Double_t nSigmaValuesCM1[12], nSigmaValuesCM2[12], nSigmaValuesCM3[12], nSigmaValuesCM4[12], nSigmaValuesCM5[12], nSigmaValuesCM6[12];
-  Double_t pSigmaErrValuesCM1[12], pSigmaErrValuesCM2[12], pSigmaErrValuesCM3[12], pSigmaErrValuesCM4[12], pSigmaErrValuesCM5[12], pSigmaErrValuesCM6[12];
-  Double_t nSigmaErrValuesCM1[12], nSigmaErrValuesCM2[12], nSigmaErrValuesCM3[12], nSigmaErrValuesCM4[12], nSigmaErrValuesCM5[12], nSigmaErrValuesCM6[12];
+  Double_t nValues410[10], nValues430[10], nValues450[10], nValues470[10], nValues490[10], nValues510[10], nValues530[10], nValues550[10], nValues570[10], nValues590[10], nValues610[10], nValues630[10];
+  Double_t nValues410[10], nValues430[10], nValues450[10], nValues470[10], nValues490[10], nValues510[10], nValues530[10], nValues550[10], nValues570[10], nValues590[10], nValues610[10], nValues630[10];
+  Double_t nErrValues410[10], nErrValues430[10], nErrValues450[10], nErrValues470[10], nErrValues490[10], nErrValues510[10], nErrValues530[10], nErrValues550[10], nErrValues570[10], nErrValues590[10], nErrValues610[10], nErrValues630[10];
+  Double_t nErrValues410[10], nErrValues430[10], nErrValues450[10], nErrValues470[10], nErrValues490[10], nErrValues510[10], nErrValues530[10], nErrValues550[10], nErrValues570[10], nErrValues590[10], nErrValues610[10], nErrValues630[10];
+  Double_t pSigmaValues410[10], pSigmaValues430[10], pSigmaValues450[10], pSigmaValues470[10], pSigmaValues490[10], pSigmaValues510[10], pSigmaValues530[10], pSigmaValues550[10], pSigmaValues570[10], pSigmaValues590[10], pSigmaValues610[10], pSigmaValues630[10];
+  Double_t nSigmaValues410[10], nSigmaValues430[10], nSigmaValues450[10], nSigmaValues470[10], nSigmaValues490[10], nSigmaValues510[10], nSigmaValues530[10], nSigmaValues550[10], nSigmaValues570[10], nSigmaValues590[10], nSigmaValues610[10], nSigmaValues630[10];
+  Double_t pSigmaErrValues410[10], pSigmaErrValues430[10], pSigmaErrValues450[10], pSigmaErrValues470[10], pSigmaErrValues490[10], pSigmaErrValues510[10], pSigmaErrValues530[10], pSigmaErrValues550[10], pSigmaErrValues570[10], pSigmaErrValues590[10], pSigmaErrValues610[10], pSigmaErrValues630[10];
+  Double_t nSigmaErrValues410[10], nSigmaErrValues430[10], nSigmaErrValues450[10], nSigmaErrValues470[10], nSigmaErrValues490[10], nSigmaErrValues510[10], nSigmaErrValues530[10], nSigmaErrValues550[10], nSigmaErrValues570[10], nSigmaErrValues590[10], nSigmaErrValues610[10], nSigmaErrValues630[10];
 
-  Double_t pCosAmpCM1, pCosAmpErrCM1, nCosAmpCM1, nCosAmpErrCM1;
-  Double_t pCosAmpCM2, pCosAmpErrCM2, nCosAmpCM2, nCosAmpErrCM2;
-  Double_t pCosAmpCM3, pCosAmpErrCM3, nCosAmpCM3, nCosAmpErrCM3;
-  Double_t pCosAmpCM4, pCosAmpErrCM4, nCosAmpCM4, nCosAmpErrCM4;
-  Double_t pCosAmpCM5, pCosAmpErrCM5, nCosAmpCM5, nCosAmpErrCM5;
-  Double_t pCosAmpCM6, pCosAmpErrCM6, nCosAmpCM6, nCosAmpErrCM6;
+  Double_t pCosAmp410, pCosAmpErr410, nCosAmp410, nCosAmpErr410;
+  Double_t pCosAmp430, pCosAmpErr430, nCosAmp430, nCosAmpErr430;
+  Double_t pCosAmp450, pCosAmpErr450, nCosAmp450, nCosAmpErr450;
+  Double_t pCosAmp470, pCosAmpErr470, nCosAmp470, nCosAmpErr470;
+  Double_t pCosAmp490, pCosAmpErr490, nCosAmp490, nCosAmpErr490;
+  Double_t pCosAmp510, pCosAmpErr510, nCosAmp510, nCosAmpErr510;
+  Double_t pCosAmp530, pCosAmpErr530, nCosAmp530, nCosAmpErr530;
+  Double_t pCosAmp550, pCosAmpErr550, nCosAmp550, nCosAmpErr550;
+  Double_t pCosAmp570, pCosAmpErr570, nCosAmp570, nCosAmpErr570;
+  Double_t pCosAmp590, pCosAmpErr590, nCosAmp590, nCosAmpErr590;
+  Double_t pCosAmp610, pCosAmpErr610, nCosAmp610, nCosAmpErr610;
+  Double_t pCosAmp630, pCosAmpErr630, nCosAmp630, nCosAmpErr630;
 
   // Set branch addresses to get values from
-  t1->SetBranchAddress("pCosAmpCM1", &pCosAmpCM1);
-  t1->SetBranchAddress("pCosAmpErrCM1", &pCosAmpErrCM1);
-  t1->SetBranchAddress("nCosAmpCM1", &nCosAmpCM1);
-  t1->SetBranchAddress("nCosAmpErrCM1", &nCosAmpErrCM1);
-  t1->SetBranchAddress("pCosAmpCM2", &pCosAmpCM2);
-  t1->SetBranchAddress("pCosAmpErrCM2", &pCosAmpErrCM2);
-  t1->SetBranchAddress("nCosAmpCM2", &nCosAmpCM2);
-  t1->SetBranchAddress("nCosAmpErrCM2", &nCosAmpErrCM2);
-  t1->SetBranchAddress("pCosAmpCM3", &pCosAmpCM3);
-  t1->SetBranchAddress("pCosAmpErrCM3", &pCosAmpErrCM3);
-  t1->SetBranchAddress("nCosAmpCM3", &nCosAmpCM3);
-  t1->SetBranchAddress("nCosAmpErrCM3", &nCosAmpErrCM3);
-  t1->SetBranchAddress("pCosAmpCM4", &pCosAmpCM4);
-  t1->SetBranchAddress("pCosAmpErrCM4", &pCosAmpErrCM4);
-  t1->SetBranchAddress("nCosAmpCM4", &nCosAmpCM4);
-  t1->SetBranchAddress("nCosAmpErrCM4", &nCosAmpErrCM4);
-  t1->SetBranchAddress("pCosAmpCM5", &pCosAmpCM5);
-  t1->SetBranchAddress("pCosAmpErrCM5", &pCosAmpErrCM5);
-  t1->SetBranchAddress("nCosAmpCM5", &nCosAmpCM5);
-  t1->SetBranchAddress("nCosAmpErrCM5", &nCosAmpErrCM5);
-  t1->SetBranchAddress("pCosAmpCM6", &pCosAmpCM6);
-  t1->SetBranchAddress("pCosAmpErrCM6", &pCosAmpErrCM6);
-  t1->SetBranchAddress("nCosAmpCM6", &nCosAmpCM6);
-  t1->SetBranchAddress("nCosAmpErrCM6", &nCosAmpErrCM6);
+  t1->SetBranchAddress("pCosAmp410", &pCosAmp410);
+  t1->SetBranchAddress("pCosAmpErr410", &pCosAmpErr410);
+  t1->SetBranchAddress("nCosAmp410", &nCosAmp410);
+  t1->SetBranchAddress("nCosAmpErr410", &nCosAmpErr410);
+  t1->SetBranchAddress("pCosAmp430", &pCosAmp430);
+  t1->SetBranchAddress("pCosAmpErr430", &pCosAmpErr430);
+  t1->SetBranchAddress("nCosAmp430", &nCosAmp430);
+  t1->SetBranchAddress("nCosAmpErr430", &nCosAmpErr430);
+  t1->SetBranchAddress("pCosAmp450", &pCosAmp450);
+  t1->SetBranchAddress("pCosAmpErr450", &pCosAmpErr450);
+  t1->SetBranchAddress("nCosAmp450", &nCosAmp450);
+  t1->SetBranchAddress("nCosAmpErr450", &nCosAmpErr450);
+  t1->SetBranchAddress("pCosAmp470", &pCosAmp470);
+  t1->SetBranchAddress("pCosAmpErr470", &pCosAmpErr470);
+  t1->SetBranchAddress("nCosAmp470", &nCosAmp470);
+  t1->SetBranchAddress("nCosAmpErr470", &nCosAmpErr470);
+  t1->SetBranchAddress("pCosAmp490", &pCosAmp490);
+  t1->SetBranchAddress("pCosAmpErr490", &pCosAmpErr490);
+  t1->SetBranchAddress("nCosAmp490", &nCosAmp490);
+  t1->SetBranchAddress("nCosAmpErr490", &nCosAmpErr490);
+  t1->SetBranchAddress("pCosAmp510", &pCosAmp510);
+  t1->SetBranchAddress("pCosAmpErr510", &pCosAmpErr510);
+  t1->SetBranchAddress("nCosAmp510", &nCosAmp510);
+  t1->SetBranchAddress("nCosAmpErr510", &nCosAmpErr510);
+  t1->SetBranchAddress("pCosAmp530", &pCosAmp530);
+  t1->SetBranchAddress("pCosAmpErr530", &pCosAmpErr530);
+  t1->SetBranchAddress("nCosAmp530", &nCosAmp530);
+  t1->SetBranchAddress("nCosAmpErr530", &nCosAmpErr530);
+  t1->SetBranchAddress("pCosAmp550", &pCosAmp550);
+  t1->SetBranchAddress("pCosAmpErr550", &pCosAmpErr550);
+  t1->SetBranchAddress("nCosAmp550", &nCosAmp550);
+  t1->SetBranchAddress("nCosAmpErr550", &nCosAmpErr550);
+  t1->SetBranchAddress("pCosAmp570", &pCosAmp570);
+  t1->SetBranchAddress("pCosAmpErr570", &pCosAmpErr570);
+  t1->SetBranchAddress("nCosAmp570", &nCosAmp570);
+  t1->SetBranchAddress("nCosAmpErr570", &nCosAmpErr570);
+  t1->SetBranchAddress("pCosAmp590", &pCosAmp590);
+  t1->SetBranchAddress("pCosAmpErr590", &pCosAmpErr590);
+  t1->SetBranchAddress("nCosAmp590", &nCosAmp590);
+  t1->SetBranchAddress("nCosAmpErr590", &nCosAmpErr590);
+  t1->SetBranchAddress("pCosAmp610", &pCosAmp610);
+  t1->SetBranchAddress("pCosAmpErr610", &pCosAmpErr610);
+  t1->SetBranchAddress("nCosAmp610", &nCosAmp610);
+  t1->SetBranchAddress("nCosAmpErr610", &nCosAmpErr610);
+  t1->SetBranchAddress("pCosAmp630", &pCosAmp630);
+  t1->SetBranchAddress("pCosAmpErr630", &pCosAmpErr630);
+  t1->SetBranchAddress("nCosAmp630", &nCosAmp630);
+  t1->SetBranchAddress("nCosAmpErr630", &nCosAmpErr630);
 
   // Load values from tree and asign values back into an array
-  for (Int_t k = 0; k < 12; k++){
+  for (Int_t k = 0; k < 10; k++){
     Parameter_Values->GetEntry(k);
-    pValuesCM1[k] = pCosAmpCM1;
-    pErrValuesCM1[k] = pCosAmpErrCM1;
-    nValuesCM1[k] = nCosAmpCM1;
-    nErrValuesCM1[k] = nCosAmpErrCM1;
-    pValuesCM2[k] = pCosAmpCM2;
-    pErrValuesCM2[k] = pCosAmpErrCM2;
-    nValuesCM2[k] = nCosAmpCM2;
-    nErrValuesCM2[k] = nCosAmpErrCM2;
-    pValuesCM3[k] = pCosAmpCM3;
-    pErrValuesCM3[k] = pCosAmpErrCM3;
-    nValuesCM3[k] = nCosAmpCM3;
-    nErrValuesCM3[k] = nCosAmpErrCM3;
-    pValuesCM4[k] = pCosAmpCM4;
-    pErrValuesCM4[k] = pCosAmpErrCM4;
-    nValuesCM4[k] = nCosAmpCM4;
-    nErrValuesCM4[k] = nCosAmpErrCM4;
-    pValuesCM5[k] = pCosAmpCM5;
-    pErrValuesCM5[k] = pCosAmpErrCM5;
-    nValuesCM5[k] = nCosAmpCM5;
-    nErrValuesCM5[k] = nCosAmpErrCM5;
-    pValuesCM6[k] = pCosAmpCM6;
-    pErrValuesCM6[k] = pCosAmpErrCM6;
-    nValuesCM6[k] = nCosAmpCM6;
-    nErrValuesCM6[k] = nCosAmpErrCM6;
+    pValues410[k] = pCosAmp410;
+    pErrValues410[k] = pCosAmpErr410;
+    nValues410[k] = nCosAmp410;
+    nErrValues410[k] = nCosAmpErr410;
+    pValues430[k] = pCosAmp430;
+    pErrValues430[k] = pCosAmpErr430;
+    nValues430[k] = nCosAmp430;
+    nErrValues430[k] = nCosAmpErr430;
+    pValues450[k] = pCosAmp450;
+    pErrValues450[k] = pCosAmpErr450;
+    nValues450[k] = nCosAmp450;
+    nErrValues450[k] = nCosAmpErr450;
+    pValues470[k] = pCosAmp470;
+    pErrValues470[k] = pCosAmpErr470;
+    nValues470[k] = nCosAmp470;
+    nErrValues470[k] = nCosAmpErr470;
+    pValues490[k] = pCosAmp490;
+    pErrValues490[k] = pCosAmpErr490;
+    nValues490[k] = nCosAmp490;
+    nErrValues490[k] = nCosAmpErr490;
+    pValues510[k] = pCosAmp510;
+    pErrValues510[k] = pCosAmpErr510;
+    nValues510[k] = nCosAmp510;
+    nErrValues510[k] = nCosAmpErr510;
+    pValues530[k] = pCosAmp530;
+    pErrValues530[k] = pCosAmpErr530;
+    nValues530[k] = nCosAmp530;
+    nErrValues530[k] = nCosAmpErr530;
+    pValues550[k] = pCosAmp550;
+    pErrValues550[k] = pCosAmpErr550;
+    nValues550[k] = nCosAmp550;
+    nErrValues550[k] = nCosAmpErr550;
+    pValues570[k] = pCosAmp570;
+    pErrValues570[k] = pCosAmpErr570;
+    nValues570[k] = nCosAmp570;
+    nErrValues570[k] = nCosAmpErr570;
+    pValues590[k] = pCosAmp590;
+    pErrValues590[k] = pCosAmpErr590;
+    nValues590[k] = nCosAmp590;
+    nErrValues590[k] = nCosAmpErr590;
+    pValues610[k] = pCosAmp610;
+    pErrValues610[k] = pCosAmpErr610;
+    nValues610[k] = nCosAmp610;
+    nErrValues610[k] = nCosAmpErr610;
+    pValues630[k] = pCosAmp630;
+    pErrValues630[k] = pCosAmpErr630;
+    nValues630[k] = nCosAmp630;
+    nErrValues630[k] = nCosAmpErr630;
+
   }
 
   TFile *f2= TFile::Open("/scratch/Mainz_Software/a2GoAT/LinPol_Aug16.root"); // Open linear polarisation plot
 
   // Calculate values of sigma for each angular and energy bin
-  for (Int_t i = 0; i < 12; i++){
-    
-    pSigmaValuesCM1[i] = pValuesCM1[i]/(Graph->Eval((410+(i*20)),0));
-    pSigmaErrValuesCM1[i] = pErrValuesCM1[i]/(Graph->Eval((410+(i*20)),0));
-    pSigmaValuesCM2[i] = pValuesCM2[i]/(Graph->Eval((410+(i*20)),0));
-    pSigmaErrValuesCM2[i] = pErrValuesCM2[i]/(Graph->Eval((410+(i*20)),0));
-    pSigmaValuesCM3[i] = pValuesCM3[i]/(Graph->Eval((410+(i*20)),0));
-    pSigmaErrValuesCM3[i] = pErrValuesCM3[i]/(Graph->Eval((410+(i*20)),0));
-    pSigmaValuesCM4[i] = pValuesCM4[i]/(Graph->Eval((410+(i*20)),0));
-    pSigmaErrValuesCM4[i] = pErrValuesCM4[i]/(Graph->Eval((410+(i*20)),0));
-    pSigmaValuesCM5[i] = pValuesCM5[i]/(Graph->Eval((410+(i*20)),0));
-    pSigmaErrValuesCM5[i] = pErrValuesCM5[i]/(Graph->Eval((410+(i*20)),0));
-    pSigmaValuesCM6[i] = pValuesCM6[i]/(Graph->Eval((410+(i*20)),0));
-    pSigmaErrValuesCM6[i] = pErrValuesCM6[i]/(Graph->Eval((410+(i*20)),0));
+  for (Int_t i = 0; i < 10; i++){
 
-    nSigmaValuesCM1[i] = nValuesCM1[i]/(Graph->Eval((410+(i*20)),0));
-    nSigmaErrValuesCM1[i] = nErrValuesCM1[i]/(Graph->Eval((410+(i*20)),0));
-    nSigmaValuesCM2[i] = nValuesCM2[i]/(Graph->Eval((410+(i*20)),0));
-    nSigmaErrValuesCM2[i] = nErrValuesCM2[i]/(Graph->Eval((410+(i*20)),0));
-    nSigmaValuesCM3[i] = nValuesCM3[i]/(Graph->Eval((410+(i*20)),0));
-    nSigmaErrValuesCM3[i] = nErrValuesCM3[i]/(Graph->Eval((410+(i*20)),0));
-    nSigmaValuesCM4[i] = nValuesCM4[i]/(Graph->Eval((410+(i*20)),0));
-    nSigmaErrValuesCM4[i] = nErrValuesCM4[i]/(Graph->Eval((410+(i*20)),0));
-    nSigmaValuesCM5[i] = nValuesCM5[i]/(Graph->Eval((410+(i*20)),0));
-    nSigmaErrValuesCM5[i] = nErrValuesCM5[i]/(Graph->Eval((410+(i*20)),0));
-    nSigmaValuesCM6[i] = nValuesCM6[i]/(Graph->Eval((410+(i*20)),0));
-    nSigmaErrValuesCM6[i] = nErrValuesCM6[i]/(Graph->Eval((410+(i*20)),0));
-    
+    pSigmaValues410[i] = pValues410[i]/(Graph->Eval(410,0));
+    pSigmaErrValues410[i] = pErrValues410[i]/(Graph->Eval(410,0)); // Double check error formula for this as new way around now
+    pSigmaValues430[i] = pValues430[i]/(Graph->Eval(430,0));
+    pSigmaErrValues430[i] = pErrValues430[i]/(Graph->Eval(430,0)); // Double check error formula for this as new way around now
+    pSigmaValues450[i] = pValues450[i]/(Graph->Eval(450,0));
+    pSigmaErrValues450[i] = pErrValues450[i]/(Graph->Eval(450,0)); // Double check error formula for this as new way around now
+    pSigmaValues470[i] = pValues470[i]/(Graph->Eval(470,0));
+    pSigmaErrValues470[i] = pErrValues470[i]/(Graph->Eval(470,0)); // Double check error formula for this as new way around now
+    pSigmaValues490[i] = pValues490[i]/(Graph->Eval(490,0));
+    pSigmaErrValues490[i] = pErrValues490[i]/(Graph->Eval(490,0)); // Double check error formula for this as new way around now
+    pSigmaValues510[i] = pValues510[i]/(Graph->Eval(510,0));
+    pSigmaErrValues510[i] = pErrValues510[i]/(Graph->Eval(510,0)); // Double check error formula for this as new way around now
+    pSigmaValues530[i] = pValues530[i]/(Graph->Eval(530,0));
+    pSigmaErrValues530[i] = pErrValues530[i]/(Graph->Eval(530,0)); // Double check error formula for this as new way around now
+    pSigmaValues550[i] = pValues550[i]/(Graph->Eval(550,0));
+    pSigmaErrValues550[i] = pErrValues550[i]/(Graph->Eval(550,0)); // Double check error formula for this as new way around now
+    pSigmaValues570[i] = pValues570[i]/(Graph->Eval(570,0));
+    pSigmaErrValues570[i] = pErrValues570[i]/(Graph->Eval(570,0)); // Double check error formula for this as new way around now
+    pSigmaValues590[i] = pValues590[i]/(Graph->Eval(590,0));
+    pSigmaErrValues590[i] = pErrValues590[i]/(Graph->Eval(590,0)); // Double check error formula for this as new way around now
+    pSigmaValues610[i] = pValues610[i]/(Graph->Eval(610,0));
+    pSigmaErrValues610[i] = pErrValues610[i]/(Graph->Eval(610,0)); // Double check error formula for this as new way around now
+    pSigmaValues630[i] = pValues630[i]/(Graph->Eval(630,0));
+    pSigmaErrValues630[i] = pErrValues630[i]/(Graph->Eval(630,0)); // Double check error formula for this as new way around now
+
+    nSigmaValues410[i] = nValues410[i]/(Graph->Eval(410,0));
+    nSigmaErrValues410[i] = nErrValues410[i]/(Graph->Eval(410,0)); // Double check error formula for this as new way around now
+    nSigmaValues430[i] = nValues430[i]/(Graph->Eval(430,0));
+    nSigmaErrValues430[i] = nErrValues430[i]/(Graph->Eval(430,0)); // Double check error formula for this as new way around now
+    nSigmaValues450[i] = nValues450[i]/(Graph->Eval(450,0));
+    nSigmaErrValues450[i] = nErrValues450[i]/(Graph->Eval(450,0)); // Double check error formula for this as new way around now
+    nSigmaValues470[i] = nValues470[i]/(Graph->Eval(470,0));
+    nSigmaErrValues470[i] = nErrValues470[i]/(Graph->Eval(470,0)); // Double check error formula for this as new way around now
+    nSigmaValues490[i] = nValues490[i]/(Graph->Eval(490,0));
+    nSigmaErrValues490[i] = nErrValues490[i]/(Graph->Eval(490,0)); // Double check error formula for this as new way around now
+    nSigmaValues510[i] = nValues510[i]/(Graph->Eval(510,0));
+    nSigmaErrValues510[i] = nErrValues510[i]/(Graph->Eval(510,0)); // Double check error formula for this as new way around now
+    nSigmaValues530[i] = nValues530[i]/(Graph->Eval(530,0));
+    nSigmaErrValues530[i] = nErrValues530[i]/(Graph->Eval(530,0)); // Double check error formula for this as new way around now
+    nSigmaValues550[i] = nValues550[i]/(Graph->Eval(550,0));
+    nSigmaErrValues550[i] = nErrValues550[i]/(Graph->Eval(550,0)); // Double check error formula for this as new way around now
+    nSigmaValues570[i] = nValues570[i]/(Graph->Eval(570,0));
+    nSigmaErrValues570[i] = nErrValues570[i]/(Graph->Eval(570,0)); // Double check error formula for this as new way around now
+    nSigmaValues590[i] = nValues590[i]/(Graph->Eval(590,0));
+    nSigmaErrValues590[i] = nErrValues590[i]/(Graph->Eval(590,0)); // Double check error formula for this as new way around now
+    nSigmaValues610[i] = nValues610[i]/(Graph->Eval(610,0));
+    nSigmaErrValues610[i] = nErrValues610[i]/(Graph->Eval(610,0)); // Double check error formula for this as new way around now
+    nSigmaValues630[i] = nValues630[i]/(Graph->Eval(630,0));
+    nSigmaErrValues630[i] = nErrValues630[i]/(Graph->Eval(630,0)); // Double check error formula for this as new way around now
+
   }
 
   TFile f3("Sigma_Plots.root", "RECREATE");
 
-  Float_t xMin = 400;
-  Float_t xMax = 650;
+  Float_t xMin = -1;
+  Float_t xMax = 1;
   Float_t yMin = -5;
   Float_t yMax = 5;
-  Double_t x[12] = {410, 430, 450, 470, 490, 510, 530, 550, 570, 590, 610, 630};
-  Double_t ex[12] = {10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10};
+  Double_t x[10] = {0.9, 0.7, 0.5, 0.3, 0.1, -0.1, -0.3, -0.5, -0.7, -0.9}; // Need to adjust
+  Double_t ex[10] = {0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1}; // Need to adjust
 
   TCanvas *canvas = new TCanvas("canvas","canvas", 1920, 1080);
   TPad *pad1 = new TPad("pad1","",0,0,1,1);
   pad1->Draw();
   pad1->cd();
-    
+
   pad1->SetTickx(1);
   pad1->SetTicky(1);
   pad1->SetGridx(1);
   pad1->SetGridy(1);
   TH1F  *hr;
   hr = canvas->DrawFrame(xMin,yMin,xMax,yMax);
+  hr->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 400-420MeV)");
 
-  gr = new TGraphErrors(12, x, pSigmaValuesCM1 , ex, pSigmaErrValuesCM1);
-  gr->SetMarkerColor(2);
-  gr->SetMarkerStyle(21);
-  gr->SetMarkerSize(2);
-  gr2 = new TGraphErrors(12, x, nSigmaValuesCM1, ex, nSigmaErrValuesCM1);
+  gr1 = new TGraphErrors(12, x, pSigmaValues410, ex, pSigmaErrValues410);
+  gr1->SetMarkerColor(2);
+  gr1->SetMarkerStyle(21);
+  gr1->SetMarkerSize(2);
+  gr2 = new TGraphErrors(12, x, nSigmaValues410, ex, nSigmaErrValues410);
   gr2->SetMarkerColor(4);
   gr2->SetMarkerStyle(22);
   gr2->SetMarkerSize(2);
+  TMultiGraph *mg1 = new TMultiGraph();
+  mg1->Add(gr1, "ep");
+  mg1->Add(gr2, "ep");
+  mg1->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 400-420MeV)");
+  mg1->GetXaxis()->SetTitle("Cos#theta_{CM}");
+  mg1->GetYaxis()->SetTitle("#Sigma");
   leg = new TLegend(0.75, 0.75, 0.95, 0.95); // Add legend to plot
-  leg->AddEntry(gr, "Proton", "ep");
+  leg->AddEntry(gr1, "Proton", "ep");
   leg->AddEntry(gr2, "Neutron", "ep");
-  gr->Draw("E1P");
-  gr2->Draw("ESAMEP");
+  mg1->Draw();
   leg->Draw("Same");
 
   TCanvas *canvas1 = new TCanvas("canvas1","canvas1", 1920, 1080);
@@ -155,75 +240,93 @@ void Sigma(){
   pad2->SetGridx(1);
   pad2->SetGridy(1);
   TH1F  *hr1;
-  hr1 = canvas1->DrawFrame(xMin,yMin,xMax,yMax);
+  hr1 = canvas1->DrawFrame(xMin,yMin/2,xMax,yMax/2);
+  hr1->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 420-440MeV)");
 
-  gr3 = new TGraphErrors(12, x, pSigmaValuesCM2 , ex, pSigmaErrValuesCM2);
+  gr3 = new TGraphErrors(12, x, pSigmaValues430 , ex, pSigmaErrValues430);
   gr3->SetMarkerColor(2);
   gr3->SetMarkerStyle(21);
   gr3->SetMarkerSize(2);
-  gr4 = new TGraphErrors(12, x, nSigmaValuesCM2, ex, nSigmaErrValuesCM2);
+  gr4 = new TGraphErrors(12, x, nSigmaValues430, ex, nSigmaErrValues430);
   gr4->SetMarkerColor(4);
   gr4->SetMarkerStyle(22);
   gr4->SetMarkerSize(2);
+  TMultiGraph *mg2 = new TMultiGraph();
+  mg2->Add(gr3, "ep");
+  mg2->Add(gr4, "ep");
+  mg2->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 420-440MeV)");
+  mg2->GetXaxis()->SetTitle("Cos#theta_{CM}");
+  mg2->GetYaxis()->SetTitle("#Sigma");
   leg2 = new TLegend(0.75, 0.75, 0.95, 0.95); // Add legend to plot
   leg2->AddEntry(gr3, "Proton", "ep");
   leg2->AddEntry(gr4, "Neutron", "ep");
-  gr3->Draw("E1P");
-  gr4->Draw("ESAMEP");
+  mg2->Draw();
   leg2->Draw("Same");
 
   TCanvas *canvas2 = new TCanvas("canvas2","canvas2", 1920, 1080);
   TPad *pad3 = new TPad("pad3","",0,0,1,1);
   pad3->Draw();
   pad3->cd();
-    
+
   pad3->SetTickx(1);
   pad3->SetTicky(1);
   pad3->SetGridx(1);
   pad3->SetGridy(1);
   TH1F  *hr2;
-  hr2 = canvas2->DrawFrame(xMin,yMin,xMax,yMax);
+  hr2 = canvas2->DrawFrame(xMin,yMin/2,xMax,yMax/2);
+  hr2->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 440-460MeV)");
 
-  gr5 = new TGraphErrors(12, x, pSigmaValuesCM3 , ex, pSigmaErrValuesCM3);
+  gr5 = new TGraphErrors(12, x, pSigmaValues450 , ex, pSigmaErrValues450);
   gr5->SetMarkerColor(2);
   gr5->SetMarkerStyle(21);
   gr5->SetMarkerSize(2);
-  gr6 = new TGraphErrors(12, x, nSigmaValuesCM3, ex, nSigmaErrValuesCM3);
+  gr6 = new TGraphErrors(12, x, nSigmaValues450, ex, nSigmaErrValues450);
   gr6->SetMarkerColor(4);
   gr6->SetMarkerStyle(22);
   gr6->SetMarkerSize(2);
+  TMultiGraph *mg3 = new TMultiGraph();
+  mg3->Add(gr5, "ep");
+  mg3->Add(gr6, "ep");
+  mg3->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 440-460MeV)");
+  mg3->GetXaxis()->SetTitle("Cos#theta_{CM}");
+  mg3->GetYaxis()->SetTitle("#Sigma");
   leg3 = new TLegend(0.75, 0.75, 0.95, 0.95); // Add legend to plot
   leg3->AddEntry(gr5, "Proton", "ep");
   leg3->AddEntry(gr6, "Neutron", "ep");
-  gr5->Draw("E1P");
-  gr6->Draw("ESAMEP");
+  mg3->Draw();
   leg3->Draw("Same");
 
   TCanvas *canvas3 = new TCanvas("canvas3","canvas3", 1920, 1080);
   TPad *pad4 = new TPad("pad4","",0,0,1,1);
   pad4->Draw();
   pad4->cd();
-    
+
   pad4->SetTickx(1);
   pad4->SetTicky(1);
   pad4->SetGridx(1);
   pad4->SetGridy(1);
   TH1F  *hr3;
-  hr3 = canvas3->DrawFrame(xMin,yMin,xMax,yMax);
+  hr3 = canvas3->DrawFrame(xMin,yMin/2,xMax,yMax/2);
+  hr3->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 460-480MeV)");
 
-  gr7 = new TGraphErrors(12, x, pSigmaValuesCM4 , ex, pSigmaErrValuesCM4);
+  gr7 = new TGraphErrors(12, x, pSigmaValues470 , ex, pSigmaErrValues470);
   gr7->SetMarkerColor(2);
   gr7->SetMarkerStyle(21);
   gr7->SetMarkerSize(2);
-  gr8 = new TGraphErrors(12, x, nSigmaValuesCM4, ex, nSigmaErrValuesCM4);
+  gr8 = new TGraphErrors(12, x, nSigmaValues470, ex, nSigmaErrValues470);
   gr8->SetMarkerColor(4);
   gr8->SetMarkerStyle(22);
   gr8->SetMarkerSize(2);
+  TMultiGraph *mg4 = new TMultiGraph();
+  mg4->Add(gr7, "ep");
+  mg4->Add(gr8, "ep");
+  mg4->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 460-480MeV)");
+  mg4->GetXaxis()->SetTitle("Cos#theta_{CM}");
+  mg4->GetYaxis()->SetTitle("#Sigma");
   leg4 = new TLegend(0.75, 0.75, 0.95, 0.95); // Add legend to plot
   leg4->AddEntry(gr7, "Proton", "ep");
   leg4->AddEntry(gr8, "Neutron", "ep");
-  gr7->Draw("E1P");
-  gr8->Draw("ESAMEP");
+  mg4->Draw();
   leg4->Draw("Same");
 
   TCanvas *canvas4 = new TCanvas("canvas4","canvas4", 1920, 1080);
@@ -236,49 +339,76 @@ void Sigma(){
   pad5->SetGridx(1);
   pad5->SetGridy(1);
   TH1F  *hr4;
-  hr4 = canvas4->DrawFrame(xMin,yMin,xMax,yMax);
+  hr4 = canvas4->DrawFrame(xMin,yMin/2,xMax,yMax/2);
+  hr4->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 480-500MeV)");
 
-  gr9 = new TGraphErrors(12, x, pSigmaValuesCM5 , ex, pSigmaErrValuesCM5);
+  gr9 = new TGraphErrors(12, x, pSigmaValues490, ex, pSigmaErrValues490);
   gr9->SetMarkerColor(2);
   gr9->SetMarkerStyle(21);
   gr9->SetMarkerSize(2);
-  gr10 = new TGraphErrors(12, x, nSigmaValuesCM5, ex, nSigmaErrValuesCM5);
+  gr10 = new TGraphErrors(12, x, nSigmaValues490, ex, nSigmaErrValues490);
   gr10->SetMarkerColor(4);
   gr10->SetMarkerStyle(22);
   gr10->SetMarkerSize(2);
+  TMultiGraph *mg5 = new TMultiGraph();
+  mg5->Add(gr9, "ep");
+  mg5->Add(gr10, "ep");
+  mg5->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 480-500MeV)");
+  mg5->GetXaxis()->SetTitle("Cos#theta_{CM}");
+  mg5->GetYaxis()->SetTitle("#Sigma");
   leg5 = new TLegend(0.75, 0.75, 0.95, 0.95); // Add legend to plot
   leg5->AddEntry(gr9, "Proton", "ep");
   leg5->AddEntry(gr10, "Neutron", "ep");
-  gr9->Draw("E1P");
-  gr10->Draw("ESAMEP");
+  mg5->Draw();
   leg5->Draw("Same");
 
   TCanvas *canvas5 = new TCanvas("canvas5","canvas5", 1920, 1080);
   TPad *pad6 = new TPad("pad6","",0,0,1,1);
   pad6->Draw();
   pad6->cd();
-    
+
   pad6->SetTickx(1);
   pad6->SetTicky(1);
   pad6->SetGridx(1);
   pad6->SetGridy(1);
   TH1F  *hr5;
   hr5 = canvas5->DrawFrame(xMin,yMin,xMax,yMax);
+  hr5->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 500-520MeV)");
 
-  gr11 = new TGraphErrors(12, x, pSigmaValuesCM6 , ex, pSigmaErrValuesCM6);
+  gr11 = new TGraphErrors(12, x, pSigmaValues510, ex, pSigmaErrValues510);
   gr11->SetMarkerColor(2);
   gr11->SetMarkerStyle(21);
   gr11->SetMarkerSize(2);
-  gr12 = new TGraphErrors(12, x, nSigmaValuesCM6, ex, nSigmaErrValuesCM6);
+  gr12 = new TGraphErrors(12, x, nSigmaValues510, ex, nSigmaErrValues510);
   gr12->SetMarkerColor(4);
   gr12->SetMarkerStyle(22);
   gr12->SetMarkerSize(2);
+  TMultiGraph *mg6 = new TMultiGraph();
+  mg6->Add(gr11, "ep");
+  mg6->Add(gr12, "ep");
+  mg6->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 500-520MeV)");
+  mg6->GetXaxis()->SetTitle("Cos#theta_{CM}");
+  mg6->GetYaxis()->SetTitle("#Sigma");
   leg6 = new TLegend(0.75, 0.75, 0.95, 0.95); // Add legend to plot
   leg6->AddEntry(gr11, "Proton", "ep");
   leg6->AddEntry(gr12, "Neutron", "ep");
-  gr11->Draw("E1P");
-  gr12->Draw("ESAMEP");
+  mg6->Draw();
   leg6->Draw("Same");
+
+  TCanvas *canvas6 = new TCanvas("canvas6","canvas6", 1920, 1080);
+  canvas6->Divide(3,2);
+  canvas6->cd(1);
+  pad1->Draw();
+  canvas6->cd(2);
+  pad2->Draw();
+  canvas6->cd(3);
+  pad3->Draw();
+  canvas6->cd(4);
+  pad4->Draw();
+  canvas6->cd(5);
+  pad5->Draw();
+  canvas6->cd(6);
+  pad6->Draw();
 
   canvas->Write();
   canvas1->Write();
@@ -286,6 +416,7 @@ void Sigma(){
   canvas3->Write();
   canvas4->Write();
   canvas5->Write();
+  canvas6->Write();
   f3.Write();
 
 }

@@ -63,6 +63,7 @@ private:
   double_t WCZnRec;
   double_t Thetap;
   double_t ThetapCM;
+  double_t CosThetapCM;
   double_t Thetan;
   double_t ThetapRec;
   double_t ThetanRec;
@@ -335,6 +336,110 @@ private:
   GH1* Phin590CM6;
   GH1* Phin610CM6;
   GH1* Phin630CM6;
+
+  GH1* Phip410CM7;
+  GH1* Phip430CM7;
+  GH1* Phip450CM7;
+  GH1* Phip470CM7;
+  GH1* Phip490CM7;
+  GH1* Phip510CM7;
+  GH1* Phip530CM7;
+  GH1* Phip550CM7;
+  GH1* Phip570CM7;
+  GH1* Phip590CM7;
+  GH1* Phip610CM7;
+  GH1* Phip630CM7;
+
+  GH1* Phin410CM7;
+  GH1* Phin430CM7;
+  GH1* Phin450CM7;
+  GH1* Phin470CM7;
+  GH1* Phin490CM7;
+  GH1* Phin510CM7;
+  GH1* Phin530CM7;
+  GH1* Phin550CM7;
+  GH1* Phin570CM7;
+  GH1* Phin590CM7;
+  GH1* Phin610CM7;
+  GH1* Phin630CM7;
+
+  GH1* Phip410CM8;
+  GH1* Phip430CM8;
+  GH1* Phip450CM8;
+  GH1* Phip470CM8;
+  GH1* Phip490CM8;
+  GH1* Phip510CM8;
+  GH1* Phip530CM8;
+  GH1* Phip550CM8;
+  GH1* Phip570CM8;
+  GH1* Phip590CM8;
+  GH1* Phip610CM8;
+  GH1* Phip630CM8;
+
+  GH1* Phin410CM8;
+  GH1* Phin430CM8;
+  GH1* Phin450CM8;
+  GH1* Phin470CM8;
+  GH1* Phin490CM8;
+  GH1* Phin510CM8;
+  GH1* Phin530CM8;
+  GH1* Phin550CM8;
+  GH1* Phin570CM8;
+  GH1* Phin590CM8;
+  GH1* Phin610CM8;
+  GH1* Phin630CM8;
+
+  GH1* Phip410CM9;
+  GH1* Phip430CM9;
+  GH1* Phip450CM9;
+  GH1* Phip470CM9;
+  GH1* Phip490CM9;
+  GH1* Phip510CM9;
+  GH1* Phip530CM9;
+  GH1* Phip550CM9;
+  GH1* Phip570CM9;
+  GH1* Phip590CM9;
+  GH1* Phip610CM9;
+  GH1* Phip630CM9;
+
+  GH1* Phin410CM9;
+  GH1* Phin430CM9;
+  GH1* Phin450CM9;
+  GH1* Phin470CM9;
+  GH1* Phin490CM9;
+  GH1* Phin510CM9;
+  GH1* Phin530CM9;
+  GH1* Phin550CM9;
+  GH1* Phin570CM9;
+  GH1* Phin590CM9;
+  GH1* Phin610CM9;
+  GH1* Phin630CM9;
+
+  GH1* Phip410CM10;
+  GH1* Phip430CM10;
+  GH1* Phip450CM10;
+  GH1* Phip470CM10;
+  GH1* Phip490CM10;
+  GH1* Phip510CM10;
+  GH1* Phip530CM10;
+  GH1* Phip550CM10;
+  GH1* Phip570CM10;
+  GH1* Phip590CM10;
+  GH1* Phip610CM10;
+  GH1* Phip630CM10;
+
+  GH1* Phin410CM10;
+  GH1* Phin430CM10;
+  GH1* Phin450CM10;
+  GH1* Phin470CM10;
+  GH1* Phin490CM10;
+  GH1* Phin510CM10;
+  GH1* Phin530CM10;
+  GH1* Phin550CM10;
+  GH1* Phin570CM10;
+  GH1* Phin590CM10;
+  GH1* Phin610CM10;
+  GH1* Phin630CM10;
 
   GH2* E_dE;
   GH2* E_dE_Cut;

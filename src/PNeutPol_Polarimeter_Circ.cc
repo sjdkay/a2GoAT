@@ -104,7 +104,6 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
   }
 
   EventCounterTrackCut++;
-  EventNum = GetEventNumber();
 
   if (Proton1 == kTRUE)
   {
