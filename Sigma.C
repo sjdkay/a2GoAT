@@ -7,7 +7,7 @@ void Sigma(){
 
   Double_t pValues410[10], pValues430[10], pValues450[10], pValues470[10], pValues490[10], pValues510[10], pValues530[10], pValues550[10], pValues570[10], pValues590[10], pValues610[10], pValues630[10];
   Double_t nValues410[10], nValues430[10], nValues450[10], nValues470[10], nValues490[10], nValues510[10], nValues530[10], nValues550[10], nValues570[10], nValues590[10], nValues610[10], nValues630[10];
-  Double_t nErrValues410[10], nErrValues430[10], nErrValues450[10], nErrValues470[10], nErrValues490[10], nErrValues510[10], nErrValues530[10], nErrValues550[10], nErrValues570[10], nErrValues590[10], nErrValues610[10], nErrValues630[10];
+  Double_t pErrValues410[10], pErrValues430[10], pErrValues450[10], pErrValues470[10], pErrValues490[10], pErrValues510[10], pErrValues530[10], pErrValues550[10], pErrValues570[10], pErrValues590[10], pErrValues610[10], pErrValues630[10];
   Double_t nErrValues410[10], nErrValues430[10], nErrValues450[10], nErrValues470[10], nErrValues490[10], nErrValues510[10], nErrValues530[10], nErrValues550[10], nErrValues570[10], nErrValues590[10], nErrValues610[10], nErrValues630[10];
   Double_t pSigmaValues410[10], pSigmaValues430[10], pSigmaValues450[10], pSigmaValues470[10], pSigmaValues490[10], pSigmaValues510[10], pSigmaValues530[10], pSigmaValues550[10], pSigmaValues570[10], pSigmaValues590[10], pSigmaValues610[10], pSigmaValues630[10];
   Double_t nSigmaValues410[10], nSigmaValues430[10], nSigmaValues450[10], nSigmaValues470[10], nSigmaValues490[10], nSigmaValues510[10], nSigmaValues530[10], nSigmaValues550[10], nSigmaValues570[10], nSigmaValues590[10], nSigmaValues610[10], nSigmaValues630[10];
