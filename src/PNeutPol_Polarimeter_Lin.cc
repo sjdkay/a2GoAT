@@ -370,20 +370,6 @@ PNeutPol_Polarimeter_Lin::PNeutPol_Polarimeter_Lin() // Define a load of histogr
   Phip610CM1 = new GH1("Phip_610MeVCM1", "Proton Phi Distribution for Photon Energies of 610pm10MeV (CosTheta1-0.8)", 10, -180, 180);
   Phip630CM1 = new GH1("Phip_630MeVCM1", "Proton Phi Distribution for Photon Energies of 630pm10MeV (CosTheta1-0.8)", 10, -180, 180);
 
-  // Angles of neutron in scattered frame across EGamma bins
-  Phin410CM1 = new GH1("Phin_410MeVCM1", "Neutron Phi Distribution for Photon Energies of 410pm10MeV (CosTheta1-0.8)", 10, -180, 180);
-  Phin430CM1 = new GH1("Phin_430MeVCM1", "Neutron Phi Distribution for Photon Energies of 430pm10MeV (CosTheta1-0.8)", 10, -180, 180);
-  Phin450CM1 = new GH1("Phin_450MeVCM1", "Neutron Phi Distribution for Photon Energies of 450pm10MeV (CosTheta1-0.8)", 10, -180, 180);
-  Phin470CM1 = new GH1("Phin_470MeVCM1", "Neutron Phi Distribution for Photon Energies of 470pm10MeV (CosTheta1-0.8)", 10, -180, 180);
-  Phin490CM1 = new GH1("Phin_490MeVCM1", "Neutron Phi Distribution for Photon Energies of 490pm10MeV (CosTheta1-0.8)", 10, -180, 180);
-  Phin510CM1 = new GH1("Phin_510MeVCM1", "Neutron Phi Distribution for Photon Energies of 510pm10MeV (CosTheta1-0.8)", 10, -180, 180);
-  Phin530CM1 = new GH1("Phin_530MeVCM1", "Neutron Phi Distribution for Photon Energies of 530pm10MeV (CosTheta1-0.8)", 10, -180, 180);
-  Phin550CM1 = new GH1("Phin_550MeVCM1", "Neutron Phi Distribution for Photon Energies of 550pm10MeV (CosTheta1-0.8)", 10, -180, 180);
-  Phin570CM1 = new GH1("Phin_570MeVCM1", "Neutron Phi Distribution for Photon Energies of 570pm10MeV (CosTheta1-0.8)", 10, -180, 180);
-  Phin590CM1 = new GH1("Phin_590MeVCM1", "Neutron Phi Distribution for Photon Energies of 590pm10MeV (CosTheta1-0.8)", 10, -180, 180);
-  Phin610CM1 = new GH1("Phin_610MeVCM1", "Neutron Phi Distribution for Photon Energies of 610pm10MeV (CosTheta1-0.8)", 10, -180, 180);
-  Phin630CM1 = new GH1("Phin_630MeVCM1", "Neutron Phi Distribution for Photon Energies of 630pm10MeV (CosTheta1-0.8)", 10, -180, 180);
-
   // Proton Phi dists across EGamma bins
   Phip410CM2 = new GH1("Phip_410MeVCM2", "Proton Phi Distribution for Photon Energies of 410pm10MeV (CosTheta0.8-0.6)", 10, -180, 180);
   Phip430CM2 = new GH1("Phip_430MeVCM2", "Proton Phi Distribution for Photon Energies of 430pm10MeV (CosTheta0.8-0.6)", 10, -180, 180);
@@ -397,20 +383,6 @@ PNeutPol_Polarimeter_Lin::PNeutPol_Polarimeter_Lin() // Define a load of histogr
   Phip590CM2 = new GH1("Phip_590MeVCM2", "Proton Phi Distribution for Photon Energies of 590pm10MeV (CosTheta0.8-0.6)", 10, -180, 180);
   Phip610CM2 = new GH1("Phip_610MeVCM2", "Proton Phi Distribution for Photon Energies of 610pm10MeV (CosTheta0.8-0.6)", 10, -180, 180);
   Phip630CM2 = new GH1("Phip_630MeVCM2", "Proton Phi Distribution for Photon Energies of 630pm10MeV (CosTheta0.8-0.6)", 10, -180, 180);
-
-  // Angles of neutron in scattered frame across EGamma bins
-  Phin410CM2 = new GH1("Phin_410MeVCM2", "Neutron Phi Distribution for Photon Energies of 410pm10MeV (CosTheta0.8-0.6)", 10, -180, 180);
-  Phin430CM2 = new GH1("Phin_430MeVCM2", "Neutron Phi Distribution for Photon Energies of 430pm10MeV (CosTheta0.8-0.6)", 10, -180, 180);
-  Phin450CM2 = new GH1("Phin_450MeVCM2", "Neutron Phi Distribution for Photon Energies of 450pm10MeV (CosTheta0.8-0.6)", 10, -180, 180);
-  Phin470CM2 = new GH1("Phin_470MeVCM2", "Neutron Phi Distribution for Photon Energies of 470pm10MeV (CosTheta0.8-0.6)", 10, -180, 180);
-  Phin490CM2 = new GH1("Phin_490MeVCM2", "Neutron Phi Distribution for Photon Energies of 490pm10MeV (CosTheta0.8-0.6)", 10, -180, 180);
-  Phin510CM2 = new GH1("Phin_510MeVCM2", "Neutron Phi Distribution for Photon Energies of 510pm10MeV (CosTheta0.8-0.6)", 10, -180, 180);
-  Phin530CM2 = new GH1("Phin_530MeVCM2", "Neutron Phi Distribution for Photon Energies of 530pm10MeV (CosTheta0.8-0.6)", 10, -180, 180);
-  Phin550CM2 = new GH1("Phin_550MeVCM2", "Neutron Phi Distribution for Photon Energies of 550pm10MeV (CosTheta0.8-0.6)", 10, -180, 180);
-  Phin570CM2 = new GH1("Phin_570MeVCM2", "Neutron Phi Distribution for Photon Energies of 570pm10MeV (CosTheta0.8-0.6)", 10, -180, 180);
-  Phin590CM2 = new GH1("Phin_590MeVCM2", "Neutron Phi Distribution for Photon Energies of 590pm10MeV (CosTheta0.8-0.6)", 10, -180, 180);
-  Phin610CM2 = new GH1("Phin_610MeVCM2", "Neutron Phi Distribution for Photon Energies of 610pm10MeV (CosTheta0.8-0.6)", 10, -180, 180);
-  Phin630CM2 = new GH1("Phin_630MeVCM2", "Neutron Phi Distribution for Photon Energies of 630pm10MeV (CosTheta0.8-0.6)", 10, -180, 180);
 
   // Proton Phi dists across EGamma bins
   Phip410CM3 = new GH1("Phip_410MeVCM3", "Proton Phi Distribution for Photon Energies of 410pm10MeV (CosTheta0.6-0.4)", 10, -180, 180);
@@ -426,20 +398,6 @@ PNeutPol_Polarimeter_Lin::PNeutPol_Polarimeter_Lin() // Define a load of histogr
   Phip610CM3 = new GH1("Phip_610MeVCM3", "Proton Phi Distribution for Photon Energies of 610pm10MeV (CosTheta0.6-0.4)", 10, -180, 180);
   Phip630CM3 = new GH1("Phip_630MeVCM3", "Proton Phi Distribution for Photon Energies of 630pm10MeV (CosTheta0.6-0.4)", 10, -180, 180);
 
-  // Angles of neutron in scattered frame across EGamma bins
-  Phin410CM3 = new GH1("Phin_410MeVCM3", "Neutron Phi Distribution for Photon Energies of 410pm10MeV (CosTheta0.6-0.4)", 10, -180, 180);
-  Phin430CM3 = new GH1("Phin_430MeVCM3", "Neutron Phi Distribution for Photon Energies of 430pm10MeV (CosTheta0.6-0.4)", 10, -180, 180);
-  Phin450CM3 = new GH1("Phin_450MeVCM3", "Neutron Phi Distribution for Photon Energies of 450pm10MeV (CosTheta0.6-0.4)", 10, -180, 180);
-  Phin470CM3 = new GH1("Phin_470MeVCM3", "Neutron Phi Distribution for Photon Energies of 470pm10MeV (CosTheta0.6-0.4)", 10, -180, 180);
-  Phin490CM3 = new GH1("Phin_490MeVCM3", "Neutron Phi Distribution for Photon Energies of 490pm10MeV (CosTheta0.6-0.4)", 10, -180, 180);
-  Phin510CM3 = new GH1("Phin_510MeVCM3", "Neutron Phi Distribution for Photon Energies of 510pm10MeV (CosTheta0.6-0.4)", 10, -180, 180);
-  Phin530CM3 = new GH1("Phin_530MeVCM3", "Neutron Phi Distribution for Photon Energies of 530pm10MeV (CosTheta0.6-0.4)", 10, -180, 180);
-  Phin550CM3 = new GH1("Phin_550MeVCM3", "Neutron Phi Distribution for Photon Energies of 550pm10MeV (CosTheta0.6-0.4)", 10, -180, 180);
-  Phin570CM3 = new GH1("Phin_570MeVCM3", "Neutron Phi Distribution for Photon Energies of 570pm10MeV (CosTheta0.6-0.4)", 10, -180, 180);
-  Phin590CM3 = new GH1("Phin_590MeVCM3", "Neutron Phi Distribution for Photon Energies of 590pm10MeV (CosTheta0.6-0.4)", 10, -180, 180);
-  Phin610CM3 = new GH1("Phin_610MeVCM3", "Neutron Phi Distribution for Photon Energies of 610pm10MeV (CosTheta0.6-0.4)", 10, -180, 180);
-  Phin630CM3 = new GH1("Phin_630MeVCM3", "Neutron Phi Distribution for Photon Energies of 630pm10MeV (CosTheta0.6-0.4)", 10, -180, 180);
-
   // Proton Phi dists across EGamma bins
   Phip410CM4 = new GH1("Phip_410MeVCM4", "Proton Phi Distribution for Photon Energies of 410pm10MeV (CosTheta0.4-0.2)", 10, -180, 180);
   Phip430CM4 = new GH1("Phip_430MeVCM4", "Proton Phi Distribution for Photon Energies of 430pm10MeV (CosTheta0.4-0.2)", 10, -180, 180);
@@ -453,20 +411,6 @@ PNeutPol_Polarimeter_Lin::PNeutPol_Polarimeter_Lin() // Define a load of histogr
   Phip590CM4 = new GH1("Phip_590MeVCM4", "Proton Phi Distribution for Photon Energies of 590pm10MeV (CosTheta0.4-0.2)", 10, -180, 180);
   Phip610CM4 = new GH1("Phip_610MeVCM4", "Proton Phi Distribution for Photon Energies of 610pm10MeV (CosTheta0.4-0.2)", 10, -180, 180);
   Phip630CM4 = new GH1("Phip_630MeVCM4", "Proton Phi Distribution for Photon Energies of 630pm10MeV (CosTheta0.4-0.2)", 10, -180, 180);
-
-  // Angles of neutron in scattered frame across EGamma bins
-  Phin410CM4 = new GH1("Phin_410MeVCM4", "Neutron Phi Distribution for Photon Energies of 410pm10MeV (CosTheta0.4-0.2)", 10, -180, 180);
-  Phin430CM4 = new GH1("Phin_430MeVCM4", "Neutron Phi Distribution for Photon Energies of 430pm10MeV (CosTheta0.4-0.2)", 10, -180, 180);
-  Phin450CM4 = new GH1("Phin_450MeVCM4", "Neutron Phi Distribution for Photon Energies of 450pm10MeV (CosTheta0.4-0.2)", 10, -180, 180);
-  Phin470CM4 = new GH1("Phin_470MeVCM4", "Neutron Phi Distribution for Photon Energies of 470pm10MeV (CosTheta0.4-0.2)", 10, -180, 180);
-  Phin490CM4 = new GH1("Phin_490MeVCM4", "Neutron Phi Distribution for Photon Energies of 490pm10MeV (CosTheta0.4-0.2)", 10, -180, 180);
-  Phin510CM4 = new GH1("Phin_510MeVCM4", "Neutron Phi Distribution for Photon Energies of 510pm10MeV (CosTheta0.4-0.2)", 10, -180, 180);
-  Phin530CM4 = new GH1("Phin_530MeVCM4", "Neutron Phi Distribution for Photon Energies of 530pm10MeV (CosTheta0.4-0.2)", 10, -180, 180);
-  Phin550CM4 = new GH1("Phin_550MeVCM4", "Neutron Phi Distribution for Photon Energies of 550pm10MeV (CosTheta0.4-0.2)", 10, -180, 180);
-  Phin570CM4 = new GH1("Phin_570MeVCM4", "Neutron Phi Distribution for Photon Energies of 570pm10MeV (CosTheta0.4-0.2)", 10, -180, 180);
-  Phin590CM4 = new GH1("Phin_590MeVCM4", "Neutron Phi Distribution for Photon Energies of 590pm10MeV (CosTheta0.4-0.2)", 10, -180, 180);
-  Phin610CM4 = new GH1("Phin_610MeVCM4", "Neutron Phi Distribution for Photon Energies of 610pm10MeV (CosTheta0.4-0.2)", 10, -180, 180);
-  Phin630CM4 = new GH1("Phin_630MeVCM4", "Neutron Phi Distribution for Photon Energies of 630pm10MeV (CosTheta0.4-0.2)", 10, -180, 180);
 
   // Proton Phi dists across EGamma bins
   Phip410CM5 = new GH1("Phip_410MeVCM5", "Proton Phi Distribution for Photon Energies of 410pm10MeV (CosTheta0.2-0)", 10, -180, 180);
@@ -482,20 +426,6 @@ PNeutPol_Polarimeter_Lin::PNeutPol_Polarimeter_Lin() // Define a load of histogr
   Phip610CM5 = new GH1("Phip_610MeVCM5", "Proton Phi Distribution for Photon Energies of 610pm10MeV (CosTheta0.2-0)", 10, -180, 180);
   Phip630CM5 = new GH1("Phip_630MeVCM5", "Proton Phi Distribution for Photon Energies of 630pm10MeV (CosTheta0.2-0)", 10, -180, 180);
 
-  // Angles of neutron in scattered frame across EGamma bins
-  Phin410CM5 = new GH1("Phin_410MeVCM5", "Neutron Phi Distribution for Photon Energies of 410pm10MeV (CosTheta0.2-0)", 10, -180, 180);
-  Phin430CM5 = new GH1("Phin_430MeVCM5", "Neutron Phi Distribution for Photon Energies of 430pm10MeV (CosTheta0.2-0)", 10, -180, 180);
-  Phin450CM5 = new GH1("Phin_450MeVCM5", "Neutron Phi Distribution for Photon Energies of 450pm10MeV (CosTheta0.2-0)", 10, -180, 180);
-  Phin470CM5 = new GH1("Phin_470MeVCM5", "Neutron Phi Distribution for Photon Energies of 470pm10MeV (CosTheta0.2-0)", 10, -180, 180);
-  Phin490CM5 = new GH1("Phin_490MeVCM5", "Neutron Phi Distribution for Photon Energies of 490pm10MeV (CosTheta0.2-0)", 10, -180, 180);
-  Phin510CM5 = new GH1("Phin_510MeVCM5", "Neutron Phi Distribution for Photon Energies of 510pm10MeV (CosTheta0.2-0)", 10, -180, 180);
-  Phin530CM5 = new GH1("Phin_530MeVCM5", "Neutron Phi Distribution for Photon Energies of 530pm10MeV (CosTheta0.2-0)", 10, -180, 180);
-  Phin550CM5 = new GH1("Phin_550MeVCM5", "Neutron Phi Distribution for Photon Energies of 550pm10MeV (CosTheta0.2-0)", 10, -180, 180);
-  Phin570CM5 = new GH1("Phin_570MeVCM5", "Neutron Phi Distribution for Photon Energies of 570pm10MeV (CosTheta0.2-0)", 10, -180, 180);
-  Phin590CM5 = new GH1("Phin_590MeVCM5", "Neutron Phi Distribution for Photon Energies of 590pm10MeV (CosTheta0.2-0)", 10, -180, 180);
-  Phin610CM5 = new GH1("Phin_610MeVCM5", "Neutron Phi Distribution for Photon Energies of 610pm10MeV (CosTheta0.2-0)", 10, -180, 180);
-  Phin630CM5 = new GH1("Phin_630MeVCM5", "Neutron Phi Distribution for Photon Energies of 630pm10MeV (CosTheta0.2-0)", 10, -180, 180);
-
   // Proton Phi dists across EGamma bins
   Phip410CM6 = new GH1("Phip_410MeVCM6", "Proton Phi Distribution for Photon Energies of 410pm10MeV (CosTheta0-(-0.2))", 10, -180, 180);
   Phip430CM6 = new GH1("Phip_430MeVCM6", "Proton Phi Distribution for Photon Energies of 430pm10MeV (CosTheta0-(-0.2))", 10, -180, 180);
@@ -509,20 +439,6 @@ PNeutPol_Polarimeter_Lin::PNeutPol_Polarimeter_Lin() // Define a load of histogr
   Phip590CM6 = new GH1("Phip_590MeVCM6", "Proton Phi Distribution for Photon Energies of 590pm10MeV (CosTheta0-(-0.2))", 10, -180, 180);
   Phip610CM6 = new GH1("Phip_610MeVCM6", "Proton Phi Distribution for Photon Energies of 610pm10MeV (CosTheta0-(-0.2))", 10, -180, 180);
   Phip630CM6 = new GH1("Phip_630MeVCM6", "Proton Phi Distribution for Photon Energies of 630pm10MeV (CosTheta0-(-0.2))", 10, -180, 180);
-
-  // Angles of neutron in scattered frame across EGamma bins
-  Phin410CM6 = new GH1("Phin_410MeVCM6", "Neutron Phi Distribution for Photon Energies of 410pm10MeV (CosTheta0-(-0.2))", 10, -180, 180);
-  Phin430CM6 = new GH1("Phin_430MeVCM6", "Neutron Phi Distribution for Photon Energies of 430pm10MeV (CosTheta0-(-0.2))", 10, -180, 180);
-  Phin450CM6 = new GH1("Phin_450MeVCM6", "Neutron Phi Distribution for Photon Energies of 450pm10MeV (CosTheta0-(-0.2))", 10, -180, 180);
-  Phin470CM6 = new GH1("Phin_470MeVCM6", "Neutron Phi Distribution for Photon Energies of 470pm10MeV (CosTheta0-(-0.2))", 10, -180, 180);
-  Phin490CM6 = new GH1("Phin_490MeVCM6", "Neutron Phi Distribution for Photon Energies of 490pm10MeV (CosTheta0-(-0.2))", 10, -180, 180);
-  Phin510CM6 = new GH1("Phin_510MeVCM6", "Neutron Phi Distribution for Photon Energies of 510pm10MeV (CosTheta0-(-0.2))", 10, -180, 180);
-  Phin530CM6 = new GH1("Phin_530MeVCM6", "Neutron Phi Distribution for Photon Energies of 530pm10MeV (CosTheta0-(-0.2))", 10, -180, 180);
-  Phin550CM6 = new GH1("Phin_550MeVCM6", "Neutron Phi Distribution for Photon Energies of 550pm10MeV (CosTheta0-(-0.2))", 10, -180, 180);
-  Phin570CM6 = new GH1("Phin_570MeVCM6", "Neutron Phi Distribution for Photon Energies of 570pm10MeV (CosTheta0-(-0.2))", 10, -180, 180);
-  Phin590CM6 = new GH1("Phin_590MeVCM6", "Neutron Phi Distribution for Photon Energies of 590pm10MeV (CosTheta0-(-0.2))", 10, -180, 180);
-  Phin610CM6 = new GH1("Phin_610MeVCM6", "Neutron Phi Distribution for Photon Energies of 610pm10MeV (CosTheta0-(-0.2))", 10, -180, 180);
-  Phin630CM6 = new GH1("Phin_630MeVCM6", "Neutron Phi Distribution for Photon Energies of 630pm10MeV (CosTheta0-(-0.2))", 10, -180, 180);
 
   // Proton Phi dists across EGamma bins
   Phip410CM7 = new GH1("Phip_410MeVCM7", "Proton Phi Distribution for Photon Energies of 410pm10MeV (CosTheta-0.2-(-0.4))", 10, -180, 180);
@@ -538,20 +454,6 @@ PNeutPol_Polarimeter_Lin::PNeutPol_Polarimeter_Lin() // Define a load of histogr
   Phip610CM7 = new GH1("Phip_610MeVCM7", "Proton Phi Distribution for Photon Energies of 610pm10MeV (CosTheta-0.2-(-0.4))", 10, -180, 180);
   Phip630CM7 = new GH1("Phip_630MeVCM7", "Proton Phi Distribution for Photon Energies of 630pm10MeV (CosTheta-0.2-(-0.4))", 10, -180, 180);
 
-  // Angles of neutron in scattered frame across EGamma bins
-  Phin410CM7 = new GH1("Phin_410MeVCM7", "Neutron Phi Distribution for Photon Energies of 410pm10MeV (CosTheta-0.2-(-0.4))", 10, -180, 180);
-  Phin430CM7 = new GH1("Phin_430MeVCM7", "Neutron Phi Distribution for Photon Energies of 430pm10MeV (CosTheta-0.2-(-0.4))", 10, -180, 180);
-  Phin450CM7 = new GH1("Phin_450MeVCM7", "Neutron Phi Distribution for Photon Energies of 450pm10MeV (CosTheta-0.2-(-0.4))", 10, -180, 180);
-  Phin470CM7 = new GH1("Phin_470MeVCM7", "Neutron Phi Distribution for Photon Energies of 470pm10MeV (CosTheta-0.2-(-0.4))", 10, -180, 180);
-  Phin490CM7 = new GH1("Phin_490MeVCM7", "Neutron Phi Distribution for Photon Energies of 490pm10MeV (CosTheta-0.2-(-0.4))", 10, -180, 180);
-  Phin510CM7 = new GH1("Phin_510MeVCM7", "Neutron Phi Distribution for Photon Energies of 510pm10MeV (CosTheta-0.2-(-0.4))", 10, -180, 180);
-  Phin530CM7 = new GH1("Phin_530MeVCM7", "Neutron Phi Distribution for Photon Energies of 530pm10MeV (CosTheta-0.2-(-0.4))", 10, -180, 180);
-  Phin550CM7 = new GH1("Phin_550MeVCM7", "Neutron Phi Distribution for Photon Energies of 550pm10MeV (CosTheta-0.2-(-0.4))", 10, -180, 180);
-  Phin570CM7 = new GH1("Phin_570MeVCM7", "Neutron Phi Distribution for Photon Energies of 570pm10MeV (CosTheta-0.2-(-0.4))", 10, -180, 180);
-  Phin590CM7 = new GH1("Phin_590MeVCM7", "Neutron Phi Distribution for Photon Energies of 590pm10MeV (CosTheta-0.2-(-0.4))", 10, -180, 180);
-  Phin610CM7 = new GH1("Phin_610MeVCM7", "Neutron Phi Distribution for Photon Energies of 610pm10MeV (CosTheta-0.2-(-0.4))", 10, -180, 180);
-  Phin630CM7 = new GH1("Phin_630MeVCM7", "Neutron Phi Distribution for Photon Energies of 630pm10MeV (CosTheta-0.2-(-0.4))", 10, -180, 180);
-
   // Proton Phi dists across EGamma bins
   Phip410CM8 = new GH1("Phip_410MeVCM8", "Proton Phi Distribution for Photon Energies of 410pm10MeV (CosTheta-0.4-(-0.6))", 10, -180, 180);
   Phip430CM8 = new GH1("Phip_430MeVCM8", "Proton Phi Distribution for Photon Energies of 430pm10MeV (CosTheta-0.4-(-0.6))", 10, -180, 180);
@@ -565,20 +467,6 @@ PNeutPol_Polarimeter_Lin::PNeutPol_Polarimeter_Lin() // Define a load of histogr
   Phip590CM8 = new GH1("Phip_590MeVCM8", "Proton Phi Distribution for Photon Energies of 590pm10MeV (CosTheta-0.4-(-0.6))", 10, -180, 180);
   Phip610CM8 = new GH1("Phip_610MeVCM8", "Proton Phi Distribution for Photon Energies of 610pm10MeV (CosTheta-0.4-(-0.6))", 10, -180, 180);
   Phip630CM8 = new GH1("Phip_630MeVCM8", "Proton Phi Distribution for Photon Energies of 630pm10MeV (CosTheta-0.4-(-0.6))", 10, -180, 180);
-
-  // Angles of neutron in scattered frame across EGamma bins
-  Phin410CM8 = new GH1("Phin_410MeVCM8", "Neutron Phi Distribution for Photon Energies of 410pm10MeV (CosTheta-0.4-(-0.6))", 10, -180, 180);
-  Phin430CM8 = new GH1("Phin_430MeVCM8", "Neutron Phi Distribution for Photon Energies of 430pm10MeV (CosTheta-0.4-(-0.6))", 10, -180, 180);
-  Phin450CM8 = new GH1("Phin_450MeVCM8", "Neutron Phi Distribution for Photon Energies of 450pm10MeV (CosTheta-0.4-(-0.6))", 10, -180, 180);
-  Phin470CM8 = new GH1("Phin_470MeVCM8", "Neutron Phi Distribution for Photon Energies of 470pm10MeV (CosTheta-0.4-(-0.6))", 10, -180, 180);
-  Phin490CM8 = new GH1("Phin_490MeVCM8", "Neutron Phi Distribution for Photon Energies of 490pm10MeV (CosTheta-0.4-(-0.6))", 10, -180, 180);
-  Phin510CM8 = new GH1("Phin_510MeVCM8", "Neutron Phi Distribution for Photon Energies of 510pm10MeV (CosTheta-0.4-(-0.6))", 10, -180, 180);
-  Phin530CM8 = new GH1("Phin_530MeVCM8", "Neutron Phi Distribution for Photon Energies of 530pm10MeV (CosTheta-0.4-(-0.6))", 10, -180, 180);
-  Phin550CM8 = new GH1("Phin_550MeVCM8", "Neutron Phi Distribution for Photon Energies of 550pm10MeV (CosTheta-0.4-(-0.6))", 10, -180, 180);
-  Phin570CM8 = new GH1("Phin_570MeVCM8", "Neutron Phi Distribution for Photon Energies of 570pm10MeV (CosTheta-0.4-(-0.6))", 10, -180, 180);
-  Phin590CM8 = new GH1("Phin_590MeVCM8", "Neutron Phi Distribution for Photon Energies of 590pm10MeV (CosTheta-0.4-(-0.6))", 10, -180, 180);
-  Phin610CM8 = new GH1("Phin_610MeVCM8", "Neutron Phi Distribution for Photon Energies of 610pm10MeV (CosTheta-0.4-(-0.6))", 10, -180, 180);
-  Phin630CM8 = new GH1("Phin_630MeVCM8", "Neutron Phi Distribution for Photon Energies of 630pm10MeV (CosTheta-0.4-(-0.6))", 10, -180, 180);
 
   // Proton Phi dists across EGamma bins
   Phip410CM9 = new GH1("Phip_410MeVCM9", "Proton Phi Distribution for Photon Energies of 410pm10MeV (CosTheta-0.6-(-0.8))", 10, -180, 180);
@@ -594,20 +482,6 @@ PNeutPol_Polarimeter_Lin::PNeutPol_Polarimeter_Lin() // Define a load of histogr
   Phip610CM9 = new GH1("Phip_610MeVCM9", "Proton Phi Distribution for Photon Energies of 610pm10MeV (CosTheta-0.6-(-0.8))", 10, -180, 180);
   Phip630CM9 = new GH1("Phip_630MeVCM9", "Proton Phi Distribution for Photon Energies of 630pm10MeV (CosTheta-0.6-(-0.8))", 10, -180, 180);
 
-  // Angles of neutron in scattered frame across EGamma bins
-  Phin410CM9 = new GH1("Phin_410MeVCM9", "Neutron Phi Distribution for Photon Energies of 410pm10MeV (CosTheta-0.6-(-0.8))", 10, -180, 180);
-  Phin430CM9 = new GH1("Phin_430MeVCM9", "Neutron Phi Distribution for Photon Energies of 430pm10MeV (CosTheta-0.6-(-0.8))", 10, -180, 180);
-  Phin450CM9 = new GH1("Phin_450MeVCM9", "Neutron Phi Distribution for Photon Energies of 450pm10MeV (CosTheta-0.6-(-0.8))", 10, -180, 180);
-  Phin470CM9 = new GH1("Phin_470MeVCM9", "Neutron Phi Distribution for Photon Energies of 470pm10MeV (CosTheta-0.6-(-0.8))", 10, -180, 180);
-  Phin490CM9 = new GH1("Phin_490MeVCM9", "Neutron Phi Distribution for Photon Energies of 490pm10MeV (CosTheta-0.6-(-0.8))", 10, -180, 180);
-  Phin510CM9 = new GH1("Phin_510MeVCM9", "Neutron Phi Distribution for Photon Energies of 510pm10MeV (CosTheta-0.6-(-0.8))", 10, -180, 180);
-  Phin530CM9 = new GH1("Phin_530MeVCM9", "Neutron Phi Distribution for Photon Energies of 530pm10MeV (CosTheta-0.6-(-0.8))", 10, -180, 180);
-  Phin550CM9 = new GH1("Phin_550MeVCM9", "Neutron Phi Distribution for Photon Energies of 550pm10MeV (CosTheta-0.6-(-0.8))", 10, -180, 180);
-  Phin570CM9 = new GH1("Phin_570MeVCM9", "Neutron Phi Distribution for Photon Energies of 570pm10MeV (CosTheta-0.6-(-0.8))", 10, -180, 180);
-  Phin590CM9 = new GH1("Phin_590MeVCM9", "Neutron Phi Distribution for Photon Energies of 590pm10MeV (CosTheta-0.6-(-0.8))", 10, -180, 180);
-  Phin610CM9 = new GH1("Phin_610MeVCM9", "Neutron Phi Distribution for Photon Energies of 610pm10MeV (CosTheta-0.6-(-0.8))", 10, -180, 180);
-  Phin630CM9 = new GH1("Phin_630MeVCM9", "Neutron Phi Distribution for Photon Energies of 630pm10MeV (CosTheta-0.6-(-0.8))", 10, -180, 180);
-
   // Proton Phi dists across EGamma bins
   Phip410CM10 = new GH1("Phip_410MeVCM10", "Proton Phi Distribution for Photon Energies of 410pm10MeV (CosTheta-0.8-(-1))", 10, -180, 180);
   Phip430CM10 = new GH1("Phip_430MeVCM10", "Proton Phi Distribution for Photon Energies of 430pm10MeV (CosTheta-0.8-(-1))", 10, -180, 180);
@@ -621,20 +495,6 @@ PNeutPol_Polarimeter_Lin::PNeutPol_Polarimeter_Lin() // Define a load of histogr
   Phip590CM10 = new GH1("Phip_590MeVCM10", "Proton Phi Distribution for Photon Energies of 590pm10MeV (CosTheta-0.8-(-1))", 10, -180, 180);
   Phip610CM10 = new GH1("Phip_610MeVCM10", "Proton Phi Distribution for Photon Energies of 610pm10MeV (CosTheta-0.8-(-1))", 10, -180, 180);
   Phip630CM10 = new GH1("Phip_630MeVCM10", "Proton Phi Distribution for Photon Energies of 630pm10MeV (CosTheta-0.8-(-1))", 10, -180, 180);
-
-  // Angles of neutron in scattered frame across EGamma bins
-  Phin410CM10 = new GH1("Phin_410MeVCM10", "Neutron Phi Distribution for Photon Energies of 410pm10MeV (CosTheta-0.8-(-1))", 10, -180, 180);
-  Phin430CM10 = new GH1("Phin_430MeVCM10", "Neutron Phi Distribution for Photon Energies of 430pm10MeV (CosTheta-0.8-(-1))", 10, -180, 180);
-  Phin450CM10 = new GH1("Phin_450MeVCM10", "Neutron Phi Distribution for Photon Energies of 450pm10MeV (CosTheta-0.8-(-1))", 10, -180, 180);
-  Phin470CM10 = new GH1("Phin_470MeVCM10", "Neutron Phi Distribution for Photon Energies of 470pm10MeV (CosTheta-0.8-(-1))", 10, -180, 180);
-  Phin490CM10 = new GH1("Phin_490MeVCM10", "Neutron Phi Distribution for Photon Energies of 490pm10MeV (CosTheta-0.8-(-1))", 10, -180, 180);
-  Phin510CM10 = new GH1("Phin_510MeVCM10", "Neutron Phi Distribution for Photon Energies of 510pm10MeV (CosTheta-0.8-(-1))", 10, -180, 180);
-  Phin530CM10 = new GH1("Phin_530MeVCM10", "Neutron Phi Distribution for Photon Energies of 530pm10MeV (CosTheta-0.8-(-1))", 10, -180, 180);
-  Phin550CM10 = new GH1("Phin_550MeVCM10", "Neutron Phi Distribution for Photon Energies of 550pm10MeV (CosTheta-0.8-(-1))", 10, -180, 180);
-  Phin570CM10 = new GH1("Phin_570MeVCM10", "Neutron Phi Distribution for Photon Energies of 570pm10MeV (CosTheta-0.8-(-1))", 10, -180, 180);
-  Phin590CM10 = new GH1("Phin_590MeVCM10", "Neutron Phi Distribution for Photon Energies of 590pm10MeV (CosTheta-0.8-(-1))", 10, -180, 180);
-  Phin610CM10 = new GH1("Phin_610MeVCM10", "Neutron Phi Distribution for Photon Energies of 610pm10MeV (CosTheta-0.8-(-1))", 10, -180, 180);
-  Phin630CM10 = new GH1("Phin_630MeVCM10", "Neutron Phi Distribution for Photon Energies of 630pm10MeV (CosTheta-0.8-(-1))", 10, -180, 180);
 
   ThetaRecPiDiff = new GH1 ("ThetaRecPiDiff", "Difference between ThetaPiRec and Thetan", 200, 0, 180);
   ThetanThetaRecPi = new GH2 ("ThetanThetaRecPi", "Thetan vs ThetaPiRec", 100, 0, 180, 100, 0, 180);
@@ -732,52 +592,42 @@ void PNeutPol_Polarimeter_Lin::FillHists()
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
             Phip410CM1->Fill(WCPhip, TaggerTime);
-            Phin410CM1->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
             Phip410CM2->Fill(WCPhip, TaggerTime);
-            Phin410CM2->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
             Phip410CM3->Fill(WCPhip, TaggerTime);
-            Phin410CM3->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
             Phip410CM4->Fill(WCPhip, TaggerTime);
-            Phin410CM4->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
             Phip410CM5->Fill(WCPhip, TaggerTime);
-            Phin410CM5->Fill(PhinRec, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
             Phip410CM6->Fill(WCPhip, TaggerTime);
-            Phin410CM6->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
             Phip410CM7->Fill(WCPhip, TaggerTime);
-            Phin410CM7->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
             Phip410CM8->Fill(WCPhip, TaggerTime);
-            Phin410CM8->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
             Phip410CM9->Fill(WCPhip, TaggerTime);
-            Phin410CM9->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
             Phip410CM10->Fill(WCPhip, TaggerTime);
-            Phin410CM10->Fill(PhinRec, TaggerTime);
         }
     }
 
@@ -786,52 +636,42 @@ void PNeutPol_Polarimeter_Lin::FillHists()
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
             Phip430CM1->Fill(WCPhip, TaggerTime);
-            Phin430CM1->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
             Phip430CM2->Fill(WCPhip, TaggerTime);
-            Phin430CM2->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
             Phip430CM3->Fill(WCPhip, TaggerTime);
-            Phin430CM3->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
             Phip430CM4->Fill(WCPhip, TaggerTime);
-            Phin430CM4->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
             Phip430CM5->Fill(WCPhip, TaggerTime);
-            Phin430CM5->Fill(PhinRec, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
             Phip430CM6->Fill(WCPhip, TaggerTime);
-            Phin430CM6->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
             Phip430CM7->Fill(WCPhip, TaggerTime);
-            Phin430CM7->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
             Phip430CM8->Fill(WCPhip, TaggerTime);
-            Phin430CM8->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
             Phip430CM9->Fill(WCPhip, TaggerTime);
-            Phin430CM9->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
             Phip430CM10->Fill(WCPhip, TaggerTime);
-            Phin430CM10->Fill(PhinRec, TaggerTime);
         }
     }
 
@@ -840,52 +680,42 @@ void PNeutPol_Polarimeter_Lin::FillHists()
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
             Phip450CM1->Fill(WCPhip, TaggerTime);
-            Phin450CM1->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
             Phip450CM2->Fill(WCPhip, TaggerTime);
-            Phin450CM2->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
             Phip450CM3->Fill(WCPhip, TaggerTime);
-            Phin450CM3->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
             Phip450CM4->Fill(WCPhip, TaggerTime);
-            Phin450CM4->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
             Phip450CM5->Fill(WCPhip, TaggerTime);
-            Phin450CM5->Fill(PhinRec, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
             Phip450CM6->Fill(WCPhip, TaggerTime);
-            Phin450CM6->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
             Phip450CM7->Fill(WCPhip, TaggerTime);
-            Phin450CM7->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
             Phip450CM8->Fill(WCPhip, TaggerTime);
-            Phin450CM8->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
             Phip450CM9->Fill(WCPhip, TaggerTime);
-            Phin450CM9->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
             Phip450CM10->Fill(WCPhip, TaggerTime);
-            Phin450CM10->Fill(PhinRec, TaggerTime);
         }
     }
 
@@ -894,51 +724,41 @@ void PNeutPol_Polarimeter_Lin::FillHists()
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
             Phip470CM1->Fill(WCPhip, TaggerTime);
-            Phin470CM1->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
             Phip470CM2->Fill(WCPhip, TaggerTime);
-            Phin470CM2->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
             Phip470CM3->Fill(WCPhip, TaggerTime);
-            Phin470CM3->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
             Phip470CM4->Fill(WCPhip, TaggerTime);
-            Phin470CM4->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
             Phip470CM5->Fill(WCPhip, TaggerTime);
-            Phin470CM5->Fill(PhinRec, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
             Phip470CM6->Fill(WCPhip, TaggerTime);
-            Phin470CM6->Fill(PhinRec, TaggerTime);
         }
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
             Phip470CM7->Fill(WCPhip, TaggerTime);
-            Phin470CM7->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
             Phip470CM8->Fill(WCPhip, TaggerTime);
-            Phin470CM8->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
             Phip470CM9->Fill(WCPhip, TaggerTime);
-            Phin470CM9->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
             Phip470CM10->Fill(WCPhip, TaggerTime);
-            Phin470CM10->Fill(PhinRec, TaggerTime);
         }
     }
 
@@ -947,52 +767,42 @@ void PNeutPol_Polarimeter_Lin::FillHists()
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
             Phip490CM1->Fill(WCPhip, TaggerTime);
-            Phin490CM1->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
             Phip490CM2->Fill(WCPhip, TaggerTime);
-            Phin490CM2->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
             Phip490CM3->Fill(WCPhip, TaggerTime);
-            Phin490CM3->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
             Phip490CM4->Fill(WCPhip, TaggerTime);
-            Phin490CM4->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
             Phip490CM5->Fill(WCPhip, TaggerTime);
-            Phin490CM5->Fill(PhinRec, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
             Phip490CM6->Fill(WCPhip, TaggerTime);
-            Phin490CM6->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
             Phip490CM7->Fill(WCPhip, TaggerTime);
-            Phin490CM7->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
             Phip490CM8->Fill(WCPhip, TaggerTime);
-            Phin490CM8->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
             Phip490CM9->Fill(WCPhip, TaggerTime);
-            Phin490CM9->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
             Phip490CM10->Fill(WCPhip, TaggerTime);
-            Phin490CM10->Fill(PhinRec, TaggerTime);
         }
     }
 
@@ -1001,52 +811,42 @@ void PNeutPol_Polarimeter_Lin::FillHists()
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
             Phip510CM1->Fill(WCPhip, TaggerTime);
-            Phin510CM1->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
             Phip510CM2->Fill(WCPhip, TaggerTime);
-            Phin510CM2->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
             Phip510CM3->Fill(WCPhip, TaggerTime);
-            Phin510CM3->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
             Phip510CM4->Fill(WCPhip, TaggerTime);
-            Phin510CM4->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
             Phip510CM5->Fill(WCPhip, TaggerTime);
-            Phin510CM5->Fill(PhinRec, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
             Phip510CM6->Fill(WCPhip, TaggerTime);
-            Phin510CM6->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
             Phip510CM7->Fill(WCPhip, TaggerTime);
-            Phin510CM7->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
             Phip510CM8->Fill(WCPhip, TaggerTime);
-            Phin510CM8->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
             Phip510CM9->Fill(WCPhip, TaggerTime);
-            Phin510CM9->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
             Phip510CM10->Fill(WCPhip, TaggerTime);
-            Phin510CM10->Fill(PhinRec, TaggerTime);
         }
     }
 
@@ -1055,52 +855,42 @@ void PNeutPol_Polarimeter_Lin::FillHists()
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
             Phip530CM1->Fill(WCPhip, TaggerTime);
-            Phin530CM1->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
             Phip530CM2->Fill(WCPhip, TaggerTime);
-            Phin530CM2->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
             Phip530CM3->Fill(WCPhip, TaggerTime);
-            Phin530CM3->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
             Phip530CM4->Fill(WCPhip, TaggerTime);
-            Phin530CM4->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
             Phip530CM5->Fill(WCPhip, TaggerTime);
-            Phin530CM5->Fill(PhinRec, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
             Phip530CM6->Fill(WCPhip, TaggerTime);
-            Phin530CM6->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
             Phip530CM7->Fill(WCPhip, TaggerTime);
-            Phin530CM7->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
             Phip530CM8->Fill(WCPhip, TaggerTime);
-            Phin530CM8->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
             Phip530CM9->Fill(WCPhip, TaggerTime);
-            Phin530CM9->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
             Phip530CM10->Fill(WCPhip, TaggerTime);
-            Phin530CM10->Fill(PhinRec, TaggerTime);
         }
     }
 
@@ -1109,52 +899,42 @@ void PNeutPol_Polarimeter_Lin::FillHists()
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
             Phip550CM1->Fill(WCPhip, TaggerTime);
-            Phin550CM1->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
             Phip550CM2->Fill(WCPhip, TaggerTime);
-            Phin550CM2->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
             Phip550CM3->Fill(WCPhip, TaggerTime);
-            Phin550CM3->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
             Phip550CM4->Fill(WCPhip, TaggerTime);
-            Phin550CM4->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
             Phip550CM5->Fill(WCPhip, TaggerTime);
-            Phin550CM5->Fill(PhinRec, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
             Phip550CM6->Fill(WCPhip, TaggerTime);
-            Phin550CM6->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
             Phip550CM7->Fill(WCPhip, TaggerTime);
-            Phin550CM7->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
             Phip550CM8->Fill(WCPhip, TaggerTime);
-            Phin550CM8->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
             Phip550CM9->Fill(WCPhip, TaggerTime);
-            Phin550CM9->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
             Phip550CM10->Fill(WCPhip, TaggerTime);
-            Phin550CM10->Fill(PhinRec, TaggerTime);
         }
     }
 
@@ -1163,52 +943,42 @@ void PNeutPol_Polarimeter_Lin::FillHists()
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
             Phip570CM1->Fill(WCPhip, TaggerTime);
-            Phin570CM1->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
             Phip570CM2->Fill(WCPhip, TaggerTime);
-            Phin570CM2->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
             Phip570CM3->Fill(WCPhip, TaggerTime);
-            Phin570CM3->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
             Phip570CM4->Fill(WCPhip, TaggerTime);
-            Phin570CM4->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
             Phip570CM5->Fill(WCPhip, TaggerTime);
-            Phin570CM5->Fill(PhinRec, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
             Phip570CM6->Fill(WCPhip, TaggerTime);
-            Phin570CM6->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
             Phip570CM7->Fill(WCPhip, TaggerTime);
-            Phin570CM7->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
             Phip570CM8->Fill(WCPhip, TaggerTime);
-            Phin570CM8->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
             Phip570CM9->Fill(WCPhip, TaggerTime);
-            Phin570CM9->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
             Phip570CM10->Fill(WCPhip, TaggerTime);
-            Phin570CM10->Fill(PhinRec, TaggerTime);
         }
     }
 
@@ -1217,52 +987,42 @@ void PNeutPol_Polarimeter_Lin::FillHists()
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
             Phip590CM1->Fill(WCPhip, TaggerTime);
-            Phin590CM1->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
             Phip590CM2->Fill(WCPhip, TaggerTime);
-            Phin590CM2->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
             Phip590CM3->Fill(WCPhip, TaggerTime);
-            Phin590CM3->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
             Phip590CM4->Fill(WCPhip, TaggerTime);
-            Phin590CM4->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
             Phip590CM5->Fill(WCPhip, TaggerTime);
-            Phin590CM5->Fill(PhinRec, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
             Phip590CM6->Fill(WCPhip, TaggerTime);
-            Phin590CM6->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
             Phip590CM7->Fill(WCPhip, TaggerTime);
-            Phin590CM7->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
             Phip590CM8->Fill(WCPhip, TaggerTime);
-            Phin590CM8->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
             Phip590CM9->Fill(WCPhip, TaggerTime);
-            Phin590CM9->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
             Phip590CM10->Fill(WCPhip, TaggerTime);
-            Phin590CM10->Fill(PhinRec, TaggerTime);
         }
     }
 
@@ -1271,52 +1031,42 @@ void PNeutPol_Polarimeter_Lin::FillHists()
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
             Phip610CM1->Fill(WCPhip, TaggerTime);
-            Phin610CM1->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
             Phip610CM2->Fill(WCPhip, TaggerTime);
-            Phin610CM2->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
             Phip610CM3->Fill(WCPhip, TaggerTime);
-            Phin610CM3->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
             Phip610CM4->Fill(WCPhip, TaggerTime);
-            Phin610CM4->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
             Phip610CM5->Fill(WCPhip, TaggerTime);
-            Phin610CM5->Fill(PhinRec, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
             Phip610CM6->Fill(WCPhip, TaggerTime);
-            Phin610CM6->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
             Phip610CM7->Fill(WCPhip, TaggerTime);
-            Phin610CM7->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
             Phip610CM8->Fill(WCPhip, TaggerTime);
-            Phin610CM8->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
             Phip610CM9->Fill(WCPhip, TaggerTime);
-            Phin610CM9->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
             Phip610CM10->Fill(WCPhip, TaggerTime);
-            Phin610CM10->Fill(PhinRec, TaggerTime);
         }
     }
 
@@ -1325,52 +1075,42 @@ void PNeutPol_Polarimeter_Lin::FillHists()
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
             Phip630CM1->Fill(WCPhip, TaggerTime);
-            Phin630CM1->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
             Phip630CM2->Fill(WCPhip, TaggerTime);
-            Phin630CM2->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
             Phip630CM3->Fill(WCPhip, TaggerTime);
-            Phin630CM3->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
             Phip630CM4->Fill(WCPhip, TaggerTime);
-            Phin630CM4->Fill(PhinRec, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
             Phip630CM5->Fill(WCPhip, TaggerTime);
-            Phin630CM5->Fill(PhinRec, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
             Phip630CM6->Fill(WCPhip, TaggerTime);
-            Phin630CM6->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
             Phip630CM7->Fill(WCPhip, TaggerTime);
-            Phin630CM7->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
             Phip630CM8->Fill(WCPhip, TaggerTime);
-            Phin630CM8->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
             Phip630CM9->Fill(WCPhip, TaggerTime);
-            Phin630CM9->Fill(PhinRec, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
             Phip630CM10->Fill(WCPhip, TaggerTime);
-            Phin630CM10->Fill(PhinRec, TaggerTime);
         }
     }
 }

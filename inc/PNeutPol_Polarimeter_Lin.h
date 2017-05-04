@@ -194,19 +194,6 @@ private:
   GH1* Phip610CM1;
   GH1* Phip630CM1;
 
-  GH1* Phin410CM1;
-  GH1* Phin430CM1;
-  GH1* Phin450CM1;
-  GH1* Phin470CM1;
-  GH1* Phin490CM1;
-  GH1* Phin510CM1;
-  GH1* Phin530CM1;
-  GH1* Phin550CM1;
-  GH1* Phin570CM1;
-  GH1* Phin590CM1;
-  GH1* Phin610CM1;
-  GH1* Phin630CM1;
-
   GH1* Phip410CM2;
   GH1* Phip430CM2;
   GH1* Phip450CM2;
@@ -219,19 +206,6 @@ private:
   GH1* Phip590CM2;
   GH1* Phip610CM2;
   GH1* Phip630CM2;
-
-  GH1* Phin410CM2;
-  GH1* Phin430CM2;
-  GH1* Phin450CM2;
-  GH1* Phin470CM2;
-  GH1* Phin490CM2;
-  GH1* Phin510CM2;
-  GH1* Phin530CM2;
-  GH1* Phin550CM2;
-  GH1* Phin570CM2;
-  GH1* Phin590CM2;
-  GH1* Phin610CM2;
-  GH1* Phin630CM2;
 
   GH1* Phip410CM3;
   GH1* Phip430CM3;
@@ -246,19 +220,6 @@ private:
   GH1* Phip610CM3;
   GH1* Phip630CM3;
 
-  GH1* Phin410CM3;
-  GH1* Phin430CM3;
-  GH1* Phin450CM3;
-  GH1* Phin470CM3;
-  GH1* Phin490CM3;
-  GH1* Phin510CM3;
-  GH1* Phin530CM3;
-  GH1* Phin550CM3;
-  GH1* Phin570CM3;
-  GH1* Phin590CM3;
-  GH1* Phin610CM3;
-  GH1* Phin630CM3;
-
   GH1* Phip410CM4;
   GH1* Phip430CM4;
   GH1* Phip450CM4;
@@ -271,19 +232,6 @@ private:
   GH1* Phip590CM4;
   GH1* Phip610CM4;
   GH1* Phip630CM4;
-
-  GH1* Phin410CM4;
-  GH1* Phin430CM4;
-  GH1* Phin450CM4;
-  GH1* Phin470CM4;
-  GH1* Phin490CM4;
-  GH1* Phin510CM4;
-  GH1* Phin530CM4;
-  GH1* Phin550CM4;
-  GH1* Phin570CM4;
-  GH1* Phin590CM4;
-  GH1* Phin610CM4;
-  GH1* Phin630CM4;
 
   GH1* Phip410CM5;
   GH1* Phip430CM5;
@@ -298,19 +246,6 @@ private:
   GH1* Phip610CM5;
   GH1* Phip630CM5;
 
-  GH1* Phin410CM5;
-  GH1* Phin430CM5;
-  GH1* Phin450CM5;
-  GH1* Phin470CM5;
-  GH1* Phin490CM5;
-  GH1* Phin510CM5;
-  GH1* Phin530CM5;
-  GH1* Phin550CM5;
-  GH1* Phin570CM5;
-  GH1* Phin590CM5;
-  GH1* Phin610CM5;
-  GH1* Phin630CM5;
-
   GH1* Phip410CM6;
   GH1* Phip430CM6;
   GH1* Phip450CM6;
@@ -323,19 +258,6 @@ private:
   GH1* Phip590CM6;
   GH1* Phip610CM6;
   GH1* Phip630CM6;
-
-  GH1* Phin410CM6;
-  GH1* Phin430CM6;
-  GH1* Phin450CM6;
-  GH1* Phin470CM6;
-  GH1* Phin490CM6;
-  GH1* Phin510CM6;
-  GH1* Phin530CM6;
-  GH1* Phin550CM6;
-  GH1* Phin570CM6;
-  GH1* Phin590CM6;
-  GH1* Phin610CM6;
-  GH1* Phin630CM6;
 
   GH1* Phip410CM7;
   GH1* Phip430CM7;
@@ -350,19 +272,6 @@ private:
   GH1* Phip610CM7;
   GH1* Phip630CM7;
 
-  GH1* Phin410CM7;
-  GH1* Phin430CM7;
-  GH1* Phin450CM7;
-  GH1* Phin470CM7;
-  GH1* Phin490CM7;
-  GH1* Phin510CM7;
-  GH1* Phin530CM7;
-  GH1* Phin550CM7;
-  GH1* Phin570CM7;
-  GH1* Phin590CM7;
-  GH1* Phin610CM7;
-  GH1* Phin630CM7;
-
   GH1* Phip410CM8;
   GH1* Phip430CM8;
   GH1* Phip450CM8;
@@ -375,19 +284,6 @@ private:
   GH1* Phip590CM8;
   GH1* Phip610CM8;
   GH1* Phip630CM8;
-
-  GH1* Phin410CM8;
-  GH1* Phin430CM8;
-  GH1* Phin450CM8;
-  GH1* Phin470CM8;
-  GH1* Phin490CM8;
-  GH1* Phin510CM8;
-  GH1* Phin530CM8;
-  GH1* Phin550CM8;
-  GH1* Phin570CM8;
-  GH1* Phin590CM8;
-  GH1* Phin610CM8;
-  GH1* Phin630CM8;
 
   GH1* Phip410CM9;
   GH1* Phip430CM9;
@@ -402,19 +298,6 @@ private:
   GH1* Phip610CM9;
   GH1* Phip630CM9;
 
-  GH1* Phin410CM9;
-  GH1* Phin430CM9;
-  GH1* Phin450CM9;
-  GH1* Phin470CM9;
-  GH1* Phin490CM9;
-  GH1* Phin510CM9;
-  GH1* Phin530CM9;
-  GH1* Phin550CM9;
-  GH1* Phin570CM9;
-  GH1* Phin590CM9;
-  GH1* Phin610CM9;
-  GH1* Phin630CM9;
-
   GH1* Phip410CM10;
   GH1* Phip430CM10;
   GH1* Phip450CM10;
@@ -427,19 +310,6 @@ private:
   GH1* Phip590CM10;
   GH1* Phip610CM10;
   GH1* Phip630CM10;
-
-  GH1* Phin410CM10;
-  GH1* Phin430CM10;
-  GH1* Phin450CM10;
-  GH1* Phin470CM10;
-  GH1* Phin490CM10;
-  GH1* Phin510CM10;
-  GH1* Phin530CM10;
-  GH1* Phin550CM10;
-  GH1* Phin570CM10;
-  GH1* Phin590CM10;
-  GH1* Phin610CM10;
-  GH1* Phin630CM10;
 
   GH2* E_dE;
   GH2* E_dE_Cut;
