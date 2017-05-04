@@ -423,6 +423,18 @@ void Sigma(){
   canvas9->Write();
   canvas10->Write();
   canvas11->Write();
+  gr1->Write();
+  gr2->Write();
+  gr3->Write();
+  gr4->Write();
+  gr5->Write();
+  gr6->Write();
+  gr7->Write();
+  gr8->Write();
+  gr9->Write();
+  gr10->Write();
+  gr11->Write();
+  gr12->Write();
   //canvas12->Write();
   f3.Write();
 
