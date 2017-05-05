@@ -2,7 +2,7 @@
 
 void Sigma(){
 
-  TFile *f1= TFile::Open("/scratch/Mainz_Software/a2GoAT/ParaPerpAsymm_Total_10.root");
+  TFile *f1= TFile::Open("/scratch/Mainz_Software/a2GoAT/ParaPerpAsymm_Total_10_v2.root");
   TTree *t1 = (TTree*)f1->Get("Parameter_Values");
 
   Double_t pValues410[10], pValues430[10], pValues450[10], pValues470[10], pValues490[10], pValues510[10], pValues530[10], pValues550[10], pValues570[10], pValues590[10], pValues610[10], pValues630[10];
@@ -111,7 +111,7 @@ void Sigma(){
 
   }
 
-  TFile f3("Sigma_Plots_10.root", "RECREATE");
+  TFile f3("Sigma_Plots_10_v2.root", "RECREATE");
 
   Float_t xMin = -1;
   Float_t xMax = 1;

@@ -2,7 +2,7 @@
 
 void SigmaAsymm(){
 
-  TF1 *CosFunc = new TF1("CosFit", "[0]*cos(2*x*TMath::DegToRad())", -130, 130);
+  TF1 *CosFunc = new TF1("CosFit", "[0]*cos((2*x*TMath::DegToRad())+acos(0))");
   CosFunc->SetParNames("Amplitude");
 
   double pCosAmp[10][12]; // Format of array is Theta bin (x) by Egamma bin (y), 6 theta bins of 30, 12 20MeV Egamma bins
@@ -32,7 +32,7 @@ void SigmaAsymm(){
   double pCosA630;
   double pCosAErr630;
 
-  TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/ParaPerp_Total_11_Combined.root"); // Open the latest PTotal combined file to load histograms from
+  TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/ParaPerp_Total_10_Combined.root"); // Open the latest PTotal combined file to load histograms from
   NPara = Eg_Para->GetEntries();
   NPerp = Eg_Perp->GetEntries();
   ScaleFactor = NPara/NPerp;
@@ -914,7 +914,7 @@ void SigmaAsymm(){
   pCosAmp[9][11] = CosFit->GetParameter(0);
   pCosAmpErr[9][11] = CosFit->GetParError(0);
 
-  TFile f1("ParaPerpAsymm_Total_11.root", "RECREATE");
+  TFile f1("ParaPerpAsymm_Total_10_v2.root", "RECREATE");
 
   ParaPerpAsymmPhip_410MeVCM1->Write();
   ParaPerpAsymmPhip_430MeVCM1->Write();
