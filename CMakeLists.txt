@@ -181,6 +181,17 @@ add_executable(NeutPol_Polarimeter_Lin
    )
 target_link_libraries(NeutPol_Polarimeter_Lin ${LIBS} ${ROOT_LIBRARIES})
 
+add_executable(NeutPol_Polarimeter_Lin_NoScatt
+   ${GOAT_BASE}
+   ${GOAT_GHIST}
+   inc/PPhysics.h
+   src/PPhysics.cc
+   inc/PNeutPol_Polarimeter_Lin_NoScatt.h
+   src/PNeutPol_Polarimeter_Lin_NoScatt.cc
+   src/NeutPol_Polarimeter_Lin_NoScatt_main.cc
+   )
+target_link_libraries(NeutPol_Polarimeter_Lin_NoScatt ${LIBS} ${ROOT_LIBRARIES})
+
 add_executable(ProtPol
    ${GOAT_BASE}
    ${GOAT_GHIST}
