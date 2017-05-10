@@ -1788,7 +1788,7 @@ void SigmaAsymm_NoScatt(){
     pCosA605 = pCosAmp[m][18];
     pCosAErr605= pCosAmpErr[m][18];
     pCosA615 = pCosAmp[m][19];
-    pCosAErr615= pCosAmpErr[m][119];
+    pCosAErr615= pCosAmpErr[m][19];
 
     tree->Fill();
   }
