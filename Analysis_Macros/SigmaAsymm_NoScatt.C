@@ -1,6 +1,6 @@
 #include "./includes_SigmaAsymm_NoScatt.h"
 
-void SigmaAsymm(){
+void SigmaAsymm_NoScatt(){
 
   TF1 *CosFunc = new TF1("CosFit", "[0]*cos((2*x*TMath::DegToRad())+acos(0))");
   CosFunc->SetParNames("Amplitude");
