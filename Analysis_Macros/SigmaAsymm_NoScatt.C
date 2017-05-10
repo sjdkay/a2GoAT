@@ -35,6 +35,8 @@ void SigmaAsymm_NoScatt(){
   double pCosAErr545;
   double pCosA555;
   double pCosAErr555;
+  double pCosA565;
+  double pCosAErr565;
   double pCosA575;
   double pCosAErr575;
   double pCosA585;
