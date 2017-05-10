@@ -384,32 +384,32 @@ void Sigma(){
   gr12->GetYaxis()->SetTitle("#Sigma");
   gr12->Draw("ep");
 
-  TCanvas *canvas12 = new TCanvas("canvas12","canvas12", 1920, 1080);
-  canvas12->Divide(4,3);
-  canvas12->cd(1);
-  pad1->Draw();
-  canvas12->cd(2);
-  pad2->Draw();
-  canvas12->cd(3);
-  pad3->Draw();
-  canvas12->cd(4);
-  pad4->Draw();
-  canvas12->cd(5);
-  pad5->Draw();
-  canvas12->cd(6);
-  pad6->Draw();
-  canvas12->cd(7);
-  pad7->Draw();
-  canvas12->cd(8);
-  pad8->Draw();
-  canvas12->cd(9);
-  pad9->Draw();
-  canvas12->cd(10);
-  pad10->Draw();
-  canvas12->cd(11);
-  pad11->Draw();
-  canvas12->cd(12);
-  pad12->Draw();
+  //TCanvas *canvas12 = new TCanvas("canvas12","canvas12", 1920, 1080);
+  //canvas12->Divide(4,3);
+  //canvas12->cd(1);
+  //pad1->Draw();
+  //canvas12->cd(2);
+  //pad2->Draw();
+  //canvas12->cd(3);
+  //pad3->Draw();
+  //canvas12->cd(4);
+  //pad4->Draw();
+  //canvas12->cd(5);
+  //pad5->Draw();
+  //canvas12->cd(6);
+  //pad6->Draw();
+  //canvas12->cd(7);
+  //pad7->Draw();
+  //canvas12->cd(8);
+  //pad8->Draw();
+  //canvas12->cd(9);
+  //pad9->Draw();
+  //canvas12->cd(10);
+  //pad10->Draw();
+  //canvas12->cd(11);
+  //pad11->Draw();
+  //canvas12->cd(12);
+  //pad12->Draw();
 
   canvas->Write();
   canvas1->Write();
@@ -435,7 +435,7 @@ void Sigma(){
   gr10->Write();
   gr11->Write();
   gr12->Write();
-  canvas12->Write();
+  //canvas12->Write();
   f3.Write();
 
 }
