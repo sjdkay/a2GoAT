@@ -61,6 +61,7 @@ private:
   double_t Phin;
   double_t PhipRec;
   double_t PhinRec;
+  double_t WCZnRec;
   double_t PhiPiRec;
   double_t ThetaWCn;
   double_t ThetaPiRecDiff;

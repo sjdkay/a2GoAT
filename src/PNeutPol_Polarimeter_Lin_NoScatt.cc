@@ -65,7 +65,6 @@ void	PNeutPol_Polarimeter_Lin_NoScatt::ProcessEvent()
   NPi = GetChargedPions()->GetNParticles();
   NRoo = GetRootinos()->GetNParticles();
   NTag = GetTagger()->GetNTagged();
-  EventCounter++;
   if (NRoo !=0) return; // Goes to next event if any "rootinos" found
   if (NTrack !=2) return; // Ensures two track event
   Detectors1 = GetTracks()->GetDetectors(0); //Gets number for detectors that registered hits
