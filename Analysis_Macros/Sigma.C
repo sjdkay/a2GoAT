@@ -306,7 +306,7 @@ void Sigma(){
   pad9->SetGridx(1);
   pad9->SetGridy(1);
   TH1F  *hr8;
-  hr8 = canvas7->DrawFrame(xMin,-2.5,xMax,2.5);
+  hr8 = canvas8->DrawFrame(xMin,-2.5,xMax,2.5);
   hr8->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 560-580MeV)");
 
   gr9 = new TGraphErrors(10, x, pSigmaValues570, ex, pSigmaErrValues570);
@@ -328,7 +328,7 @@ void Sigma(){
   pad10->SetGridx(1);
   pad10->SetGridy(1);
   TH1F  *hr9;
-  hr9 = canvas7->DrawFrame(xMin,-1.5,xMax,1.5);
+  hr9 = canvas9->DrawFrame(xMin,-1.5,xMax,1.5);
   hr9->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 580-600MeV)");
 
   gr10 = new TGraphErrors(10, x, pSigmaValues590, ex, pSigmaErrValues590);
@@ -350,7 +350,7 @@ void Sigma(){
   pad11->SetGridx(1);
   pad11->SetGridy(1);
   TH1F  *hr10;
-  hr10 = canvas7->DrawFrame(xMin,-1.5,xMax,1.5);
+  hr10 = canvas10->DrawFrame(xMin,-1.5,xMax,1.5);
   hr10->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 600-620MeV)");
 
   gr11 = new TGraphErrors(10, x, pSigmaValues610, ex, pSigmaErrValues610);
@@ -372,7 +372,7 @@ void Sigma(){
   pad12->SetGridx(1);
   pad12->SetGridy(1);
   TH1F  *hr11;
-  hr11 = canvas7->DrawFrame(xMin,-1.5,xMax,1.5);
+  hr11 = canvas11->DrawFrame(xMin,-1.5,xMax,1.5);
   hr11->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 620-640MeV)");
 
   gr12 = new TGraphErrors(10, x, pSigmaValues630, ex, pSigmaErrValues630);

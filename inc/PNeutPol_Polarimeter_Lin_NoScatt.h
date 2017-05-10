@@ -86,7 +86,6 @@ private:
   double_t MMpEpCorr;
   double_t OpeningAngle;
   double_t PhiDiff;
-  double_t PhiDiffRec;
 
   Bool_t nBanana;
   Bool_t Proton1;
@@ -133,7 +132,6 @@ private:
   GH1* OAngle;
   GH1* WCZnRecon;
   GH1* PhipPhinDiff;
-  GH1* PhipPhinRecDiff;
 
   GH1* MMp200300;
   GH1* MMp300400;
@@ -357,11 +355,8 @@ private:
   GH1* Phip615CM10;
 
   GH2* E_dE;
-  GH2* E_dE_Cut;
   GH2* KinEp_dE;
-  GH2* KinEp_dE_GoodCut;
   GH2* E_KinEp;
-  GH2* E_KinEpCut;
 
   GH1* ThetaRecPiDiff;
   GH2* ThetanThetaRecPi;

@@ -1100,8 +1100,8 @@ void SigmaAsymm(){
     pCosAErr590= pCosAmpErr[m][9];
     pCosA610 = pCosAmp[m][10];
     pCosAErr610= pCosAmpErr[m][10];
-    pCosA630 = pCosAmp[m][10];
-    pCosAErr630= pCosAmpErr[m][10];
+    pCosA630 = pCosAmp[m][11];
+    pCosAErr630= pCosAmpErr[m][11];
     tree->Fill();
   }
 
