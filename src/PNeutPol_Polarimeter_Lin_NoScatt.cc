@@ -32,10 +32,6 @@ Bool_t	PNeutPol_Polarimeter_Lin_NoScatt::Start()
 
   SetAsPhysicsFile();
 
-  EventCounter = 0;
-  EventCounterTrackCut = 0;
-  EventCounterZCut = 0;
-  EventCounterCoplanarCut = 0;
   NP = 0; // Set number of Protons to 0 before checking
   NPi = 0; // Set number of pions to 0 before checking
   NRoo = 0; // Set number of Rootinos to 0 before checking
@@ -322,7 +318,6 @@ PNeutPol_Polarimeter_Lin_NoScatt::PNeutPol_Polarimeter_Lin_NoScatt() // Define a
   Phip595CM1 = new GH1("Phip_595MeVCM1", "Proton Phi Distribution for Photon Energies of 595pm5MeV (CosTheta1-0.8)", 10, -180, 180);
   Phip605CM1 = new GH1("Phip_605MeVCM1", "Proton Phi Distribution for Photon Energies of 605pm5MeV (CosTheta1-0.8)", 10, -180, 180);
   Phip615CM1 = new GH1("Phip_615MeVCM1", "Proton Phi Distribution for Photon Energies of 615pm5MeV (CosTheta1-0.8)", 10, -180, 180);
-  Phip625CM1 = new GH1("Phip_625MeVCM1", "Proton Phi Distribution for Photon Energies of 625pm5MeV (CosTheta1-0.8)", 10, -180, 180);
 
   // Proton Phi dists across EGamma bins
   Phip425CM2 = new GH1("Phip_425MeVCM2", "Proton Phi Distribution for Photon Energies of 425pm5MeV (CosTheta0.8-0.6)", 10, -180, 180);
@@ -345,7 +340,6 @@ PNeutPol_Polarimeter_Lin_NoScatt::PNeutPol_Polarimeter_Lin_NoScatt() // Define a
   Phip595CM2 = new GH1("Phip_595MeVCM2", "Proton Phi Distribution for Photon Energies of 595pm5MeV (CosTheta0.8-0.6)", 10, -180, 180);
   Phip605CM2 = new GH1("Phip_605MeVCM2", "Proton Phi Distribution for Photon Energies of 605pm5MeV (CosTheta0.8-0.6)", 10, -180, 180);
   Phip615CM2 = new GH1("Phip_615MeVCM2", "Proton Phi Distribution for Photon Energies of 615pm5MeV (CosTheta0.8-0.6)", 10, -180, 180);
-  Phip625CM2 = new GH1("Phip_625MeVCM2", "Proton Phi Distribution for Photon Energies of 625pm5MeV (CosTheta0.8-0.6)", 10, -180, 180);
 
   // Proton Phi dists across EGamma bins
   Phip425CM3 = new GH1("Phip_425MeVCM3", "Proton Phi Distribution for Photon Energies of 425pm5MeV (CosTheta0.6-0.4)", 10, -180, 180);
@@ -368,7 +362,6 @@ PNeutPol_Polarimeter_Lin_NoScatt::PNeutPol_Polarimeter_Lin_NoScatt() // Define a
   Phip595CM3 = new GH1("Phip_595MeVCM3", "Proton Phi Distribution for Photon Energies of 595pm5MeV (CosTheta0.6-0.4)", 10, -180, 180);
   Phip605CM3 = new GH1("Phip_605MeVCM3", "Proton Phi Distribution for Photon Energies of 605pm5MeV (CosTheta0.6-0.4)", 10, -180, 180);
   Phip615CM3 = new GH1("Phip_615MeVCM3", "Proton Phi Distribution for Photon Energies of 615pm5MeV (CosTheta0.6-0.4)", 10, -180, 180);
-  Phip625CM3 = new GH1("Phip_625MeVCM3", "Proton Phi Distribution for Photon Energies of 625pm5MeV (CosTheta0.6-0.4)", 10, -180, 180);
 
   // Proton Phi dists across EGamma bins
   Phip425CM4 = new GH1("Phip_425MeVCM4", "Proton Phi Distribution for Photon Energies of 425pm5MeV (CosTheta0.4-0.2)", 10, -180, 180);
@@ -391,7 +384,6 @@ PNeutPol_Polarimeter_Lin_NoScatt::PNeutPol_Polarimeter_Lin_NoScatt() // Define a
   Phip595CM4 = new GH1("Phip_595MeVCM4", "Proton Phi Distribution for Photon Energies of 595pm5MeV (CosTheta0.4-0.2)", 10, -180, 180);
   Phip605CM4 = new GH1("Phip_605MeVCM4", "Proton Phi Distribution for Photon Energies of 605pm5MeV (CosTheta0.4-0.2)", 10, -180, 180);
   Phip615CM4 = new GH1("Phip_615MeVCM4", "Proton Phi Distribution for Photon Energies of 615pm5MeV (CosTheta0.4-0.2)", 10, -180, 180);
-  Phip625CM4 = new GH1("Phip_625MeVCM4", "Proton Phi Distribution for Photon Energies of 625pm5MeV (CosTheta0.4-0.2)", 10, -180, 180);
 
   // Proton Phi dists across EGamma bins
   Phip425CM5 = new GH1("Phip_425MeVCM5", "Proton Phi Distribution for Photon Energies of 425pm5MeV (CosTheta0.2-0)", 10, -180, 180);
@@ -414,7 +406,6 @@ PNeutPol_Polarimeter_Lin_NoScatt::PNeutPol_Polarimeter_Lin_NoScatt() // Define a
   Phip595CM5 = new GH1("Phip_595MeVCM5", "Proton Phi Distribution for Photon Energies of 595pm5MeV (CosTheta0.2-0)", 10, -180, 180);
   Phip605CM5 = new GH1("Phip_605MeVCM5", "Proton Phi Distribution for Photon Energies of 605pm5MeV (CosTheta0.2-0)", 10, -180, 180);
   Phip615CM5 = new GH1("Phip_615MeVCM5", "Proton Phi Distribution for Photon Energies of 615pm5MeV (CosTheta0.2-0)", 10, -180, 180);
-  Phip625CM5 = new GH1("Phip_625MeVCM5", "Proton Phi Distribution for Photon Energies of 625pm5MeV (CosTheta0.2-0)", 10, -180, 180);
 
   // Proton Phi dists across EGamma bins
   Phip425CM6 = new GH1("Phip_425MeVCM6", "Proton Phi Distribution for Photon Energies of 425pm5MeV (CosTheta0-(-0.2))", 10, -180, 180);
@@ -437,7 +428,6 @@ PNeutPol_Polarimeter_Lin_NoScatt::PNeutPol_Polarimeter_Lin_NoScatt() // Define a
   Phip595CM6 = new GH1("Phip_595MeVCM6", "Proton Phi Distribution for Photon Energies of 595pm5MeV (CosTheta0-(-0.2))", 10, -180, 180);
   Phip605CM6 = new GH1("Phip_605MeVCM6", "Proton Phi Distribution for Photon Energies of 605pm5MeV (CosTheta0-(-0.2))", 10, -180, 180);
   Phip615CM6 = new GH1("Phip_615MeVCM6", "Proton Phi Distribution for Photon Energies of 615pm5MeV (CosTheta0-(-0.2))", 10, -180, 180);
-  Phip625CM6 = new GH1("Phip_625MeVCM6", "Proton Phi Distribution for Photon Energies of 625pm5MeV (CosTheta0-(-0.2))", 10, -180, 180);
 
   // Proton Phi dists across EGamma bins
   Phip425CM7 = new GH1("Phip_425MeVCM7", "Proton Phi Distribution for Photon Energies of 425pm5MeV (CosTheta-0.2-(-0.4))", 10, -180, 180);
@@ -460,7 +450,6 @@ PNeutPol_Polarimeter_Lin_NoScatt::PNeutPol_Polarimeter_Lin_NoScatt() // Define a
   Phip595CM7 = new GH1("Phip_595MeVCM7", "Proton Phi Distribution for Photon Energies of 595pm5MeV (CosTheta-0.2-(-0.4))", 10, -180, 180);
   Phip605CM7 = new GH1("Phip_605MeVCM7", "Proton Phi Distribution for Photon Energies of 605pm5MeV (CosTheta-0.2-(-0.4))", 10, -180, 180);
   Phip615CM7 = new GH1("Phip_615MeVCM7", "Proton Phi Distribution for Photon Energies of 615pm5MeV (CosTheta-0.2-(-0.4))", 10, -180, 180);
-  Phip625CM7 = new GH1("Phip_625MeVCM7", "Proton Phi Distribution for Photon Energies of 625pm5MeV (CosTheta-0.2-(-0.4))", 10, -180, 180);
 
   // Proton Phi dists across EGamma bins
   Phip425CM8 = new GH1("Phip_425MeVCM8", "Proton Phi Distribution for Photon Energies of 425pm5MeV (CosTheta-0.4-(-0.6))", 10, -180, 180);
@@ -483,7 +472,6 @@ PNeutPol_Polarimeter_Lin_NoScatt::PNeutPol_Polarimeter_Lin_NoScatt() // Define a
   Phip595CM8 = new GH1("Phip_595MeVCM8", "Proton Phi Distribution for Photon Energies of 595pm5MeV (CosTheta-0.4-(-0.6))", 10, -180, 180);
   Phip605CM8 = new GH1("Phip_605MeVCM8", "Proton Phi Distribution for Photon Energies of 605pm5MeV (CosTheta-0.4-(-0.6))", 10, -180, 180);
   Phip615CM8 = new GH1("Phip_615MeVCM8", "Proton Phi Distribution for Photon Energies of 615pm5MeV (CosTheta-0.4-(-0.6))", 10, -180, 180);
-  Phip625CM8 = new GH1("Phip_625MeVCM8", "Proton Phi Distribution for Photon Energies of 625pm5MeV (CosTheta-0.4-(-0.6))", 10, -180, 180);
 
   // Proton Phi dists across EGamma bins
   Phip425CM9 = new GH1("Phip_425MeVCM9", "Proton Phi Distribution for Photon Energies of 425pm5MeV (CosTheta-0.6-(-0.8))", 10, -180, 180);
@@ -506,7 +494,6 @@ PNeutPol_Polarimeter_Lin_NoScatt::PNeutPol_Polarimeter_Lin_NoScatt() // Define a
   Phip595CM9 = new GH1("Phip_595MeVCM9", "Proton Phi Distribution for Photon Energies of 595pm5MeV (CosTheta-0.6-(-0.8))", 10, -180, 180);
   Phip605CM9 = new GH1("Phip_605MeVCM9", "Proton Phi Distribution for Photon Energies of 605pm5MeV (CosTheta-0.6-(-0.8))", 10, -180, 180);
   Phip615CM9 = new GH1("Phip_615MeVCM9", "Proton Phi Distribution for Photon Energies of 615pm5MeV (CosTheta-0.6-(-0.8))", 10, -180, 180);
-  Phip625CM9 = new GH1("Phip_625MeVCM9", "Proton Phi Distribution for Photon Energies of 625pm5MeV (CosTheta-0.6-(-0.8))", 10, -180, 180);
 
   // Proton Phi dists across EGamma bins
   Phip425CM10 = new GH1("Phip_425MeVCM10", "Proton Phi Distribution for Photon Energies of 425pm5MeV (CosTheta-0.8-(-1))", 10, -180, 180);
@@ -529,7 +516,6 @@ PNeutPol_Polarimeter_Lin_NoScatt::PNeutPol_Polarimeter_Lin_NoScatt() // Define a
   Phip595CM10 = new GH1("Phip_595MeVCM10", "Proton Phi Distribution for Photon Energies of 595pm5MeV (CosTheta-0.8-(-1))", 10, -180, 180);
   Phip605CM10 = new GH1("Phip_605MeVCM10", "Proton Phi Distribution for Photon Energies of 605pm5MeV (CosTheta-0.8-(-1))", 10, -180, 180);
   Phip615CM10 = new GH1("Phip_615MeVCM10", "Proton Phi Distribution for Photon Energies of 615pm5MeV (CosTheta-0.8-(-1))", 10, -180, 180);
-  Phip625CM10 = new GH1("Phip_625MeVCM10", "Proton Phi Distribution for Photon Energies of 625pm5MeV (CosTheta-0.8-(-1))", 10, -180, 180);
 
   ThetaRecPiDiff = new GH1 ("ThetaRecPiDiff", "Difference between ThetaPiRec and Thetan", 200, 0, 180);
   ThetanThetaRecPi = new GH2 ("ThetanThetaRecPi", "Thetan vs ThetaPiRec", 100, 0, 180, 100, 0, 180);
@@ -561,9 +547,7 @@ void PNeutPol_Polarimeter_Lin_NoScatt::FillHists()
     WCZnRecon->Fill(WCZnRec, TaggerTime);
     ZpDist->Fill(Zp, TaggerTime);
 
-    WCPhiDifference->Fill(PhiWCDiff);
     E_KinEp->Fill(EpCorr, KinEp, TaggerTime);
-    PhinDiffWCZRec->Fill(WCZnRec, PhinDiff, TaggerTime);
     ThetaRecPiDiff->Fill(ThetaPiRecDiff, TaggerTime);
     ThetanThetaRecPi->Fill(Thetan, ThetaPiRec, TaggerTime);
     ThetanThetaRecPiDiff->Fill(Thetan, ThetaPiRecDiff, TaggerTime);
