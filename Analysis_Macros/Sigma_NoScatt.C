@@ -1,6 +1,6 @@
 #include "./includes_Sigma_NoScatt.h"
 
-void Sigma(){
+void Sigma_NoScatt(){
 
   TFile *f1= TFile::Open("/scratch/Mainz_Software/a2GoAT/ParaPerpAsymm_NoScatt_Total_1.root");
   TTree *t1 = (TTree*)f1->Get("Parameter_Values");
