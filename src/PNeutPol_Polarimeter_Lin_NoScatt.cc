@@ -199,6 +199,9 @@ void	PNeutPol_Polarimeter_Lin_NoScatt::ProcessEvent()
     N3Vect = RecKinNeutron.Vect();
     OpeningAngle = (N3Vect.Angle(GVn3))*TMath::RadToDeg();
 
+    PhiDiff = abs(WCPhip - Phin);
+    PhiDiffRec = abs(WCPhip - PhinRec);
+
     if(Cut_protonKinGood -> IsInside(KinEp, dEp) == kFALSE) continue; // If E loss correct proton is NOT inside p banana drop out
     if(ThetaPiRec > 20) continue;
     //if ( 850 > MMpEpCorr || 1050 < MMpEpCorr) continue;
@@ -279,6 +282,8 @@ PNeutPol_Polarimeter_Lin_NoScatt::PNeutPol_Polarimeter_Lin_NoScatt() // Define a
   EpCorrected = new GH1 ("EpCorrected", "Ep Corrected for Energy Loss in Polarimeter ", 100, 0, 500);
   OAngle = new GH1 ("OAngle", "Opening Angle between P and N Vectors", 180, 0, 180);
   WCZnRecon = new GH1 ("WCZnRecon", "WCZ Hit Position from Reconstructed n Vector", 200, 0, 400);
+  PhipPhinDiff = new GH1("PhipPhinDiff", "Difference between WCPhip and Phin", 180, 0, 360);
+  PhipPhinRecDiff = new GH1("PhipPhinRecDiff", "Difference between WCPhip and PhinRec", 180, 0, 360);
 
   EpKinEpCorrDiff = new GH1("EpKinEpCorrDiff", "Difference Between EpKin and EpCorr", 300, -300, 300);
   EpEpCorrDiff = new GH1("EpEpCorrDiff", "Difference Between Ep and EpCorr", 200, 0, 200);
@@ -545,6 +550,8 @@ void PNeutPol_Polarimeter_Lin_NoScatt::FillHists()
     OAngle->Fill(OpeningAngle, TaggerTime);
     WCZnRecon->Fill(WCZnRec, TaggerTime);
     ZpDist->Fill(Zp, TaggerTime);
+    PhipPhinDiff->Fill(PhiDiff, TaggerTime);
+    PhipPhinRecDiff->Fill(PhiDiffRec, TaggerTime);
 
     E_KinEp->Fill(EpCorr, KinEp, TaggerTime);
     ThetaRecPiDiff->Fill(ThetaPiRecDiff, TaggerTime);
@@ -553,7 +560,6 @@ void PNeutPol_Polarimeter_Lin_NoScatt::FillHists()
     ThetaRecPDiff->Fill(ThetapRecDiff, TaggerTime);
     ThetanThetaRecP->Fill(Thetan, ThetapRec, TaggerTime);
     ThetanThetaRecPDiff->Fill(Thetan, ThetapRecDiff, TaggerTime);
-
 
     if(200 < EGamma && EGamma < 300){
         MMp200300->Fill(MMpEpCorr, TaggerTime);

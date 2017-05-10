@@ -85,6 +85,8 @@ private:
   double_t Ppz;
   double_t MMpEpCorr;
   double_t OpeningAngle;
+  double_t PhiDiff;
+  double_t PhiDiffRec;
 
   Bool_t nBanana;
   Bool_t Proton1;
@@ -130,6 +132,8 @@ private:
   GH1* MMpEpCorrected;
   GH1* OAngle;
   GH1* WCZnRecon;
+  GH1* PhipPhinDiff;
+  GH1* PhipPhinRecDiff;
 
   GH1* MMp200300;
   GH1* MMp300400;
