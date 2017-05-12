@@ -2,7 +2,7 @@
 
 void ParaPerp_Combiner_Unpolarised() {
 
-    TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Para/Physics_Total_Para_10_28_4_17.root"); // Open latest Para file
+    TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Para/Physics_Total_Para_11_11_5_17.root"); // Open latest Para file
 
     TH1D* time_Para = (TH1D*)f->Get("time")->Clone();
     time_Para->SetName("time_Para");
@@ -106,7 +106,7 @@ void ParaPerp_Combiner_Unpolarised() {
     ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////
 
-    TFile *f1 = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Perp/Physics_Total_Perp_10_28_4_17.root"); // Open latest Para file
+    TFile *f1 = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Perp/Physics_Total_Perp_11_11_5_17.root"); // Open latest Para file
 
     TH1D* time_Perp = (TH1D*)f1->Get("time")->Clone();
     time_Perp->SetName("time_Perp");
@@ -537,7 +537,7 @@ void ParaPerp_Combiner_Unpolarised() {
     list45->Add(E_KinEp_Para);
     E_KinEp_Perp->Scale(ScaleFactor);
     list45->Add(E_KinEp_Perp);
-    E_KinEp = new TH2D("E_KinEp", "E_KinEp", 100, 0, 500, 100, 0, 5);
+    E_KinEp = new TH2D("E_KinEp", "E_KinEp", 100, 0, 500, 100, 0, 500);
     E_KinEp->Merge(list45);
 
     TList *list46 = new TList;
@@ -547,7 +547,7 @@ void ParaPerp_Combiner_Unpolarised() {
     PhinDiffWCZRec = new TH2D("PhinDiffWCZRec", "PhinDiffWCZRec", 100, 0, 200, 100, 0, 180);
     PhinDiffWCZRec->Merge(list46);
 
-    TFile f2("ParaPerp_Total_10_Combined_Unpolarised.root", "RECREATE");
+    TFile f2("ParaPerp_Total_11_Combined_Unpolarised.root", "RECREATE");
 
     time->Write();
     time_cut->Write();

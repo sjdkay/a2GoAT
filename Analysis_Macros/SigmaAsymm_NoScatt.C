@@ -1766,29 +1766,29 @@ void SigmaAsymm_NoScatt(){
     pCosA495 = pCosAmp[m][7];
     pCosAErr495 = pCosAmpErr[m][7];
     pCosA505 = pCosAmp[m][8];
-    pCosAErr505= pCosAmpErr[m][8];
+    pCosAErr505 = pCosAmpErr[m][8];
     pCosA515 = pCosAmp[m][9];
-    pCosAErr515= pCosAmpErr[m][9];
+    pCosAErr515 = pCosAmpErr[m][9];
     pCosA525 = pCosAmp[m][10];
-    pCosAErr525= pCosAmpErr[m][10];
+    pCosAErr525 = pCosAmpErr[m][10];
     pCosA535 = pCosAmp[m][11];
-    pCosAErr535= pCosAmpErr[m][11];
+    pCosAErr535 = pCosAmpErr[m][11];
     pCosA545 = pCosAmp[m][12];
     pCosAErr545= pCosAmpErr[m][12];
-    pCosA555 = pCosAmp[m][13];
-    pCosAErr555= pCosAmpErr[m][13];
+    pCosA555 = 0; // This Eg bin is empty but root fits to it anyway! A should be 0 so manually force it to be 0
+    pCosAErr555 = 0;
     pCosA565 = pCosAmp[m][14];
-    pCosAErr565= pCosAmpErr[m][14];
+    pCosAErr565 = pCosAmpErr[m][14];
     pCosA575 = pCosAmp[m][15];
-    pCosAErr575= pCosAmpErr[m][15];
+    pCosAErr575 = pCosAmpErr[m][15];
     pCosA585 = pCosAmp[m][16];
-    pCosAErr585= pCosAmpErr[m][16];
+    pCosAErr585 = pCosAmpErr[m][16];
     pCosA595 = pCosAmp[m][17];
-    pCosAErr595= pCosAmpErr[m][17];
+    pCosAErr595 = pCosAmpErr[m][17];
     pCosA605 = pCosAmp[m][18];
-    pCosAErr605= pCosAmpErr[m][18];
+    pCosAErr605 = pCosAmpErr[m][18];
     pCosA615 = pCosAmp[m][19];
-    pCosAErr615= pCosAmpErr[m][19];
+    pCosAErr615 = pCosAmpErr[m][19];
 
     tree->Fill();
   }
