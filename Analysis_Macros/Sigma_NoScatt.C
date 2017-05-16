@@ -2,7 +2,7 @@
 
 void Sigma_NoScatt(){
 
-  TFile *f1= TFile::Open("/scratch/Mainz_Software/a2GoAT/ParaPerpAsymm_NoScatt_Total_1.root");
+  TFile *f1= TFile::Open("/scratch/Mainz_Software/a2GoAT/ParaPerpAsymm_NoScatt_Total_3.root");
   TTree *t1 = (TTree*)f1->Get("Parameter_Values");
 
   Double_t pValues425[10], pValues435[10], pValues445[10], pValues455[10], pValues465[10], pValues475[10], pValues485[10], pValues495[10], pValues505[10], pValues515[10], pValues525[10], pValues535[10], pValues545[10], pValues555[10], pValues565[10], pValues575[10], pValues585[10], pValues595[10], pValues605[10], pValues615[10];
@@ -167,7 +167,7 @@ void Sigma_NoScatt(){
 
   }
 
-  TFile f3("Sigma_Plots_NoScatt_1.root", "RECREATE");
+  TFile f3("Sigma_Plots_NoScatt_3.root", "RECREATE");
 
   Float_t xMin = -1;
   Float_t xMax = 1;
@@ -616,7 +616,7 @@ void Sigma_NoScatt(){
   gr20->GetYaxis()->SetTitle("#Sigma");
   gr20->Draw("ep");
 
-  //Tcanvas *//canvas20 = new T//canvas("//canvas20","//canvas20", 1920, 1080);
+  //TCanvas *canvas20 = new TCanvas("canvas20","canvas20", 1920, 1080);
   //canvas20->Divide(5,4);
   //canvas20->cd(1);
   //pad1->Draw();

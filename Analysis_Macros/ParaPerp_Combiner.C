@@ -2,7 +2,7 @@
 
 void ParaPerp_Combiner(){
 
-  TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Para/Physics_Total_Para_11_XX_X_17.root"); // Open latest Para file
+  TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Para/Physics_Total_Para_12_15_5_17.root"); // Open latest Para file
 
   TH1D* time_Para = (TH1D*)f->Get("time")->Clone();
   time_Para->SetName("time_Para");
@@ -102,7 +102,6 @@ void ParaPerp_Combiner(){
   Phip_610MeVCM1_Para->SetName("Phip_610MeVCM1_Para");
   TH1D* Phip_630MeVCM1_Para = (TH1D*)f->Get("Phip_630MeVCM1")->Clone();
   Phip_630MeVCM1_Para->SetName("Phip_630MeVCM1_Para");
-  TH1D* Phin_410MeVCM1_Para = (TH1D*)f->Get("Phin_410MeVCM1")->Clone();
 
   TH1D* Phip_410MeVCM2_Para = (TH1D*)f->Get("Phip_410MeVCM2")->Clone();
   Phip_410MeVCM2_Para->SetName("Phip_410MeVCM2_Para");
@@ -358,7 +357,7 @@ void ParaPerp_Combiner(){
   ////////////////////////////////////////////////////
   ////////////////////////////////////////////////////
 
-  TFile *f1 = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Perp/Physics_Total_Perp_11_XX_X_17.root"); // Open latest Para file
+  TFile *f1 = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Perp/Physics_Total_Perp_12_15_5_17.root"); // Open latest Para file
 
   TH1D* time_Perp = (TH1D*)f1->Get("time")->Clone();
   time_Perp->SetName("time_Perp");
@@ -713,7 +712,7 @@ void ParaPerp_Combiner(){
   ////////////////////////////////////////////////////
   ////////////////////////////////////////////////////
 
-  TFile f2("ParaPerp_Total_11_Combined.root", "RECREATE");
+  TFile f2("ParaPerp_Total_12_Combined.root", "RECREATE");
 
   time_Para->Write();
   time_cut_Para->Write();

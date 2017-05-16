@@ -358,6 +358,10 @@ private:
   GH2* KinEp_dE;
   GH2* E_KinEp;
 
+  GH1* ThetanDist;
+  GH1* ThetanRecDist;
+  GH1* ThetanDiffDist;
+  GH2* ThetanDiffZp;
   GH1* ThetaRecPiDiff;
   GH2* ThetanThetaRecPi;
   GH2* ThetanThetaRecPiDiff;

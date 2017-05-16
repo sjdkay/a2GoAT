@@ -321,6 +321,10 @@ private:
   GH2* PhinDiffWCZRec;
   GH2* PhinDiffWCZRec_KinCut;
 
+  GH1* ThetanDist;
+  GH1* ThetanRecDist;
+  GH1* ThetanDiffDist;
+  GH2* ThetanDiffZp;
   GH1* ThetaRecPiDiff;
   GH2* ThetanThetaRecPi;
   GH2* ThetanThetaRecPiDiff;

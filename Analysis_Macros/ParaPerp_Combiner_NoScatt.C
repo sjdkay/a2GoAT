@@ -2,7 +2,7 @@
 
 void ParaPerp_Combiner_NoScatt(){
 
-  TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Para/NoScatt/Physics_Total_Para_NoScatt_1_10_5_17.root"); // Open latest Para file
+  TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Para/NoScatt/Physics_Total_Para_NoScatt_3_12_5_17.root"); // Open latest Para file
 
   TH1D* time_Para = (TH1D*)f->Get("time")->Clone();
   time_Para->SetName("time_Para");
@@ -483,7 +483,7 @@ void ParaPerp_Combiner_NoScatt(){
   ////////////////////////////////////////////////////
   ////////////////////////////////////////////////////
 
-  TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Perp/NoScatt/Physics_Total_Perp_NoScatt_1_10_5_17.root"); // Open latest Perp file
+  TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Perp/NoScatt/Physics_Total_Perp_NoScatt_3_12_5_17.root"); // Open latest Perp file
 
   TH1D* time_Perp = (TH1D*)f->Get("time")->Clone();
   time_Perp->SetName("time_Perp");
@@ -964,7 +964,7 @@ void ParaPerp_Combiner_NoScatt(){
   ////////////////////////////////////////////////////
   ////////////////////////////////////////////////////
 
-  TFile f2("ParaPerp_NoScatt_Total_1_Combined.root", "RECREATE");
+  TFile f2("ParaPerp_NoScatt_Total_3_Combined.root", "RECREATE");
 
   time_Para->Write();
   time_cut_Para->Write();

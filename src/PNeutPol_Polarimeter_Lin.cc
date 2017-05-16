@@ -335,174 +335,178 @@ PNeutPol_Polarimeter_Lin::PNeutPol_Polarimeter_Lin() // Define a load of histogr
   ZpPhiScatPos180 = new GH1("ZpPhiScatPos180", "Proton Pseudo Vertex Z for events with PhiSc ~ 180", 200, -200, 200);
 
   // MMp across photon E bins
-  MMp200300 = new GH1("MMp200300", "Missing mass as seen by Proton (200-300MeV Photon Energy)", 400, 0, 2000);
-  MMp300400 = new GH1("MMp300400", "Missing mass as seen by Proton (300-400MeV Photon Energy)", 400, 0, 2000);
-  MMp400500 = new GH1("MMp400500", "Missing mass as seen by Proton (400-500MeV Photon Energy)", 400, 0, 2000);
-  MMp500600 = new GH1("MMp500600", "Missing mass as seen by Proton (500-600MeV Photon Energy)", 400, 0, 2000);
-  MMp600700 = new GH1("MMp600700", "Missing mass as seen by Proton (600-700MeV Photon Energy)", 400, 0, 2000);
-  MMp700800 = new GH1("MMp700800", "Missing mass as seen by Proton (700-800MeV Photon Energy)", 400, 0, 2000);
-  MMp800900 = new GH1("MMp800900", "Missing mass as seen by Proton (800-900MeV Photon Energy)", 400, 0, 2000);
+  MMp200300 = new GH1("MMp200300", "Missing mass as seen by Proton (200-300MeV E_{#gamma})", 400, 0, 2000);
+  MMp300400 = new GH1("MMp300400", "Missing mass as seen by Proton (300-400MeV E_{#gamma})", 400, 0, 2000);
+  MMp400500 = new GH1("MMp400500", "Missing mass as seen by Proton (400-500MeV E_{#gamma})", 400, 0, 2000);
+  MMp500600 = new GH1("MMp500600", "Missing mass as seen by Proton (500-600MeV E_{#gamma})", 400, 0, 2000);
+  MMp600700 = new GH1("MMp600700", "Missing mass as seen by Proton (600-700MeV E_{#gamma})", 400, 0, 2000);
+  MMp700800 = new GH1("MMp700800", "Missing mass as seen by Proton (700-800MeV E_{#gamma})", 400, 0, 2000);
+  MMp800900 = new GH1("MMp800900", "Missing mass as seen by Proton (800-900MeV E_{#gamma})", 400, 0, 2000);
 
   // Angles of neutron in scattered frame across EGamma bins
-  PhiSc410 = new GH1("Phi_Scattered_410MeV", "Scattered Proton Phi Distribution in Rotated Frame for Photon Energies of 410pm10MeV", 2, -180, 180);
-  PhiSc430 = new GH1("Phi_Scattered_430MeV", "Scattered Proton Phi Distribution in Rotated Frame for Photon Energies of 430pm10MeV", 2, -180, 180);
-  PhiSc450 = new GH1("Phi_Scattered_450MeV", "Scattered Proton Phi Distribution in Rotated Frame for Photon Energies of 450pm10MeV", 2, -180, 180);
-  PhiSc470 = new GH1("Phi_Scattered_470MeV", "Scattered Proton Phi Distribution in Rotated Frame for Photon Energies of 470pm10MeV", 2, -180, 180);
-  PhiSc490 = new GH1("Phi_Scattered_490MeV", "Scattered Proton Phi Distribution in Rotated Frame for Photon Energies of 490pm10MeV", 2, -180, 180);
-  PhiSc510 = new GH1("Phi_Scattered_510MeV", "Scattered Proton Phi Distribution in Rotated Frame for Photon Energies of 510pm10MeV", 2, -180, 180);
-  PhiSc530 = new GH1("Phi_Scattered_530MeV", "Scattered Proton Phi Distribution in Rotated Frame for Photon Energies of 530pm10MeV", 2, -180, 180);
-  PhiSc550 = new GH1("Phi_Scattered_550MeV", "Scattered Proton Phi Distribution in Rotated Frame for Photon Energies of 550pm10MeV", 2, -180, 180);
-  PhiSc570 = new GH1("Phi_Scattered_570MeV", "Scattered Proton Phi Distribution in Rotated Frame for Photon Energies of 570pm10MeV", 2, -180, 180);
-  PhiSc590 = new GH1("Phi_Scattered_590MeV", "Scattered Proton Phi Distribution in Rotated Frame for Photon Energies of 590pm10MeV", 2, -180, 180);
-  PhiSc610 = new GH1("Phi_Scattered_610MeV", "Scattered Proton Phi Distribution in Rotated Frame for Photon Energies of 610pm10MeV", 2, -180, 180);
-  PhiSc630 = new GH1("Phi_Scattered_630MeV", "Scattered Proton Phi Distribution in Rotated Frame for Photon Energies of 630pm10MeV", 2, -180, 180);
+  PhiSc410 = new GH1("Phi_Scattered_410MeV", "#phi_{pScat} Distribution in Rotated Frame for E_{#gamma} 410 #pm 10MeV", 2, -180, 180);
+  PhiSc430 = new GH1("Phi_Scattered_430MeV", "#phi_{pScat} Distribution in Rotated Frame for E_{#gamma} 430 #pm 10MeV", 2, -180, 180);
+  PhiSc450 = new GH1("Phi_Scattered_450MeV", "#phi_{pScat} Distribution in Rotated Frame for E_{#gamma} 450 #pm 10MeV", 2, -180, 180);
+  PhiSc470 = new GH1("Phi_Scattered_470MeV", "#phi_{pScat} Distribution in Rotated Frame for E_{#gamma} 470 #pm 10MeV", 2, -180, 180);
+  PhiSc490 = new GH1("Phi_Scattered_490MeV", "#phi_{pScat} Distribution in Rotated Frame for E_{#gamma} 490 #pm 10MeV", 2, -180, 180);
+  PhiSc510 = new GH1("Phi_Scattered_510MeV", "#phi_{pScat} Distribution in Rotated Frame for E_{#gamma} 510 #pm 10MeV", 2, -180, 180);
+  PhiSc530 = new GH1("Phi_Scattered_530MeV", "#phi_{pScat} Distribution in Rotated Frame for E_{#gamma} 530 #pm 10MeV", 2, -180, 180);
+  PhiSc550 = new GH1("Phi_Scattered_550MeV", "#phi_{pScat} Distribution in Rotated Frame for E_{#gamma} 550 #pm 10MeV", 2, -180, 180);
+  PhiSc570 = new GH1("Phi_Scattered_570MeV", "#phi_{pScat} Distribution in Rotated Frame for E_{#gamma} 570 #pm 10MeV", 2, -180, 180);
+  PhiSc590 = new GH1("Phi_Scattered_590MeV", "#phi_{pScat} Distribution in Rotated Frame for E_{#gamma} 590 #pm 10MeV", 2, -180, 180);
+  PhiSc610 = new GH1("Phi_Scattered_610MeV", "#phi_{pScat} Distribution in Rotated Frame for E_{#gamma} 610 #pm 10MeV", 2, -180, 180);
+  PhiSc630 = new GH1("Phi_Scattered_630MeV", "#phi_{pScat} Distribution in Rotated Frame for E_{#gamma} 630 #pm 10MeV", 2, -180, 180);
 
-  // Proton Phi dists across EGamma bins
-  Phip410CM1 = new GH1("Phip_410MeVCM1", "Proton Phi Distribution for Photon Energies of 410pm10MeV (CosTheta1-0.8)", 10, -180, 180);
-  Phip430CM1 = new GH1("Phip_430MeVCM1", "Proton Phi Distribution for Photon Energies of 430pm10MeV (CosTheta1-0.8)", 10, -180, 180);
-  Phip450CM1 = new GH1("Phip_450MeVCM1", "Proton Phi Distribution for Photon Energies of 450pm10MeV (CosTheta1-0.8)", 10, -180, 180);
-  Phip470CM1 = new GH1("Phip_470MeVCM1", "Proton Phi Distribution for Photon Energies of 470pm10MeV (CosTheta1-0.8)", 10, -180, 180);
-  Phip490CM1 = new GH1("Phip_490MeVCM1", "Proton Phi Distribution for Photon Energies of 490pm10MeV (CosTheta1-0.8)", 10, -180, 180);
-  Phip510CM1 = new GH1("Phip_510MeVCM1", "Proton Phi Distribution for Photon Energies of 510pm10MeV (CosTheta1-0.8)", 10, -180, 180);
-  Phip530CM1 = new GH1("Phip_530MeVCM1", "Proton Phi Distribution for Photon Energies of 530pm10MeV (CosTheta1-0.8)", 10, -180, 180);
-  Phip550CM1 = new GH1("Phip_550MeVCM1", "Proton Phi Distribution for Photon Energies of 550pm10MeV (CosTheta1-0.8)", 10, -180, 180);
-  Phip570CM1 = new GH1("Phip_570MeVCM1", "Proton Phi Distribution for Photon Energies of 570pm10MeV (CosTheta1-0.8)", 10, -180, 180);
-  Phip590CM1 = new GH1("Phip_590MeVCM1", "Proton Phi Distribution for Photon Energies of 590pm10MeV (CosTheta1-0.8)", 10, -180, 180);
-  Phip610CM1 = new GH1("Phip_610MeVCM1", "Proton Phi Distribution for Photon Energies of 610pm10MeV (CosTheta1-0.8)", 10, -180, 180);
-  Phip630CM1 = new GH1("Phip_630MeVCM1", "Proton Phi Distribution for Photon Energies of 630pm10MeV (CosTheta1-0.8)", 10, -180, 180);
+  // #phi_{p} dists across EGamma bins
+  Phip410CM1 = new GH1("Phip_410MeVCM1", "#phi_{p} Distribution for E_{#gamma} 410 #pm 10MeV (Cos#theta_{CM}1-0.8)", 10, -180, 180);
+  Phip430CM1 = new GH1("Phip_430MeVCM1", "#phi_{p} Distribution for E_{#gamma} 430 #pm 10MeV (Cos#theta_{CM}1-0.8)", 10, -180, 180);
+  Phip450CM1 = new GH1("Phip_450MeVCM1", "#phi_{p} Distribution for E_{#gamma} 450 #pm 10MeV (Cos#theta_{CM}1-0.8)", 10, -180, 180);
+  Phip470CM1 = new GH1("Phip_470MeVCM1", "#phi_{p} Distribution for E_{#gamma} 470 #pm 10MeV (Cos#theta_{CM}1-0.8)", 10, -180, 180);
+  Phip490CM1 = new GH1("Phip_490MeVCM1", "#phi_{p} Distribution for E_{#gamma} 490 #pm 10MeV (Cos#theta_{CM}1-0.8)", 10, -180, 180);
+  Phip510CM1 = new GH1("Phip_510MeVCM1", "#phi_{p} Distribution for E_{#gamma} 510 #pm 10MeV (Cos#theta_{CM}1-0.8)", 10, -180, 180);
+  Phip530CM1 = new GH1("Phip_530MeVCM1", "#phi_{p} Distribution for E_{#gamma} 530 #pm 10MeV (Cos#theta_{CM}1-0.8)", 10, -180, 180);
+  Phip550CM1 = new GH1("Phip_550MeVCM1", "#phi_{p} Distribution for E_{#gamma} 550 #pm 10MeV (Cos#theta_{CM}1-0.8)", 10, -180, 180);
+  Phip570CM1 = new GH1("Phip_570MeVCM1", "#phi_{p} Distribution for E_{#gamma} 570 #pm 10MeV (Cos#theta_{CM}1-0.8)", 10, -180, 180);
+  Phip590CM1 = new GH1("Phip_590MeVCM1", "#phi_{p} Distribution for E_{#gamma} 590 #pm 10MeV (Cos#theta_{CM}1-0.8)", 10, -180, 180);
+  Phip610CM1 = new GH1("Phip_610MeVCM1", "#phi_{p} Distribution for E_{#gamma} 610 #pm 10MeV (Cos#theta_{CM}1-0.8)", 10, -180, 180);
+  Phip630CM1 = new GH1("Phip_630MeVCM1", "#phi_{p} Distribution for E_{#gamma} 630 #pm 10MeV (Cos#theta_{CM}1-0.8)", 10, -180, 180);
 
-  // Proton Phi dists across EGamma bins
-  Phip410CM2 = new GH1("Phip_410MeVCM2", "Proton Phi Distribution for Photon Energies of 410pm10MeV (CosTheta0.8-0.6)", 10, -180, 180);
-  Phip430CM2 = new GH1("Phip_430MeVCM2", "Proton Phi Distribution for Photon Energies of 430pm10MeV (CosTheta0.8-0.6)", 10, -180, 180);
-  Phip450CM2 = new GH1("Phip_450MeVCM2", "Proton Phi Distribution for Photon Energies of 450pm10MeV (CosTheta0.8-0.6)", 10, -180, 180);
-  Phip470CM2 = new GH1("Phip_470MeVCM2", "Proton Phi Distribution for Photon Energies of 470pm10MeV (CosTheta0.8-0.6)", 10, -180, 180);
-  Phip490CM2 = new GH1("Phip_490MeVCM2", "Proton Phi Distribution for Photon Energies of 490pm10MeV (CosTheta0.8-0.6)", 10, -180, 180);
-  Phip510CM2 = new GH1("Phip_510MeVCM2", "Proton Phi Distribution for Photon Energies of 510pm10MeV (CosTheta0.8-0.6)", 10, -180, 180);
-  Phip530CM2 = new GH1("Phip_530MeVCM2", "Proton Phi Distribution for Photon Energies of 530pm10MeV (CosTheta0.8-0.6)", 10, -180, 180);
-  Phip550CM2 = new GH1("Phip_550MeVCM2", "Proton Phi Distribution for Photon Energies of 550pm10MeV (CosTheta0.8-0.6)", 10, -180, 180);
-  Phip570CM2 = new GH1("Phip_570MeVCM2", "Proton Phi Distribution for Photon Energies of 570pm10MeV (CosTheta0.8-0.6)", 10, -180, 180);
-  Phip590CM2 = new GH1("Phip_590MeVCM2", "Proton Phi Distribution for Photon Energies of 590pm10MeV (CosTheta0.8-0.6)", 10, -180, 180);
-  Phip610CM2 = new GH1("Phip_610MeVCM2", "Proton Phi Distribution for Photon Energies of 610pm10MeV (CosTheta0.8-0.6)", 10, -180, 180);
-  Phip630CM2 = new GH1("Phip_630MeVCM2", "Proton Phi Distribution for Photon Energies of 630pm10MeV (CosTheta0.8-0.6)", 10, -180, 180);
+  // #phi_{p} dists across EGamma bins
+  Phip410CM2 = new GH1("Phip_410MeVCM2", "#phi_{p} Distribution for E_{#gamma} 410 #pm 10MeV (Cos#theta_{CM}0.8-0.6)", 10, -180, 180);
+  Phip430CM2 = new GH1("Phip_430MeVCM2", "#phi_{p} Distribution for E_{#gamma} 430 #pm 10MeV (Cos#theta_{CM}0.8-0.6)", 10, -180, 180);
+  Phip450CM2 = new GH1("Phip_450MeVCM2", "#phi_{p} Distribution for E_{#gamma} 450 #pm 10MeV (Cos#theta_{CM}0.8-0.6)", 10, -180, 180);
+  Phip470CM2 = new GH1("Phip_470MeVCM2", "#phi_{p} Distribution for E_{#gamma} 470 #pm 10MeV (Cos#theta_{CM}0.8-0.6)", 10, -180, 180);
+  Phip490CM2 = new GH1("Phip_490MeVCM2", "#phi_{p} Distribution for E_{#gamma} 490 #pm 10MeV (Cos#theta_{CM}0.8-0.6)", 10, -180, 180);
+  Phip510CM2 = new GH1("Phip_510MeVCM2", "#phi_{p} Distribution for E_{#gamma} 510 #pm 10MeV (Cos#theta_{CM}0.8-0.6)", 10, -180, 180);
+  Phip530CM2 = new GH1("Phip_530MeVCM2", "#phi_{p} Distribution for E_{#gamma} 530 #pm 10MeV (Cos#theta_{CM}0.8-0.6)", 10, -180, 180);
+  Phip550CM2 = new GH1("Phip_550MeVCM2", "#phi_{p} Distribution for E_{#gamma} 550 #pm 10MeV (Cos#theta_{CM}0.8-0.6)", 10, -180, 180);
+  Phip570CM2 = new GH1("Phip_570MeVCM2", "#phi_{p} Distribution for E_{#gamma} 570 #pm 10MeV (Cos#theta_{CM}0.8-0.6)", 10, -180, 180);
+  Phip590CM2 = new GH1("Phip_590MeVCM2", "#phi_{p} Distribution for E_{#gamma} 590 #pm 10MeV (Cos#theta_{CM}0.8-0.6)", 10, -180, 180);
+  Phip610CM2 = new GH1("Phip_610MeVCM2", "#phi_{p} Distribution for E_{#gamma} 610 #pm 10MeV (Cos#theta_{CM}0.8-0.6)", 10, -180, 180);
+  Phip630CM2 = new GH1("Phip_630MeVCM2", "#phi_{p} Distribution for E_{#gamma} 630 #pm 10MeV (Cos#theta_{CM}0.8-0.6)", 10, -180, 180);
 
-  // Proton Phi dists across EGamma bins
-  Phip410CM3 = new GH1("Phip_410MeVCM3", "Proton Phi Distribution for Photon Energies of 410pm10MeV (CosTheta0.6-0.4)", 10, -180, 180);
-  Phip430CM3 = new GH1("Phip_430MeVCM3", "Proton Phi Distribution for Photon Energies of 430pm10MeV (CosTheta0.6-0.4)", 10, -180, 180);
-  Phip450CM3 = new GH1("Phip_450MeVCM3", "Proton Phi Distribution for Photon Energies of 450pm10MeV (CosTheta0.6-0.4)", 10, -180, 180);
-  Phip470CM3 = new GH1("Phip_470MeVCM3", "Proton Phi Distribution for Photon Energies of 470pm10MeV (CosTheta0.6-0.4)", 10, -180, 180);
-  Phip490CM3 = new GH1("Phip_490MeVCM3", "Proton Phi Distribution for Photon Energies of 490pm10MeV (CosTheta0.6-0.4)", 10, -180, 180);
-  Phip510CM3 = new GH1("Phip_510MeVCM3", "Proton Phi Distribution for Photon Energies of 510pm10MeV (CosTheta0.6-0.4)", 10, -180, 180);
-  Phip530CM3 = new GH1("Phip_530MeVCM3", "Proton Phi Distribution for Photon Energies of 530pm10MeV (CosTheta0.6-0.4)", 10, -180, 180);
-  Phip550CM3 = new GH1("Phip_550MeVCM3", "Proton Phi Distribution for Photon Energies of 550pm10MeV (CosTheta0.6-0.4)", 10, -180, 180);
-  Phip570CM3 = new GH1("Phip_570MeVCM3", "Proton Phi Distribution for Photon Energies of 570pm10MeV (CosTheta0.6-0.4)", 10, -180, 180);
-  Phip590CM3 = new GH1("Phip_590MeVCM3", "Proton Phi Distribution for Photon Energies of 590pm10MeV (CosTheta0.6-0.4)", 10, -180, 180);
-  Phip610CM3 = new GH1("Phip_610MeVCM3", "Proton Phi Distribution for Photon Energies of 610pm10MeV (CosTheta0.6-0.4)", 10, -180, 180);
-  Phip630CM3 = new GH1("Phip_630MeVCM3", "Proton Phi Distribution for Photon Energies of 630pm10MeV (CosTheta0.6-0.4)", 10, -180, 180);
+  // #phi_{p} dists across EGamma bins
+  Phip410CM3 = new GH1("Phip_410MeVCM3", "#phi_{p} Distribution for E_{#gamma} 410 #pm 10MeV (Cos#theta_{CM}0.6-0.4)", 10, -180, 180);
+  Phip430CM3 = new GH1("Phip_430MeVCM3", "#phi_{p} Distribution for E_{#gamma} 430 #pm 10MeV (Cos#theta_{CM}0.6-0.4)", 10, -180, 180);
+  Phip450CM3 = new GH1("Phip_450MeVCM3", "#phi_{p} Distribution for E_{#gamma} 450 #pm 10MeV (Cos#theta_{CM}0.6-0.4)", 10, -180, 180);
+  Phip470CM3 = new GH1("Phip_470MeVCM3", "#phi_{p} Distribution for E_{#gamma} 470 #pm 10MeV (Cos#theta_{CM}0.6-0.4)", 10, -180, 180);
+  Phip490CM3 = new GH1("Phip_490MeVCM3", "#phi_{p} Distribution for E_{#gamma} 490 #pm 10MeV (Cos#theta_{CM}0.6-0.4)", 10, -180, 180);
+  Phip510CM3 = new GH1("Phip_510MeVCM3", "#phi_{p} Distribution for E_{#gamma} 510 #pm 10MeV (Cos#theta_{CM}0.6-0.4)", 10, -180, 180);
+  Phip530CM3 = new GH1("Phip_530MeVCM3", "#phi_{p} Distribution for E_{#gamma} 530 #pm 10MeV (Cos#theta_{CM}0.6-0.4)", 10, -180, 180);
+  Phip550CM3 = new GH1("Phip_550MeVCM3", "#phi_{p} Distribution for E_{#gamma} 550 #pm 10MeV (Cos#theta_{CM}0.6-0.4)", 10, -180, 180);
+  Phip570CM3 = new GH1("Phip_570MeVCM3", "#phi_{p} Distribution for E_{#gamma} 570 #pm 10MeV (Cos#theta_{CM}0.6-0.4)", 10, -180, 180);
+  Phip590CM3 = new GH1("Phip_590MeVCM3", "#phi_{p} Distribution for E_{#gamma} 590 #pm 10MeV (Cos#theta_{CM}0.6-0.4)", 10, -180, 180);
+  Phip610CM3 = new GH1("Phip_610MeVCM3", "#phi_{p} Distribution for E_{#gamma} 610 #pm 10MeV (Cos#theta_{CM}0.6-0.4)", 10, -180, 180);
+  Phip630CM3 = new GH1("Phip_630MeVCM3", "#phi_{p} Distribution for E_{#gamma} 630 #pm 10MeV (Cos#theta_{CM}0.6-0.4)", 10, -180, 180);
 
-  // Proton Phi dists across EGamma bins
-  Phip410CM4 = new GH1("Phip_410MeVCM4", "Proton Phi Distribution for Photon Energies of 410pm10MeV (CosTheta0.4-0.2)", 10, -180, 180);
-  Phip430CM4 = new GH1("Phip_430MeVCM4", "Proton Phi Distribution for Photon Energies of 430pm10MeV (CosTheta0.4-0.2)", 10, -180, 180);
-  Phip450CM4 = new GH1("Phip_450MeVCM4", "Proton Phi Distribution for Photon Energies of 450pm10MeV (CosTheta0.4-0.2)", 10, -180, 180);
-  Phip470CM4 = new GH1("Phip_470MeVCM4", "Proton Phi Distribution for Photon Energies of 470pm10MeV (CosTheta0.4-0.2)", 10, -180, 180);
-  Phip490CM4 = new GH1("Phip_490MeVCM4", "Proton Phi Distribution for Photon Energies of 490pm10MeV (CosTheta0.4-0.2)", 10, -180, 180);
-  Phip510CM4 = new GH1("Phip_510MeVCM4", "Proton Phi Distribution for Photon Energies of 510pm10MeV (CosTheta0.4-0.2)", 10, -180, 180);
-  Phip530CM4 = new GH1("Phip_530MeVCM4", "Proton Phi Distribution for Photon Energies of 530pm10MeV (CosTheta0.4-0.2)", 10, -180, 180);
-  Phip550CM4 = new GH1("Phip_550MeVCM4", "Proton Phi Distribution for Photon Energies of 550pm10MeV (CosTheta0.4-0.2)", 10, -180, 180);
-  Phip570CM4 = new GH1("Phip_570MeVCM4", "Proton Phi Distribution for Photon Energies of 570pm10MeV (CosTheta0.4-0.2)", 10, -180, 180);
-  Phip590CM4 = new GH1("Phip_590MeVCM4", "Proton Phi Distribution for Photon Energies of 590pm10MeV (CosTheta0.4-0.2)", 10, -180, 180);
-  Phip610CM4 = new GH1("Phip_610MeVCM4", "Proton Phi Distribution for Photon Energies of 610pm10MeV (CosTheta0.4-0.2)", 10, -180, 180);
-  Phip630CM4 = new GH1("Phip_630MeVCM4", "Proton Phi Distribution for Photon Energies of 630pm10MeV (CosTheta0.4-0.2)", 10, -180, 180);
+  // #phi_{p} dists across EGamma bins
+  Phip410CM4 = new GH1("Phip_410MeVCM4", "#phi_{p} Distribution for E_{#gamma} 410 #pm 10MeV (Cos#theta_{CM}0.4-0.2)", 10, -180, 180);
+  Phip430CM4 = new GH1("Phip_430MeVCM4", "#phi_{p} Distribution for E_{#gamma} 430 #pm 10MeV (Cos#theta_{CM}0.4-0.2)", 10, -180, 180);
+  Phip450CM4 = new GH1("Phip_450MeVCM4", "#phi_{p} Distribution for E_{#gamma} 450 #pm 10MeV (Cos#theta_{CM}0.4-0.2)", 10, -180, 180);
+  Phip470CM4 = new GH1("Phip_470MeVCM4", "#phi_{p} Distribution for E_{#gamma} 470 #pm 10MeV (Cos#theta_{CM}0.4-0.2)", 10, -180, 180);
+  Phip490CM4 = new GH1("Phip_490MeVCM4", "#phi_{p} Distribution for E_{#gamma} 490 #pm 10MeV (Cos#theta_{CM}0.4-0.2)", 10, -180, 180);
+  Phip510CM4 = new GH1("Phip_510MeVCM4", "#phi_{p} Distribution for E_{#gamma} 510 #pm 10MeV (Cos#theta_{CM}0.4-0.2)", 10, -180, 180);
+  Phip530CM4 = new GH1("Phip_530MeVCM4", "#phi_{p} Distribution for E_{#gamma} 530 #pm 10MeV (Cos#theta_{CM}0.4-0.2)", 10, -180, 180);
+  Phip550CM4 = new GH1("Phip_550MeVCM4", "#phi_{p} Distribution for E_{#gamma} 550 #pm 10MeV (Cos#theta_{CM}0.4-0.2)", 10, -180, 180);
+  Phip570CM4 = new GH1("Phip_570MeVCM4", "#phi_{p} Distribution for E_{#gamma} 570 #pm 10MeV (Cos#theta_{CM}0.4-0.2)", 10, -180, 180);
+  Phip590CM4 = new GH1("Phip_590MeVCM4", "#phi_{p} Distribution for E_{#gamma} 590 #pm 10MeV (Cos#theta_{CM}0.4-0.2)", 10, -180, 180);
+  Phip610CM4 = new GH1("Phip_610MeVCM4", "#phi_{p} Distribution for E_{#gamma} 610 #pm 10MeV (Cos#theta_{CM}0.4-0.2)", 10, -180, 180);
+  Phip630CM4 = new GH1("Phip_630MeVCM4", "#phi_{p} Distribution for E_{#gamma} 630 #pm 10MeV (Cos#theta_{CM}0.4-0.2)", 10, -180, 180);
 
-  // Proton Phi dists across EGamma bins
-  Phip410CM5 = new GH1("Phip_410MeVCM5", "Proton Phi Distribution for Photon Energies of 410pm10MeV (CosTheta0.2-0)", 10, -180, 180);
-  Phip430CM5 = new GH1("Phip_430MeVCM5", "Proton Phi Distribution for Photon Energies of 430pm10MeV (CosTheta0.2-0)", 10, -180, 180);
-  Phip450CM5 = new GH1("Phip_450MeVCM5", "Proton Phi Distribution for Photon Energies of 450pm10MeV (CosTheta0.2-0)", 10, -180, 180);
-  Phip470CM5 = new GH1("Phip_470MeVCM5", "Proton Phi Distribution for Photon Energies of 470pm10MeV (CosTheta0.2-0)", 10, -180, 180);
-  Phip490CM5 = new GH1("Phip_490MeVCM5", "Proton Phi Distribution for Photon Energies of 490pm10MeV (CosTheta0.2-0)", 10, -180, 180);
-  Phip510CM5 = new GH1("Phip_510MeVCM5", "Proton Phi Distribution for Photon Energies of 510pm10MeV (CosTheta0.2-0)", 10, -180, 180);
-  Phip530CM5 = new GH1("Phip_530MeVCM5", "Proton Phi Distribution for Photon Energies of 530pm10MeV (CosTheta0.2-0)", 10, -180, 180);
-  Phip550CM5 = new GH1("Phip_550MeVCM5", "Proton Phi Distribution for Photon Energies of 550pm10MeV (CosTheta0.2-0)", 10, -180, 180);
-  Phip570CM5 = new GH1("Phip_570MeVCM5", "Proton Phi Distribution for Photon Energies of 570pm10MeV (CosTheta0.2-0)", 10, -180, 180);
-  Phip590CM5 = new GH1("Phip_590MeVCM5", "Proton Phi Distribution for Photon Energies of 590pm10MeV (CosTheta0.2-0)", 10, -180, 180);
-  Phip610CM5 = new GH1("Phip_610MeVCM5", "Proton Phi Distribution for Photon Energies of 610pm10MeV (CosTheta0.2-0)", 10, -180, 180);
-  Phip630CM5 = new GH1("Phip_630MeVCM5", "Proton Phi Distribution for Photon Energies of 630pm10MeV (CosTheta0.2-0)", 10, -180, 180);
+  // #phi_{p} dists across EGamma bins
+  Phip410CM5 = new GH1("Phip_410MeVCM5", "#phi_{p} Distribution for E_{#gamma} 410 #pm 10MeV (Cos#theta_{CM}0.2-0)", 10, -180, 180);
+  Phip430CM5 = new GH1("Phip_430MeVCM5", "#phi_{p} Distribution for E_{#gamma} 430 #pm 10MeV (Cos#theta_{CM}0.2-0)", 10, -180, 180);
+  Phip450CM5 = new GH1("Phip_450MeVCM5", "#phi_{p} Distribution for E_{#gamma} 450 #pm 10MeV (Cos#theta_{CM}0.2-0)", 10, -180, 180);
+  Phip470CM5 = new GH1("Phip_470MeVCM5", "#phi_{p} Distribution for E_{#gamma} 470 #pm 10MeV (Cos#theta_{CM}0.2-0)", 10, -180, 180);
+  Phip490CM5 = new GH1("Phip_490MeVCM5", "#phi_{p} Distribution for E_{#gamma} 490 #pm 10MeV (Cos#theta_{CM}0.2-0)", 10, -180, 180);
+  Phip510CM5 = new GH1("Phip_510MeVCM5", "#phi_{p} Distribution for E_{#gamma} 510 #pm 10MeV (Cos#theta_{CM}0.2-0)", 10, -180, 180);
+  Phip530CM5 = new GH1("Phip_530MeVCM5", "#phi_{p} Distribution for E_{#gamma} 530 #pm 10MeV (Cos#theta_{CM}0.2-0)", 10, -180, 180);
+  Phip550CM5 = new GH1("Phip_550MeVCM5", "#phi_{p} Distribution for E_{#gamma} 550 #pm 10MeV (Cos#theta_{CM}0.2-0)", 10, -180, 180);
+  Phip570CM5 = new GH1("Phip_570MeVCM5", "#phi_{p} Distribution for E_{#gamma} 570 #pm 10MeV (Cos#theta_{CM}0.2-0)", 10, -180, 180);
+  Phip590CM5 = new GH1("Phip_590MeVCM5", "#phi_{p} Distribution for E_{#gamma} 590 #pm 10MeV (Cos#theta_{CM}0.2-0)", 10, -180, 180);
+  Phip610CM5 = new GH1("Phip_610MeVCM5", "#phi_{p} Distribution for E_{#gamma} 610 #pm 10MeV (Cos#theta_{CM}0.2-0)", 10, -180, 180);
+  Phip630CM5 = new GH1("Phip_630MeVCM5", "#phi_{p} Distribution for E_{#gamma} 630 #pm 10MeV (Cos#theta_{CM}0.2-0)", 10, -180, 180);
 
-  // Proton Phi dists across EGamma bins
-  Phip410CM6 = new GH1("Phip_410MeVCM6", "Proton Phi Distribution for Photon Energies of 410pm10MeV (CosTheta0-(-0.2))", 10, -180, 180);
-  Phip430CM6 = new GH1("Phip_430MeVCM6", "Proton Phi Distribution for Photon Energies of 430pm10MeV (CosTheta0-(-0.2))", 10, -180, 180);
-  Phip450CM6 = new GH1("Phip_450MeVCM6", "Proton Phi Distribution for Photon Energies of 450pm10MeV (CosTheta0-(-0.2))", 10, -180, 180);
-  Phip470CM6 = new GH1("Phip_470MeVCM6", "Proton Phi Distribution for Photon Energies of 470pm10MeV (CosTheta0-(-0.2))", 10, -180, 180);
-  Phip490CM6 = new GH1("Phip_490MeVCM6", "Proton Phi Distribution for Photon Energies of 490pm10MeV (CosTheta0-(-0.2))", 10, -180, 180);
-  Phip510CM6 = new GH1("Phip_510MeVCM6", "Proton Phi Distribution for Photon Energies of 510pm10MeV (CosTheta0-(-0.2))", 10, -180, 180);
-  Phip530CM6 = new GH1("Phip_530MeVCM6", "Proton Phi Distribution for Photon Energies of 530pm10MeV (CosTheta0-(-0.2))", 10, -180, 180);
-  Phip550CM6 = new GH1("Phip_550MeVCM6", "Proton Phi Distribution for Photon Energies of 550pm10MeV (CosTheta0-(-0.2))", 10, -180, 180);
-  Phip570CM6 = new GH1("Phip_570MeVCM6", "Proton Phi Distribution for Photon Energies of 570pm10MeV (CosTheta0-(-0.2))", 10, -180, 180);
-  Phip590CM6 = new GH1("Phip_590MeVCM6", "Proton Phi Distribution for Photon Energies of 590pm10MeV (CosTheta0-(-0.2))", 10, -180, 180);
-  Phip610CM6 = new GH1("Phip_610MeVCM6", "Proton Phi Distribution for Photon Energies of 610pm10MeV (CosTheta0-(-0.2))", 10, -180, 180);
-  Phip630CM6 = new GH1("Phip_630MeVCM6", "Proton Phi Distribution for Photon Energies of 630pm10MeV (CosTheta0-(-0.2))", 10, -180, 180);
+  // #phi_{p} dists across EGamma bins
+  Phip410CM6 = new GH1("Phip_410MeVCM6", "#phi_{p} Distribution for E_{#gamma} 410 #pm 10MeV (Cos#theta_{CM}0-(-0.2))", 10, -180, 180);
+  Phip430CM6 = new GH1("Phip_430MeVCM6", "#phi_{p} Distribution for E_{#gamma} 430 #pm 10MeV (Cos#theta_{CM}0-(-0.2))", 10, -180, 180);
+  Phip450CM6 = new GH1("Phip_450MeVCM6", "#phi_{p} Distribution for E_{#gamma} 450 #pm 10MeV (Cos#theta_{CM}0-(-0.2))", 10, -180, 180);
+  Phip470CM6 = new GH1("Phip_470MeVCM6", "#phi_{p} Distribution for E_{#gamma} 470 #pm 10MeV (Cos#theta_{CM}0-(-0.2))", 10, -180, 180);
+  Phip490CM6 = new GH1("Phip_490MeVCM6", "#phi_{p} Distribution for E_{#gamma} 490 #pm 10MeV (Cos#theta_{CM}0-(-0.2))", 10, -180, 180);
+  Phip510CM6 = new GH1("Phip_510MeVCM6", "#phi_{p} Distribution for E_{#gamma} 510 #pm 10MeV (Cos#theta_{CM}0-(-0.2))", 10, -180, 180);
+  Phip530CM6 = new GH1("Phip_530MeVCM6", "#phi_{p} Distribution for E_{#gamma} 530 #pm 10MeV (Cos#theta_{CM}0-(-0.2))", 10, -180, 180);
+  Phip550CM6 = new GH1("Phip_550MeVCM6", "#phi_{p} Distribution for E_{#gamma} 550 #pm 10MeV (Cos#theta_{CM}0-(-0.2))", 10, -180, 180);
+  Phip570CM6 = new GH1("Phip_570MeVCM6", "#phi_{p} Distribution for E_{#gamma} 570 #pm 10MeV (Cos#theta_{CM}0-(-0.2))", 10, -180, 180);
+  Phip590CM6 = new GH1("Phip_590MeVCM6", "#phi_{p} Distribution for E_{#gamma} 590 #pm 10MeV (Cos#theta_{CM}0-(-0.2))", 10, -180, 180);
+  Phip610CM6 = new GH1("Phip_610MeVCM6", "#phi_{p} Distribution for E_{#gamma} 610 #pm 10MeV (Cos#theta_{CM}0-(-0.2))", 10, -180, 180);
+  Phip630CM6 = new GH1("Phip_630MeVCM6", "#phi_{p} Distribution for E_{#gamma} 630 #pm 10MeV (Cos#theta_{CM}0-(-0.2))", 10, -180, 180);
 
-  // Proton Phi dists across EGamma bins
-  Phip410CM7 = new GH1("Phip_410MeVCM7", "Proton Phi Distribution for Photon Energies of 410pm10MeV (CosTheta-0.2-(-0.4))", 10, -180, 180);
-  Phip430CM7 = new GH1("Phip_430MeVCM7", "Proton Phi Distribution for Photon Energies of 430pm10MeV (CosTheta-0.2-(-0.4))", 10, -180, 180);
-  Phip450CM7 = new GH1("Phip_450MeVCM7", "Proton Phi Distribution for Photon Energies of 450pm10MeV (CosTheta-0.2-(-0.4))", 10, -180, 180);
-  Phip470CM7 = new GH1("Phip_470MeVCM7", "Proton Phi Distribution for Photon Energies of 470pm10MeV (CosTheta-0.2-(-0.4))", 10, -180, 180);
-  Phip490CM7 = new GH1("Phip_490MeVCM7", "Proton Phi Distribution for Photon Energies of 490pm10MeV (CosTheta-0.2-(-0.4))", 10, -180, 180);
-  Phip510CM7 = new GH1("Phip_510MeVCM7", "Proton Phi Distribution for Photon Energies of 510pm10MeV (CosTheta-0.2-(-0.4))", 10, -180, 180);
-  Phip530CM7 = new GH1("Phip_530MeVCM7", "Proton Phi Distribution for Photon Energies of 530pm10MeV (CosTheta-0.2-(-0.4))", 10, -180, 180);
-  Phip550CM7 = new GH1("Phip_550MeVCM7", "Proton Phi Distribution for Photon Energies of 550pm10MeV (CosTheta-0.2-(-0.4))", 10, -180, 180);
-  Phip570CM7 = new GH1("Phip_570MeVCM7", "Proton Phi Distribution for Photon Energies of 570pm10MeV (CosTheta-0.2-(-0.4))", 10, -180, 180);
-  Phip590CM7 = new GH1("Phip_590MeVCM7", "Proton Phi Distribution for Photon Energies of 590pm10MeV (CosTheta-0.2-(-0.4))", 10, -180, 180);
-  Phip610CM7 = new GH1("Phip_610MeVCM7", "Proton Phi Distribution for Photon Energies of 610pm10MeV (CosTheta-0.2-(-0.4))", 10, -180, 180);
-  Phip630CM7 = new GH1("Phip_630MeVCM7", "Proton Phi Distribution for Photon Energies of 630pm10MeV (CosTheta-0.2-(-0.4))", 10, -180, 180);
+  // #phi_{p} dists across EGamma bins
+  Phip410CM7 = new GH1("Phip_410MeVCM7", "#phi_{p} Distribution for E_{#gamma} 410 #pm 10MeV (Cos#theta_{CM}-0.2-(-0.4))", 10, -180, 180);
+  Phip430CM7 = new GH1("Phip_430MeVCM7", "#phi_{p} Distribution for E_{#gamma} 430 #pm 10MeV (Cos#theta_{CM}-0.2-(-0.4))", 10, -180, 180);
+  Phip450CM7 = new GH1("Phip_450MeVCM7", "#phi_{p} Distribution for E_{#gamma} 450 #pm 10MeV (Cos#theta_{CM}-0.2-(-0.4))", 10, -180, 180);
+  Phip470CM7 = new GH1("Phip_470MeVCM7", "#phi_{p} Distribution for E_{#gamma} 470 #pm 10MeV (Cos#theta_{CM}-0.2-(-0.4))", 10, -180, 180);
+  Phip490CM7 = new GH1("Phip_490MeVCM7", "#phi_{p} Distribution for E_{#gamma} 490 #pm 10MeV (Cos#theta_{CM}-0.2-(-0.4))", 10, -180, 180);
+  Phip510CM7 = new GH1("Phip_510MeVCM7", "#phi_{p} Distribution for E_{#gamma} 510 #pm 10MeV (Cos#theta_{CM}-0.2-(-0.4))", 10, -180, 180);
+  Phip530CM7 = new GH1("Phip_530MeVCM7", "#phi_{p} Distribution for E_{#gamma} 530 #pm 10MeV (Cos#theta_{CM}-0.2-(-0.4))", 10, -180, 180);
+  Phip550CM7 = new GH1("Phip_550MeVCM7", "#phi_{p} Distribution for E_{#gamma} 550 #pm 10MeV (Cos#theta_{CM}-0.2-(-0.4))", 10, -180, 180);
+  Phip570CM7 = new GH1("Phip_570MeVCM7", "#phi_{p} Distribution for E_{#gamma} 570 #pm 10MeV (Cos#theta_{CM}-0.2-(-0.4))", 10, -180, 180);
+  Phip590CM7 = new GH1("Phip_590MeVCM7", "#phi_{p} Distribution for E_{#gamma} 590 #pm 10MeV (Cos#theta_{CM}-0.2-(-0.4))", 10, -180, 180);
+  Phip610CM7 = new GH1("Phip_610MeVCM7", "#phi_{p} Distribution for E_{#gamma} 610 #pm 10MeV (Cos#theta_{CM}-0.2-(-0.4))", 10, -180, 180);
+  Phip630CM7 = new GH1("Phip_630MeVCM7", "#phi_{p} Distribution for E_{#gamma} 630 #pm 10MeV (Cos#theta_{CM}-0.2-(-0.4))", 10, -180, 180);
 
-  // Proton Phi dists across EGamma bins
-  Phip410CM8 = new GH1("Phip_410MeVCM8", "Proton Phi Distribution for Photon Energies of 410pm10MeV (CosTheta-0.4-(-0.6))", 10, -180, 180);
-  Phip430CM8 = new GH1("Phip_430MeVCM8", "Proton Phi Distribution for Photon Energies of 430pm10MeV (CosTheta-0.4-(-0.6))", 10, -180, 180);
-  Phip450CM8 = new GH1("Phip_450MeVCM8", "Proton Phi Distribution for Photon Energies of 450pm10MeV (CosTheta-0.4-(-0.6))", 10, -180, 180);
-  Phip470CM8 = new GH1("Phip_470MeVCM8", "Proton Phi Distribution for Photon Energies of 470pm10MeV (CosTheta-0.4-(-0.6))", 10, -180, 180);
-  Phip490CM8 = new GH1("Phip_490MeVCM8", "Proton Phi Distribution for Photon Energies of 490pm10MeV (CosTheta-0.4-(-0.6))", 10, -180, 180);
-  Phip510CM8 = new GH1("Phip_510MeVCM8", "Proton Phi Distribution for Photon Energies of 510pm10MeV (CosTheta-0.4-(-0.6))", 10, -180, 180);
-  Phip530CM8 = new GH1("Phip_530MeVCM8", "Proton Phi Distribution for Photon Energies of 530pm10MeV (CosTheta-0.4-(-0.6))", 10, -180, 180);
-  Phip550CM8 = new GH1("Phip_550MeVCM8", "Proton Phi Distribution for Photon Energies of 550pm10MeV (CosTheta-0.4-(-0.6))", 10, -180, 180);
-  Phip570CM8 = new GH1("Phip_570MeVCM8", "Proton Phi Distribution for Photon Energies of 570pm10MeV (CosTheta-0.4-(-0.6))", 10, -180, 180);
-  Phip590CM8 = new GH1("Phip_590MeVCM8", "Proton Phi Distribution for Photon Energies of 590pm10MeV (CosTheta-0.4-(-0.6))", 10, -180, 180);
-  Phip610CM8 = new GH1("Phip_610MeVCM8", "Proton Phi Distribution for Photon Energies of 610pm10MeV (CosTheta-0.4-(-0.6))", 10, -180, 180);
-  Phip630CM8 = new GH1("Phip_630MeVCM8", "Proton Phi Distribution for Photon Energies of 630pm10MeV (CosTheta-0.4-(-0.6))", 10, -180, 180);
+  // #phi_{p} dists across EGamma bins
+  Phip410CM8 = new GH1("Phip_410MeVCM8", "#phi_{p} Distribution for E_{#gamma} 410 #pm 10MeV (Cos#theta_{CM}-0.4-(-0.6))", 10, -180, 180);
+  Phip430CM8 = new GH1("Phip_430MeVCM8", "#phi_{p} Distribution for E_{#gamma} 430 #pm 10MeV (Cos#theta_{CM}-0.4-(-0.6))", 10, -180, 180);
+  Phip450CM8 = new GH1("Phip_450MeVCM8", "#phi_{p} Distribution for E_{#gamma} 450 #pm 10MeV (Cos#theta_{CM}-0.4-(-0.6))", 10, -180, 180);
+  Phip470CM8 = new GH1("Phip_470MeVCM8", "#phi_{p} Distribution for E_{#gamma} 470 #pm 10MeV (Cos#theta_{CM}-0.4-(-0.6))", 10, -180, 180);
+  Phip490CM8 = new GH1("Phip_490MeVCM8", "#phi_{p} Distribution for E_{#gamma} 490 #pm 10MeV (Cos#theta_{CM}-0.4-(-0.6))", 10, -180, 180);
+  Phip510CM8 = new GH1("Phip_510MeVCM8", "#phi_{p} Distribution for E_{#gamma} 510 #pm 10MeV (Cos#theta_{CM}-0.4-(-0.6))", 10, -180, 180);
+  Phip530CM8 = new GH1("Phip_530MeVCM8", "#phi_{p} Distribution for E_{#gamma} 530 #pm 10MeV (Cos#theta_{CM}-0.4-(-0.6))", 10, -180, 180);
+  Phip550CM8 = new GH1("Phip_550MeVCM8", "#phi_{p} Distribution for E_{#gamma} 550 #pm 10MeV (Cos#theta_{CM}-0.4-(-0.6))", 10, -180, 180);
+  Phip570CM8 = new GH1("Phip_570MeVCM8", "#phi_{p} Distribution for E_{#gamma} 570 #pm 10MeV (Cos#theta_{CM}-0.4-(-0.6))", 10, -180, 180);
+  Phip590CM8 = new GH1("Phip_590MeVCM8", "#phi_{p} Distribution for E_{#gamma} 590 #pm 10MeV (Cos#theta_{CM}-0.4-(-0.6))", 10, -180, 180);
+  Phip610CM8 = new GH1("Phip_610MeVCM8", "#phi_{p} Distribution for E_{#gamma} 610 #pm 10MeV (Cos#theta_{CM}-0.4-(-0.6))", 10, -180, 180);
+  Phip630CM8 = new GH1("Phip_630MeVCM8", "#phi_{p} Distribution for E_{#gamma} 630 #pm 10MeV (Cos#theta_{CM}-0.4-(-0.6))", 10, -180, 180);
 
-  // Proton Phi dists across EGamma bins
-  Phip410CM9 = new GH1("Phip_410MeVCM9", "Proton Phi Distribution for Photon Energies of 410pm10MeV (CosTheta-0.6-(-0.8))", 10, -180, 180);
-  Phip430CM9 = new GH1("Phip_430MeVCM9", "Proton Phi Distribution for Photon Energies of 430pm10MeV (CosTheta-0.6-(-0.8))", 10, -180, 180);
-  Phip450CM9 = new GH1("Phip_450MeVCM9", "Proton Phi Distribution for Photon Energies of 450pm10MeV (CosTheta-0.6-(-0.8))", 10, -180, 180);
-  Phip470CM9 = new GH1("Phip_470MeVCM9", "Proton Phi Distribution for Photon Energies of 470pm10MeV (CosTheta-0.6-(-0.8))", 10, -180, 180);
-  Phip490CM9 = new GH1("Phip_490MeVCM9", "Proton Phi Distribution for Photon Energies of 490pm10MeV (CosTheta-0.6-(-0.8))", 10, -180, 180);
-  Phip510CM9 = new GH1("Phip_510MeVCM9", "Proton Phi Distribution for Photon Energies of 510pm10MeV (CosTheta-0.6-(-0.8))", 10, -180, 180);
-  Phip530CM9 = new GH1("Phip_530MeVCM9", "Proton Phi Distribution for Photon Energies of 530pm10MeV (CosTheta-0.6-(-0.8))", 10, -180, 180);
-  Phip550CM9 = new GH1("Phip_550MeVCM9", "Proton Phi Distribution for Photon Energies of 550pm10MeV (CosTheta-0.6-(-0.8))", 10, -180, 180);
-  Phip570CM9 = new GH1("Phip_570MeVCM9", "Proton Phi Distribution for Photon Energies of 570pm10MeV (CosTheta-0.6-(-0.8))", 10, -180, 180);
-  Phip590CM9 = new GH1("Phip_590MeVCM9", "Proton Phi Distribution for Photon Energies of 590pm10MeV (CosTheta-0.6-(-0.8))", 10, -180, 180);
-  Phip610CM9 = new GH1("Phip_610MeVCM9", "Proton Phi Distribution for Photon Energies of 610pm10MeV (CosTheta-0.6-(-0.8))", 10, -180, 180);
-  Phip630CM9 = new GH1("Phip_630MeVCM9", "Proton Phi Distribution for Photon Energies of 630pm10MeV (CosTheta-0.6-(-0.8))", 10, -180, 180);
+  // #phi_{p} dists across EGamma bins
+  Phip410CM9 = new GH1("Phip_410MeVCM9", "#phi_{p} Distribution for E_{#gamma} 410 #pm 10MeV (Cos#theta_{CM}-0.6-(-0.8))", 10, -180, 180);
+  Phip430CM9 = new GH1("Phip_430MeVCM9", "#phi_{p} Distribution for E_{#gamma} 430 #pm 10MeV (Cos#theta_{CM}-0.6-(-0.8))", 10, -180, 180);
+  Phip450CM9 = new GH1("Phip_450MeVCM9", "#phi_{p} Distribution for E_{#gamma} 450 #pm 10MeV (Cos#theta_{CM}-0.6-(-0.8))", 10, -180, 180);
+  Phip470CM9 = new GH1("Phip_470MeVCM9", "#phi_{p} Distribution for E_{#gamma} 470 #pm 10MeV (Cos#theta_{CM}-0.6-(-0.8))", 10, -180, 180);
+  Phip490CM9 = new GH1("Phip_490MeVCM9", "#phi_{p} Distribution for E_{#gamma} 490 #pm 10MeV (Cos#theta_{CM}-0.6-(-0.8))", 10, -180, 180);
+  Phip510CM9 = new GH1("Phip_510MeVCM9", "#phi_{p} Distribution for E_{#gamma} 510 #pm 10MeV (Cos#theta_{CM}-0.6-(-0.8))", 10, -180, 180);
+  Phip530CM9 = new GH1("Phip_530MeVCM9", "#phi_{p} Distribution for E_{#gamma} 530 #pm 10MeV (Cos#theta_{CM}-0.6-(-0.8))", 10, -180, 180);
+  Phip550CM9 = new GH1("Phip_550MeVCM9", "#phi_{p} Distribution for E_{#gamma} 550 #pm 10MeV (Cos#theta_{CM}-0.6-(-0.8))", 10, -180, 180);
+  Phip570CM9 = new GH1("Phip_570MeVCM9", "#phi_{p} Distribution for E_{#gamma} 570 #pm 10MeV (Cos#theta_{CM}-0.6-(-0.8))", 10, -180, 180);
+  Phip590CM9 = new GH1("Phip_590MeVCM9", "#phi_{p} Distribution for E_{#gamma} 590 #pm 10MeV (Cos#theta_{CM}-0.6-(-0.8))", 10, -180, 180);
+  Phip610CM9 = new GH1("Phip_610MeVCM9", "#phi_{p} Distribution for E_{#gamma} 610 #pm 10MeV (Cos#theta_{CM}-0.6-(-0.8))", 10, -180, 180);
+  Phip630CM9 = new GH1("Phip_630MeVCM9", "#phi_{p} Distribution for E_{#gamma} 630 #pm 10MeV (Cos#theta_{CM}-0.6-(-0.8))", 10, -180, 180);
 
-  // Proton Phi dists across EGamma bins
-  Phip410CM10 = new GH1("Phip_410MeVCM10", "Proton Phi Distribution for Photon Energies of 410pm10MeV (CosTheta-0.8-(-1))", 10, -180, 180);
-  Phip430CM10 = new GH1("Phip_430MeVCM10", "Proton Phi Distribution for Photon Energies of 430pm10MeV (CosTheta-0.8-(-1))", 10, -180, 180);
-  Phip450CM10 = new GH1("Phip_450MeVCM10", "Proton Phi Distribution for Photon Energies of 450pm10MeV (CosTheta-0.8-(-1))", 10, -180, 180);
-  Phip470CM10 = new GH1("Phip_470MeVCM10", "Proton Phi Distribution for Photon Energies of 470pm10MeV (CosTheta-0.8-(-1))", 10, -180, 180);
-  Phip490CM10 = new GH1("Phip_490MeVCM10", "Proton Phi Distribution for Photon Energies of 490pm10MeV (CosTheta-0.8-(-1))", 10, -180, 180);
-  Phip510CM10 = new GH1("Phip_510MeVCM10", "Proton Phi Distribution for Photon Energies of 510pm10MeV (CosTheta-0.8-(-1))", 10, -180, 180);
-  Phip530CM10 = new GH1("Phip_530MeVCM10", "Proton Phi Distribution for Photon Energies of 530pm10MeV (CosTheta-0.8-(-1))", 10, -180, 180);
-  Phip550CM10 = new GH1("Phip_550MeVCM10", "Proton Phi Distribution for Photon Energies of 550pm10MeV (CosTheta-0.8-(-1))", 10, -180, 180);
-  Phip570CM10 = new GH1("Phip_570MeVCM10", "Proton Phi Distribution for Photon Energies of 570pm10MeV (CosTheta-0.8-(-1))", 10, -180, 180);
-  Phip590CM10 = new GH1("Phip_590MeVCM10", "Proton Phi Distribution for Photon Energies of 590pm10MeV (CosTheta-0.8-(-1))", 10, -180, 180);
-  Phip610CM10 = new GH1("Phip_610MeVCM10", "Proton Phi Distribution for Photon Energies of 610pm10MeV (CosTheta-0.8-(-1))", 10, -180, 180);
-  Phip630CM10 = new GH1("Phip_630MeVCM10", "Proton Phi Distribution for Photon Energies of 630pm10MeV (CosTheta-0.8-(-1))", 10, -180, 180);
+  // #phi_{p} dists across EGamma bins
+  Phip410CM10 = new GH1("Phip_410MeVCM10", "#phi_{p} Distribution for E_{#gamma} 410 #pm 10MeV (Cos#theta_{CM}-0.8-(-1))", 10, -180, 180);
+  Phip430CM10 = new GH1("Phip_430MeVCM10", "#phi_{p} Distribution for E_{#gamma} 430 #pm 10MeV (Cos#theta_{CM}-0.8-(-1))", 10, -180, 180);
+  Phip450CM10 = new GH1("Phip_450MeVCM10", "#phi_{p} Distribution for E_{#gamma} 450 #pm 10MeV (Cos#theta_{CM}-0.8-(-1))", 10, -180, 180);
+  Phip470CM10 = new GH1("Phip_470MeVCM10", "#phi_{p} Distribution for E_{#gamma} 470 #pm 10MeV (Cos#theta_{CM}-0.8-(-1))", 10, -180, 180);
+  Phip490CM10 = new GH1("Phip_490MeVCM10", "#phi_{p} Distribution for E_{#gamma} 490 #pm 10MeV (Cos#theta_{CM}-0.8-(-1))", 10, -180, 180);
+  Phip510CM10 = new GH1("Phip_510MeVCM10", "#phi_{p} Distribution for E_{#gamma} 510 #pm 10MeV (Cos#theta_{CM}-0.8-(-1))", 10, -180, 180);
+  Phip530CM10 = new GH1("Phip_530MeVCM10", "#phi_{p} Distribution for E_{#gamma} 530 #pm 10MeV (Cos#theta_{CM}-0.8-(-1))", 10, -180, 180);
+  Phip550CM10 = new GH1("Phip_550MeVCM10", "#phi_{p} Distribution for E_{#gamma} 550 #pm 10MeV (Cos#theta_{CM}-0.8-(-1))", 10, -180, 180);
+  Phip570CM10 = new GH1("Phip_570MeVCM10", "#phi_{p} Distribution for E_{#gamma} 570 #pm 10MeV (Cos#theta_{CM}-0.8-(-1))", 10, -180, 180);
+  Phip590CM10 = new GH1("Phip_590MeVCM10", "#phi_{p} Distribution for E_{#gamma} 590 #pm 10MeV (Cos#theta_{CM}-0.8-(-1))", 10, -180, 180);
+  Phip610CM10 = new GH1("Phip_610MeVCM10", "#phi_{p} Distribution for E_{#gamma} 610 #pm 10MeV (Cos#theta_{CM}-0.8-(-1))", 10, -180, 180);
+  Phip630CM10 = new GH1("Phip_630MeVCM10", "#phi_{p} Distribution for E_{#gamma} 630 #pm 10MeV (Cos#theta_{CM}-0.8-(-1))", 10, -180, 180);
 
-  ThetaRecPiDiff = new GH1 ("ThetaRecPiDiff", "Difference between ThetaPiRec and Thetan", 200, 0, 180);
-  ThetanThetaRecPi = new GH2 ("ThetanThetaRecPi", "Thetan vs ThetaPiRec", 100, 0, 180, 100, 0, 180);
-  ThetanThetaRecPiDiff = new GH2 ("ThetanThetaRecPiDiff", "Thetan vs (ThetaPiRec - Thetan)", 100, 0, 180, 100, 0, 180);
-  ThetaRecPDiff = new GH1 ("ThetaRecPDiff", "Difference between ThetaPRec and Thetan", 200, 0, 180);
-  ThetanThetaRecP = new GH2 ("ThetanThetaRecP", "Thetan vs ThetaPRec", 100, 0, 180, 100, 0, 180);
-  ThetanThetaRecPDiff = new GH2 ("ThetanThetaRecPDiff", "Thetan vs (ThetaPRec - Thetan)", 100, 0, 180, 100, 0, 180);
+  ThetanDist = new GH1 ("ThetanDist", "#theta_{n} Distribution", 200, 0, 180);
+  ThetanRecDist = new GH1 ("ThetanRecDist", "Reconstructed #theta_{n} Distribution", 200, 0, 180);
+  ThetanDiffDist = new GH1 ("ThetanDiffDist", "Difference Between #theta_{n} and  #theta_{nRec}", 200, 0, 180);
+  ThetanDiffZp = new GH2 ("ThetanDiffZp", "Diff(#theta_{n} - #theta_{nRec}) as a Fn of Z_{p}", 200, 0, 180, 200, -100, 100);
+  ThetaRecPiDiff = new GH1 ("ThetaRecPiDiff", "Difference between #theta_{#pi Rec} and #theta_{n}", 200, 0, 180);
+  ThetanThetaRecPi = new GH2 ("ThetanThetaRecPi", "#theta_{n} vs #theta_{#pi Rec}", 100, 0, 180, 100, 0, 180);
+  ThetanThetaRecPiDiff = new GH2 ("ThetanThetaRecPiDiff", "#theta_{n} vs (#theta_{#pi Rec} - #theta_{n})", 100, 0, 180, 100, 0, 180);
+  ThetaRecPDiff = new GH1 ("ThetaRecPDiff", "Difference between #theta_{pRec} and #theta_{n}", 200, 0, 180);
+  ThetanThetaRecP = new GH2 ("ThetanThetaRecP", "#theta_{n} vs #theta_{pRec}", 100, 0, 180, 100, 0, 180);
+  ThetanThetaRecPDiff = new GH2 ("ThetanThetaRecPDiff", "#theta_{n} vs (#theta_{pRec}  - #theta_{n})", 100, 0, 180, 100, 0, 180);
 
   E_dE = new GH2 ("E_dE", "EdE Plot With E Loss Adjustment", 100, 0, 500, 100, 0, 5);
   KinEp_dE = new GH2 ("KinEp_dE", "KinEpdE Plot", 100, 0, 500, 100, 0, 5);
@@ -533,6 +537,11 @@ void PNeutPol_Polarimeter_Lin::FillHists()
 
     WCPhiDifference->Fill(PhiWCDiff);
     E_KinEp->Fill(EpCorr, KinEp, TaggerTime);
+
+    ThetanDist->Fill(Thetan, TaggerTime);
+    ThetanRecDist->Fill(ThetanRec, TaggerTime);
+    ThetanDiffDist->Fill(abs(Thetan-ThetanRec), TaggerTime);
+    ThetanDiffZp->Fill(abs(Thetan-ThetanRec), Zp, TaggerTime);
     PhinDiffWCZRec->Fill(WCZnRec, PhinDiff, TaggerTime);
     ThetaRecPiDiff->Fill(ThetaPiRecDiff, TaggerTime);
     ThetanThetaRecPi->Fill(Thetan, ThetaPiRec, TaggerTime);
