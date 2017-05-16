@@ -156,9 +156,13 @@ void	PNeutPol_Polarimeter_Lin_NoScatt::ProcessEvent()
     Phip = GVp3.Phi()*TMath::RadToDeg();
     Thetan = GVn3.Theta()*TMath::RadToDeg();
     Phin = GVn3.Phi()*TMath::RadToDeg();
+    Pn = sqrt (TMath::Power((En + Mn ),2) - TMath::Power(Mn,2));
 
     EpCorr = EpPolCorrect(Ep, WCThetap);
     EpDiff = abs(EpCorr - Ep);
+
+    GVnCorr =  LNeutron4VectorCorr(Zp, GVn, En, Pp , Mn, Phin);
+    ThetanCorr = (GVnCorr.Theta())*TMath::RadToDeg();
 
     // Gamma(d,p)n
     KinEp = CalcKinEnergy(WCThetap, EGamma, Md, 0., Mp, Mn); // Calculate kin E of proton assuming pn production
@@ -238,6 +242,19 @@ TCutG*	PNeutPol_Polarimeter_Lin_NoScatt::OpenCutFile(Char_t* filename, Char_t* c
   CutFile->Close();
   cout << "cut file " << filename << " opened (Cut-name = " << cutname << ")"<< endl;
   return Cut_clone;
+}
+
+TLorentzVector PNeutPol_Polarimeter_Lin_NoScatt::LNeutron4VectorCorr(Double_t ZVert, TLorentzVector n4Vector, Double_t nE, Double_t MagP, Double_t nMass, Double_t nPhi)
+{
+    Ncor1 = 0.0886404-0.000555077*ZVert+0.000914921*ZVert*ZVert-7.6616e-06*ZVert*ZVert*ZVert;
+    Ncor2=0.991;
+    Ncor3= 0.612847+0.153167*ZVert-0.00106208*ZVert*ZVert;
+    NcorR=Ncor1+Ncor2*(n4Vector.Theta()*180/acos(-1))+Ncor3*sin(n4Vector.Theta());
+    NcorRR=NcorR/180.0*acos(-1);
+
+    N4VectCorr =  TLorentzVector (MagP*sin(NcorRR)*cos(nPhi),MagP*sin(NcorRR)*sin(nPhi) , MagP*cos(NcorRR) , nE+nMass);
+
+    return N4VectCorr;
 }
 
 TLorentzVector PNeutPol_Polarimeter_Lin_NoScatt::LProton4VectorKin(Double_t KinE, Double_t Theta, Double_t Phi)
@@ -523,6 +540,10 @@ PNeutPol_Polarimeter_Lin_NoScatt::PNeutPol_Polarimeter_Lin_NoScatt() // Define a
   ThetanRecDist = new GH1 ("ThetanRecDist", "Reconstructed #theta_{n} Distribution", 200, 0, 180);
   ThetanDiffDist = new GH1 ("ThetanDiffDist", "Difference Between #theta_{n} and  #theta_{nRec}", 200, 0, 180);
   ThetanDiffZp = new GH2 ("ThetanDiffZp", "Diff(#theta_{n} - #theta_{nRec}) as a Fn of Z_{p}", 200, 0, 180, 200, -100, 100);
+  ThetanCorrDist = new GH1 ("ThetanCorrDist", "#theta_{nCorr} Distribution", 200, 0, 180);
+  ThetanCorrDiffDist = new GH1 ("ThetanCorrDiffDist", "Difference Between #theta_{n} and #theta_{nCorr} Distribution", 200, 0, 180);
+  ThetanCorrRecDiffDist = new GH1 ("ThetanCorrRecDiffDist", "Difference Between #theta_{nCorr} and  #theta_{nRec}", 200, 0, 180);
+  ThetanCorrDiffZp = new GH2 ("ThetanCorrDiffZp", "Diff(#theta_{nCorr} - #theta_{nRec}) as a Fn of Z_{p}", 200, 0, 180, 200, -100, 100);
   ThetaRecPiDiff = new GH1 ("ThetaRecPiDiff", "Difference between #theta_{#pi Rec} and #theta_{n}", 200, 0, 180);
   ThetanThetaRecPi = new GH2 ("ThetanThetaRecPi", "#theta_{n} vs ThetaPiRec", 100, 0, 180, 100, 0, 180);
   ThetanThetaRecPiDiff = new GH2 ("ThetanThetaRecPiDiff", "#theta_{n} vs (#theta_{#pi Rec} - #theta_{n})", 100, 0, 180, 100, 0, 180);
@@ -560,6 +581,10 @@ void PNeutPol_Polarimeter_Lin_NoScatt::FillHists()
     ThetanRecDist->Fill(ThetanRec, TaggerTime);
     ThetanDiffDist->Fill(abs(Thetan-ThetanRec), TaggerTime);
     ThetanDiffZp->Fill(abs(Thetan-ThetanRec), Zp, TaggerTime);
+    ThetanCorrDist->Fill(ThetanCorr, TaggerTime);
+    ThetanCorrDiffDist->Fill(abs(Thetan-ThetanCorr), TaggerTime);
+    ThetanCorrRecDiffDist->Fill(abs(ThetanCorr-ThetanRec), TaggerTime);
+    ThetanCorrDiffZp ->Fill(abs(ThetanCorr-ThetanRec), Zp, TaggerTime);
     ThetaRecPiDiff->Fill(ThetaPiRecDiff, TaggerTime);
     ThetanThetaRecPi->Fill(Thetan, ThetaPiRec, TaggerTime);
     ThetanThetaRecPiDiff->Fill(Thetan, ThetaPiRecDiff, TaggerTime);

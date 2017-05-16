@@ -70,6 +70,7 @@ private:
   double_t ThetaPiRec;
   double_t Phip;
   double_t Phin;
+  double_t Pn;
   double_t PhipRec;
   double_t PhinRec;
   double_t PhiPiRec;
@@ -104,6 +105,12 @@ private:
   double_t OpeningAngle;
   double_t ThetanDiff;
   double_t PhinDiff;
+  double_t Ncor1;
+  double_t Ncor2;
+  double_t Ncor3;
+  double_t NcorR;
+  double_t NcorRR;
+  double_t ThetanCorr;
 
   Bool_t nBanana;
   Bool_t Proton1;
@@ -112,11 +119,13 @@ private:
   TLorentzVector GVp;
   TLorentzVector GVn;
   TLorentzVector GVpB;
+  TLorentzVector GVnCorr;
   TLorentzVector Gamma;
   TLorentzVector Deut;
   TLorentzVector Neut;
   TLorentzVector P4Vect;
   TLorentzVector N4Vect;
+  TLorentzVector N4VectCorr;
   TLorentzVector Pi4Vect;
   TLorentzVector RecKinProton;
   TLorentzVector RecKinNeutron;
@@ -325,6 +334,10 @@ private:
   GH1* ThetanRecDist;
   GH1* ThetanDiffDist;
   GH2* ThetanDiffZp;
+  GH1* ThetanCorrDist;
+  GH1* ThetanCorrDiffDist;
+  GH1* ThetanCorrRecDiffDist;
+  GH2* ThetanCorrDiffZp;
   GH1* ThetaRecPiDiff;
   GH2* ThetanThetaRecPi;
   GH2* ThetanThetaRecPiDiff;
@@ -357,6 +370,7 @@ public:
     virtual ~PNeutPol_Polarimeter_Lin();
     virtual Bool_t  Init();
     TCutG* OpenCutFile(Char_t* filename, Char_t* cutname);
+    TLorentzVector LNeutron4VectorCorr(Double_t ZVert, TLorentzVector n4Vector, Double_t nE, Double_t MagP, Double_t nMass, Double_t nPhi);
     TLorentzVector LProton4VectorKin(Double_t KinE, Double_t Theta, Double_t Phi);
     TLorentzVector LNeutron4VectorKin(TLorentzVector ProtonKinVector);
     TLorentzVector LPion4VectorKin(TLorentzVector ProtonKinVector);
