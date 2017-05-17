@@ -271,6 +271,15 @@ TH1D* Phip_595MeVCM10_Para;
 TH1D* Phip_605MeVCM10_Para;
 TH1D* Phip_615MeVCM10_Para;
 
+TH1D* ThetanDist_Para;
+TH1D* ThetanRecDist_Para;
+TH1D* ThetanDiffDist_Para;
+TH2D* ThetanDiffZp_Para;
+TH1D* ThetanCorrDist_Para;
+TH1D* ThetanCorrDiffDist_Para;
+TH1D* ThetanCorrRecDiffDist_Para;
+TH2D* ThetanCorrDiffZp_Para;
+
 TH2D* E_dE_Para;
 TH2D* KinEp_dE_Para;
 TH2D* E_KinEp_Para;
@@ -515,6 +524,15 @@ TH1D* Phip_585MeVCM10_Perp;
 TH1D* Phip_595MeVCM10_Perp;
 TH1D* Phip_605MeVCM10_Perp;
 TH1D* Phip_615MeVCM10_Perp;
+
+TH1D* ThetanDist_Perp;
+TH1D* ThetanRecDist_Perp;
+TH1D* ThetanDiffDist_Perp;
+TH2D* ThetanDiffZp_Perp;
+TH1D* ThetanCorrDist_Perp;
+TH1D* ThetanCorrDiffDist_Perp;
+TH1D* ThetanCorrRecDiffDist_Perp;
+TH2D* ThetanCorrDiffZp_Perp;
 
 TH2D* E_dE_Perp;
 TH2D* KinEp_dE_Perp;

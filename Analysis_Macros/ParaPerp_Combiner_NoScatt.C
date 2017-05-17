@@ -2,7 +2,7 @@
 
 void ParaPerp_Combiner_NoScatt(){
 
-  TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Para/NoScatt/Physics_Total_Para_NoScatt_3_12_5_17.root"); // Open latest Para file
+  TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Para/NoScatt/Physics_Total_Para_NoScatt_4_16_5_17.root"); // Open latest Para file
 
   TH1D* time_Para = (TH1D*)f->Get("time")->Clone();
   time_Para->SetName("time_Para");
@@ -457,6 +457,24 @@ void ParaPerp_Combiner_NoScatt(){
   TH1D* Phip_615MeVCM10_Para = (TH1D*)f->Get("Phip_615MeVCM10")->Clone();
   Phip_615MeVCM10_Para->SetName("Phip_615MeVCM10_Para");
 
+  TH1D* ThetanDist_Para = (TH1D*)f->Get("ThetanDist")->Clone();
+  ThetanDist_Para->SetName("ThetanDist_Para");
+  TH1D* ThetanRecDist_Para = (TH1D*)f->Get("ThetanRecDist")->Clone();
+  ThetanRecDist_Para->SetName("ThetanRecDist_Para");
+  TH1D* ThetanDiffDist_Para = (TH1D*)f->Get("ThetanDiffDist")->Clone();
+  ThetanDiffDist_Para->SetName("ThetanDiffDist_Para");
+  TH2D* ThetanDiffZp_Para = (TH2D*)f->Get("ThetanDiffZp")->Clone();
+  ThetanDiffZp_Para->SetName("ThetanDiffZp_Para");
+
+  TH1D* ThetanCorrDist_Para = (TH1D*)f->Get("ThetanCorrDist")->Clone();
+  ThetanCorrDist_Para->SetName("ThetanCorrDist_Para");
+  TH1D* ThetanCorrDiffDist_Para = (TH1D*)f->Get("ThetanCorrDiffDist")->Clone();
+  ThetanCorrDiffDist_Para->SetName("ThetanCorrDiffDist_Para");
+  TH1D* ThetanCorrRecDiffDist_Para = (TH1D*)f->Get("ThetanCorrRecDiffDist")->Clone();
+  ThetanCorrRecDiffDist_Para->SetName("ThetanCorrRecDiffDist_Para");
+  TH2D* ThetanCorrDiffZp_Para = (TH2D*)f->Get("ThetanCorrDiffZp")->Clone();
+  ThetanCorrDiffZp_Para->SetName("ThetanCorrDiffZp_Para");
+
   TH2D* E_dE_Para = (TH2D*)f->Get("E_dE")->Clone();
   E_dE_Para->SetName("E_dE_Para");
   TH2D* KinEp_dE_Para = (TH2D*)f->Get("KinEp_dE")->Clone();
@@ -483,7 +501,7 @@ void ParaPerp_Combiner_NoScatt(){
   ////////////////////////////////////////////////////
   ////////////////////////////////////////////////////
 
-  TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Perp/NoScatt/Physics_Total_Perp_NoScatt_3_12_5_17.root"); // Open latest Perp file
+  TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Perp/NoScatt/Physics_Total_Perp_NoScatt_4_16_5_17.root"); // Open latest Perp file
 
   TH1D* time_Perp = (TH1D*)f->Get("time")->Clone();
   time_Perp->SetName("time_Perp");
@@ -938,6 +956,24 @@ void ParaPerp_Combiner_NoScatt(){
   TH1D* Phip_615MeVCM10_Perp = (TH1D*)f->Get("Phip_615MeVCM10")->Clone();
   Phip_615MeVCM10_Perp->SetName("Phip_615MeVCM10_Perp");
 
+  TH1D* ThetanDist_Perp = (TH1D*)f->Get("ThetanDist")->Clone();
+  ThetanDist_Perp->SetName("ThetanDist_Perp");
+  TH1D* ThetanRecDist_Perp = (TH1D*)f->Get("ThetanRecDist")->Clone();
+  ThetanRecDist_Perp->SetName("ThetanRecDist_Perp");
+  TH1D* ThetanDiffDist_Perp = (TH1D*)f->Get("ThetanDiffDist")->Clone();
+  ThetanDiffDist_Perp->SetName("ThetanDiffDist_Perp");
+  TH2D* ThetanDiffZp_Perp = (TH2D*)f->Get("ThetanDiffZp")->Clone();
+  ThetanDiffZp_Perp->SetName("ThetanDiffZp_Perp");
+
+  TH1D* ThetanCorrDist_Perp = (TH1D*)f->Get("ThetanCorrDist")->Clone();
+  ThetanCorrDist_Perp->SetName("ThetanCorrDist_Perp");
+  TH1D* ThetanCorrDiffDist_Perp = (TH1D*)f->Get("ThetanCorrDiffDist")->Clone();
+  ThetanCorrDiffDist_Perp->SetName("ThetanCorrDiffDist_Perp");
+  TH1D* ThetanCorrRecDiffDist_Perp = (TH1D*)f->Get("ThetanCorrRecDiffDist")->Clone();
+  ThetanCorrRecDiffDist_Perp->SetName("ThetanCorrRecDiffDist_Perp");
+  TH2D* ThetanCorrDiffZp_Perp = (TH2D*)f->Get("ThetanCorrDiffZp")->Clone();
+  ThetanCorrDiffZp_Perp->SetName("ThetanCorrDiffZp_Perp");
+
   TH2D* E_dE_Perp = (TH2D*)f->Get("E_dE")->Clone();
   E_dE_Perp->SetName("E_dE_Perp");
   TH2D* KinEp_dE_Perp = (TH2D*)f->Get("KinEp_dE")->Clone();
@@ -964,7 +1000,7 @@ void ParaPerp_Combiner_NoScatt(){
   ////////////////////////////////////////////////////
   ////////////////////////////////////////////////////
 
-  TFile f2("ParaPerp_NoScatt_Total_3_Combined.root", "RECREATE");
+  TFile f2("ParaPerp_NoScatt_Total_4_Combined.root", "RECREATE");
 
   time_Para->Write();
   time_cut_Para->Write();
@@ -1199,6 +1235,15 @@ void ParaPerp_Combiner_NoScatt(){
   Phip_595MeVCM10_Para->Write();
   Phip_605MeVCM10_Para->Write();
   Phip_615MeVCM10_Para->Write();
+
+  ThetanDist_Para->Write();
+  ThetanRecDist_Para->Write();
+  ThetanDiffDist_Para->Write();
+  ThetanDiffZp_Para->Write();
+  ThetanCorrDist_Para->Write();
+  ThetanCorrDiffDist_Para->Write();
+  ThetanCorrRecDiffDist_Para->Write();
+  ThetanCorrDiffZp_Para->Write();
 
   E_dE_Para->Write();;
   KinEp_dE_Para->Write();
@@ -1450,6 +1495,15 @@ void ParaPerp_Combiner_NoScatt(){
   Phip_595MeVCM10_Perp->Write();
   Phip_605MeVCM10_Perp->Write();
   Phip_615MeVCM10_Perp->Write();
+
+  ThetanDist_Perp->Write();
+  ThetanRecDist_Perp->Write();
+  ThetanDiffDist_Perp->Write();
+  ThetanDiffZp_Perp->Write();
+  ThetanCorrDist_Perp->Write();
+  ThetanCorrDiffDist_Perp->Write();
+  ThetanCorrRecDiffDist_Perp->Write();
+  ThetanCorrDiffZp_Perp->Write();
 
   E_dE_Perp->Write();;
   KinEp_dE_Perp->Write();

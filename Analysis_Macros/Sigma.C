@@ -2,7 +2,7 @@
 
 void Sigma(){
 
-  TFile *f1= TFile::Open("/scratch/Mainz_Software/a2GoAT/ParaPerpAsymm_Total_12.root");
+  TFile *f1= TFile::Open("/scratch/Mainz_Software/a2GoAT/ParaPerpAsymm_Total_13.root");
   TTree *t1 = (TTree*)f1->Get("Parameter_Values");
 
   Double_t pValues410[10], pValues430[10], pValues450[10], pValues470[10], pValues490[10], pValues510[10], pValues530[10], pValues550[10], pValues570[10], pValues590[10], pValues610[10], pValues630[10];
@@ -111,7 +111,7 @@ void Sigma(){
 
   }
 
-  TFile f3("Sigma_Plots_12.root", "RECREATE");
+  TFile f3("Sigma_Plots_Multi_13.root", "RECREATE");
 
   Float_t xMin = -1;
   Float_t xMax = 1;
@@ -384,32 +384,32 @@ void Sigma(){
   gr12->GetYaxis()->SetTitle("#Sigma");
   gr12->Draw("ep");
 
-  //TCanvas *canvas12 = new TCanvas("canvas12","canvas12", 1920, 1080);
-  //canvas12->Divide(4,3);
-  //canvas12->cd(1);
-  //pad1->Draw();
-  //canvas12->cd(2);
-  //pad2->Draw();
-  //canvas12->cd(3);
-  //pad3->Draw();
-  //canvas12->cd(4);
-  //pad4->Draw();
-  //canvas12->cd(5);
-  //pad5->Draw();
-  //canvas12->cd(6);
-  //pad6->Draw();
-  //canvas12->cd(7);
-  //pad7->Draw();
-  //canvas12->cd(8);
-  //pad8->Draw();
-  //canvas12->cd(9);
-  //pad9->Draw();
-  //canvas12->cd(10);
-  //pad10->Draw();
-  //canvas12->cd(11);
-  //pad11->Draw();
-  //canvas12->cd(12);
-  //pad12->Draw();
+  TCanvas *canvas12 = new TCanvas("canvas12","canvas12", 1920, 1080);
+  canvas12->Divide(4,3);
+  canvas12->cd(1);
+  pad1->Draw();
+  canvas12->cd(2);
+  pad2->Draw();
+  canvas12->cd(3);
+  pad3->Draw();
+  canvas12->cd(4);
+  pad4->Draw();
+  canvas12->cd(5);
+  pad5->Draw();
+  canvas12->cd(6);
+  pad6->Draw();
+  canvas12->cd(7);
+  pad7->Draw();
+  canvas12->cd(8);
+  pad8->Draw();
+  canvas12->cd(9);
+  pad9->Draw();
+  canvas12->cd(10);
+  pad10->Draw();
+  canvas12->cd(11);
+  pad11->Draw();
+  canvas12->cd(12);
+  pad12->Draw();
 
   canvas->Write();
   canvas1->Write();
@@ -435,7 +435,7 @@ void Sigma(){
   gr10->Write();
   gr11->Write();
   gr12->Write();
-  //canvas12->Write();
+  canvas12->Write();
   f3.Write();
 
 }

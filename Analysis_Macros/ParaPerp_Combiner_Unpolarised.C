@@ -2,7 +2,7 @@
 
 void ParaPerp_Combiner_Unpolarised() {
 
-    TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Para/Physics_Total_Para_12_15_5_17.root"); // Open latest Para file
+    TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Para/Physics_Total_Para_13_16_5_17.root"); // Open latest Para file
 
     TH1D* time_Para = (TH1D*)f->Get("time")->Clone();
     time_Para->SetName("time_Para");
@@ -100,13 +100,31 @@ void ParaPerp_Combiner_Unpolarised() {
     TH1D* Phi_Scattered_630MeV_Para = (TH1D*)f->Get("Phi_Scattered_630MeV")->Clone();
     Phi_Scattered_630MeV_Para->SetName("Phi_Scattered_630MeV_Para");
 
+    TH1D* ThetanDist_Para = (TH1D*)f->Get("ThetanDist")->Clone();
+    ThetanDist_Para->SetName("ThetanDist_Para");
+    TH1D* ThetanRecDist_Para = (TH1D*)f->Get("ThetanRecDist")->Clone();
+    ThetanRecDist_Para->SetName("ThetanRecDist_Para");
+    TH1D* ThetanDiffDist_Para = (TH1D*)f->Get("ThetanDiffDist")->Clone();
+    ThetanDiffDist_Para->SetName("ThetanDiffDist_Para");
+    TH2D* ThetanDiffZp_Para = (TH2D*)f->Get("ThetanDiffZp")->Clone();
+    ThetanDiffZp_Para->SetName("ThetanDiffZp_Para");
+
+    TH1D* ThetanCorrDist_Para = (TH1D*)f->Get("ThetanCorrDist")->Clone();
+    ThetanCorrDist_Para->SetName("ThetanCorrDist_Para");
+    TH1D* ThetanCorrDiffDist_Para = (TH1D*)f->Get("ThetanCorrDiffDist")->Clone();
+    ThetanCorrDiffDist_Para->SetName("ThetanCorrDiffDist_Para");
+    TH1D* ThetanCorrRecDiffDist_Para = (TH1D*)f->Get("ThetanCorrRecDiffDist")->Clone();
+    ThetanCorrRecDiffDist_Para->SetName("ThetanCorrRecDiffDist_Para");
+    TH2D* ThetanCorrDiffZp_Para = (TH2D*)f->Get("ThetanCorrDiffZp")->Clone();
+    ThetanCorrDiffZp_Para->SetName("ThetanCorrDiffZp_Para");
+
     ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////
     ///////////////// PARA DONE ////////////////////////
     ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////
 
-    TFile *f1 = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Perp/Physics_Total_Perp_12_15_5_17.root"); // Open latest Para file
+    TFile *f1 = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Perp/Physics_Total_Perp_13_16_5_17.root"); // Open latest Para file
 
     TH1D* time_Perp = (TH1D*)f1->Get("time")->Clone();
     time_Perp->SetName("time_Perp");
@@ -204,6 +222,23 @@ void ParaPerp_Combiner_Unpolarised() {
     TH1D* Phi_Scattered_630MeV_Perp = (TH1D*)f1->Get("Phi_Scattered_630MeV")->Clone();
     Phi_Scattered_630MeV_Perp->SetName("Phi_Scattered_630MeV_Perp");
 
+    TH1D* ThetanDist_Perp = (TH1D*)f->Get("ThetanDist")->Clone();
+    ThetanDist_Perp->SetName("ThetanDist_Perp");
+    TH1D* ThetanRecDist_Perp = (TH1D*)f->Get("ThetanRecDist")->Clone();
+    ThetanRecDist_Perp->SetName("ThetanRecDist_Perp");
+    TH1D* ThetanDiffDist_Perp = (TH1D*)f->Get("ThetanDiffDist")->Clone();
+    ThetanDiffDist_Perp->SetName("ThetanDiffDist_Perp");
+    TH2D* ThetanDiffZp_Perp = (TH2D*)f->Get("ThetanDiffZp")->Clone();
+    ThetanDiffZp_Perp->SetName("ThetanDiffZp_Perp");
+
+    TH1D* ThetanCorrDist_Perp = (TH1D*)f->Get("ThetanCorrDist")->Clone();
+    ThetanCorrDist_Perp->SetName("ThetanCorrDist_Perp");
+    TH1D* ThetanCorrDiffDist_Perp = (TH1D*)f->Get("ThetanCorrDiffDist")->Clone();
+    ThetanCorrDiffDist_Perp->SetName("ThetanCorrDiffDist_Perp");
+    TH1D* ThetanCorrRecDiffDist_Perp = (TH1D*)f->Get("ThetanCorrRecDiffDist")->Clone();
+    ThetanCorrRecDiffDist_Perp->SetName("ThetanCorrRecDiffDist_Perp");
+    TH2D* ThetanCorrDiffZp_Perp = (TH2D*)f->Get("ThetanCorrDiffZp")->Clone();
+    ThetanCorrDiffZp_Perp->SetName("ThetanCorrDiffZp_Perp");
 
     ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////
@@ -547,7 +582,63 @@ void ParaPerp_Combiner_Unpolarised() {
     PhinDiffWCZRec = new TH2D("PhinDiffWCZRec", "PhinDiffWCZRec", 100, 0, 200, 100, 0, 180);
     PhinDiffWCZRec->Merge(list46);
 
-    TFile f2("ParaPerp_Total_12_Combined_Unpolarised.root", "RECREATE");
+    TList *list47 = new TList;
+    list47->Add(ThetanDist_Para);
+    ThetanDist_Perp->Scale(ScaleFactor);
+    list47->Add(ThetanDist_Perp);
+    ThetanDist = new TH1D("ThetanDist", "#theta_{n} Distribution", 200, 0, 180);
+    ThetanDist->Merge(list47);
+
+    TList *list48 = new TList;
+    list48->Add(ThetanRecDist_Para);
+    ThetanRecDist_Perp->Scale(ScaleFactor);
+    list48->Add(ThetanRecDist_Perp);
+    ThetanRecDist = new TH1D("ThetanRecDist", "Reconstructed #theta_{n} Distribution", 200, 0, 180);
+    ThetanRecDist->Merge(list48);
+
+    TList *list49 = new TList;
+    list49->Add(ThetanDiffDist_Para);
+    ThetanDiffDist_Perp->Scale(ScaleFactor);
+    list49->Add(ThetanDiffDist_Perp);
+    ThetanDiffDist = new TH1D("ThetanDiffDist", "Difference Between #theta_{n} and  #theta_{nRec}", 200, 0, 180);
+    ThetanDiffDist->Merge(list49);
+
+    TList *list50 = new TList;
+    list50->Add(ThetanDiffZp_Para);
+    ThetanDiffZp_Perp->Scale(ScaleFactor);
+    list50->Add(ThetanDiffZp_Perp);
+    ThetanDiffZp = new TH2D("ThetanDiffZp", "Diff(#theta_{n} - #theta_{nRec}) as a Fn of Z_{p}", 200, 0, 180, 200, -100, 100);
+    ThetanDiffZp->Merge(list50);
+
+    TList *list51 = new TList;
+    list51->Add(ThetanCorrDist_Para);
+    ThetanCorrDist_Perp->Scale(ScaleFactor);
+    list51->Add(ThetanCorrDist_Perp);
+    ThetanCorrDist = new TH1D("ThetanCorrDist", "#theta_{nCorr} Distribution", 200, 0, 180);
+    ThetanCorrDist->Merge(list51);
+
+    TList *list52 = new TList;
+    list52->Add(ThetanCorrDiffDist_Para);
+    ThetanCorrDiffDist_Perp->Scale(ScaleFactor);
+    list52->Add(ThetanCorrDiffDist_Perp);
+    ThetanCorrDiffDist = new TH1D("ThetanCorrDiffDist", "Difference Between #theta_{n} and #theta_{nCorr} Distribution", 200, 0, 180);
+    ThetanCorrDiffDist->Merge(list52);
+
+    TList *list53 = new TList;
+    list53->Add(ThetanCorrRecDiffDist_Para);
+    ThetanCorrRecDiffDist_Perp->Scale(ScaleFactor);
+    list53->Add(ThetanCorrRecDiffDist_Perp);
+    ThetanCorrRecDiffDist = new TH1D("ThetanCorrRecDiffDist", "Difference Between #theta_{nCorr} and  #theta_{nRec}", 200, 0, 180);
+    ThetanCorrRecDiffDist->Merge(list53);
+
+    TList *list54 = new TList;
+    list54->Add(ThetanCorrDiffZp_Para);
+    ThetanCorrDiffZp_Perp->Scale(ScaleFactor);
+    list54->Add(ThetanCorrDiffZp_Perp);
+    ThetanCorrDiffZp = new TH2D("ThetanCorrDiffZp", "Diff(#theta_{nCorr} - #theta_{nRec}) as a Fn of Z_{p}", 200, 0, 180, 200, -100, 100);
+    ThetanCorrDiffZp->Merge(list54);
+
+    TFile f2("ParaPerp_Total_13_Combined_Unpolarised.root", "RECREATE");
 
     time->Write();
     time_cut->Write();

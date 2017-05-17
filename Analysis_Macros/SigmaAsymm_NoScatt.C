@@ -48,7 +48,7 @@ void SigmaAsymm_NoScatt(){
   double pCosA615;
   double pCosAErr615;
 
-  TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/ParaPerp_NoScatt_Total_3_Combined.root"); // Open the latest PTotal combined file to load histograms from
+  TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/ParaPerp_NoScatt_Total_4_Combined.root"); // Open the latest PTotal combined file to load histograms from
   NPara = Eg_Para->GetEntries();
   NPerp = Eg_Perp->GetEntries();
   ScaleFactor = NPara/NPerp;
@@ -1490,7 +1490,7 @@ void SigmaAsymm_NoScatt(){
   pCosAmp[9][19] = CosFit->GetParameter(0);
   pCosAmpErr[9][19] = CosFit->GetParError(0);
 
-  TFile f1("ParaPerpAsymm_NoScatt_Total_3.root", "RECREATE");
+  TFile f1("ParaPerpAsymm_NoScatt_Total_4.root", "RECREATE");
 
   ParaPerpAsymmPhip_425MeVCM1->Write();
   ParaPerpAsymmPhip_435MeVCM1->Write();
@@ -1775,8 +1775,8 @@ void SigmaAsymm_NoScatt(){
     pCosAErr535 = pCosAmpErr[m][11];
     pCosA545 = pCosAmp[m][12];
     pCosAErr545= pCosAmpErr[m][12];
-    pCosA555 = 0; // This Eg bin is empty but root fits to it anyway! A should be 0 so manually force it to be 0
-    pCosAErr555 = 0;
+    pCosA555 = pCosAmp[m][13];
+    pCosAErr555 = pCosAmpErr[m][13];
     pCosA565 = pCosAmp[m][14];
     pCosAErr565 = pCosAmpErr[m][14];
     pCosA575 = pCosAmp[m][15];

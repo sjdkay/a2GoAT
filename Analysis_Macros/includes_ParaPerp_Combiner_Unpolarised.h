@@ -73,6 +73,16 @@ TH1D* Phi_Scattered_570MeV_Para;
 TH1D* Phi_Scattered_590MeV_Para;
 TH1D* Phi_Scattered_610MeV_Para;
 TH1D* Phi_Scattered_630MeV_Para;
+
+TH1D* ThetanDist_Para;
+TH1D* ThetanRecDist_Para;
+TH1D* ThetanDiffDist_Para;
+TH2D* ThetanDiffZp_Para;
+TH1D* ThetanCorrDist_Para;
+TH1D* ThetanCorrDiffDist_Para;
+TH1D* ThetanCorrRecDiffDist_Para;
+TH2D* ThetanCorrDiffZp_Para;
+
 TH1D* ThetaRecPiDiff_Para;
 TH2D* ThetanThetaRecPi_Para;
 TH2D* ThetanThetaRecPiDiff_Para;
@@ -121,6 +131,16 @@ TH1D* Phi_Scattered_570MeV_Perp;
 TH1D* Phi_Scattered_590MeV_Perp;
 TH1D* Phi_Scattered_610MeV_Perp;
 TH1D* Phi_Scattered_630MeV_Perp;
+
+TH1D* ThetanDist_Perp;
+TH1D* ThetanRecDist_Perp;
+TH1D* ThetanDiffDist_Perp;
+TH2D* ThetanDiffZp_Perp;
+TH1D* ThetanCorrDist_Perp;
+TH1D* ThetanCorrDiffDist_Perp;
+TH1D* ThetanCorrRecDiffDist_Perp;
+TH2D* ThetanCorrDiffZp_Perp;
+
 TH1D* ThetaRecPiDiff_Perp;
 TH2D* ThetanThetaRecPi_Perp;
 TH2D* ThetanThetaRecPiDiff_Perp;
@@ -169,6 +189,16 @@ TH1D* PhiSc570;
 TH1D* PhiSc590;
 TH1D* PhiSc610;
 TH1D* PhiSc630;
+
+TH1D* ThetanDist;
+TH1D* ThetanRecDist;
+TH1D* ThetanDiffDist;
+TH2D* ThetanDiffZp;
+TH1D* ThetanCorrDist;
+TH1D* ThetanCorrDiffDist;
+TH1D* ThetanCorrRecDiffDist;
+TH2D* ThetanCorrDiffZp;
+
 TH1D* ThetaRecPiDiff;
 TH2D* ThetanThetaRecPi;
 TH2D* ThetanThetaRecPiDiff;
