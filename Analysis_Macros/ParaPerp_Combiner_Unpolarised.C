@@ -676,6 +676,16 @@ void ParaPerp_Combiner_Unpolarised() {
     PhiSc590->Write();
     PhiSc610->Write();
     PhiSc630->Write();
+
+    ThetanDist->Write();
+    ThetanRecDist->Write();
+    ThetanDiffDist->Write();
+    ThetanDiffZp->Write();
+    ThetanCorrDist->Write();
+    ThetanCorrDiffDist->Write();
+    ThetanCorrRecDiffDist->Write();
+    ThetanCorrDiffZp->Write();
+
     ThetaRecPiDiff->Write();
     ThetanThetaRecPi->Write();
     ThetanThetaRecPiDiff->Write();

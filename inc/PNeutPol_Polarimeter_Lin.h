@@ -25,10 +25,6 @@ private:
   Int_t NRoo;
   Int_t NTag;
   Int_t NTrack;
-  Int_t EventCounter;
-  Int_t EventCounterTrackCut;
-  Int_t EventCounterZCut;
-  Int_t EventCounterCoplanarCut;
   Int_t EventNum;
 
   Int_t Detectors1;
@@ -62,6 +58,7 @@ private:
   double_t WCPhin;
   double_t WCZnRec;
   double_t Thetap;
+  double_t ThetapRad;
   double_t ThetapCM;
   double_t CosThetapCM;
   double_t Thetan;
@@ -69,6 +66,7 @@ private:
   double_t ThetanRec;
   double_t ThetaPiRec;
   double_t Phip;
+  double_t PhipRad;
   double_t Phin;
   double_t Pn;
   double_t PhipRec;

@@ -12,7 +12,7 @@ Target-Mass: 1875.613
 #Target-Mass: 0
 
 # cut on the tagger channel (for standard physics library)
-Tagger-Channel-Cut: 200 300
+Tagger-Channel-Cut: 1 350
 
 # where are the tagger scalers?
 Tagger-Scalers: 268 619

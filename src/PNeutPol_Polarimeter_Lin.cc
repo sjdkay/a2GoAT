@@ -32,10 +32,6 @@ Bool_t	PNeutPol_Polarimeter_Lin::Start()
 
   SetAsPhysicsFile();
 
-  EventCounter = 0;
-  EventCounterTrackCut = 0;
-  EventCounterZCut = 0;
-  EventCounterCoplanarCut = 0;
   NP = 0; // Set number of Protons to 0 before checking
   NPi = 0; // Set number of pions to 0 before checking
   NRoo = 0; // Set number of Rootinos to 0 before checking
@@ -58,8 +54,6 @@ Bool_t	PNeutPol_Polarimeter_Lin::Start()
 
   TraverseValidEvents(); // This loops over each event as in old file and calls ProcessEvent() each loop
 
-  cout << EventCounter << " Events in file " << EventCounterTrackCut << " Events After Track Cut " << EventCounterZCut << " Events after Z cut " << EventCounterCoplanarCut << " Events after Coplanarity Cut" << endl;
-
   return kTRUE;
 }
 
@@ -71,7 +65,6 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
   NPi = GetChargedPions()->GetNParticles();
   NRoo = GetRootinos()->GetNParticles();
   NTag = GetTagger()->GetNTagged();
-  EventCounter++;
   if (NRoo !=0) return; // Goes to next event if any "rootinos" found
   if (NTrack !=2) return; // Ensures two track event
   Detectors1 = GetTracks()->GetDetectors(0); //Gets number for detectors that registered hits
@@ -103,7 +96,6 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
     return;
   }
 
-  EventCounterTrackCut++;
   EventNum = GetEventNumber();
 
   if (Proton1 == kTRUE)
@@ -162,11 +154,7 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
   //if( Zp > 60 || Zp < -60) return; // Particles selected out from other parts tend to be inside anyway, skip this?
   //if( Zp > 200 || Zp < 150) return; // Select out windows
 
-  EventCounterZCut++;
-
   //if ( PhiWCDiff > 195 || PhiWCDiff < 165) return;
-
-  EventCounterCoplanarCut++;
 
   for (Int_t j = 0; j < GetTagger()->GetNTagged(); j++)
   {
@@ -182,7 +170,9 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
     CosThetapCM = cos (ThetapCM * TMath::DegToRad());
 
     Thetap = GVp3.Theta()*TMath::RadToDeg(); // Lab frame angles for proton/neutron
+    ThetapRad = GVp3.Theta();
     Phip = GVp3.Phi()*TMath::RadToDeg();
+    PhipRad = GVp3.Phi();
     Thetan = GVn3.Theta()*TMath::RadToDeg();
     Phin = GVn3.Phi()*TMath::RadToDeg();
     Pn = sqrt (TMath::Power((En + Mn ),2) - TMath::Power(Mn,2));
@@ -239,16 +229,9 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
 
     if(Cut_proton -> IsInside(EpCorr, dEp) == kFALSE) continue; // If E loss correct proton is NOT inside p banana drop out
     if(Cut_protonKinGood -> IsInside(KinEp, dEp) == kFALSE) continue; // If KinE proton is NOT inside p banana drop out
-    if(ThetaPiRec > 20) continue;
-    //if ( 850 > MMpEpCorr || 1050 < MMpEpCorr) continue;
+    //if(ThetaPiRec > 20) continue; // This cut makes no sense and needs to be replaced with a new cut along the diagonal
     if (ScattTheta > 60) continue;
-    //if (ScattPhi > 170) continue; // Exclude values  at edges for now
-    //if (ScattPhi < -170) continue;
-    //if (ScattPhi < -165 || ScattPhi > 165) continue;
 
-    //if (abs(KinEDiff) > 100) continue; // If difference between CB energy and calculated Energy for proton > 100MeV continue
-
-    //k++;
     FillHists(); // Fill histograms with data generated
   }
 }

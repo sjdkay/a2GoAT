@@ -20,6 +20,7 @@ private:
 
   TH1*	TaggerAccScal;
 
+  Int_t k;
   Int_t NP;
   Int_t NPi;
   Int_t NRoo;
@@ -29,6 +30,7 @@ private:
   Int_t Detectors1;
   Int_t Detectors2;
   Int_t DetectorsSum;
+  Int_t EventNumber;
 
   double_t Time;
   double_t TaggerTime;
@@ -51,6 +53,7 @@ private:
   double_t WCPhip;
   double_t WCPhipRad;
   double_t Thetap;
+  double_t ThetapRad;
   double_t ThetapCM;
   double_t CosThetapCM;
   double_t Thetan;
@@ -58,6 +61,7 @@ private:
   double_t ThetanRec;
   double_t ThetaPiRec;
   double_t Phip;
+  double_t PhipRad;
   double_t Phin;
   double_t Pn;
   double_t PhipRec;
