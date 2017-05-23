@@ -375,16 +375,21 @@ private:
   GH1* ThetanRecDist;
   GH1* ThetanDiffDist;
   GH2* ThetanDiffZp;
+
   GH1* ThetanCorrDist;
   GH1* ThetanCorrDiffDist;
   GH1* ThetanCorrRecDiffDist;
   GH2* ThetanCorrDiffZp;
+
   GH1* ThetaRecPiDiff;
   GH2* ThetanThetaRecPi;
   GH2* ThetanThetaRecPiDiff;
+
   GH1* ThetaRecPDiff;
   GH2* ThetanThetaRecP;
   GH2* ThetanThetaRecPDiff;
+
+  GH2* DeutKinPiKin;
 
   char cutfilename[256];
   char cutname[256];

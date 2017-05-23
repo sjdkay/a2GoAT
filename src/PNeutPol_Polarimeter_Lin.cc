@@ -176,15 +176,15 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
     Thetan = GVn3.Theta()*TMath::RadToDeg();
     Phin = GVn3.Phi()*TMath::RadToDeg();
     Pn = sqrt (TMath::Power((En + Mn ),2) - TMath::Power(Mn,2));
-    EpCorr = EpPolCorrect(Ep, WCThetap);
+    EpCorr = EpPolCorrect(Ep, Thetap);
     EpDiff = abs(EpCorr - Ep);
 
     GVnCorr =  LNeutron4VectorCorr(Zp, GVn, En, Pp , Mn, Phin);
     ThetanCorr = (GVnCorr.Theta())*TMath::RadToDeg();
 
     // Gamma(d,p)n
-    KinEp = CalcKinEnergy(WCThetap, EGamma, Md, 0., Mp, Mn); // Calculate kin E of proton assuming pn production
-    RecKinProton = LProton4VectorKin(KinEp, WCThetapRad, WCPhipRad);
+    KinEp = CalcKinEnergy(Thetap, EGamma, Md, 0., Mp, Mn); // Calculate kin E of proton assuming pn production
+    RecKinProton = LProton4VectorKin(KinEp, ThetapRad, PhipRad);
     RecKinNeutron = LNeutron4VectorKin(RecKinProton);
     ThetanRec = (RecKinNeutron.Theta()) * TMath::RadToDeg();
     PhinRec = (RecKinNeutron.Phi()) * TMath::RadToDeg();
@@ -192,8 +192,8 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
 
     // Gamma(n,p)Pi (P detected correct)
     // Assume proton track is proton and "neutron" track is from charged pion
-    KinEpPi = CalcKinEnergy(WCThetap, EGamma, Mn, 0, Mp, Mpi); // Calculate kin E of proton assuming g(n, p) pi
-    RecKinProtonPi = LProton4VectorKin(KinEpPi, WCThetapRad, WCPhipRad); // Get Proton 4 vector from calculated kin E
+    KinEpPi = CalcKinEnergy(Thetap, EGamma, Mn, 0, Mp, Mpi); // Calculate kin E of proton assuming g(n, p) pi
+    RecKinProtonPi = LProton4VectorKin(KinEpPi, ThetapRad, PhipRad); // Get Proton 4 vector from calculated kin E
     RecKinPion = LPion4VectorKin(RecKinProtonPi); // Get Pion 4 vector from 4 momenta conservation
     ThetaPiRec = (RecKinPion.Theta())*TMath::RadToDeg();
     PhiPiRec = (RecKinPion.Phi())*TMath::RadToDeg();
@@ -201,8 +201,8 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
 
     // Gamma(n,p)Pi (Pion detected correct)
     // Assume proton track is pion and "neutron" track is from proton
-    KinPi = CalcKinEnergy(WCThetap, EGamma, Mn, 0, Mpi, Mp); // Calculate kin E of pion
-    RecKinPionP = LProton4VectorKin(KinPi, WCThetapRad, WCPhipRad); // Get Pion 4 vector from calculated kinE
+    KinPi = CalcKinEnergy(Thetap, EGamma, Mn, 0, Mpi, Mp); // Calculate kin E of pion
+    RecKinPionP = LProton4VectorKin(KinPi, ThetapRad, PhipRad); // Get Pion 4 vector from calculated kinE
     RecKinPPi = LPion4VectorKin(RecKinPionP); // Get Proton 4 vector from 4 momenta conservation
     ThetapRec = (RecKinPPi.Theta())*TMath::RadToDeg();
     PhipRec = (RecKinPPi.Phi())*TMath::RadToDeg();
@@ -210,7 +210,7 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
 
     KinEDiff = KinEp - EpCorr;
 
-    RecProtonEpCorr = LProton4VectorKin(EpCorr, WCThetapRad, WCPhipRad);
+    RecProtonEpCorr = LProton4VectorKin(EpCorr, ThetapRad, PhipRad);
     RecNeutronEpCorr = LNeutron4VectorKin(RecProtonEpCorr);
     MMpEpCorr = RecNeutronEpCorr.M();
     RecProtonEpCorr3 = RecProtonEpCorr.Vect();
@@ -229,7 +229,6 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
 
     if(Cut_proton -> IsInside(EpCorr, dEp) == kFALSE) continue; // If E loss correct proton is NOT inside p banana drop out
     if(Cut_protonKinGood -> IsInside(KinEp, dEp) == kFALSE) continue; // If KinE proton is NOT inside p banana drop out
-    //if(ThetaPiRec > 20) continue; // This cut makes no sense and needs to be replaced with a new cut along the diagonal
     if (ScattTheta > 60) continue;
 
     FillHists(); // Fill histograms with data generated

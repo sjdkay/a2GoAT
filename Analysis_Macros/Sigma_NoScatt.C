@@ -2,7 +2,7 @@
 
 void Sigma_NoScatt(){
 
-  TFile *f1= TFile::Open("/scratch/Mainz_Software/a2GoAT/ParaPerpAsymm_NoScatt_Total_4.root");
+  TFile *f1= TFile::Open("/scratch/Mainz_Software/a2GoAT/ParaPerpAsymm_NoScatt_Total_6.root");
   TTree *t1 = (TTree*)f1->Get("Parameter_Values");
 
   Double_t pValues425[10], pValues435[10], pValues445[10], pValues455[10], pValues465[10], pValues475[10], pValues485[10], pValues495[10], pValues505[10], pValues515[10], pValues525[10], pValues535[10], pValues545[10], pValues555[10], pValues565[10], pValues575[10], pValues585[10], pValues595[10], pValues605[10], pValues615[10];
@@ -167,7 +167,7 @@ void Sigma_NoScatt(){
 
   }
 
-  TFile f3("Sigma_Plots_NoScatt_Multi_4.root", "RECREATE");
+  TFile f3("Sigma_Plots_NoScatt_6.root", "RECREATE");
 
   Float_t xMin = -1;
   Float_t xMax = 1;
@@ -616,48 +616,48 @@ void Sigma_NoScatt(){
   gr20->GetYaxis()->SetTitle("#Sigma");
   gr20->Draw("ep");
 
-  TCanvas *canvas20 = new TCanvas("canvas20","canvas20", 1920, 1080);
-  canvas20->Divide(5,4);
-  canvas20->cd(1);
-  pad1->Draw();
-  canvas20->cd(2);
-  pad2->Draw();
-  canvas20->cd(3);
-  pad3->Draw();
-  canvas20->cd(4);
-  pad4->Draw();
-  canvas20->cd(5);
-  pad5->Draw();
-  canvas20->cd(6);
-  pad6->Draw();
-  canvas20->cd(7);
-  pad7->Draw();
-  canvas20->cd(8);
-  pad8->Draw();
-  canvas20->cd(9);
-  pad9->Draw();
-  canvas20->cd(10);
-  pad10->Draw();
-  canvas20->cd(11);
-  pad11->Draw();
-  canvas20->cd(12);
-  pad12->Draw();
-  canvas20->cd(13);
-  pad13->Draw();
-  canvas20->cd(14);
-  pad14->Draw();
-  canvas20->cd(15);
-  pad15->Draw();
-  canvas20->cd(16);
-  pad16->Draw();
-  canvas20->cd(17);
-  pad17->Draw();
-  canvas20->cd(18);
-  pad18->Draw();
-  canvas20->cd(19);
-  pad19->Draw();
-  canvas20->cd(20);
-  pad20->Draw();
+  //TCanvas *canvas20 = new TCanvas("canvas20","canvas20", 1920, 1080);
+  //canvas20->Divide(5,4);
+  //canvas20->cd(1);
+  //pad1->Draw();
+  //canvas20->cd(2);
+  //pad2->Draw();
+  //canvas20->cd(3);
+  //pad3->Draw();
+  //canvas20->cd(4);
+  //pad4->Draw();
+  //canvas20->cd(5);
+  //pad5->Draw();
+  //canvas20->cd(6);
+  //pad6->Draw();
+  //canvas20->cd(7);
+  //pad7->Draw();
+  //canvas20->cd(8);
+  //pad8->Draw();
+  //canvas20->cd(9);
+  //pad9->Draw();
+  //canvas20->cd(10);
+  //pad10->Draw();
+  //canvas20->cd(11);
+  //pad11->Draw();
+  //canvas20->cd(12);
+  //pad12->Draw();
+  //canvas20->cd(13);
+  //pad13->Draw();
+  //canvas20->cd(14);
+  //pad14->Draw();
+  //canvas20->cd(15);
+  //pad15->Draw();
+  //canvas20->cd(16);
+  //pad16->Draw();
+  //canvas20->cd(17);
+  //pad17->Draw();
+  //canvas20->cd(18);
+  //pad18->Draw();
+  //canvas20->cd(19);
+  //pad19->Draw();
+  //canvas20->cd(20);
+  //pad20->Draw();
 
   canvas->Write();
   canvas1->Write();
@@ -699,7 +699,7 @@ void Sigma_NoScatt(){
   gr18->Write();
   gr19->Write();
   gr20->Write();
-  canvas20->Write();
+  //canvas20->Write();
   f3.Write();
 
 }
