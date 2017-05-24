@@ -197,7 +197,7 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
     RecKinPion = LPion4VectorKin(RecKinProtonPi); // Get Pion 4 vector from 4 momenta conservation
     ThetaPiRec = (RecKinPion.Theta())*TMath::RadToDeg();
     PhiPiRec = (RecKinPion.Phi())*TMath::RadToDeg();
-    ThetaPiRecDiff = abs(ThetaPiRec - Thetan);
+    ThetaPiRecDiff = ThetaPiRec - Thetan;
 
     // Gamma(n,p)Pi (Pion detected correct)
     // Assume proton track is pion and "neutron" track is from proton
@@ -206,7 +206,7 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
     RecKinPPi = LPion4VectorKin(RecKinPionP); // Get Proton 4 vector from 4 momenta conservation
     ThetapRec = (RecKinPPi.Theta())*TMath::RadToDeg();
     PhipRec = (RecKinPPi.Phi())*TMath::RadToDeg();
-    ThetapRecDiff = abs (ThetapRec - Thetan);
+    ThetapRecDiff = ThetapRec - Thetan;
 
     KinEDiff = KinEp - EpCorr;
 
@@ -229,6 +229,7 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
 
     if(Cut_proton -> IsInside(EpCorr, dEp) == kFALSE) continue; // If E loss correct proton is NOT inside p banana drop out
     if(Cut_protonKinGood -> IsInside(KinEp, dEp) == kFALSE) continue; // If KinE proton is NOT inside p banana drop out
+    if ((MMpEpCorr < 800 == kTRUE) || (MMpEpCorr > 1100 == kTRUE)) continue; // Force a missing mass cut
     if (ScattTheta > 60) continue;
 
     FillHists(); // Fill histograms with data generated
@@ -317,7 +318,7 @@ PNeutPol_Polarimeter_Lin::PNeutPol_Polarimeter_Lin() // Define a load of histogr
   EpKin = new GH1 ("EpKin", "Ep Calculated from Ep/Thetap", 100, 0, 500);
   EpCorrected = new GH1 ("EpCorrected", "Ep Corrected for Energy Loss in Polarimeter ", 100, 0, 500);
   OAngle = new GH1 ("OAngle", "Opening Angle between P and N Vectors", 180, 0, 180);
-  WCZnRecon = new GH1 ("WCZnRecon", "WCZ Hit Position from Reconstructed n Vector", 200, 0, 400);
+  WCZnRecon = new GH1 ("WCZnRecon", "WCZ Hit Position from Reconstructed n Vector", 200, -400, 400);
 
   ThetaSc =  new GH1( "Theta_Scattered", "Scattered Proton Theta Distribution in Rotated Frame", 180, 0, 180);
   PhiSc = new GH1( "Phi_Scattered", "Scattered Proton Phi Distribution in Rotated Frame", 90, -180, 180 );
@@ -497,18 +498,23 @@ PNeutPol_Polarimeter_Lin::PNeutPol_Polarimeter_Lin() // Define a load of histogr
 
   ThetanDist = new GH1 ("ThetanDist", "#theta_{n} Distribution", 200, 0, 180);
   ThetanRecDist = new GH1 ("ThetanRecDist", "Reconstructed #theta_{n} Distribution", 200, 0, 180);
-  ThetanDiffDist = new GH1 ("ThetanDiffDist", "Difference Between #theta_{n} and  #theta_{nRec}", 200, 0, 180);
-  ThetanDiffZp = new GH2 ("ThetanDiffZp", "Diff(#theta_{n} - #theta_{nRec}) as a Fn of Z_{p}", 200, 0, 180, 200, -100, 100);
+  ThetanDiffDist = new GH1 ("ThetanDiffDist", "Difference Between #theta_{n} and  #theta_{nRec}", 200, -90, 90);
+  ThetanDiffZp = new GH2 ("ThetanDiffZp", "Diff(#theta_{n} - #theta_{nRec}) as a Fn of Z_{p}", 200, -90, 90, 200, -100, 100);
+
   ThetanCorrDist = new GH1 ("ThetanCorrDist", "#theta_{nCorr} Distribution", 200, 0, 180);
-  ThetanCorrDiffDist = new GH1 ("ThetanCorrDiffDist", "Difference Between #theta_{n} and #theta_{nCorr} Distribution", 200, 0, 180);
-  ThetanCorrRecDiffDist = new GH1 ("ThetanCorrRecDiffDist", "Difference Between #theta_{nCorr} and  #theta_{nRec}", 200, 0, 180);
-  ThetanCorrDiffZp = new GH2 ("ThetanCorrDiffZp", "Diff(#theta_{nCorr} - #theta_{nRec}) as a Fn of Z_{p}", 200, 0, 180, 200, -100, 100);
-  ThetaRecPiDiff = new GH1 ("ThetaRecPiDiff", "Difference between #theta_{#pi Rec} and #theta_{n}", 200, 0, 180);
-  ThetanThetaRecPi = new GH2 ("ThetanThetaRecPi", "#theta_{n} vs #theta_{#pi Rec}", 100, 0, 180, 100, 0, 180);
-  ThetanThetaRecPiDiff = new GH2 ("ThetanThetaRecPiDiff", "#theta_{n} vs (#theta_{#pi Rec} - #theta_{n})", 100, 0, 180, 100, 0, 180);
-  ThetaRecPDiff = new GH1 ("ThetaRecPDiff", "Difference between #theta_{pRec} and #theta_{n}", 200, 0, 180);
+  ThetanCorrDiffDist = new GH1 ("ThetanCorrDiffDist", "Difference Between #theta_{n} and #theta_{nCorr} Distribution", 200, -90, 90);
+  ThetanCorrRecDiffDist = new GH1 ("ThetanCorrRecDiffDist", "Difference Between #theta_{nCorr} and  #theta_{nRec}", 200, -90, 90);
+  ThetanCorrDiffZp = new GH2 ("ThetanCorrDiffZp", "Diff(#theta_{nCorr} - #theta_{nRec}) as a Fn of Z_{p}", 200, -90, 90, 200, -100, 100);
+
+  ThetaRecPiDiff = new GH1 ("ThetaRecPiDiff", "Difference between #theta_{#pi Rec} and #theta_{n}", 200, -90, 90);
+  ThetanThetaRecPi = new GH2 ("ThetanThetaRecPi", "#theta_{n} vs #theta_{#pi rec}", 100, 0, 180, 100, 0, 180);
+  ThetanThetaRecPiDiff = new GH2 ("ThetanThetaRecPiDiff", "#theta_{n} vs (#theta_{#pi Rec} - #theta_{n})", 100, 0, 180, 100, -90, 90);
+
+  ThetaRecPDiff = new GH1 ("ThetaRecPDiff", "Difference between #theta_{pRec} and #theta_{n}", 200, -90, 90);
   ThetanThetaRecP = new GH2 ("ThetanThetaRecP", "#theta_{n} vs #theta_{pRec}", 100, 0, 180, 100, 0, 180);
-  ThetanThetaRecPDiff = new GH2 ("ThetanThetaRecPDiff", "#theta_{n} vs (#theta_{pRec}  - #theta_{n})", 100, 0, 180, 100, 0, 180);
+  ThetanThetaRecPDiff = new GH2 ("ThetanThetaRecPDiff", "#theta_{n} vs (#theta_{pRec} - #theta_{n})", 100, 0, 180, 100, -90, 90);
+
+  DeutKinPiKin = new GH2 ("DeutKinPiKin", "(#theta_{nRec} - #theta_{n}) vs (#theta_{#pi Rec} - #theta_{n})", 200, -180, 180, 200, -180, 180);
 
   E_dE = new GH2 ("E_dE", "EdE Plot With E Loss Adjustment", 100, 0, 500, 100, 0, 5);
   KinEp_dE = new GH2 ("KinEp_dE", "KinEpdE Plot", 100, 0, 500, 100, 0, 5);
@@ -542,16 +548,26 @@ void PNeutPol_Polarimeter_Lin::FillHists()
 
     ThetanDist->Fill(Thetan, TaggerTime);
     ThetanRecDist->Fill(ThetanRec, TaggerTime);
-    ThetanDiffDist->Fill(abs(Thetan-ThetanRec), TaggerTime);
-    ThetanDiffZp->Fill(abs(Thetan-ThetanRec), Zp, TaggerTime);
+    ThetanDiffDist->Fill(Thetan-ThetanRec, TaggerTime);
+    ThetanDiffZp->Fill(Thetan-ThetanRec, Zp, TaggerTime);
+
     ThetanCorrDist->Fill(ThetanCorr, TaggerTime);
-    ThetanCorrDiffDist->Fill(abs(Thetan-ThetanCorr), TaggerTime);
-    ThetanCorrRecDiffDist->Fill(abs(ThetanCorr-ThetanRec), TaggerTime);
-    ThetanCorrDiffZp ->Fill(abs(ThetanCorr-ThetanRec), Zp, TaggerTime);
-    PhinDiffWCZRec->Fill(WCZnRec, PhinDiff, TaggerTime);
+    ThetanCorrDiffDist->Fill(Thetan-ThetanCorr, TaggerTime);
+    ThetanCorrRecDiffDist->Fill(ThetanCorr-ThetanRec, TaggerTime);
+    ThetanCorrDiffZp ->Fill(ThetanCorr-ThetanRec, Zp, TaggerTime);
+
     ThetaRecPiDiff->Fill(ThetaPiRecDiff, TaggerTime);
     ThetanThetaRecPi->Fill(Thetan, ThetaPiRec, TaggerTime);
     ThetanThetaRecPiDiff->Fill(Thetan, ThetaPiRecDiff, TaggerTime);
+
+    ThetaRecPDiff->Fill(ThetapRecDiff, TaggerTime);
+    ThetanThetaRecP->Fill(Thetan, ThetapRec, TaggerTime);
+    ThetanThetaRecPDiff->Fill(Thetan, ThetapRecDiff, TaggerTime);
+
+    DeutKinPiKin->Fill(ThetanRec-Thetan, ThetaPiRecDiff, TaggerTime);
+
+    PhinDiffWCZRec->Fill(WCZnRec, PhinDiff, TaggerTime);
+
     ThetaRecPDiff->Fill(ThetapRecDiff, TaggerTime);
     ThetanThetaRecP->Fill(Thetan, ThetapRec, TaggerTime);
     ThetanThetaRecPDiff->Fill(Thetan, ThetapRecDiff, TaggerTime);

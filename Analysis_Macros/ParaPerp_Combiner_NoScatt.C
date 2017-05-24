@@ -2,7 +2,7 @@
 
 void ParaPerp_Combiner_NoScatt(){
 
-  TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Para/NoScatt/Physics_Total_Para_NoScatt_6_18_5_17.root"); // Open latest Para file
+  TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Para/NoScatt/Physics_Total_Para_NoScatt_7_23_5_17.root"); // Open latest Para file
 
   TH1D* time_Para = (TH1D*)f->Get("time")->Clone();
   time_Para->SetName("time_Para");
@@ -495,13 +495,16 @@ void ParaPerp_Combiner_NoScatt(){
   TH2D* ThetanThetaRecPDiff_Para = (TH2D*)f->Get("ThetanThetaRecPDiff")->Clone();
   ThetanThetaRecPDiff_Para->SetName("ThetanThetaRecPDiff_Para");
 
+  TH2D* DeutKinPiKin_Para = (TH2D*)f->Get("DeutKinPiKin")->Clone();
+  DeutKinPiKin_Para->SetName("DeutKinPiKin_Para");
+
   ////////////////////////////////////////////////////
   ////////////////////////////////////////////////////
   ///////////////// PARA DONE ////////////////////////
   ////////////////////////////////////////////////////
   ////////////////////////////////////////////////////
 
-  TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Perp/NoScatt/Physics_Total_Perp_NoScatt_6_18_5_17.root"); // Open latest Perp file
+  TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Perp/NoScatt/Physics_Total_Perp_NoScatt_7_23_5_17.root"); // Open latest Perp file
 
   TH1D* time_Perp = (TH1D*)f->Get("time")->Clone();
   time_Perp->SetName("time_Perp");
@@ -994,13 +997,16 @@ void ParaPerp_Combiner_NoScatt(){
   TH2D* ThetanThetaRecPDiff_Perp = (TH2D*)f->Get("ThetanThetaRecPDiff")->Clone();
   ThetanThetaRecPDiff_Perp->SetName("ThetanThetaRecPDiff_Perp");
 
+  TH2D* DeutKinPiKin_Perp = (TH2D*)f->Get("DeutKinPiKin")->Clone();
+  DeutKinPiKin_Perp->SetName("DeutKinPiKin_Perp");
+
   ////////////////////////////////////////////////////
   ////////////////////////////////////////////////////
   ///////////////// PERP DONE ////////////////////////
   ////////////////////////////////////////////////////
   ////////////////////////////////////////////////////
 
-  TFile f2("ParaPerp_NoScatt_Total_6_Combined.root", "RECREATE");
+  TFile f2("ParaPerp_NoScatt_Total_7_Combined.root", "RECREATE");
 
   time_Para->Write();
   time_cut_Para->Write();
@@ -1255,6 +1261,8 @@ void ParaPerp_Combiner_NoScatt(){
   ThetaRecPDiff_Para->Write();
   ThetanThetaRecP_Para->Write();
   ThetanThetaRecPDiff_Para->Write();
+
+  DeutKinPiKin_Para->Write();
 
   ////////////////////////////////////////////////////
   ////////////////////////////////////////////////////
@@ -1515,6 +1523,8 @@ void ParaPerp_Combiner_NoScatt(){
   ThetaRecPDiff_Perp->Write();
   ThetanThetaRecP_Perp->Write();
   ThetanThetaRecPDiff_Perp->Write();
+
+  DeutKinPiKin_Perp->Write();
 
   f2.Write();
 

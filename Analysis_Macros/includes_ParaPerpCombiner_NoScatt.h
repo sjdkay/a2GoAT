@@ -291,6 +291,8 @@ TH1D* ThetaRecPDiff_Para;
 TH2D* ThetanThetaRecP_Para;
 TH2D* ThetanThetaRecPDiff_Para;
 
+TH2D* DeutKinPiKin_Para;
+
 TH1D* time_Perp;
 TH1D* time_cut_Perp;
 
@@ -533,6 +535,8 @@ TH1D* ThetanCorrDist_Perp;
 TH1D* ThetanCorrDiffDist_Perp;
 TH1D* ThetanCorrRecDiffDist_Perp;
 TH2D* ThetanCorrDiffZp_Perp;
+
+TH2D* DeutKinPiKin_Perp;
 
 TH2D* E_dE_Perp;
 TH2D* KinEp_dE_Perp;
