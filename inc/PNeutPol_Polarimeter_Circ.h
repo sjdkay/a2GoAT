@@ -213,6 +213,8 @@ private:
   GH2* PhinDiffWCZRec;
   GH2* ThetaDiffPhiDiff;
 
+  GH2* DeutKinPiKin;
+
   GH1* ThetaRecPiDiff;
   GH2* ThetanThetaRecPi;
   GH2* ThetanThetaRecPiDiff;

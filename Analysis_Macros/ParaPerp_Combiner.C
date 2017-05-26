@@ -2,7 +2,7 @@
 
 void ParaPerp_Combiner(){
 
-  TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Para/Physics_Total_Para_13_16_5_17.root"); // Open latest Para file
+  TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Para/Physics_Total_Para_14_24_5_17.root"); // Open latest Para file
 
   TH1D* time_Para = (TH1D*)f->Get("time")->Clone();
   time_Para->SetName("time_Para");
@@ -368,6 +368,8 @@ void ParaPerp_Combiner(){
   E_KinEp_Para->SetName("E_KinEp_Para");
   TH2D* PhinDiffWCZRec_Para = (TH2D*)f->Get("PhinDiffWCZRec")->Clone();
   PhinDiffWCZRec_Para->SetName(" PhinDiffWCZRec_Para");
+  TH2D* DeutKinPiKin_Para = (TH2D*)f->Get("DeutKinPiKin")->Clone();
+  DeutKinPiKin_Para->SetName(" DeutKinPiKin_Para");
 
   ////////////////////////////////////////////////////
   ////////////////////////////////////////////////////
@@ -375,7 +377,7 @@ void ParaPerp_Combiner(){
   ////////////////////////////////////////////////////
   ////////////////////////////////////////////////////
 
-  TFile *f1 = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Perp/Physics_Total_Perp_13_16_5_17.root"); // Open latest Para file
+  TFile *f1 = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Perp/Physics_Total_Perp_14_24_5_17.root"); // Open latest Para file
 
   TH1D* time_Perp = (TH1D*)f1->Get("time")->Clone();
   time_Perp->SetName("time_Perp");
@@ -741,6 +743,8 @@ void ParaPerp_Combiner(){
   E_KinEp_Perp->SetName("E_KinEp_Perp");
   TH2D* PhinDiffWCZRec_Perp = (TH2D*)f1->Get("PhinDiffWCZRec")->Clone();
   PhinDiffWCZRec_Perp->SetName(" PhinDiffWCZRec_Perp");
+  TH2D* DeutKinPiKin_Perp = (TH2D*)f->Get("DeutKinPiKin")->Clone();
+  DeutKinPiKin_Perp->SetName(" DeutKinPiKin_Perp");
 
   ////////////////////////////////////////////////////
   ////////////////////////////////////////////////////
@@ -748,7 +752,7 @@ void ParaPerp_Combiner(){
   ////////////////////////////////////////////////////
   ////////////////////////////////////////////////////
 
-  TFile f2("ParaPerp_Total_13_Combined.root", "RECREATE");
+  TFile f2("ParaPerp_Total_14_Combined.root", "RECREATE");
 
   time_Para->Write();
   time_cut_Para->Write();
@@ -927,6 +931,7 @@ void ParaPerp_Combiner(){
   ThetaScPhiSc_Para->Write();
   E_KinEp_Para->Write();
   PhinDiffWCZRec_Para->Write();
+  DeutKinPiKin_Para->Write();
 
   ////////////////////////////////////////////////////
   ////////////////////////////////////////////////////
@@ -1111,6 +1116,7 @@ void ParaPerp_Combiner(){
   ThetaScPhiSc_Perp->Write();
   E_KinEp_Perp->Write();
   PhinDiffWCZRec_Perp->Write();
+  DeutKinPiKin_Perp->Write();
 
   f2.Write();
 

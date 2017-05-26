@@ -220,7 +220,7 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
 
     if(Cut_proton -> IsInside(EpCorr, dEp) == kFALSE) continue; // If E loss correct proton is NOT inside p banana drop out
     if(Cut_protonKinGood -> IsInside(KinEp, dEp) == kFALSE) continue; // If KinE proton is NOT inside p banana drop out
-    if ((MMpEpCorr < 800 == kTRUE) || (MMpEpCorr > 1100 == kTRUE)) continue; // Force a missing mass cut
+    if (((MMpEpCorr < 800) == kTRUE) || ((MMpEpCorr > 1100) == kTRUE)) continue; // Force a missing mass cut
     if (ScattTheta > 60) continue;
     //if ( (ThetanRec-Thetan < -20 == kTRUE) || (ThetanRec-Thetan > 20 == kTRUE)) continue;
 
@@ -376,6 +376,8 @@ PNeutPol_Polarimeter_Circ::PNeutPol_Polarimeter_Circ() // Define a load of histo
   ThetanThetaRecP = new GH2 ("ThetanThetaRecP", "Thetan vs ThetaPRec", 100, 0, 180, 100, 0, 180);
   ThetanThetaRecPDiff = new GH2 ("ThetanThetaRecPDiff", "Thetan vs (ThetaPRec - Thetan)", 100, 0, 180, 100, 0, 180);
 
+  DeutKinPiKin = new GH2 ("DeutKinPiKin", "(#theta_{nRec} - #theta_{n}) vs (#theta_{#pi Rec} - #theta_{n})", 200, -180, 180, 200, -180, 180);
+
   E_dE = new GH2 ("E_dE", "EdE Plot With E Loss Adjustment", 100, 0, 500, 100, 0, 5);
   KinEp_dE = new GH2 ("KinEp_dE", "KinEpdE Plot", 100, 0, 500, 100, 0, 5);
   //KinEp_dE_GoodCut = new GH2 ("KinEp_dE_GoodCut", "KinEpdE Plot With Good Proton Cut", 100, 0, 500, 100, 0, 5);
@@ -413,6 +415,8 @@ void PNeutPol_Polarimeter_Circ::FillHists()
     ThetanThetaRecP->Fill(Thetan, ThetapRec, TaggerTime);
     ThetanThetaRecPDiff->Fill(Thetan, ThetapRecDiff, TaggerTime);
     ThetaDiffPhiDiff->Fill((abs(Thetan-ThetanRec)), (abs(Phin-PhinRec)), TaggerTime );
+
+    DeutKinPiKin->Fill(ThetanRec-Thetan, ThetaPiRecDiff, TaggerTime);
 
     ThetaSc -> Fill(ScattTheta, TaggerTime);
     PhiSc -> Fill(ScattPhi, TaggerTime);

@@ -229,7 +229,7 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
 
     if(Cut_proton -> IsInside(EpCorr, dEp) == kFALSE) continue; // If E loss correct proton is NOT inside p banana drop out
     if(Cut_protonKinGood -> IsInside(KinEp, dEp) == kFALSE) continue; // If KinE proton is NOT inside p banana drop out
-    if ((MMpEpCorr < 800 == kTRUE) || (MMpEpCorr > 1100 == kTRUE)) continue; // Force a missing mass cut
+    if (((MMpEpCorr < 800) == kTRUE) || ((MMpEpCorr > 1100) == kTRUE)) continue; // Force a missing mass cut
     if (ScattTheta > 60) continue;
 
     FillHists(); // Fill histograms with data generated

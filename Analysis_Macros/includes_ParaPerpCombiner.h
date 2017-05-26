@@ -214,6 +214,7 @@ TH2D* KinEp_dE_Para;
 TH2D* ThetaScPhiSc_Para;
 TH2D* E_KinEp_Para;
 TH2D* PhinDiffWCZRec_Para;
+TH2D* DeutKinPiKin_Para;
 
 TH1D* time_Perp;
 TH1D* time_cut_Perp;
@@ -392,3 +393,4 @@ TH2D* KinEp_dE_Perp;
 TH2D* ThetaScPhiSc_Perp;
 TH2D* E_KinEp_Perp;
 TH2D* PhinDiffWCZRec_Perp;
+TH2D* DeutKinPiKin_Perp;

@@ -17,6 +17,10 @@ message(STATUS "*** Compiler Flags:  " ${DEFAULT_COMPILE_FLAGS})
 message(STATUS "*** Install libs to: " ${LIBRARY_OUTPUT_PATH})
 message(STATUS "*** Install bin to:  " ${EXECUTABLE_OUTPUT_PATH})
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+find_package(APLCON REQUIRED)
+include_directories(${APLCON_INCLUDE_DIR})
+
 # require a fairly recent ROOT version
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 find_package(ROOT "5.30" REQUIRED)
@@ -135,7 +139,7 @@ add_executable(pi0-example
    src/PPi0Example.cc
    src/pi0_example_main.cc
    )
-target_link_libraries(pi0-example ${LIBS} ${ROOT_LIBRARIES})
+target_link_libraries(pi0-example ${LIBS} ${ROOT_LIBRARIES} ${APLCON_LIBRARIES})
 
 add_executable(NeutPol
    ${GOAT_BASE}
@@ -146,7 +150,7 @@ add_executable(NeutPol
    src/PNeutPol.cc
    src/NeutPol_main.cc
    )
-target_link_libraries(NeutPol ${LIBS} ${ROOT_LIBRARIES})
+target_link_libraries(NeutPol ${LIBS} ${ROOT_LIBRARIES} ${APLCON_LIBRARIES})
 
 add_executable(NeutPol_NoPID
    ${GOAT_BASE}
@@ -157,7 +161,7 @@ add_executable(NeutPol_NoPID
    src/PNeutPol_NoPID.cc
    src/NeutPol_NoPID_main.cc
    )
-target_link_libraries(NeutPol_NoPID ${LIBS} ${ROOT_LIBRARIES})
+target_link_libraries(NeutPol_NoPID ${LIBS} ${ROOT_LIBRARIES} ${APLCON_LIBRARIES})
 
 add_executable(NeutPol_Polarimeter_Circ
    ${GOAT_BASE}
@@ -168,7 +172,7 @@ add_executable(NeutPol_Polarimeter_Circ
    src/PNeutPol_Polarimeter_Circ.cc
    src/NeutPol_Polarimeter_Circ_main.cc
    )
-target_link_libraries(NeutPol_Polarimeter_Circ ${LIBS} ${ROOT_LIBRARIES})
+target_link_libraries(NeutPol_Polarimeter_Circ ${LIBS} ${ROOT_LIBRARIES} ${APLCON_LIBRARIES})
 
 add_executable(NeutPol_Polarimeter_Lin
    ${GOAT_BASE}
@@ -179,7 +183,7 @@ add_executable(NeutPol_Polarimeter_Lin
    src/PNeutPol_Polarimeter_Lin.cc
    src/NeutPol_Polarimeter_Lin_main.cc
    )
-target_link_libraries(NeutPol_Polarimeter_Lin ${LIBS} ${ROOT_LIBRARIES})
+target_link_libraries(NeutPol_Polarimeter_Lin ${LIBS} ${ROOT_LIBRARIES} ${APLCON_LIBRARIES})
 
 add_executable(NeutPol_Polarimeter_Lin_NoScatt
    ${GOAT_BASE}
@@ -190,7 +194,7 @@ add_executable(NeutPol_Polarimeter_Lin_NoScatt
    src/PNeutPol_Polarimeter_Lin_NoScatt.cc
    src/NeutPol_Polarimeter_Lin_NoScatt_main.cc
    )
-target_link_libraries(NeutPol_Polarimeter_Lin_NoScatt ${LIBS} ${ROOT_LIBRARIES})
+target_link_libraries(NeutPol_Polarimeter_Lin_NoScatt ${LIBS} ${ROOT_LIBRARIES} ${APLCON_LIBRARIES})
 
 add_executable(ProtPol
    ${GOAT_BASE}
@@ -201,7 +205,7 @@ add_executable(ProtPol
    src/PProtPol.cc
    src/ProtPol_main.cc
    )
-target_link_libraries(ProtPol ${LIBS} ${ROOT_LIBRARIES})
+target_link_libraries(ProtPol ${LIBS} ${ROOT_LIBRARIES} ${APLCON_LIBRARIES} ${APLCON_LIBRARIES})
 
 add_executable(1pi0
    ${GOAT_BASE}
@@ -212,7 +216,7 @@ add_executable(1pi0
    src/P1pi0.cc
    src/1pi0_main.cc
    )
-target_link_libraries(1pi0 ${LIBS} ${ROOT_LIBRARIES})
+target_link_libraries(1pi0 ${LIBS} ${ROOT_LIBRARIES} ${APLCON_LIBRARIES})
 
 add_executable(2pi0
    ${GOAT_BASE}
@@ -245,7 +249,7 @@ add_executable(PolTest
    src/PPolTest.cc
    src/PolTest_main.cc
    )
-target_link_libraries(PolTest ${LIBS} ${ROOT_LIBRARIES})
+target_link_libraries(PolTest ${LIBS} ${ROOT_LIBRARIES} ${APLCON_LIBRARIES})
 
 add_executable(PiPolTest
    ${GOAT_BASE}
@@ -256,7 +260,7 @@ add_executable(PiPolTest
    src/PPiPolTest.cc
    src/PiPolTest_main.cc
    )
-target_link_libraries(PiPolTest ${LIBS} ${ROOT_LIBRARIES})
+target_link_libraries(PiPolTest ${LIBS} ${ROOT_LIBRARIES} ${APLCON_LIBRARIES})
 
 # install some scripts to the bin directory
 # by creating symlinks
