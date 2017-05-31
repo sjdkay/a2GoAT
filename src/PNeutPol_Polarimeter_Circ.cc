@@ -40,7 +40,7 @@ Bool_t	PNeutPol_Polarimeter_Circ::Start()
   Md = 1875.613; //Mass of Deuterium in MeV
   Mpi = 139.57018; // Mass of charged pion in MeV
   Deut = TLorentzVector (0., 0., 0., 1875.613); // 4-Vector of Deuterium target, assume at rest
-  Neut = TLorentzVector (0., 0., 0., 939.565); // 4-Vector of Deuterium target, assume at rest
+  Neut = TLorentzVector (0., 0., 0., 939.565); // 4-Vector of Neutron target, assume at rest
 
   Cut_CB_proton = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Proton_11_05_17.root", "Proton"); // These will need adjusting with new Acqu files
   Cut_proton = Cut_CB_proton;
@@ -222,7 +222,6 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
     if(Cut_protonKinGood -> IsInside(KinEp, dEp) == kFALSE) continue; // If KinE proton is NOT inside p banana drop out
     if (((MMpEpCorr < 800) == kTRUE) || ((MMpEpCorr > 1100) == kTRUE)) continue; // Force a missing mass cut
     if (ScattTheta > 60) continue;
-    //if ( (ThetanRec-Thetan < -20 == kTRUE) || (ThetanRec-Thetan > 20 == kTRUE)) continue;
 
     FillHists(); // Fill histograms with data generated
     }

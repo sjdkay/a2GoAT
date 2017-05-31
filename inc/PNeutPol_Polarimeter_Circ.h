@@ -5,6 +5,7 @@
 #include <fstream>
 #include <cstdio>
 #include <string>
+#include <APLCON.hpp>
 using namespace std;
 #include "GTreeManager.h"
 #include "PPhysics.h"
@@ -240,6 +241,62 @@ protected:
     virtual void    ProcessEvent();
     virtual void    ProcessScalerRead();
     virtual Bool_t  Write();
+
+      // lightweight structure for linking to fitter
+    struct FitParticle{
+        void SetFromVector(const TLorentzVector& p_) {
+            Ek = p_.E()-p_.M();
+            Theta = p_.Theta();
+            Phi = p_.Phi();
+        }
+
+        static TLorentzVector Make(const std::vector<double>& EkThetaPhi,
+        const Double_t m);
+        static TLorentzVector Make(const FitParticle& p, const Double_t m) {
+            return Make(std::vector<double>{p.Ek, p.Theta, p.Phi}, m);
+        }
+
+    std::vector<double*> Link() {
+        return {std::addressof(Ek),
+        std::addressof(Theta),
+        std::addressof(Phi)};
+    }
+        std::vector<double*> LinkSigma() {
+        return {std::addressof(Ek_Sigma),
+        std::addressof(Theta_Sigma),
+        std::addressof(Phi_Sigma)};
+    }
+
+    std::vector<APLCON::Variable_Settings_t> LinkSettings()
+    {
+        return{Ek_Setting, Theta_Setting, Phi_Setting};
+    }
+
+    void Smear(std::vector<double> unc , int particle);
+
+    void APLCONSettings();
+
+    double Ek;
+    double Ek_Sigma;
+    APLCON::Variable_Settings_t Ek_Setting;
+    double Theta;
+    double Theta_Sigma;
+    APLCON::Variable_Settings_t Theta_Setting;
+    double Phi;
+    double Phi_Sigma;
+    APLCON::Variable_Settings_t Phi_Setting;
+
+    bool isCB;
+
+    private:
+        static std::default_random_engine generator;
+
+    };
+
+    FitParticle beamF;
+    FitParticle protonF;
+    FitParticle neutronF;
+    //APLCON kinfit("EMcons", settings);
 
 public:
 

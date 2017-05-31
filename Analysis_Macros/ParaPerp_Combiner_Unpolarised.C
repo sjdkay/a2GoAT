@@ -2,7 +2,7 @@
 
 void ParaPerp_Combiner_Unpolarised() {
 
-    TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Para/Physics_Total_Para_14_24_5_17.root"); // Open latest Para file
+    TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Para/Physics_Total_Para_15_26_5_17.root"); // Open latest Para file
 
     TH1D* time_Para = (TH1D*)f->Get("time")->Clone();
     time_Para->SetName("time_Para");
@@ -127,7 +127,7 @@ void ParaPerp_Combiner_Unpolarised() {
     ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////
 
-    TFile *f1 = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Perp/Physics_Total_Perp_14_24_5_17.root"); // Open latest Para file
+    TFile *f1 = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Perp/Physics_Total_Perp_15_26_5_17.root"); // Open latest Para file
 
     TH1D* time_Perp = (TH1D*)f1->Get("time")->Clone();
     time_Perp->SetName("time_Perp");
@@ -652,7 +652,7 @@ void ParaPerp_Combiner_Unpolarised() {
     DeutKinPiKin = new TH2D ("DeutKinPiKin", "(#theta_{nRec} - #theta_{n}) vs (#theta_{#pi Rec} - #theta_{n})", 200, -180, 180, 200, -180, 180);
     DeutKinPiKin->Merge(list55);
 
-    TFile f2("ParaPerp_Total_14_Combined_Unpolarised.root", "RECREATE");
+    TFile f2("ParaPerp_Total_15_Combined_Unpolarised.root", "RECREATE");
 
     time->Write();
     time_cut->Write();

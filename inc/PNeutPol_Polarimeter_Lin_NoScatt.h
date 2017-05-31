@@ -27,6 +27,7 @@ private:
   Int_t NRoo;
   Int_t NTag;
   Int_t NTrack;
+  Int_t EventNum;
 
   Int_t Detectors1;
   Int_t Detectors2;
@@ -35,8 +36,9 @@ private:
 
   double_t Time;
   double_t TaggerTime;
+  double_t Timep;
+  double_t Timen;
   double_t EGamma;
-  double_t B;
   double_t Mn;
   double_t Mp;
   double_t Md;
@@ -44,32 +46,43 @@ private:
   double_t z1;
   double_t z2;
   double_t ln;
+  double_t Xp;
+  double_t Yp;
   double_t Zp;
   double_t Zn;
+  double_t Thp;
+  double_t ThpRad;
+  double_t Thn;
+  double_t Php;
+  double_t PhpRad;
+  double_t Phn;
   double_t WC1pX;
   double_t WC1pY;
   double_t WC1pZ;
+  double_t WC1nX;
+  double_t WC1nY;
+  double_t WC1nZ;
   double_t WCThetap;
   double_t WCThetapRad;
+  double_t WCThetan;
   double_t WCPhip;
   double_t WCPhipRad;
-  double_t Thetap;
-  double_t ThetapRad;
+  double_t WCPhin;
+  double_t WCZnRec;
   double_t ThetapCM;
   double_t CosThetapCM;
   double_t Thetan;
   double_t ThetapRec;
   double_t ThetanRec;
   double_t ThetaPiRec;
-  double_t Phip;
-  double_t PhipRad;
-  double_t Phin;
+  double_t Pp;
   double_t Pn;
+  double_t PpKin;
   double_t PhipRec;
   double_t PhinRec;
-  double_t WCZnRec;
   double_t PhiPiRec;
   double_t ThetaWCn;
+  double_t PhiDiff;
   double_t ThetaPiRecDiff;
   double_t ThetapRecDiff;
   double_t Ep;
@@ -78,6 +91,12 @@ private:
   double_t EnKinCalc;
   double_t dEp;
   double_t dEn;
+  double_t ScattX;
+  double_t ScattY;
+  double_t ScattZ;
+  double_t ScattThetaLab;
+  double_t ScattTheta;
+  double_t ScattPhi;
   double_t KinEp;
   double_t KinEpPi;
   double_t KinPi;
@@ -85,13 +104,13 @@ private:
   double_t EpDiff;
   double_t EpCorr;
   double_t EpTot;
-  double_t Pp;
   double_t Ppx;
   double_t Ppy;
   double_t Ppz;
   double_t MMpEpCorr;
   double_t OpeningAngle;
-  double_t PhiDiff;
+  double_t ThetanDiff;
+  double_t PhinDiff;
   double_t Ncor1;
   double_t Ncor2;
   double_t Ncor3;
@@ -103,16 +122,18 @@ private:
   Bool_t Proton1;
   Bool_t Proton2;
 
+  TLorentzVector B;
   TLorentzVector GVp;
   TLorentzVector GVn;
-  TLorentzVector GVpB;
+  TLorentzVector GVpCorr;
+  TLorentzVector GVpCorrB;
   TLorentzVector GVnCorr;
   TLorentzVector Gamma;
   TLorentzVector Deut;
   TLorentzVector Neut;
-  TLorentzVector N4VectCorr;
   TLorentzVector P4Vect;
   TLorentzVector N4Vect;
+  TLorentzVector N4VectCorr;
   TLorentzVector Pi4Vect;
   TLorentzVector RecKinProton;
   TLorentzVector RecKinNeutron;
@@ -123,10 +144,12 @@ private:
   TLorentzVector RecProtonEpCorr;
   TLorentzVector RecNeutronEpCorr;
   TVector3 b;
-  TVector3 GVp3;
-  TVector3 GVn3;
+  TVector3 pVertex;
+  TVector3 GVpCorr3;
+  TVector3 GVnCorr3;
   TVector3 GVn3Rec;
   TVector3 WC3Vectp;
+  TVector3 WC3Vectn;
   TVector3 P3Vect;
   TVector3 N3Vect;
   TVector3 RecProtonEpCorr3;
@@ -137,6 +160,7 @@ private:
 
   GH1* EkSum;
   GH1* Eg;
+  GH1* PhiDifference;
   GH1* EpKin;
   GH1* EpCorrected;
   GH1* EpKinEpCorrDiff;
@@ -145,7 +169,6 @@ private:
   GH1* MMpEpCorrected;
   GH1* OAngle;
   GH1* WCZnRecon;
-  GH1* PhipPhinDiff;
 
   GH1* MMp200300;
   GH1* MMp300400;
@@ -411,7 +434,6 @@ protected:
     virtual void    ProcessScalerRead();
     virtual Bool_t  Write();
 
-
     // lightweight structure for linking to fitter
     struct FitParticle{
         void SetFromVector(const TLorentzVector& p_) {
@@ -467,7 +489,6 @@ protected:
     FitParticle protonF;
     FitParticle neutronF;
     //APLCON kinfit("EMcons", settings);
-
 
 public:
 

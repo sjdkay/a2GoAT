@@ -5,6 +5,7 @@
 #include <fstream>
 #include <cstdio>
 #include <string>
+#include <APLCON.hpp>
 using namespace std;
 #include "GTreeManager.h"
 #include "PPhysics.h"
@@ -33,8 +34,9 @@ private:
 
   double_t Time;
   double_t TaggerTime;
+  double_t Timep;
+  double_t Timen;
   double_t EGamma;
-  double_t B;
   double_t Mn;
   double_t Mp;
   double_t Md;
@@ -42,8 +44,16 @@ private:
   double_t z1;
   double_t z2;
   double_t ln;
+  double_t Xp;
+  double_t Yp;
   double_t Zp;
   double_t Zn;
+  double_t Thp;
+  double_t ThpRad;
+  double_t Thn;
+  double_t Php;
+  double_t PhpRad;
+  double_t Phn;
   double_t WC1pX;
   double_t WC1pY;
   double_t WC1pZ;
@@ -57,23 +67,20 @@ private:
   double_t WCPhipRad;
   double_t WCPhin;
   double_t WCZnRec;
-  double_t Thetap;
-  double_t ThetapRad;
   double_t ThetapCM;
   double_t CosThetapCM;
   double_t Thetan;
   double_t ThetapRec;
   double_t ThetanRec;
   double_t ThetaPiRec;
-  double_t Phip;
-  double_t PhipRad;
-  double_t Phin;
+  double_t Pp;
   double_t Pn;
+  double_t PpKin;
   double_t PhipRec;
   double_t PhinRec;
   double_t PhiPiRec;
   double_t ThetaWCn;
-  double_t PhiWCDiff;
+  double_t PhiDiff;
   double_t ThetaPiRecDiff;
   double_t ThetapRecDiff;
   double_t Ep;
@@ -95,7 +102,6 @@ private:
   double_t EpDiff;
   double_t EpCorr;
   double_t EpTot;
-  double_t Pp;
   double_t Ppx;
   double_t Ppy;
   double_t Ppz;
@@ -114,9 +120,11 @@ private:
   Bool_t Proton1;
   Bool_t Proton2;
 
+  TLorentzVector B;
   TLorentzVector GVp;
   TLorentzVector GVn;
-  TLorentzVector GVpB;
+  TLorentzVector GVpCorr;
+  TLorentzVector GVpCorrB;
   TLorentzVector GVnCorr;
   TLorentzVector Gamma;
   TLorentzVector Deut;
@@ -134,8 +142,9 @@ private:
   TLorentzVector RecProtonEpCorr;
   TLorentzVector RecNeutronEpCorr;
   TVector3 b;
-  TVector3 GVp3;
-  TVector3 GVn3;
+  TVector3 pVertex;
+  TVector3 GVpCorr3;
+  TVector3 GVnCorr3;
   TVector3 GVn3Rec;
   TVector3 WC3Vectp;
   TVector3 WC3Vectn;
@@ -149,7 +158,7 @@ private:
 
   GH1* EkSum;
   GH1* Eg;
-  GH1* WCPhiDifference;
+  GH1* PhiDifference;
   GH1* EpKin;
   GH1* EpCorrected;
   GH1* EpKinEpCorrDiff;
@@ -366,6 +375,62 @@ protected:
     virtual void    ProcessEvent();
     virtual void    ProcessScalerRead();
     virtual Bool_t  Write();
+
+    // lightweight structure for linking to fitter
+    struct FitParticle{
+        void SetFromVector(const TLorentzVector& p_) {
+            Ek = p_.E()-p_.M();
+            Theta = p_.Theta();
+            Phi = p_.Phi();
+        }
+
+        static TLorentzVector Make(const std::vector<double>& EkThetaPhi,
+        const Double_t m);
+        static TLorentzVector Make(const FitParticle& p, const Double_t m) {
+            return Make(std::vector<double>{p.Ek, p.Theta, p.Phi}, m);
+        }
+
+    std::vector<double*> Link() {
+        return {std::addressof(Ek),
+        std::addressof(Theta),
+        std::addressof(Phi)};
+    }
+        std::vector<double*> LinkSigma() {
+        return {std::addressof(Ek_Sigma),
+        std::addressof(Theta_Sigma),
+        std::addressof(Phi_Sigma)};
+    }
+
+    std::vector<APLCON::Variable_Settings_t> LinkSettings()
+    {
+        return{Ek_Setting, Theta_Setting, Phi_Setting};
+    }
+
+    void Smear(std::vector<double> unc , int particle);
+
+    void APLCONSettings();
+
+    double Ek;
+    double Ek_Sigma;
+    APLCON::Variable_Settings_t Ek_Setting;
+    double Theta;
+    double Theta_Sigma;
+    APLCON::Variable_Settings_t Theta_Setting;
+    double Phi;
+    double Phi_Sigma;
+    APLCON::Variable_Settings_t Phi_Setting;
+
+    bool isCB;
+
+    private:
+        static std::default_random_engine generator;
+
+    };
+
+    FitParticle beamF;
+    FitParticle protonF;
+    FitParticle neutronF;
+    //APLCON kinfit("EMcons", settings);
 
 public:
 

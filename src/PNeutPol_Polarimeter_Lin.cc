@@ -11,229 +11,248 @@ PNeutPol_Polarimeter_Lin::~PNeutPol_Polarimeter_Lin()
 
 Bool_t	PNeutPol_Polarimeter_Lin::Init()
 {
-  cout << "Initialising physics analysis..." << endl;
-  cout << "--------------------------------------------------" << endl << endl;
+    cout << "Initialising physics analysis..." << endl;
+    cout << "--------------------------------------------------" << endl << endl;
 
-  if(!InitBackgroundCuts()) return kFALSE;
-  if(!InitTargetMass()) return kFALSE;
-  if(!InitTaggerChannelCuts()) return kFALSE;
-  if(!InitTaggerScalers()) return kFALSE;
-  cout << "--------------------------------------------------" << endl;
-  return kTRUE;
+    if(!InitBackgroundCuts()) return kFALSE;
+    if(!InitTargetMass()) return kFALSE;
+    if(!InitTaggerChannelCuts()) return kFALSE;
+    if(!InitTaggerScalers()) return kFALSE;
+    cout << "--------------------------------------------------" << endl;
+    return kTRUE;
 }
 
 Bool_t	PNeutPol_Polarimeter_Lin::Start()
 {
-  if(!IsGoATFile())
-  {
+    if(!IsGoATFile())
+    {
     cout << "ERROR: Input File is not a GoAT file." << endl;
     return kFALSE;
-  }
+    }
 
-  SetAsPhysicsFile();
+    SetAsPhysicsFile();
 
-  NP = 0; // Set number of Protons to 0 before checking
-  NPi = 0; // Set number of pions to 0 before checking
-  NRoo = 0; // Set number of Rootinos to 0 before checking
-  Mn = 939.565; // Mass of neutron in MeV
-  Mp = 938.272; // Mass of proton in MeV
-  Md = 1875.613; //Mass of Deuterium in MeV
-  Mpi = 139.57018; // Mass of charged pion in MeV
-  Deut = TLorentzVector (0., 0., 0., 1875.613); // 4-Vector of Deuterium target, assume at rest
-  Neut = TLorentzVector (0., 0., 0., 939.565); // 4-Vector of Deuterium target, assume at rest
+    NP = 0; // Set number of Protons to 0 before checking
+    NPi = 0; // Set number of pions to 0 before checking
+    NRoo = 0; // Set number of Rootinos to 0 before checking
+    Mn = 939.565; // Mass of neutron in MeV
+    Mp = 938.272; // Mass of proton in MeV
+    Md = 1875.613; //Mass of Deuterium in MeV
+    Mpi = 139.57018; // Mass of charged pion in MeV
+    Deut = TLorentzVector (0., 0., 0., 1875.613); // 4-Vector of Deuterium target, assume at rest
+    Neut = TLorentzVector (0., 0., 0., 939.565); // 4-Vector of Deuterium target, assume at rest
 
-  Cut_CB_proton = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Proton_11_05_17.root", "Proton"); // These will need adjusting with new Acqu files
-  Cut_proton = Cut_CB_proton;
-  Cut_CB_pion = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Pion_29_07_15.root", "Pion");
-  Cut_pion = Cut_CB_pion;
-  Cut_CB_protonKinGood = OpenCutFile("configfiles/cuts/CB_DeltaE-E_ProtonKinGood_11_05_17.root", "ProtonKinGood"); // These will need adjusting with new Acqu files
-  Cut_protonKinGood = Cut_CB_protonKinGood;
-  Cut_CB_protonKinBad = OpenCutFile("configfiles/cuts/CB_DeltaE-E_ProtonKinBad_15_12_16.root", "ProtonKinBad");
-  Cut_protonKinBad = Cut_CB_protonKinBad;
-  cout << endl;
+    Cut_CB_proton = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Proton_11_05_17.root", "Proton"); // These will need adjusting with new Acqu files
+    Cut_proton = Cut_CB_proton;
+    Cut_CB_pion = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Pion_29_07_15.root", "Pion");
+    Cut_pion = Cut_CB_pion;
+    Cut_CB_protonKinGood = OpenCutFile("configfiles/cuts/CB_DeltaE-E_ProtonKinGood_11_05_17.root", "ProtonKinGood"); // These will need adjusting with new Acqu files
+    Cut_protonKinGood = Cut_CB_protonKinGood;
+    Cut_CB_protonKinBad = OpenCutFile("configfiles/cuts/CB_DeltaE-E_ProtonKinBad_15_12_16.root", "ProtonKinBad");
+    Cut_protonKinBad = Cut_CB_protonKinBad;
+    cout << endl;
 
-  TraverseValidEvents(); // This loops over each event as in old file and calls ProcessEvent() each loop
+    TraverseValidEvents(); // This loops over each event as in old file and calls ProcessEvent() each loop
 
-  return kTRUE;
+    return kTRUE;
 }
 
 void	PNeutPol_Polarimeter_Lin::ProcessEvent()
 {
 
-  NTrack = GetTracks()->GetNTracks();
-  NP = GetProtons()->GetNParticles();
-  NPi = GetChargedPions()->GetNParticles();
-  NRoo = GetRootinos()->GetNParticles();
-  NTag = GetTagger()->GetNTagged();
-  if (NRoo !=0) return; // Goes to next event if any "rootinos" found
-  if (NTrack !=2) return; // Ensures two track event
-  Detectors1 = GetTracks()->GetDetectors(0); //Gets number for detectors that registered hits
-  Detectors2 = GetTracks()->GetDetectors(1); // 7 = NaI + PID + MWPC, 5 = NaI + MWPC
+    NTrack = GetTracks()->GetNTracks();
+    NP = GetProtons()->GetNParticles();
+    NPi = GetChargedPions()->GetNParticles();
+    NRoo = GetRootinos()->GetNParticles();
+    NTag = GetTagger()->GetNTagged();
+    if (NRoo !=0) return; // Goes to next event if any "rootinos" found
+    if (NTrack !=2) return; // Ensures two track event
+    Detectors1 = GetTracks()->GetDetectors(0); //Gets number for detectors that registered hits
+    Detectors2 = GetTracks()->GetDetectors(1); // 7 = NaI + PID + MWPC, 5 = NaI + MWPC
 
-  //Condition is to now keep any ALL + CB/MWPC events
-  //If track 1 only gives signals in CB it is the neutron
+    //Condition is to now keep any ALL + CB/MWPC events
+    //If track 1 only gives signals in CB it is the neutron
 
-  if((Detectors1 == 7) && (Detectors2 == 5))
-  {
-    Proton1 = kTRUE;
-    Proton2 = kFALSE;
-    if (GetTracks()->GetMWPC0Energy(0) == 0) return; // If no hit in first chamber for p drop out
-    if (GetTracks()->GetMWPC0Energy(1) == 0) return; // If no hit in first chamber for n drop out
-  }
+    if((Detectors1 == 7) && (Detectors2 == 5))
+    {
+        Proton1 = kTRUE;
+        Proton2 = kFALSE;
+        if (GetTracks()->GetMWPC0Energy(0) == 0) return; // If no hit in first chamber for p drop out
+        if (GetTracks()->GetMWPC0Energy(1) == 0) return; // If no hit in first chamber for n drop out
+    }
 
-  // If track 2 only gives signals in MWPC and CB it is the neutron
-  else if((Detectors1 == 5) && (Detectors2 == 7))
-  {
-    Proton1 = kFALSE;
-    Proton2 = kTRUE;
-    if (GetTracks()->GetMWPC0Energy(1) == 0) return; // If no hit in first chamber for p drop out
-    if (GetTracks()->GetMWPC0Energy(0) == 0) return; // If no hit in first chamber for n drop out
-  }
+// If track 2 only gives signals in MWPC and CB it is the neutron
+    else if((Detectors1 == 5) && (Detectors2 == 7))
+    {
+        Proton1 = kFALSE;
+        Proton2 = kTRUE;
+        if (GetTracks()->GetMWPC0Energy(1) == 0) return; // If no hit in first chamber for p drop out
+        if (GetTracks()->GetMWPC0Energy(0) == 0) return; // If no hit in first chamber for n drop out
+    }
 
-  // Drop out on ANY other condition (for now)
-  else
-  {
-    return;
-  }
+// Drop out on ANY other condition (for now)
+    else
+    {
+        return;
+    }
 
-  EventNum = GetEventNumber();
+    EventNum = GetEventNumber();
 
-  if (Proton1 == kTRUE)
-  {
-    GVp = GetTracks()->GetVector(0, Mp);
-    GVn = GetTracks()->GetVector(1, Mn);
-    Zp = GetTracks()->GetPseudoVertexZ(0); // First particle is proton, second neutron
-    Zn = GetTracks()->GetPseudoVertexZ(1);
-    Ep = GetTracks()->GetClusterEnergy(0);
-    En = GetTracks()->GetClusterEnergy(1);
-    dEp = GetTracks()->GetVetoEnergy(0);
-    dEn = GetTracks()->GetVetoEnergy(1);
-    WC1pX = GetTracks()->GetMWPC0PosX(0);
-    WC1pY = GetTracks()->GetMWPC0PosY(0);
-    WC1pZ = GetTracks()->GetMWPC0PosZ(0);
-    WC1nX = GetTracks()->GetMWPC0PosX(1);
-    WC1nY = GetTracks()->GetMWPC0PosY(1);
-    WC1nZ = GetTracks()->GetMWPC0PosZ(1);
-  }
+    if (Proton1 == kTRUE)
+    {
+        GVp = GetTracks()->GetVector(0, Mp);
+        GVn = GetTracks()->GetVector(1, Mn);
+        Timep = GetTracks->GetTime(0);
+        Timen = GetTracks->GetTime(1);
+        Thp = GetTracks()->GetTheta(0);
+        ThpRad = GetTracks()->GetThetaRad(0);
+        Thn = GetTracks()->GetTheta(1);
+        Php = GetTracks()->GetPhi(0);
+        PhpRad = GetTracks()->GetPhiRad(0);
+        Phn = GetTracks()->GetPhi(1);
+        Xp = GetTracks()->GetPseudoVertexX(0);
+        Yp = GetTracks()->GetPseudoVertexY(0);
+        Zp = GetTracks()->GetPseudoVertexZ(0); // First particle is proton, second neutron
+        Zn = GetTracks()->GetPseudoVertexZ(1);
+        Ep = GetTracks()->GetClusterEnergy(0);
+        En = GetTracks()->GetClusterEnergy(1);
+        dEp = GetTracks()->GetVetoEnergy(0);
+        dEn = GetTracks()->GetVetoEnergy(1);
+        WC1pX = GetTracks()->GetMWPC0PosX(0);
+        WC1pY = GetTracks()->GetMWPC0PosY(0);
+        WC1pZ = GetTracks()->GetMWPC0PosZ(0);
+        WC1nX = GetTracks()->GetMWPC0PosX(1);
+        WC1nY = GetTracks()->GetMWPC0PosY(1);
+        WC1nZ = GetTracks()->GetMWPC0PosZ(1);
+    }
 
-  else if (Proton2 == kTRUE)
-  {
-    GVp = GetTracks()->GetVector(1, Mp);
-    GVn = GetTracks()->GetVector(0, Mn);
-    Zp = GetTracks()->GetPseudoVertexZ(1); // First particle is neutron, second is proton
-    Zn = GetTracks()->GetPseudoVertexZ(0);
-    Ep = GetTracks()->GetClusterEnergy(1); // Therefore the quantity mmp is the amount of missing mass we see when we do a kinematics calculation USING the proton
-    En = GetTracks()->GetClusterEnergy(0);
-    dEp = GetTracks()->GetVetoEnergy(1);
-    dEn = GetTracks()->GetVetoEnergy(0);
-    WC1pX = GetTracks()->GetMWPC0PosX(1);
-    WC1pY = GetTracks()->GetMWPC0PosY(1);
-    WC1pZ = GetTracks()->GetMWPC0PosZ(1);
-    WC1nX = GetTracks()->GetMWPC0PosX(0);
-    WC1nY = GetTracks()->GetMWPC0PosY(0);
-    WC1nZ = GetTracks()->GetMWPC0PosZ(0);
-  }
+    else if (Proton2 == kTRUE)
+    {
+        GVp = GetTracks()->GetVector(1, Mp);
+        GVn = GetTracks()->GetVector(0, Mn);
+        Timep = GetTracks->GetTime(1);
+        Timen = GetTracks->GetTime(0);
+        Thp = GetTracks()->GetTheta(1);
+        ThpRad = GetTracks()->GetThetaRad(1);
+        Thn = GetTracks()->GetTheta(0);
+        Php = GetTracks()->GetPhi(1);
+        PhpRad = GetTracks()->GetPhiRad(1);
+        Phn = GetTracks()->GetPhi(0);
+        Xp = GetTracks()->GetPseudoVertexX(1);
+        Yp = GetTracks()->GetPseudoVertexY(1);
+        Zp = GetTracks()->GetPseudoVertexZ(1); // First particle is neutron, second is proton
+        Zn = GetTracks()->GetPseudoVertexZ(0);
+        Ep = GetTracks()->GetClusterEnergy(1); // Therefore the quantity mmp is the amount of missing mass we see when we do a kinematics calculation USING the proton
+        En = GetTracks()->GetClusterEnergy(0);
+        dEp = GetTracks()->GetVetoEnergy(1);
+        dEn = GetTracks()->GetVetoEnergy(0);
+        WC1pX = GetTracks()->GetMWPC0PosX(1);
+        WC1pY = GetTracks()->GetMWPC0PosY(1);
+        WC1pZ = GetTracks()->GetMWPC0PosZ(1);
+        WC1nX = GetTracks()->GetMWPC0PosX(0);
+        WC1nY = GetTracks()->GetMWPC0PosY(0);
+        WC1nZ = GetTracks()->GetMWPC0PosZ(0);
+    }
 
-  else
-  {
-    return;
-  }
+    else
+    {
+        return;
+    }
 
-  GVp3 = GVp.Vect(); // Generate some 3-vectors from the 4-vectors we have
-  GVn3 = GVn.Vect();
-  WC3Vectp.SetXYZ(WC1pX, WC1pY, WC1pZ);
-  WC3Vectn.SetXYZ(WC1nX, WC1nY, WC1nZ);
-  WCThetap = WC3Vectp.Theta()*TMath::RadToDeg(); // Angles from WC hit positons
-  WCThetapRad = WC3Vectp.Theta();
-  WCPhip = WC3Vectp.Phi()*TMath::RadToDeg();
-  WCPhipRad = WC3Vectp.Phi();
-  WCThetan = WC3Vectn.Theta()*TMath::RadToDeg();
-  WCPhin = WC3Vectn.Phi()*TMath::RadToDeg();
-  PhiWCDiff = abs (WCPhip-WCPhin);
+    PhiDiff = abs (Php-Phn);
 
-  //if( Zp > 60 || Zp < -60) return; // Particles selected out from other parts tend to be inside anyway, skip this?
-  //if( Zp > 200 || Zp < 150) return; // Select out windows
+    if( Zp > 60 || Zp < -60) return; // Particles selected out from other parts tend to be inside anyway, skip this?
+    if ( PhiDiff > 195 || PhiDiff < 165) return;
 
-  //if ( PhiWCDiff > 195 || PhiWCDiff < 165) return;
+    EpCorr = EpPolCorrect(Ep, Thp); //correct Ep for energy loss in polarimeter
 
-  for (Int_t j = 0; j < GetTagger()->GetNTagged(); j++)
-  {
+    if(Cut_proton -> IsInside(EpCorr, dEp) == kFALSE) return; // If E loss correct proton is NOT inside p banana drop out
 
-    TaggerTime = GetTagger()->GetTaggedTime(j); // Get tagged time for event
-    EGamma = (GetTagger()->GetTaggedEnergy(j)); // Get Photon energy for event
-    Gamma = TLorentzVector (0., 0., EGamma , EGamma); // 4-Vector of Photon beam
-    B = (Deut + Gamma).Beta(); // Calculate Lorentz Beta
-    b = TVector3(0., 0., B); // Define boost vector
-    GVpB = GVp;
-    GVpB.Boost(b); // Boost GVp to CM frame
-    ThetapCM = (GVpB.Theta())*TMath::RadToDeg(); // Get Theta of proton in CM frame
-    CosThetapCM = cos (ThetapCM * TMath::DegToRad());
-
-    Thetap = GVp3.Theta()*TMath::RadToDeg(); // Lab frame angles for proton/neutron
-    ThetapRad = GVp3.Theta();
-    Phip = GVp3.Phi()*TMath::RadToDeg();
-    PhipRad = GVp3.Phi();
-    Thetan = GVn3.Theta()*TMath::RadToDeg();
-    Phin = GVn3.Phi()*TMath::RadToDeg();
-    Pn = sqrt (TMath::Power((En + Mn ),2) - TMath::Power(Mn,2));
-    EpCorr = EpPolCorrect(Ep, Thetap);
     EpDiff = abs(EpCorr - Ep);
 
-    GVnCorr =  LNeutron4VectorCorr(Zp, GVn, En, Pp , Mn, Phin);
+    Pp = sqrt (TMath::Power((Mp + EpCorr),2) - TMath::Power(Mp,2));
+    Pn = sqrt (TMath::Power((En + Mn ),2) - TMath::Power(Mn,2));
+    GVpCorr = TLorentzVector(Pp*sin(Thp)*cos(Php), Pp*sin(Thp)*sin(Php), Pp*cos(Thp), EpCorr+Mp);
+
+    GVnCorr =  LNeutron4VectorCorr(Zp, GVn, En, Pn , Mn, Phn);
     ThetanCorr = (GVnCorr.Theta())*TMath::RadToDeg();
 
-    // Gamma(d,p)n
-    KinEp = CalcKinEnergy(Thetap, EGamma, Md, 0., Mp, Mn); // Calculate kin E of proton assuming pn production
-    RecKinProton = LProton4VectorKin(KinEp, ThetapRad, PhipRad);
-    RecKinNeutron = LNeutron4VectorKin(RecKinProton);
-    ThetanRec = (RecKinNeutron.Theta()) * TMath::RadToDeg();
-    PhinRec = (RecKinNeutron.Phi()) * TMath::RadToDeg();
-    WCZnRec = 72/tan(RecKinNeutron.Theta());
+    WC3Vectp.SetXYZ(WC1pX, WC1pY, WC1pZ);
+    WC3Vectn.SetXYZ(WC1nX, WC1nY, WC1nZ);
+    WCThetap = WC3Vectp.Theta()*TMath::RadToDeg(); // Angles from WC hit positons
+    WCThetapRad = WC3Vectp.Theta();
+    WCPhip = WC3Vectp.Phi()*TMath::RadToDeg();
+    WCPhipRad = WC3Vectp.Phi();
+    WCThetan = WC3Vectn.Theta()*TMath::RadToDeg();
+    WCPhin = WC3Vectn.Phi()*TMath::RadToDeg();
 
-    // Gamma(n,p)Pi (P detected correct)
-    // Assume proton track is proton and "neutron" track is from charged pion
-    KinEpPi = CalcKinEnergy(Thetap, EGamma, Mn, 0, Mp, Mpi); // Calculate kin E of proton assuming g(n, p) pi
-    RecKinProtonPi = LProton4VectorKin(KinEpPi, ThetapRad, PhipRad); // Get Proton 4 vector from calculated kin E
-    RecKinPion = LPion4VectorKin(RecKinProtonPi); // Get Pion 4 vector from 4 momenta conservation
-    ThetaPiRec = (RecKinPion.Theta())*TMath::RadToDeg();
-    PhiPiRec = (RecKinPion.Phi())*TMath::RadToDeg();
-    ThetaPiRecDiff = ThetaPiRec - Thetan;
+    GVpCorr3 = GVpCorr.Vect();
+    GVnCorr3 = GVnCorr.Vect();
+    pVertex = TVector3(Xp, Yp, Zp);
 
-    // Gamma(n,p)Pi (Pion detected correct)
-    // Assume proton track is pion and "neutron" track is from proton
-    KinPi = CalcKinEnergy(Thetap, EGamma, Mn, 0, Mpi, Mp); // Calculate kin E of pion
-    RecKinPionP = LProton4VectorKin(KinPi, ThetapRad, PhipRad); // Get Pion 4 vector from calculated kinE
-    RecKinPPi = LPion4VectorKin(RecKinPionP); // Get Proton 4 vector from 4 momenta conservation
-    ThetapRec = (RecKinPPi.Theta())*TMath::RadToDeg();
-    PhipRec = (RecKinPPi.Phi())*TMath::RadToDeg();
-    ThetapRecDiff = ThetapRec - Thetan;
+    for (Int_t j = 0; j < GetTagger()->GetNTagged(); j++)
+    {
+        TaggerTime = GetTagger()->GetTaggedTime(j); // Get tagged time for event
+        EGamma = (GetTagger()->GetTaggedEnergy(j)); // Get Photon energy for event
+        Gamma = TLorentzVector (0., 0., EGamma , EGamma); // 4-Vector of Photon beam
+        B = (Deut + Gamma);
+        b = -1*B.BoostVector();
+        GVpCorrB = GVp;
+        GVpCorrB.Boost(b); // Boost GVp to CM frame
+        ThetapCM = (GVpCorrB.Theta())*TMath::RadToDeg(); // Get Theta of proton in CM frame
+        CosThetapCM = cos (GVpCorrB.Theta());
 
-    KinEDiff = KinEp - EpCorr;
+        // Gamma(d,p)n
+        KinEp = CalcKinEnergy(Thp, EGamma, Md, 0., Mp, Mn); // Calculate kin E of proton assuming pn production
+        RecKinProton = LProton4VectorKin(KinEp, ThpRad, PhpRad);
+        RecKinNeutron = LNeutron4VectorKin(RecKinProton);
+        ThetanRec = (RecKinNeutron.Theta()) * TMath::RadToDeg();
+        PhinRec = (RecKinNeutron.Phi()) * TMath::RadToDeg();
+        WCZnRec = 72/tan(RecKinNeutron.Theta());
 
-    RecProtonEpCorr = LProton4VectorKin(EpCorr, ThetapRad, PhipRad);
-    RecNeutronEpCorr = LNeutron4VectorKin(RecProtonEpCorr);
-    MMpEpCorr = RecNeutronEpCorr.M();
-    RecProtonEpCorr3 = RecProtonEpCorr.Vect();
-    RecNeutronEpCorr3 = RecNeutronEpCorr.Vect();
+        // Gamma(n,p)Pi (P detected correct)
+        // Assume proton track is proton and "neutron" track is from charged pion
+        KinEpPi = CalcKinEnergy(Thp, EGamma, Mn, 0, Mp, Mpi); // Calculate kin E of proton assuming g(n, p) pi
+        RecKinProtonPi = LProton4VectorKin(KinEpPi, ThpRad, PhpRad); // Get Proton 4 vector from calculated kin E
+        RecKinPion = LPion4VectorKin(RecKinProtonPi); // Get Pion 4 vector from 4 momenta conservation
+        ThetaPiRec = (RecKinPion.Theta())*TMath::RadToDeg();
+        PhiPiRec = (RecKinPion.Phi())*TMath::RadToDeg();
+        ThetaPiRecDiff = ThetaPiRec - Thetan;
 
-    P3Vect = RecKinProton.Vect();
-    N3Vect = RecKinNeutron.Vect();
-    OpeningAngle = (N3Vect.Angle(GVn3))*TMath::RadToDeg();
+        // Gamma(n,p)Pi (Pion detected correct)
+        // Assume proton track is pion and "neutron" track is from proton
+        KinPi = CalcKinEnergy(Thp, EGamma, Mn, 0, Mpi, Mp); // Calculate kin E of pion
+        RecKinPionP = LProton4VectorKin(KinPi, ThpRad, PhpRad); // Get Pion 4 vector from calculated kinE
+        RecKinPPi = LPion4VectorKin(RecKinPionP); // Get Proton 4 vector from 4 momenta conservation
+        ThetapRec = (RecKinPPi.Theta())*TMath::RadToDeg();
+        PhipRec = (RecKinPPi.Phi())*TMath::RadToDeg();
+        ThetapRecDiff = ThetapRec - Thetan;
 
-    ThetanDiff = abs(ThetanRec - WCThetan);
-    PhinDiff = abs(PhinRec - WCPhin);
+        KinEDiff = KinEp - EpCorr;
 
-    TVector3 ScattAngles = ScatteredFrameAngles(RecNeutronEpCorr3, GVp3, GVn3, Gamma);
-    ScattTheta = ScattAngles(0); // Theta is 1st component in vector fn returns above
-    ScattPhi = ScattAngles(1); // Phi is 2nd component
+        RecProtonEpCorr = LProton4VectorKin(EpCorr, ThpRad, PhpRad);
+        RecNeutronEpCorr = LNeutron4VectorKin(RecProtonEpCorr);
+        MMpEpCorr = RecNeutronEpCorr.M();
+        RecProtonEpCorr3 = RecProtonEpCorr.Vect();
+        RecNeutronEpCorr3 = RecNeutronEpCorr.Vect();
 
-    if(Cut_proton -> IsInside(EpCorr, dEp) == kFALSE) continue; // If E loss correct proton is NOT inside p banana drop out
-    if(Cut_protonKinGood -> IsInside(KinEp, dEp) == kFALSE) continue; // If KinE proton is NOT inside p banana drop out
-    if (((MMpEpCorr < 800) == kTRUE) || ((MMpEpCorr > 1100) == kTRUE)) continue; // Force a missing mass cut
-    if (ScattTheta > 60) continue;
+        P3Vect = RecKinProton.Vect();
+        N3Vect = RecKinNeutron.Vect();
+        OpeningAngle = (N3Vect.Angle(GVnCorr3))*TMath::RadToDeg();
 
-    FillHists(); // Fill histograms with data generated
-  }
+        ThetanDiff = abs(ThetanRec - WCThetan);
+        PhinDiff = abs(PhinRec - WCPhin);
+
+        TVector3 ScattAngles = ScatteredFrameAngles(RecNeutronEpCorr3, GVpCorr3, GVnCorr3, Gamma);
+        ScattTheta = ScattAngles(0); // Theta is 1st component in vector fn returns above
+        ScattPhi = ScattAngles(1); // Phi is 2nd component
+
+        if(Cut_protonKinGood -> IsInside(KinEp, dEp) == kFALSE) continue; // If KinE proton is NOT inside p banana drop out
+        if (((MMpEpCorr < 800) == kTRUE) || ((MMpEpCorr > 1100) == kTRUE)) continue; // Force a missing mass cut
+        if (ScattTheta > 60) continue;
+
+        FillHists(); // Fill histograms with data generated
+    }
 }
 
 void	PNeutPol_Polarimeter_Lin::ProcessScalerRead()
@@ -244,24 +263,24 @@ void	PNeutPol_Polarimeter_Lin::ProcessScalerRead()
 
 TCutG*	PNeutPol_Polarimeter_Lin::OpenCutFile(Char_t* filename, Char_t* cutname)
 {
-  CutFile = new TFile(filename, "READ");
+    CutFile = new TFile(filename, "READ");
 
-  if( !CutFile || !CutFile->IsOpen() ) {
+    if( !CutFile || !CutFile->IsOpen() ) {
     cerr << "Can't open cut file: " << filename << endl;
     throw false;
     }
 
-  CutFile->GetObject(cutname, Cut);
+    CutFile->GetObject(cutname, Cut);
 
-  if( !Cut ) {
+    if( !Cut ) {
     cerr << "Could not find a TCutG with the name " << cutname << " in " << filename << endl;
     throw false;
-  }
+    }
 
-  TCutG* Cut_clone = Cut;
-  CutFile->Close();
-  cout << "cut file " << filename << " opened (Cut-name = " << cutname << ")"<< endl;
-  return Cut_clone;
+    TCutG* Cut_clone = Cut;
+    CutFile->Close();
+    cout << "cut file " << filename << " opened (Cut-name = " << cutname << ")"<< endl;
+    return Cut_clone;
 }
 
 TLorentzVector PNeutPol_Polarimeter_Lin::LNeutron4VectorCorr(Double_t ZVert, TLorentzVector n4Vector, Double_t nE, Double_t MagP, Double_t nMass, Double_t nPhi)
@@ -280,10 +299,10 @@ TLorentzVector PNeutPol_Polarimeter_Lin::LNeutron4VectorCorr(Double_t ZVert, TLo
 TLorentzVector PNeutPol_Polarimeter_Lin::LProton4VectorKin(Double_t KinE, Double_t Theta, Double_t Phi)
 {
     EpTot = KinE + Mp;
-    Pp = sqrt (TMath::Power(EpTot,2) - TMath::Power(Mp,2));
-    Ppx = Pp*sin(Theta)*cos(Phi);
-    Ppy = Pp*sin(Theta)*sin(Phi);
-    Ppz = Pp*cos(Theta);
+    PpKin = sqrt (TMath::Power(EpTot,2) - TMath::Power(Mp,2));
+    Ppx = PpKin*sin(Theta)*cos(Phi);
+    Ppy = PpKin*sin(Theta)*sin(Phi);
+    Ppz = PpKin*cos(Theta);
     P4Vect.SetE(EpTot);
     P4Vect.SetPx(Ppx);
     P4Vect.SetPy(Ppy);
@@ -314,7 +333,7 @@ PNeutPol_Polarimeter_Lin::PNeutPol_Polarimeter_Lin() // Define a load of histogr
   time_cut = new TH1D("time_cut", 	"time_cut", 	1400, -700, 700);
 
   Eg = new GH1( "Eg", "Photon Energy Distribution", 200, 100, 1600);
-  WCPhiDifference = new GH1 ("WCPhiDifference", "WC Phi Difference Between p and n", 180, 0, 360);
+  PhiDifference = new GH1 ("PhiDifference", "#phi_{Diff} Between p and n", 180, 0, 360);
   EpKin = new GH1 ("EpKin", "Ep Calculated from Ep/Thetap", 100, 0, 500);
   EpCorrected = new GH1 ("EpCorrected", "Ep Corrected for Energy Loss in Polarimeter ", 100, 0, 500);
   OAngle = new GH1 ("OAngle", "Opening Angle between P and N Vectors", 180, 0, 180);
@@ -543,33 +562,33 @@ void PNeutPol_Polarimeter_Lin::FillHists()
     WCZnRecon->Fill(WCZnRec, TaggerTime);
     ZpDist->Fill(Zp, TaggerTime);
 
-    WCPhiDifference->Fill(PhiWCDiff);
+    PhiDifference->Fill(PhiDiff);
     E_KinEp->Fill(EpCorr, KinEp, TaggerTime);
 
-    ThetanDist->Fill(Thetan, TaggerTime);
+    ThetanDist->Fill(Thn, TaggerTime);
     ThetanRecDist->Fill(ThetanRec, TaggerTime);
     ThetanDiffDist->Fill(Thetan-ThetanRec, TaggerTime);
-    ThetanDiffZp->Fill(Thetan-ThetanRec, Zp, TaggerTime);
+    ThetanDiffZp->Fill(Thn-ThetanRec, Zp, TaggerTime);
 
     ThetanCorrDist->Fill(ThetanCorr, TaggerTime);
-    ThetanCorrDiffDist->Fill(Thetan-ThetanCorr, TaggerTime);
+    ThetanCorrDiffDist->Fill(Thn-ThetanCorr, TaggerTime);
     ThetanCorrRecDiffDist->Fill(ThetanCorr-ThetanRec, TaggerTime);
     ThetanCorrDiffZp ->Fill(ThetanCorr-ThetanRec, Zp, TaggerTime);
 
     ThetaRecPiDiff->Fill(ThetaPiRecDiff, TaggerTime);
-    ThetanThetaRecPi->Fill(Thetan, ThetaPiRec, TaggerTime);
-    ThetanThetaRecPiDiff->Fill(Thetan, ThetaPiRecDiff, TaggerTime);
+    ThetanThetaRecPi->Fill(Thn, ThetaPiRec, TaggerTime);
+    ThetanThetaRecPiDiff->Fill(Thn, ThetaPiRecDiff, TaggerTime);
 
     ThetaRecPDiff->Fill(ThetapRecDiff, TaggerTime);
-    ThetanThetaRecP->Fill(Thetan, ThetapRec, TaggerTime);
-    ThetanThetaRecPDiff->Fill(Thetan, ThetapRecDiff, TaggerTime);
+    ThetanThetaRecP->Fill(Thn, ThetapRec, TaggerTime);
+    ThetanThetaRecPDiff->Fill(Thn, ThetapRecDiff, TaggerTime);
 
-    DeutKinPiKin->Fill(ThetanRec-Thetan, ThetaPiRecDiff, TaggerTime);
+    DeutKinPiKin->Fill(ThetanRec-Thn, ThetaPiRecDiff, TaggerTime);
 
     PhinDiffWCZRec->Fill(WCZnRec, PhinDiff, TaggerTime);
 
     ThetaRecPDiff->Fill(ThetapRecDiff, TaggerTime);
-    ThetanThetaRecP->Fill(Thetan, ThetapRec, TaggerTime);
+    ThetanThetaRecP->Fill(Thn, ThetapRec, TaggerTime);
     ThetanThetaRecPDiff->Fill(Thetan, ThetapRecDiff, TaggerTime);
 
     ThetaSc -> Fill(ScattTheta, TaggerTime);
@@ -623,43 +642,43 @@ void PNeutPol_Polarimeter_Lin::FillHists()
         PhiSc410->Fill(ScattPhi, TaggerTime);
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
-            Phip410CM1->Fill(WCPhip, TaggerTime);
+            Phip410CM1->Fill(Php, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
-            Phip410CM2->Fill(WCPhip, TaggerTime);
+            Phip410CM2->Fill(Php, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
-            Phip410CM3->Fill(WCPhip, TaggerTime);
+            Phip410CM3->Fill(Php, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
-            Phip410CM4->Fill(WCPhip, TaggerTime);
+            Phip410CM4->Fill(Php, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
-            Phip410CM5->Fill(WCPhip, TaggerTime);
+            Phip410CM5->Fill(Php, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip410CM6->Fill(WCPhip, TaggerTime);
+            Phip410CM6->Fill(Php, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip410CM7->Fill(WCPhip, TaggerTime);
+            Phip410CM7->Fill(Php, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip410CM8->Fill(WCPhip, TaggerTime);
+            Phip410CM8->Fill(Php, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip410CM9->Fill(WCPhip, TaggerTime);
+            Phip410CM9->Fill(Php, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip410CM10->Fill(WCPhip, TaggerTime);
+            Phip410CM10->Fill(Php, TaggerTime);
         }
     }
 
@@ -667,43 +686,43 @@ void PNeutPol_Polarimeter_Lin::FillHists()
         PhiSc430->Fill(ScattPhi, TaggerTime);
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
-            Phip430CM1->Fill(WCPhip, TaggerTime);
+            Phip430CM1->Fill(Php, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
-            Phip430CM2->Fill(WCPhip, TaggerTime);
+            Phip430CM2->Fill(Php, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
-            Phip430CM3->Fill(WCPhip, TaggerTime);
+            Phip430CM3->Fill(Php, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
-            Phip430CM4->Fill(WCPhip, TaggerTime);
+            Phip430CM4->Fill(Php, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
-            Phip430CM5->Fill(WCPhip, TaggerTime);
+            Phip430CM5->Fill(Php, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip430CM6->Fill(WCPhip, TaggerTime);
+            Phip430CM6->Fill(Php, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip430CM7->Fill(WCPhip, TaggerTime);
+            Phip430CM7->Fill(Php, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip430CM8->Fill(WCPhip, TaggerTime);
+            Phip430CM8->Fill(Php, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip430CM9->Fill(WCPhip, TaggerTime);
+            Phip430CM9->Fill(Php, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip430CM10->Fill(WCPhip, TaggerTime);
+            Phip430CM10->Fill(Php, TaggerTime);
         }
     }
 
@@ -711,43 +730,43 @@ void PNeutPol_Polarimeter_Lin::FillHists()
         PhiSc450->Fill(ScattPhi, TaggerTime);
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
-            Phip450CM1->Fill(WCPhip, TaggerTime);
+            Phip450CM1->Fill(Php, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
-            Phip450CM2->Fill(WCPhip, TaggerTime);
+            Phip450CM2->Fill(Php, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
-            Phip450CM3->Fill(WCPhip, TaggerTime);
+            Phip450CM3->Fill(Php, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
-            Phip450CM4->Fill(WCPhip, TaggerTime);
+            Phip450CM4->Fill(Php, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
-            Phip450CM5->Fill(WCPhip, TaggerTime);
+            Phip450CM5->Fill(Php, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip450CM6->Fill(WCPhip, TaggerTime);
+            Phip450CM6->Fill(Php, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip450CM7->Fill(WCPhip, TaggerTime);
+            Phip450CM7->Fill(Php, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip450CM8->Fill(WCPhip, TaggerTime);
+            Phip450CM8->Fill(Php, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip450CM9->Fill(WCPhip, TaggerTime);
+            Phip450CM9->Fill(Php, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip450CM10->Fill(WCPhip, TaggerTime);
+            Phip450CM10->Fill(Php, TaggerTime);
         }
     }
 
@@ -755,42 +774,42 @@ void PNeutPol_Polarimeter_Lin::FillHists()
         PhiSc470->Fill(ScattPhi, TaggerTime);
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
-            Phip470CM1->Fill(WCPhip, TaggerTime);
+            Phip470CM1->Fill(Php, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
-            Phip470CM2->Fill(WCPhip, TaggerTime);
+            Phip470CM2->Fill(Php, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
-            Phip470CM3->Fill(WCPhip, TaggerTime);
+            Phip470CM3->Fill(Php, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
-            Phip470CM4->Fill(WCPhip, TaggerTime);
+            Phip470CM4->Fill(Php, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
-            Phip470CM5->Fill(WCPhip, TaggerTime);
+            Phip470CM5->Fill(Php, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip470CM6->Fill(WCPhip, TaggerTime);
+            Phip470CM6->Fill(Php, TaggerTime);
         }
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip470CM7->Fill(WCPhip, TaggerTime);
+            Phip470CM7->Fill(Php, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip470CM8->Fill(WCPhip, TaggerTime);
+            Phip470CM8->Fill(Php, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip470CM9->Fill(WCPhip, TaggerTime);
+            Phip470CM9->Fill(Php, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip470CM10->Fill(WCPhip, TaggerTime);
+            Phip470CM10->Fill(Php, TaggerTime);
         }
     }
 
@@ -798,43 +817,43 @@ void PNeutPol_Polarimeter_Lin::FillHists()
         PhiSc490->Fill(ScattPhi, TaggerTime);
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
-            Phip490CM1->Fill(WCPhip, TaggerTime);
+            Phip490CM1->Fill(Php, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
-            Phip490CM2->Fill(WCPhip, TaggerTime);
+            Phip490CM2->Fill(Php, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
-            Phip490CM3->Fill(WCPhip, TaggerTime);
+            Phip490CM3->Fill(Php, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
-            Phip490CM4->Fill(WCPhip, TaggerTime);
+            Phip490CM4->Fill(Php, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
-            Phip490CM5->Fill(WCPhip, TaggerTime);
+            Phip490CM5->Fill(Php, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip490CM6->Fill(WCPhip, TaggerTime);
+            Phip490CM6->Fill(Php, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip490CM7->Fill(WCPhip, TaggerTime);
+            Phip490CM7->Fill(Php, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip490CM8->Fill(WCPhip, TaggerTime);
+            Phip490CM8->Fill(Php, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip490CM9->Fill(WCPhip, TaggerTime);
+            Phip490CM9->Fill(Php, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip490CM10->Fill(WCPhip, TaggerTime);
+            Phip490CM10->Fill(Php, TaggerTime);
         }
     }
 
@@ -842,43 +861,43 @@ void PNeutPol_Polarimeter_Lin::FillHists()
         PhiSc510->Fill(ScattPhi, TaggerTime);
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
-            Phip510CM1->Fill(WCPhip, TaggerTime);
+            Phip510CM1->Fill(Php, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
-            Phip510CM2->Fill(WCPhip, TaggerTime);
+            Phip510CM2->Fill(Php, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
-            Phip510CM3->Fill(WCPhip, TaggerTime);
+            Phip510CM3->Fill(Php, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
-            Phip510CM4->Fill(WCPhip, TaggerTime);
+            Phip510CM4->Fill(Php, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
-            Phip510CM5->Fill(WCPhip, TaggerTime);
+            Phip510CM5->Fill(Php, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip510CM6->Fill(WCPhip, TaggerTime);
+            Phip510CM6->Fill(Php, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip510CM7->Fill(WCPhip, TaggerTime);
+            Phip510CM7->Fill(Php, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip510CM8->Fill(WCPhip, TaggerTime);
+            Phip510CM8->Fill(Php, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip510CM9->Fill(WCPhip, TaggerTime);
+            Phip510CM9->Fill(Php, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip510CM10->Fill(WCPhip, TaggerTime);
+            Phip510CM10->Fill(Php, TaggerTime);
         }
     }
 
@@ -886,43 +905,43 @@ void PNeutPol_Polarimeter_Lin::FillHists()
         PhiSc530->Fill(ScattPhi, TaggerTime);
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
-            Phip530CM1->Fill(WCPhip, TaggerTime);
+            Phip530CM1->Fill(Php, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
-            Phip530CM2->Fill(WCPhip, TaggerTime);
+            Phip530CM2->Fill(Php, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
-            Phip530CM3->Fill(WCPhip, TaggerTime);
+            Phip530CM3->Fill(Php, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
-            Phip530CM4->Fill(WCPhip, TaggerTime);
+            Phip530CM4->Fill(Php, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
-            Phip530CM5->Fill(WCPhip, TaggerTime);
+            Phip530CM5->Fill(Php, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip530CM6->Fill(WCPhip, TaggerTime);
+            Phip530CM6->Fill(Php, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip530CM7->Fill(WCPhip, TaggerTime);
+            Phip530CM7->Fill(Php, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip530CM8->Fill(WCPhip, TaggerTime);
+            Phip530CM8->Fill(Php, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip530CM9->Fill(WCPhip, TaggerTime);
+            Phip530CM9->Fill(Php, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip530CM10->Fill(WCPhip, TaggerTime);
+            Phip530CM10->Fill(Php, TaggerTime);
         }
     }
 
@@ -930,43 +949,43 @@ void PNeutPol_Polarimeter_Lin::FillHists()
         PhiSc550->Fill(ScattPhi, TaggerTime);
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
-            Phip550CM1->Fill(WCPhip, TaggerTime);
+            Phip550CM1->Fill(Php, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
-            Phip550CM2->Fill(WCPhip, TaggerTime);
+            Phip550CM2->Fill(Php, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
-            Phip550CM3->Fill(WCPhip, TaggerTime);
+            Phip550CM3->Fill(Php, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
-            Phip550CM4->Fill(WCPhip, TaggerTime);
+            Phip550CM4->Fill(Php, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
-            Phip550CM5->Fill(WCPhip, TaggerTime);
+            Phip550CM5->Fill(Php, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip550CM6->Fill(WCPhip, TaggerTime);
+            Phip550CM6->Fill(Php, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip550CM7->Fill(WCPhip, TaggerTime);
+            Phip550CM7->Fill(Php, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip550CM8->Fill(WCPhip, TaggerTime);
+            Phip550CM8->Fill(Php, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip550CM9->Fill(WCPhip, TaggerTime);
+            Phip550CM9->Fill(Php, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip550CM10->Fill(WCPhip, TaggerTime);
+            Phip550CM10->Fill(Php, TaggerTime);
         }
     }
 
@@ -974,43 +993,43 @@ void PNeutPol_Polarimeter_Lin::FillHists()
         PhiSc570->Fill(ScattPhi, TaggerTime);
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
-            Phip570CM1->Fill(WCPhip, TaggerTime);
+            Phip570CM1->Fill(Php, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
-            Phip570CM2->Fill(WCPhip, TaggerTime);
+            Phip570CM2->Fill(Php, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
-            Phip570CM3->Fill(WCPhip, TaggerTime);
+            Phip570CM3->Fill(Php, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
-            Phip570CM4->Fill(WCPhip, TaggerTime);
+            Phip570CM4->Fill(Php, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
-            Phip570CM5->Fill(WCPhip, TaggerTime);
+            Phip570CM5->Fill(Php, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip570CM6->Fill(WCPhip, TaggerTime);
+            Phip570CM6->Fill(Php, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip570CM7->Fill(WCPhip, TaggerTime);
+            Phip570CM7->Fill(Php, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip570CM8->Fill(WCPhip, TaggerTime);
+            Phip570CM8->Fill(Php, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip570CM9->Fill(WCPhip, TaggerTime);
+            Phip570CM9->Fill(Php, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip570CM10->Fill(WCPhip, TaggerTime);
+            Phip570CM10->Fill(Php, TaggerTime);
         }
     }
 
@@ -1018,43 +1037,43 @@ void PNeutPol_Polarimeter_Lin::FillHists()
         PhiSc590->Fill(ScattPhi, TaggerTime);
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
-            Phip590CM1->Fill(WCPhip, TaggerTime);
+            Phip590CM1->Fill(Php, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
-            Phip590CM2->Fill(WCPhip, TaggerTime);
+            Phip590CM2->Fill(Php, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
-            Phip590CM3->Fill(WCPhip, TaggerTime);
+            Phip590CM3->Fill(Php, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
-            Phip590CM4->Fill(WCPhip, TaggerTime);
+            Phip590CM4->Fill(Php, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
-            Phip590CM5->Fill(WCPhip, TaggerTime);
+            Phip590CM5->Fill(Php, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip590CM6->Fill(WCPhip, TaggerTime);
+            Phip590CM6->Fill(Php, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip590CM7->Fill(WCPhip, TaggerTime);
+            Phip590CM7->Fill(Php, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip590CM8->Fill(WCPhip, TaggerTime);
+            Phip590CM8->Fill(Php, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip590CM9->Fill(WCPhip, TaggerTime);
+            Phip590CM9->Fill(Php, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip590CM10->Fill(WCPhip, TaggerTime);
+            Phip590CM10->Fill(Php, TaggerTime);
         }
     }
 
@@ -1062,43 +1081,43 @@ void PNeutPol_Polarimeter_Lin::FillHists()
         PhiSc610->Fill(ScattPhi, TaggerTime);
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
-            Phip610CM1->Fill(WCPhip, TaggerTime);
+            Phip610CM1->Fill(Php, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
-            Phip610CM2->Fill(WCPhip, TaggerTime);
+            Phip610CM2->Fill(Php, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
-            Phip610CM3->Fill(WCPhip, TaggerTime);
+            Phip610CM3->Fill(Php, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
-            Phip610CM4->Fill(WCPhip, TaggerTime);
+            Phip610CM4->Fill(Php, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
-            Phip610CM5->Fill(WCPhip, TaggerTime);
+            Phip610CM5->Fill(Php, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip610CM6->Fill(WCPhip, TaggerTime);
+            Phip610CM6->Fill(Php, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip610CM7->Fill(WCPhip, TaggerTime);
+            Phip610CM7->Fill(Php, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip610CM8->Fill(WCPhip, TaggerTime);
+            Phip610CM8->Fill(Php, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip610CM9->Fill(WCPhip, TaggerTime);
+            Phip610CM9->Fill(Php, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip610CM10->Fill(WCPhip, TaggerTime);
+            Phip610CM10->Fill(Php, TaggerTime);
         }
     }
 
@@ -1106,43 +1125,43 @@ void PNeutPol_Polarimeter_Lin::FillHists()
         PhiSc630->Fill(ScattPhi, TaggerTime);
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
-            Phip630CM1->Fill(WCPhip, TaggerTime);
+            Phip630CM1->Fill(Php, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
-            Phip630CM2->Fill(WCPhip, TaggerTime);
+            Phip630CM2->Fill(Php, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
-            Phip630CM3->Fill(WCPhip, TaggerTime);
+            Phip630CM3->Fill(Php, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
-            Phip630CM4->Fill(WCPhip, TaggerTime);
+            Phip630CM4->Fill(Php, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
-            Phip630CM5->Fill(WCPhip, TaggerTime);
+            Phip630CM5->Fill(Php, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip630CM6->Fill(WCPhip, TaggerTime);
+            Phip630CM6->Fill(Php, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip630CM7->Fill(WCPhip, TaggerTime);
+            Phip630CM7->Fill(Php, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip630CM8->Fill(WCPhip, TaggerTime);
+            Phip630CM8->Fill(Php, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip630CM9->Fill(WCPhip, TaggerTime);
+            Phip630CM9->Fill(Php, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip630CM10->Fill(WCPhip, TaggerTime);
+            Phip630CM10->Fill(Php, TaggerTime);
         }
     }
 }

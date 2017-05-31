@@ -11,210 +11,247 @@ PNeutPol_Polarimeter_Lin_NoScatt::~PNeutPol_Polarimeter_Lin_NoScatt()
 
 Bool_t	PNeutPol_Polarimeter_Lin_NoScatt::Init()
 {
-  cout << "Initialising physics analysis..." << endl;
-  cout << "--------------------------------------------------" << endl << endl;
+    cout << "Initialising physics analysis..." << endl;
+    cout << "--------------------------------------------------" << endl << endl;
 
-  if(!InitBackgroundCuts()) return kFALSE;
-  if(!InitTargetMass()) return kFALSE;
-  if(!InitTaggerChannelCuts()) return kFALSE;
-  if(!InitTaggerScalers()) return kFALSE;
-  cout << "--------------------------------------------------" << endl;
-  return kTRUE;
+    if(!InitBackgroundCuts()) return kFALSE;
+    if(!InitTargetMass()) return kFALSE;
+    if(!InitTaggerChannelCuts()) return kFALSE;
+    if(!InitTaggerScalers()) return kFALSE;
+    cout << "--------------------------------------------------" << endl;
+    return kTRUE;
 }
 
 Bool_t	PNeutPol_Polarimeter_Lin_NoScatt::Start()
 {
-  if(!IsGoATFile())
-  {
-    cout << "ERROR: Input File is not a GoAT file." << endl;
-    return kFALSE;
-  }
+    if(!IsGoATFile())
+    {
+        cout << "ERROR: Input File is not a GoAT file." << endl;
+        return kFALSE;
+    }
 
-  SetAsPhysicsFile();
+    SetAsPhysicsFile();
 
-  k = 0;
-  NP = 0; // Set number of Protons to 0 before checking
-  NPi = 0; // Set number of pions to 0 before checking
-  NRoo = 0; // Set number of Rootinos to 0 before checking
-  Mn = 939.565; // Mass of neutron in MeV
-  Mp = 938.272; // Mass of proton in MeV
-  Md = 1875.613; //Mass of Deuterium in MeV
-  Mpi = 139.57018; // Mass of charged pion in MeV
-  Deut = TLorentzVector (0., 0., 0., 1875.613); // 4-Vector of Deuterium target, assume at rest
-  Neut = TLorentzVector (0., 0., 0., 939.565); // 4-Vector of Deuterium target, assume at rest
+    k = 0;
+    NP = 0; // Set number of Protons to 0 before checking
+    NPi = 0; // Set number of pions to 0 before checking
+    NRoo = 0; // Set number of Rootinos to 0 before checking
+    Mn = 939.565; // Mass of neutron in MeV
+    Mp = 938.272; // Mass of proton in MeV
+    Md = 1875.613; //Mass of Deuterium in MeV
+    Mpi = 139.57018; // Mass of charged pion in MeV
+    Deut = TLorentzVector (0., 0., 0., 1875.613); // 4-Vector of Deuterium target, assume at rest
+    Neut = TLorentzVector (0., 0., 0., 939.565); // 4-Vector of Deuterium target, assume at rest
 
-  Cut_CB_proton = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Proton_11_05_17.root", "Proton"); // These will need adjusting with new Acqu files
-  Cut_proton = Cut_CB_proton;
-  Cut_CB_pion = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Pion_29_07_15.root", "Pion");
-  Cut_pion = Cut_CB_pion;
-  Cut_CB_protonKinGood = OpenCutFile("configfiles/cuts/CB_DeltaE-E_ProtonKinGood_11_05_17.root", "ProtonKinGood"); // These will need adjusting with new Acqu files
-  Cut_protonKinGood = Cut_CB_protonKinGood;
-  Cut_CB_protonKinBad = OpenCutFile("configfiles/cuts/CB_DeltaE-E_ProtonKinBad_15_12_16.root", "ProtonKinBad");
-  Cut_protonKinBad = Cut_CB_protonKinBad;
-  cout << endl;
+    Cut_CB_proton = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Proton_11_05_17.root", "Proton"); // These will need adjusting with new Acqu files
+    Cut_proton = Cut_CB_proton;
+    Cut_CB_pion = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Pion_29_07_15.root", "Pion");
+    Cut_pion = Cut_CB_pion;
+    Cut_CB_protonKinGood = OpenCutFile("configfiles/cuts/CB_DeltaE-E_ProtonKinGood_11_05_17.root", "ProtonKinGood"); // These will need adjusting with new Acqu files
+    Cut_protonKinGood = Cut_CB_protonKinGood;
+    Cut_CB_protonKinBad = OpenCutFile("configfiles/cuts/CB_DeltaE-E_ProtonKinBad_15_12_16.root", "ProtonKinBad");
+    Cut_protonKinBad = Cut_CB_protonKinBad;
+    cout << endl;
 
-  TraverseValidEvents(); // This loops over each event as in old file and calls ProcessEvent() each loop
+    TraverseValidEvents(); // This loops over each event as in old file and calls ProcessEvent() each loop
 
-  return kTRUE;
+    return kTRUE;
 }
 
 void	PNeutPol_Polarimeter_Lin_NoScatt::ProcessEvent()
 {
-  EventNumber = GetEventNumber();
-  NTrack = GetTracks()->GetNTracks();
-  NP = GetProtons()->GetNParticles();
-  NPi = GetChargedPions()->GetNParticles();
-  NRoo = GetRootinos()->GetNParticles();
-  NTag = GetTagger()->GetNTagged();
-  if (NRoo !=0) return; // Goes to next event if any "rootinos" found
-  if (NTrack !=2) return; // Ensures two track event
-  Detectors1 = GetTracks()->GetDetectors(0); //Gets number for detectors that registered hits
-  Detectors2 = GetTracks()->GetDetectors(1); // 7 = NaI + PID + MWPC, 5 = NaI + MWPC
+    EventNumber = GetEventNumber();
+    NTrack = GetTracks()->GetNTracks();
+    NP = GetProtons()->GetNParticles();
+    NPi = GetChargedPions()->GetNParticles();
+    NRoo = GetRootinos()->GetNParticles();
+    NTag = GetTagger()->GetNTagged();
+    if (NRoo !=0) return; // Goes to next event if any "rootinos" found
+    if (NTrack !=2) return; // Ensures two track event
+    Detectors1 = GetTracks()->GetDetectors(0); //Gets number for detectors that registered hits
+    Detectors2 = GetTracks()->GetDetectors(1); // 7 = NaI + PID + MWPC, 5 = NaI + MWPC
 
-  //Condition is to now keep any ALL + CB/MWPC events
-  //If track 1 only gives signals in CB it is the neutron
+    //Condition is to now keep any ALL + CB/MWPC events
+    //If track 1 only gives signals in CB it is the neutron
 
-  if((Detectors1 == 7) && (Detectors2 == 1))
-  {
-    Proton1 = kTRUE;
-    Proton2 = kFALSE;
-    if (GetTracks()->GetMWPC0Energy(0) == 0) return; // If no hit in first chamber for p drop out
-  }
+    if((Detectors1 == 7) && (Detectors2 == 1))
+    {
+        Proton1 = kTRUE;
+        Proton2 = kFALSE;
+        if (GetTracks()->GetMWPC0Energy(0) == 0) return; // If no hit in first chamber for p drop out
+    }
 
-  // If track 2 only gives signals in MWPC and CB it is the neutron
-  else if((Detectors1 == 1) && (Detectors2 == 7))
-  {
-    Proton1 = kFALSE;
-    Proton2 = kTRUE;
-    if (GetTracks()->GetMWPC0Energy(1) == 0) return; // If no hit in first chamber for p drop out
-  }
+    // If track 2 only gives signals in MWPC and CB it is the neutron
+    else if((Detectors1 == 1) && (Detectors2 == 7))
+    {
+        Proton1 = kFALSE;
+        Proton2 = kTRUE;
+        if (GetTracks()->GetMWPC0Energy(1) == 0) return; // If no hit in first chamber for p drop out
+    }
 
-  // Drop out on ANY other condition (for now)
-  else
-  {
-    return;
-  }
+    // Drop out on ANY other condition (for now)
+    else
+    {
+        return;
+    }
 
-  if (Proton1 == kTRUE)
-  {
-    GVp = GetTracks()->GetVector(0, Mp);
-    GVn = GetTracks()->GetVector(1, Mn);
-    Zp = GetTracks()->GetPseudoVertexZ(0); // First particle is proton, second neutron
-    Zn = GetTracks()->GetPseudoVertexZ(1);
-    Ep = GetTracks()->GetClusterEnergy(0);
-    En = GetTracks()->GetClusterEnergy(1);
-    dEp = GetTracks()->GetVetoEnergy(0);
-    dEn = GetTracks()->GetVetoEnergy(1);
-    WC1pX = GetTracks()->GetMWPC0PosX(0);
-    WC1pY = GetTracks()->GetMWPC0PosY(0);
-    WC1pZ = GetTracks()->GetMWPC0PosZ(0);
-  }
+    EventNum = GetEventNumber();
 
-  else if (Proton2 == kTRUE)
-  {
-    GVp = GetTracks()->GetVector(1, Mp);
-    GVn = GetTracks()->GetVector(0, Mn);
-    Zp = GetTracks()->GetPseudoVertexZ(1); // First particle is neutron, second is proton
-    Zn = GetTracks()->GetPseudoVertexZ(0);
-    Ep = GetTracks()->GetClusterEnergy(1); // Therefore the quantity mmp is the amount of missing mass we see when we do a kinematics calculation USING the proton
-    En = GetTracks()->GetClusterEnergy(0);
-    dEp = GetTracks()->GetVetoEnergy(1);
-    dEn = GetTracks()->GetVetoEnergy(0);
-    WC1pX = GetTracks()->GetMWPC0PosX(1);
-    WC1pY = GetTracks()->GetMWPC0PosY(1);
-    WC1pZ = GetTracks()->GetMWPC0PosZ(1);
-  }
+    if (Proton1 == kTRUE)
+    {
+        GVp = GetTracks()->GetVector(0, Mp);
+        GVn = GetTracks()->GetVector(1, Mn);
+        Timep = GetTracks->GetTime(0);
+        Timen = GetTracks->GetTime(1);
+        Thp = GetTracks()->GetTheta(0);
+        ThpRad = GetTracks()->GetThetaRad(0);
+        Thn = GetTracks()->GetTheta(1);
+        Php = GetTracks()->GetPhi(0);
+        PhpRad = GetTracks()->GetPhiRad(0);
+        Phn = GetTracks()->GetPhi(1);
+        Xp = GetTracks()->GetPseudoVertexX(0);
+        Yp = GetTracks()->GetPseudoVertexY(0);
+        Zp = GetTracks()->GetPseudoVertexZ(0); // First particle is proton, second neutron
+        Zn = GetTracks()->GetPseudoVertexZ(1);
+        Ep = GetTracks()->GetClusterEnergy(0);
+        En = GetTracks()->GetClusterEnergy(1);
+        dEp = GetTracks()->GetVetoEnergy(0);
+        dEn = GetTracks()->GetVetoEnergy(1);
+        WC1pX = GetTracks()->GetMWPC0PosX(0);
+        WC1pY = GetTracks()->GetMWPC0PosY(0);
+        WC1pZ = GetTracks()->GetMWPC0PosZ(0);
+        WC1nX = GetTracks()->GetMWPC0PosX(1);
+        WC1nY = GetTracks()->GetMWPC0PosY(1);
+        WC1nZ = GetTracks()->GetMWPC0PosZ(1);
+    }
 
-  else
-  {
-    return;
-  }
+    else if (Proton2 == kTRUE)
+    {
+        GVp = GetTracks()->GetVector(1, Mp);
+        GVn = GetTracks()->GetVector(0, Mn);
+        Timep = GetTracks->GetTime(1);
+        Timen = GetTracks->GetTime(0);
+        Thp = GetTracks()->GetTheta(1);
+        ThpRad = GetTracks()->GetThetaRad(1);
+        Thn = GetTracks()->GetTheta(0);
+        Php = GetTracks()->GetPhi(1);
+        PhpRad = GetTracks()->GetPhiRad(1);
+        Phn = GetTracks()->GetPhi(0);
+        Xp = GetTracks()->GetPseudoVertexX(1);
+        Yp = GetTracks()->GetPseudoVertexY(1);
+        Zp = GetTracks()->GetPseudoVertexZ(1); // First particle is neutron, second is proton
+        Zn = GetTracks()->GetPseudoVertexZ(0);
+        Ep = GetTracks()->GetClusterEnergy(1); // Therefore the quantity mmp is the amount of missing mass we see when we do a kinematics calculation USING the proton
+        En = GetTracks()->GetClusterEnergy(0);
+        dEp = GetTracks()->GetVetoEnergy(1);
+        dEn = GetTracks()->GetVetoEnergy(0);
+        WC1pX = GetTracks()->GetMWPC0PosX(1);
+        WC1pY = GetTracks()->GetMWPC0PosY(1);
+        WC1pZ = GetTracks()->GetMWPC0PosZ(1);
+        WC1nX = GetTracks()->GetMWPC0PosX(0);
+        WC1nY = GetTracks()->GetMWPC0PosY(0);
+        WC1nZ = GetTracks()->GetMWPC0PosZ(0);
+    }
 
-  GVp3 = GVp.Vect(); // Generate some 3-vectors from the 4-vectors we have
-  GVn3 = GVn.Vect();
-  WC3Vectp.SetXYZ(WC1pX, WC1pY, WC1pZ);
-  WCThetap = WC3Vectp.Theta()*TMath::RadToDeg(); // Angles from WC hit positons
-  WCThetapRad = WC3Vectp.Theta();
-  WCPhip = WC3Vectp.Phi()*TMath::RadToDeg();
-  WCPhipRad = WC3Vectp.Phi();
+    else
+    {
+        return;
+    }
 
-  if( Zp > 60 || Zp < -60) return; // Particles selected out from other parts tend to be inside anyway, skip this?
-  //if( Zp > 200 || Zp < 150) return; // Select out windows
+    PhiDiff = abs (Php-Phn);
 
-  for (Int_t j = 0; j < GetTagger()->GetNTagged(); j++)
-  {
+    if( Zp > 60 || Zp < -60) return; // Particles selected out from other parts tend to be inside anyway, skip this?
+    if ( PhiDiff > 195 || PhiDiff < 165) return;
 
-    TaggerTime = GetTagger()->GetTaggedTime(j); // Get tagged time for event
-    EGamma = (GetTagger()->GetTaggedEnergy(j)); // Get Photon energy for event
-    Gamma = TLorentzVector (0., 0., EGamma , EGamma); // 4-Vector of Photon beam
-    B = (Deut + Gamma).Beta(); // Calculate Lorentz Beta
-    b = TVector3(0., 0., B); // Define boost vector
-    GVpB = GVp;
-    GVpB.Boost(b); // Boost GVp to CM frame
-    ThetapCM = (GVpB.Theta())*TMath::RadToDeg(); // Get Theta of proton in CM frame
-    CosThetapCM = cos (ThetapCM * TMath::DegToRad());
+    EpCorr = EpPolCorrect(Ep, Thp); //correct Ep for energy loss in polarimeter
 
-    Thetap = GVp3.Theta()*TMath::RadToDeg(); // Lab frame angles for proton/neutron
-    ThetapRad = GVp3.Theta();
-    Phip = GVp3.Phi()*TMath::RadToDeg();
-    PhipRad = GVp3.Phi();
-    Thetan = GVn3.Theta()*TMath::RadToDeg();
-    Phin = GVn3.Phi()*TMath::RadToDeg();
-    Pn = sqrt (TMath::Power((En + Mn ),2) - TMath::Power(Mn,2));
+    if(Cut_proton -> IsInside(EpCorr, dEp) == kFALSE) return; // If E loss correct proton is NOT inside p banana drop out
 
-    EpCorr = EpPolCorrect(Ep, Thetap);
     EpDiff = abs(EpCorr - Ep);
 
-    GVnCorr =  LNeutron4VectorCorr(Zp, GVn, En, Pp , Mn, Phin);
+    Pp = sqrt (TMath::Power((Mp + EpCorr),2) - TMath::Power(Mp,2));
+    Pn = sqrt (TMath::Power((En + Mn ),2) - TMath::Power(Mn,2));
+    GVpCorr = TLorentzVector(Pp*sin(Thp)*cos(Php), Pp*sin(Thp)*sin(Php), Pp*cos(Thp), EpCorr+Mp);
+
+    GVnCorr =  LNeutron4VectorCorr(Zp, GVn, En, Pn , Mn, Phn);
     ThetanCorr = (GVnCorr.Theta())*TMath::RadToDeg();
 
-    // Gamma(d,p)n
-    KinEp = CalcKinEnergy(Thetap, EGamma, Md, 0., Mp, Mn); // Calculate kin E of proton assuming pn production
-    RecKinProton = LProton4VectorKin(KinEp, ThetapRad, PhipRad);
-    RecKinNeutron = LNeutron4VectorKin(RecKinProton);
-    ThetanRec = (RecKinNeutron.Theta()) * TMath::RadToDeg();
-    PhinRec = (RecKinNeutron.Phi()) * TMath::RadToDeg();
-    WCZnRec = 72/tan(RecKinNeutron.Theta());
+    WC3Vectp.SetXYZ(WC1pX, WC1pY, WC1pZ);
+    WC3Vectn.SetXYZ(WC1nX, WC1nY, WC1nZ);
+    WCThetap = WC3Vectp.Theta()*TMath::RadToDeg(); // Angles from WC hit positons
+    WCThetapRad = WC3Vectp.Theta();
+    WCPhip = WC3Vectp.Phi()*TMath::RadToDeg();
+    WCPhipRad = WC3Vectp.Phi();
+    WCThetan = WC3Vectn.Theta()*TMath::RadToDeg();
+    WCPhin = WC3Vectn.Phi()*TMath::RadToDeg();
 
-    // Gamma(n,p)Pi (P detected correct)
-    // Assume proton track is proton and "neutron" track is from charged pion
-    KinEpPi = CalcKinEnergy(Thetap, EGamma, Mn, 0, Mp, Mpi); // Calculate kin E of proton assuming g(n, p) pi
-    RecKinProtonPi = LProton4VectorKin(KinEpPi, ThetapRad, PhipRad); // Get Proton 4 vector from calculated kin E
-    RecKinPion = LPion4VectorKin(RecKinProtonPi); // Get Pion 4 vector from 4 momenta conservation
-    ThetaPiRec = (RecKinPion.Theta())*TMath::RadToDeg();
-    PhiPiRec = (RecKinPion.Phi())*TMath::RadToDeg();
-    ThetaPiRecDiff = ThetaPiRec - Thetan;
+    GVpCorr3 = GVpCorr.Vect();
+    GVnCorr3 = GVnCorr.Vect();
+    pVertex = TVector3(Xp, Yp, Zp);
 
-    // Gamma(n,p)Pi (Pion detected correct)
-    // Assume proton track is pion and "neutron" track is from proton
-    KinPi = CalcKinEnergy(Thetap, EGamma, Mn, 0, Mpi, Mp); // Calculate kin E of pion
-    RecKinPionP = LProton4VectorKin(KinPi, ThetapRad, PhipRad); // Get Pion 4 vector from calculated kinE
-    RecKinPPi = LPion4VectorKin(RecKinPionP); // Get Proton 4 vector from 4 momenta conservation
-    ThetapRec = (RecKinPPi.Theta())*TMath::RadToDeg();
-    PhipRec = (RecKinPPi.Phi())*TMath::RadToDeg();
-    ThetapRecDiff = ThetapRec - Thetan;
+    for (Int_t j = 0; j < GetTagger()->GetNTagged(); j++)
+    {
+        TaggerTime = GetTagger()->GetTaggedTime(j); // Get tagged time for event
+        EGamma = (GetTagger()->GetTaggedEnergy(j)); // Get Photon energy for event
+        Gamma = TLorentzVector (0., 0., EGamma , EGamma); // 4-Vector of Photon beam
+        B = (Deut + Gamma);
+        b = -1*B.BoostVector();
+        GVpCorrB = GVp;
+        GVpCorrB.Boost(b); // Boost GVp to CM frame
+        ThetapCM = (GVpCorrB.Theta())*TMath::RadToDeg(); // Get Theta of proton in CM frame
+        CosThetapCM = cos (GVpCorrB.Theta());
 
-    KinEDiff = KinEp - EpCorr;
+        // Gamma(d,p)n
+        KinEp = CalcKinEnergy(Thp, EGamma, Md, 0., Mp, Mn); // Calculate kin E of proton assuming pn production
+        RecKinProton = LProton4VectorKin(KinEp, ThpRad, PhpRad);
+        RecKinNeutron = LNeutron4VectorKin(RecKinProton);
+        ThetanRec = (RecKinNeutron.Theta()) * TMath::RadToDeg();
+        PhinRec = (RecKinNeutron.Phi()) * TMath::RadToDeg();
+        WCZnRec = 72/tan(RecKinNeutron.Theta());
 
-    RecProtonEpCorr = LProton4VectorKin(EpCorr, ThetapRad, PhipRad);
-    RecNeutronEpCorr = LNeutron4VectorKin(RecProtonEpCorr);
-    MMpEpCorr = RecNeutronEpCorr.M();
-    RecProtonEpCorr3 = RecProtonEpCorr.Vect();
-    RecNeutronEpCorr3 = RecNeutronEpCorr.Vect();
+        // Gamma(n,p)Pi (P detected correct)
+        // Assume proton track is proton and "neutron" track is from charged pion
+        KinEpPi = CalcKinEnergy(Thp, EGamma, Mn, 0, Mp, Mpi); // Calculate kin E of proton assuming g(n, p) pi
+        RecKinProtonPi = LProton4VectorKin(KinEpPi, ThpRad, PhpRad); // Get Proton 4 vector from calculated kin E
+        RecKinPion = LPion4VectorKin(RecKinProtonPi); // Get Pion 4 vector from 4 momenta conservation
+        ThetaPiRec = (RecKinPion.Theta())*TMath::RadToDeg();
+        PhiPiRec = (RecKinPion.Phi())*TMath::RadToDeg();
+        ThetaPiRecDiff = ThetaPiRec - ThetanCorr;
 
-    P3Vect = RecKinProton.Vect();
-    N3Vect = RecKinNeutron.Vect();
-    OpeningAngle = (N3Vect.Angle(GVn3))*TMath::RadToDeg();
+        // Gamma(n,p)Pi (Pion detected correct)
+        // Assume proton track is pion and "neutron" track is from proton
+        KinPi = CalcKinEnergy(Thp, EGamma, Mn, 0, Mpi, Mp); // Calculate kin E of pion
+        RecKinPionP = LProton4VectorKin(KinPi, ThpRad, PhpRad); // Get Pion 4 vector from calculated kinE
+        RecKinPPi = LPion4VectorKin(RecKinPionP); // Get Proton 4 vector from 4 momenta conservation
+        ThetapRec = (RecKinPPi.Theta())*TMath::RadToDeg();
+        PhipRec = (RecKinPPi.Phi())*TMath::RadToDeg();
+        ThetapRecDiff = ThetapRec - ThetanCorr;
 
-    PhiDiff = abs(WCPhip - Phin);
+        KinEDiff = KinEp - EpCorr;
 
-    if(Cut_proton -> IsInside(EpCorr, dEp) == kFALSE) continue; // If E loss correct proton is NOT inside p banana drop out
-    if(Cut_protonKinGood -> IsInside(KinEp, dEp) == kFALSE) continue; // If KinE proton is NOT inside p banana drop out
-    if (((MMpEpCorr < 800) == kTRUE) || ((MMpEpCorr > 1100) == kTRUE)) continue; // Force a missing mass cut
-    if ( (ThetanRec-Thetan < -20 == kTRUE) || (ThetanRec-Thetan > 20 == kTRUE)) continue;
+        RecProtonEpCorr = LProton4VectorKin(EpCorr, ThpRad, PhpRad);
+        RecNeutronEpCorr = LNeutron4VectorKin(RecProtonEpCorr);
+        MMpEpCorr = RecNeutronEpCorr.M();
+        RecProtonEpCorr3 = RecProtonEpCorr.Vect();
+        RecNeutronEpCorr3 = RecNeutronEpCorr.Vect();
 
-    FillHists(); // Fill histograms with data generated
-  }
+        P3Vect = RecKinProton.Vect();
+        N3Vect = RecKinNeutron.Vect();
+        OpeningAngle = (N3Vect.Angle(GVnCorr3))*TMath::RadToDeg();
+
+        ThetanDiff = abs(ThetanRec - ThetanCorr);
+
+        TVector3 ScattAngles = ScatteredFrameAngles(RecNeutronEpCorr3, GVpCorr3, GVnCorr3, Gamma);
+        ScattTheta = ScattAngles(0); // Theta is 1st component in vector fn returns above
+        ScattPhi = ScattAngles(1); // Phi is 2nd component
+
+        if(Cut_protonKinGood -> IsInside(KinEp, dEp) == kFALSE) continue; // If KinE proton is NOT inside p banana drop out
+        if (((MMpEpCorr < 800) == kTRUE) || ((MMpEpCorr > 1100) == kTRUE)) continue; // Force a missing mass cut
+        if ( (ThetanCorr-ThetanRec) < -15 || (ThetanCorr-ThetanRec) > 15) continue;
+        //if (ScattTheta > 60) continue;
+
+        FillHists(); // Fill histograms with data generated
+    }
 }
 
 void	PNeutPol_Polarimeter_Lin_NoScatt::ProcessScalerRead()
@@ -299,7 +336,7 @@ PNeutPol_Polarimeter_Lin_NoScatt::PNeutPol_Polarimeter_Lin_NoScatt() // Define a
   EpCorrected = new GH1 ("EpCorrected", "Ep Corrected for Energy Loss in Polarimeter ", 100, 0, 500);
   OAngle = new GH1 ("OAngle", "Opening Angle between P and N Vectors", 180, 0, 180);
   WCZnRecon = new GH1 ("WCZnRecon", "WCZ Hit Position from Reconstructed n Vector", 200, -400, 400);
-  PhipPhinDiff = new GH1("PhipPhinDiff", "Difference between WCPhip and Phin", 180, 0, 360);
+  PhiDifference = new GH1 ("PhiDifference", "#phi_{Diff} Between p and n", 180, 0, 360);
 
   EpKinEpCorrDiff = new GH1("EpKinEpCorrDiff", "Difference Between EpKin and EpCorr", 300, -300, 300);
   EpEpCorrDiff = new GH1("EpEpCorrDiff", "Difference Between Ep and EpCorr", 200, 0, 200);
@@ -547,15 +584,15 @@ PNeutPol_Polarimeter_Lin_NoScatt::PNeutPol_Polarimeter_Lin_NoScatt() // Define a
   ThetanCorrRecDiffDist = new GH1 ("ThetanCorrRecDiffDist", "Difference Between #theta_{nCorr} and  #theta_{nRec}", 200, -90, 90);
   ThetanCorrDiffZp = new GH2 ("ThetanCorrDiffZp", "Diff(#theta_{nCorr} - #theta_{nRec}) as a Fn of Z_{p}", 200, -90, 90, 200, -100, 100);
 
-  ThetaRecPiDiff = new GH1 ("ThetaRecPiDiff", "Difference between #theta_{#pi Rec} and #theta_{n}", 200, -90, 90);
-  ThetanThetaRecPi = new GH2 ("ThetanThetaRecPi", "#theta_{n} vs #theta_{#pi rec}", 100, 0, 180, 100, 0, 180);
-  ThetanThetaRecPiDiff = new GH2 ("ThetanThetaRecPiDiff", "#theta_{n} vs (#theta_{#pi Rec} - #theta_{n})", 100, 0, 180, 100, -90, 90);
+  ThetaRecPiDiff = new GH1 ("ThetaRecPiDiff", "Difference between #theta_{#pi Rec} and #theta_{nCorr}", 200, -90, 90);
+  ThetanThetaRecPi = new GH2 ("ThetanThetaRecPi", "#theta_{nCorr} vs #theta_{#pi rec}", 100, 0, 180, 100, 0, 180);
+  ThetanThetaRecPiDiff = new GH2 ("ThetanThetaRecPiDiff", "#theta_{nCorr} vs (#theta_{#pi Rec} - #theta_{nCorr})", 100, 0, 180, 100, -90, 90);
 
-  ThetaRecPDiff = new GH1 ("ThetaRecPDiff", "Difference between #theta_{pRec} and #theta_{n}", 200, -90, 90);
-  ThetanThetaRecP = new GH2 ("ThetanThetaRecP", "#theta_{n} vs #theta_{pRec}", 100, 0, 180, 100, 0, 180);
-  ThetanThetaRecPDiff = new GH2 ("ThetanThetaRecPDiff", "#theta_{n} vs (#theta_{pRec} - #theta_{n})", 100, 0, 180, 100, -90, 90);
+  ThetaRecPDiff = new GH1 ("ThetaRecPDiff", "Difference between #theta_{pRec} and #theta_{nCorr}", 200, -90, 90);
+  ThetanThetaRecP = new GH2 ("ThetanThetaRecP", "#theta_{nCorr} vs #theta_{pRec}", 100, 0, 180, 100, 0, 180);
+  ThetanThetaRecPDiff = new GH2 ("ThetanThetaRecPDiff", "#theta_{nCorr} vs (#theta_{pRec} - #theta_{nCorr})", 100, 0, 180, 100, -90, 90);
 
-  DeutKinPiKin = new GH2 ("DeutKinPiKin", "(#theta_{nRec} - #theta_{n}) vs (#theta_{#pi Rec} - #theta_{n})", 200, -180, 180, 200, -180, 180);
+  DeutKinPiKin = new GH2 ("DeutKinPiKin", "(#theta_{nRec} - #theta_{nCorr}) vs (#theta_{#pi Rec} - #theta_{nCorr})", 200, -180, 180, 200, -180, 180);
 
   E_dE = new GH2 ("E_dE", "EdE Plot With E Loss Adjustment", 100, 0, 500, 100, 0, 5);
   KinEp_dE = new GH2 ("KinEp_dE", "KinEpdE Plot", 100, 0, 500, 100, 0, 5);
@@ -579,29 +616,29 @@ void PNeutPol_Polarimeter_Lin_NoScatt::FillHists()
     OAngle->Fill(OpeningAngle, TaggerTime);
     WCZnRecon->Fill(WCZnRec, TaggerTime);
     ZpDist->Fill(Zp, TaggerTime);
-    PhipPhinDiff->Fill(PhiDiff, TaggerTime);
+    PhiDifference->Fill(PhiDiff);
 
     E_KinEp->Fill(EpCorr, KinEp, TaggerTime);
 
-    ThetanDist->Fill(Thetan, TaggerTime);
+    ThetanDist->Fill(Thn, TaggerTime);
     ThetanRecDist->Fill(ThetanRec, TaggerTime);
-    ThetanDiffDist->Fill(Thetan-ThetanRec, TaggerTime);
-    ThetanDiffZp->Fill(Thetan-ThetanRec, Zp, TaggerTime);
+    ThetanDiffDist->Fill(Thn-ThetanRec, TaggerTime);
+    ThetanDiffZp->Fill(Thn-ThetanRec, Zp, TaggerTime);
 
     ThetanCorrDist->Fill(ThetanCorr, TaggerTime);
-    ThetanCorrDiffDist->Fill(Thetan-ThetanCorr, TaggerTime);
+    ThetanCorrDiffDist->Fill(Thn-ThetanCorr, TaggerTime);
     ThetanCorrRecDiffDist->Fill(ThetanCorr-ThetanRec, TaggerTime);
     ThetanCorrDiffZp ->Fill(ThetanCorr-ThetanRec, Zp, TaggerTime);
 
     ThetaRecPiDiff->Fill(ThetaPiRecDiff, TaggerTime);
-    ThetanThetaRecPi->Fill(Thetan, ThetaPiRec, TaggerTime);
-    ThetanThetaRecPiDiff->Fill(Thetan, ThetaPiRecDiff, TaggerTime);
+    ThetanThetaRecPi->Fill(ThetanCorr, ThetaPiRec, TaggerTime);
+    ThetanThetaRecPiDiff->Fill(Thn, ThetaPiRecDiff, TaggerTime);
 
     ThetaRecPDiff->Fill(ThetapRecDiff, TaggerTime);
-    ThetanThetaRecP->Fill(Thetan, ThetapRec, TaggerTime);
-    ThetanThetaRecPDiff->Fill(Thetan, ThetapRecDiff, TaggerTime);
+    ThetanThetaRecP->Fill(ThetanCorr, ThetapRec, TaggerTime);
+    ThetanThetaRecPDiff->Fill(ThetanCorr, ThetapRecDiff, TaggerTime);
 
-    DeutKinPiKin->Fill(ThetanRec-Thetan, ThetaPiRecDiff, TaggerTime);
+    DeutKinPiKin->Fill(ThetanRec-ThetanCorr, ThetaPiRecDiff, TaggerTime);
 
     if(200 < EGamma && EGamma < 300){
         MMp200300->Fill(MMpEpCorr, TaggerTime);
@@ -636,859 +673,859 @@ void PNeutPol_Polarimeter_Lin_NoScatt::FillHists()
     if ( 420 < EGamma && EGamma < 430) {
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
-            Phip425CM1->Fill(WCPhip, TaggerTime);
+            Phip425CM1->Fill(Php, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
-            Phip425CM2->Fill(WCPhip, TaggerTime);
+            Phip425CM2->Fill(Php, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
-            Phip425CM3->Fill(WCPhip, TaggerTime);
+            Phip425CM3->Fill(Php, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
-            Phip425CM4->Fill(WCPhip, TaggerTime);
+            Phip425CM4->Fill(Php, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
-            Phip425CM5->Fill(WCPhip, TaggerTime);
+            Phip425CM5->Fill(Php, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip425CM6->Fill(WCPhip, TaggerTime);
+            Phip425CM6->Fill(Php, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip425CM7->Fill(WCPhip, TaggerTime);
+            Phip425CM7->Fill(Php, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip425CM8->Fill(WCPhip, TaggerTime);
+            Phip425CM8->Fill(Php, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip425CM9->Fill(WCPhip, TaggerTime);
+            Phip425CM9->Fill(Php, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip425CM10->Fill(WCPhip, TaggerTime);
+            Phip425CM10->Fill(Php, TaggerTime);
         }
     }
 
     else if ( 430 < EGamma && EGamma < 440) {
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
-            Phip435CM1->Fill(WCPhip, TaggerTime);
+            Phip435CM1->Fill(Php, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
-            Phip435CM2->Fill(WCPhip, TaggerTime);
+            Phip435CM2->Fill(Php, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
-            Phip435CM3->Fill(WCPhip, TaggerTime);
+            Phip435CM3->Fill(Php, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
-            Phip435CM4->Fill(WCPhip, TaggerTime);
+            Phip435CM4->Fill(Php, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
-            Phip435CM5->Fill(WCPhip, TaggerTime);
+            Phip435CM5->Fill(Php, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip435CM6->Fill(WCPhip, TaggerTime);
+            Phip435CM6->Fill(Php, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip435CM7->Fill(WCPhip, TaggerTime);
+            Phip435CM7->Fill(Php, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip435CM8->Fill(WCPhip, TaggerTime);
+            Phip435CM8->Fill(Php, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip435CM9->Fill(WCPhip, TaggerTime);
+            Phip435CM9->Fill(Php, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip435CM10->Fill(WCPhip, TaggerTime);
+            Phip435CM10->Fill(Php, TaggerTime);
         }
     }
 
     else if ( 440 < EGamma && EGamma < 450) {
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
-            Phip445CM1->Fill(WCPhip, TaggerTime);
+            Phip445CM1->Fill(Php, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
-            Phip445CM2->Fill(WCPhip, TaggerTime);
+            Phip445CM2->Fill(Php, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
-            Phip445CM3->Fill(WCPhip, TaggerTime);
+            Phip445CM3->Fill(Php, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
-            Phip445CM4->Fill(WCPhip, TaggerTime);
+            Phip445CM4->Fill(Php, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
-            Phip445CM5->Fill(WCPhip, TaggerTime);
+            Phip445CM5->Fill(Php, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip445CM6->Fill(WCPhip, TaggerTime);
+            Phip445CM6->Fill(Php, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip445CM7->Fill(WCPhip, TaggerTime);
+            Phip445CM7->Fill(Php, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip445CM8->Fill(WCPhip, TaggerTime);
+            Phip445CM8->Fill(Php, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip445CM9->Fill(WCPhip, TaggerTime);
+            Phip445CM9->Fill(Php, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip445CM10->Fill(WCPhip, TaggerTime);
+            Phip445CM10->Fill(Php, TaggerTime);
         }
     }
 
     else if ( 450 < EGamma && EGamma < 460) {
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
-            Phip455CM1->Fill(WCPhip, TaggerTime);
+            Phip455CM1->Fill(Php, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
-            Phip455CM2->Fill(WCPhip, TaggerTime);
+            Phip455CM2->Fill(Php, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
-            Phip455CM3->Fill(WCPhip, TaggerTime);
+            Phip455CM3->Fill(Php, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
-            Phip455CM4->Fill(WCPhip, TaggerTime);
+            Phip455CM4->Fill(Php, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
-            Phip455CM5->Fill(WCPhip, TaggerTime);
+            Phip455CM5->Fill(Php, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip455CM6->Fill(WCPhip, TaggerTime);
+            Phip455CM6->Fill(Php, TaggerTime);
         }
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip455CM7->Fill(WCPhip, TaggerTime);
+            Phip455CM7->Fill(Php, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip455CM8->Fill(WCPhip, TaggerTime);
+            Phip455CM8->Fill(Php, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip455CM9->Fill(WCPhip, TaggerTime);
+            Phip455CM9->Fill(Php, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip455CM10->Fill(WCPhip, TaggerTime);
+            Phip455CM10->Fill(Php, TaggerTime);
         }
     }
 
     else if ( 460 < EGamma && EGamma < 470) {
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
-            Phip465CM1->Fill(WCPhip, TaggerTime);
+            Phip465CM1->Fill(Php, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
-            Phip465CM2->Fill(WCPhip, TaggerTime);
+            Phip465CM2->Fill(Php, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
-            Phip465CM3->Fill(WCPhip, TaggerTime);
+            Phip465CM3->Fill(Php, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
-            Phip465CM4->Fill(WCPhip, TaggerTime);
+            Phip465CM4->Fill(Php, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
-            Phip465CM5->Fill(WCPhip, TaggerTime);
+            Phip465CM5->Fill(Php, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip465CM6->Fill(WCPhip, TaggerTime);
+            Phip465CM6->Fill(Php, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip465CM7->Fill(WCPhip, TaggerTime);
+            Phip465CM7->Fill(Php, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip465CM8->Fill(WCPhip, TaggerTime);
+            Phip465CM8->Fill(Php, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip465CM9->Fill(WCPhip, TaggerTime);
+            Phip465CM9->Fill(Php, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip465CM10->Fill(WCPhip, TaggerTime);
+            Phip465CM10->Fill(Php, TaggerTime);
         }
     }
 
     else if ( 470 < EGamma && EGamma < 480) {
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
-            Phip475CM1->Fill(WCPhip, TaggerTime);
+            Phip475CM1->Fill(Php, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
-            Phip475CM2->Fill(WCPhip, TaggerTime);
+            Phip475CM2->Fill(Php, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
-            Phip475CM3->Fill(WCPhip, TaggerTime);
+            Phip475CM3->Fill(Php, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
-            Phip475CM4->Fill(WCPhip, TaggerTime);
+            Phip475CM4->Fill(Php, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
-            Phip475CM5->Fill(WCPhip, TaggerTime);
+            Phip475CM5->Fill(Php, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip475CM6->Fill(WCPhip, TaggerTime);
+            Phip475CM6->Fill(Php, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip475CM7->Fill(WCPhip, TaggerTime);
+            Phip475CM7->Fill(Php, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip475CM8->Fill(WCPhip, TaggerTime);
+            Phip475CM8->Fill(Php, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip475CM9->Fill(WCPhip, TaggerTime);
+            Phip475CM9->Fill(Php, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip475CM10->Fill(WCPhip, TaggerTime);
+            Phip475CM10->Fill(Php, TaggerTime);
         }
     }
 
     else if ( 480 < EGamma && EGamma < 490) {
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
-            Phip485CM1->Fill(WCPhip, TaggerTime);
+            Phip485CM1->Fill(Php, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
-            Phip485CM2->Fill(WCPhip, TaggerTime);
+            Phip485CM2->Fill(Php, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
-            Phip485CM3->Fill(WCPhip, TaggerTime);
+            Phip485CM3->Fill(Php, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
-            Phip485CM4->Fill(WCPhip, TaggerTime);
+            Phip485CM4->Fill(Php, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
-            Phip485CM5->Fill(WCPhip, TaggerTime);
+            Phip485CM5->Fill(Php, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip485CM6->Fill(WCPhip, TaggerTime);
+            Phip485CM6->Fill(Php, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip485CM7->Fill(WCPhip, TaggerTime);
+            Phip485CM7->Fill(Php, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip485CM8->Fill(WCPhip, TaggerTime);
+            Phip485CM8->Fill(Php, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip485CM9->Fill(WCPhip, TaggerTime);
+            Phip485CM9->Fill(Php, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip485CM10->Fill(WCPhip, TaggerTime);
+            Phip485CM10->Fill(Php, TaggerTime);
         }
     }
 
     else if ( 490 < EGamma && EGamma < 500) {
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
-            Phip495CM1->Fill(WCPhip, TaggerTime);
+            Phip495CM1->Fill(Php, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
-            Phip495CM2->Fill(WCPhip, TaggerTime);
+            Phip495CM2->Fill(Php, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
-            Phip495CM3->Fill(WCPhip, TaggerTime);
+            Phip495CM3->Fill(Php, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
-            Phip495CM4->Fill(WCPhip, TaggerTime);
+            Phip495CM4->Fill(Php, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
-            Phip495CM5->Fill(WCPhip, TaggerTime);
+            Phip495CM5->Fill(Php, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip495CM6->Fill(WCPhip, TaggerTime);
+            Phip495CM6->Fill(Php, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip495CM7->Fill(WCPhip, TaggerTime);
+            Phip495CM7->Fill(Php, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip495CM8->Fill(WCPhip, TaggerTime);
+            Phip495CM8->Fill(Php, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip495CM9->Fill(WCPhip, TaggerTime);
+            Phip495CM9->Fill(Php, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip495CM10->Fill(WCPhip, TaggerTime);
+            Phip495CM10->Fill(Php, TaggerTime);
         }
     }
 
     else if ( 500 < EGamma && EGamma < 510) {
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
-            Phip505CM1->Fill(WCPhip, TaggerTime);
+            Phip505CM1->Fill(Php, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
-            Phip505CM2->Fill(WCPhip, TaggerTime);
+            Phip505CM2->Fill(Php, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
-            Phip505CM3->Fill(WCPhip, TaggerTime);
+            Phip505CM3->Fill(Php, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
-            Phip505CM4->Fill(WCPhip, TaggerTime);
+            Phip505CM4->Fill(Php, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
-            Phip505CM5->Fill(WCPhip, TaggerTime);
+            Phip505CM5->Fill(Php, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip505CM6->Fill(WCPhip, TaggerTime);
+            Phip505CM6->Fill(Php, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip505CM7->Fill(WCPhip, TaggerTime);
+            Phip505CM7->Fill(Php, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip505CM8->Fill(WCPhip, TaggerTime);
+            Phip505CM8->Fill(Php, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip505CM9->Fill(WCPhip, TaggerTime);
+            Phip505CM9->Fill(Php, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip505CM10->Fill(WCPhip, TaggerTime);
+            Phip505CM10->Fill(Php, TaggerTime);
         }
     }
 
     else if ( 510 < EGamma && EGamma < 520) {
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
-            Phip515CM1->Fill(WCPhip, TaggerTime);
+            Phip515CM1->Fill(Php, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
-            Phip515CM2->Fill(WCPhip, TaggerTime);
+            Phip515CM2->Fill(Php, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
-            Phip515CM3->Fill(WCPhip, TaggerTime);
+            Phip515CM3->Fill(Php, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
-            Phip515CM4->Fill(WCPhip, TaggerTime);
+            Phip515CM4->Fill(Php, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
-            Phip515CM5->Fill(WCPhip, TaggerTime);
+            Phip515CM5->Fill(Php, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip515CM6->Fill(WCPhip, TaggerTime);
+            Phip515CM6->Fill(Php, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip515CM7->Fill(WCPhip, TaggerTime);
+            Phip515CM7->Fill(Php, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip515CM8->Fill(WCPhip, TaggerTime);
+            Phip515CM8->Fill(Php, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip515CM9->Fill(WCPhip, TaggerTime);
+            Phip515CM9->Fill(Php, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip515CM10->Fill(WCPhip, TaggerTime);
+            Phip515CM10->Fill(Php, TaggerTime);
         }
     }
 
     else if ( 520 < EGamma && EGamma < 530) {
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
-            Phip525CM1->Fill(WCPhip, TaggerTime);
+            Phip525CM1->Fill(Php, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
-            Phip525CM2->Fill(WCPhip, TaggerTime);
+            Phip525CM2->Fill(Php, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
-            Phip525CM3->Fill(WCPhip, TaggerTime);
+            Phip525CM3->Fill(Php, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
-            Phip525CM4->Fill(WCPhip, TaggerTime);
+            Phip525CM4->Fill(Php, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
-            Phip525CM5->Fill(WCPhip, TaggerTime);
+            Phip525CM5->Fill(Php, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip525CM6->Fill(WCPhip, TaggerTime);
+            Phip525CM6->Fill(Php, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip525CM7->Fill(WCPhip, TaggerTime);
+            Phip525CM7->Fill(Php, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip525CM8->Fill(WCPhip, TaggerTime);
+            Phip525CM8->Fill(Php, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip525CM9->Fill(WCPhip, TaggerTime);
+            Phip525CM9->Fill(Php, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip525CM10->Fill(WCPhip, TaggerTime);
+            Phip525CM10->Fill(Php, TaggerTime);
         }
     }
 
     else if ( 530 < EGamma && EGamma < 540) {
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
-            Phip535CM1->Fill(WCPhip, TaggerTime);
+            Phip535CM1->Fill(Php, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
-            Phip535CM2->Fill(WCPhip, TaggerTime);
+            Phip535CM2->Fill(Php, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
-            Phip535CM3->Fill(WCPhip, TaggerTime);
+            Phip535CM3->Fill(Php, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
-            Phip535CM4->Fill(WCPhip, TaggerTime);
+            Phip535CM4->Fill(Php, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
-            Phip535CM5->Fill(WCPhip, TaggerTime);
+            Phip535CM5->Fill(Php, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip535CM6->Fill(WCPhip, TaggerTime);
+            Phip535CM6->Fill(Php, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip535CM7->Fill(WCPhip, TaggerTime);
+            Phip535CM7->Fill(Php, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip535CM8->Fill(WCPhip, TaggerTime);
+            Phip535CM8->Fill(Php, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip535CM9->Fill(WCPhip, TaggerTime);
+            Phip535CM9->Fill(Php, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip535CM10->Fill(WCPhip, TaggerTime);
+            Phip535CM10->Fill(Php, TaggerTime);
         }
     }
 
     else if ( 540 < EGamma && EGamma < 550) {
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
-            Phip545CM1->Fill(WCPhip, TaggerTime);
+            Phip545CM1->Fill(Php, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
-            Phip545CM2->Fill(WCPhip, TaggerTime);
+            Phip545CM2->Fill(Php, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
-            Phip545CM3->Fill(WCPhip, TaggerTime);
+            Phip545CM3->Fill(Php, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
-            Phip545CM4->Fill(WCPhip, TaggerTime);
+            Phip545CM4->Fill(Php, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
-            Phip545CM5->Fill(WCPhip, TaggerTime);
+            Phip545CM5->Fill(Php, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip545CM6->Fill(WCPhip, TaggerTime);
+            Phip545CM6->Fill(Php, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip545CM7->Fill(WCPhip, TaggerTime);
+            Phip545CM7->Fill(Php, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip545CM8->Fill(WCPhip, TaggerTime);
+            Phip545CM8->Fill(Php, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip545CM9->Fill(WCPhip, TaggerTime);
+            Phip545CM9->Fill(Php, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip545CM10->Fill(WCPhip, TaggerTime);
+            Phip545CM10->Fill(Php, TaggerTime);
         }
     }
 
     else if ( 550 < EGamma && EGamma < 560) {
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
-            Phip555CM1->Fill(WCPhip, TaggerTime);
+            Phip555CM1->Fill(Php, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
-            Phip555CM2->Fill(WCPhip, TaggerTime);
+            Phip555CM2->Fill(Php, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
-            Phip555CM3->Fill(WCPhip, TaggerTime);
+            Phip555CM3->Fill(Php, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
-            Phip555CM4->Fill(WCPhip, TaggerTime);
+            Phip555CM4->Fill(Php, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
-            Phip555CM5->Fill(WCPhip, TaggerTime);
+            Phip555CM5->Fill(Php, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip555CM6->Fill(WCPhip, TaggerTime);
+            Phip555CM6->Fill(Php, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip555CM7->Fill(WCPhip, TaggerTime);
+            Phip555CM7->Fill(Php, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip555CM8->Fill(WCPhip, TaggerTime);
+            Phip555CM8->Fill(Php, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip555CM9->Fill(WCPhip, TaggerTime);
+            Phip555CM9->Fill(Php, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip555CM10->Fill(WCPhip, TaggerTime);
+            Phip555CM10->Fill(Php, TaggerTime);
         }
     }
 
     else if ( 560 < EGamma && EGamma < 570) {
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
-            Phip565CM1->Fill(WCPhip, TaggerTime);
+            Phip565CM1->Fill(Php, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
-            Phip565CM2->Fill(WCPhip, TaggerTime);
+            Phip565CM2->Fill(Php, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
-            Phip565CM3->Fill(WCPhip, TaggerTime);
+            Phip565CM3->Fill(Php, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
-            Phip565CM4->Fill(WCPhip, TaggerTime);
+            Phip565CM4->Fill(Php, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
-            Phip565CM5->Fill(WCPhip, TaggerTime);
+            Phip565CM5->Fill(Php, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip565CM6->Fill(WCPhip, TaggerTime);
+            Phip565CM6->Fill(Php, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip565CM7->Fill(WCPhip, TaggerTime);
+            Phip565CM7->Fill(Php, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip565CM8->Fill(WCPhip, TaggerTime);
+            Phip565CM8->Fill(Php, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip565CM9->Fill(WCPhip, TaggerTime);
+            Phip565CM9->Fill(Php, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip565CM10->Fill(WCPhip, TaggerTime);
+            Phip565CM10->Fill(Php, TaggerTime);
         }
     }
 
     else if ( 570 < EGamma && EGamma < 580) {
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
-            Phip575CM1->Fill(WCPhip, TaggerTime);
+            Phip575CM1->Fill(Php, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
-            Phip575CM2->Fill(WCPhip, TaggerTime);
+            Phip575CM2->Fill(Php, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
-            Phip575CM3->Fill(WCPhip, TaggerTime);
+            Phip575CM3->Fill(Php, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
-            Phip575CM4->Fill(WCPhip, TaggerTime);
+            Phip575CM4->Fill(Php, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
-            Phip575CM5->Fill(WCPhip, TaggerTime);
+            Phip575CM5->Fill(Php, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip575CM6->Fill(WCPhip, TaggerTime);
+            Phip575CM6->Fill(Php, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip575CM7->Fill(WCPhip, TaggerTime);
+            Phip575CM7->Fill(Php, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip575CM8->Fill(WCPhip, TaggerTime);
+            Phip575CM8->Fill(Php, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip575CM9->Fill(WCPhip, TaggerTime);
+            Phip575CM9->Fill(Php, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip575CM10->Fill(WCPhip, TaggerTime);
+            Phip575CM10->Fill(Php, TaggerTime);
         }
     }
 
     else if ( 580 < EGamma && EGamma < 590) {
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
-            Phip585CM1->Fill(WCPhip, TaggerTime);
+            Phip585CM1->Fill(Php, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
-            Phip585CM2->Fill(WCPhip, TaggerTime);
+            Phip585CM2->Fill(Php, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
-            Phip585CM3->Fill(WCPhip, TaggerTime);
+            Phip585CM3->Fill(Php, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
-            Phip585CM4->Fill(WCPhip, TaggerTime);
+            Phip585CM4->Fill(Php, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
-            Phip585CM5->Fill(WCPhip, TaggerTime);
+            Phip585CM5->Fill(Php, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip585CM6->Fill(WCPhip, TaggerTime);
+            Phip585CM6->Fill(Php, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip585CM7->Fill(WCPhip, TaggerTime);
+            Phip585CM7->Fill(Php, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip585CM8->Fill(WCPhip, TaggerTime);
+            Phip585CM8->Fill(Php, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip585CM9->Fill(WCPhip, TaggerTime);
+            Phip585CM9->Fill(Php, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip585CM10->Fill(WCPhip, TaggerTime);
+            Phip585CM10->Fill(Php, TaggerTime);
         }
     }
 
     else if ( 590 < EGamma && EGamma < 600) {
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
-            Phip595CM1->Fill(WCPhip, TaggerTime);
+            Phip595CM1->Fill(Php, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
-            Phip595CM2->Fill(WCPhip, TaggerTime);
+            Phip595CM2->Fill(Php, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
-            Phip595CM3->Fill(WCPhip, TaggerTime);
+            Phip595CM3->Fill(Php, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
-            Phip595CM4->Fill(WCPhip, TaggerTime);
+            Phip595CM4->Fill(Php, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
-            Phip595CM5->Fill(WCPhip, TaggerTime);
+            Phip595CM5->Fill(Php, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip595CM6->Fill(WCPhip, TaggerTime);
+            Phip595CM6->Fill(Php, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip595CM7->Fill(WCPhip, TaggerTime);
+            Phip595CM7->Fill(Php, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip595CM8->Fill(WCPhip, TaggerTime);
+            Phip595CM8->Fill(Php, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip595CM9->Fill(WCPhip, TaggerTime);
+            Phip595CM9->Fill(Php, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip595CM10->Fill(WCPhip, TaggerTime);
+            Phip595CM10->Fill(Php, TaggerTime);
         }
     }
 
     else if ( 600 < EGamma && EGamma < 610) {
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
-            Phip605CM1->Fill(WCPhip, TaggerTime);
+            Phip605CM1->Fill(Php, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
-            Phip605CM2->Fill(WCPhip, TaggerTime);
+            Phip605CM2->Fill(Php, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
-            Phip605CM3->Fill(WCPhip, TaggerTime);
+            Phip605CM3->Fill(Php, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
-            Phip605CM4->Fill(WCPhip, TaggerTime);
+            Phip605CM4->Fill(Php, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
-            Phip605CM5->Fill(WCPhip, TaggerTime);
+            Phip605CM5->Fill(Php, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip605CM6->Fill(WCPhip, TaggerTime);
+            Phip605CM6->Fill(Php, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip605CM7->Fill(WCPhip, TaggerTime);
+            Phip605CM7->Fill(Php, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip605CM8->Fill(WCPhip, TaggerTime);
+            Phip605CM8->Fill(Php, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip605CM9->Fill(WCPhip, TaggerTime);
+            Phip605CM9->Fill(Php, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip605CM10->Fill(WCPhip, TaggerTime);
+            Phip605CM10->Fill(Php, TaggerTime);
         }
     }
 
     else if ( 610 < EGamma && EGamma < 620) {
 
         if(1 > CosThetapCM && CosThetapCM > 0.8 ){
-            Phip615CM1->Fill(WCPhip, TaggerTime);
+            Phip615CM1->Fill(Php, TaggerTime);
         }
 
         else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
-            Phip615CM2->Fill(WCPhip, TaggerTime);
+            Phip615CM2->Fill(Php, TaggerTime);
         }
 
         else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
-            Phip615CM3->Fill(WCPhip, TaggerTime);
+            Phip615CM3->Fill(Php, TaggerTime);
         }
 
         else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
-            Phip615CM4->Fill(WCPhip, TaggerTime);
+            Phip615CM4->Fill(Php, TaggerTime);
         }
 
         else if(0.2 > CosThetapCM && CosThetapCM > 0){
-            Phip615CM5->Fill(WCPhip, TaggerTime);
+            Phip615CM5->Fill(Php, TaggerTime);
         }
 
         else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip615CM6->Fill(WCPhip, TaggerTime);
+            Phip615CM6->Fill(Php, TaggerTime);
         }
 
         else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip615CM7->Fill(WCPhip, TaggerTime);
+            Phip615CM7->Fill(Php, TaggerTime);
         }
 
         else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip615CM8->Fill(WCPhip, TaggerTime);
+            Phip615CM8->Fill(Php, TaggerTime);
         }
 
         else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip615CM9->Fill(WCPhip, TaggerTime);
+            Phip615CM9->Fill(Php, TaggerTime);
         }
 
         else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip615CM10->Fill(WCPhip, TaggerTime);
+            Phip615CM10->Fill(Php, TaggerTime);
         }
     }
 }
