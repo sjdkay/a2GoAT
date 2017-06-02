@@ -56,18 +56,6 @@ private:
   double_t Php;
   double_t PhpRad;
   double_t Phn;
-  double_t WC1pX;
-  double_t WC1pY;
-  double_t WC1pZ;
-  double_t WC1nX;
-  double_t WC1nY;
-  double_t WC1nZ;
-  double_t WCThetap;
-  double_t WCThetapRad;
-  double_t WCThetan;
-  double_t WCPhip;
-  double_t WCPhipRad;
-  double_t WCPhin;
   double_t WCZnRec;
   double_t ThetapCM;
   double_t CosThetapCM;
@@ -148,8 +136,6 @@ private:
   TVector3 GVpCorr3;
   TVector3 GVnCorr3;
   TVector3 GVn3Rec;
-  TVector3 WC3Vectp;
-  TVector3 WC3Vectn;
   TVector3 P3Vect;
   TVector3 N3Vect;
   TVector3 RecProtonEpCorr3;
@@ -158,7 +144,6 @@ private:
   TH1D*	time;
   TH1D*	time_cut;
 
-  GH1* EkSum;
   GH1* Eg;
   GH1* PhiDifference;
   GH1* EpKin;
@@ -488,7 +473,6 @@ protected:
     FitParticle beamF;
     FitParticle protonF;
     FitParticle neutronF;
-    //APLCON kinfit("EMcons", settings);
 
 public:
 

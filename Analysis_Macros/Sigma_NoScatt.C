@@ -4,7 +4,7 @@ void Sigma_NoScatt(){
 
     TFile *MBData = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sig_res_St.root");
 
-    TFile *f1= TFile::Open("/scratch/Mainz_Software/a2GoAT/ParaPerpAsymm_NoScatt_Total_7.root");
+    TFile *f1= TFile::Open("/scratch/Mainz_Software/a2GoAT/ParaPerpAsymm_NoScatt_Total_8.root");
     TTree *t1 = (TTree*)f1->Get("Parameter_Values");
 
     Double_t pValues425[10], pValues435[10], pValues445[10], pValues455[10], pValues465[10], pValues475[10], pValues485[10], pValues495[10], pValues505[10], pValues515[10], pValues525[10], pValues535[10], pValues545[10], pValues555[10], pValues565[10], pValues575[10], pValues585[10], pValues595[10], pValues605[10], pValues615[10];
@@ -169,7 +169,7 @@ void Sigma_NoScatt(){
 
     }
 
-    TFile f3("Sigma_Plots_NoScatt_Multi_7.root", "RECREATE");
+    TFile f3("Sigma_Plots_NoScatt_Multi_8.root", "RECREATE");
 
     Float_t xMin = -1;
     Float_t xMax = 1;
@@ -188,7 +188,7 @@ void Sigma_NoScatt(){
     pad1->SetGridx(1);
     pad1->SetGridy(1);
     TH1F  *hr;
-    hr = canvas->DrawFrame(xMin,-2.5,xMax,2.5);
+    hr = canvas->DrawFrame(xMin, -1,xMax, 1);
     hr->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 420-430MeV)");
 
     gr1 = new TGraphErrors(10, x, pSigmaValues425, ex, pSigmaErrValues425);
@@ -210,7 +210,7 @@ void Sigma_NoScatt(){
     pad2->SetGridx(1);
     pad2->SetGridy(1);
     TH1F  *hr1;
-    hr1 = canvas1->DrawFrame(xMin,-2.5,xMax,2.5);
+    hr1 = canvas1->DrawFrame(xMin,-1 ,xMax, 1 );
     hr1->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 430-440MeV)");
 
     gr2 = new TGraphErrors(10, x, pSigmaValues435 , ex, pSigmaErrValues435);
@@ -232,7 +232,7 @@ void Sigma_NoScatt(){
     pad3->SetGridx(1);
     pad3->SetGridy(1);
     TH1F  *hr2;
-    hr2 = canvas2->DrawFrame(xMin,-2.5,xMax,2.5);
+    hr2 = canvas2->DrawFrame(xMin,-1,xMax,1);
     hr2->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 440-450MeV)");
 
     gr3 = new TGraphErrors(10, x, pSigmaValues445 , ex, pSigmaErrValues445);
@@ -254,7 +254,7 @@ void Sigma_NoScatt(){
     pad4->SetGridx(1);
     pad4->SetGridy(1);
     TH1F  *hr3;
-    hr3 = canvas3->DrawFrame(xMin,-2.5,xMax,2.5);
+    hr3 = canvas3->DrawFrame(xMin,-1,xMax,1);
     hr3->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 450-460MeV)");
 
     gr4 = new TGraphErrors(10, x, pSigmaValues455 , ex, pSigmaErrValues455);
@@ -276,7 +276,7 @@ void Sigma_NoScatt(){
     pad5->SetGridx(1);
     pad5->SetGridy(1);
     TH1F  *hr4;
-    hr4 = canvas4->DrawFrame(xMin,-2.5,xMax,2.5);
+    hr4 = canvas4->DrawFrame(xMin,-1,xMax,1);
     hr4->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 460-470MeV)");
 
     gr5 = new TGraphErrors(10, x, pSigmaValues465, ex, pSigmaErrValues465);
@@ -298,7 +298,7 @@ void Sigma_NoScatt(){
     pad6->SetGridx(1);
     pad6->SetGridy(1);
     TH1F  *hr5;
-    hr5 = canvas5->DrawFrame(xMin,-2.5,xMax,2.5);
+    hr5 = canvas5->DrawFrame(xMin,-1,xMax,1);
     hr5->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 470-480MeV)");
 
     gr6 = new TGraphErrors(10, x, pSigmaValues475, ex, pSigmaErrValues475);
@@ -342,7 +342,7 @@ void Sigma_NoScatt(){
     pad8->SetGridx(1);
     pad8->SetGridy(1);
     TH1F  *hr7;
-    hr7 = canvas7->DrawFrame(xMin,-2.5,xMax,2.5);
+    hr7 = canvas7->DrawFrame(xMin,-1,xMax,1);
     hr7->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 490-500MeV)");
 
     gr8 = new TGraphErrors(10, x, pSigmaValues495, ex, pSigmaErrValues495);
@@ -364,7 +364,7 @@ void Sigma_NoScatt(){
     pad9->SetGridx(1);
     pad9->SetGridy(1);
     TH1F  *hr8;
-    hr8 = canvas8->DrawFrame(xMin,-2.5,xMax,2.5);
+    hr8 = canvas8->DrawFrame(xMin,-1,xMax,1);
     hr8->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 500-510MeV)");
 
     gr9 = new TGraphErrors(10, x, pSigmaValues505, ex, pSigmaErrValues505);
@@ -386,7 +386,7 @@ void Sigma_NoScatt(){
     pad10->SetGridx(1);
     pad10->SetGridy(1);
     TH1F  *hr9;
-    hr9 = canvas9->DrawFrame(xMin,-1.5,xMax,1.5);
+    hr9 = canvas9->DrawFrame(xMin,-1,xMax,1);
     hr9->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 510-520MeV)");
 
     gr10 = new TGraphErrors(10, x, pSigmaValues515, ex, pSigmaErrValues515);
@@ -408,7 +408,7 @@ void Sigma_NoScatt(){
     pad11->SetGridx(1);
     pad11->SetGridy(1);
     TH1F  *hr10;
-    hr10 = canvas10->DrawFrame(xMin,-1.5,xMax,1.5);
+    hr10 = canvas10->DrawFrame(xMin,-1,xMax,1);
     hr10->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 520-530MeV)");
 
     gr11 = new TGraphErrors(10, x, pSigmaValues525, ex, pSigmaErrValues525);
@@ -430,7 +430,7 @@ void Sigma_NoScatt(){
     pad12->SetGridx(1);
     pad12->SetGridy(1);
     TH1F  *hr11;
-    hr11 = canvas11->DrawFrame(xMin,-1.5,xMax,1.5);
+    hr11 = canvas11->DrawFrame(xMin,-1,xMax,1);
     hr11->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 530-540MeV)");
 
     gr12 = new TGraphErrors(10, x, pSigmaValues535, ex, pSigmaErrValues535);
@@ -452,7 +452,7 @@ void Sigma_NoScatt(){
     pad13->SetGridx(1);
     pad13->SetGridy(1);
     TH1F  *hr12;
-    hr12 = canvas12->DrawFrame(xMin,-1.5,xMax,1.5);
+    hr12 = canvas12->DrawFrame(xMin,-1,xMax,1);
     hr12->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 540-550MeV)");
 
     gr13 = new TGraphErrors(10, x, pSigmaValues545, ex, pSigmaErrValues545);
@@ -474,7 +474,7 @@ void Sigma_NoScatt(){
     pad14->SetGridx(1);
     pad14->SetGridy(1);
     TH1F  *hr13;
-    hr13 = canvas13->DrawFrame(xMin,-1.5,xMax,1.5);
+    hr13 = canvas13->DrawFrame(xMin,-1,xMax,1);
     hr13->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 550-560MeV)");
 
     gr14 = new TGraphErrors(10, x, pSigmaValues555, ex, pSigmaErrValues555);
@@ -496,7 +496,7 @@ void Sigma_NoScatt(){
     pad15->SetGridx(1);
     pad15->SetGridy(1);
     TH1F  *hr14;
-    hr14 = canvas14->DrawFrame(xMin,-1.5,xMax,1.5);
+    hr14 = canvas14->DrawFrame(xMin,-1,xMax,1);
     hr14->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 560-570MeV)");
 
     gr15 = new TGraphErrors(10, x, pSigmaValues565, ex, pSigmaErrValues565);
@@ -518,7 +518,7 @@ void Sigma_NoScatt(){
     pad16->SetGridx(1);
     pad16->SetGridy(1);
     TH1F  *hr15;
-    hr15 = canvas15->DrawFrame(xMin,-1.5,xMax,1.5);
+    hr15 = canvas15->DrawFrame(xMin,-1,xMax,1);
     hr15->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 570-580MeV)");
 
     gr16 = new TGraphErrors(10, x, pSigmaValues575, ex, pSigmaErrValues575);
@@ -540,7 +540,7 @@ void Sigma_NoScatt(){
     pad17->SetGridx(1);
     pad17->SetGridy(1);
     TH1F  *hr16;
-    hr16 = canvas16->DrawFrame(xMin,-1.5,xMax,1.5);
+    hr16 = canvas16->DrawFrame(xMin,-1,xMax,1);
     hr16->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 580-590MeV)");
 
     gr17 = new TGraphErrors(10, x, pSigmaValues585, ex, pSigmaErrValues585);
@@ -562,7 +562,7 @@ void Sigma_NoScatt(){
     pad18->SetGridx(1);
     pad18->SetGridy(1);
     TH1F  *hr17;
-    hr17 = canvas17->DrawFrame(xMin,-1.5,xMax,1.5);
+    hr17 = canvas17->DrawFrame(xMin,-1,xMax,1);
     hr17->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 590-600MeV)");
 
     gr18 = new TGraphErrors(10, x, pSigmaValues595, ex, pSigmaErrValues595);
@@ -584,7 +584,7 @@ void Sigma_NoScatt(){
     pad19->SetGridx(1);
     pad19->SetGridy(1);
     TH1F  *hr18;
-    hr18 = canvas18->DrawFrame(xMin,-1.5,xMax,1.5);
+    hr18 = canvas18->DrawFrame(xMin,-1,xMax,1);
     hr18->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 600-610MeV)");
 
     gr19 = new TGraphErrors(10, x, pSigmaValues605, ex, pSigmaErrValues605);
@@ -606,7 +606,7 @@ void Sigma_NoScatt(){
     pad20->SetGridx(1);
     pad20->SetGridy(1);
     TH1F  *hr19;
-    hr19 = canvas19->DrawFrame(xMin,-1.5,xMax,1.5);
+    hr19 = canvas19->DrawFrame(xMin,-1,xMax,1);
     hr19->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 610-620MeV)");
 
     gr20 = new TGraphErrors(10, x, pSigmaValues615, ex, pSigmaErrValues615);

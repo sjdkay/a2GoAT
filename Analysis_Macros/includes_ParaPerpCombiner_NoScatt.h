@@ -41,6 +41,7 @@ TH1D* time_Para;
 TH1D* time_cut_Para;
 
 TH1D* Eg_Para;
+TH1D* PhiDifference_Para;
 TH1D* EpKin_Para;
 TH1D* EpCorrected_Para;
 TH1D* EpKinEpCorrDiff_Para;
@@ -49,7 +50,6 @@ TH1D* EpEpCorrDiff_Para;
 TH1D* MMpEpCorrected_Para;
 TH1D* OAngle_Para;
 TH1D* WCZnRecon_Para;
-TH1D* PhipPhinDiff_Para;
 
 TH1D* MMp200300_Para;
 TH1D* MMp300400_Para;
@@ -297,6 +297,7 @@ TH1D* time_Perp;
 TH1D* time_cut_Perp;
 
 TH1D* Eg_Perp;
+TH1D* PhiDifference_Perp;
 TH1D* EpKin_Perp;
 TH1D* EpCorrected_Perp;
 TH1D* EpKinEpCorrDiff_Perp;
@@ -305,7 +306,6 @@ TH1D* EpEpCorrDiff_Perp;
 TH1D* MMpEpCorrected_Perp;
 TH1D* OAngle_Perp;
 TH1D* WCZnRecon_Perp;
-TH1D* PhipPhinDiff_Perp;
 
 TH1D* MMp200300_Perp;
 TH1D* MMp300400_Perp;

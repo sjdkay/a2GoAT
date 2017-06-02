@@ -60,6 +60,35 @@ Bool_t	PNeutPol_Polarimeter_Lin_NoScatt::Start()
 
 void	PNeutPol_Polarimeter_Lin_NoScatt::ProcessEvent()
 {
+    // Set up APLCON
+    APLCON::Fit_Settings_t settings = APLCON::Fit_Settings_t::Default;
+    settings.MaxIterations = 10;
+    settings.DebugLevel = 0;
+    APLCON kinfit("EMcons", settings);
+
+    auto EnergyMomentumBalance = [] (const vector< vector<double> >& particles) -> vector<double>
+    {
+        const TLorentzVector target(0,0,0, 1875.613);
+        // assume first particle is beam photon
+        double tmpMom;
+        double tmpMass;
+        tmpMass=0;
+        tmpMom=sqrt((particles[0][0]+tmpMass)*(particles[0][0]+tmpMass)-tmpMass*tmpMass);
+
+        TLorentzVector tmpBeam (tmpMom*sin(particles[0][1])*cos(particles[0][2]),tmpMom*sin(particles[0][1])*sin(particles[0][2]),tmpMom*cos(particles[0][1]),particles[0][0]+tmpMass);
+
+        tmpMass=938.272;
+        tmpMom=sqrt((particles[1][0]+tmpMass)*(particles[1][0]+tmpMass)-tmpMass*tmpMass);
+        TLorentzVector tmpProton (tmpMom*sin(particles[1][1])*cos(particles[1][2]),tmpMom*sin(particles[1][1])*sin(particles[1][2]),tmpMom*cos(particles[1][1]),particles[1][0]+tmpMass);
+
+        tmpMass=939.565;
+        tmpMom=sqrt((particles[2][0]+tmpMass)*(particles[2][0]+tmpMass)-tmpMass*tmpMass);
+        TLorentzVector tmpNeutron (tmpMom*sin(particles[2][1])*cos(particles[2][2]),tmpMom*sin(particles[2][1])*sin(particles[2][2]),tmpMom*cos(particles[2][1]),particles[2][0]+tmpMass);
+
+        TLorentzVector diff = target + tmpBeam - tmpProton - tmpNeutron;
+        return {diff.X(), diff.Y(), diff.Z(), diff.T()};
+    };
+
     EventNumber = GetEventNumber();
     NTrack = GetTracks()->GetNTracks();
     NP = GetProtons()->GetNParticles();
@@ -101,8 +130,8 @@ void	PNeutPol_Polarimeter_Lin_NoScatt::ProcessEvent()
     {
         GVp = GetTracks()->GetVector(0, Mp);
         GVn = GetTracks()->GetVector(1, Mn);
-        Timep = GetTracks->GetTime(0);
-        Timen = GetTracks->GetTime(1);
+        Timep = GetTracks()->GetTime(0);
+        Timen = GetTracks()->GetTime(1);
         Thp = GetTracks()->GetTheta(0);
         ThpRad = GetTracks()->GetThetaRad(0);
         Thn = GetTracks()->GetTheta(1);
@@ -117,20 +146,14 @@ void	PNeutPol_Polarimeter_Lin_NoScatt::ProcessEvent()
         En = GetTracks()->GetClusterEnergy(1);
         dEp = GetTracks()->GetVetoEnergy(0);
         dEn = GetTracks()->GetVetoEnergy(1);
-        WC1pX = GetTracks()->GetMWPC0PosX(0);
-        WC1pY = GetTracks()->GetMWPC0PosY(0);
-        WC1pZ = GetTracks()->GetMWPC0PosZ(0);
-        WC1nX = GetTracks()->GetMWPC0PosX(1);
-        WC1nY = GetTracks()->GetMWPC0PosY(1);
-        WC1nZ = GetTracks()->GetMWPC0PosZ(1);
     }
 
     else if (Proton2 == kTRUE)
     {
         GVp = GetTracks()->GetVector(1, Mp);
         GVn = GetTracks()->GetVector(0, Mn);
-        Timep = GetTracks->GetTime(1);
-        Timen = GetTracks->GetTime(0);
+        Timep = GetTracks()->GetTime(1);
+        Timen = GetTracks()->GetTime(0);
         Thp = GetTracks()->GetTheta(1);
         ThpRad = GetTracks()->GetThetaRad(1);
         Thn = GetTracks()->GetTheta(0);
@@ -145,12 +168,6 @@ void	PNeutPol_Polarimeter_Lin_NoScatt::ProcessEvent()
         En = GetTracks()->GetClusterEnergy(0);
         dEp = GetTracks()->GetVetoEnergy(1);
         dEn = GetTracks()->GetVetoEnergy(0);
-        WC1pX = GetTracks()->GetMWPC0PosX(1);
-        WC1pY = GetTracks()->GetMWPC0PosY(1);
-        WC1pZ = GetTracks()->GetMWPC0PosZ(1);
-        WC1nX = GetTracks()->GetMWPC0PosX(0);
-        WC1nY = GetTracks()->GetMWPC0PosY(0);
-        WC1nZ = GetTracks()->GetMWPC0PosZ(0);
     }
 
     else
@@ -176,18 +193,16 @@ void	PNeutPol_Polarimeter_Lin_NoScatt::ProcessEvent()
     GVnCorr =  LNeutron4VectorCorr(Zp, GVn, En, Pn , Mn, Phn);
     ThetanCorr = (GVnCorr.Theta())*TMath::RadToDeg();
 
-    WC3Vectp.SetXYZ(WC1pX, WC1pY, WC1pZ);
-    WC3Vectn.SetXYZ(WC1nX, WC1nY, WC1nZ);
-    WCThetap = WC3Vectp.Theta()*TMath::RadToDeg(); // Angles from WC hit positons
-    WCThetapRad = WC3Vectp.Theta();
-    WCPhip = WC3Vectp.Phi()*TMath::RadToDeg();
-    WCPhipRad = WC3Vectp.Phi();
-    WCThetan = WC3Vectn.Theta()*TMath::RadToDeg();
-    WCPhin = WC3Vectn.Phi()*TMath::RadToDeg();
-
     GVpCorr3 = GVpCorr.Vect();
     GVnCorr3 = GVnCorr.Vect();
     pVertex = TVector3(Xp, Yp, Zp);
+
+    kinfit.LinkVariable("beamF",    beamF.Link(),       beamF.LinkSigma());
+    kinfit.LinkVariable("protonF",    protonF.Link(),       protonF.LinkSigma());
+    kinfit.LinkVariable("neutronF",    neutronF.Link(),       neutronF.LinkSigma());
+
+    vector<string> all_names = {"beamF", "protonF", "neutronF"};
+    kinfit.AddConstraint("EnergyMomentumBalance", all_names, EnergyMomentumBalance);
 
     for (Int_t j = 0; j < GetTagger()->GetNTagged(); j++)
     {
@@ -240,15 +255,32 @@ void	PNeutPol_Polarimeter_Lin_NoScatt::ProcessEvent()
         OpeningAngle = (N3Vect.Angle(GVnCorr3))*TMath::RadToDeg();
 
         ThetanDiff = abs(ThetanRec - ThetanCorr);
+        PhinDiff = abs(PhinRec - Phn);
 
         TVector3 ScattAngles = ScatteredFrameAngles(RecNeutronEpCorr3, GVpCorr3, GVnCorr3, Gamma);
         ScattTheta = ScattAngles(0); // Theta is 1st component in vector fn returns above
         ScattPhi = ScattAngles(1); // Phi is 2nd component
 
+        beamF.SetFromVector(Gamma); // Set Lorentz vectors for use in APLCON
+        protonF.SetFromVector(GVpCorr);
+        neutronF.SetFromVector(GVnCorr);
+
+        neutronF.Ek_Sigma=0; // Set errors on Ek, Theta and Phi for n/p/Photon
+        neutronF.Theta_Sigma=0.0474839+0.00425626*GVnCorr.Theta();
+        neutronF.Phi_Sigma=0.112339-0.0761341*GVnCorr.Theta()+0.0244866*GVnCorr.Theta()*GVnCorr.Theta();
+
+        protonF.Ek_Sigma=(0.045+0.043*(GVpCorr.E()-GVpCorr.M()))*4;
+        protonF.Theta_Sigma=0.00920133-0.00511389*GVpCorr.Theta()+0.00307915*GVpCorr.Theta()*GVpCorr.Theta();
+        protonF.Phi_Sigma=0.00974036+0.00411955*GVpCorr.Theta()-0.0096472*GVpCorr.Theta()*GVpCorr.Theta()+0.00414428*GVpCorr.Theta()*GVpCorr.Theta()*GVpCorr.Theta();
+        if(EpCorr>410)protonF.Ek_Sigma=0;
+
+        beamF.Ek_Sigma=0.87-0.0000011*(EGamma-177);
+        beamF.Theta_Sigma=1e-3;
+        beamF.Phi_Sigma=1e-3;
+
         if(Cut_protonKinGood -> IsInside(KinEp, dEp) == kFALSE) continue; // If KinE proton is NOT inside p banana drop out
         if (((MMpEpCorr < 800) == kTRUE) || ((MMpEpCorr > 1100) == kTRUE)) continue; // Force a missing mass cut
         if ( (ThetanCorr-ThetanRec) < -15 || (ThetanCorr-ThetanRec) > 15) continue;
-        //if (ScattTheta > 60) continue;
 
         FillHists(); // Fill histograms with data generated
     }

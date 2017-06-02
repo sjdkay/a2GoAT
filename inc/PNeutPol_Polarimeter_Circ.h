@@ -26,6 +26,7 @@ private:
   Int_t NRoo;
   Int_t NTag;
   Int_t NTrack;
+  Int_t EventNum;
 
   Int_t Detectors1;
   Int_t Detectors2;
@@ -33,6 +34,8 @@ private:
 
   double_t Time;
   double_t TaggerTime;
+  double_t Timep;
+  double_t Timen;
   double_t EGamma;
   double_t Mn;
   double_t Mp;
@@ -41,35 +44,40 @@ private:
   double_t z1;
   double_t z2;
   double_t ln;
+  double_t Xp;
+  double_t Yp;
   double_t Zp;
   double_t Zn;
+  double_t Thp;
+  double_t ThpRad;
+  double_t Thn;
+  double_t Php;
+  double_t PhpRad;
+  double_t Phn;
   double_t WC1pX;
   double_t WC1pY;
   double_t WC1pZ;
   double_t WC1nX;
   double_t WC1nY;
   double_t WC1nZ;
-  double_t WCThetap;
-  double_t WCThetapRad;
-  double_t WCThetan;
-  double_t WCPhip;
-  double_t WCPhipRad;
-  double_t WCPhin;
+  double_t WC2nX;
+  double_t WC2nY;
+  double_t WC2nZ;
   double_t WCZnRec;
-  double_t Thetap;
-  double_t ThetapRad;
+  double_t ThetapCM;
+  double_t CosThetapCM;
   double_t Thetan;
   double_t ThetapRec;
   double_t ThetanRec;
   double_t ThetaPiRec;
-  double_t Phip;
-  double_t PhipRad;
-  double_t Phin;
+  double_t Pp;
+  double_t Pn;
+  double_t PpKin;
   double_t PhipRec;
   double_t PhinRec;
   double_t PhiPiRec;
   double_t ThetaWCn;
-  double_t PhiWCDiff;
+  double_t PhiDiff;
   double_t ThetaPiRecDiff;
   double_t ThetapRecDiff;
   double_t Ep;
@@ -91,7 +99,6 @@ private:
   double_t EpDiff;
   double_t EpCorr;
   double_t EpTot;
-  double_t Pp;
   double_t Ppx;
   double_t Ppy;
   double_t Ppz;
@@ -99,19 +106,30 @@ private:
   double_t OpeningAngle;
   double_t ThetanDiff;
   double_t PhinDiff;
+  double_t Ncor1;
+  double_t Ncor2;
+  double_t Ncor3;
+  double_t NcorR;
+  double_t NcorRR;
+  double_t ThetanCorr;
 
   Bool_t nBanana;
   Bool_t Proton1;
   Bool_t Proton2;
   Bool_t BeamHelicity;
 
+  TLorentzVector B;
   TLorentzVector GVp;
   TLorentzVector GVn;
+  TLorentzVector GVpCorr;
+  TLorentzVector GVpCorrB;
+  TLorentzVector GVnCorr;
   TLorentzVector Gamma;
   TLorentzVector Deut;
   TLorentzVector Neut;
   TLorentzVector P4Vect;
   TLorentzVector N4Vect;
+  TLorentzVector N4VectCorr;
   TLorentzVector Pi4Vect;
   TLorentzVector RecKinProton;
   TLorentzVector RecKinNeutron;
@@ -121,11 +139,14 @@ private:
   TLorentzVector RecKinPPi;
   TLorentzVector RecProtonEpCorr;
   TLorentzVector RecNeutronEpCorr;
-  TVector3 GVp3;
-  TVector3 GVn3;
+  TVector3 b;
+  TVector3 pVertex;
+  TVector3 GVpCorr3;
+  TVector3 GVnCorr3;
   TVector3 GVn3Rec;
   TVector3 WC3Vectp;
-  TVector3 WC3Vectn;
+  TVector3 WC13Vectn;
+  TVector3 WC23Vectn;
   TVector3 P3Vect;
   TVector3 N3Vect;
   TVector3 RecProtonEpCorr3;
@@ -137,7 +158,7 @@ private:
   GH1* EkSum;
   GH1* Eg;
   GH1* ThetaProt655705;
-  GH1* WCPhiDifference;
+  GH1* PhiDifference;
   GH1* EpKin;
   GH1* EpCorrected;
   GH1* EpKinEpCorrDiff;
@@ -216,9 +237,20 @@ private:
 
   GH2* DeutKinPiKin;
 
+  GH1* ThetanDist;
+  GH1* ThetanRecDist;
+  GH1* ThetanDiffDist;
+  GH2* ThetanDiffZp;
+
+  GH1* ThetanCorrDist;
+  GH1* ThetanCorrDiffDist;
+  GH1* ThetanCorrRecDiffDist;
+  GH2* ThetanCorrDiffZp;
+
   GH1* ThetaRecPiDiff;
   GH2* ThetanThetaRecPi;
   GH2* ThetanThetaRecPiDiff;
+
   GH1* ThetaRecPDiff;
   GH2* ThetanThetaRecP;
   GH2* ThetanThetaRecPDiff;
@@ -304,6 +336,7 @@ public:
     virtual ~PNeutPol_Polarimeter_Circ();
     virtual Bool_t  Init();
     TCutG* OpenCutFile(Char_t* filename, Char_t* cutname);
+    TLorentzVector CNeutron4VectorCorr(Double_t ZVert, TLorentzVector n4Vector, Double_t nE, Double_t MagP, Double_t nMass, Double_t nPhi);
     TLorentzVector CProton4VectorKin(Double_t KinE, Double_t Theta, Double_t Phi);
     TLorentzVector CNeutron4VectorKin(TLorentzVector ProtonKinVector);
     TLorentzVector CPion4VectorKin(TLorentzVector ProtonKinVector);
