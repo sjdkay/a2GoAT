@@ -238,6 +238,7 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
     {
         TaggerTime = GetTagger()->GetTaggedTime(j); // Get tagged time for event
         EGamma = (GetTagger()->GetTaggedEnergy(j)); // Get Photon energy for event
+        BeamHelicity = GetTrigger()->GetHelicity();
         Gamma = TLorentzVector (0., 0., EGamma , EGamma); // 4-Vector of Photon beam
         B = (Deut + Gamma);
         b = -1*B.BoostVector();
@@ -518,8 +519,8 @@ PNeutPol_Polarimeter_Circ::PNeutPol_Polarimeter_Circ() // Define a load of histo
     ClosestApproach = new GH1("ClosestApproach", "DOCA of n and p' vectors", 200, -200, 200);
     POCAr = new GH1("POCAr", "Radius of POCA", 200, 0, 300);
     ScatterVertexZ = new GH1("ScatterVertexZ", "Z Vertex Point of Scatter from DOCA Method", 200, -200, 200);
-    ScatterVertexXY = new GH2("ScatterVertexXY", "XY Vertex Point of Scatter from DOCA Method", 100, -100, 100, 100, -100, 100);
-    ScatterVertex = new GH3("ScatterVertex", "Vertex Point of Scatter from DOCA Method", 100, -50, 50, 100, -50, 50, 100, -200, 200);
+    ScatterVertexXY = new GH2("ScatterVertexXY", "XY Vertex Point of Scatter from DOCA Method", 100, -80, 80, 100, -80, 80);
+    ScatterVertex = new GH3("ScatterVertex", "Vertex Point of Scatter from DOCA Method", 100, -80, 80, 100, -80, 80, 100, -200, 200);
 }
 
 void PNeutPol_Polarimeter_Circ::FillHists()
