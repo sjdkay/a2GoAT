@@ -47,6 +47,8 @@ private:
   double_t Xp;
   double_t Yp;
   double_t Zp;
+  double_t Xn;
+  double_t Yn;
   double_t Zn;
   double_t Thp;
   double_t ThpRad;
@@ -112,6 +114,11 @@ private:
   double_t NcorR;
   double_t NcorRR;
   double_t ThetanCorr;
+  double_t DOCA;
+  double_t POCAx;
+  double_t POCAy;
+  double_t POCAz;
+  double_t r;
 
   Bool_t nBanana;
   Bool_t Proton1;
@@ -141,14 +148,21 @@ private:
   TLorentzVector RecNeutronEpCorr;
   TVector3 b;
   TVector3 pVertex;
+  TVector3 nVertex;
+  TVector3 DOCAVertex1;
+  TVector3 DOCAVertex2;
+  TVector3 POCA;
   TVector3 GVpCorr3;
   TVector3 GVnCorr3;
+  TVector3 GVn3Unit;
+  TVector3 GVnCorr3Unit;
   TVector3 GVn3Rec;
   TVector3 WC3Vectp;
   TVector3 WC13Vectn;
   TVector3 WC23Vectn;
   TVector3 P3Vect;
   TVector3 N3Vect;
+  TVector3 N3VectUnit;
   TVector3 RecProtonEpCorr3;
   TVector3 RecNeutronEpCorr3;
 
@@ -231,7 +245,8 @@ private:
   GH2* E_dE;
   GH2* KinEp_dE;
   GH2* ThetaScPhiSc;
-  GH2* E_KinEp;
+  GH2* EpCorr_KinEp;
+  GH2* PhiDiffThetaSc;
   GH2* PhinDiffWCZRec;
   GH2* ThetaDiffPhiDiff;
 
@@ -254,6 +269,12 @@ private:
   GH1* ThetaRecPDiff;
   GH2* ThetanThetaRecP;
   GH2* ThetanThetaRecPDiff;
+
+  GH1* ClosestApproach;
+  GH1* POCAr;
+  GH1* ScatterVertexZ;
+  GH2* ScatterVertexXY;
+  GH3* ScatterVertex;
 
   char cutfilename[256];
   char cutname[256];

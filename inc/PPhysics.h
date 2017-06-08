@@ -120,6 +120,8 @@ public:
 
     TVector3 ScatteredFrameAngles(TVector3 InitialVect, TVector3 RealPVect, TVector3 ScattVector, TLorentzVector GammaVect);
 
+    Double_t Calc_dtfInterDOCA(const TVector3 &locUnitDir1, const TVector3 &locUnitDir2, const TVector3 &locVertex1, const TVector3 &locVertex2, TVector3 &locInterDOCA1, TVector3 &locInterDOCA2);
+
 	void FillScalers(Int_t low_scaler_number, Int_t high_scaler_number, TH1* hist);
 
 	Bool_t InitBackgroundCuts();

@@ -321,6 +321,28 @@ TVector3 PPhysics::ScatteredFrameAngles(TVector3 InitialVect, TVector3 RealPVect
   return ValueHolder;
 }
 
+Double_t PPhysics::Calc_dtfInterDOCA(const TVector3 &locUnitDir1, const TVector3 &locUnitDir2, const TVector3 &locVertex1, const TVector3 &locVertex2, TVector3 &locInterDOCA1, TVector3 &locInterDOCA2){
+    //originated from code by Jörn Langheinrich
+    //you can use this function to find the DOCA to a fixed point by calling this function with locUnitDir1 and 2 parallel, and the fixed vertex as locVertex2
+    Double_t locUnitDot = locUnitDir1*locUnitDir2;
+    Double_t locDenominator = locUnitDot*locUnitDot - 1.0; /// scalar product of directions
+    Double_t locDistVertToInterDOCA1 = 0.0, locDistVertToInterDOCA2 = 0.0; //distance from vertex to DOCA point
+
+    if(fabs(locDenominator) < 1.0e-15) //parallel
+        locDistVertToInterDOCA1 = (locVertex2 - locVertex1)*locUnitDir2/locUnitDot; //the opposite
+    else{
+        Double_t locA = (locVertex1 - locVertex2)*locUnitDir1;
+        Double_t locB = (locVertex1 - locVertex2)*locUnitDir2;
+        locDistVertToInterDOCA1 = (locA - locUnitDot*locB)/locDenominator;
+        locDistVertToInterDOCA2 = (locUnitDot*locA - locB)/locDenominator;
+    }
+
+    locInterDOCA1 = locVertex1 + locDistVertToInterDOCA1*locUnitDir1; //intersection point of DOCA line and track 1
+    locInterDOCA2 = locVertex2 + locDistVertToInterDOCA2*locUnitDir2; //intersection point of DOCA line and track 2
+    Double_t locDOCA = (locInterDOCA1 - locInterDOCA2).Mag();
+    return ((locVertex2.Z() > locVertex1.Z()) ? locDOCA : -1.0*locDOCA); // Returns DOCA, also want POCA
+}
+
 // ----------------------------------------------------------------------------------------
 // GH1 routines
 // ----------------------------------------------------------------------------------------

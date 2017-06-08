@@ -106,7 +106,9 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
         Proton1 = kTRUE;
         Proton2 = kFALSE;
         if (GetTracks()->GetMWPC0Energy(0) == 0) return; // If no hit in first chamber for p drop out
+        if (GetTracks()->GetMWPC1Energy(0) == 0) return; // If no hit in second chamber for p drop out
         if (GetTracks()->GetMWPC0Energy(1) == 0) return; // If no hit in first chamber for n drop out
+        if (GetTracks()->GetMWPC1Energy(1) == 0) return; // If no hit in second chamber for p drop out
     }
 
     // If track 2 only gives signals in MWPC and CB it is the neutron
@@ -115,7 +117,9 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
         Proton1 = kFALSE;
         Proton2 = kTRUE;
         if (GetTracks()->GetMWPC0Energy(1) == 0) return; // If no hit in first chamber for p drop out
+        if (GetTracks()->GetMWPC1Energy(1) == 0) return; // If no hit in second chamber for p drop out
         if (GetTracks()->GetMWPC0Energy(0) == 0) return; // If no hit in first chamber for n drop out
+        if (GetTracks()->GetMWPC1Energy(0) == 0) return; // If no hit in second chamber for n drop out
     }
 
     // Drop out on ANY other condition (for now)
@@ -141,17 +145,13 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
         Xp = GetTracks()->GetPseudoVertexX(0);
         Yp = GetTracks()->GetPseudoVertexY(0);
         Zp = GetTracks()->GetPseudoVertexZ(0); // First particle is proton, second neutron
+        Xn = GetTracks()->GetPseudoVertexX(1);
+        Yn = GetTracks()->GetPseudoVertexY(1);
         Zn = GetTracks()->GetPseudoVertexZ(1);
         Ep = GetTracks()->GetClusterEnergy(0);
         En = GetTracks()->GetClusterEnergy(1);
         dEp = GetTracks()->GetVetoEnergy(0);
         dEn = GetTracks()->GetVetoEnergy(1);
-        WC1pX = GetTracks()->GetMWPC0PosX(0);
-        WC1pY = GetTracks()->GetMWPC0PosY(0);
-        WC1pZ = GetTracks()->GetMWPC0PosZ(0);
-        WC1nX = GetTracks()->GetMWPC0PosX(1);
-        WC1nY = GetTracks()->GetMWPC0PosY(1);
-        WC1nZ = GetTracks()->GetMWPC0PosZ(1);
         WC1pX = GetTracks()->GetMWPC0PosX(0);
         WC1pY = GetTracks()->GetMWPC0PosY(0);
         WC1pZ = GetTracks()->GetMWPC0PosZ(0);
@@ -178,6 +178,8 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
         Xp = GetTracks()->GetPseudoVertexX(1);
         Yp = GetTracks()->GetPseudoVertexY(1);
         Zp = GetTracks()->GetPseudoVertexZ(1); // First particle is neutron, second is proton
+        Xn = GetTracks()->GetPseudoVertexX(0);
+        Yn = GetTracks()->GetPseudoVertexY(0);
         Zn = GetTracks()->GetPseudoVertexZ(0);
         Ep = GetTracks()->GetClusterEnergy(1); // Therefore the quantity mmp is the amount of missing mass we see when we do a kinematics calculation USING the proton
         En = GetTracks()->GetClusterEnergy(0);
@@ -220,7 +222,10 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
 
     GVpCorr3 = GVpCorr.Vect();
     GVnCorr3 = GVnCorr.Vect();
+    GVn3Unit = (GVn.Vect()).Unit();
+    GVnCorr3Unit = GVnCorr3.Unit();
     pVertex = TVector3(Xp, Yp, Zp);
+    nVertex = TVector3(Xn, Yn, Zn);
 
     kinfit.LinkVariable("beamF",    beamF.Link(),       beamF.LinkSigma());
     kinfit.LinkVariable("protonF",    protonF.Link(),       protonF.LinkSigma());
@@ -249,7 +254,15 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
         PhinRec = (RecKinNeutron.Phi()) * TMath::RadToDeg();
         WCZnRec = 72/tan(RecKinNeutron.Theta());
 
-        PhiDiff = abs (Php-PhinRec); // This will always be 180?
+        if(Cut_protonKinGood -> IsInside(KinEp, dEp) == kFALSE) continue; // If KinE proton is NOT inside p banana drop out
+
+        RecProtonEpCorr = CProton4VectorKin(EpCorr, ThpRad, PhpRad);
+        RecNeutronEpCorr = CNeutron4VectorKin(RecProtonEpCorr);
+        MMpEpCorr = RecNeutronEpCorr.M();
+
+        if (((MMpEpCorr < 800) == kTRUE) || ((MMpEpCorr > 1100) == kTRUE)) continue; // Force a missing mass cut
+
+        PhiDiff = abs (Php-Phn); // This will always be 180?
         // if ( PhiDiff > 195 || PhiDiff < 165) return;
 
         // Gamma(n,p)Pi (P detected correct)
@@ -272,14 +285,12 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
 
         KinEDiff = KinEp - EpCorr;
 
-        RecProtonEpCorr = CProton4VectorKin(EpCorr, ThpRad, PhpRad);
-        RecNeutronEpCorr = CNeutron4VectorKin(RecProtonEpCorr);
-        MMpEpCorr = RecNeutronEpCorr.M();
         RecProtonEpCorr3 = RecProtonEpCorr.Vect();
         RecNeutronEpCorr3 = RecNeutronEpCorr.Vect();
 
         P3Vect = RecKinProton.Vect();
         N3Vect = RecKinNeutron.Vect();
+        N3VectUnit = N3Vect.Unit();
         OpeningAngle = (N3Vect.Angle(GVnCorr3))*TMath::RadToDeg();
 
         ThetanDiff = abs(ThetanRec - ThetanCorr);
@@ -306,9 +317,17 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
         beamF.Theta_Sigma=1e-3;
         beamF.Phi_Sigma=1e-3;
 
-        if(Cut_protonKinGood -> IsInside(KinEp, dEp) == kFALSE) continue; // If KinE proton is NOT inside p banana drop out
-        if (((MMpEpCorr < 800) == kTRUE) || ((MMpEpCorr > 1100) == kTRUE)) continue; // Force a missing mass cut
+        DOCAVertex1 = TVector3(0., 0., 0.);
+        DOCAVertex2 = TVector3(0., 0., 0.);
+        DOCA = Calc_dtfInterDOCA(N3VectUnit, GVn3Unit, pVertex, nVertex, DOCAVertex1, DOCAVertex2);
+        POCAx = DOCAVertex1.X()-(DOCAVertex1.X()-DOCAVertex2.X())/2.0;
+        POCAy = DOCAVertex1.Y()-(DOCAVertex1.Y()-DOCAVertex2.Y())/2.0;
+        POCAz = DOCAVertex1.Z()-(DOCAVertex1.Z()-DOCAVertex2.Z())/2.0;
+        r = sqrt((TMath::Power(POCAx,2))+(TMath::Power(POCAy,2)));
+        POCA = TVector3(POCAx, POCAy, POCAz);
         //if (ScattTheta > 60) continue;
+
+        if( r > 75 || r < 35 ) return; // Ensure POCA is at polarimeter radius
 
         FillHists(); // Fill histograms with data generated
     }
@@ -396,8 +415,7 @@ PNeutPol_Polarimeter_Circ::PNeutPol_Polarimeter_Circ() // Define a load of histo
     EpKin = new GH1 ("EpKin", "E_{p} Calculated from E_{p}/#theta_{p}", 100, 0, 500);
     EpCorrected = new GH1 ("EpCorrected", "E_{pCorr}", 100, 0, 500);
     OAngle = new GH1 ("OAngle", "Opening Angle between P and N Vectors", 180, 0, 180);
-    WCZnRecon = new GH1 ("WCZnRecon", "WCZ Hit Position from Reconstructed n Vector", 200, 0, 400);
-    WCZnRecon = new GH1 ("WCZnRecon", "WCZ Hit Position from Reconstructed n Vector", 200, 0, 400);
+    WCZnRecon = new GH1 ("WCZnRecon", "WCZ Hit Position from Reconstructed n Vector", 400, -400, 400);
 
     ThetaSc =  new GH1( "Theta_Scattered", "Scattered Proton Theta Distribution in Rotated Frame", 180, 0, 180 );
     PhiSc = new GH1( "Phi_Scattered", "Scattered Proton Phi Distribution in Rotated Frame", 90, -180, 180 );
@@ -490,12 +508,18 @@ PNeutPol_Polarimeter_Circ::PNeutPol_Polarimeter_Circ() // Define a load of histo
 
     E_dE = new GH2 ("E_dE", "EdE Plot With E Loss Adjustment", 100, 0, 500, 100, 0, 5);
     KinEp_dE = new GH2 ("KinEp_dE", "KinEpdE Plot", 100, 0, 500, 100, 0, 5);
+    PhiDiffThetaSc = new GH2("PhiDiffThetaSc", "#theta_{Sc} as a fn of #phi_{Diff}", 100, 0, 360, 100, 0, 180);
     //KinEp_dE_GoodCut = new GH2 ("KinEp_dE_GoodCut", "KinEpdE Plot With Good Proton Cut", 100, 0, 500, 100, 0, 5);
     ThetaScPhiSc = new GH2 ("ThetaScPhiSc", "#Phi_{Sc} as a function of #theta_{Sc}", 100, 0, 180, 100, -180, 180);
-    E_KinEp = new GH2 ("E_KinEp", "Kinematic Energy of Proton as a function of CB energy", 100, 0, 500, 100, 0, 500);
+    EpCorr_KinEp = new GH2 ("EpCorr_KinEp", "E_{pKin} as a fn of E_{pCorr}", 100, 0, 500, 100, 0, 500);
     PhinDiffWCZRec = new GH2 ("PhinDiffWCZRec", "Difference between WC Phi and Reconstructed Phi as a fn of WCZ Hit Position", 100, 0, 200, 100, 0, 180);
-    ThetaDiffPhiDiff = new GH2 ("ThetaDiffPhiDiff", "PhiDiff as a Fn of ThetaDiff (Detected-Rec)", 100, 0, 180, 100, 0, 180);
+    ThetaDiffPhiDiff = new GH2 ("ThetaDiffPhiDiff", "PhiDiff as a Fn of ThetaDiff (Detected-Rec)", 100, -180, 180, 100, -180, 180);
 
+    ClosestApproach = new GH1("ClosestApproach", "DOCA of n and p' vectors", 200, -200, 200);
+    POCAr = new GH1("POCAr", "Radius of POCA", 200, 0, 300);
+    ScatterVertexZ = new GH1("ScatterVertexZ", "Z Vertex Point of Scatter from DOCA Method", 200, -200, 200);
+    ScatterVertexXY = new GH2("ScatterVertexXY", "XY Vertex Point of Scatter from DOCA Method", 100, -100, 100, 100, -100, 100);
+    ScatterVertex = new GH3("ScatterVertex", "Vertex Point of Scatter from DOCA Method", 100, -50, 50, 100, -50, 50, 100, -200, 200);
 }
 
 void PNeutPol_Polarimeter_Circ::FillHists()
@@ -514,9 +538,10 @@ void PNeutPol_Polarimeter_Circ::FillHists()
     OAngle->Fill(OpeningAngle, TaggerTime);
     WCZnRecon->Fill(WCZnRec, TaggerTime);
     ZpDist->Fill(Zp, TaggerTime);
+    PhiDiffThetaSc->Fill(PhiDiff, ScattTheta, TaggerTime);
 
     PhiDifference->Fill(PhiDiff);
-    E_KinEp->Fill(EpCorr, KinEp, TaggerTime);
+    EpCorr_KinEp->Fill(EpCorr, KinEp, TaggerTime);
     PhinDiffWCZRec->Fill(WCZnRec, PhinDiff, TaggerTime);
 
     ThetanDist->Fill(Thn, TaggerTime);
@@ -537,9 +562,15 @@ void PNeutPol_Polarimeter_Circ::FillHists()
     ThetanThetaRecP->Fill(ThetanCorr, ThetapRec, TaggerTime);
     ThetanThetaRecPDiff->Fill(ThetanCorr, ThetapRecDiff, TaggerTime);
 
-    ThetaDiffPhiDiff->Fill((abs(ThetanCorr-ThetanRec)), (abs(Phn-PhinRec)), TaggerTime );
+    ThetaDiffPhiDiff->Fill((ThetanCorr-ThetanRec), (Phn-PhinRec), TaggerTime);
 
     DeutKinPiKin->Fill(ThetanRec-ThetanCorr, ThetaPiRecDiff, TaggerTime);
+
+    ClosestApproach->Fill(DOCA, TaggerTime);
+    POCAr->Fill(r, TaggerTime);
+    ScatterVertexZ->Fill(POCAz, TaggerTime);
+    ScatterVertexXY->Fill(POCAx, POCAy, TaggerTime);
+    ScatterVertex->Fill(POCAx, POCAy, POCAz, TaggerTime);
 
     ThetaSc -> Fill(ScattTheta, TaggerTime);
     PhiSc -> Fill(ScattPhi, TaggerTime);
