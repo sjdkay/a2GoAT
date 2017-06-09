@@ -273,6 +273,7 @@ private:
   GH1* ClosestApproach;
   GH1* POCAr;
   GH1* ScatterVertexZ;
+  GH2* ScatterVertexZr;
   GH2* ScatterVertexXY;
   GH3* ScatterVertex;
 

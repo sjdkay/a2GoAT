@@ -328,7 +328,7 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
         POCA = TVector3(POCAx, POCAy, POCAz);
         //if (ScattTheta > 60) continue;
 
-        if( r > 75 || r < 35 ) return; // Ensure POCA is at polarimeter radius
+        //if( r > 75 || r < 35 ) return; // Ensure POCA is at polarimeter radius
 
         FillHists(); // Fill histograms with data generated
     }
@@ -517,8 +517,9 @@ PNeutPol_Polarimeter_Circ::PNeutPol_Polarimeter_Circ() // Define a load of histo
     ThetaDiffPhiDiff = new GH2 ("ThetaDiffPhiDiff", "PhiDiff as a Fn of ThetaDiff (Detected-Rec)", 100, -180, 180, 100, -180, 180);
 
     ClosestApproach = new GH1("ClosestApproach", "DOCA of n and p' vectors", 200, -200, 200);
-    POCAr = new GH1("POCAr", "Radius of POCA", 200, 0, 300);
-    ScatterVertexZ = new GH1("ScatterVertexZ", "Z Vertex Point of Scatter from DOCA Method", 200, -200, 200);
+    POCAr = new GH1("POCAr", "r_{POCA}", 200, 0, 300);
+    ScatterVertexZ = new GH1("ScatterVertexZ", "Z_{POCA}", 200, -200, 200);
+    ScatterVertexZr = new GH2("ScatterVertexZr", "Z_{POCA} vs r_{POCA}", 200, -200, 200, 200, 0, 200);
     ScatterVertexXY = new GH2("ScatterVertexXY", "XY Vertex Point of Scatter from DOCA Method", 100, -80, 80, 100, -80, 80);
     ScatterVertex = new GH3("ScatterVertex", "Vertex Point of Scatter from DOCA Method", 100, -80, 80, 100, -80, 80, 100, -200, 200);
 }
@@ -570,6 +571,7 @@ void PNeutPol_Polarimeter_Circ::FillHists()
     ClosestApproach->Fill(DOCA, TaggerTime);
     POCAr->Fill(r, TaggerTime);
     ScatterVertexZ->Fill(POCAz, TaggerTime);
+    ScatterVertexZr->Fill(POCAz, r, TaggerTime);
     ScatterVertexXY->Fill(POCAx, POCAy, TaggerTime);
     ScatterVertex->Fill(POCAx, POCAy, POCAz, TaggerTime);
 
