@@ -725,5 +725,4 @@ void Sigma_NoScatt(){
 
     canvas20->Write();
     f3.Write();
-
 }
