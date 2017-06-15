@@ -196,18 +196,6 @@ private:
 
     GH1* ThetaSc;
     GH1* PhiSc;
-    GH1* PhiSc410;
-    GH1* PhiSc430;
-    GH1* PhiSc450;
-    GH1* PhiSc470;
-    GH1* PhiSc490;
-    GH1* PhiSc510;
-    GH1* PhiSc530;
-    GH1* PhiSc550;
-    GH1* PhiSc570;
-    GH1* PhiSc590;
-    GH1* PhiSc610;
-    GH1* PhiSc630;
 
     GH1* Phip425CM1;
     GH1* Phip435CM1;
