@@ -4,7 +4,7 @@ void Sigma_NoScatt(){
 
     TFile *MBData = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sig_res_St.root");
 
-    TFile *f1= TFile::Open("/scratch/Mainz_Software/a2GoAT/ParaPerpAsymm_NoScatt_Total_8.root");
+    TFile *f1= TFile::Open("/scratch/Mainz_Software/a2GoAT/ParaPerpAsymm_NoScatt_Total_9.root");
     TTree *t1 = (TTree*)f1->Get("Parameter_Values");
 
     Double_t pValues425[10], pValues435[10], pValues445[10], pValues455[10], pValues465[10], pValues475[10], pValues485[10], pValues495[10], pValues505[10], pValues515[10], pValues525[10], pValues535[10], pValues545[10], pValues555[10], pValues565[10], pValues575[10], pValues585[10], pValues595[10], pValues605[10], pValues615[10];
@@ -169,7 +169,7 @@ void Sigma_NoScatt(){
 
     }
 
-    TFile f3("Sigma_Plots_NoScatt_Multi_8.root", "RECREATE");
+    TFile f3("Sigma_Plots_NoScatt_9.root", "RECREATE");
 
     Float_t xMin = -1;
     Float_t xMax = 1;
@@ -198,6 +198,7 @@ void Sigma_NoScatt(){
     gr1->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 420-430MeV)");
     gr1->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr1->GetYaxis()->SetTitle("#Sigma");
+    gr1->SetName("Sigma425");
     gr1->Draw("ep");
 
     TCanvas *canvas1 = new TCanvas("canvas1","canvas1", 1920, 1080);
@@ -220,6 +221,7 @@ void Sigma_NoScatt(){
     gr2->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 430-440MeV)");
     gr2->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr2->GetYaxis()->SetTitle("#Sigma");
+    gr2->SetName("Sigma435");
     gr2->Draw("ep");
 
     TCanvas *canvas2 = new TCanvas("canvas2","canvas2", 1920, 1080);
@@ -242,6 +244,7 @@ void Sigma_NoScatt(){
     gr3->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 440-450MeV)");
     gr3->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr3->GetYaxis()->SetTitle("#Sigma");
+    gr3->SetName("Sigma445");
     gr3->Draw("ep");
 
     TCanvas *canvas3 = new TCanvas("canvas3","canvas3", 1920, 1080);
@@ -264,6 +267,7 @@ void Sigma_NoScatt(){
     gr4->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 450-460MeV)");
     gr4->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr4->GetYaxis()->SetTitle("#Sigma");
+    gr4->SetName("Sigma455");
     gr4->Draw("ep");
 
     TCanvas *canvas4 = new TCanvas("canvas4","canvas4", 1920, 1080);
@@ -286,6 +290,7 @@ void Sigma_NoScatt(){
     gr5->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 460-470MeV)");
     gr5->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr5->GetYaxis()->SetTitle("#Sigma");
+    gr5->SetName("Sigma465");
     gr5->Draw("ep");
 
     TCanvas *canvas5 = new TCanvas("canvas5","canvas5", 1920, 1080);
@@ -308,6 +313,7 @@ void Sigma_NoScatt(){
     gr6->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 470-480MeV)");
     gr6->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr6->GetYaxis()->SetTitle("#Sigma");
+    gr6->SetName("Sigma475");
     gr6->Draw("ep");
 
     TCanvas *canvas6 = new TCanvas("canvas6","canvas6", 1920, 1080);
@@ -330,6 +336,7 @@ void Sigma_NoScatt(){
     gr7->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 480-490MeV)");
     gr7->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr7->GetYaxis()->SetTitle("#Sigma");
+    gr7->SetName("Sigma485");
     gr7->Draw("ep");
 
     TCanvas *canvas7 = new TCanvas("canvas7","canvas7", 1920, 1080);
@@ -352,6 +359,7 @@ void Sigma_NoScatt(){
     gr8->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 490-500MeV)");
     gr8->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr8->GetYaxis()->SetTitle("#Sigma");
+    gr8->SetName("Sigma495");
     gr8->Draw("ep");
 
     TCanvas *canvas8 = new TCanvas("canvas8","canvas8", 1920, 1080);
@@ -374,6 +382,7 @@ void Sigma_NoScatt(){
     gr9->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 500-510MeV)");
     gr9->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr9->GetYaxis()->SetTitle("#Sigma");
+    gr9->SetName("Sigma505");
     gr9->Draw("ep");
 
     TCanvas *canvas9 = new TCanvas("canvas9","canvas9", 1920, 1080);
@@ -396,6 +405,7 @@ void Sigma_NoScatt(){
     gr10->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 510-520MeV)");
     gr10->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr10->GetYaxis()->SetTitle("#Sigma");
+    gr10->SetName("Sigma515");
     gr10->Draw("ep");
 
     TCanvas *canvas10 = new TCanvas("canvas10","canvas10", 1920, 1080);
@@ -418,6 +428,7 @@ void Sigma_NoScatt(){
     gr11->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 520-530MeV)");
     gr11->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr11->GetYaxis()->SetTitle("#Sigma");
+    gr11->SetName("Sigma525");
     gr11->Draw("ep");
 
     TCanvas *canvas11 = new TCanvas("canvas11","canvas11", 1920, 1080);
@@ -440,6 +451,7 @@ void Sigma_NoScatt(){
     gr12->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 530-540MeV)");
     gr12->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr12->GetYaxis()->SetTitle("#Sigma");
+    gr12->SetName("Sigma535");
     gr12->Draw("ep");
 
     TCanvas *canvas12 = new TCanvas("canvas12","canvas12", 1920, 1080);
@@ -462,6 +474,7 @@ void Sigma_NoScatt(){
     gr13->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 540-550MeV)");
     gr13->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr13->GetYaxis()->SetTitle("#Sigma");
+    gr13->SetName("Sigma545");
     gr13->Draw("ep");
 
     TCanvas *canvas13 = new TCanvas("canvas13","canvas13", 1920, 1080);
@@ -484,6 +497,7 @@ void Sigma_NoScatt(){
     gr14->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 550-560MeV)");
     gr14->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr14->GetYaxis()->SetTitle("#Sigma");
+    gr14->SetName("Sigma555");
     gr14->Draw("ep");
 
     TCanvas *canvas14 = new TCanvas("canvas14","canvas14", 1920, 1080);
@@ -506,6 +520,7 @@ void Sigma_NoScatt(){
     gr15->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 560-570MeV)");
     gr15->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr15->GetYaxis()->SetTitle("#Sigma");
+    gr15->SetName("Sigma565");
     gr15->Draw("ep");
 
     TCanvas *canvas15 = new TCanvas("canvas15","canvas15", 1920, 1080);
@@ -528,6 +543,7 @@ void Sigma_NoScatt(){
     gr16->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 570-580MeV)");
     gr16->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr16->GetYaxis()->SetTitle("#Sigma");
+    gr16->SetName("Sigma575");
     gr16->Draw("ep");
 
     TCanvas *canvas16 = new TCanvas("canvas16","canvas16", 1920, 1080);
@@ -550,6 +566,7 @@ void Sigma_NoScatt(){
     gr17->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 580-590MeV)");
     gr17->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr17->GetYaxis()->SetTitle("#Sigma");
+    gr17->SetName("Sigma585");
     gr17->Draw("ep");
 
     TCanvas *canvas17 = new TCanvas("canvas17","canvas17", 1920, 1080);
@@ -572,6 +589,7 @@ void Sigma_NoScatt(){
     gr18->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 590-600MeV)");
     gr18->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr18->GetYaxis()->SetTitle("#Sigma");
+    gr18->SetName("Sigma595");
     gr18->Draw("ep");
 
     TCanvas *canvas18 = new TCanvas("canvas18","canvas18", 1920, 1080);
@@ -594,6 +612,7 @@ void Sigma_NoScatt(){
     gr19->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 600-610MeV)");
     gr19->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr19->GetYaxis()->SetTitle("#Sigma");
+    gr19->SetName("Sigma605");
     gr19->Draw("ep");
 
     TCanvas *canvas19 = new TCanvas("canvas19","canvas19", 1920, 1080);
@@ -616,69 +635,49 @@ void Sigma_NoScatt(){
     gr20->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 610-620MeV)");
     gr20->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr20->GetYaxis()->SetTitle("#Sigma");
+    gr20->SetName("Sigma4615");
     gr20->Draw("ep");
 
     canvas->Write();
+    gr1->Write();
     canvas1->Write();
+    gr2->Write();
     canvas2->Write();
+    gr3->Write();
     canvas3->Write();
+    gr4->Write();
     canvas4->Write();
+    gr5->Write();
     canvas5->Write();
+    gr6->Write();
     canvas6->Write();
+    gr7->Write();
     canvas7->Write();
+    gr8->Write();
     canvas8->Write();
+    gr9->Write();
     canvas9->Write();
+    gr10->Write();
     canvas10->Write();
+    gr11->Write();
     canvas11->Write();
+    gr12->Write();
     canvas12->Write();
+    gr13->Write();
     canvas13->Write();
+    gr14->Write();
     canvas14->Write();
+    gr15->Write();
     canvas15->Write();
+    gr16->Write();
     canvas16->Write();
+    gr17->Write();
     canvas17->Write();
+    gr18->Write();
     canvas18->Write();
+    gr19->Write();
     canvas19->Write();
-
-    gr1->SetName("Sigma425");
-    Sigma425->Write();
-    gr2->SetName("Sigma435");
-    Sigma435->Write();
-    gr3->SetName("Sigma445");
-    Sigma445->Write();
-    gr4->SetName("Sigma455");
-    Sigma455->Write();
-    gr5->SetName("Sigma465");
-    Sigma465->Write();
-    gr6->SetName("Sigma475");
-    Sigma475->Write();
-    gr7->SetName("Sigma485");
-    Sigma485->Write();
-    gr8->SetName("Sigma495");
-    Sigma495->Write();
-    gr9->SetName("Sigma505");
-    Sigma505->Write();
-    gr10->SetName("Sigma515");
-    Sigma515->Write();
-    gr11->SetName("Sigma525");
-    Sigma525->Write();
-    gr12->SetName("Sigma535");
-    Sigma535->Write();
-    gr13->SetName("Sigma545");
-    Sigma545->Write();
-    gr14->SetName("Sigma555");
-    Sigma555->Write();
-    gr15->SetName("Sigma565");
-    Sigma565->Write();
-    gr16->SetName("Sigma575");
-    Sigma575->Write();
-    gr17->SetName("Sigma585");
-    Sigma585->Write();
-    gr18->SetName("Sigma595");
-    Sigma595->Write();
-    gr19->SetName("Sigma605");
-    Sigma605->Write();
-    gr20->SetName("Sigma615");
-    Sigma615->Write();
+    gr20->Write();
 
     TCanvas *canvas20 = new TCanvas("canvas20","canvas20", 1920, 1080);
     canvas20->Divide(5,4);
@@ -722,7 +721,6 @@ void Sigma_NoScatt(){
     pad19->Draw();
     canvas20->cd(20);
     pad20->Draw();
-
 
     canvas20->Write();
     f3.Write();

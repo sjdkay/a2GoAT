@@ -53,6 +53,7 @@ Bool_t	PNeutPol_Polarimeter_Lin_NoScatt::Start()
     Cut_protonKinBad = Cut_CB_protonKinBad;
     cout << endl;
 
+    MCData = MCDataCheck(); //Check scaler entries and deterimine if MC Data or not
     TraverseValidEvents(); // This loops over each event as in old file and calls ProcessEvent() each loop
 
     return kTRUE;
@@ -95,7 +96,9 @@ void	PNeutPol_Polarimeter_Lin_NoScatt::ProcessEvent()
     NPi = GetChargedPions()->GetNParticles();
     NRoo = GetRootinos()->GetNParticles();
     NTag = GetTagger()->GetNTagged();
-    if (NRoo !=0) return; // Goes to next event if any "rootinos" found
+    if (MCData == kFALSE){
+        //if (NRoo !=0) return; // Goes to next event if any "rootinos" found, remove this?
+    }
     if (NTrack !=2) return; // Ensures two track event
     Detectors1 = GetTracks()->GetDetectors(0); //Gets number for detectors that registered hits
     Detectors2 = GetTracks()->GetDetectors(1); // 7 = NaI + PID + MWPC, 5 = NaI + MWPC

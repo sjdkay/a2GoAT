@@ -10,56 +10,56 @@ PNeutPol::~PNeutPol()
 
 Bool_t	PNeutPol::Init()
 {
-  cout << "Initialising physics analysis..." << endl;
-  cout << "--------------------------------------------------" << endl << endl;
+    cout << "Initialising physics analysis..." << endl;
+    cout << "--------------------------------------------------" << endl << endl;
 
-  if(!InitBackgroundCuts()) return kFALSE;
-  if(!InitTargetMass()) return kFALSE;
-  if(!InitTaggerChannelCuts()) return kFALSE;
-  if(!InitTaggerScalers()) return kFALSE;
-  cout << "--------------------------------------------------" << endl;
-  return kTRUE;
-}
+    if(!InitBackgroundCuts()) return kFALSE;
+    if(!InitTargetMass()) return kFALSE;
+    if(!InitTaggerChannelCuts()) return kFALSE;
+    if(!InitTaggerScalers()) return kFALSE;
+    cout << "--------------------------------------------------" << endl;
+    return kTRUE;
+    }
 
-Bool_t	PNeutPol::Start()
-{
-  if(!IsGoATFile())
+    Bool_t	PNeutPol::Start()
+    {
+    if(!IsGoATFile())
     {
       cout << "ERROR: Input File is not a GoAT file." << endl;
       return kFALSE;
     }
 
-  SetAsPhysicsFile();
+    SetAsPhysicsFile();
 
-  i = 0; // Integer counter
- // k = 0;
-  d = 54.2; // Distance from centre of target to centre of PID
-  NP = 0; // Set number of Protons to 0 before checking
-  NPi = 0; // Set number of pions to 0 before checking
-  NRoo = 0; // Set number of Rootinos to 0 before checking
-  Deut = TLorentzVector (0., 0., 0., 1875.613); // 4-Vector of Deuterium target, assume at rest
-  Mn = 939.565; // Mass of neutron in MeV
-  Mp = 938.272; // Mass of proton in MeV
+    i = 0; // Integer counter
+    // k = 0;
+    d = 54.2; // Distance from centre of target to centre of PID
+    NP = 0; // Set number of Protons to 0 before checking
+    NPi = 0; // Set number of pions to 0 before checking
+    NRoo = 0; // Set number of Rootinos to 0 before checking
+    Deut = TLorentzVector (0., 0., 0., 1875.613); // 4-Vector of Deuterium target, assume at rest
+    Mn = 939.565; // Mass of neutron in MeV
+    Mp = 938.272; // Mass of proton in MeV
 
-  Cut_CB_proton = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Proton_29_07_15.root", "Proton"); // These will need adjusting with new Acqu files
-  Cut_proton = Cut_CB_proton;
-  Cut_CB_pion = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Pion_29_07_15.root", "Pion");
-  Cut_pion = Cut_CB_pion;
-  //Cut_CB_ROI = OpenCutFile("configfiles/cuts/CB_DeltaE-E_ROI_05_08_15.root", "ROI");
-  //Cut_ROI = Cut_CB_ROI; // Uncomment these two if you want some ROI cut to be loaded and used
-  //Cut_CB_neutron = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Neutron_25_02_15.root", "Neutron");
-  //Cut_neutron = Cut_CB_neutron; // This only needs to be here if we get simulation to show where we expect neutrons
-  cout << endl;
+    Cut_CB_proton = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Proton_29_07_15.root", "Proton"); // These will need adjusting with new Acqu files
+    Cut_proton = Cut_CB_proton;
+    Cut_CB_pion = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Pion_29_07_15.root", "Pion");
+    Cut_pion = Cut_CB_pion;
+    //Cut_CB_ROI = OpenCutFile("configfiles/cuts/CB_DeltaE-E_ROI_05_08_15.root", "ROI");
+    //Cut_ROI = Cut_CB_ROI; // Uncomment these two if you want some ROI cut to be loaded and used
+    //Cut_CB_neutron = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Neutron_25_02_15.root", "Neutron");
+    //Cut_neutron = Cut_CB_neutron; // This only needs to be here if we get simulation to show where we expect neutrons
+    cout << endl;
 
-  MCDataCheck();
+    MCData = MCDataCheck();
 
-  if (MCData == kTRUE) MCHists();
+    if (MCData == kTRUE) MCHists();
 
-  TraverseValidEvents(); // This loops over each event as in old file and calls ProcessEvent() each loop
+    TraverseValidEvents(); // This loops over each event as in old file and calls ProcessEvent() each loop
 
-  //cout << k << endl;
+    //cout << k << endl;
 
-  return kTRUE;
+    return kTRUE;
 }
 
 void	PNeutPol::ProcessEvent()
@@ -76,7 +76,7 @@ void	PNeutPol::ProcessEvent()
 
   if ( MCData == kTRUE)
   {
-      MCSmearing(); // Smear dE values for MC data
+      //MCSmearing(); // Smear dE values for MC data
       MCTrueID();
       MCTrueVectors();
       MCTheta1True = (MCTrueVect1.Theta()) * TMath::RadToDeg();
@@ -209,23 +209,6 @@ TCutG*	PNeutPol::OpenCutFile(Char_t* filename, Char_t* cutname)
   return Cut_clone;
 }
 
-Bool_t PNeutPol::MCDataCheck(){
-
-  if (GetScalers()->GetNEntries() == 0) // MC Data has no scaler entries so if 0, data gets a flag to denote it as MC
-  {
-      MCData = kTRUE;
-      TRandom2 *rGen = new TRandom2(0); // Define new random generator for use in MC smearing fn
-  }
-
-  else if (GetScalers()->GetNEntries() != 0) // This flag is listed as false if the number of scaler entries does not equal 0
-
-  {
-      MCData = kFALSE;
-  }
-
-  return MCData;
-}
-
 Int_t PNeutPol::GetEvent() // Gets basic info on particles for event
 {
   NTrack = GetTracks()->GetNTracks();
@@ -325,16 +308,16 @@ Double_t PNeutPol::PIDElementsFromPhi(Double_t PhiVal)
 
 }
 
-Double_t PNeutPol::MCSmearing() // Smear dE values for MC data to represent Energy resolution of PID
-{
-  dE1 = rGen.Gaus(GetTracks()->GetVetoEnergy(0) , (0.29*(sqrt(GetTracks()->GetVetoEnergy(0)))));
-  dE2 = rGen.Gaus(GetTracks()->GetVetoEnergy(1) , (0.29*(sqrt(GetTracks()->GetVetoEnergy(1)))));
-
-  if (dE1 < 0) dE1 = 0.01;
-  if (dE2 < 0) dE2 = 0.01;
-
-  return dE1, dE2;
-}
+//Double_t PNeutPol::MCSmearing() // Smear dE values for MC data to represent Energy resolution of PID
+//{
+//  dE1 = rGen.Gaus(GetTracks()->GetVetoEnergy(0) , (0.29*(sqrt(GetTracks()->GetVetoEnergy(0)))));
+//  dE2 = rGen.Gaus(GetTracks()->GetVetoEnergy(1) , (0.29*(sqrt(GetTracks()->GetVetoEnergy(1)))));
+//
+//  if (dE1 < 0) dE1 = 0.01;
+//  if (dE2 < 0) dE2 = 0.01;
+//
+//  return dE1, dE2;
+//}
 
 Int_t PNeutPol::MCTrueID()
 {

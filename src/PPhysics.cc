@@ -343,6 +343,22 @@ Double_t PPhysics::Calc_dtfInterDOCA(const TVector3 &locUnitDir1, const TVector3
     return ((locVertex2.Z() > locVertex1.Z()) ? locDOCA : -1.0*locDOCA); // Returns DOCA, also want POCA
 }
 
+Bool_t PPhysics::MCDataCheck(){
+
+    Bool_t MC;
+    if (GetScalers()->GetNEntries() == 0) // MC Data has no scaler entries so if 0, data gets a flag to denote it as MC
+    {
+        MC = kTRUE;
+    }
+
+    else if (GetScalers()->GetNEntries() != 0) // This flag is listed as false if the number of scaler entries does not equal 0
+    {
+        MC = kFALSE;
+    }
+
+    return MC;
+}
+
 // ----------------------------------------------------------------------------------------
 // GH1 routines
 // ----------------------------------------------------------------------------------------

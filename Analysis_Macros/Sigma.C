@@ -1,9 +1,9 @@
 #include "./includes_Sigma.h"
 
 void Sigma(){
-TFile *MBData = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sig_res_St.root");
+    TFile *MBData = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sig_res_St.root");
 
-    TFile *f1= TFile::Open("/scratch/Mainz_Software/a2GoAT/ParaPerpAsymm_Total_16.root");
+    TFile *f1= TFile::Open("/scratch/Mainz_Software/a2GoAT/ParaPerpAsymm_Total_17.root");
     TTree *t1 = (TTree*)f1->Get("Parameter_Values");
 
     Double_t pValues435[10], pValues455[10], pValues475[10], pValues495[10], pValues515[10], pValues535[10], pValues555[10], pValues575[10],, pValues595[10], pValues615[10];
@@ -97,7 +97,7 @@ TFile *MBData = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sig_res_St.root");
 
     }
 
-    TFile f3("Sigma_Plots_16.root", "RECREATE");
+    TFile f3("Sigma_Plots_17.root", "RECREATE");
 
     Float_t xMin = -1;
     Float_t xMax = 1;
@@ -126,6 +126,7 @@ TFile *MBData = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sig_res_St.root");
     gr1->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 435 #pm 10 MeV)");
     gr1->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr1->GetYaxis()->SetTitle("#Sigma");
+    gr1->SetName("Sigma435");
     gr1->Draw("ep");
 
     TCanvas *canvas2 = new TCanvas("canvas2","canvas2", 1920, 1080);
@@ -148,6 +149,7 @@ TFile *MBData = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sig_res_St.root");
     gr2->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 455 #pm 10 MeV)");
     gr2->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr2->GetYaxis()->SetTitle("#Sigma");
+    gr2->SetName("Sigma455");
     gr2->Draw("ep");
 
     TCanvas *canvas3 = new TCanvas("canvas3","canvas3", 1920, 1080);
@@ -170,6 +172,7 @@ TFile *MBData = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sig_res_St.root");
     gr3->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 475 #pm 10 MeV)");
     gr3->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr3->GetYaxis()->SetTitle("#Sigma");
+    gr3->SetName("Sigma475");
     gr3->Draw("ep");
 
 
@@ -193,6 +196,7 @@ TFile *MBData = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sig_res_St.root");
     gr4->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 495 #pm 10 MeV)");
     gr4->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr4->GetYaxis()->SetTitle("#Sigma");
+    gr4->SetName("Sigma495");
     gr4->Draw("ep");
 
     TCanvas *canvas5 = new TCanvas("canvas5","canvas5", 1920, 1080);
@@ -215,12 +219,13 @@ TFile *MBData = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sig_res_St.root");
     gr5->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 515 #pm 10 MeV)");
     gr5->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr5->GetYaxis()->SetTitle("#Sigma");
+    gr5->SetName("Sigma515");
     gr5->Draw("ep");
 
     TCanvas *canvas6 = new TCanvas("canvas6","canvas6", 1920, 1080);
     TPad *pad6 = new TPad("pad6","",0,0,1,1);
     pad6->Draw();
-    pad->cd();
+    pad6->cd();
 
     pad6->SetTickx(1);
     pad6->SetTicky(1);
@@ -237,6 +242,7 @@ TFile *MBData = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sig_res_St.root");
     gr6->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 535 #pm 10 MeV)");
     gr6->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr6->GetYaxis()->SetTitle("#Sigma");
+    gr6->SetName("Sigma535");
     gr6->Draw("ep");
 
     TCanvas *canvas7 = new TCanvas("canvas7","canvas7", 1920, 1080);
@@ -259,6 +265,7 @@ TFile *MBData = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sig_res_St.root");
     gr7->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 555 #pm 10 MeV)");
     gr7->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr7->GetYaxis()->SetTitle("#Sigma");
+    gr7->SetName("Sigma555");
     gr7->Draw("ep");
 
     TCanvas *canvas8 = new TCanvas("canvas8","canvas8", 1920, 1080);
@@ -281,6 +288,7 @@ TFile *MBData = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sig_res_St.root");
     gr8->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 575 #pm 10 MeV)");
     gr8->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr8->GetYaxis()->SetTitle("#Sigma");
+    gr8->SetName("Sigma575");
     gr8->Draw("ep");
 
     TCanvas *canvas9 = new TCanvas("canvas9","canvas9", 1920, 1080);
@@ -303,6 +311,7 @@ TFile *MBData = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sig_res_St.root");
     gr9->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 595 #pm 10 MeV)");
     gr9->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr9->GetYaxis()->SetTitle("#Sigma");
+    gr9->SetName("Sigma595");
     gr9->Draw("ep");
 
     TCanvas *canvas10 = new TCanvas("canvas10","canvas10", 1920, 1080);
@@ -325,6 +334,7 @@ TFile *MBData = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sig_res_St.root");
     gr10->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 615 #pm 10 MeV)");
     gr10->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr10->GetYaxis()->SetTitle("#Sigma");
+    gr10->SetName("Sigma615");
     gr10->Draw("ep");
 
     canvas1->Write();
@@ -338,7 +348,7 @@ TFile *MBData = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sig_res_St.root");
     canvas9->Write();
 
     TCanvas *canvas11 = new TCanvas("canvas11","canvas11", 1920, 1080);
-    canvas11->Divide(5,2);
+    canvas11->Divide(4,3);
     canvas11->cd(1);
     pad1->Draw();
     canvas11->cd(2);

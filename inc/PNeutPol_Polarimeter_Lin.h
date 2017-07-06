@@ -120,7 +120,7 @@ private:
     double_t POCAz;
     double_t r;
 
-    Bool_t nBanana;
+    Bool_t MCData;
     Bool_t Proton1;
     Bool_t Proton2;
 

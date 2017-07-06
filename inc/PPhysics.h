@@ -122,6 +122,8 @@ public:
 
     Double_t Calc_dtfInterDOCA(const TVector3 &locUnitDir1, const TVector3 &locUnitDir2, const TVector3 &locVertex1, const TVector3 &locVertex2, TVector3 &locInterDOCA1, TVector3 &locInterDOCA2);
 
+    Bool_t MCDataCheck();
+
 	void FillScalers(Int_t low_scaler_number, Int_t high_scaler_number, TH1* hist);
 
 	Bool_t InitBackgroundCuts();

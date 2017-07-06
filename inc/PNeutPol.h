@@ -103,8 +103,8 @@ private:
   double_t ScattTheta;
   double_t ScattPhi;
 
-  Bool_t nBanana;
   Bool_t MCData;
+  Bool_t nBanana;
   Bool_t Proton1;
   Bool_t Proton2;
 
@@ -135,8 +135,6 @@ private:
   TVector3 fY;
   TVector3 fZ;
   TVector3 nFrame;
-
-  TRandom2 rGen;
 
   GH1*	time;
   GH1*	time_cut;
@@ -336,7 +334,6 @@ public:
     void MCHists();
     void ParticleSelection();
     void AlternativeParticleSelection();
-    Bool_t MCDataCheck();
     Int_t GetEvent();
     TLorentzVector InitialVect();
     Double_t InitialProp();
