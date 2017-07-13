@@ -7,28 +7,28 @@ void SigmaAsymm(){
 
     double pCosAmp[10][10]; // Format of array is Theta bin (x) by Egamma bin (y), 10 CosTheta bins, 10 20MeV Egamma bins
     double pCosAmpErr[10][10];
-    double pCosA435;
-    double pCosAErr435;
-    double pCosA455;
-    double pCosAErr455;
-    double pCosA475;
-    double pCosAErr475;
-    double pCosA495;
-    double pCosAErr495;
-    double pCosA515;
-    double pCosAErr515;
-    double pCosA535;
-    double pCosAErr535;
-    double pCosA555;
-    double pCosAErr555;
-    double pCosA575;
-    double pCosAErr575;
-    double pCosA595;
-    double pCosAErr595;
-    double pCosA615;
-    double pCosAErr615;
+    double pCosA430;
+    double pCosAErr430;
+    double pCosA450;
+    double pCosAErr450;
+    double pCosA470;
+    double pCosAErr470;
+    double pCosA490;
+    double pCosAErr490;
+    double pCosA510;
+    double pCosAErr510;
+    double pCosA530;
+    double pCosAErr530;
+    double pCosA550;
+    double pCosAErr550;
+    double pCosA570;
+    double pCosAErr570;
+    double pCosA590;
+    double pCosAErr590;
+    double pCosA610;
+    double pCosAErr610;
 
-    TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/ParaPerp_Total_17_Combined.root"); // Open the latest PTotal combined file to load histograms from
+    TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/ParaPerp_Total_19_Combined.root"); // Open the latest PTotal combined file to load histograms from
     NPara = Eg_Para->GetEntries();
     NPerp = Eg_Perp->GetEntries();
     ScaleFactor = NPara/NPerp;
@@ -38,73 +38,73 @@ void SigmaAsymm(){
     ////////////////  CM1  ////////////////////
     ///////////////////////////////////////////
 
-    ParaPerpAsymmPhip_435MeVCM1 = Phip_435MeVCM1_Para->GetAsymmetry(Phip_435MeVCM1_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_435MeVCM1->SetName("ParaPerpAsymmPhip435MeVCM1");
-    ParaPerpAsymmPhip_435MeVCM1->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 435 #pm 10MeV (CosTheta1-0.8)");
-    ParaPerpAsymmPhip_435MeVCM1->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_430MeVCM1 = Phip_430MeVCM1_Para->GetAsymmetry(Phip_430MeVCM1_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_430MeVCM1->SetName("ParaPerpAsymmPhip430MeVCM1");
+    ParaPerpAsymmPhip_430MeVCM1->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 435 #pm 10MeV (CosTheta1-0.8)");
+    ParaPerpAsymmPhip_430MeVCM1->Fit("CosFit", "Q");
     pCosAmp[0][0] = CosFit->GetParameter(0);
     pCosAmpErr[0][0] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_455MeVCM1 = Phip_455MeVCM1_Para->GetAsymmetry(Phip_455MeVCM1_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_455MeVCM1->SetName("ParaPerpAsymmPhip455MeVCM1");
-    ParaPerpAsymmPhip_455MeVCM1->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 455 #pm 10MeV (CosTheta1-0.8)");
-    ParaPerpAsymmPhip_455MeVCM1->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_450MeVCM1 = Phip_450MeVCM1_Para->GetAsymmetry(Phip_450MeVCM1_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_450MeVCM1->SetName("ParaPerpAsymmPhip450MeVCM1");
+    ParaPerpAsymmPhip_450MeVCM1->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 455 #pm 10MeV (CosTheta1-0.8)");
+    ParaPerpAsymmPhip_450MeVCM1->Fit("CosFit", "Q");
     pCosAmp[0][1] = CosFit->GetParameter(0);
     pCosAmpErr[0][1] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_475MeVCM1 = Phip_475MeVCM1_Para->GetAsymmetry(Phip_475MeVCM1_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_475MeVCM1->SetName("ParaPerpAsymmPhip475MeVCM1");
-    ParaPerpAsymmPhip_475MeVCM1->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 475 #pm 10MeV (CosTheta1-0.8)");
-    ParaPerpAsymmPhip_475MeVCM1->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_470MeVCM1 = Phip_470MeVCM1_Para->GetAsymmetry(Phip_470MeVCM1_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_470MeVCM1->SetName("ParaPerpAsymmPhip470MeVCM1");
+    ParaPerpAsymmPhip_470MeVCM1->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 475 #pm 10MeV (CosTheta1-0.8)");
+    ParaPerpAsymmPhip_470MeVCM1->Fit("CosFit", "Q");
     pCosAmp[0][2] = CosFit->GetParameter(0);
     pCosAmpErr[0][2] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_495MeVCM1 = Phip_495MeVCM1_Para->GetAsymmetry(Phip_495MeVCM1_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_495MeVCM1->SetName("ParaPerpAsymmPhip495MeVCM1");
-    ParaPerpAsymmPhip_495MeVCM1->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 495 #pm 10MeV (CosTheta1-0.8)");
-    ParaPerpAsymmPhip_495MeVCM1->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_490MeVCM1 = Phip_490MeVCM1_Para->GetAsymmetry(Phip_490MeVCM1_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_490MeVCM1->SetName("ParaPerpAsymmPhip490MeVCM1");
+    ParaPerpAsymmPhip_490MeVCM1->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 495 #pm 10MeV (CosTheta1-0.8)");
+    ParaPerpAsymmPhip_490MeVCM1->Fit("CosFit", "Q");
     pCosAmp[0][3] = CosFit->GetParameter(0);
     pCosAmpErr[0][3] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_515MeVCM1 = Phip_515MeVCM1_Para->GetAsymmetry(Phip_515MeVCM1_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_515MeVCM1->SetName("ParaPerpAsymmPhip515MeVCM1");
-    ParaPerpAsymmPhip_515MeVCM1->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 515 #pm 10MeV (CosTheta1-0.8)");
-    ParaPerpAsymmPhip_515MeVCM1->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_510MeVCM1 = Phip_510MeVCM1_Para->GetAsymmetry(Phip_510MeVCM1_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_510MeVCM1->SetName("ParaPerpAsymmPhip510MeVCM1");
+    ParaPerpAsymmPhip_510MeVCM1->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 515 #pm 10MeV (CosTheta1-0.8)");
+    ParaPerpAsymmPhip_510MeVCM1->Fit("CosFit", "Q");
     pCosAmp[0][4] = CosFit->GetParameter(0);
     pCosAmpErr[0][4] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_535MeVCM1 = Phip_535MeVCM1_Para->GetAsymmetry(Phip_535MeVCM1_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_535MeVCM1->SetName("ParaPerpAsymmPhip535MeVCM1");
-    ParaPerpAsymmPhip_535MeVCM1->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 535 #pm 10MeV (CosTheta1-0.8)");
-    ParaPerpAsymmPhip_535MeVCM1->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_530MeVCM1 = Phip_530MeVCM1_Para->GetAsymmetry(Phip_530MeVCM1_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_530MeVCM1->SetName("ParaPerpAsymmPhip530MeVCM1");
+    ParaPerpAsymmPhip_530MeVCM1->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 535 #pm 10MeV (CosTheta1-0.8)");
+    ParaPerpAsymmPhip_530MeVCM1->Fit("CosFit", "Q");
     pCosAmp[0][5] = CosFit->GetParameter(0);
     pCosAmpErr[0][5] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_555MeVCM1 = Phip_555MeVCM1_Para->GetAsymmetry(Phip_555MeVCM1_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_555MeVCM1->SetName("ParaPerpAsymmPhip555MeVCM1");
-    ParaPerpAsymmPhip_555MeVCM1->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 555 #pm 10MeV (CosTheta1-0.8)");
-    ParaPerpAsymmPhip_555MeVCM1->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_550MeVCM1 = Phip_550MeVCM1_Para->GetAsymmetry(Phip_550MeVCM1_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_550MeVCM1->SetName("ParaPerpAsymmPhip550MeVCM1");
+    ParaPerpAsymmPhip_550MeVCM1->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 555 #pm 10MeV (CosTheta1-0.8)");
+    ParaPerpAsymmPhip_550MeVCM1->Fit("CosFit", "Q");
     pCosAmp[0][6] = CosFit->GetParameter(0);
     pCosAmpErr[0][6] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_575MeVCM1 = Phip_575MeVCM1_Para->GetAsymmetry(Phip_575MeVCM1_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_575MeVCM1->SetName("ParaPerpAsymmPhip575MeVCM1");
-    ParaPerpAsymmPhip_575MeVCM1->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 575 #pm 10MeV (CosTheta1-0.8)");
-    ParaPerpAsymmPhip_575MeVCM1->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_570MeVCM1 = Phip_570MeVCM1_Para->GetAsymmetry(Phip_570MeVCM1_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_570MeVCM1->SetName("ParaPerpAsymmPhip570MeVCM1");
+    ParaPerpAsymmPhip_570MeVCM1->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 575 #pm 10MeV (CosTheta1-0.8)");
+    ParaPerpAsymmPhip_570MeVCM1->Fit("CosFit", "Q");
     pCosAmp[0][7] = CosFit->GetParameter(0);
     pCosAmpErr[0][7] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_595MeVCM1 = Phip_595MeVCM1_Para->GetAsymmetry(Phip_595MeVCM1_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_595MeVCM1->SetName("ParaPerpAsymmPhip595MeVCM1");
-    ParaPerpAsymmPhip_595MeVCM1->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 595 #pm 10MeV (CosTheta1-0.8)");
-    ParaPerpAsymmPhip_595MeVCM1->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_590MeVCM1 = Phip_590MeVCM1_Para->GetAsymmetry(Phip_590MeVCM1_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_590MeVCM1->SetName("ParaPerpAsymmPhip590MeVCM1");
+    ParaPerpAsymmPhip_590MeVCM1->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 595 #pm 10MeV (CosTheta1-0.8)");
+    ParaPerpAsymmPhip_590MeVCM1->Fit("CosFit", "Q");
     pCosAmp[0][8] = CosFit->GetParameter(0);
     pCosAmpErr[0][8] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_615MeVCM1 = Phip_615MeVCM1_Para->GetAsymmetry(Phip_615MeVCM1_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_615MeVCM1->SetName("ParaPerpAsymmPhip615MeVCM1");
-    ParaPerpAsymmPhip_615MeVCM1->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 615 #pm 10MeV (CosTheta1-0.8)");
-    ParaPerpAsymmPhip_615MeVCM1->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_610MeVCM1 = Phip_610MeVCM1_Para->GetAsymmetry(Phip_610MeVCM1_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_610MeVCM1->SetName("ParaPerpAsymmPhip610MeVCM1");
+    ParaPerpAsymmPhip_610MeVCM1->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 615 #pm 10MeV (CosTheta1-0.8)");
+    ParaPerpAsymmPhip_610MeVCM1->Fit("CosFit", "Q");
     pCosAmp[0][9] = CosFit->GetParameter(0);
     pCosAmpErr[0][9] = CosFit->GetParError(0);
 
@@ -112,73 +112,73 @@ void SigmaAsymm(){
     ////////////////  CM2  ////////////////////
     ///////////////////////////////////////////
 
-    ParaPerpAsymmPhip_435MeVCM2 = Phip_435MeVCM2_Para->GetAsymmetry(Phip_435MeVCM2_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_435MeVCM2->SetName("ParaPerpAsymmPhip435MeVCM2");
-    ParaPerpAsymmPhip_435MeVCM2->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 435 #pm 10MeV (CosTheta0.8-0.6)");
-    ParaPerpAsymmPhip_435MeVCM2->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_430MeVCM2 = Phip_430MeVCM2_Para->GetAsymmetry(Phip_430MeVCM2_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_430MeVCM2->SetName("ParaPerpAsymmPhip430MeVCM2");
+    ParaPerpAsymmPhip_430MeVCM2->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 435 #pm 10MeV (CosTheta0.8-0.6)");
+    ParaPerpAsymmPhip_430MeVCM2->Fit("CosFit", "Q");
     pCosAmp[1][0] = CosFit->GetParameter(0);
     pCosAmpErr[1][0] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_455MeVCM2 = Phip_455MeVCM2_Para->GetAsymmetry(Phip_455MeVCM2_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_455MeVCM2->SetName("ParaPerpAsymmPhip455MeVCM2");
-    ParaPerpAsymmPhip_455MeVCM2->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 455 #pm 10MeV (CosTheta0.8-0.6)");
-    ParaPerpAsymmPhip_455MeVCM2->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_450MeVCM2 = Phip_450MeVCM2_Para->GetAsymmetry(Phip_450MeVCM2_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_450MeVCM2->SetName("ParaPerpAsymmPhip450MeVCM2");
+    ParaPerpAsymmPhip_450MeVCM2->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 455 #pm 10MeV (CosTheta0.8-0.6)");
+    ParaPerpAsymmPhip_450MeVCM2->Fit("CosFit", "Q");
     pCosAmp[1][1] = CosFit->GetParameter(0);
     pCosAmpErr[1][1] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_475MeVCM2 = Phip_475MeVCM2_Para->GetAsymmetry(Phip_475MeVCM2_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_475MeVCM2->SetName("ParaPerpAsymmPhip475MeVCM2");
-    ParaPerpAsymmPhip_475MeVCM2->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 475 #pm 10MeV (CosTheta0.8-0.6)");
-    ParaPerpAsymmPhip_475MeVCM2->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_470MeVCM2 = Phip_470MeVCM2_Para->GetAsymmetry(Phip_470MeVCM2_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_470MeVCM2->SetName("ParaPerpAsymmPhip470MeVCM2");
+    ParaPerpAsymmPhip_470MeVCM2->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 475 #pm 10MeV (CosTheta0.8-0.6)");
+    ParaPerpAsymmPhip_470MeVCM2->Fit("CosFit", "Q");
     pCosAmp[1][2] = CosFit->GetParameter(0);
     pCosAmpErr[1][2] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_495MeVCM2 = Phip_495MeVCM2_Para->GetAsymmetry(Phip_495MeVCM2_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_495MeVCM2->SetName("ParaPerpAsymmPhip495MeVCM2");
-    ParaPerpAsymmPhip_495MeVCM2->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 495 #pm 10MeV (CosTheta0.8-0.6)");
-    ParaPerpAsymmPhip_495MeVCM2->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_490MeVCM2 = Phip_490MeVCM2_Para->GetAsymmetry(Phip_490MeVCM2_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_490MeVCM2->SetName("ParaPerpAsymmPhip490MeVCM2");
+    ParaPerpAsymmPhip_490MeVCM2->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 495 #pm 10MeV (CosTheta0.8-0.6)");
+    ParaPerpAsymmPhip_490MeVCM2->Fit("CosFit", "Q");
     pCosAmp[1][3] = CosFit->GetParameter(0);
     pCosAmpErr[1][3] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_515MeVCM2 = Phip_515MeVCM2_Para->GetAsymmetry(Phip_515MeVCM2_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_515MeVCM2->SetName("ParaPerpAsymmPhip515MeVCM2");
-    ParaPerpAsymmPhip_515MeVCM2->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 515 #pm 10MeV (CosTheta0.8-0.6)");
-    ParaPerpAsymmPhip_515MeVCM2->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_510MeVCM2 = Phip_510MeVCM2_Para->GetAsymmetry(Phip_510MeVCM2_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_510MeVCM2->SetName("ParaPerpAsymmPhip510MeVCM2");
+    ParaPerpAsymmPhip_510MeVCM2->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 515 #pm 10MeV (CosTheta0.8-0.6)");
+    ParaPerpAsymmPhip_510MeVCM2->Fit("CosFit", "Q");
     pCosAmp[1][4] = CosFit->GetParameter(0);
     pCosAmpErr[1][4] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_535MeVCM2 = Phip_535MeVCM2_Para->GetAsymmetry(Phip_535MeVCM2_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_535MeVCM2->SetName("ParaPerpAsymmPhip535MeVCM2");
-    ParaPerpAsymmPhip_535MeVCM2->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 535 #pm 10MeV (CosTheta0.8-0.6)");
-    ParaPerpAsymmPhip_535MeVCM2->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_530MeVCM2 = Phip_530MeVCM2_Para->GetAsymmetry(Phip_530MeVCM2_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_530MeVCM2->SetName("ParaPerpAsymmPhip530MeVCM2");
+    ParaPerpAsymmPhip_530MeVCM2->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 535 #pm 10MeV (CosTheta0.8-0.6)");
+    ParaPerpAsymmPhip_530MeVCM2->Fit("CosFit", "Q");
     pCosAmp[1][5] = CosFit->GetParameter(0);
     pCosAmpErr[1][5] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_555MeVCM2 = Phip_555MeVCM2_Para->GetAsymmetry(Phip_555MeVCM2_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_555MeVCM2->SetName("ParaPerpAsymmPhip555MeVCM2");
-    ParaPerpAsymmPhip_555MeVCM2->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 555 #pm 10MeV (CosTheta0.8-0.6)");
-    ParaPerpAsymmPhip_555MeVCM2->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_550MeVCM2 = Phip_550MeVCM2_Para->GetAsymmetry(Phip_550MeVCM2_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_550MeVCM2->SetName("ParaPerpAsymmPhip550MeVCM2");
+    ParaPerpAsymmPhip_550MeVCM2->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 555 #pm 10MeV (CosTheta0.8-0.6)");
+    ParaPerpAsymmPhip_550MeVCM2->Fit("CosFit", "Q");
     pCosAmp[1][6] = CosFit->GetParameter(0);
     pCosAmpErr[1][6] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_575MeVCM2 = Phip_575MeVCM2_Para->GetAsymmetry(Phip_575MeVCM2_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_575MeVCM2->SetName("ParaPerpAsymmPhip575MeVCM2");
-    ParaPerpAsymmPhip_575MeVCM2->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 575 #pm 10MeV (CosTheta0.8-0.6)");
-    ParaPerpAsymmPhip_575MeVCM2->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_570MeVCM2 = Phip_570MeVCM2_Para->GetAsymmetry(Phip_570MeVCM2_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_570MeVCM2->SetName("ParaPerpAsymmPhip570MeVCM2");
+    ParaPerpAsymmPhip_570MeVCM2->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 575 #pm 10MeV (CosTheta0.8-0.6)");
+    ParaPerpAsymmPhip_570MeVCM2->Fit("CosFit", "Q");
     pCosAmp[1][7] = CosFit->GetParameter(0);
     pCosAmpErr[1][7] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_595MeVCM2 = Phip_595MeVCM2_Para->GetAsymmetry(Phip_595MeVCM2_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_595MeVCM2->SetName("ParaPerpAsymmPhip595MeVCM2");
-    ParaPerpAsymmPhip_595MeVCM2->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 595 #pm 10MeV (CosTheta0.8-0.6)");
-    ParaPerpAsymmPhip_595MeVCM2->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_590MeVCM2 = Phip_590MeVCM2_Para->GetAsymmetry(Phip_590MeVCM2_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_590MeVCM2->SetName("ParaPerpAsymmPhip590MeVCM2");
+    ParaPerpAsymmPhip_590MeVCM2->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 595 #pm 10MeV (CosTheta0.8-0.6)");
+    ParaPerpAsymmPhip_590MeVCM2->Fit("CosFit", "Q");
     pCosAmp[1][8] = CosFit->GetParameter(0);
     pCosAmpErr[1][8] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_615MeVCM2 = Phip_615MeVCM2_Para->GetAsymmetry(Phip_615MeVCM2_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_615MeVCM2->SetName("ParaPerpAsymmPhip615MeVCM2");
-    ParaPerpAsymmPhip_615MeVCM2->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 615 #pm 10MeV (CosTheta0.8-0.6)");
-    ParaPerpAsymmPhip_615MeVCM2->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_610MeVCM2 = Phip_610MeVCM2_Para->GetAsymmetry(Phip_610MeVCM2_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_610MeVCM2->SetName("ParaPerpAsymmPhip610MeVCM2");
+    ParaPerpAsymmPhip_610MeVCM2->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 615 #pm 10MeV (CosTheta0.8-0.6)");
+    ParaPerpAsymmPhip_610MeVCM2->Fit("CosFit", "Q");
     pCosAmp[1][9] = CosFit->GetParameter(0);
     pCosAmpErr[1][9] = CosFit->GetParError(0);
 
@@ -186,73 +186,73 @@ void SigmaAsymm(){
     ////////////////  CM3  ////////////////////
     ///////////////////////////////////////////
 
-    ParaPerpAsymmPhip_435MeVCM3 = Phip_435MeVCM3_Para->GetAsymmetry(Phip_435MeVCM3_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_435MeVCM3->SetName("ParaPerpAsymmPhip435MeVCM3");
-    ParaPerpAsymmPhip_435MeVCM3->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 435 #pm 10MeV (CosTheta0.6-0.4)");
-    ParaPerpAsymmPhip_435MeVCM3->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_430MeVCM3 = Phip_430MeVCM3_Para->GetAsymmetry(Phip_430MeVCM3_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_430MeVCM3->SetName("ParaPerpAsymmPhip430MeVCM3");
+    ParaPerpAsymmPhip_430MeVCM3->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 435 #pm 10MeV (CosTheta0.6-0.4)");
+    ParaPerpAsymmPhip_430MeVCM3->Fit("CosFit", "Q");
     pCosAmp[2][0] = CosFit->GetParameter(0);
     pCosAmpErr[2][0] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_455MeVCM3 = Phip_455MeVCM3_Para->GetAsymmetry(Phip_455MeVCM3_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_455MeVCM3->SetName("ParaPerpAsymmPhip455MeVCM3");
-    ParaPerpAsymmPhip_455MeVCM3->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 455 #pm 10MeV (CosTheta0.6-0.4)");
-    ParaPerpAsymmPhip_455MeVCM3->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_450MeVCM3 = Phip_450MeVCM3_Para->GetAsymmetry(Phip_450MeVCM3_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_450MeVCM3->SetName("ParaPerpAsymmPhip450MeVCM3");
+    ParaPerpAsymmPhip_450MeVCM3->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 455 #pm 10MeV (CosTheta0.6-0.4)");
+    ParaPerpAsymmPhip_450MeVCM3->Fit("CosFit", "Q");
     pCosAmp[2][1] = CosFit->GetParameter(0);
     pCosAmpErr[2][1] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_475MeVCM3 = Phip_475MeVCM3_Para->GetAsymmetry(Phip_475MeVCM3_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_475MeVCM3->SetName("ParaPerpAsymmPhip475MeVCM3");
-    ParaPerpAsymmPhip_475MeVCM3->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 475 #pm 10MeV (CosTheta0.6-0.4)");
-    ParaPerpAsymmPhip_475MeVCM3->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_470MeVCM3 = Phip_470MeVCM3_Para->GetAsymmetry(Phip_470MeVCM3_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_470MeVCM3->SetName("ParaPerpAsymmPhip470MeVCM3");
+    ParaPerpAsymmPhip_470MeVCM3->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 475 #pm 10MeV (CosTheta0.6-0.4)");
+    ParaPerpAsymmPhip_470MeVCM3->Fit("CosFit", "Q");
     pCosAmp[2][2] = CosFit->GetParameter(0);
     pCosAmpErr[2][2] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_495MeVCM3 = Phip_495MeVCM3_Para->GetAsymmetry(Phip_495MeVCM3_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_495MeVCM3->SetName("ParaPerpAsymmPhip495MeVCM3");
-    ParaPerpAsymmPhip_495MeVCM3->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 495 #pm 10MeV (CosTheta0.6-0.4)");
-    ParaPerpAsymmPhip_495MeVCM3->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_490MeVCM3 = Phip_490MeVCM3_Para->GetAsymmetry(Phip_490MeVCM3_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_490MeVCM3->SetName("ParaPerpAsymmPhip490MeVCM3");
+    ParaPerpAsymmPhip_490MeVCM3->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 495 #pm 10MeV (CosTheta0.6-0.4)");
+    ParaPerpAsymmPhip_490MeVCM3->Fit("CosFit", "Q");
     pCosAmp[2][3] = CosFit->GetParameter(0);
     pCosAmpErr[2][3] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_515MeVCM3 = Phip_515MeVCM3_Para->GetAsymmetry(Phip_515MeVCM3_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_515MeVCM3->SetName("ParaPerpAsymmPhip515MeVCM3");
-    ParaPerpAsymmPhip_515MeVCM3->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 515 #pm 10MeV (CosTheta0.6-0.4)");
-    ParaPerpAsymmPhip_515MeVCM3->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_510MeVCM3 = Phip_510MeVCM3_Para->GetAsymmetry(Phip_510MeVCM3_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_510MeVCM3->SetName("ParaPerpAsymmPhip510MeVCM3");
+    ParaPerpAsymmPhip_510MeVCM3->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 515 #pm 10MeV (CosTheta0.6-0.4)");
+    ParaPerpAsymmPhip_510MeVCM3->Fit("CosFit", "Q");
     pCosAmp[2][4] = CosFit->GetParameter(0);
     pCosAmpErr[2][4] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_535MeVCM3 = Phip_535MeVCM3_Para->GetAsymmetry(Phip_535MeVCM3_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_535MeVCM3->SetName("ParaPerpAsymmPhip535MeVCM3");
-    ParaPerpAsymmPhip_535MeVCM3->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 535 #pm 10MeV (CosTheta0.6-0.4)");
-    ParaPerpAsymmPhip_535MeVCM3->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_530MeVCM3 = Phip_530MeVCM3_Para->GetAsymmetry(Phip_530MeVCM3_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_530MeVCM3->SetName("ParaPerpAsymmPhip530MeVCM3");
+    ParaPerpAsymmPhip_530MeVCM3->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 535 #pm 10MeV (CosTheta0.6-0.4)");
+    ParaPerpAsymmPhip_530MeVCM3->Fit("CosFit", "Q");
     pCosAmp[2][5] = CosFit->GetParameter(0);
     pCosAmpErr[2][5] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_555MeVCM3 = Phip_555MeVCM3_Para->GetAsymmetry(Phip_555MeVCM3_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_555MeVCM3->SetName("ParaPerpAsymmPhip555MeVCM3");
-    ParaPerpAsymmPhip_555MeVCM3->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 555 #pm 10MeV (CosTheta0.6-0.4)");
-    ParaPerpAsymmPhip_555MeVCM3->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_550MeVCM3 = Phip_550MeVCM3_Para->GetAsymmetry(Phip_550MeVCM3_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_550MeVCM3->SetName("ParaPerpAsymmPhip550MeVCM3");
+    ParaPerpAsymmPhip_550MeVCM3->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 555 #pm 10MeV (CosTheta0.6-0.4)");
+    ParaPerpAsymmPhip_550MeVCM3->Fit("CosFit", "Q");
     pCosAmp[2][6] = CosFit->GetParameter(0);
     pCosAmpErr[2][6] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_575MeVCM3 = Phip_575MeVCM3_Para->GetAsymmetry(Phip_575MeVCM3_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_575MeVCM3->SetName("ParaPerpAsymmPhip575MeVCM3");
-    ParaPerpAsymmPhip_575MeVCM3->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 575 #pm 10MeV (CosTheta0.6-0.4)");
-    ParaPerpAsymmPhip_575MeVCM3->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_570MeVCM3 = Phip_570MeVCM3_Para->GetAsymmetry(Phip_570MeVCM3_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_570MeVCM3->SetName("ParaPerpAsymmPhip570MeVCM3");
+    ParaPerpAsymmPhip_570MeVCM3->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 575 #pm 10MeV (CosTheta0.6-0.4)");
+    ParaPerpAsymmPhip_570MeVCM3->Fit("CosFit", "Q");
     pCosAmp[2][7] = CosFit->GetParameter(0);
     pCosAmpErr[2][7] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_595MeVCM3 = Phip_595MeVCM3_Para->GetAsymmetry(Phip_595MeVCM3_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_595MeVCM3->SetName("ParaPerpAsymmPhip595MeVCM3");
-    ParaPerpAsymmPhip_595MeVCM3->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 595 #pm 10MeV (CosTheta0.6-0.4)");
-    ParaPerpAsymmPhip_595MeVCM3->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_590MeVCM3 = Phip_590MeVCM3_Para->GetAsymmetry(Phip_590MeVCM3_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_590MeVCM3->SetName("ParaPerpAsymmPhip590MeVCM3");
+    ParaPerpAsymmPhip_590MeVCM3->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 595 #pm 10MeV (CosTheta0.6-0.4)");
+    ParaPerpAsymmPhip_590MeVCM3->Fit("CosFit", "Q");
     pCosAmp[2][8] = CosFit->GetParameter(0);
     pCosAmpErr[2][8] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_615MeVCM3 = Phip_615MeVCM3_Para->GetAsymmetry(Phip_615MeVCM3_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_615MeVCM3->SetName("ParaPerpAsymmPhip615MeVCM3");
-    ParaPerpAsymmPhip_615MeVCM3->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 615 #pm 10MeV (CosTheta0.6-0.4)");
-    ParaPerpAsymmPhip_615MeVCM3->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_610MeVCM3 = Phip_610MeVCM3_Para->GetAsymmetry(Phip_610MeVCM3_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_610MeVCM3->SetName("ParaPerpAsymmPhip610MeVCM3");
+    ParaPerpAsymmPhip_610MeVCM3->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 615 #pm 10MeV (CosTheta0.6-0.4)");
+    ParaPerpAsymmPhip_610MeVCM3->Fit("CosFit", "Q");
     pCosAmp[2][9] = CosFit->GetParameter(0);
     pCosAmpErr[2][9] = CosFit->GetParError(0);
 
@@ -260,73 +260,73 @@ void SigmaAsymm(){
     ////////////////  CM4  ////////////////////
     ///////////////////////////////////////////
 
-    ParaPerpAsymmPhip_435MeVCM4 = Phip_435MeVCM4_Para->GetAsymmetry(Phip_435MeVCM4_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_435MeVCM4->SetName("ParaPerpAsymmPhip435MeVCM4");
-    ParaPerpAsymmPhip_435MeVCM4->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 435 #pm 10MeV (CosTheta0.4-0.2)");
-    ParaPerpAsymmPhip_435MeVCM4->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_430MeVCM4 = Phip_430MeVCM4_Para->GetAsymmetry(Phip_430MeVCM4_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_430MeVCM4->SetName("ParaPerpAsymmPhip430MeVCM4");
+    ParaPerpAsymmPhip_430MeVCM4->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 435 #pm 10MeV (CosTheta0.4-0.2)");
+    ParaPerpAsymmPhip_430MeVCM4->Fit("CosFit", "Q");
     pCosAmp[3][0] = CosFit->GetParameter(0);
     pCosAmpErr[3][0] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_455MeVCM4 = Phip_455MeVCM4_Para->GetAsymmetry(Phip_455MeVCM4_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_455MeVCM4->SetName("ParaPerpAsymmPhip455MeVCM4");
-    ParaPerpAsymmPhip_455MeVCM4->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 455 #pm 10MeV (CosTheta0.4-0.2)");
-    ParaPerpAsymmPhip_455MeVCM4->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_450MeVCM4 = Phip_450MeVCM4_Para->GetAsymmetry(Phip_450MeVCM4_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_450MeVCM4->SetName("ParaPerpAsymmPhip450MeVCM4");
+    ParaPerpAsymmPhip_450MeVCM4->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 455 #pm 10MeV (CosTheta0.4-0.2)");
+    ParaPerpAsymmPhip_450MeVCM4->Fit("CosFit", "Q");
     pCosAmp[3][1] = CosFit->GetParameter(0);
     pCosAmpErr[3][1] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_475MeVCM4 = Phip_475MeVCM4_Para->GetAsymmetry(Phip_475MeVCM4_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_475MeVCM4->SetName("ParaPerpAsymmPhip475MeVCM4");
-    ParaPerpAsymmPhip_475MeVCM4->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 475 #pm 10MeV (CosTheta0.4-0.2)");
-    ParaPerpAsymmPhip_475MeVCM4->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_470MeVCM4 = Phip_470MeVCM4_Para->GetAsymmetry(Phip_470MeVCM4_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_470MeVCM4->SetName("ParaPerpAsymmPhip470MeVCM4");
+    ParaPerpAsymmPhip_470MeVCM4->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 475 #pm 10MeV (CosTheta0.4-0.2)");
+    ParaPerpAsymmPhip_470MeVCM4->Fit("CosFit", "Q");
     pCosAmp[3][2] = CosFit->GetParameter(0);
     pCosAmpErr[3][2] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_495MeVCM4 = Phip_495MeVCM4_Para->GetAsymmetry(Phip_495MeVCM4_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_495MeVCM4->SetName("ParaPerpAsymmPhip495MeVCM4");
-    ParaPerpAsymmPhip_495MeVCM4->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 495 #pm 10MeV (CosTheta0.4-0.2)");
-    ParaPerpAsymmPhip_495MeVCM4->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_490MeVCM4 = Phip_490MeVCM4_Para->GetAsymmetry(Phip_490MeVCM4_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_490MeVCM4->SetName("ParaPerpAsymmPhip490MeVCM4");
+    ParaPerpAsymmPhip_490MeVCM4->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 495 #pm 10MeV (CosTheta0.4-0.2)");
+    ParaPerpAsymmPhip_490MeVCM4->Fit("CosFit", "Q");
     pCosAmp[3][3] = CosFit->GetParameter(0);
     pCosAmpErr[3][3] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_515MeVCM4 = Phip_515MeVCM4_Para->GetAsymmetry(Phip_515MeVCM4_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_515MeVCM4->SetName("ParaPerpAsymmPhip515MeVCM4");
-    ParaPerpAsymmPhip_515MeVCM4->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 515 #pm 10MeV (CosTheta0.4-0.2)");
-    ParaPerpAsymmPhip_515MeVCM4->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_510MeVCM4 = Phip_510MeVCM4_Para->GetAsymmetry(Phip_510MeVCM4_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_510MeVCM4->SetName("ParaPerpAsymmPhip510MeVCM4");
+    ParaPerpAsymmPhip_510MeVCM4->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 515 #pm 10MeV (CosTheta0.4-0.2)");
+    ParaPerpAsymmPhip_510MeVCM4->Fit("CosFit", "Q");
     pCosAmp[3][4] = CosFit->GetParameter(0);
     pCosAmpErr[3][4] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_535MeVCM4 = Phip_535MeVCM4_Para->GetAsymmetry(Phip_535MeVCM4_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_535MeVCM4->SetName("ParaPerpAsymmPhip535MeVCM4");
-    ParaPerpAsymmPhip_535MeVCM4->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 535 #pm 10MeV (CosTheta0.4-0.2)");
-    ParaPerpAsymmPhip_535MeVCM4->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_530MeVCM4 = Phip_530MeVCM4_Para->GetAsymmetry(Phip_530MeVCM4_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_530MeVCM4->SetName("ParaPerpAsymmPhip530MeVCM4");
+    ParaPerpAsymmPhip_530MeVCM4->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 535 #pm 10MeV (CosTheta0.4-0.2)");
+    ParaPerpAsymmPhip_530MeVCM4->Fit("CosFit", "Q");
     pCosAmp[3][5] = CosFit->GetParameter(0);
     pCosAmpErr[3][5] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_555MeVCM4 = Phip_555MeVCM4_Para->GetAsymmetry(Phip_555MeVCM4_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_555MeVCM4->SetName("ParaPerpAsymmPhip555MeVCM4");
-    ParaPerpAsymmPhip_555MeVCM4->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 555 #pm 10MeV (CosTheta0.4-0.2)");
-    ParaPerpAsymmPhip_555MeVCM4->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_550MeVCM4 = Phip_550MeVCM4_Para->GetAsymmetry(Phip_550MeVCM4_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_550MeVCM4->SetName("ParaPerpAsymmPhip550MeVCM4");
+    ParaPerpAsymmPhip_550MeVCM4->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 555 #pm 10MeV (CosTheta0.4-0.2)");
+    ParaPerpAsymmPhip_550MeVCM4->Fit("CosFit", "Q");
     pCosAmp[3][6] = CosFit->GetParameter(0);
     pCosAmpErr[3][6] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_575MeVCM4 = Phip_575MeVCM4_Para->GetAsymmetry(Phip_575MeVCM4_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_575MeVCM4->SetName("ParaPerpAsymmPhip575MeVCM4");
-    ParaPerpAsymmPhip_575MeVCM4->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 575 #pm 10MeV (CosTheta0.4-0.2)");
-    ParaPerpAsymmPhip_575MeVCM4->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_570MeVCM4 = Phip_570MeVCM4_Para->GetAsymmetry(Phip_570MeVCM4_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_570MeVCM4->SetName("ParaPerpAsymmPhip570MeVCM4");
+    ParaPerpAsymmPhip_570MeVCM4->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 575 #pm 10MeV (CosTheta0.4-0.2)");
+    ParaPerpAsymmPhip_570MeVCM4->Fit("CosFit", "Q");
     pCosAmp[3][7] = CosFit->GetParameter(0);
     pCosAmpErr[3][7] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_595MeVCM4 = Phip_595MeVCM4_Para->GetAsymmetry(Phip_595MeVCM4_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_595MeVCM4->SetName("ParaPerpAsymmPhip595MeVCM4");
-    ParaPerpAsymmPhip_595MeVCM4->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 595 #pm 10MeV (CosTheta0.4-0.2)");
-    ParaPerpAsymmPhip_595MeVCM4->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_590MeVCM4 = Phip_590MeVCM4_Para->GetAsymmetry(Phip_590MeVCM4_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_590MeVCM4->SetName("ParaPerpAsymmPhip590MeVCM4");
+    ParaPerpAsymmPhip_590MeVCM4->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 595 #pm 10MeV (CosTheta0.4-0.2)");
+    ParaPerpAsymmPhip_590MeVCM4->Fit("CosFit", "Q");
     pCosAmp[3][8] = CosFit->GetParameter(0);
     pCosAmpErr[3][8] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_615MeVCM4 = Phip_615MeVCM4_Para->GetAsymmetry(Phip_615MeVCM4_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_615MeVCM4->SetName("ParaPerpAsymmPhip615MeVCM4");
-    ParaPerpAsymmPhip_615MeVCM4->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 615 #pm 10MeV (CosTheta0.4-0.2)");
-    ParaPerpAsymmPhip_615MeVCM4->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_610MeVCM4 = Phip_610MeVCM4_Para->GetAsymmetry(Phip_610MeVCM4_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_610MeVCM4->SetName("ParaPerpAsymmPhip610MeVCM4");
+    ParaPerpAsymmPhip_610MeVCM4->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 615 #pm 10MeV (CosTheta0.4-0.2)");
+    ParaPerpAsymmPhip_610MeVCM4->Fit("CosFit", "Q");
     pCosAmp[3][9] = CosFit->GetParameter(0);
     pCosAmpErr[3][9] = CosFit->GetParError(0);
 
@@ -334,73 +334,73 @@ void SigmaAsymm(){
     ////////////////  CM5  ////////////////////
     ///////////////////////////////////////////
 
-    ParaPerpAsymmPhip_435MeVCM5 = Phip_435MeVCM5_Para->GetAsymmetry(Phip_435MeVCM5_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_435MeVCM5->SetName("ParaPerpAsymmPhip435MeVCM5");
-    ParaPerpAsymmPhip_435MeVCM5->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 435 #pm 10MeV (CosTheta0.2-0.0)");
-    ParaPerpAsymmPhip_435MeVCM5->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_430MeVCM5 = Phip_430MeVCM5_Para->GetAsymmetry(Phip_430MeVCM5_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_430MeVCM5->SetName("ParaPerpAsymmPhip430MeVCM5");
+    ParaPerpAsymmPhip_430MeVCM5->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 435 #pm 10MeV (CosTheta0.2-0.0)");
+    ParaPerpAsymmPhip_430MeVCM5->Fit("CosFit", "Q");
     pCosAmp[4][0] = CosFit->GetParameter(0);
     pCosAmpErr[4][0] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_455MeVCM5 = Phip_455MeVCM5_Para->GetAsymmetry(Phip_455MeVCM5_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_455MeVCM5->SetName("ParaPerpAsymmPhip455MeVCM5");
-    ParaPerpAsymmPhip_455MeVCM5->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 455 #pm 10MeV (CosTheta0.2-0.0)");
-    ParaPerpAsymmPhip_455MeVCM5->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_450MeVCM5 = Phip_450MeVCM5_Para->GetAsymmetry(Phip_450MeVCM5_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_450MeVCM5->SetName("ParaPerpAsymmPhip450MeVCM5");
+    ParaPerpAsymmPhip_450MeVCM5->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 455 #pm 10MeV (CosTheta0.2-0.0)");
+    ParaPerpAsymmPhip_450MeVCM5->Fit("CosFit", "Q");
     pCosAmp[4][1] = CosFit->GetParameter(0);
     pCosAmpErr[4][1] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_475MeVCM5 = Phip_475MeVCM5_Para->GetAsymmetry(Phip_475MeVCM5_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_475MeVCM5->SetName("ParaPerpAsymmPhip475MeVCM5");
-    ParaPerpAsymmPhip_475MeVCM5->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 475 #pm 10MeV (CosTheta0.2-0.0)");
-    ParaPerpAsymmPhip_475MeVCM5->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_470MeVCM5 = Phip_470MeVCM5_Para->GetAsymmetry(Phip_470MeVCM5_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_470MeVCM5->SetName("ParaPerpAsymmPhip470MeVCM5");
+    ParaPerpAsymmPhip_470MeVCM5->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 475 #pm 10MeV (CosTheta0.2-0.0)");
+    ParaPerpAsymmPhip_470MeVCM5->Fit("CosFit", "Q");
     pCosAmp[4][2] = CosFit->GetParameter(0);
     pCosAmpErr[4][2] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_495MeVCM5 = Phip_495MeVCM5_Para->GetAsymmetry(Phip_495MeVCM5_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_495MeVCM5->SetName("ParaPerpAsymmPhip495MeVCM5");
-    ParaPerpAsymmPhip_495MeVCM5->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 495 #pm 10MeV (CosTheta0.2-0.0)");
-    ParaPerpAsymmPhip_495MeVCM5->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_490MeVCM5 = Phip_490MeVCM5_Para->GetAsymmetry(Phip_490MeVCM5_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_490MeVCM5->SetName("ParaPerpAsymmPhip490MeVCM5");
+    ParaPerpAsymmPhip_490MeVCM5->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 495 #pm 10MeV (CosTheta0.2-0.0)");
+    ParaPerpAsymmPhip_490MeVCM5->Fit("CosFit", "Q");
     pCosAmp[4][3] = CosFit->GetParameter(0);
     pCosAmpErr[4][3] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_515MeVCM5 = Phip_515MeVCM5_Para->GetAsymmetry(Phip_515MeVCM5_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_515MeVCM5->SetName("ParaPerpAsymmPhip515MeVCM5");
-    ParaPerpAsymmPhip_515MeVCM5->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 515 #pm 10MeV (CosTheta0.2-0.0)");
-    ParaPerpAsymmPhip_515MeVCM5->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_510MeVCM5 = Phip_510MeVCM5_Para->GetAsymmetry(Phip_510MeVCM5_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_510MeVCM5->SetName("ParaPerpAsymmPhip510MeVCM5");
+    ParaPerpAsymmPhip_510MeVCM5->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 515 #pm 10MeV (CosTheta0.2-0.0)");
+    ParaPerpAsymmPhip_510MeVCM5->Fit("CosFit", "Q");
     pCosAmp[4][4] = CosFit->GetParameter(0);
     pCosAmpErr[4][4] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_535MeVCM5 = Phip_535MeVCM5_Para->GetAsymmetry(Phip_535MeVCM5_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_535MeVCM5->SetName("ParaPerpAsymmPhip535MeVCM5");
-    ParaPerpAsymmPhip_535MeVCM5->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 535 #pm 10MeV (CosTheta0.2-0.0)");
-    ParaPerpAsymmPhip_535MeVCM5->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_530MeVCM5 = Phip_530MeVCM5_Para->GetAsymmetry(Phip_530MeVCM5_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_530MeVCM5->SetName("ParaPerpAsymmPhip530MeVCM5");
+    ParaPerpAsymmPhip_530MeVCM5->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 535 #pm 10MeV (CosTheta0.2-0.0)");
+    ParaPerpAsymmPhip_530MeVCM5->Fit("CosFit", "Q");
     pCosAmp[4][5] = CosFit->GetParameter(0);
     pCosAmpErr[4][5] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_555MeVCM5 = Phip_555MeVCM5_Para->GetAsymmetry(Phip_555MeVCM5_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_555MeVCM5->SetName("ParaPerpAsymmPhip555MeVCM5");
-    ParaPerpAsymmPhip_555MeVCM5->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 555 #pm 10MeV (CosTheta0.2-0.0)");
-    ParaPerpAsymmPhip_555MeVCM5->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_550MeVCM5 = Phip_550MeVCM5_Para->GetAsymmetry(Phip_550MeVCM5_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_550MeVCM5->SetName("ParaPerpAsymmPhip550MeVCM5");
+    ParaPerpAsymmPhip_550MeVCM5->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 555 #pm 10MeV (CosTheta0.2-0.0)");
+    ParaPerpAsymmPhip_550MeVCM5->Fit("CosFit", "Q");
     pCosAmp[4][6] = CosFit->GetParameter(0);
     pCosAmpErr[4][6] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_575MeVCM5 = Phip_575MeVCM5_Para->GetAsymmetry(Phip_575MeVCM5_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_575MeVCM5->SetName("ParaPerpAsymmPhip575MeVCM5");
-    ParaPerpAsymmPhip_575MeVCM5->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 575 #pm 10MeV (CosTheta0.2-0.0)");
-    ParaPerpAsymmPhip_575MeVCM5->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_570MeVCM5 = Phip_570MeVCM5_Para->GetAsymmetry(Phip_570MeVCM5_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_570MeVCM5->SetName("ParaPerpAsymmPhip570MeVCM5");
+    ParaPerpAsymmPhip_570MeVCM5->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 575 #pm 10MeV (CosTheta0.2-0.0)");
+    ParaPerpAsymmPhip_570MeVCM5->Fit("CosFit", "Q");
     pCosAmp[4][7] = CosFit->GetParameter(0);
     pCosAmpErr[4][7] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_595MeVCM5 = Phip_595MeVCM5_Para->GetAsymmetry(Phip_595MeVCM5_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_595MeVCM5->SetName("ParaPerpAsymmPhip595MeVCM5");
-    ParaPerpAsymmPhip_595MeVCM5->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 595 #pm 10MeV (CosTheta0.2-0.0)");
-    ParaPerpAsymmPhip_595MeVCM5->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_590MeVCM5 = Phip_590MeVCM5_Para->GetAsymmetry(Phip_590MeVCM5_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_590MeVCM5->SetName("ParaPerpAsymmPhip590MeVCM5");
+    ParaPerpAsymmPhip_590MeVCM5->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 595 #pm 10MeV (CosTheta0.2-0.0)");
+    ParaPerpAsymmPhip_590MeVCM5->Fit("CosFit", "Q");
     pCosAmp[4][8] = CosFit->GetParameter(0);
     pCosAmpErr[4][8] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_615MeVCM5 = Phip_615MeVCM5_Para->GetAsymmetry(Phip_615MeVCM5_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_615MeVCM5->SetName("ParaPerpAsymmPhip615MeVCM5");
-    ParaPerpAsymmPhip_615MeVCM5->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 615 #pm 10MeV (CosTheta0.2-0.0)");
-    ParaPerpAsymmPhip_615MeVCM5->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_610MeVCM5 = Phip_610MeVCM5_Para->GetAsymmetry(Phip_610MeVCM5_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_610MeVCM5->SetName("ParaPerpAsymmPhip610MeVCM5");
+    ParaPerpAsymmPhip_610MeVCM5->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 615 #pm 10MeV (CosTheta0.2-0.0)");
+    ParaPerpAsymmPhip_610MeVCM5->Fit("CosFit", "Q");
     pCosAmp[4][9] = CosFit->GetParameter(0);
     pCosAmpErr[4][9] = CosFit->GetParError(0);
 
@@ -408,73 +408,73 @@ void SigmaAsymm(){
     ////////////////  CM6  ////////////////////
     ///////////////////////////////////////////
 
-    ParaPerpAsymmPhip_435MeVCM6 = Phip_435MeVCM6_Para->GetAsymmetry(Phip_435MeVCM6_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_435MeVCM6->SetName("ParaPerpAsymmPhip435MeVCM6");
-    ParaPerpAsymmPhip_435MeVCM6->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 435 #pm 10MeV (CosTheta0.0-(-0.2))");
-    ParaPerpAsymmPhip_435MeVCM6->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_430MeVCM6 = Phip_430MeVCM6_Para->GetAsymmetry(Phip_430MeVCM6_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_430MeVCM6->SetName("ParaPerpAsymmPhip430MeVCM6");
+    ParaPerpAsymmPhip_430MeVCM6->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 435 #pm 10MeV (CosTheta0.0-(-0.2))");
+    ParaPerpAsymmPhip_430MeVCM6->Fit("CosFit", "Q");
     pCosAmp[5][0] = CosFit->GetParameter(0);
     pCosAmpErr[5][0] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_455MeVCM6 = Phip_455MeVCM6_Para->GetAsymmetry(Phip_455MeVCM6_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_455MeVCM6->SetName("ParaPerpAsymmPhip455MeVCM6");
-    ParaPerpAsymmPhip_455MeVCM6->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 455 #pm 10MeV (CosTheta0.0-(-0.2))");
-    ParaPerpAsymmPhip_455MeVCM6->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_450MeVCM6 = Phip_450MeVCM6_Para->GetAsymmetry(Phip_450MeVCM6_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_450MeVCM6->SetName("ParaPerpAsymmPhip450MeVCM6");
+    ParaPerpAsymmPhip_450MeVCM6->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 455 #pm 10MeV (CosTheta0.0-(-0.2))");
+    ParaPerpAsymmPhip_450MeVCM6->Fit("CosFit", "Q");
     pCosAmp[5][1] = CosFit->GetParameter(0);
     pCosAmpErr[5][1] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_475MeVCM6 = Phip_475MeVCM6_Para->GetAsymmetry(Phip_475MeVCM6_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_475MeVCM6->SetName("ParaPerpAsymmPhip475MeVCM6");
-    ParaPerpAsymmPhip_475MeVCM6->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 475 #pm 10MeV (CosTheta0.0-(-0.2))");
-    ParaPerpAsymmPhip_475MeVCM6->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_470MeVCM6 = Phip_470MeVCM6_Para->GetAsymmetry(Phip_470MeVCM6_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_470MeVCM6->SetName("ParaPerpAsymmPhip470MeVCM6");
+    ParaPerpAsymmPhip_470MeVCM6->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 475 #pm 10MeV (CosTheta0.0-(-0.2))");
+    ParaPerpAsymmPhip_470MeVCM6->Fit("CosFit", "Q");
     pCosAmp[5][2] = CosFit->GetParameter(0);
     pCosAmpErr[5][2] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_495MeVCM6 = Phip_495MeVCM6_Para->GetAsymmetry(Phip_495MeVCM6_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_495MeVCM6->SetName("ParaPerpAsymmPhip495MeVCM6");
-    ParaPerpAsymmPhip_495MeVCM6->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 495 #pm 10MeV (CosTheta0.0-(-0.2))");
-    ParaPerpAsymmPhip_495MeVCM6->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_490MeVCM6 = Phip_490MeVCM6_Para->GetAsymmetry(Phip_490MeVCM6_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_490MeVCM6->SetName("ParaPerpAsymmPhip490MeVCM6");
+    ParaPerpAsymmPhip_490MeVCM6->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 495 #pm 10MeV (CosTheta0.0-(-0.2))");
+    ParaPerpAsymmPhip_490MeVCM6->Fit("CosFit", "Q");
     pCosAmp[5][3] = CosFit->GetParameter(0);
     pCosAmpErr[5][3] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_515MeVCM6 = Phip_515MeVCM6_Para->GetAsymmetry(Phip_515MeVCM6_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_515MeVCM6->SetName("ParaPerpAsymmPhip515MeVCM6");
-    ParaPerpAsymmPhip_515MeVCM6->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 515 #pm 10MeV (CosTheta0.0-(-0.2))");
-    ParaPerpAsymmPhip_515MeVCM6->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_510MeVCM6 = Phip_510MeVCM6_Para->GetAsymmetry(Phip_510MeVCM6_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_510MeVCM6->SetName("ParaPerpAsymmPhip510MeVCM6");
+    ParaPerpAsymmPhip_510MeVCM6->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 515 #pm 10MeV (CosTheta0.0-(-0.2))");
+    ParaPerpAsymmPhip_510MeVCM6->Fit("CosFit", "Q");
     pCosAmp[5][4] = CosFit->GetParameter(0);
     pCosAmpErr[5][4] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_535MeVCM6 = Phip_535MeVCM6_Para->GetAsymmetry(Phip_535MeVCM6_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_535MeVCM6->SetName("ParaPerpAsymmPhip535MeVCM6");
-    ParaPerpAsymmPhip_535MeVCM6->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 535 #pm 10MeV (CosTheta0.0-(-0.2))");
-    ParaPerpAsymmPhip_535MeVCM6->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_530MeVCM6 = Phip_530MeVCM6_Para->GetAsymmetry(Phip_530MeVCM6_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_530MeVCM6->SetName("ParaPerpAsymmPhip530MeVCM6");
+    ParaPerpAsymmPhip_530MeVCM6->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 535 #pm 10MeV (CosTheta0.0-(-0.2))");
+    ParaPerpAsymmPhip_530MeVCM6->Fit("CosFit", "Q");
     pCosAmp[5][5] = CosFit->GetParameter(0);
     pCosAmpErr[5][5] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_555MeVCM6 = Phip_555MeVCM6_Para->GetAsymmetry(Phip_555MeVCM6_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_555MeVCM6->SetName("ParaPerpAsymmPhip555MeVCM6");
-    ParaPerpAsymmPhip_555MeVCM6->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 555 #pm 10MeV (CosTheta0.0-(-0.2))");
-    ParaPerpAsymmPhip_555MeVCM6->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_550MeVCM6 = Phip_550MeVCM6_Para->GetAsymmetry(Phip_550MeVCM6_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_550MeVCM6->SetName("ParaPerpAsymmPhip550MeVCM6");
+    ParaPerpAsymmPhip_550MeVCM6->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 555 #pm 10MeV (CosTheta0.0-(-0.2))");
+    ParaPerpAsymmPhip_550MeVCM6->Fit("CosFit", "Q");
     pCosAmp[5][6] = CosFit->GetParameter(0);
     pCosAmpErr[5][6] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_575MeVCM6 = Phip_575MeVCM6_Para->GetAsymmetry(Phip_575MeVCM6_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_575MeVCM6->SetName("ParaPerpAsymmPhip575MeVCM6");
-    ParaPerpAsymmPhip_575MeVCM6->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 575 #pm 10MeV (CosTheta0.0-(-0.2))");
-    ParaPerpAsymmPhip_575MeVCM6->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_570MeVCM6 = Phip_570MeVCM6_Para->GetAsymmetry(Phip_570MeVCM6_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_570MeVCM6->SetName("ParaPerpAsymmPhip570MeVCM6");
+    ParaPerpAsymmPhip_570MeVCM6->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 575 #pm 10MeV (CosTheta0.0-(-0.2))");
+    ParaPerpAsymmPhip_570MeVCM6->Fit("CosFit", "Q");
     pCosAmp[5][7] = CosFit->GetParameter(0);
     pCosAmpErr[5][7] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_595MeVCM6 = Phip_595MeVCM6_Para->GetAsymmetry(Phip_595MeVCM6_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_595MeVCM6->SetName("ParaPerpAsymmPhip595MeVCM6");
-    ParaPerpAsymmPhip_595MeVCM6->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 595 #pm 10MeV (CosTheta0.0-(-0.2))");
-    ParaPerpAsymmPhip_595MeVCM6->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_590MeVCM6 = Phip_590MeVCM6_Para->GetAsymmetry(Phip_590MeVCM6_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_590MeVCM6->SetName("ParaPerpAsymmPhip590MeVCM6");
+    ParaPerpAsymmPhip_590MeVCM6->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 595 #pm 10MeV (CosTheta0.0-(-0.2))");
+    ParaPerpAsymmPhip_590MeVCM6->Fit("CosFit", "Q");
     pCosAmp[5][8] = CosFit->GetParameter(0);
     pCosAmpErr[5][8] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_615MeVCM6 = Phip_615MeVCM6_Para->GetAsymmetry(Phip_615MeVCM6_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_615MeVCM6->SetName("ParaPerpAsymmPhip615MeVCM6");
-    ParaPerpAsymmPhip_615MeVCM6->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 615 #pm 10MeV (CosTheta0.0-(-0.2))");
-    ParaPerpAsymmPhip_615MeVCM6->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_610MeVCM6 = Phip_610MeVCM6_Para->GetAsymmetry(Phip_610MeVCM6_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_610MeVCM6->SetName("ParaPerpAsymmPhip610MeVCM6");
+    ParaPerpAsymmPhip_610MeVCM6->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 615 #pm 10MeV (CosTheta0.0-(-0.2))");
+    ParaPerpAsymmPhip_610MeVCM6->Fit("CosFit", "Q");
     pCosAmp[5][9] = CosFit->GetParameter(0);
     pCosAmpErr[5][9] = CosFit->GetParError(0);
 
@@ -482,73 +482,73 @@ void SigmaAsymm(){
     ////////////////  CM7  ////////////////////
     ///////////////////////////////////////////
 
-    ParaPerpAsymmPhip_435MeVCM7 = Phip_435MeVCM7_Para->GetAsymmetry(Phip_435MeVCM7_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_435MeVCM7->SetName("ParaPerpAsymmPhip435MeVCM7");
-    ParaPerpAsymmPhip_435MeVCM7->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 435 #pm 10MeV (CosTheta-0.2-(-0.4))");
-    ParaPerpAsymmPhip_435MeVCM7->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_430MeVCM7 = Phip_430MeVCM7_Para->GetAsymmetry(Phip_430MeVCM7_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_430MeVCM7->SetName("ParaPerpAsymmPhip430MeVCM7");
+    ParaPerpAsymmPhip_430MeVCM7->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 435 #pm 10MeV (CosTheta-0.2-(-0.4))");
+    ParaPerpAsymmPhip_430MeVCM7->Fit("CosFit", "Q");
     pCosAmp[6][0] = CosFit->GetParameter(0);
     pCosAmpErr[6][0] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_455MeVCM7 = Phip_455MeVCM7_Para->GetAsymmetry(Phip_455MeVCM7_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_455MeVCM7->SetName("ParaPerpAsymmPhip455MeVCM7");
-    ParaPerpAsymmPhip_455MeVCM7->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 455 #pm 10MeV (CosTheta-0.2-(-0.4))");
-    ParaPerpAsymmPhip_455MeVCM7->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_450MeVCM7 = Phip_450MeVCM7_Para->GetAsymmetry(Phip_450MeVCM7_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_450MeVCM7->SetName("ParaPerpAsymmPhip450MeVCM7");
+    ParaPerpAsymmPhip_450MeVCM7->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 455 #pm 10MeV (CosTheta-0.2-(-0.4))");
+    ParaPerpAsymmPhip_450MeVCM7->Fit("CosFit", "Q");
     pCosAmp[6][1] = CosFit->GetParameter(0);
     pCosAmpErr[6][1] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_475MeVCM7 = Phip_475MeVCM7_Para->GetAsymmetry(Phip_475MeVCM7_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_475MeVCM7->SetName("ParaPerpAsymmPhip475MeVCM7");
-    ParaPerpAsymmPhip_475MeVCM7->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 475 #pm 10MeV (CosTheta-0.2-(-0.4))");
-    ParaPerpAsymmPhip_475MeVCM7->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_470MeVCM7 = Phip_470MeVCM7_Para->GetAsymmetry(Phip_470MeVCM7_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_470MeVCM7->SetName("ParaPerpAsymmPhip470MeVCM7");
+    ParaPerpAsymmPhip_470MeVCM7->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 475 #pm 10MeV (CosTheta-0.2-(-0.4))");
+    ParaPerpAsymmPhip_470MeVCM7->Fit("CosFit", "Q");
     pCosAmp[6][2] = CosFit->GetParameter(0);
     pCosAmpErr[6][2] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_495MeVCM7 = Phip_495MeVCM7_Para->GetAsymmetry(Phip_495MeVCM7_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_495MeVCM7->SetName("ParaPerpAsymmPhip495MeVCM7");
-    ParaPerpAsymmPhip_495MeVCM7->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 495 #pm 10MeV (CosTheta-0.2-(-0.4))");
-    ParaPerpAsymmPhip_495MeVCM7->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_490MeVCM7 = Phip_490MeVCM7_Para->GetAsymmetry(Phip_490MeVCM7_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_490MeVCM7->SetName("ParaPerpAsymmPhip490MeVCM7");
+    ParaPerpAsymmPhip_490MeVCM7->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 495 #pm 10MeV (CosTheta-0.2-(-0.4))");
+    ParaPerpAsymmPhip_490MeVCM7->Fit("CosFit", "Q");
     pCosAmp[6][3] = CosFit->GetParameter(0);
     pCosAmpErr[6][3] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_515MeVCM7 = Phip_515MeVCM7_Para->GetAsymmetry(Phip_515MeVCM7_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_515MeVCM7->SetName("ParaPerpAsymmPhip515MeVCM7");
-    ParaPerpAsymmPhip_515MeVCM7->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 515 #pm 10MeV (CosTheta-0.2-(-0.4))");
-    ParaPerpAsymmPhip_515MeVCM7->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_510MeVCM7 = Phip_510MeVCM7_Para->GetAsymmetry(Phip_510MeVCM7_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_510MeVCM7->SetName("ParaPerpAsymmPhip510MeVCM7");
+    ParaPerpAsymmPhip_510MeVCM7->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 515 #pm 10MeV (CosTheta-0.2-(-0.4))");
+    ParaPerpAsymmPhip_510MeVCM7->Fit("CosFit", "Q");
     pCosAmp[6][4] = CosFit->GetParameter(0);
     pCosAmpErr[6][4] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_535MeVCM7 = Phip_535MeVCM7_Para->GetAsymmetry(Phip_535MeVCM7_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_535MeVCM7->SetName("ParaPerpAsymmPhip535MeVCM7");
-    ParaPerpAsymmPhip_535MeVCM7->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 535 #pm 10MeV (CosTheta-0.2-(-0.4))");
-    ParaPerpAsymmPhip_535MeVCM7->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_530MeVCM7 = Phip_530MeVCM7_Para->GetAsymmetry(Phip_530MeVCM7_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_530MeVCM7->SetName("ParaPerpAsymmPhip530MeVCM7");
+    ParaPerpAsymmPhip_530MeVCM7->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 535 #pm 10MeV (CosTheta-0.2-(-0.4))");
+    ParaPerpAsymmPhip_530MeVCM7->Fit("CosFit", "Q");
     pCosAmp[6][5] = CosFit->GetParameter(0);
     pCosAmpErr[6][5] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_555MeVCM7 = Phip_555MeVCM7_Para->GetAsymmetry(Phip_555MeVCM7_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_555MeVCM7->SetName("ParaPerpAsymmPhip555MeVCM7");
-    ParaPerpAsymmPhip_555MeVCM7->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 555 #pm 10MeV (CosTheta-0.2-(-0.4))");
-    ParaPerpAsymmPhip_555MeVCM7->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_550MeVCM7 = Phip_550MeVCM7_Para->GetAsymmetry(Phip_550MeVCM7_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_550MeVCM7->SetName("ParaPerpAsymmPhip550MeVCM7");
+    ParaPerpAsymmPhip_550MeVCM7->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 555 #pm 10MeV (CosTheta-0.2-(-0.4))");
+    ParaPerpAsymmPhip_550MeVCM7->Fit("CosFit", "Q");
     pCosAmp[6][6] = CosFit->GetParameter(0);
     pCosAmpErr[6][6] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_575MeVCM7 = Phip_575MeVCM7_Para->GetAsymmetry(Phip_575MeVCM7_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_575MeVCM7->SetName("ParaPerpAsymmPhip575MeVCM7");
-    ParaPerpAsymmPhip_575MeVCM7->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 575 #pm 10MeV (CosTheta-0.2-(-0.4))");
-    ParaPerpAsymmPhip_575MeVCM7->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_570MeVCM7 = Phip_570MeVCM7_Para->GetAsymmetry(Phip_570MeVCM7_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_570MeVCM7->SetName("ParaPerpAsymmPhip570MeVCM7");
+    ParaPerpAsymmPhip_570MeVCM7->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 575 #pm 10MeV (CosTheta-0.2-(-0.4))");
+    ParaPerpAsymmPhip_570MeVCM7->Fit("CosFit", "Q");
     pCosAmp[6][7] = CosFit->GetParameter(0);
     pCosAmpErr[6][7] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_595MeVCM7 = Phip_595MeVCM7_Para->GetAsymmetry(Phip_595MeVCM7_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_595MeVCM7->SetName("ParaPerpAsymmPhip595MeVCM7");
-    ParaPerpAsymmPhip_595MeVCM7->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 595 #pm 10MeV (CosTheta-0.2-(-0.4))");
-    ParaPerpAsymmPhip_595MeVCM7->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_590MeVCM7 = Phip_590MeVCM7_Para->GetAsymmetry(Phip_590MeVCM7_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_590MeVCM7->SetName("ParaPerpAsymmPhip590MeVCM7");
+    ParaPerpAsymmPhip_590MeVCM7->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 595 #pm 10MeV (CosTheta-0.2-(-0.4))");
+    ParaPerpAsymmPhip_590MeVCM7->Fit("CosFit", "Q");
     pCosAmp[6][8] = CosFit->GetParameter(0);
     pCosAmpErr[6][8] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_615MeVCM7 = Phip_615MeVCM7_Para->GetAsymmetry(Phip_615MeVCM7_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_615MeVCM7->SetName("ParaPerpAsymmPhip615MeVCM7");
-    ParaPerpAsymmPhip_615MeVCM7->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 615 #pm 10MeV (CosTheta-0.2-(-0.4))");
-    ParaPerpAsymmPhip_615MeVCM7->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_610MeVCM7 = Phip_610MeVCM7_Para->GetAsymmetry(Phip_610MeVCM7_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_610MeVCM7->SetName("ParaPerpAsymmPhip610MeVCM7");
+    ParaPerpAsymmPhip_610MeVCM7->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 615 #pm 10MeV (CosTheta-0.2-(-0.4))");
+    ParaPerpAsymmPhip_610MeVCM7->Fit("CosFit", "Q");
     pCosAmp[6][9] = CosFit->GetParameter(0);
     pCosAmpErr[6][9] = CosFit->GetParError(0);
 
@@ -556,73 +556,73 @@ void SigmaAsymm(){
     ////////////////  CM8  ////////////////////
     ///////////////////////////////////////////
 
-    ParaPerpAsymmPhip_435MeVCM8 = Phip_435MeVCM8_Para->GetAsymmetry(Phip_435MeVCM8_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_435MeVCM8->SetName("ParaPerpAsymmPhip435MeVCM8");
-    ParaPerpAsymmPhip_435MeVCM8->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 435 #pm 10MeV (CosTheta-0.4-(-0.6))");
-    ParaPerpAsymmPhip_435MeVCM8->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_430MeVCM8 = Phip_430MeVCM8_Para->GetAsymmetry(Phip_430MeVCM8_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_430MeVCM8->SetName("ParaPerpAsymmPhip430MeVCM8");
+    ParaPerpAsymmPhip_430MeVCM8->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 435 #pm 10MeV (CosTheta-0.4-(-0.6))");
+    ParaPerpAsymmPhip_430MeVCM8->Fit("CosFit", "Q");
     pCosAmp[7][0] = CosFit->GetParameter(0);
     pCosAmpErr[7][0] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_455MeVCM8 = Phip_455MeVCM8_Para->GetAsymmetry(Phip_455MeVCM8_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_455MeVCM8->SetName("ParaPerpAsymmPhip455MeVCM8");
-    ParaPerpAsymmPhip_455MeVCM8->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 455 #pm 10MeV (CosTheta-0.4-(-0.6))");
-    ParaPerpAsymmPhip_455MeVCM8->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_450MeVCM8 = Phip_450MeVCM8_Para->GetAsymmetry(Phip_450MeVCM8_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_450MeVCM8->SetName("ParaPerpAsymmPhip450MeVCM8");
+    ParaPerpAsymmPhip_450MeVCM8->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 455 #pm 10MeV (CosTheta-0.4-(-0.6))");
+    ParaPerpAsymmPhip_450MeVCM8->Fit("CosFit", "Q");
     pCosAmp[7][1] = CosFit->GetParameter(0);
     pCosAmpErr[7][1] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_475MeVCM8 = Phip_475MeVCM8_Para->GetAsymmetry(Phip_475MeVCM8_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_475MeVCM8->SetName("ParaPerpAsymmPhip475MeVCM8");
-    ParaPerpAsymmPhip_475MeVCM8->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 475 #pm 10MeV (CosTheta-0.4-(-0.6))");
-    ParaPerpAsymmPhip_475MeVCM8->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_470MeVCM8 = Phip_470MeVCM8_Para->GetAsymmetry(Phip_470MeVCM8_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_470MeVCM8->SetName("ParaPerpAsymmPhip470MeVCM8");
+    ParaPerpAsymmPhip_470MeVCM8->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 475 #pm 10MeV (CosTheta-0.4-(-0.6))");
+    ParaPerpAsymmPhip_470MeVCM8->Fit("CosFit", "Q");
     pCosAmp[7][2] = CosFit->GetParameter(0);
     pCosAmpErr[7][2] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_495MeVCM8 = Phip_495MeVCM8_Para->GetAsymmetry(Phip_495MeVCM8_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_495MeVCM8->SetName("ParaPerpAsymmPhip495MeVCM8");
-    ParaPerpAsymmPhip_495MeVCM8->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 495 #pm 10MeV (CosTheta-0.4-(-0.6))");
-    ParaPerpAsymmPhip_495MeVCM8->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_490MeVCM8 = Phip_490MeVCM8_Para->GetAsymmetry(Phip_490MeVCM8_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_490MeVCM8->SetName("ParaPerpAsymmPhip490MeVCM8");
+    ParaPerpAsymmPhip_490MeVCM8->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 495 #pm 10MeV (CosTheta-0.4-(-0.6))");
+    ParaPerpAsymmPhip_490MeVCM8->Fit("CosFit", "Q");
     pCosAmp[7][3] = CosFit->GetParameter(0);
     pCosAmpErr[7][3] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_515MeVCM8 = Phip_515MeVCM8_Para->GetAsymmetry(Phip_515MeVCM8_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_515MeVCM8->SetName("ParaPerpAsymmPhip515MeVCM8");
-    ParaPerpAsymmPhip_515MeVCM8->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 515 #pm 10MeV (CosTheta-0.4-(-0.6))");
-    ParaPerpAsymmPhip_515MeVCM8->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_510MeVCM8 = Phip_510MeVCM8_Para->GetAsymmetry(Phip_510MeVCM8_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_510MeVCM8->SetName("ParaPerpAsymmPhip510MeVCM8");
+    ParaPerpAsymmPhip_510MeVCM8->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 515 #pm 10MeV (CosTheta-0.4-(-0.6))");
+    ParaPerpAsymmPhip_510MeVCM8->Fit("CosFit", "Q");
     pCosAmp[7][4] = CosFit->GetParameter(0);
     pCosAmpErr[7][4] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_535MeVCM8 = Phip_535MeVCM8_Para->GetAsymmetry(Phip_535MeVCM8_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_535MeVCM8->SetName("ParaPerpAsymmPhip535MeVCM8");
-    ParaPerpAsymmPhip_535MeVCM8->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 535 #pm 10MeV (CosTheta-0.4-(-0.6))");
-    ParaPerpAsymmPhip_535MeVCM8->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_530MeVCM8 = Phip_530MeVCM8_Para->GetAsymmetry(Phip_530MeVCM8_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_530MeVCM8->SetName("ParaPerpAsymmPhip530MeVCM8");
+    ParaPerpAsymmPhip_530MeVCM8->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 535 #pm 10MeV (CosTheta-0.4-(-0.6))");
+    ParaPerpAsymmPhip_530MeVCM8->Fit("CosFit", "Q");
     pCosAmp[7][5] = CosFit->GetParameter(0);
     pCosAmpErr[7][5] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_555MeVCM8 = Phip_555MeVCM8_Para->GetAsymmetry(Phip_555MeVCM8_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_555MeVCM8->SetName("ParaPerpAsymmPhip555MeVCM8");
-    ParaPerpAsymmPhip_555MeVCM8->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 555 #pm 10MeV (CosTheta-0.4-(-0.6))");
-    ParaPerpAsymmPhip_555MeVCM8->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_550MeVCM8 = Phip_550MeVCM8_Para->GetAsymmetry(Phip_550MeVCM8_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_550MeVCM8->SetName("ParaPerpAsymmPhip550MeVCM8");
+    ParaPerpAsymmPhip_550MeVCM8->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 555 #pm 10MeV (CosTheta-0.4-(-0.6))");
+    ParaPerpAsymmPhip_550MeVCM8->Fit("CosFit", "Q");
     pCosAmp[7][6] = CosFit->GetParameter(0);
     pCosAmpErr[7][6] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_575MeVCM8 = Phip_575MeVCM8_Para->GetAsymmetry(Phip_575MeVCM8_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_575MeVCM8->SetName("ParaPerpAsymmPhip575MeVCM8");
-    ParaPerpAsymmPhip_575MeVCM8->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 575 #pm 10MeV (CosTheta-0.4-(-0.6))");
-    ParaPerpAsymmPhip_575MeVCM8->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_570MeVCM8 = Phip_570MeVCM8_Para->GetAsymmetry(Phip_570MeVCM8_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_570MeVCM8->SetName("ParaPerpAsymmPhip570MeVCM8");
+    ParaPerpAsymmPhip_570MeVCM8->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 575 #pm 10MeV (CosTheta-0.4-(-0.6))");
+    ParaPerpAsymmPhip_570MeVCM8->Fit("CosFit", "Q");
     pCosAmp[7][7] = CosFit->GetParameter(0);
     pCosAmpErr[7][7] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_595MeVCM8 = Phip_595MeVCM8_Para->GetAsymmetry(Phip_595MeVCM8_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_595MeVCM8->SetName("ParaPerpAsymmPhip595MeVCM8");
-    ParaPerpAsymmPhip_595MeVCM8->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 595 #pm 10MeV (CosTheta-0.4-(-0.6))");
-    ParaPerpAsymmPhip_595MeVCM8->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_590MeVCM8 = Phip_590MeVCM8_Para->GetAsymmetry(Phip_590MeVCM8_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_590MeVCM8->SetName("ParaPerpAsymmPhip590MeVCM8");
+    ParaPerpAsymmPhip_590MeVCM8->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 595 #pm 10MeV (CosTheta-0.4-(-0.6))");
+    ParaPerpAsymmPhip_590MeVCM8->Fit("CosFit", "Q");
     pCosAmp[7][8] = CosFit->GetParameter(0);
     pCosAmpErr[7][8] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_615MeVCM8 = Phip_615MeVCM8_Para->GetAsymmetry(Phip_615MeVCM8_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_615MeVCM8->SetName("ParaPerpAsymmPhip615MeVCM8");
-    ParaPerpAsymmPhip_615MeVCM8->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 615 #pm 10MeV (CosTheta-0.4-(-0.6))");
-    ParaPerpAsymmPhip_615MeVCM8->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_610MeVCM8 = Phip_610MeVCM8_Para->GetAsymmetry(Phip_610MeVCM8_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_610MeVCM8->SetName("ParaPerpAsymmPhip610MeVCM8");
+    ParaPerpAsymmPhip_610MeVCM8->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 615 #pm 10MeV (CosTheta-0.4-(-0.6))");
+    ParaPerpAsymmPhip_610MeVCM8->Fit("CosFit", "Q");
     pCosAmp[7][9] = CosFit->GetParameter(0);
     pCosAmpErr[7][9] = CosFit->GetParError(0);
 
@@ -630,73 +630,73 @@ void SigmaAsymm(){
     ////////////////  CM9  ////////////////////
     ///////////////////////////////////////////
 
-    ParaPerpAsymmPhip_435MeVCM9 = Phip_435MeVCM9_Para->GetAsymmetry(Phip_435MeVCM9_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_435MeVCM9->SetName("ParaPerpAsymmPhip435MeVCM9");
-    ParaPerpAsymmPhip_435MeVCM9->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 435 #pm 10MeV (CosTheta-0.6-(-0.8))");
-    ParaPerpAsymmPhip_435MeVCM9->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_430MeVCM9 = Phip_430MeVCM9_Para->GetAsymmetry(Phip_430MeVCM9_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_430MeVCM9->SetName("ParaPerpAsymmPhip430MeVCM9");
+    ParaPerpAsymmPhip_430MeVCM9->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 435 #pm 10MeV (CosTheta-0.6-(-0.8))");
+    ParaPerpAsymmPhip_430MeVCM9->Fit("CosFit", "Q");
     pCosAmp[8][0] = CosFit->GetParameter(0);
     pCosAmpErr[8][0] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_455MeVCM9 = Phip_455MeVCM9_Para->GetAsymmetry(Phip_455MeVCM9_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_455MeVCM9->SetName("ParaPerpAsymmPhip455MeVCM9");
-    ParaPerpAsymmPhip_455MeVCM9->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 455 #pm 10MeV (CosTheta-0.6-(-0.8))");
-    ParaPerpAsymmPhip_455MeVCM9->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_450MeVCM9 = Phip_450MeVCM9_Para->GetAsymmetry(Phip_450MeVCM9_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_450MeVCM9->SetName("ParaPerpAsymmPhip450MeVCM9");
+    ParaPerpAsymmPhip_450MeVCM9->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 455 #pm 10MeV (CosTheta-0.6-(-0.8))");
+    ParaPerpAsymmPhip_450MeVCM9->Fit("CosFit", "Q");
     pCosAmp[8][1] = CosFit->GetParameter(0);
     pCosAmpErr[8][1] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_475MeVCM9 = Phip_475MeVCM9_Para->GetAsymmetry(Phip_475MeVCM9_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_475MeVCM9->SetName("ParaPerpAsymmPhip475MeVCM9");
-    ParaPerpAsymmPhip_475MeVCM9->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 475 #pm 10MeV (CosTheta-0.6-(-0.8))");
-    ParaPerpAsymmPhip_475MeVCM9->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_470MeVCM9 = Phip_470MeVCM9_Para->GetAsymmetry(Phip_470MeVCM9_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_470MeVCM9->SetName("ParaPerpAsymmPhip470MeVCM9");
+    ParaPerpAsymmPhip_470MeVCM9->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 475 #pm 10MeV (CosTheta-0.6-(-0.8))");
+    ParaPerpAsymmPhip_470MeVCM9->Fit("CosFit", "Q");
     pCosAmp[8][2] = CosFit->GetParameter(0);
     pCosAmpErr[8][2] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_495MeVCM9 = Phip_495MeVCM9_Para->GetAsymmetry(Phip_495MeVCM9_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_495MeVCM9->SetName("ParaPerpAsymmPhip495MeVCM9");
-    ParaPerpAsymmPhip_495MeVCM9->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 495 #pm 10MeV (CosTheta-0.6-(-0.8))");
-    ParaPerpAsymmPhip_495MeVCM9->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_490MeVCM9 = Phip_490MeVCM9_Para->GetAsymmetry(Phip_490MeVCM9_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_490MeVCM9->SetName("ParaPerpAsymmPhip490MeVCM9");
+    ParaPerpAsymmPhip_490MeVCM9->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 495 #pm 10MeV (CosTheta-0.6-(-0.8))");
+    ParaPerpAsymmPhip_490MeVCM9->Fit("CosFit", "Q");
     pCosAmp[8][3] = CosFit->GetParameter(0);
     pCosAmpErr[8][3] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_515MeVCM9 = Phip_515MeVCM9_Para->GetAsymmetry(Phip_515MeVCM9_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_515MeVCM9->SetName("ParaPerpAsymmPhip515MeVCM9");
-    ParaPerpAsymmPhip_515MeVCM9->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 515 #pm 10MeV (CosTheta-0.6-(-0.8))");
-    ParaPerpAsymmPhip_515MeVCM9->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_510MeVCM9 = Phip_510MeVCM9_Para->GetAsymmetry(Phip_510MeVCM9_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_510MeVCM9->SetName("ParaPerpAsymmPhip510MeVCM9");
+    ParaPerpAsymmPhip_510MeVCM9->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 515 #pm 10MeV (CosTheta-0.6-(-0.8))");
+    ParaPerpAsymmPhip_510MeVCM9->Fit("CosFit", "Q");
     pCosAmp[8][4] = CosFit->GetParameter(0);
     pCosAmpErr[8][4] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_535MeVCM9 = Phip_535MeVCM9_Para->GetAsymmetry(Phip_535MeVCM9_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_535MeVCM9->SetName("ParaPerpAsymmPhip535MeVCM9");
-    ParaPerpAsymmPhip_535MeVCM9->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 535 #pm 10MeV (CosTheta-0.6-(-0.8))");
-    ParaPerpAsymmPhip_535MeVCM9->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_530MeVCM9 = Phip_530MeVCM9_Para->GetAsymmetry(Phip_530MeVCM9_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_530MeVCM9->SetName("ParaPerpAsymmPhip530MeVCM9");
+    ParaPerpAsymmPhip_530MeVCM9->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 535 #pm 10MeV (CosTheta-0.6-(-0.8))");
+    ParaPerpAsymmPhip_530MeVCM9->Fit("CosFit", "Q");
     pCosAmp[8][5] = CosFit->GetParameter(0);
     pCosAmpErr[8][5] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_555MeVCM9 = Phip_555MeVCM9_Para->GetAsymmetry(Phip_555MeVCM9_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_555MeVCM9->SetName("ParaPerpAsymmPhip555MeVCM9");
-    ParaPerpAsymmPhip_555MeVCM9->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 555 #pm 10MeV (CosTheta-0.6-(-0.8))");
-    ParaPerpAsymmPhip_555MeVCM9->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_550MeVCM9 = Phip_550MeVCM9_Para->GetAsymmetry(Phip_550MeVCM9_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_550MeVCM9->SetName("ParaPerpAsymmPhip550MeVCM9");
+    ParaPerpAsymmPhip_550MeVCM9->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 555 #pm 10MeV (CosTheta-0.6-(-0.8))");
+    ParaPerpAsymmPhip_550MeVCM9->Fit("CosFit", "Q");
     pCosAmp[8][6] = CosFit->GetParameter(0);
     pCosAmpErr[8][6] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_575MeVCM9 = Phip_575MeVCM9_Para->GetAsymmetry(Phip_575MeVCM9_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_575MeVCM9->SetName("ParaPerpAsymmPhip575MeVCM9");
-    ParaPerpAsymmPhip_575MeVCM9->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 575 #pm 10MeV (CosTheta-0.6-(-0.8))");
-    ParaPerpAsymmPhip_575MeVCM9->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_570MeVCM9 = Phip_570MeVCM9_Para->GetAsymmetry(Phip_570MeVCM9_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_570MeVCM9->SetName("ParaPerpAsymmPhip570MeVCM9");
+    ParaPerpAsymmPhip_570MeVCM9->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 575 #pm 10MeV (CosTheta-0.6-(-0.8))");
+    ParaPerpAsymmPhip_570MeVCM9->Fit("CosFit", "Q");
     pCosAmp[8][7] = CosFit->GetParameter(0);
     pCosAmpErr[8][7] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_595MeVCM9 = Phip_595MeVCM9_Para->GetAsymmetry(Phip_595MeVCM9_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_595MeVCM9->SetName("ParaPerpAsymmPhip595MeVCM9");
-    ParaPerpAsymmPhip_595MeVCM9->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 595 #pm 10MeV (CosTheta-0.6-(-0.8))");
-    ParaPerpAsymmPhip_595MeVCM9->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_590MeVCM9 = Phip_590MeVCM9_Para->GetAsymmetry(Phip_590MeVCM9_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_590MeVCM9->SetName("ParaPerpAsymmPhip590MeVCM9");
+    ParaPerpAsymmPhip_590MeVCM9->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 595 #pm 10MeV (CosTheta-0.6-(-0.8))");
+    ParaPerpAsymmPhip_590MeVCM9->Fit("CosFit", "Q");
     pCosAmp[8][8] = CosFit->GetParameter(0);
     pCosAmpErr[8][8] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_615MeVCM9 = Phip_615MeVCM9_Para->GetAsymmetry(Phip_615MeVCM9_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_615MeVCM9->SetName("ParaPerpAsymmPhip615MeVCM9");
-    ParaPerpAsymmPhip_615MeVCM9->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 615 #pm 10MeV (CosTheta-0.6-(-0.8))");
-    ParaPerpAsymmPhip_615MeVCM9->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_610MeVCM9 = Phip_610MeVCM9_Para->GetAsymmetry(Phip_610MeVCM9_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_610MeVCM9->SetName("ParaPerpAsymmPhip610MeVCM9");
+    ParaPerpAsymmPhip_610MeVCM9->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 615 #pm 10MeV (CosTheta-0.6-(-0.8))");
+    ParaPerpAsymmPhip_610MeVCM9->Fit("CosFit", "Q");
     pCosAmp[8][9] = CosFit->GetParameter(0);
     pCosAmpErr[8][9] = CosFit->GetParError(0);
 
@@ -704,235 +704,235 @@ void SigmaAsymm(){
     ////////////////  CM10  ///////////////////
     ///////////////////////////////////////////
 
-    ParaPerpAsymmPhip_435MeVCM10 = Phip_435MeVCM10_Para->GetAsymmetry(Phip_435MeVCM10_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_435MeVCM10->SetName("ParaPerpAsymmPhip435MeVCM10");
-    ParaPerpAsymmPhip_435MeVCM10->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 435 #pm 10MeV (CosTheta-0.8-(-1.0))");
-    ParaPerpAsymmPhip_435MeVCM10->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_430MeVCM10 = Phip_430MeVCM10_Para->GetAsymmetry(Phip_430MeVCM10_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_430MeVCM10->SetName("ParaPerpAsymmPhip430MeVCM10");
+    ParaPerpAsymmPhip_430MeVCM10->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 435 #pm 10MeV (CosTheta-0.8-(-1.0))");
+    ParaPerpAsymmPhip_430MeVCM10->Fit("CosFit", "Q");
     pCosAmp[9][0] = CosFit->GetParameter(0);
     pCosAmpErr[9][0] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_455MeVCM10 = Phip_455MeVCM10_Para->GetAsymmetry(Phip_455MeVCM10_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_455MeVCM10->SetName("ParaPerpAsymmPhip455MeVCM10");
-    ParaPerpAsymmPhip_455MeVCM10->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 455 #pm 10MeV (CosTheta-0.8-(-1.0))");
-    ParaPerpAsymmPhip_455MeVCM10->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_450MeVCM10 = Phip_450MeVCM10_Para->GetAsymmetry(Phip_450MeVCM10_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_450MeVCM10->SetName("ParaPerpAsymmPhip450MeVCM10");
+    ParaPerpAsymmPhip_450MeVCM10->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 455 #pm 10MeV (CosTheta-0.8-(-1.0))");
+    ParaPerpAsymmPhip_450MeVCM10->Fit("CosFit", "Q");
     pCosAmp[9][1] = CosFit->GetParameter(0);
     pCosAmpErr[9][1] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_475MeVCM10 = Phip_475MeVCM10_Para->GetAsymmetry(Phip_475MeVCM10_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_475MeVCM10->SetName("ParaPerpAsymmPhip475MeVCM10");
-    ParaPerpAsymmPhip_475MeVCM10->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 475 #pm 10MeV (CosTheta-0.8-(-1.0))");
-    ParaPerpAsymmPhip_475MeVCM10->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_470MeVCM10 = Phip_470MeVCM10_Para->GetAsymmetry(Phip_470MeVCM10_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_470MeVCM10->SetName("ParaPerpAsymmPhip470MeVCM10");
+    ParaPerpAsymmPhip_470MeVCM10->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 475 #pm 10MeV (CosTheta-0.8-(-1.0))");
+    ParaPerpAsymmPhip_470MeVCM10->Fit("CosFit", "Q");
     pCosAmp[9][2] = CosFit->GetParameter(0);
     pCosAmpErr[9][2] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_495MeVCM10 = Phip_495MeVCM10_Para->GetAsymmetry(Phip_495MeVCM10_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_495MeVCM10->SetName("ParaPerpAsymmPhip495MeVCM10");
-    ParaPerpAsymmPhip_495MeVCM10->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 495 #pm 10MeV (CosTheta-0.8-(-1.0))");
-    ParaPerpAsymmPhip_495MeVCM10->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_490MeVCM10 = Phip_490MeVCM10_Para->GetAsymmetry(Phip_490MeVCM10_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_490MeVCM10->SetName("ParaPerpAsymmPhip490MeVCM10");
+    ParaPerpAsymmPhip_490MeVCM10->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 495 #pm 10MeV (CosTheta-0.8-(-1.0))");
+    ParaPerpAsymmPhip_490MeVCM10->Fit("CosFit", "Q");
     pCosAmp[9][3] = CosFit->GetParameter(0);
     pCosAmpErr[9][3] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_515MeVCM10 = Phip_515MeVCM10_Para->GetAsymmetry(Phip_515MeVCM10_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_515MeVCM10->SetName("ParaPerpAsymmPhip515MeVCM10");
-    ParaPerpAsymmPhip_515MeVCM10->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 515 #pm 10MeV (CosTheta-0.8-(-1.0))");
-    ParaPerpAsymmPhip_515MeVCM10->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_510MeVCM10 = Phip_510MeVCM10_Para->GetAsymmetry(Phip_510MeVCM10_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_510MeVCM10->SetName("ParaPerpAsymmPhip510MeVCM10");
+    ParaPerpAsymmPhip_510MeVCM10->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 515 #pm 10MeV (CosTheta-0.8-(-1.0))");
+    ParaPerpAsymmPhip_510MeVCM10->Fit("CosFit", "Q");
     pCosAmp[9][4] = CosFit->GetParameter(0);
     pCosAmpErr[9][4] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_535MeVCM10 = Phip_535MeVCM10_Para->GetAsymmetry(Phip_535MeVCM10_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_535MeVCM10->SetName("ParaPerpAsymmPhip535MeVCM10");
-    ParaPerpAsymmPhip_535MeVCM10->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 535 #pm 10MeV (CosTheta-0.8-(-1.0))");
-    ParaPerpAsymmPhip_535MeVCM10->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_530MeVCM10 = Phip_530MeVCM10_Para->GetAsymmetry(Phip_530MeVCM10_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_530MeVCM10->SetName("ParaPerpAsymmPhip530MeVCM10");
+    ParaPerpAsymmPhip_530MeVCM10->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 535 #pm 10MeV (CosTheta-0.8-(-1.0))");
+    ParaPerpAsymmPhip_530MeVCM10->Fit("CosFit", "Q");
     pCosAmp[9][5] = CosFit->GetParameter(0);
     pCosAmpErr[9][5] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_555MeVCM10 = Phip_555MeVCM10_Para->GetAsymmetry(Phip_555MeVCM10_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_555MeVCM10->SetName("ParaPerpAsymmPhip555MeVCM10");
-    ParaPerpAsymmPhip_555MeVCM10->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 555 #pm 10MeV (CosTheta-0.8-(-1.0))");
-    ParaPerpAsymmPhip_555MeVCM10->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_550MeVCM10 = Phip_550MeVCM10_Para->GetAsymmetry(Phip_550MeVCM10_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_550MeVCM10->SetName("ParaPerpAsymmPhip550MeVCM10");
+    ParaPerpAsymmPhip_550MeVCM10->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 555 #pm 10MeV (CosTheta-0.8-(-1.0))");
+    ParaPerpAsymmPhip_550MeVCM10->Fit("CosFit", "Q");
     pCosAmp[9][6] = CosFit->GetParameter(0);
     pCosAmpErr[9][6] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_575MeVCM10 = Phip_575MeVCM10_Para->GetAsymmetry(Phip_575MeVCM10_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_575MeVCM10->SetName("ParaPerpAsymmPhip575MeVCM10");
-    ParaPerpAsymmPhip_575MeVCM10->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 575 #pm 10MeV (CosTheta-0.8-(-1.0))");
-    ParaPerpAsymmPhip_575MeVCM10->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_570MeVCM10 = Phip_570MeVCM10_Para->GetAsymmetry(Phip_570MeVCM10_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_570MeVCM10->SetName("ParaPerpAsymmPhip570MeVCM10");
+    ParaPerpAsymmPhip_570MeVCM10->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 575 #pm 10MeV (CosTheta-0.8-(-1.0))");
+    ParaPerpAsymmPhip_570MeVCM10->Fit("CosFit", "Q");
     pCosAmp[9][7] = CosFit->GetParameter(0);
     pCosAmpErr[9][7] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_595MeVCM10 = Phip_595MeVCM10_Para->GetAsymmetry(Phip_595MeVCM10_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_595MeVCM10->SetName("ParaPerpAsymmPhip595MeVCM10");
-    ParaPerpAsymmPhip_595MeVCM10->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 595 #pm 10MeV (CosTheta-0.8-(-1.0))");
-    ParaPerpAsymmPhip_595MeVCM10->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_590MeVCM10 = Phip_590MeVCM10_Para->GetAsymmetry(Phip_590MeVCM10_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_590MeVCM10->SetName("ParaPerpAsymmPhip590MeVCM10");
+    ParaPerpAsymmPhip_590MeVCM10->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 595 #pm 10MeV (CosTheta-0.8-(-1.0))");
+    ParaPerpAsymmPhip_590MeVCM10->Fit("CosFit", "Q");
     pCosAmp[9][8] = CosFit->GetParameter(0);
     pCosAmpErr[9][8] = CosFit->GetParError(0);
 
-    ParaPerpAsymmPhip_615MeVCM10 = Phip_615MeVCM10_Para->GetAsymmetry(Phip_615MeVCM10_Perp, ScaleFactor, ScaleFactorErr);
-    ParaPerpAsymmPhip_615MeVCM10->SetName("ParaPerpAsymmPhip615MeVCM10");
-    ParaPerpAsymmPhip_615MeVCM10->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 615 #pm 10MeV (CosTheta-0.8-(-1.0))");
-    ParaPerpAsymmPhip_615MeVCM10->Fit("CosFit", "Q");
+    ParaPerpAsymmPhip_610MeVCM10 = Phip_610MeVCM10_Para->GetAsymmetry(Phip_610MeVCM10_Perp, ScaleFactor, ScaleFactorErr);
+    ParaPerpAsymmPhip_610MeVCM10->SetName("ParaPerpAsymmPhip610MeVCM10");
+    ParaPerpAsymmPhip_610MeVCM10->SetTitle("Proton Para/Perp Phi Asymmetry for E_{#gamma} 615 #pm 10MeV (CosTheta-0.8-(-1.0))");
+    ParaPerpAsymmPhip_610MeVCM10->Fit("CosFit", "Q");
     pCosAmp[9][9] = CosFit->GetParameter(0);
     pCosAmpErr[9][9] = CosFit->GetParError(0);
 
-    TFile f1("ParaPerpAsymm_Total_17.root", "RECREATE");
+    TFile f1("ParaPerpAsymm_Total_18.root", "RECREATE");
 
-    ParaPerpAsymmPhip_435MeVCM1->Write();
-    ParaPerpAsymmPhip_455MeVCM1->Write();
-    ParaPerpAsymmPhip_475MeVCM1->Write();
-    ParaPerpAsymmPhip_495MeVCM1->Write();
-    ParaPerpAsymmPhip_515MeVCM1->Write();
-    ParaPerpAsymmPhip_535MeVCM1->Write();
-    ParaPerpAsymmPhip_555MeVCM1->Write();
-    ParaPerpAsymmPhip_575MeVCM1->Write();
-    ParaPerpAsymmPhip_595MeVCM1->Write();
-    ParaPerpAsymmPhip_615MeVCM1->Write();
+    ParaPerpAsymmPhip_430MeVCM1->Write();
+    ParaPerpAsymmPhip_450MeVCM1->Write();
+    ParaPerpAsymmPhip_470MeVCM1->Write();
+    ParaPerpAsymmPhip_490MeVCM1->Write();
+    ParaPerpAsymmPhip_510MeVCM1->Write();
+    ParaPerpAsymmPhip_530MeVCM1->Write();
+    ParaPerpAsymmPhip_550MeVCM1->Write();
+    ParaPerpAsymmPhip_570MeVCM1->Write();
+    ParaPerpAsymmPhip_590MeVCM1->Write();
+    ParaPerpAsymmPhip_610MeVCM1->Write();
 
-    ParaPerpAsymmPhip_435MeVCM2->Write();
-    ParaPerpAsymmPhip_455MeVCM2->Write();
-    ParaPerpAsymmPhip_475MeVCM2->Write();
-    ParaPerpAsymmPhip_495MeVCM2->Write();
-    ParaPerpAsymmPhip_515MeVCM2->Write();
-    ParaPerpAsymmPhip_535MeVCM2->Write();
-    ParaPerpAsymmPhip_555MeVCM2->Write();
-    ParaPerpAsymmPhip_575MeVCM2->Write();
-    ParaPerpAsymmPhip_595MeVCM2->Write();
-    ParaPerpAsymmPhip_615MeVCM2->Write();
+    ParaPerpAsymmPhip_430MeVCM2->Write();
+    ParaPerpAsymmPhip_450MeVCM2->Write();
+    ParaPerpAsymmPhip_470MeVCM2->Write();
+    ParaPerpAsymmPhip_490MeVCM2->Write();
+    ParaPerpAsymmPhip_510MeVCM2->Write();
+    ParaPerpAsymmPhip_530MeVCM2->Write();
+    ParaPerpAsymmPhip_550MeVCM2->Write();
+    ParaPerpAsymmPhip_570MeVCM2->Write();
+    ParaPerpAsymmPhip_590MeVCM2->Write();
+    ParaPerpAsymmPhip_610MeVCM2->Write();
 
-    ParaPerpAsymmPhip_435MeVCM3->Write();
-    ParaPerpAsymmPhip_455MeVCM3->Write();
-    ParaPerpAsymmPhip_475MeVCM3->Write();
-    ParaPerpAsymmPhip_495MeVCM3->Write();
-    ParaPerpAsymmPhip_515MeVCM3->Write();
-    ParaPerpAsymmPhip_535MeVCM3->Write();
-    ParaPerpAsymmPhip_555MeVCM3->Write();
-    ParaPerpAsymmPhip_575MeVCM3->Write();
-    ParaPerpAsymmPhip_595MeVCM3->Write();
-    ParaPerpAsymmPhip_615MeVCM3->Write();
+    ParaPerpAsymmPhip_430MeVCM3->Write();
+    ParaPerpAsymmPhip_450MeVCM3->Write();
+    ParaPerpAsymmPhip_470MeVCM3->Write();
+    ParaPerpAsymmPhip_490MeVCM3->Write();
+    ParaPerpAsymmPhip_510MeVCM3->Write();
+    ParaPerpAsymmPhip_530MeVCM3->Write();
+    ParaPerpAsymmPhip_550MeVCM3->Write();
+    ParaPerpAsymmPhip_570MeVCM3->Write();
+    ParaPerpAsymmPhip_590MeVCM3->Write();
+    ParaPerpAsymmPhip_610MeVCM3->Write();
 
-    ParaPerpAsymmPhip_435MeVCM4->Write();
-    ParaPerpAsymmPhip_455MeVCM4->Write();
-    ParaPerpAsymmPhip_475MeVCM4->Write();
-    ParaPerpAsymmPhip_495MeVCM4->Write();
-    ParaPerpAsymmPhip_515MeVCM4->Write();
-    ParaPerpAsymmPhip_535MeVCM4->Write();
-    ParaPerpAsymmPhip_555MeVCM4->Write();
-    ParaPerpAsymmPhip_575MeVCM4->Write();
-    ParaPerpAsymmPhip_595MeVCM4->Write();
-    ParaPerpAsymmPhip_615MeVCM4->Write();
+    ParaPerpAsymmPhip_430MeVCM4->Write();
+    ParaPerpAsymmPhip_450MeVCM4->Write();
+    ParaPerpAsymmPhip_470MeVCM4->Write();
+    ParaPerpAsymmPhip_490MeVCM4->Write();
+    ParaPerpAsymmPhip_510MeVCM4->Write();
+    ParaPerpAsymmPhip_530MeVCM4->Write();
+    ParaPerpAsymmPhip_550MeVCM4->Write();
+    ParaPerpAsymmPhip_570MeVCM4->Write();
+    ParaPerpAsymmPhip_590MeVCM4->Write();
+    ParaPerpAsymmPhip_610MeVCM4->Write();
 
-    ParaPerpAsymmPhip_435MeVCM5->Write();
-    ParaPerpAsymmPhip_455MeVCM5->Write();
-    ParaPerpAsymmPhip_475MeVCM5->Write();
-    ParaPerpAsymmPhip_495MeVCM5->Write();
-    ParaPerpAsymmPhip_515MeVCM5->Write();
-    ParaPerpAsymmPhip_535MeVCM5->Write();
-    ParaPerpAsymmPhip_555MeVCM5->Write();
-    ParaPerpAsymmPhip_575MeVCM5->Write();
-    ParaPerpAsymmPhip_595MeVCM5->Write();
-    ParaPerpAsymmPhip_615MeVCM5->Write();
+    ParaPerpAsymmPhip_430MeVCM5->Write();
+    ParaPerpAsymmPhip_450MeVCM5->Write();
+    ParaPerpAsymmPhip_470MeVCM5->Write();
+    ParaPerpAsymmPhip_490MeVCM5->Write();
+    ParaPerpAsymmPhip_510MeVCM5->Write();
+    ParaPerpAsymmPhip_530MeVCM5->Write();
+    ParaPerpAsymmPhip_550MeVCM5->Write();
+    ParaPerpAsymmPhip_570MeVCM5->Write();
+    ParaPerpAsymmPhip_590MeVCM5->Write();
+    ParaPerpAsymmPhip_610MeVCM5->Write();
 
-    ParaPerpAsymmPhip_435MeVCM6->Write();
-    ParaPerpAsymmPhip_455MeVCM6->Write();
-    ParaPerpAsymmPhip_475MeVCM6->Write();
-    ParaPerpAsymmPhip_495MeVCM6->Write();
-    ParaPerpAsymmPhip_515MeVCM6->Write();
-    ParaPerpAsymmPhip_535MeVCM6->Write();
-    ParaPerpAsymmPhip_555MeVCM6->Write();
-    ParaPerpAsymmPhip_575MeVCM6->Write();
-    ParaPerpAsymmPhip_595MeVCM6->Write();
-    ParaPerpAsymmPhip_615MeVCM6->Write();
+    ParaPerpAsymmPhip_430MeVCM6->Write();
+    ParaPerpAsymmPhip_450MeVCM6->Write();
+    ParaPerpAsymmPhip_470MeVCM6->Write();
+    ParaPerpAsymmPhip_490MeVCM6->Write();
+    ParaPerpAsymmPhip_510MeVCM6->Write();
+    ParaPerpAsymmPhip_530MeVCM6->Write();
+    ParaPerpAsymmPhip_550MeVCM6->Write();
+    ParaPerpAsymmPhip_570MeVCM6->Write();
+    ParaPerpAsymmPhip_590MeVCM6->Write();
+    ParaPerpAsymmPhip_610MeVCM6->Write();
 
-    ParaPerpAsymmPhip_435MeVCM7->Write();
-    ParaPerpAsymmPhip_455MeVCM7->Write();
-    ParaPerpAsymmPhip_475MeVCM7->Write();
-    ParaPerpAsymmPhip_495MeVCM7->Write();
-    ParaPerpAsymmPhip_515MeVCM7->Write();
-    ParaPerpAsymmPhip_535MeVCM7->Write();
-    ParaPerpAsymmPhip_555MeVCM7->Write();
-    ParaPerpAsymmPhip_575MeVCM7->Write();
-    ParaPerpAsymmPhip_595MeVCM7->Write();
-    ParaPerpAsymmPhip_615MeVCM7->Write();
+    ParaPerpAsymmPhip_430MeVCM7->Write();
+    ParaPerpAsymmPhip_450MeVCM7->Write();
+    ParaPerpAsymmPhip_470MeVCM7->Write();
+    ParaPerpAsymmPhip_490MeVCM7->Write();
+    ParaPerpAsymmPhip_510MeVCM7->Write();
+    ParaPerpAsymmPhip_530MeVCM7->Write();
+    ParaPerpAsymmPhip_550MeVCM7->Write();
+    ParaPerpAsymmPhip_570MeVCM7->Write();
+    ParaPerpAsymmPhip_590MeVCM7->Write();
+    ParaPerpAsymmPhip_610MeVCM7->Write();
 
-    ParaPerpAsymmPhip_435MeVCM8->Write();
-    ParaPerpAsymmPhip_455MeVCM8->Write();
-    ParaPerpAsymmPhip_475MeVCM8->Write();
-    ParaPerpAsymmPhip_495MeVCM8->Write();
-    ParaPerpAsymmPhip_515MeVCM8->Write();
-    ParaPerpAsymmPhip_535MeVCM8->Write();
-    ParaPerpAsymmPhip_555MeVCM8->Write();
-    ParaPerpAsymmPhip_575MeVCM8->Write();
-    ParaPerpAsymmPhip_595MeVCM8->Write();
-    ParaPerpAsymmPhip_615MeVCM8->Write();
+    ParaPerpAsymmPhip_430MeVCM8->Write();
+    ParaPerpAsymmPhip_450MeVCM8->Write();
+    ParaPerpAsymmPhip_470MeVCM8->Write();
+    ParaPerpAsymmPhip_490MeVCM8->Write();
+    ParaPerpAsymmPhip_510MeVCM8->Write();
+    ParaPerpAsymmPhip_530MeVCM8->Write();
+    ParaPerpAsymmPhip_550MeVCM8->Write();
+    ParaPerpAsymmPhip_570MeVCM8->Write();
+    ParaPerpAsymmPhip_590MeVCM8->Write();
+    ParaPerpAsymmPhip_610MeVCM8->Write();
 
-    ParaPerpAsymmPhip_435MeVCM9->Write();
-    ParaPerpAsymmPhip_455MeVCM9->Write();
-    ParaPerpAsymmPhip_475MeVCM9->Write();
-    ParaPerpAsymmPhip_495MeVCM9->Write();
-    ParaPerpAsymmPhip_515MeVCM9->Write();
-    ParaPerpAsymmPhip_535MeVCM9->Write();
-    ParaPerpAsymmPhip_555MeVCM9->Write();
-    ParaPerpAsymmPhip_575MeVCM9->Write();
-    ParaPerpAsymmPhip_595MeVCM9->Write();
-    ParaPerpAsymmPhip_615MeVCM9->Write();
+    ParaPerpAsymmPhip_430MeVCM9->Write();
+    ParaPerpAsymmPhip_450MeVCM9->Write();
+    ParaPerpAsymmPhip_470MeVCM9->Write();
+    ParaPerpAsymmPhip_490MeVCM9->Write();
+    ParaPerpAsymmPhip_510MeVCM9->Write();
+    ParaPerpAsymmPhip_530MeVCM9->Write();
+    ParaPerpAsymmPhip_550MeVCM9->Write();
+    ParaPerpAsymmPhip_570MeVCM9->Write();
+    ParaPerpAsymmPhip_590MeVCM9->Write();
+    ParaPerpAsymmPhip_610MeVCM9->Write();
 
-    ParaPerpAsymmPhip_435MeVCM10->Write();
-    ParaPerpAsymmPhip_455MeVCM10->Write();
-    ParaPerpAsymmPhip_475MeVCM10->Write();
-    ParaPerpAsymmPhip_495MeVCM10->Write();
-    ParaPerpAsymmPhip_515MeVCM10->Write();
-    ParaPerpAsymmPhip_535MeVCM10->Write();
-    ParaPerpAsymmPhip_555MeVCM10->Write();
-    ParaPerpAsymmPhip_575MeVCM10->Write();
-    ParaPerpAsymmPhip_595MeVCM10->Write();
-    ParaPerpAsymmPhip_615MeVCM10->Write();
+    ParaPerpAsymmPhip_430MeVCM10->Write();
+    ParaPerpAsymmPhip_450MeVCM10->Write();
+    ParaPerpAsymmPhip_470MeVCM10->Write();
+    ParaPerpAsymmPhip_490MeVCM10->Write();
+    ParaPerpAsymmPhip_510MeVCM10->Write();
+    ParaPerpAsymmPhip_530MeVCM10->Write();
+    ParaPerpAsymmPhip_550MeVCM10->Write();
+    ParaPerpAsymmPhip_570MeVCM10->Write();
+    ParaPerpAsymmPhip_590MeVCM10->Write();
+    ParaPerpAsymmPhip_610MeVCM10->Write();
 
     //Define new tree to store parameters in
     TTree* tree = new TTree("Parameter_Values", "Tree_of_Values");
 
     // Define branches to store parameters, (Branch Name, Variable, Type of Variable)
-    tree->Branch("pCosAmp435", &pCosA435, "pCosA435/D");
-    tree->Branch("pCosAmpErr435", &pCosAErr435, "pCosAErr435/D");
-    tree->Branch("pCosAmp455", &pCosA455, "pCosA455/D");
-    tree->Branch("pCosAmpErr455", &pCosAErr455, "pCosAErr455/D");
-    tree->Branch("pCosAmp475", &pCosA475, "pCosA475/D");
-    tree->Branch("pCosAmpErr475", &pCosAErr475, "pCosAErr475/D");
-    tree->Branch("pCosAmp495", &pCosA495, "pCosA495/D");
-    tree->Branch("pCosAmpErr495", &pCosAErr495, "pCosAErr495/D");
-    tree->Branch("pCosAmp515", &pCosA515, "pCosA515/D");
-    tree->Branch("pCosAmpErr515", &pCosAErr515, "pCosAErr515/D");
-    tree->Branch("pCosAmp535", &pCosA535, "pCosA535/D");
-    tree->Branch("pCosAmpErr535", &pCosAErr535, "pCosAErr535/D");
-    tree->Branch("pCosAmp555", &pCosA555, "pCosA555/D");
-    tree->Branch("pCosAmpErr555", &pCosAErr555, "pCosAErr555/D");
-    tree->Branch("pCosAmp575", &pCosA575, "pCosA575/D");
-    tree->Branch("pCosAmpErr575", &pCosAErr575, "pCosAErr575/D");
-    tree->Branch("pCosAmp595", &pCosA595, "pCosA595/D");
-    tree->Branch("pCosAmpErr595", &pCosAErr595, "pCosAErr595/D");
-    tree->Branch("pCosAmp615", &pCosA615, "pCosA615/D");
-    tree->Branch("pCosAmpErr615", &pCosAErr615, "pCosAErr615/D");
+    tree->Branch("pCosAmp430", &pCosA430, "pCosA430/D");
+    tree->Branch("pCosAmpErr430", &pCosAErr430, "pCosAErr430/D");
+    tree->Branch("pCosAmp450", &pCosA450, "pCosA450/D");
+    tree->Branch("pCosAmpErr450", &pCosAErr450, "pCosAErr450/D");
+    tree->Branch("pCosAmp470", &pCosA470, "pCosA470/D");
+    tree->Branch("pCosAmpErr470", &pCosAErr470, "pCosAErr470/D");
+    tree->Branch("pCosAmp490", &pCosA490, "pCosA490/D");
+    tree->Branch("pCosAmpErr490", &pCosAErr490, "pCosAErr490/D");
+    tree->Branch("pCosAmp510", &pCosA510, "pCosA510/D");
+    tree->Branch("pCosAmpErr510", &pCosAErr510, "pCosAErr510/D");
+    tree->Branch("pCosAmp530", &pCosA530, "pCosA530/D");
+    tree->Branch("pCosAmpErr530", &pCosAErr530, "pCosAErr530/D");
+    tree->Branch("pCosAmp550", &pCosA550, "pCosA550/D");
+    tree->Branch("pCosAmpErr550", &pCosAErr550, "pCosAErr550/D");
+    tree->Branch("pCosAmp570", &pCosA570, "pCosA570/D");
+    tree->Branch("pCosAmpErr570", &pCosAErr570, "pCosAErr570/D");
+    tree->Branch("pCosAmp590", &pCosA590, "pCosA590/D");
+    tree->Branch("pCosAmpErr590", &pCosAErr590, "pCosAErr590/D");
+    tree->Branch("pCosAmp610", &pCosA610, "pCosA610/D");
+    tree->Branch("pCosAmpErr610", &pCosAErr610, "pCosAErr610/D");
 
     // Fill branches (and hence tree) with corresponding parameters from above
     for (Int_t m = 0; m < 10; m++){
-        pCosA435 = pCosAmp[m][0];
-        pCosAErr435 = pCosAmpErr[m][0];
-        pCosA455 = pCosAmp[m][1];
-        pCosAErr455 = pCosAmpErr[m][1];
-        pCosA475 = pCosAmp[m][2];
-        pCosAErr475 = pCosAmpErr[m][2];
-        pCosA495 = pCosAmp[m][3];
-        pCosAErr495 = pCosAmpErr[m][3];
-        pCosA515 = pCosAmp[m][4];
-        pCosAErr515 = pCosAmpErr[m][4];
-        pCosA535 = pCosAmp[m][5];
-        pCosAErr535 = pCosAmpErr[m][5];
-        pCosA555 = pCosAmp[m][6];
-        pCosAErr555 = pCosAmpErr[m][6];
-        pCosA575 = pCosAmp[m][7];
-        pCosAErr575 = pCosAmpErr[m][7];
-        pCosA595 = pCosAmp[m][8];
-        pCosAErr595 = pCosAmpErr[m][8];
-        pCosA615 = pCosAmp[m][9];
-        pCosAErr615 = pCosAmpErr[m][9];
+        pCosA430 = pCosAmp[m][0];
+        pCosAErr430 = pCosAmpErr[m][0];
+        pCosA450 = pCosAmp[m][1];
+        pCosAErr450 = pCosAmpErr[m][1];
+        pCosA470 = pCosAmp[m][2];
+        pCosAErr470 = pCosAmpErr[m][2];
+        pCosA490 = pCosAmp[m][3];
+        pCosAErr490 = pCosAmpErr[m][3];
+        pCosA510 = pCosAmp[m][4];
+        pCosAErr510 = pCosAmpErr[m][4];
+        pCosA530 = pCosAmp[m][5];
+        pCosAErr530 = pCosAmpErr[m][5];
+        pCosA550 = pCosAmp[m][6];
+        pCosAErr550 = pCosAmpErr[m][6];
+        pCosA570 = pCosAmp[m][7];
+        pCosAErr570 = pCosAmpErr[m][7];
+        pCosA590 = pCosAmp[m][8];
+        pCosAErr590 = pCosAmpErr[m][8];
+        pCosA610 = pCosAmp[m][9];
+        pCosAErr610 = pCosAmpErr[m][9];
         tree->Fill();
     }
 

@@ -145,15 +145,13 @@ private:
     TH1D*	time_cut;
 
     GH1* Eg;
-    GH1* PhiDifference;
-    GH1* EpKin;
-    GH1* EpCorrected;
-    GH1* EpKinEpCorrDiff;
-    GH1* EpEpCorrDiff;
-
-    GH1* MMpEpCorrected;
     GH1* OAngle;
-    GH1* WCZnRecon;
+    GH1* MMpEpCorrected;
+    GH1* ZpDist;
+    GH1* ThetanDist;
+
+    GH2* E_dE;
+    GH2* DeutKinPiKin;
 
     GH1* MMp200300;
     GH1* MMp300400;
@@ -162,9 +160,6 @@ private:
     GH1* MMp600700;
     GH1* MMp700800;
     GH1* MMp800900;
-    GH1* OAngle200400;
-
-    GH1* ZpDist;
 
     GH1* Phip425CM1;
     GH1* Phip435CM1;
@@ -376,30 +371,6 @@ private:
     GH1* Phip605CM10;
     GH1* Phip615CM10;
 
-    GH2* E_dE;
-    GH2* KinEp_dE;
-    GH2* E_KinEp;
-
-    GH1* ThetanDist;
-    GH1* ThetanRecDist;
-    GH1* ThetanDiffDist;
-    GH2* ThetanDiffZp;
-
-    GH1* ThetanCorrDist;
-    GH1* ThetanCorrDiffDist;
-    GH1* ThetanCorrRecDiffDist;
-    GH2* ThetanCorrDiffZp;
-
-    GH1* ThetaRecPiDiff;
-    GH2* ThetanThetaRecPi;
-    GH2* ThetanThetaRecPiDiff;
-
-    GH1* ThetaRecPDiff;
-    GH2* ThetanThetaRecP;
-    GH2* ThetanThetaRecPDiff;
-
-    GH2* DeutKinPiKin;
-
     char cutfilename[256];
     char cutname[256];
     TFile* CutFile;
@@ -413,7 +384,7 @@ private:
     TCutG* Cut_CB_protonKinGood;
     TCutG* Cut_CB_protonKinBad;
 
-protected:
+    protected:
     virtual Bool_t  Start();
     virtual void    ProcessEvent();
     virtual void    ProcessScalerRead();

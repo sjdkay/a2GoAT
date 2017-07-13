@@ -1,11 +1,20 @@
 #include "./includes_Sigma_NoScatt.h"
 
+// define a legendre polynomial, 6 parameters. Need to set limits?
+Double_t legendre(Double_t *x,Double_t *par)
+{
+    Double_t fitval = 0;
+    fitval = (1-TMath::Power(x[0],2)*(par[0]*3+par[1]*15*x[0]+par[2]*15.0/2*(7*TMath::Power(x[0],2)-1)+par[3]*105.0/2*x[0]*(3*TMath::Power(x[0],2)-1)+par[4]*105.0/8*(33*TMath::Power(x[0],4)-18*TMath::Power(x[0],2)+1)+par[5]*63.0/8*x*(143*TMath::Power(x[0],4)-110*TMath::Power(x[0],2)+15)+par[6]*315.0/16*(143*TMath::Power(x[0],6)-143*TMath::Power(x[0],4)+33*TMath::Power(x[0],2)-1)));
+    return fitval;
+}
+
 void Sigma_NoScatt(){
 
     TFile *MBData = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sig_res_St.root");
 
     TFile *f1= TFile::Open("/scratch/Mainz_Software/a2GoAT/ParaPerpAsymm_NoScatt_Total_9.root");
     TTree *t1 = (TTree*)f1->Get("Parameter_Values");
+    TF1 *LegendreFunc = new TF1("LegendreFit",  legendre, -1, 1, 7); //Give a name and range to the fitting funcion
 
     Double_t pValues425[10], pValues435[10], pValues445[10], pValues455[10], pValues465[10], pValues475[10], pValues485[10], pValues495[10], pValues505[10], pValues515[10], pValues525[10], pValues535[10], pValues545[10], pValues555[10], pValues565[10], pValues575[10], pValues585[10], pValues595[10], pValues605[10], pValues615[10];
     Double_t pErrValues425[10], pErrValues435[10], pErrValues445[10], pErrValues455[10], pErrValues465[10], pErrValues475[10], pErrValues485[10], pErrValues495[10], pErrValues505[10], pErrValues515[10], pErrValues525[10], pErrValues535[10], pErrValues545[10], pErrValues555[10], pErrValues565[10], pErrValues575[10], pErrValues585[10], pErrValues595[10], pErrValues605[10], pErrValues615[10];
@@ -192,7 +201,9 @@ void Sigma_NoScatt(){
     hr->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 420-430MeV)");
 
     gr1 = new TGraphErrors(10, x, pSigmaValues425, ex, pSigmaErrValues425);
-    gr1->SetMarkerColor(2);
+    gr1->Fit("LegendreFit");
+    gr1->SetMarkerColor(4);
+    gr1->SetLineColor(4);
     gr1->SetMarkerStyle(5);
     gr1->SetMarkerSize(2);
     gr1->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 420-430MeV)");
@@ -215,7 +226,9 @@ void Sigma_NoScatt(){
     hr1->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 430-440MeV)");
 
     gr2 = new TGraphErrors(10, x, pSigmaValues435 , ex, pSigmaErrValues435);
-    gr2->SetMarkerColor(2);
+    gr2->Fit("LegendreFit");
+    gr2->SetMarkerColor(4);
+    gr2->SetLineColor(4);
     gr2->SetMarkerStyle(5);
     gr2->SetMarkerSize(2);
     gr2->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 430-440MeV)");
@@ -238,7 +251,9 @@ void Sigma_NoScatt(){
     hr2->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 440-450MeV)");
 
     gr3 = new TGraphErrors(10, x, pSigmaValues445 , ex, pSigmaErrValues445);
-    gr3->SetMarkerColor(2);
+    gr3->Fit("LegendreFit");
+    gr3->SetMarkerColor(4);
+    gr3->SetLineColor(4);
     gr3->SetMarkerStyle(5);
     gr3->SetMarkerSize(2);
     gr3->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 440-450MeV)");
@@ -261,7 +276,9 @@ void Sigma_NoScatt(){
     hr3->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 450-460MeV)");
 
     gr4 = new TGraphErrors(10, x, pSigmaValues455 , ex, pSigmaErrValues455);
-    gr4->SetMarkerColor(2);
+    gr4->Fit("LegendreFit");
+    gr4->SetMarkerColor(4);
+    gr4->SetLineColor(4);
     gr4->SetMarkerStyle(5);
     gr4->SetMarkerSize(2);
     gr4->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 450-460MeV)");
@@ -284,7 +301,9 @@ void Sigma_NoScatt(){
     hr4->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 460-470MeV)");
 
     gr5 = new TGraphErrors(10, x, pSigmaValues465, ex, pSigmaErrValues465);
-    gr5->SetMarkerColor(2);
+    gr5->Fit("LegendreFit");
+    gr5->SetMarkerColor(4);
+    gr5->SetLineColor(4);
     gr5->SetMarkerStyle(5);
     gr5->SetMarkerSize(2);
     gr5->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 460-470MeV)");
@@ -307,7 +326,9 @@ void Sigma_NoScatt(){
     hr5->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 470-480MeV)");
 
     gr6 = new TGraphErrors(10, x, pSigmaValues475, ex, pSigmaErrValues475);
-    gr6->SetMarkerColor(2);
+    gr6->Fit("LegendreFit");
+    gr6->SetMarkerColor(4);
+    gr6->SetLineColor(4);
     gr6->SetMarkerStyle(5);
     gr6->SetMarkerSize(2);
     gr6->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 470-480MeV)");
@@ -330,7 +351,9 @@ void Sigma_NoScatt(){
     hr6->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 480-490MeV)");
 
     gr7 = new TGraphErrors(10, x, pSigmaValues485, ex, pSigmaErrValues485);
-    gr7->SetMarkerColor(2);
+    gr7->Fit("LegendreFit");
+    gr7->SetMarkerColor(4);
+    gr7->SetLineColor(4);
     gr7->SetMarkerStyle(5);
     gr7->SetMarkerSize(2);
     gr7->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 480-490MeV)");
@@ -353,7 +376,9 @@ void Sigma_NoScatt(){
     hr7->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 490-500MeV)");
 
     gr8 = new TGraphErrors(10, x, pSigmaValues495, ex, pSigmaErrValues495);
-    gr8->SetMarkerColor(2);
+    gr8->Fit("LegendreFit");
+    gr8->SetMarkerColor(4);
+    gr8->SetLineColor(4);
     gr8->SetMarkerStyle(5);
     gr8->SetMarkerSize(2);
     gr8->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 490-500MeV)");
@@ -376,7 +401,9 @@ void Sigma_NoScatt(){
     hr8->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 500-510MeV)");
 
     gr9 = new TGraphErrors(10, x, pSigmaValues505, ex, pSigmaErrValues505);
-    gr9->SetMarkerColor(2);
+    gr9->Fit("LegendreFit");
+    gr9->SetMarkerColor(4);
+    gr9->SetLineColor(4);
     gr9->SetMarkerStyle(5);
     gr9->SetMarkerSize(2);
     gr9->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 500-510MeV)");
@@ -399,7 +426,9 @@ void Sigma_NoScatt(){
     hr9->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 510-520MeV)");
 
     gr10 = new TGraphErrors(10, x, pSigmaValues515, ex, pSigmaErrValues515);
-    gr10->SetMarkerColor(2);
+    gr10->Fit("LegendreFit");
+    gr10->SetMarkerColor(4);
+    gr10->SetLineColor(4);
     gr10->SetMarkerStyle(5);
     gr10->SetMarkerSize(2);
     gr10->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 510-520MeV)");
@@ -422,7 +451,9 @@ void Sigma_NoScatt(){
     hr10->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 520-530MeV)");
 
     gr11 = new TGraphErrors(10, x, pSigmaValues525, ex, pSigmaErrValues525);
-    gr11->SetMarkerColor(2);
+    gr11->Fit("LegendreFit");
+    gr11->SetMarkerColor(4);
+    gr11->SetLineColor(4);
     gr11->SetMarkerStyle(5);
     gr11->SetMarkerSize(2);
     gr11->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 520-530MeV)");
@@ -445,7 +476,9 @@ void Sigma_NoScatt(){
     hr11->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 530-540MeV)");
 
     gr12 = new TGraphErrors(10, x, pSigmaValues535, ex, pSigmaErrValues535);
-    gr12->SetMarkerColor(2);
+    gr12->Fit("LegendreFit");
+    gr12->SetMarkerColor(4);
+    gr12->SetLineColor(4);
     gr12->SetMarkerStyle(5);
     gr12->SetMarkerSize(2);
     gr12->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 530-540MeV)");
@@ -468,7 +501,9 @@ void Sigma_NoScatt(){
     hr12->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 540-550MeV)");
 
     gr13 = new TGraphErrors(10, x, pSigmaValues545, ex, pSigmaErrValues545);
-    gr13->SetMarkerColor(2);
+    gr13->Fit("LegendreFit");
+    gr13->SetMarkerColor(4);
+    gr13->SetLineColor(4);
     gr13->SetMarkerStyle(5);
     gr13->SetMarkerSize(2);
     gr13->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 540-550MeV)");
@@ -491,7 +526,9 @@ void Sigma_NoScatt(){
     hr13->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 550-560MeV)");
 
     gr14 = new TGraphErrors(10, x, pSigmaValues555, ex, pSigmaErrValues555);
-    gr14->SetMarkerColor(2);
+    gr14->Fit("LegendreFit");
+    gr14->SetMarkerColor(4);
+    gr14->SetLineColor(4);
     gr14->SetMarkerStyle(5);
     gr14->SetMarkerSize(2);
     gr14->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 550-560MeV)");
@@ -514,7 +551,9 @@ void Sigma_NoScatt(){
     hr14->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 560-570MeV)");
 
     gr15 = new TGraphErrors(10, x, pSigmaValues565, ex, pSigmaErrValues565);
-    gr15->SetMarkerColor(2);
+    gr15->Fit("LegendreFit");
+    gr15->SetMarkerColor(4);
+    gr15->SetLineColor(4);
     gr15->SetMarkerStyle(5);
     gr15->SetMarkerSize(2);
     gr15->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 560-570MeV)");
@@ -537,7 +576,9 @@ void Sigma_NoScatt(){
     hr15->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 570-580MeV)");
 
     gr16 = new TGraphErrors(10, x, pSigmaValues575, ex, pSigmaErrValues575);
-    gr16->SetMarkerColor(2);
+    gr16->Fit("LegendreFit");
+    gr16->SetMarkerColor(4);
+    gr16->SetLineColor(4);
     gr16->SetMarkerStyle(5);
     gr16->SetMarkerSize(2);
     gr16->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 570-580MeV)");
@@ -560,7 +601,9 @@ void Sigma_NoScatt(){
     hr16->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 580-590MeV)");
 
     gr17 = new TGraphErrors(10, x, pSigmaValues585, ex, pSigmaErrValues585);
-    gr17->SetMarkerColor(2);
+    gr17->Fit("LegendreFit");
+    gr17->SetMarkerColor(4);
+    gr17->SetLineColor(4);
     gr17->SetMarkerStyle(5);
     gr17->SetMarkerSize(2);
     gr17->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 580-590MeV)");
@@ -583,7 +626,9 @@ void Sigma_NoScatt(){
     hr17->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 590-600MeV)");
 
     gr18 = new TGraphErrors(10, x, pSigmaValues595, ex, pSigmaErrValues595);
-    gr18->SetMarkerColor(2);
+    gr18->Fit("LegendreFit");
+    gr18->SetMarkerColor(4);
+    gr18->SetLineColor(4);
     gr18->SetMarkerStyle(5);
     gr18->SetMarkerSize(2);
     gr18->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 590-600MeV)");
@@ -606,7 +651,9 @@ void Sigma_NoScatt(){
     hr18->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 600-610MeV)");
 
     gr19 = new TGraphErrors(10, x, pSigmaValues605, ex, pSigmaErrValues605);
-    gr19->SetMarkerColor(2);
+    gr19->Fit("LegendreFit");
+    gr19->SetMarkerColor(4);
+    gr19->SetLineColor(4);
     gr19->SetMarkerStyle(5);
     gr19->SetMarkerSize(2);
     gr19->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 600-610MeV)");
@@ -629,13 +676,15 @@ void Sigma_NoScatt(){
     hr19->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 610-620MeV)");
 
     gr20 = new TGraphErrors(10, x, pSigmaValues615, ex, pSigmaErrValues615);
-    gr20->SetMarkerColor(2);
+    gr20->Fit("LegendreFit");
+    gr20->SetMarkerColor(4);
+    gr20->SetLineColor(4);
     gr20->SetMarkerStyle(5);
     gr20->SetMarkerSize(2);
     gr20->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 610-620MeV)");
     gr20->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr20->GetYaxis()->SetTitle("#Sigma");
-    gr20->SetName("Sigma4615");
+    gr20->SetName("Sigma615");
     gr20->Draw("ep");
 
     canvas->Write();

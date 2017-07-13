@@ -223,6 +223,10 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
     WC13Vectn.SetXYZ(WC1nX, WC1nY, WC1nZ);
     WC23Vectn.SetXYZ(WC2nX, WC2nY, WC2nZ);
 
+    WC1Phin = (WC13Vectn.Phi())*TMath::RadToDeg();
+    WC2Phin = (WC23Vectn.Phi())*TMath::RadToDeg();
+    WCPhiDiffn = WC1Phin - WC2Phin;
+
     GVpCorr3 = GVpCorr.Vect();
     GVnCorr3 = GVnCorr.Vect();
     GVn3Unit = (GVn.Vect()).Unit();
@@ -331,7 +335,7 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
         POCA = TVector3(POCAx, POCAy, POCAz);
         //if (ScattTheta > 60) continue;
 
-        if( r > 75 || r < 35 ) return; // Ensure POCA is at polarimeter radius
+        //if( r > 75 || r < 35 ) return; // Ensure POCA is at polarimeter radius
 
         FillHists(); // Fill histograms with data generated
     }
@@ -415,23 +419,32 @@ PNeutPol_Polarimeter_Circ::PNeutPol_Polarimeter_Circ() // Define a load of histo
     time_cut = new TH1D("time_cut", 	"time_cut", 	1400, -700, 700);
 
     Eg = new GH1( "Eg", "E_{#gamma} Distribution", 200, 100, 1600 );
-    PhiDifference = new GH1 ("PhiDifference", "#phi_{Diff} Between p and n", 180, 0, 360);
-    EpKin = new GH1 ("EpKin", "E_{p} Calculated from E_{p}/#theta_{p}", 100, 0, 500);
-    EpCorrected = new GH1 ("EpCorrected", "E_{pCorr}", 100, 0, 500);
     OAngle = new GH1 ("OAngle", "Opening Angle between P and N Vectors", 180, 0, 180);
-    WCZnRecon = new GH1 ("WCZnRecon", "WCZ Hit Position from Reconstructed n Vector", 400, -400, 400);
-
     ThetaSc =  new GH1( "Theta_Scattered", "Scattered Proton Theta Distribution in Rotated Frame", 180, 0, 180 );
     PhiSc = new GH1( "Phi_Scattered", "Scattered Proton Phi Distribution in Rotated Frame", 90, -180, 180 );
-
-    EpKinEpCorrDiff = new GH1("EpKinEpCorrDiff", "Difference Between E_{pKin} and E_{pCorr}", 300, -300, 300);
-    EpEpCorrDiff = new GH1("EpEpCorrDiff", "Difference Between E_{p} and E_{pCorr}", 200, 0, 200);
     MMpEpCorrected = new GH1 ("MMpEpCorrected", "Missing mass seen by Proton (E Loss Corrected)", 400, 0, 2000);
-
     ZpDist = new GH1 ("ZpDist", "Proton Pseudo Z Vertex Distribution", 200, -400, 400);
-    ZpPhiScatNeg180 = new GH1("ZpPhiScatNeg180", "Proton Pseudo Vertex Z for events with #phi_{Sc} ~ -ve180", 200, -200, 200);
-    ZpPhiScat0 = new GH1("ZpPhiScat0", "Proton Pseudo Vertex Z for events with #phi_{Sc} ~ 0", 200, -200, 200);
-    ZpPhiScatPos180 = new GH1("ZpPhiScatPos180", "Proton Pseudo Vertex Z for events with #phi_{Sc} ~ 180", 200, -200, 200);
+    ThetanDist = new GH1 ("ThetanDist", "#theta_{n} Distribution", 200, 0, 180);
+
+    OAngleThetaScDiff = new GH1( "Opening_Angle_ThetaSc_Diff", "Opening Angle - #theta_{Sc}", 360, -180, 180);
+    OAngleThetaSc = new GH2("Theta_Sc_Fn_Opening_Angle", "#theta_{Sc} as Fn of Opening Angle", 100, 0, 180, 100, 0, 180);
+
+    OAngleThetaScDiffNonPol = new GH1( "Opening_Angle_ThetaSc_Diff_Non_Pol", "Opening Angle - #theta_{Sc} for Events with r_{POCA} Outside Polarimeter", 360, -180, 180);
+    OAngleThetaScNonPol = new GH2("Theta_Sc_Fn_Opening_Angle_Non_Pol", "#theta_{Sc} as Fn of Opening Angle  for Events with r_{POCA} Outside Polarimeter", 100, 0, 180, 100, 0, 180);
+
+    DeutKinPiKin = new GH2 ("DeutKinPiKin", "(#theta_{nRec} - #theta_{nCorr}) vs (#theta_{#pi Rec} - #theta_{nCorr})", 200, -180, 180, 200, -180, 180);
+    E_dE = new GH2 ("E_dE", "EdE Plot With E Loss Adjustment", 100, 0, 500, 100, 0, 5);
+    ThetaScPhiSc = new GH2 ("ThetaScPhiSc", "#Phi_{Sc} as a function of #theta_{Sc}", 100, 0, 180, 100, -180, 180);
+
+    ClosestApproach = new GH1("ClosestApproach", "DOCA of n and p' vectors", 200, -200, 200);
+    POCAr = new GH1("POCAr", "r_{POCA}", 200, 0, 300);
+    ScatterVertexZ = new GH1("ScatterVertexZ", "Z_{POCA}", 200, -200, 200);
+    ScatterVertexZr = new GH2("ScatterVertexZr", "Z_{POCA} vs r_{POCA}", 200, -200, 200, 200, 0, 200);
+    ScatterVertexXY = new GH2("ScatterVertexXY", "XY Vertex Point of Scatter from DOCA Method", 100, -80, 80, 100, -80, 80);
+    ScatterVertex = new GH3("ScatterVertex", "Vertex Point of Scatter from DOCA Method", 100, -80, 80, 100, -80, 80, 100, -200, 200);
+
+    POCAr_Equiv_OAngle = new GH1("POCAr_Equivalent_OpeningAngle", "r_{POCA} for Events with Opening Angle #approx #theta_{Sc} ", 200, 0, 300);
+
 
     // MMp across photon E bins
     MMp200300 = new GH1("MMp200300", "Missing mass as seen by Proton (200-300MeV E_{#gamma})", 400, 0, 2000);
@@ -555,59 +568,6 @@ PNeutPol_Polarimeter_Circ::PNeutPol_Polarimeter_Circ() // Define a load of histo
     PhiSc545PosHelCM8 = new GH1( "Phi_Scattered_545MeV_PosHelCM8", "#phi_{Sc} E_{#gamma}545 #pm 35MeV (Cos#theta_{CM}-0.75-(-1.0))) for +ve Helicity", 10, -180, 180);
     PhiSc615PosHelCM8 = new GH1( "Phi_Scattered_615MeV_PosHelCM8", "#phi_{Sc} E_{#gamma}615 #pm 35MeV (Cos#theta_{CM}-0.75-(-1.0))) for +ve Helicity", 10, -180, 180);
     PhiSc685PosHelCM8 = new GH1( "Phi_Scattered_685MeV_PosHelCM8", "#phi_{Sc} E_{#gamma}685 #pm 35MeV (Cos#theta_{CM}-0.75-(-1.0))) for +ve Helicity", 10, -180, 180);
-
-    ThetanDist = new GH1 ("ThetanDist", "#theta_{n} Distribution", 200, 0, 180);
-    ThetanRecDist = new GH1 ("ThetanRecDist", "Reconstructed #theta_{n} Distribution", 200, 0, 180);
-    ThetanDiffDist = new GH1 ("ThetanDiffDist", "Difference Between #theta_{n} and  #theta_{nRec}", 200, -90, 90);
-    ThetanDiffZp = new GH2 ("ThetanDiffZp", "Diff(#theta_{n} - #theta_{nRec}) as a Fn of Z_{p}", 200, -90, 90, 200, -100, 100);
-
-    ThetanCorrDist = new GH1 ("ThetanCorrDist", "#theta_{nCorr} Distribution", 200, 0, 180);
-    ThetanCorrDiffDist = new GH1 ("ThetanCorrDiffDist", "Difference Between #theta_{n} and #theta_{nCorr} Distribution", 200, -90, 90);
-    ThetanCorrRecDiffDist = new GH1 ("ThetanCorrRecDiffDist", "Difference Between #theta_{nCorr} and  #theta_{nRec}", 200, -90, 90);
-    ThetanCorrDiffZp = new GH2 ("ThetanCorrDiffZp", "Diff(#theta_{nCorr} - #theta_{nRec}) as a Fn of Z_{p}", 200, -90, 90, 200, -100, 100);
-
-    ThetaRecPiDiff = new GH1 ("ThetaRecPiDiff", "Difference between #theta_{#pi Rec} and #theta_{nCorr}", 200, -90, 90);
-    ThetanThetaRecPi = new GH2 ("ThetanThetaRecPi", "#theta_{nCorr} vs #theta_{#pi rec}", 100, 0, 180, 100, 0, 180);
-    ThetanThetaRecPiDiff = new GH2 ("ThetanThetaRecPiDiff", "#theta_{nCorr} vs (#theta_{#pi Rec} - #theta_{nCorr})", 100, 0, 180, 100, -90, 90);
-
-    ThetaRecPDiff = new GH1 ("ThetaRecPDiff", "Difference between #theta_{pRec} and #theta_{nCorr}", 200, -90, 90);
-    ThetanThetaRecP = new GH2 ("ThetanThetaRecP", "#theta_{nCorr} vs #theta_{pRec}", 100, 0, 180, 100, 0, 180);
-    ThetanThetaRecPDiff = new GH2 ("ThetanThetaRecPDiff", "#theta_{nCorr} vs (#theta_{pRec} - #theta_{nCorr})", 100, 0, 180, 100, -90, 90);
-
-    DeutKinPiKin = new GH2 ("DeutKinPiKin", "(#theta_{nRec} - #theta_{nCorr}) vs (#theta_{#pi Rec} - #theta_{nCorr})", 200, -180, 180, 200, -180, 180);
-
-    E_dE = new GH2 ("E_dE", "EdE Plot With E Loss Adjustment", 100, 0, 500, 100, 0, 5);
-    KinEp_dE = new GH2 ("KinEp_dE", "KinEpdE Plot", 100, 0, 500, 100, 0, 5);
-    PhiDiffThetaSc = new GH2("PhiDiffThetaSc", "#theta_{Sc} as a fn of #phi_{Diff}", 100, 0, 360, 100, 0, 180);
-    //KinEp_dE_GoodCut = new GH2 ("KinEp_dE_GoodCut", "KinEpdE Plot With Good Proton Cut", 100, 0, 500, 100, 0, 5);
-    ThetaScPhiSc = new GH2 ("ThetaScPhiSc", "#Phi_{Sc} as a function of #theta_{Sc}", 100, 0, 180, 100, -180, 180);
-    EpCorr_KinEp = new GH2 ("EpCorr_KinEp", "E_{pKin} as a fn of E_{pCorr}", 100, 0, 500, 100, 0, 500);
-    PhinDiffWCZRec = new GH2 ("PhinDiffWCZRec", "Difference between WC Phi and Reconstructed Phi as a fn of WCZ Hit Position", 100, 0, 200, 100, 0, 180);
-    ThetaDiffPhiDiff = new GH2 ("ThetaDiffPhiDiff", "PhiDiff as a Fn of ThetaDiff (Detected-Rec)", 100, -180, 180, 100, -180, 180);
-
-    ClosestApproach = new GH1("ClosestApproach", "DOCA of n and p' vectors", 200, -200, 200);
-    POCAr = new GH1("POCAr", "r_{POCA}", 200, 0, 300);
-    ScatterVertexZ = new GH1("ScatterVertexZ", "Z_{POCA}", 200, -200, 200);
-    ScatterVertexZr = new GH2("ScatterVertexZr", "Z_{POCA} vs r_{POCA}", 200, -200, 200, 200, 0, 200);
-    ScatterVertexXY = new GH2("ScatterVertexXY", "XY Vertex Point of Scatter from DOCA Method", 100, -80, 80, 100, -80, 80);
-    ScatterVertex = new GH3("ScatterVertex", "Vertex Point of Scatter from DOCA Method", 100, -80, 80, 100, -80, 80, 100, -200, 200);
-
-    POCAr050 = new GH1("POCAr050", "r_{POCA} for Z_{POCA} 0-50", 200, 0, 300);
-    POCAr50100 = new GH1("POCAr50100", "r_{POCA} for Z_{POCA} 50-100", 200, 0, 300);
-    POCAr100150 = new GH1("POCAr100150", "r_{POCA} for Z_{POCA} 100-150", 200, 0, 300);
-    POCAr150200 = new GH1("POCAr150200", "r_{POCA} for Z_{POCA} 150-200", 200, 0, 300);
-    POCAr200250 = new GH1("POCAr200250", "r_{POCA} for Z_{POCA} 200-250", 200, 0, 300);
-    POCAr250300 = new GH1("POCAr250300", "r_{POCA} for Z_{POCA} 250-300", 200, 0, 300);
-    POCAr300350 = new GH1("POCAr300350", "r_{POCA} for Z_{POCA} 300-350", 200, 0, 300);
-    POCAr350400 = new GH1("POCAr350400", "r_{POCA} for Z_{POCA} 350-400", 200, 0, 300);
-    ScatterVertexXY050 = new GH2("ScatterVertexXY050", "XY Vertex Point of Scatter from DOCA Method for Z_{POCA} 0-50 ", 100, -80, 80, 100, -80, 80);
-    ScatterVertexXY50100 = new GH2("ScatterVertexXY50100", "XY Vertex Point of Scatter from DOCA Method for Z_{POCA} 50-100 ", 100, -80, 80, 100, -80, 80);
-    ScatterVertexXY100150 = new GH2("ScatterVertexXY100150", "XY Vertex Point of Scatter from DOCA Method for Z_{POCA} 100-150 ", 100, -80, 80, 100, -80, 80);
-    ScatterVertexXY150200 = new GH2("ScatterVertexXY150200", "XY Vertex Point of Scatter from DOCA Method for Z_{POCA} 150-200 ", 100, -80, 80, 100, -80, 80);
-    ScatterVertexXY200250 = new GH2("ScatterVertexXY200250", "XY Vertex Point of Scatter from DOCA Method for Z_{POCA} 200-250 ", 100, -80, 80, 100, -80, 80);
-    ScatterVertexXY250300 = new GH2("ScatterVertexXY250300", "XY Vertex Point of Scatter from DOCA Method for Z_{POCA} 250-300 ", 100, -80, 80, 100, -80, 80);
-    ScatterVertexXY300350 = new GH2("ScatterVertexXY250300", "XY Vertex Point of Scatter from DOCA Method for Z_{POCA} 300-350 ", 100, -80, 80, 100, -80, 80);
-    ScatterVertexXY350400 = new GH2("ScatterVertexXY250300", "XY Vertex Point of Scatter from DOCA Method for Z_{POCA} 350-400 ", 100, -80, 80, 100, -80, 80);
 }
 
 void PNeutPol_Polarimeter_Circ::FillHists()
@@ -616,43 +576,19 @@ void PNeutPol_Polarimeter_Circ::FillHists()
     if (-5 < TaggerTime && TaggerTime < 20) time_cut->Fill(TaggerTime);
 
     Eg->Fill(EGamma, TaggerTime);
-    E_dE->Fill(EpCorr, dEp, TaggerTime);
-    KinEp_dE->Fill(KinEp, dEp, TaggerTime);
-    EpKin->Fill(KinEp, TaggerTime);
-    EpCorrected->Fill(EpCorr, TaggerTime);
-    EpKinEpCorrDiff->Fill(KinEDiff, TaggerTime);
-    EpEpCorrDiff->Fill(EpDiff, TaggerTime);
-    MMpEpCorrected->Fill(MMpEpCorr, TaggerTime);
     OAngle->Fill(OpeningAngle, TaggerTime);
-    WCZnRecon->Fill(WCZnRec, TaggerTime);
+    ThetaSc -> Fill(ScattTheta, TaggerTime);
+    PhiSc -> Fill(ScattPhi, TaggerTime);
+    MMpEpCorrected->Fill(MMpEpCorr, TaggerTime);
     ZpDist->Fill(Zp, TaggerTime);
-    PhiDiffThetaSc->Fill(PhiDiff, ScattTheta, TaggerTime);
 
-    PhiDifference->Fill(PhiDiff);
-    EpCorr_KinEp->Fill(EpCorr, KinEp, TaggerTime);
-    PhinDiffWCZRec->Fill(WCZnRec, PhinDiff, TaggerTime);
+    OAngleThetaScDiff->Fill((OpeningAngle-ScattTheta), TaggerTime);
+    OAngleThetaSc->Fill(OpeningAngle, ScattTheta, TaggerTime);
 
     ThetanDist->Fill(Thn, TaggerTime);
-    ThetanRecDist->Fill(ThetanRec, TaggerTime);
-    ThetanDiffDist->Fill(Thetan-ThetanRec, TaggerTime);
-    ThetanDiffZp->Fill(Thn-ThetanRec, Zp, TaggerTime);
-
-    ThetanCorrDist->Fill(ThetanCorr, TaggerTime);
-    ThetanCorrDiffDist->Fill(Thn-ThetanCorr, TaggerTime);
-    ThetanCorrRecDiffDist->Fill(ThetanCorr-ThetanRec, TaggerTime);
-    ThetanCorrDiffZp ->Fill(ThetanCorr-ThetanRec, Zp, TaggerTime);
-
-    ThetaRecPiDiff->Fill(ThetaPiRecDiff, TaggerTime);
-    ThetanThetaRecPi->Fill(ThetanCorr, ThetaPiRec, TaggerTime);
-    ThetanThetaRecPiDiff->Fill(ThetanCorr, ThetaPiRecDiff, TaggerTime);
-
-    ThetaRecPDiff->Fill(ThetapRecDiff, TaggerTime);
-    ThetanThetaRecP->Fill(ThetanCorr, ThetapRec, TaggerTime);
-    ThetanThetaRecPDiff->Fill(ThetanCorr, ThetapRecDiff, TaggerTime);
-
-    ThetaDiffPhiDiff->Fill((ThetanCorr-ThetanRec), (Phn-PhinRec), TaggerTime);
-
     DeutKinPiKin->Fill(ThetanRec-ThetanCorr, ThetaPiRecDiff, TaggerTime);
+    E_dE->Fill(EpCorr, dEp, TaggerTime);
+    ThetaScPhiSc->Fill(ScattTheta, ScattPhi, TaggerTime);
 
     ClosestApproach->Fill(DOCA, TaggerTime);
     POCAr->Fill(r, TaggerTime);
@@ -661,61 +597,13 @@ void PNeutPol_Polarimeter_Circ::FillHists()
     ScatterVertexXY->Fill(POCAx, POCAy, TaggerTime);
     ScatterVertex->Fill(POCAx, POCAy, POCAz, TaggerTime);
 
-    if( POCAz > 0 && POCAz < 50 ){
-        POCAr050->Fill(r, TaggerTime);
-        ScatterVertexXY050->Fill(POCAx, POCAy, TaggerTime);
+    if( r > 75 || r < 35 ){
+        OAngleThetaScDiffNonPol->Fill((OpeningAngle-ScattTheta), TaggerTime);
+        OAngleThetaScNonPol->Fill(OpeningAngle, ScattTheta, TaggerTime);
     }
 
-    else if( POCAz > 50 && POCAz < 100 ){
-        POCAr50100->Fill(r, TaggerTime);
-        ScatterVertexXY50100->Fill(POCAx, POCAy, TaggerTime);
-    }
-
-    else if( POCAz > 100 && POCAz < 150 ){
-        POCAr100150->Fill(r, TaggerTime);
-        ScatterVertexXY100150->Fill(POCAx, POCAy, TaggerTime);
-    }
-
-    else if( POCAz > 150 && POCAz < 200 ){
-        POCAr150200->Fill(r, TaggerTime);
-        ScatterVertexXY150200->Fill(POCAx, POCAy, TaggerTime);
-    }
-
-    else if( POCAz > 200 && POCAz < 250 ){
-        POCAr200250->Fill(r, TaggerTime);
-        ScatterVertexXY200250->Fill(POCAx, POCAy, TaggerTime);
-    }
-
-    else if( POCAz > 250 && POCAz < 300 ){
-        POCAr250300->Fill(r, TaggerTime);
-        ScatterVertexXY250300->Fill(POCAx, POCAy, TaggerTime);
-    }
-
-    else if( POCAz > 300 && POCAz < 350 ){
-        POCAr300350->Fill(r, TaggerTime);
-        ScatterVertexXY300350->Fill(POCAx, POCAy, TaggerTime);
-    }
-
-    else if( POCAz > 350 && POCAz < 400 ){
-        POCAr350400->Fill(r, TaggerTime);
-        ScatterVertexXY350400->Fill(POCAx, POCAy, TaggerTime);
-    }
-
-
-    ThetaSc -> Fill(ScattTheta, TaggerTime);
-    PhiSc -> Fill(ScattPhi, TaggerTime);
-    ThetaScPhiSc->Fill(ScattTheta, ScattPhi, TaggerTime);
-
-    if(ScattPhi < -165){
-        ZpPhiScatNeg180->Fill(Zp, TaggerTime);
-    }
-
-    if(ScattPhi < 15 && ScattPhi > -15){
-        ZpPhiScat0->Fill(Zp, TaggerTime);
-    }
-
-    if(ScattPhi > 165){
-        ZpPhiScatPos180->Fill(Zp, TaggerTime);
+    if (abs(OpeningAngle-ScattTheta) < 5){
+        POCAr_Equiv_OAngle->Fill(r, TaggerTime);
     }
 
     if(200 < EGamma && EGamma < 300){

@@ -120,6 +120,10 @@ private:
     double_t POCAz;
     double_t r;
 
+    double_t WC1Phin;
+    double_t WC2Phin;
+    double_t WCPhiDiffn;
+
     Bool_t MCData;
     Bool_t Proton1;
     Bool_t Proton2;
@@ -169,18 +173,32 @@ private:
     TH1D*	time;
     TH1D*	time_cut;
 
-    GH1* EkSum;
     GH1* Eg;
-    GH1* ThetaProt655705;
-    GH1* PhiDifference;
-    GH1* EpKin;
-    GH1* EpCorrected;
-    GH1* EpKinEpCorrDiff;
-    GH1* EpEpCorrDiff;
-
-    GH1* MMpEpCorrected;
     GH1* OAngle;
-    GH1* WCZnRecon;
+    GH1* ThetaSc;
+    GH1* PhiSc;
+    GH1* MMpEpCorrected;
+    GH1* ZpDist;
+    GH1* ThetanDist;
+
+    GH1* OAngleThetaScDiff;
+    GH2* OAngleThetaSc;
+
+    GH1* OAngleThetaScDiffNonPol;
+    GH2* OAngleThetaScNonPol;
+
+    GH2* DeutKinPiKin;
+    GH2* E_dE;
+    GH2* ThetaScPhiSc;
+
+    GH1* ClosestApproach;
+    GH1* POCAr;
+    GH1* ScatterVertexZ;
+    GH2* ScatterVertexZr;
+    GH2* ScatterVertexXY;
+    GH3* ScatterVertex;
+
+    GH1* POCAr_Equiv_OAngle;
 
     GH1* MMp200300;
     GH1* MMp300400;
@@ -189,14 +207,6 @@ private:
     GH1* MMp600700;
     GH1* MMp700800;
     GH1* MMp800900;
-
-    GH1* ZpDist;
-    GH1* ZpPhiScatNeg180;
-    GH1* ZpPhiScat0;
-    GH1* ZpPhiScatPos180;
-
-    GH1* ThetaSc;
-    GH1* PhiSc;
 
     GH1* PhiSc335NegHelCM1;
     GH1* PhiSc405NegHelCM1;
@@ -295,59 +305,6 @@ private:
     GH1* PhiSc545PosHelCM8;
     GH1* PhiSc615PosHelCM8;
     GH1* PhiSc685PosHelCM8;
-
-    GH2* E_dE;
-    GH2* KinEp_dE;
-    GH2* ThetaScPhiSc;
-    GH2* EpCorr_KinEp;
-    GH2* PhiDiffThetaSc;
-    GH2* PhinDiffWCZRec;
-    GH2* ThetaDiffPhiDiff;
-
-    GH2* DeutKinPiKin;
-
-    GH1* ThetanDist;
-    GH1* ThetanRecDist;
-    GH1* ThetanDiffDist;
-    GH2* ThetanDiffZp;
-
-    GH1* ThetanCorrDist;
-    GH1* ThetanCorrDiffDist;
-    GH1* ThetanCorrRecDiffDist;
-    GH2* ThetanCorrDiffZp;
-
-    GH1* ThetaRecPiDiff;
-    GH2* ThetanThetaRecPi;
-    GH2* ThetanThetaRecPiDiff;
-
-    GH1* ThetaRecPDiff;
-    GH2* ThetanThetaRecP;
-    GH2* ThetanThetaRecPDiff;
-
-    GH1* ClosestApproach;
-    GH1* POCAr;
-    GH1* POCAr050;
-    GH1* POCAr50100;
-    GH1* POCAr100150;
-    GH1* POCAr150200;
-    GH1* POCAr200250;
-    GH1* POCAr250300;
-    GH1* POCAr300350;
-    GH1* POCAr350400;
-
-    GH2* ScatterVertexXY050;
-    GH2* ScatterVertexXY50100;
-    GH2* ScatterVertexXY100150;
-    GH2* ScatterVertexXY150200;
-    GH2* ScatterVertexXY200250;
-    GH2* ScatterVertexXY250300;
-    GH2* ScatterVertexXY300350;
-    GH2* ScatterVertexXY350400;
-
-    GH1* ScatterVertexZ;
-    GH2* ScatterVertexZr;
-    GH2* ScatterVertexXY;
-    GH3* ScatterVertex;
 
     char cutfilename[256];
     char cutname[256];

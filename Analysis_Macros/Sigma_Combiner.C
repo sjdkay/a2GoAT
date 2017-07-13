@@ -1,0 +1,227 @@
+#include "./includes.h"
+
+void Sigma_Combiner(){
+
+    TFile *CombData = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sigma_Combined_NS_9_S19.root", "UPDATE");
+
+    TCanvas *canvas21 = new TCanvas("canvas21","canvas21", 1920, 1080);
+    canvas21->Divide(5,4);
+    canvas21->cd(1);
+    hslC43->Draw();
+    canvas21->cd(2);
+    hslC44->Draw();
+    canvas21->cd(3);
+    hslC45->Draw();
+    canvas21->cd(4);
+    hslC46->Draw();
+    canvas21->cd(5);
+    hslC47->Draw();
+    canvas21->cd(6);
+    hslC48->Draw();
+    canvas21->cd(7);
+    hslC49->Draw();
+    canvas21->cd(8);
+    hslC50->Draw();
+    canvas21->cd(9);
+    hslC51->Draw();
+    canvas21->cd(10);
+    hslC52->Draw();
+    canvas21->cd(11);
+    hslC53->Draw();
+    canvas21->cd(12);
+    hslC54->Draw();
+    canvas21->cd(13);
+    hslC55->Draw();
+    canvas21->cd(14);
+    hslC56->Draw();
+    canvas21->cd(15);
+    hslC57->Draw();
+    canvas21->cd(16);
+    hslC58->Draw();
+    canvas21->cd(17);
+    hslC59->Draw();
+    canvas21->cd(18);
+    hslC60->Draw();
+    canvas21->cd(19);
+    hslC61->Draw();
+    canvas21->cd(20);
+    hslC62->Draw();
+    canvas21->Write();
+
+    TCanvas *canvas22 = new TCanvas("canvas22","canvas22", 1920, 1080);
+    canvas22->Divide(5,4);
+    canvas22->cd(1);
+    hslC43->Draw();
+    Sigma425->Draw("sameep");
+    canvas22->cd(2);
+    hslC44->Draw();
+    Sigma435->Draw("sameep");
+    canvas22->cd(3);
+    hslC45->Draw();
+    Sigma445->Draw("sameep");
+    canvas22->cd(4);
+    hslC46->Draw();
+    Sigma455->Draw("sameep");
+    canvas22->cd(5);
+    hslC47->Draw();
+    Sigma465->Draw("sameep");
+    canvas22->cd(6);
+    hslC48->Draw();
+    Sigma475->Draw("sameep");
+    canvas22->cd(7);
+    hslC49->Draw();
+    Sigma485->Draw("sameep");
+    canvas22->cd(8);
+    hslC50->Draw();
+    Sigma495->Draw("sameep");
+    canvas22->cd(9);
+    hslC51->Draw();
+    Sigma505->Draw("sameep");
+    canvas22->cd(10);
+    hslC52->Draw();
+    Sigma515->Draw("sameep");
+    canvas22->cd(11);
+    hslC53->Draw();
+    Sigma525->Draw("sameep");
+    canvas22->cd(12);
+    hslC54->Draw();
+    Sigma535->Draw("sameep");
+    canvas22->cd(13);
+    hslC55->Draw();
+    Sigma545->Draw("sameep");
+    canvas22->cd(14);
+    hslC56->Draw();
+    Sigma555->Draw("sameep");
+    canvas22->cd(15);
+    hslC57->Draw();
+    Sigma565->Draw("sameep");
+    canvas22->cd(16);
+    hslC58->Draw();
+    Sigma575->Draw("sameep");
+    canvas22->cd(17);
+    hslC59->Draw();
+    Sigma585->Draw("sameep");
+    canvas22->cd(18);
+    hslC60->Draw();
+    Sigma595->Draw("sameep");
+    canvas22->cd(19);
+    hslC61->Draw();
+    Sigma605->Draw("sameep");
+    canvas22->cd(20);
+    hslC62->Draw();
+    Sigma615->Draw("sameep");
+    canvas22->Write();
+
+    TCanvas *canvas23 = new TCanvas("canvas23","canvas23", 1920, 1080);
+    canvas23->Divide(4,3);
+    canvas23->cd(1);
+    Sigma430_S->SetMarkerColor(807);
+    Sigma430_S->SetLineColor(807);
+    Sigma430_S->SetMarkerStyle(4);
+    Sigma430_S->Draw();
+    Sigma425->SetLineColor(4);
+    Sigma425->Draw("sameep");
+    Sigma435->SetMarkerColor(1);
+    Sigma435->Draw("sameep");
+
+    canvas23->cd(2);
+    Sigma450_S->SetMarkerColor(807);
+    Sigma450_S->SetLineColor(807);
+    Sigma450_S->SetMarkerStyle(4);
+    Sigma450_S->Draw();
+    Sigma445->SetLineColor(4);
+    Sigma445->Draw("sameep");
+    Sigma455->SetMarkerColor(1);
+    Sigma455->Draw("sameep");
+
+    canvas23->cd(3);
+    Sigma470_S->SetMarkerColor(807);
+    Sigma470_S->SetLineColor(807);
+    Sigma470_S->SetMarkerStyle(4);
+    Sigma470_S->Draw();
+    Sigma465->SetLineColor(4);
+    Sigma465->Draw("sameep");
+    Sigma475->SetMarkerColor(1);
+    Sigma475->Draw("sameep");
+
+    canvas23->cd(4);
+    Sigma490_S->SetMarkerColor(807);
+    Sigma490_S->SetLineColor(807);
+    Sigma490_S->SetMarkerStyle(4);
+    Sigma490_S->Draw();
+    Sigma485->SetLineColor(4);
+    Sigma485->Draw("sameep");
+    Sigma495->SetMarkerColor(1);
+    Sigma495->Draw("sameep");
+
+    canvas23->cd(5);
+    Sigma510_S->SetMarkerColor(807);
+    Sigma510_S->SetLineColor(807);
+    Sigma510_S->SetMarkerStyle(4);
+    Sigma510_S->Draw();
+    Sigma505->SetLineColor(4);
+    Sigma505->Draw("sameep");
+    Sigma515->SetMarkerColor(1);
+    Sigma515->Draw("sameep");
+
+    canvas23->cd(6);
+    Sigma530_S->SetMarkerColor(807);
+    Sigma530_S->SetLineColor(807);
+    Sigma530_S->SetMarkerStyle(4);
+    Sigma530_S->Draw();
+    Sigma525->SetLineColor(4);
+    Sigma525->Draw("sameep");
+    Sigma535->SetMarkerColor(1);
+    Sigma535->Draw("sameep");
+
+    canvas23->cd(7);
+    Sigma550_S->SetMarkerColor(807);
+    Sigma550_S->SetLineColor(807);
+    Sigma550_S->SetMarkerStyle(4);
+    Sigma550_S->Draw();
+    Sigma545->SetLineColor(4);
+    Sigma545->Draw("sameep");
+    Sigma555->SetMarkerColor(1);
+    Sigma555->Draw("sameep");
+
+    canvas23->cd(8);
+    Sigma570_S->SetMarkerColor(807);
+    Sigma570_S->SetLineColor(807);
+    Sigma570_S->SetMarkerStyle(4);
+    Sigma570_S->Draw();
+    Sigma565->SetLineColor(4);
+    Sigma565->Draw("sameep");
+    Sigma575->SetMarkerColor(1);
+    Sigma575->Draw("sameep");
+
+    canvas23->cd(9);
+    Sigma590_S->SetMarkerColor(807);
+    Sigma590_S->SetLineColor(807);
+    Sigma590_S->SetMarkerStyle(4);
+    Sigma590_S->Draw();
+    Sigma585->Draw("sameep");
+    Sigma595->SetMarkerColor(1);
+    Sigma595->Draw("sameep");
+
+    canvas23->cd(10);
+    Sigma610_S->SetMarkerColor(807);
+    Sigma610_S->SetLineColor(807);
+    Sigma610_S->SetMarkerStyle(4);
+    Sigma610_S->Draw();
+    Sigma605->SetLineColor(4);
+    Sigma605->Draw("sameep");
+    Sigma615->SetMarkerColor(1);
+    Sigma615->Draw("sameep");
+
+    canvas23->cd(11);
+    leg = new TLegend(0.1, 0.1, 0.9, 0.9);
+    leg->AddEntry(Sigma610_S, "Scattered Data", "ep");
+    leg->AddEntry(Sigma605, "Non Scattered Data (Low E bin)", "ep");
+    leg->AddEntry(Sigma615, "Non Scattered Data (High E bin)", "ep");
+    leg->Draw();
+
+    canvas23->Write();
+
+    CombData.Write();
+
+}
