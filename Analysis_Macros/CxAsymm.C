@@ -76,7 +76,7 @@ void CxAsymm(){
     AsymmFunc->SetParameter(0, 0);
     TF1 *SinFunc = new TF1("SinFit", "[0]*sin(x*TMath::DegToRad())", -130, 130);
     SinFunc->SetParNames("InitialSinAmp");
-    TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Amo/Physics_Total_52_5_7_17.root"); // Open the latest PTotal file to load histograms from
+    TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Amo/Physics_Total_58_18_7_17.root"); // Open the latest PTotal file to load histograms from
 
     ///////////////////////////////////////////
     //////////////////  CM1  //////////////////
@@ -1023,7 +1023,7 @@ void CxAsymm(){
     CosAmpErr[7][5] = AsymmFit->GetParError(2);
 
     // Define new file to store fit parameters
-    TFile f1("AsymmFits_PTotal52.root", "RECREATE");
+    TFile f1("AsymmFits_PTotal58.root", "RECREATE");
 
     PhiSc335AsymmCM1->Write();
     PhiSc405AsymmCM1->Write();
@@ -1213,7 +1213,7 @@ void CxAsymm(){
 
     }
 
-    TFile f3("Cx_Plots_Multi_52.root", "RECREATE");
+    TFile f3("Cx_Plots_Multi_58.root", "RECREATE");
 
     Float_t xMin = -1;
     Float_t xMax = 1;

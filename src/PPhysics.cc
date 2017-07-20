@@ -302,23 +302,69 @@ Double_t PPhysics::CoeffC(Double_t ProtTheta){ // Calculate Coefficient C for MB
 // Currently not working as intended?
 TVector3 PPhysics::ScatteredFrameAngles(TVector3 InitialVect, TVector3 RealPVect, TVector3 ScattVector, TLorentzVector GammaVect)
 {
-  TVector3 ValueHolder(0, 0, 0);
-  // Convert given TLorentzVectors to 3 vectors
-  TVector3 GammaVect3 = GammaVect.Vect();
-  // Get Axes of scattered frame
-  TVector3 ScattZAxis = (InitialVect.Unit()); // Z axis defined by reconstructed n vector
-  TVector3 ScattYAxis = ((GammaVect3.Cross(RealPVect)).Unit()); // Defined using the "real" proton and the photon vector
-  TVector3 ScattXAxis = ((ScattYAxis.Cross(ScattZAxis)).Unit());
+    TVector3 ValueHolder(0, 0, 0);
+    // Convert given TLorentzVectors to 3 vectors
+    TVector3 GammaVect3 = GammaVect.Vect();
+    // Get Axes of scattered frame
+    TVector3 ScattZAxis = (InitialVect.Unit()); // Z axis defined by reconstructed n vector
+    TVector3 ScattYAxis = ((GammaVect3.Cross(RealPVect)).Unit()); // Defined using the "real" proton and the photon vector
+    TVector3 ScattXAxis = (ScattYAxis.Cross(ScattZAxis));
 
-  Double_t ScattZ = ScattZAxis.Angle(ScattVector); // Gives the angles between the axes defined above and the Scattered Proton vector
-  Double_t ScattY = ScattYAxis.Angle(ScattVector);
-  Double_t ScattX = ScattXAxis.Angle(ScattVector);
-  Double_t ScattTheta = ScattZ*TMath::RadToDeg(); // Get the angle of the scattered particle in frame of initial particle
-  Double_t ScattPhi = (atan2(cos(ScattY),cos(ScattX)))*TMath::RadToDeg();
-  ValueHolder.SetX(ScattTheta);
-  ValueHolder.SetY(ScattPhi);
+    Double_t ScattZ = ScattZAxis.Angle(ScattVector); // Gives the angles between the axes defined above and the Scattered Proton vector
+    Double_t ScattY = ScattYAxis.Angle(ScattVector);
+    Double_t ScattX = ScattXAxis.Angle(ScattVector);
+    Double_t ScattTheta = ScattZ*TMath::RadToDeg(); // Get the angle of the scattered particle in frame of initial particle
+    Double_t ScattPhi = (atan2(cos(ScattY),cos(ScattX)))*TMath::RadToDeg();
+    ValueHolder.SetX(ScattTheta);
+    ValueHolder.SetY(ScattPhi);
 
-  return ValueHolder;
+    return ValueHolder;
+}
+
+TRotation PPhysics::ScatterFrame(TVector3 InitialVect, TVector3 RealPVect, TVector3 ScattVector, TLorentzVector GammaVect)
+{
+    TRotation react;
+    // Convert given TLorentzVectors to 3 vectors
+    TVector3 GammaVect3 = GammaVect.Vect();
+    // Get Axes of scattered frame
+    TVector3 ScattZ = (InitialVect.Unit()); // Z axis defined by reconstructed n vector
+    TVector3 ScattY = ((GammaVect3.Cross(RealPVect)).Unit()); // Defined using the "real" proton and the photon vector
+    TVector3 ScattX = (ScattY.Cross(ScattZ));
+
+    react.RotateAxes(ScattX, ScattY, ScattZ);
+
+    return react;
+}
+
+// Currently not working as intended?
+TVector3 PPhysics::ScatteredFrameAnglesMB(TVector3 InitialVect, TVector3 RealPVect, TVector3 ScattVector, TLorentzVector GammaVect)
+{
+    TVector3 ValueHolder(0, 0, 0);
+
+    TVector3 V1 = (InitialVect.Unit()); //neutron angle, z-axis
+    TVector3 VFZ = (InitialVect.Unit()); //neutron angle, z-axis
+
+    TVector3 V2 = (ScattVector.Unit()); //recoil proton angle
+    double_t TT1 = V1.Angle(V2);
+    double_t tmpPh = TMath::ATan2((V1.Py()), (V1.Px()))-0.5*acos(-1);
+    TVector3 V3(cos(tmpPh), sin(tmpPh), 0); // X-axis
+    TVector3 V3Y = V1.Cross(V3);
+
+    TVector3 Vbm = (GammaVect.Vect()).Unit();
+    TVector3 Vp1 = (RealPVect.Unit());
+    TVector3 VFY = Vbm.Cross(Vp1); // Y-Axis
+    TVector3 VFX = VFY.Cross(VFZ); // X-Axis
+
+    double_t tmpL = V2.Mag()*cos(TT1)/V1.Mag(); // ??? V2 and V1 are both Mag = 1? tmpL should just be equivalent to cos(TT1)
+    TVector3 V4(V1.X()*tmpL, V1.Y()*tmpL, V1.Z()*tmpL);
+    TVector3 V5 = V2 - V4; // XY projection of recoil vector in recoil frame
+
+    double_t Phi = (TMath::ATan2(cos(VFY.Angle(V5)), cos(VFX.Angle(V5))))*TMath::RadToDeg();
+
+    ValueHolder.SetX(Phi);
+    ValueHolder.SetY(tmpPh*TMath::RadToDeg());
+
+    return ValueHolder;
 }
 
 Double_t PPhysics::Calc_dtfInterDOCA(const TVector3 &locUnitDir1, const TVector3 &locUnitDir2, const TVector3 &locVertex1, const TVector3 &locVertex2, TVector3 &locInterDOCA1, TVector3 &locInterDOCA2){

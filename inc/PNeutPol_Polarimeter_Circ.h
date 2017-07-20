@@ -79,7 +79,6 @@ private:
     double_t PhinRec;
     double_t PhiPiRec;
     double_t ThetaWCn;
-    double_t PhiDiff;
     double_t ThetaPiRecDiff;
     double_t ThetapRecDiff;
     double_t Ep;
@@ -94,6 +93,8 @@ private:
     double_t ScattThetaLab;
     double_t ScattTheta;
     double_t ScattPhi;
+    double_t ScattPhi2;
+    double_t ScattPhiMB;
     double_t KinEp;
     double_t KinEpPi;
     double_t KinPi;
@@ -177,15 +178,11 @@ private:
     GH1* OAngle;
     GH1* ThetaSc;
     GH1* PhiSc;
+    GH1* PhiSc2;
+    GH1* PhiScMB;
     GH1* MMpEpCorrected;
     GH1* ZpDist;
     GH1* ThetanDist;
-
-    GH1* OAngleThetaScDiff;
-    GH2* OAngleThetaSc;
-
-    GH1* OAngleThetaScDiffNonPol;
-    GH2* OAngleThetaScNonPol;
 
     GH2* DeutKinPiKin;
     GH2* E_dE;
@@ -198,7 +195,9 @@ private:
     GH2* ScatterVertexXY;
     GH3* ScatterVertex;
 
-    GH1* POCAr_Equiv_OAngle;
+    GH1* ThetaDiff;
+    GH1* PhiDiff;
+    GH2* PhiDiffThetaDiff;
 
     GH1* MMp200300;
     GH1* MMp300400;

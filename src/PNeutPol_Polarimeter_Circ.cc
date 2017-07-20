@@ -270,9 +270,6 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
 
         if (((MMpEpCorr < 800) == kTRUE) || ((MMpEpCorr > 1100) == kTRUE)) continue; // Force a missing mass cut
 
-        PhiDiff = abs (Php-Phn); // This will always be 180?
-        // if ( PhiDiff > 195 || PhiDiff < 165) return;
-
         // Gamma(n,p)Pi (P detected correct)
         // Assume proton track is proton and "neutron" track is from charged pion
         KinEpPi = CalcKinEnergy(Thp, EGamma, Mn, 0, Mp, Mpi); // Calculate kin E of proton assuming g(n, p) pi
@@ -301,12 +298,18 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
         N3VectUnit = N3Vect.Unit();
         OpeningAngle = (N3Vect.Angle(GVnCorr3))*TMath::RadToDeg();
 
-        ThetanDiff = abs(ThetanRec - ThetanCorr);
-        PhinDiff = abs(PhinRec - Phn);
+        ThetanDiff = ThetanCorr-ThetanRec;
+        PhinDiff = Phn-PhinRec;
 
         TVector3 ScattAngles = ScatteredFrameAngles(RecNeutronEpCorr3, GVpCorr3, GVnCorr3, Gamma);
+        TVector3 ScattAnglesMB = ScatteredFrameAnglesMB(RecNeutronEpCorr3, GVpCorr3, GVnCorr3, Gamma);
+        //TRotation ScatterRotation = ScatterFrame(RecNeutronEpCorr3, GVpCorr3, GVnCorr3, Gamma);
         ScattTheta = ScattAngles(0); // Theta is 1st component in vector fn returns above
-        ScattPhi = ScattAngles(1); // Phi is 2nd component
+        //ScattPhi = ScattAngles(1); // Phi is 2nd component
+        //ScattPhi2 = ((ScatterRotation.Inverse()*GVnCorr3).Phi()) * TMath::RadToDeg();
+        ScattPhi = ScattAnglesMB(0);
+
+        //cout << ScattPhi << "   " << ScattPhi2 << "   " << ScattPhiMB << endl;
 
         beamF.SetFromVector(Gamma); // Set Lorentz vectors for use in APLCON
         protonF.SetFromVector(GVpCorr);
@@ -335,7 +338,7 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
         POCA = TVector3(POCAx, POCAy, POCAz);
         //if (ScattTheta > 60) continue;
 
-        //if( r > 75 || r < 35 ) return; // Ensure POCA is at polarimeter radius
+        if( r > 75 || r < 35 ) return; // Ensure POCA is at polarimeter radius
 
         FillHists(); // Fill histograms with data generated
     }
@@ -422,15 +425,11 @@ PNeutPol_Polarimeter_Circ::PNeutPol_Polarimeter_Circ() // Define a load of histo
     OAngle = new GH1 ("OAngle", "Opening Angle between P and N Vectors", 180, 0, 180);
     ThetaSc =  new GH1( "Theta_Scattered", "Scattered Proton Theta Distribution in Rotated Frame", 180, 0, 180 );
     PhiSc = new GH1( "Phi_Scattered", "Scattered Proton Phi Distribution in Rotated Frame", 90, -180, 180 );
+    //PhiSc2 = new GH1( "Phi_Scattered2", "Scattered Proton Phi Distribution in Rotated Frame (MS Method)", 90, -180, 180 );
+    //PhiScMB = new GH1( "Phi_ScatteredMB", "Scattered Proton Phi Distribution in Rotated Frame (MB Method)", 90, -180, 180 );
     MMpEpCorrected = new GH1 ("MMpEpCorrected", "Missing mass seen by Proton (E Loss Corrected)", 400, 0, 2000);
     ZpDist = new GH1 ("ZpDist", "Proton Pseudo Z Vertex Distribution", 200, -400, 400);
     ThetanDist = new GH1 ("ThetanDist", "#theta_{n} Distribution", 200, 0, 180);
-
-    OAngleThetaScDiff = new GH1( "Opening_Angle_ThetaSc_Diff", "Opening Angle - #theta_{Sc}", 360, -180, 180);
-    OAngleThetaSc = new GH2("Theta_Sc_Fn_Opening_Angle", "#theta_{Sc} as Fn of Opening Angle", 100, 0, 180, 100, 0, 180);
-
-    OAngleThetaScDiffNonPol = new GH1( "Opening_Angle_ThetaSc_Diff_Non_Pol", "Opening Angle - #theta_{Sc} for Events with r_{POCA} Outside Polarimeter", 360, -180, 180);
-    OAngleThetaScNonPol = new GH2("Theta_Sc_Fn_Opening_Angle_Non_Pol", "#theta_{Sc} as Fn of Opening Angle  for Events with r_{POCA} Outside Polarimeter", 100, 0, 180, 100, 0, 180);
 
     DeutKinPiKin = new GH2 ("DeutKinPiKin", "(#theta_{nRec} - #theta_{nCorr}) vs (#theta_{#pi Rec} - #theta_{nCorr})", 200, -180, 180, 200, -180, 180);
     E_dE = new GH2 ("E_dE", "EdE Plot With E Loss Adjustment", 100, 0, 500, 100, 0, 5);
@@ -443,8 +442,9 @@ PNeutPol_Polarimeter_Circ::PNeutPol_Polarimeter_Circ() // Define a load of histo
     ScatterVertexXY = new GH2("ScatterVertexXY", "XY Vertex Point of Scatter from DOCA Method", 100, -80, 80, 100, -80, 80);
     ScatterVertex = new GH3("ScatterVertex", "Vertex Point of Scatter from DOCA Method", 100, -80, 80, 100, -80, 80, 100, -200, 200);
 
-    POCAr_Equiv_OAngle = new GH1("POCAr_Equivalent_OpeningAngle", "r_{POCA} for Events with Opening Angle #approx #theta_{Sc} ", 200, 0, 300);
-
+    ThetaDiff = new GH1("ThetaDiff", "Difference Between #theta_{Det} and #theta_{Rec}", 200, 0, 180);
+    PhiDiff = new GH1("PhiDiff", "Difference Between #phi_{Det} and #phi_{Rec}", 200, 0, 180);
+    PhiDiffThetaDiff = new GH2("PhiDiffThetaDiff", "#phi_{Diff} as a Function of #theta_{Diff}", 100, -100, 100, 100, -100, 100);
 
     // MMp across photon E bins
     MMp200300 = new GH1("MMp200300", "Missing mass as seen by Proton (200-300MeV E_{#gamma})", 400, 0, 2000);
@@ -579,11 +579,10 @@ void PNeutPol_Polarimeter_Circ::FillHists()
     OAngle->Fill(OpeningAngle, TaggerTime);
     ThetaSc -> Fill(ScattTheta, TaggerTime);
     PhiSc -> Fill(ScattPhi, TaggerTime);
+    //PhiSc2 -> Fill(ScattPhi2, TaggerTime);
+    //PhiScMB -> Fill(ScattPhiMB, TaggerTime);
     MMpEpCorrected->Fill(MMpEpCorr, TaggerTime);
     ZpDist->Fill(Zp, TaggerTime);
-
-    OAngleThetaScDiff->Fill((OpeningAngle-ScattTheta), TaggerTime);
-    OAngleThetaSc->Fill(OpeningAngle, ScattTheta, TaggerTime);
 
     ThetanDist->Fill(Thn, TaggerTime);
     DeutKinPiKin->Fill(ThetanRec-ThetanCorr, ThetaPiRecDiff, TaggerTime);
@@ -597,14 +596,9 @@ void PNeutPol_Polarimeter_Circ::FillHists()
     ScatterVertexXY->Fill(POCAx, POCAy, TaggerTime);
     ScatterVertex->Fill(POCAx, POCAy, POCAz, TaggerTime);
 
-    if( r > 75 || r < 35 ){
-        OAngleThetaScDiffNonPol->Fill((OpeningAngle-ScattTheta), TaggerTime);
-        OAngleThetaScNonPol->Fill(OpeningAngle, ScattTheta, TaggerTime);
-    }
-
-    if (abs(OpeningAngle-ScattTheta) < 5){
-        POCAr_Equiv_OAngle->Fill(r, TaggerTime);
-    }
+    ThetaDiff->Fill(abs(ThetanDiff), TaggerTime);
+    PhiDiff->Fill(abs(PhinDiff), TaggerTime);
+    PhiDiffThetaDiff->Fill(ThetanDiff, PhinDiff, TaggerTime);
 
     if(200 < EGamma && EGamma < 300){
         MMp200300->Fill(MMpEpCorr, TaggerTime);
