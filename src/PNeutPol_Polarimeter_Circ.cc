@@ -309,8 +309,6 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
         //ScattPhi2 = ((ScatterRotation.Inverse()*GVnCorr3).Phi()) * TMath::RadToDeg();
         ScattPhi = ScattAnglesMB(0);
 
-        //cout << ScattPhi << "   " << ScattPhi2 << "   " << ScattPhiMB << endl;
-
         beamF.SetFromVector(Gamma); // Set Lorentz vectors for use in APLCON
         protonF.SetFromVector(GVpCorr);
         neutronF.SetFromVector(GVnCorr);
@@ -336,7 +334,7 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
         POCAz = DOCAVertex1.Z()-(DOCAVertex1.Z()-DOCAVertex2.Z())/2.0;
         r = sqrt((TMath::Power(POCAx,2))+(TMath::Power(POCAy,2)));
         POCA = TVector3(POCAx, POCAy, POCAz);
-        //if (ScattTheta > 60) continue;
+        //if (ScattTheta > 90) continue;
 
         if( r > 75 || r < 35 ) return; // Ensure POCA is at polarimeter radius
 
@@ -425,7 +423,7 @@ PNeutPol_Polarimeter_Circ::PNeutPol_Polarimeter_Circ() // Define a load of histo
     OAngle = new GH1 ("OAngle", "Opening Angle between P and N Vectors", 180, 0, 180);
     ThetaSc =  new GH1( "Theta_Scattered", "Scattered Proton Theta Distribution in Rotated Frame", 180, 0, 180 );
     PhiSc = new GH1( "Phi_Scattered", "Scattered Proton Phi Distribution in Rotated Frame", 90, -180, 180 );
-    //PhiSc2 = new GH1( "Phi_Scattered2", "Scattered Proton Phi Distribution in Rotated Frame (MS Method)", 90, -180, 180 );
+    PhiSc2 = new GH1( "Phi_Scattered2", "Scattered Proton Phi Distribution in Rotated Frame (MS Method)", 90, -180, 180 );
     //PhiScMB = new GH1( "Phi_ScatteredMB", "Scattered Proton Phi Distribution in Rotated Frame (MB Method)", 90, -180, 180 );
     MMpEpCorrected = new GH1 ("MMpEpCorrected", "Missing mass seen by Proton (E Loss Corrected)", 400, 0, 2000);
     ZpDist = new GH1 ("ZpDist", "Proton Pseudo Z Vertex Distribution", 200, -400, 400);
@@ -579,7 +577,7 @@ void PNeutPol_Polarimeter_Circ::FillHists()
     OAngle->Fill(OpeningAngle, TaggerTime);
     ThetaSc -> Fill(ScattTheta, TaggerTime);
     PhiSc -> Fill(ScattPhi, TaggerTime);
-    //PhiSc2 -> Fill(ScattPhi2, TaggerTime);
+    PhiSc2 -> Fill(ScattPhi2, TaggerTime);
     //PhiScMB -> Fill(ScattPhiMB, TaggerTime);
     MMpEpCorrected->Fill(MMpEpCorr, TaggerTime);
     ZpDist->Fill(Zp, TaggerTime);

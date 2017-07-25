@@ -341,28 +341,28 @@ TVector3 PPhysics::ScatteredFrameAnglesMB(TVector3 InitialVect, TVector3 RealPVe
 {
     TVector3 ValueHolder(0, 0, 0);
 
-    TVector3 V1 = (InitialVect.Unit()); //neutron angle, z-axis
-    TVector3 VFZ = (InitialVect.Unit()); //neutron angle, z-axis
+    TVector3 RecNeut = (InitialVect.Unit()); //neutron angle, z-axis
+    TVector3 ZAxis = (InitialVect.Unit()); //neutron angle, z-axis
 
-    TVector3 V2 = (ScattVector.Unit()); //recoil proton angle
-    double_t TT1 = V1.Angle(V2);
-    double_t tmpPh = TMath::ATan2((V1.Py()), (V1.Px()))-0.5*acos(-1);
-    TVector3 V3(cos(tmpPh), sin(tmpPh), 0); // X-axis
-    TVector3 V3Y = V1.Cross(V3);
+    TVector3 ScattNeut = (ScattVector.Unit()); //recoil proton angle
+    double_t TT1 = RecNeut.Angle(ScattNeut);
+    double_t tmpPh = TMath::ATan2((RecNeut.Py()), (RecNeut.Px()))-0.5*acos(-1);
+    //TVector3 V3(cos(tmpPh), sin(tmpPh), 0); // X-axis
+    //TVector3 V3Y = RecNeut.Cross(V3);
 
-    TVector3 Vbm = (GammaVect.Vect()).Unit();
-    TVector3 Vp1 = (RealPVect.Unit());
-    TVector3 VFY = Vbm.Cross(Vp1); // Y-Axis
-    TVector3 VFX = VFY.Cross(VFZ); // X-Axis
+    TVector3 BeamVect = (GammaVect.Vect()).Unit();
+    TVector3 ProtVect = (RealPVect.Unit());
+    TVector3 YAxis = BeamVect.Cross(ProtVect); // Y-Axis
+    TVector3 XAxis = YAxis.Cross(ZAxis); // X-Axis
 
-    double_t tmpL = V2.Mag()*cos(TT1)/V1.Mag(); // ??? V2 and V1 are both Mag = 1? tmpL should just be equivalent to cos(TT1)
-    TVector3 V4(V1.X()*tmpL, V1.Y()*tmpL, V1.Z()*tmpL);
-    TVector3 V5 = V2 - V4; // XY projection of recoil vector in recoil frame
+    double_t tmpL = ScattNeut.Mag()*cos(TT1)/RecNeut.Mag(); // ??? ScattNeut and RecNeut are both Mag = 1? tmpL should just be equivalent to cos(TT1)
+    TVector3 V1(RecNeut.X()*tmpL, RecNeut.Y()*tmpL, RecNeut.Z()*tmpL);
+    TVector3 V2 = ScattNeut - V1; // XY projection of recoil vector in recoil frame
 
-    double_t Phi = (TMath::ATan2(cos(VFY.Angle(V5)), cos(VFX.Angle(V5))))*TMath::RadToDeg();
+    double_t Phi = TMath::ATan2(cos(YAxis.Angle(V2)), cos(XAxis.Angle(V2)));
 
-    ValueHolder.SetX(Phi);
-    ValueHolder.SetY(tmpPh*TMath::RadToDeg());
+    ValueHolder.SetX(Phi*TMath::RadToDeg());
+    ValueHolder.SetY(tmpPh);
 
     return ValueHolder;
 }
