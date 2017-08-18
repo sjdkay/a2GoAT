@@ -255,7 +255,10 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
         RecKinNeutron = LNeutron4VectorKin(RecKinProton);
         ThetanRec = (RecKinNeutron.Theta()) * TMath::RadToDeg();
         PhinRec = (RecKinNeutron.Phi()) * TMath::RadToDeg();
-        WCZnRec = 72/tan(RecKinNeutron.Theta());
+
+        RecKinNeutronB = RecKinNeutron;
+        RecKinNeutronB.Boost(b);
+        ThetanCM = (RecKinNeutronB.Theta())*TMath::RadToDeg();
 
         if(Cut_protonKinGood -> IsInside(KinEp, dEp) == kFALSE) continue; // If KinE proton is NOT inside p banana drop out
 
@@ -299,9 +302,9 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
         ThetanDiff = abs(ThetanRec - ThetanCorr);
         PhinDiff = abs(PhinRec - Phn);
 
-        TVector3 ScattAngles = ScatteredFrameAngles(RecNeutronEpCorr3, GVpCorr3, GVnCorr3, Gamma);
-        ScattTheta = ScattAngles(0); // Theta is 1st component in vector fn returns above
-        ScattPhi = ScattAngles(1); // Phi is 2nd component
+        TVector3 ScattAngles = ScatteredFrameAnglesMB(RecNeutronEpCorr3, GVpCorr3, GVnCorr3, Gamma);
+        ScattTheta = ScattAngles(2); // Theta is 1st component in vector fn returns above
+        ScattPhi = ScattAngles(0); // Phi is 2nd component
 
         beamF.SetFromVector(Gamma); // Set Lorentz vectors for use in APLCON
         protonF.SetFromVector(GVpCorr);
@@ -331,6 +334,8 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
         //if (ScattTheta > 60) continue;
 
         if( r > 75 || r < 35 ) return; // Ensure POCA is at polarimeter radius
+        //if(ThetanCM < 80 || ThetanCM > 100) return; // Ensure ThetaCM close to 90 degrees
+
 
         FillHists(); // Fill histograms with data generated
     }
@@ -420,6 +425,7 @@ PNeutPol_Polarimeter_Lin::PNeutPol_Polarimeter_Lin() // Define a load of histogr
     MMpEpCorrected = new GH1 ("MMpEpCorrected", "Missing mass seen by Proton (E Loss Corrected)", 400, 0, 2000);
     ZpDist = new GH1 ("ZpDist", "Proton Pseudo Z Vertex Distribution", 200, -400, 400);
     ThetanDist = new GH1 ("ThetanDist", "#theta_{n} Distribution", 200, 0, 180);
+    ThetanCMDist = new GH1 ("ThetanCMDist", "#theta_{nCM} Distribution", 200, 0, 180);
 
     E_dE = new GH2 ("E_dE", "EdE Plot With E Loss Adjustment", 100, 0, 500, 100, 0, 5);
     DeutKinPiKin = new GH2 ("DeutKinPiKin", "(#theta_{nRec} - #theta_{n}) vs (#theta_{#pi Rec} - #theta_{n})", 200, -180, 180, 200, -180, 180);
@@ -442,125 +448,64 @@ PNeutPol_Polarimeter_Lin::PNeutPol_Polarimeter_Lin() // Define a load of histogr
     MMp800900 = new GH1("MMp800900", "Missing mass as seen by Proton (800-900MeV E_{#gamma})", 400, 0, 2000);
 
     // Proton Phi dists across EGamma bins
-    Phip430CM1 = new GH1("Phip_430MeVCM1", "#phi_{p} Distribution for E_{#gamma} 430 #pm 10MeV (Cos#theta_{CM}1-0.8)", 10, -180, 180);
-    Phip450CM1 = new GH1("Phip_450MeVCM1", "#phi_{p} Distribution for E_{#gamma} 450 #pm 10MeV (Cos#theta_{CM}1-0.8)", 10, -180, 180);
-    Phip470CM1 = new GH1("Phip_470MeVCM1", "#phi_{p} Distribution for E_{#gamma} 470 #pm 10MeV (Cos#theta_{CM}1-0.8)", 10, -180, 180);
-    Phip490CM1 = new GH1("Phip_490MeVCM1", "#phi_{p} Distribution for E_{#gamma} 490 #pm 10MeV (Cos#theta_{CM}1-0.8)", 10, -180, 180);
-    Phip510CM1 = new GH1("Phip_510MeVCM1", "#phi_{p} Distribution for E_{#gamma} 510 #pm 10MeV (Cos#theta_{CM}1-0.8)", 10, -180, 180);
-    Phip530CM1 = new GH1("Phip_530MeVCM1", "#phi_{p} Distribution for E_{#gamma} 530 #pm 10MeV (Cos#theta_{CM}1-0.8)", 10, -180, 180);
-    Phip550CM1 = new GH1("Phip_550MeVCM1", "#phi_{p} Distribution for E_{#gamma} 550 #pm 10MeV (Cos#theta_{CM}1-0.8)", 10, -180, 180);
-    Phip570CM1 = new GH1("Phip_570MeVCM1", "#phi_{p} Distribution for E_{#gamma} 570 #pm 10MeV (Cos#theta_{CM}1-0.8)", 10, -180, 180);
-    Phip590CM1 = new GH1("Phip_590MeVCM1", "#phi_{p} Distribution for E_{#gamma} 590 #pm 10MeV (Cos#theta_{CM}1-0.8)", 10, -180, 180);
-    Phip610CM1 = new GH1("Phip_610MeVCM1", "#phi_{p} Distribution for E_{#gamma} 610 #pm 10MeV (Cos#theta_{CM}1-0.8)", 10, -180, 180);
+    Phip430CM1 = new GH1("Phip_430MeVCM1", "#phi_{p} Distribution for E_{#gamma} 430 #pm 10MeV (Cos#theta_{CM}1-0.6)", 10, -180, 180);
+    Phip450CM1 = new GH1("Phip_450MeVCM1", "#phi_{p} Distribution for E_{#gamma} 450 #pm 10MeV (Cos#theta_{CM}1-0.6)", 10, -180, 180);
+    Phip470CM1 = new GH1("Phip_470MeVCM1", "#phi_{p} Distribution for E_{#gamma} 470 #pm 10MeV (Cos#theta_{CM}1-0.6)", 10, -180, 180);
+    Phip490CM1 = new GH1("Phip_490MeVCM1", "#phi_{p} Distribution for E_{#gamma} 490 #pm 10MeV (Cos#theta_{CM}1-0.6)", 10, -180, 180);
+    Phip510CM1 = new GH1("Phip_510MeVCM1", "#phi_{p} Distribution for E_{#gamma} 510 #pm 10MeV (Cos#theta_{CM}1-0.6)", 10, -180, 180);
+    Phip530CM1 = new GH1("Phip_530MeVCM1", "#phi_{p} Distribution for E_{#gamma} 530 #pm 10MeV (Cos#theta_{CM}1-0.6)", 10, -180, 180);
+    Phip550CM1 = new GH1("Phip_550MeVCM1", "#phi_{p} Distribution for E_{#gamma} 550 #pm 10MeV (Cos#theta_{CM}1-0.6)", 10, -180, 180);
+    Phip570CM1 = new GH1("Phip_570MeVCM1", "#phi_{p} Distribution for E_{#gamma} 570 #pm 10MeV (Cos#theta_{CM}1-0.6)", 10, -180, 180);
+    Phip590CM1 = new GH1("Phip_590MeVCM1", "#phi_{p} Distribution for E_{#gamma} 590 #pm 10MeV (Cos#theta_{CM}1-0.6)", 10, -180, 180);
+    Phip610CM1 = new GH1("Phip_610MeVCM1", "#phi_{p} Distribution for E_{#gamma} 610 #pm 10MeV (Cos#theta_{CM}1-0.6)", 10, -180, 180);
 
     // #phi_{p} dists across EGamma bins
-    Phip430CM2 = new GH1("Phip_430MeVCM2", "#phi_{p} Distribution for E_{#gamma} 430 #pm 10MeV (Cos#theta_{CM}0.8-0.6)", 10, -180, 180);
-    Phip450CM2 = new GH1("Phip_450MeVCM2", "#phi_{p} Distribution for E_{#gamma} 450 #pm 10MeV (Cos#theta_{CM}0.8-0.6)", 10, -180, 180);
-    Phip470CM2 = new GH1("Phip_470MeVCM2", "#phi_{p} Distribution for E_{#gamma} 470 #pm 10MeV (Cos#theta_{CM}0.8-0.6)", 10, -180, 180);
-    Phip490CM2 = new GH1("Phip_490MeVCM2", "#phi_{p} Distribution for E_{#gamma} 490 #pm 10MeV (Cos#theta_{CM}0.8-0.6)", 10, -180, 180);
-    Phip510CM2 = new GH1("Phip_510MeVCM2", "#phi_{p} Distribution for E_{#gamma} 510 #pm 10MeV (Cos#theta_{CM}0.8-0.6)", 10, -180, 180);
-    Phip530CM2 = new GH1("Phip_530MeVCM2", "#phi_{p} Distribution for E_{#gamma} 530 #pm 10MeV (Cos#theta_{CM}0.8-0.6)", 10, -180, 180);
-    Phip550CM2 = new GH1("Phip_550MeVCM2", "#phi_{p} Distribution for E_{#gamma} 550 #pm 10MeV (Cos#theta_{CM}0.8-0.6)", 10, -180, 180);
-    Phip570CM2 = new GH1("Phip_570MeVCM2", "#phi_{p} Distribution for E_{#gamma} 570 #pm 10MeV (Cos#theta_{CM}0.8-0.6)", 10, -180, 180);
-    Phip590CM2 = new GH1("Phip_590MeVCM2", "#phi_{p} Distribution for E_{#gamma} 590 #pm 10MeV (Cos#theta_{CM}0.8-0.6)", 10, -180, 180);
-    Phip610CM2 = new GH1("Phip_610MeVCM2", "#phi_{p} Distribution for E_{#gamma} 610 #pm 10MeV (Cos#theta_{CM}0.8-0.6)", 10, -180, 180);
+    Phip430CM2 = new GH1("Phip_430MeVCM2", "#phi_{p} Distribution for E_{#gamma} 430 #pm 10MeV (Cos#theta_{CM}0.6-0.2)", 10, -180, 180);
+    Phip450CM2 = new GH1("Phip_450MeVCM2", "#phi_{p} Distribution for E_{#gamma} 450 #pm 10MeV (Cos#theta_{CM}0.6-0.2)", 10, -180, 180);
+    Phip470CM2 = new GH1("Phip_470MeVCM2", "#phi_{p} Distribution for E_{#gamma} 470 #pm 10MeV (Cos#theta_{CM}0.6-0.2)", 10, -180, 180);
+    Phip490CM2 = new GH1("Phip_490MeVCM2", "#phi_{p} Distribution for E_{#gamma} 490 #pm 10MeV (Cos#theta_{CM}0.6-0.2)", 10, -180, 180);
+    Phip510CM2 = new GH1("Phip_510MeVCM2", "#phi_{p} Distribution for E_{#gamma} 510 #pm 10MeV (Cos#theta_{CM}0.6-0.2)", 10, -180, 180);
+    Phip530CM2 = new GH1("Phip_530MeVCM2", "#phi_{p} Distribution for E_{#gamma} 530 #pm 10MeV (Cos#theta_{CM}0.6-0.2)", 10, -180, 180);
+    Phip550CM2 = new GH1("Phip_550MeVCM2", "#phi_{p} Distribution for E_{#gamma} 550 #pm 10MeV (Cos#theta_{CM}0.6-0.2)", 10, -180, 180);
+    Phip570CM2 = new GH1("Phip_570MeVCM2", "#phi_{p} Distribution for E_{#gamma} 570 #pm 10MeV (Cos#theta_{CM}0.6-0.2)", 10, -180, 180);
+    Phip590CM2 = new GH1("Phip_590MeVCM2", "#phi_{p} Distribution for E_{#gamma} 590 #pm 10MeV (Cos#theta_{CM}0.6-0.2)", 10, -180, 180);
+    Phip610CM2 = new GH1("Phip_610MeVCM2", "#phi_{p} Distribution for E_{#gamma} 610 #pm 10MeV (Cos#theta_{CM}0.6-0.2)", 10, -180, 180);
 
     // #phi_{p} dists across EGamma bins
-    Phip430CM3 = new GH1("Phip_430MeVCM3", "#phi_{p} Distribution for E_{#gamma} 430 #pm 10MeV (Cos#theta_{CM}0.6-0.4)", 10, -180, 180);
-    Phip450CM3 = new GH1("Phip_450MeVCM3", "#phi_{p} Distribution for E_{#gamma} 450 #pm 10MeV (Cos#theta_{CM}0.6-0.4)", 10, -180, 180);
-    Phip470CM3 = new GH1("Phip_470MeVCM3", "#phi_{p} Distribution for E_{#gamma} 470 #pm 10MeV (Cos#theta_{CM}0.6-0.4)", 10, -180, 180);
-    Phip490CM3 = new GH1("Phip_490MeVCM3", "#phi_{p} Distribution for E_{#gamma} 490 #pm 10MeV (Cos#theta_{CM}0.6-0.4)", 10, -180, 180);
-    Phip510CM3 = new GH1("Phip_510MeVCM3", "#phi_{p} Distribution for E_{#gamma} 510 #pm 10MeV (Cos#theta_{CM}0.6-0.4)", 10, -180, 180);
-    Phip530CM3 = new GH1("Phip_530MeVCM3", "#phi_{p} Distribution for E_{#gamma} 530 #pm 10MeV (Cos#theta_{CM}0.6-0.4)", 10, -180, 180);
-    Phip550CM3 = new GH1("Phip_550MeVCM3", "#phi_{p} Distribution for E_{#gamma} 550 #pm 10MeV (Cos#theta_{CM}0.6-0.4)", 10, -180, 180);
-    Phip570CM3 = new GH1("Phip_570MeVCM3", "#phi_{p} Distribution for E_{#gamma} 570 #pm 10MeV (Cos#theta_{CM}0.6-0.4)", 10, -180, 180);
-    Phip590CM3 = new GH1("Phip_590MeVCM3", "#phi_{p} Distribution for E_{#gamma} 590 #pm 10MeV (Cos#theta_{CM}0.6-0.4)", 10, -180, 180);
-    Phip610CM3 = new GH1("Phip_610MeVCM3", "#phi_{p} Distribution for E_{#gamma} 610 #pm 10MeV (Cos#theta_{CM}0.6-0.4)", 10, -180, 180);
+    Phip430CM3 = new GH1("Phip_430MeVCM3", "#phi_{p} Distribution for E_{#gamma} 430 #pm 10MeV (Cos#theta_{CM}0.2-(-0.2))", 10, -180, 180);
+    Phip450CM3 = new GH1("Phip_450MeVCM3", "#phi_{p} Distribution for E_{#gamma} 450 #pm 10MeV (Cos#theta_{CM}0.2-(-0.2))", 10, -180, 180);
+    Phip470CM3 = new GH1("Phip_470MeVCM3", "#phi_{p} Distribution for E_{#gamma} 470 #pm 10MeV (Cos#theta_{CM}0.2-(-0.2))", 10, -180, 180);
+    Phip490CM3 = new GH1("Phip_490MeVCM3", "#phi_{p} Distribution for E_{#gamma} 490 #pm 10MeV (Cos#theta_{CM}0.2-(-0.2))", 10, -180, 180);
+    Phip510CM3 = new GH1("Phip_510MeVCM3", "#phi_{p} Distribution for E_{#gamma} 510 #pm 10MeV (Cos#theta_{CM}0.2-(-0.2))", 10, -180, 180);
+    Phip530CM3 = new GH1("Phip_530MeVCM3", "#phi_{p} Distribution for E_{#gamma} 530 #pm 10MeV (Cos#theta_{CM}0.2-(-0.2))", 10, -180, 180);
+    Phip550CM3 = new GH1("Phip_550MeVCM3", "#phi_{p} Distribution for E_{#gamma} 550 #pm 10MeV (Cos#theta_{CM}0.2-(-0.2))", 10, -180, 180);
+    Phip570CM3 = new GH1("Phip_570MeVCM3", "#phi_{p} Distribution for E_{#gamma} 570 #pm 10MeV (Cos#theta_{CM}0.2-(-0.2))", 10, -180, 180);
+    Phip590CM3 = new GH1("Phip_590MeVCM3", "#phi_{p} Distribution for E_{#gamma} 590 #pm 10MeV (Cos#theta_{CM}0.2-(-0.2))", 10, -180, 180);
+    Phip610CM3 = new GH1("Phip_610MeVCM3", "#phi_{p} Distribution for E_{#gamma} 610 #pm 10MeV (Cos#theta_{CM}0.2-(-0.2))", 10, -180, 180);
 
     // #phi_{p} dists across EGamma bins
-    Phip430CM4 = new GH1("Phip_430MeVCM4", "#phi_{p} Distribution for E_{#gamma} 430 #pm 10MeV (Cos#theta_{CM}0.4-0.2)", 10, -180, 180);
-    Phip450CM4 = new GH1("Phip_450MeVCM4", "#phi_{p} Distribution for E_{#gamma} 450 #pm 10MeV (Cos#theta_{CM}0.4-0.2)", 10, -180, 180);
-    Phip470CM4 = new GH1("Phip_470MeVCM4", "#phi_{p} Distribution for E_{#gamma} 470 #pm 10MeV (Cos#theta_{CM}0.4-0.2)", 10, -180, 180);
-    Phip490CM4 = new GH1("Phip_490MeVCM4", "#phi_{p} Distribution for E_{#gamma} 490 #pm 10MeV (Cos#theta_{CM}0.4-0.2)", 10, -180, 180);
-    Phip510CM4 = new GH1("Phip_510MeVCM4", "#phi_{p} Distribution for E_{#gamma} 510 #pm 10MeV (Cos#theta_{CM}0.4-0.2)", 10, -180, 180);
-    Phip530CM4 = new GH1("Phip_530MeVCM4", "#phi_{p} Distribution for E_{#gamma} 530 #pm 10MeV (Cos#theta_{CM}0.4-0.2)", 10, -180, 180);
-    Phip550CM4 = new GH1("Phip_550MeVCM4", "#phi_{p} Distribution for E_{#gamma} 550 #pm 10MeV (Cos#theta_{CM}0.4-0.2)", 10, -180, 180);
-    Phip570CM4 = new GH1("Phip_570MeVCM4", "#phi_{p} Distribution for E_{#gamma} 570 #pm 10MeV (Cos#theta_{CM}0.4-0.2)", 10, -180, 180);
-    Phip590CM4 = new GH1("Phip_590MeVCM4", "#phi_{p} Distribution for E_{#gamma} 590 #pm 10MeV (Cos#theta_{CM}0.4-0.2)", 10, -180, 180);
-    Phip610CM4 = new GH1("Phip_610MeVCM4", "#phi_{p} Distribution for E_{#gamma} 610 #pm 10MeV (Cos#theta_{CM}0.4-0.2)", 10, -180, 180);
+    Phip430CM4 = new GH1("Phip_430MeVCM4", "#phi_{p} Distribution for E_{#gamma} 430 #pm 10MeV (Cos#theta_{CM}-0.2-(-0.6))", 10, -180, 180);
+    Phip450CM4 = new GH1("Phip_450MeVCM4", "#phi_{p} Distribution for E_{#gamma} 450 #pm 10MeV (Cos#theta_{CM}-0.2-(-0.6))", 10, -180, 180);
+    Phip470CM4 = new GH1("Phip_470MeVCM4", "#phi_{p} Distribution for E_{#gamma} 470 #pm 10MeV (Cos#theta_{CM}-0.2-(-0.6))", 10, -180, 180);
+    Phip490CM4 = new GH1("Phip_490MeVCM4", "#phi_{p} Distribution for E_{#gamma} 490 #pm 10MeV (Cos#theta_{CM}-0.2-(-0.6))", 10, -180, 180);
+    Phip510CM4 = new GH1("Phip_510MeVCM4", "#phi_{p} Distribution for E_{#gamma} 510 #pm 10MeV (Cos#theta_{CM}-0.2-(-0.6))", 10, -180, 180);
+    Phip530CM4 = new GH1("Phip_530MeVCM4", "#phi_{p} Distribution for E_{#gamma} 530 #pm 10MeV (Cos#theta_{CM}-0.2-(-0.6))", 10, -180, 180);
+    Phip550CM4 = new GH1("Phip_550MeVCM4", "#phi_{p} Distribution for E_{#gamma} 550 #pm 10MeV (Cos#theta_{CM}-0.2-(-0.6))", 10, -180, 180);
+    Phip570CM4 = new GH1("Phip_570MeVCM4", "#phi_{p} Distribution for E_{#gamma} 570 #pm 10MeV (Cos#theta_{CM}-0.2-(-0.6))", 10, -180, 180);
+    Phip590CM4 = new GH1("Phip_590MeVCM4", "#phi_{p} Distribution for E_{#gamma} 590 #pm 10MeV (Cos#theta_{CM}-0.2-(-0.6))", 10, -180, 180);
+    Phip610CM4 = new GH1("Phip_610MeVCM4", "#phi_{p} Distribution for E_{#gamma} 610 #pm 10MeV (Cos#theta_{CM}-0.2-(-0.6))", 10, -180, 180);
 
     // #phi_{p} dists across EGamma bins
-    Phip430CM5 = new GH1("Phip_430MeVCM5", "#phi_{p} Distribution for E_{#gamma} 430 #pm 10MeV (Cos#theta_{CM}0.2-0)", 10, -180, 180);
-    Phip450CM5 = new GH1("Phip_450MeVCM5", "#phi_{p} Distribution for E_{#gamma} 450 #pm 10MeV (Cos#theta_{CM}0.2-0)", 10, -180, 180);
-    Phip470CM5 = new GH1("Phip_470MeVCM5", "#phi_{p} Distribution for E_{#gamma} 470 #pm 10MeV (Cos#theta_{CM}0.2-0)", 10, -180, 180);
-    Phip490CM5 = new GH1("Phip_490MeVCM5", "#phi_{p} Distribution for E_{#gamma} 490 #pm 10MeV (Cos#theta_{CM}0.2-0)", 10, -180, 180);
-    Phip510CM5 = new GH1("Phip_510MeVCM5", "#phi_{p} Distribution for E_{#gamma} 510 #pm 10MeV (Cos#theta_{CM}0.2-0)", 10, -180, 180);
-    Phip530CM5 = new GH1("Phip_530MeVCM5", "#phi_{p} Distribution for E_{#gamma} 530 #pm 10MeV (Cos#theta_{CM}0.2-0)", 10, -180, 180);
-    Phip550CM5 = new GH1("Phip_550MeVCM5", "#phi_{p} Distribution for E_{#gamma} 550 #pm 10MeV (Cos#theta_{CM}0.2-0)", 10, -180, 180);
-    Phip570CM5 = new GH1("Phip_570MeVCM5", "#phi_{p} Distribution for E_{#gamma} 570 #pm 10MeV (Cos#theta_{CM}0.2-0)", 10, -180, 180);
-    Phip590CM5 = new GH1("Phip_590MeVCM5", "#phi_{p} Distribution for E_{#gamma} 590 #pm 10MeV (Cos#theta_{CM}0.2-0)", 10, -180, 180);
-    Phip610CM5 = new GH1("Phip_610MeVCM5", "#phi_{p} Distribution for E_{#gamma} 610 #pm 10MeV (Cos#theta_{CM}0.2-0)", 10, -180, 180);
-
-    // #phi_{p} dists across EGamma bins
-    Phip430CM6 = new GH1("Phip_430MeVCM6", "#phi_{p} Distribution for E_{#gamma} 430 #pm 10MeV (Cos#theta_{CM}0-(-0.2))", 10, -180, 180);
-    Phip450CM6 = new GH1("Phip_450MeVCM6", "#phi_{p} Distribution for E_{#gamma} 450 #pm 10MeV (Cos#theta_{CM}0-(-0.2))", 10, -180, 180);
-    Phip470CM6 = new GH1("Phip_470MeVCM6", "#phi_{p} Distribution for E_{#gamma} 470 #pm 10MeV (Cos#theta_{CM}0-(-0.2))", 10, -180, 180);
-    Phip490CM6 = new GH1("Phip_490MeVCM6", "#phi_{p} Distribution for E_{#gamma} 490 #pm 10MeV (Cos#theta_{CM}0-(-0.2))", 10, -180, 180);
-    Phip510CM6 = new GH1("Phip_510MeVCM6", "#phi_{p} Distribution for E_{#gamma} 510 #pm 10MeV (Cos#theta_{CM}0-(-0.2))", 10, -180, 180);
-    Phip530CM6 = new GH1("Phip_530MeVCM6", "#phi_{p} Distribution for E_{#gamma} 530 #pm 10MeV (Cos#theta_{CM}0-(-0.2))", 10, -180, 180);
-    Phip550CM6 = new GH1("Phip_550MeVCM6", "#phi_{p} Distribution for E_{#gamma} 550 #pm 10MeV (Cos#theta_{CM}0-(-0.2))", 10, -180, 180);
-    Phip570CM6 = new GH1("Phip_570MeVCM6", "#phi_{p} Distribution for E_{#gamma} 570 #pm 10MeV (Cos#theta_{CM}0-(-0.2))", 10, -180, 180);
-    Phip590CM6 = new GH1("Phip_590MeVCM6", "#phi_{p} Distribution for E_{#gamma} 590 #pm 10MeV (Cos#theta_{CM}0-(-0.2))", 10, -180, 180);
-    Phip610CM6 = new GH1("Phip_610MeVCM6", "#phi_{p} Distribution for E_{#gamma} 610 #pm 10MeV (Cos#theta_{CM}0-(-0.2))", 10, -180, 180);
-
-    // #phi_{p} dists across EGamma bins
-    Phip430CM7 = new GH1("Phip_430MeVCM7", "#phi_{p} Distribution for E_{#gamma} 430 #pm 10MeV (Cos#theta_{CM}-0.2-(-0.4))", 10, -180, 180);
-    Phip450CM7 = new GH1("Phip_450MeVCM7", "#phi_{p} Distribution for E_{#gamma} 450 #pm 10MeV (Cos#theta_{CM}-0.2-(-0.4))", 10, -180, 180);
-    Phip470CM7 = new GH1("Phip_470MeVCM7", "#phi_{p} Distribution for E_{#gamma} 470 #pm 10MeV (Cos#theta_{CM}-0.2-(-0.4))", 10, -180, 180);
-    Phip490CM7 = new GH1("Phip_490MeVCM7", "#phi_{p} Distribution for E_{#gamma} 490 #pm 10MeV (Cos#theta_{CM}-0.2-(-0.4))", 10, -180, 180);
-    Phip510CM7 = new GH1("Phip_510MeVCM7", "#phi_{p} Distribution for E_{#gamma} 510 #pm 10MeV (Cos#theta_{CM}-0.2-(-0.4))", 10, -180, 180);
-    Phip530CM7 = new GH1("Phip_530MeVCM7", "#phi_{p} Distribution for E_{#gamma} 530 #pm 10MeV (Cos#theta_{CM}-0.2-(-0.4))", 10, -180, 180);
-    Phip550CM7 = new GH1("Phip_550MeVCM7", "#phi_{p} Distribution for E_{#gamma} 550 #pm 10MeV (Cos#theta_{CM}-0.2-(-0.4))", 10, -180, 180);
-    Phip570CM7 = new GH1("Phip_570MeVCM7", "#phi_{p} Distribution for E_{#gamma} 570 #pm 10MeV (Cos#theta_{CM}-0.2-(-0.4))", 10, -180, 180);
-    Phip590CM7 = new GH1("Phip_590MeVCM7", "#phi_{p} Distribution for E_{#gamma} 590 #pm 10MeV (Cos#theta_{CM}-0.2-(-0.4))", 10, -180, 180);
-    Phip610CM7 = new GH1("Phip_610MeVCM7", "#phi_{p} Distribution for E_{#gamma} 610 #pm 10MeV (Cos#theta_{CM}-0.2-(-0.4))", 10, -180, 180);
-
-    // #phi_{p} dists across EGamma bins
-    Phip430CM8 = new GH1("Phip_430MeVCM8", "#phi_{p} Distribution for E_{#gamma} 430 #pm 10MeV (Cos#theta_{CM}-0.4-(-0.6))", 10, -180, 180);
-    Phip450CM8 = new GH1("Phip_450MeVCM8", "#phi_{p} Distribution for E_{#gamma} 450 #pm 10MeV (Cos#theta_{CM}-0.4-(-0.6))", 10, -180, 180);
-    Phip470CM8 = new GH1("Phip_470MeVCM8", "#phi_{p} Distribution for E_{#gamma} 470 #pm 10MeV (Cos#theta_{CM}-0.4-(-0.6))", 10, -180, 180);
-    Phip490CM8 = new GH1("Phip_490MeVCM8", "#phi_{p} Distribution for E_{#gamma} 490 #pm 10MeV (Cos#theta_{CM}-0.4-(-0.6))", 10, -180, 180);
-    Phip510CM8 = new GH1("Phip_510MeVCM8", "#phi_{p} Distribution for E_{#gamma} 510 #pm 10MeV (Cos#theta_{CM}-0.4-(-0.6))", 10, -180, 180);
-    Phip530CM8 = new GH1("Phip_530MeVCM8", "#phi_{p} Distribution for E_{#gamma} 530 #pm 10MeV (Cos#theta_{CM}-0.4-(-0.6))", 10, -180, 180);
-    Phip550CM8 = new GH1("Phip_550MeVCM8", "#phi_{p} Distribution for E_{#gamma} 550 #pm 10MeV (Cos#theta_{CM}-0.4-(-0.6))", 10, -180, 180);
-    Phip570CM8 = new GH1("Phip_570MeVCM8", "#phi_{p} Distribution for E_{#gamma} 570 #pm 10MeV (Cos#theta_{CM}-0.4-(-0.6))", 10, -180, 180);
-    Phip590CM8 = new GH1("Phip_590MeVCM8", "#phi_{p} Distribution for E_{#gamma} 590 #pm 10MeV (Cos#theta_{CM}-0.4-(-0.6))", 10, -180, 180);
-    Phip610CM8 = new GH1("Phip_610MeVCM8", "#phi_{p} Distribution for E_{#gamma} 610 #pm 10MeV (Cos#theta_{CM}-0.4-(-0.6))", 10, -180, 180);
-
-    // #phi_{p} dists across EGamma bins
-    Phip430CM9 = new GH1("Phip_430MeVCM9", "#phi_{p} Distribution for E_{#gamma} 430 #pm 10MeV (Cos#theta_{CM}-0.6-(-0.8))", 10, -180, 180);
-    Phip450CM9 = new GH1("Phip_450MeVCM9", "#phi_{p} Distribution for E_{#gamma} 450 #pm 10MeV (Cos#theta_{CM}-0.6-(-0.8))", 10, -180, 180);
-    Phip470CM9 = new GH1("Phip_470MeVCM9", "#phi_{p} Distribution for E_{#gamma} 470 #pm 10MeV (Cos#theta_{CM}-0.6-(-0.8))", 10, -180, 180);
-    Phip490CM9 = new GH1("Phip_490MeVCM9", "#phi_{p} Distribution for E_{#gamma} 490 #pm 10MeV (Cos#theta_{CM}-0.6-(-0.8))", 10, -180, 180);
-    Phip510CM9 = new GH1("Phip_510MeVCM9", "#phi_{p} Distribution for E_{#gamma} 510 #pm 10MeV (Cos#theta_{CM}-0.6-(-0.8))", 10, -180, 180);
-    Phip530CM9 = new GH1("Phip_530MeVCM9", "#phi_{p} Distribution for E_{#gamma} 530 #pm 10MeV (Cos#theta_{CM}-0.6-(-0.8))", 10, -180, 180);
-    Phip550CM9 = new GH1("Phip_550MeVCM9", "#phi_{p} Distribution for E_{#gamma} 550 #pm 10MeV (Cos#theta_{CM}-0.6-(-0.8))", 10, -180, 180);
-    Phip570CM9 = new GH1("Phip_570MeVCM9", "#phi_{p} Distribution for E_{#gamma} 570 #pm 10MeV (Cos#theta_{CM}-0.6-(-0.8))", 10, -180, 180);
-    Phip590CM9 = new GH1("Phip_590MeVCM9", "#phi_{p} Distribution for E_{#gamma} 590 #pm 10MeV (Cos#theta_{CM}-0.6-(-0.8))", 10, -180, 180);
-    Phip610CM9 = new GH1("Phip_610MeVCM9", "#phi_{p} Distribution for E_{#gamma} 610 #pm 10MeV (Cos#theta_{CM}-0.6-(-0.8))", 10, -180, 180);
-
-    // #phi_{p} dists across EGamma bins
-    Phip430CM10 = new GH1("Phip_430MeVCM10", "#phi_{p} Distribution for E_{#gamma} 430 #pm 10MeV (Cos#theta_{CM}-0.8-(-1))", 10, -180, 180);
-    Phip450CM10 = new GH1("Phip_450MeVCM10", "#phi_{p} Distribution for E_{#gamma} 450 #pm 10MeV (Cos#theta_{CM}-0.8-(-1))", 10, -180, 180);
-    Phip470CM10 = new GH1("Phip_470MeVCM10", "#phi_{p} Distribution for E_{#gamma} 470 #pm 10MeV (Cos#theta_{CM}-0.8-(-1))", 10, -180, 180);
-    Phip490CM10 = new GH1("Phip_490MeVCM10", "#phi_{p} Distribution for E_{#gamma} 490 #pm 10MeV (Cos#theta_{CM}-0.8-(-1))", 10, -180, 180);
-    Phip510CM10 = new GH1("Phip_510MeVCM10", "#phi_{p} Distribution for E_{#gamma} 510 #pm 10MeV (Cos#theta_{CM}-0.8-(-1))", 10, -180, 180);
-    Phip530CM10 = new GH1("Phip_530MeVCM10", "#phi_{p} Distribution for E_{#gamma} 530 #pm 10MeV (Cos#theta_{CM}-0.8-(-1))", 10, -180, 180);
-    Phip550CM10 = new GH1("Phip_550MeVCM10", "#phi_{p} Distribution for E_{#gamma} 550 #pm 10MeV (Cos#theta_{CM}-0.8-(-1))", 10, -180, 180);
-    Phip570CM10 = new GH1("Phip_570MeVCM10", "#phi_{p} Distribution for E_{#gamma} 570 #pm 10MeV (Cos#theta_{CM}-0.8-(-1))", 10, -180, 180);
-    Phip590CM10 = new GH1("Phip_590MeVCM10", "#phi_{p} Distribution for E_{#gamma} 590 #pm 10MeV (Cos#theta_{CM}-0.8-(-1))", 10, -180, 180);
-    Phip610CM10 = new GH1("Phip_610MeVCM10", "#phi_{p} Distribution for E_{#gamma} 610 #pm 10MeV (Cos#theta_{CM}-0.8-(-1))", 10, -180, 180);
-}
+    Phip430CM5 = new GH1("Phip_430MeVCM5", "#phi_{p} Distribution for E_{#gamma} 430 #pm 10MeV (Cos#theta_{CM}-0.6-(-1))", 10, -180, 180);
+    Phip450CM5 = new GH1("Phip_450MeVCM5", "#phi_{p} Distribution for E_{#gamma} 450 #pm 10MeV (Cos#theta_{CM}-0.6-(-1))", 10, -180, 180);
+    Phip470CM5 = new GH1("Phip_470MeVCM5", "#phi_{p} Distribution for E_{#gamma} 470 #pm 10MeV (Cos#theta_{CM}-0.6-(-1))", 10, -180, 180);
+    Phip490CM5 = new GH1("Phip_490MeVCM5", "#phi_{p} Distribution for E_{#gamma} 490 #pm 10MeV (Cos#theta_{CM}-0.6-(-1))", 10, -180, 180);
+    Phip510CM5 = new GH1("Phip_510MeVCM5", "#phi_{p} Distribution for E_{#gamma} 510 #pm 10MeV (Cos#theta_{CM}-0.6-(-1))", 10, -180, 180);
+    Phip530CM5 = new GH1("Phip_530MeVCM5", "#phi_{p} Distribution for E_{#gamma} 530 #pm 10MeV (Cos#theta_{CM}-0.6-(-1))", 10, -180, 180);
+    Phip550CM5 = new GH1("Phip_550MeVCM5", "#phi_{p} Distribution for E_{#gamma} 550 #pm 10MeV (Cos#theta_{CM}-0.6-(-1))", 10, -180, 180);
+    Phip570CM5 = new GH1("Phip_570MeVCM5", "#phi_{p} Distribution for E_{#gamma} 570 #pm 10MeV (Cos#theta_{CM}-0.6-(-1))", 10, -180, 180);
+    Phip590CM5 = new GH1("Phip_590MeVCM5", "#phi_{p} Distribution for E_{#gamma} 590 #pm 10MeV (Cos#theta_{CM}-0.6-(-1))", 10, -180, 180);
+    Phip610CM5 = new GH1("Phip_610MeVCM5", "#phi_{p} Distribution for E_{#gamma} 610 #pm 10MeV (Cos#theta_{CM}-0.6-(-1))", 10, -180, 180);}
 
 void PNeutPol_Polarimeter_Lin::FillHists()
 {
@@ -574,6 +519,7 @@ void PNeutPol_Polarimeter_Lin::FillHists()
     MMpEpCorrected->Fill(MMpEpCorr, TaggerTime);
     ZpDist->Fill(Zp, TaggerTime);
     ThetanDist->Fill(Thn, TaggerTime);
+    ThetanCMDist->Fill(ThetanCM, TaggerTime);
 
     E_dE->Fill(EpCorr, dEp, TaggerTime);
     DeutKinPiKin->Fill(ThetanRec-Thn, ThetaPiRecDiff, TaggerTime);
@@ -616,432 +562,233 @@ void PNeutPol_Polarimeter_Lin::FillHists()
 
     if ( 420 < EGamma && EGamma < 440) {
 
-        if(1 > CosThetapCM && CosThetapCM > 0.8 ){
+        if(1 > CosThetapCM && CosThetapCM > 0.6){
             Phip430CM1->Fill(Php, TaggerTime);
         }
 
-        else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
+        else if(0.6 > CosThetapCM && CosThetapCM > 0.2){
             Phip430CM2->Fill(Php, TaggerTime);
         }
 
-        else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
+        else if(0.2 > CosThetapCM && CosThetapCM > -0.2){
             Phip430CM3->Fill(Php, TaggerTime);
         }
 
-        else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
+        else if(-0.2 > CosThetapCM && CosThetapCM > -0.6){
             Phip430CM4->Fill(Php, TaggerTime);
         }
 
-        else if(0.2 > CosThetapCM && CosThetapCM > 0){
+        else if(-0.6 > CosThetapCM && CosThetapCM > -1.0){
             Phip430CM5->Fill(Php, TaggerTime);
-        }
-
-        else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip430CM6->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip430CM7->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip430CM8->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip430CM9->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip430CM10->Fill(Php, TaggerTime);
         }
     }
 
 
     else if ( 440 < EGamma && EGamma < 460) {
 
-        if(1 > CosThetapCM && CosThetapCM > 0.8 ){
+        if(1 > CosThetapCM && CosThetapCM > 0.6 ){
             Phip450CM1->Fill(Php, TaggerTime);
         }
 
-        else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
+        else if(0.6 > CosThetapCM && CosThetapCM > 0.2){
             Phip450CM2->Fill(Php, TaggerTime);
         }
 
-        else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
+        else if(0.2 > CosThetapCM && CosThetapCM > -0.2){
             Phip450CM3->Fill(Php, TaggerTime);
         }
 
-        else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
+        else if(-0.2 > CosThetapCM && CosThetapCM > -0.6){
             Phip450CM4->Fill(Php, TaggerTime);
         }
 
-        else if(0.2 > CosThetapCM && CosThetapCM > 0){
+        else if(-0.6 > CosThetapCM && CosThetapCM > -1.0){
             Phip450CM5->Fill(Php, TaggerTime);
-        }
-
-        else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip450CM6->Fill(Php, TaggerTime);
-        }
-        else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip450CM7->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip450CM8->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip450CM9->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip450CM10->Fill(Php, TaggerTime);
         }
     }
 
     else if ( 460 < EGamma && EGamma < 480) {
 
-        if(1 > CosThetapCM && CosThetapCM > 0.8 ){
+        if(1 > CosThetapCM && CosThetapCM > 0.6 ){
             Phip470CM1->Fill(Php, TaggerTime);
         }
 
-        else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
+        else if(0.6 > CosThetapCM && CosThetapCM > 0.2){
             Phip470CM2->Fill(Php, TaggerTime);
         }
 
-        else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
+        else if(0.2 > CosThetapCM && CosThetapCM > -0.2){
             Phip470CM3->Fill(Php, TaggerTime);
         }
 
-        else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
+        else if(-0.2 > CosThetapCM && CosThetapCM > -0.6){
             Phip470CM4->Fill(Php, TaggerTime);
         }
 
-        else if(0.2 > CosThetapCM && CosThetapCM > 0){
+        else if(-0.6 > CosThetapCM && CosThetapCM > -1.0){
             Phip470CM5->Fill(Php, TaggerTime);
-        }
-
-        else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip470CM6->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip470CM7->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip470CM8->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip470CM9->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip470CM10->Fill(Php, TaggerTime);
         }
     }
 
     else if ( 480 < EGamma && EGamma < 500) {
 
-        if(1 > CosThetapCM && CosThetapCM > 0.8 ){
+        if(1 > CosThetapCM && CosThetapCM > 0.6 ){
             Phip490CM1->Fill(Php, TaggerTime);
         }
 
-        else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
+        else if(0.6 > CosThetapCM && CosThetapCM > 0.2){
             Phip490CM2->Fill(Php, TaggerTime);
         }
 
-        else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
+        else if(0.2 > CosThetapCM && CosThetapCM > -0.2){
             Phip490CM3->Fill(Php, TaggerTime);
         }
 
-        else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
+        else if(-0.2 > CosThetapCM && CosThetapCM > -0.6){
             Phip490CM4->Fill(Php, TaggerTime);
         }
 
-        else if(0.2 > CosThetapCM && CosThetapCM > 0){
+        else if(-0.6 > CosThetapCM && CosThetapCM > -1.0){
             Phip490CM5->Fill(Php, TaggerTime);
-        }
-
-        else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip490CM6->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip490CM7->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip490CM8->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip490CM9->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip490CM10->Fill(Php, TaggerTime);
         }
     }
 
     else if ( 500 < EGamma && EGamma < 520) {
 
-        if(1 > CosThetapCM && CosThetapCM > 0.8 ){
+        if(1 > CosThetapCM && CosThetapCM > 0.6 ){
             Phip510CM1->Fill(Php, TaggerTime);
         }
 
-        else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
+        else if(0.6 > CosThetapCM && CosThetapCM > 0.2){
             Phip510CM2->Fill(Php, TaggerTime);
         }
 
-        else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
+        else if(0.2 > CosThetapCM && CosThetapCM > -0.2){
             Phip510CM3->Fill(Php, TaggerTime);
         }
 
-        else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
+        else if(-0.2 > CosThetapCM && CosThetapCM > -0.6){
             Phip510CM4->Fill(Php, TaggerTime);
         }
 
-        else if(0.2 > CosThetapCM && CosThetapCM > 0){
+        else if(-0.6 > CosThetapCM && CosThetapCM > -1.0){
             Phip510CM5->Fill(Php, TaggerTime);
-        }
-
-        else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip510CM6->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip510CM7->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip510CM8->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip510CM9->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip510CM10->Fill(Php, TaggerTime);
         }
     }
 
     else if ( 520 < EGamma && EGamma < 540) {
 
-        if(1 > CosThetapCM && CosThetapCM > 0.8 ){
+        if(1 > CosThetapCM && CosThetapCM > 0.6 ){
             Phip530CM1->Fill(Php, TaggerTime);
         }
 
-        else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
+        else if(0.6 > CosThetapCM && CosThetapCM > 0.2){
             Phip530CM2->Fill(Php, TaggerTime);
         }
 
-        else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
+        else if(0.2 > CosThetapCM && CosThetapCM > -0.2){
             Phip530CM3->Fill(Php, TaggerTime);
         }
 
-        else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
+        else if(-0.2 > CosThetapCM && CosThetapCM > -0.6){
             Phip530CM4->Fill(Php, TaggerTime);
         }
 
-        else if(0.2 > CosThetapCM && CosThetapCM > 0){
+        else if(-0.6 > CosThetapCM && CosThetapCM > -1.0){
             Phip530CM5->Fill(Php, TaggerTime);
-        }
-
-        else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip530CM6->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip530CM7->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip530CM8->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip530CM9->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip530CM10->Fill(Php, TaggerTime);
         }
     }
 
     else if ( 540 < EGamma && EGamma < 560) {
 
-        if(1 > CosThetapCM && CosThetapCM > 0.8 ){
+        if(1 > CosThetapCM && CosThetapCM > 0.6 ){
             Phip550CM1->Fill(Php, TaggerTime);
         }
 
-        else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
+        else if(0.6 > CosThetapCM && CosThetapCM > 0.2){
             Phip550CM2->Fill(Php, TaggerTime);
         }
 
-        else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
+        else if(0.2 > CosThetapCM && CosThetapCM > -0.2){
             Phip550CM3->Fill(Php, TaggerTime);
         }
 
-        else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
+        else if(-0.2 > CosThetapCM && CosThetapCM > -0.6){
             Phip550CM4->Fill(Php, TaggerTime);
         }
 
-        else if(0.2 > CosThetapCM && CosThetapCM > 0){
+        else if(-0.6 > CosThetapCM && CosThetapCM > -1.0){
             Phip550CM5->Fill(Php, TaggerTime);
-        }
-
-        else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip550CM6->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip550CM7->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip550CM8->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip550CM9->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip550CM10->Fill(Php, TaggerTime);
         }
     }
 
 
     else if ( 560 < EGamma && EGamma < 580) {
 
-        if(1 > CosThetapCM && CosThetapCM > 0.8 ){
+        if(1 > CosThetapCM && CosThetapCM > 0.6 ){
             Phip570CM1->Fill(Php, TaggerTime);
         }
 
-        else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
+        else if(0.6 > CosThetapCM && CosThetapCM > 0.2){
             Phip570CM2->Fill(Php, TaggerTime);
         }
 
-        else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
+        else if(0.2 > CosThetapCM && CosThetapCM > -0.2){
             Phip570CM3->Fill(Php, TaggerTime);
         }
 
-        else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
+        else if(-0.2 > CosThetapCM && CosThetapCM > -0.6){
             Phip570CM4->Fill(Php, TaggerTime);
         }
 
-        else if(0.2 > CosThetapCM && CosThetapCM > 0){
+        else if(-0.6 > CosThetapCM && CosThetapCM > -1.0){
             Phip570CM5->Fill(Php, TaggerTime);
-        }
-
-        else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip570CM6->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip570CM7->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip570CM8->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip570CM9->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip570CM10->Fill(Php, TaggerTime);
         }
     }
 
     else if ( 580 < EGamma && EGamma < 600) {
 
-        if(1 > CosThetapCM && CosThetapCM > 0.8 ){
+        if(1 > CosThetapCM && CosThetapCM > 0.6 ){
             Phip590CM1->Fill(Php, TaggerTime);
         }
 
-        else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
+        else if(0.6 > CosThetapCM && CosThetapCM > 0.2){
             Phip590CM2->Fill(Php, TaggerTime);
         }
 
-        else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
+        else if(0.2 > CosThetapCM && CosThetapCM > -0.2){
             Phip590CM3->Fill(Php, TaggerTime);
         }
 
-        else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
+        else if(-0.2 > CosThetapCM && CosThetapCM > -0.6){
             Phip590CM4->Fill(Php, TaggerTime);
         }
 
-        else if(0.2 > CosThetapCM && CosThetapCM > 0){
+        else if(-0.6 > CosThetapCM && CosThetapCM > -1.0){
             Phip590CM5->Fill(Php, TaggerTime);
-        }
-
-        else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip590CM6->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip590CM7->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip590CM8->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip590CM9->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip590CM10->Fill(Php, TaggerTime);
         }
     }
 
     else if ( 600 < EGamma && EGamma < 620) {
 
-        if(1 > CosThetapCM && CosThetapCM > 0.8 ){
+        if(1 > CosThetapCM && CosThetapCM > 0.6 ){
             Phip610CM1->Fill(Php, TaggerTime);
         }
 
-        else if(0.8 > CosThetapCM && CosThetapCM > 0.6){
+        else if(0.6 > CosThetapCM && CosThetapCM > 0.2){
             Phip610CM2->Fill(Php, TaggerTime);
         }
 
-        else if(0.6 > CosThetapCM && CosThetapCM > 0.4){
+        else if(0.2 > CosThetapCM && CosThetapCM > -0.2){
             Phip610CM3->Fill(Php, TaggerTime);
         }
 
-        else if(0.4 > CosThetapCM && CosThetapCM > 0.2){
+        else if(-0.2 > CosThetapCM && CosThetapCM > -0.6){
             Phip610CM4->Fill(Php, TaggerTime);
         }
 
-        else if(0.2 > CosThetapCM && CosThetapCM > 0){
+        else if(-0.6 > CosThetapCM && CosThetapCM > -1.0){
             Phip610CM5->Fill(Php, TaggerTime);
-        }
-
-        else if(0 > CosThetapCM && CosThetapCM > -0.2){
-            Phip610CM6->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.2 > CosThetapCM && CosThetapCM > -0.4){
-            Phip610CM7->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.4 > CosThetapCM && CosThetapCM > -0.6){
-            Phip610CM8->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.6> CosThetapCM && CosThetapCM > -0.8){
-            Phip610CM9->Fill(Php, TaggerTime);
-        }
-
-        else if(-0.8> CosThetapCM && CosThetapCM > -1){
-            Phip610CM10->Fill(Php, TaggerTime);
         }
     }
 }

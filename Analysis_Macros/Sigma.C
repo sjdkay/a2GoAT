@@ -11,14 +11,14 @@ Double_t legendre(Double_t *x,Double_t *par)
 void Sigma(){
     TFile *MBData = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sig_res_St.root");
 
-    TFile *f1= TFile::Open("/scratch/Mainz_Software/a2GoAT/ParaPerpAsymm_Total_18.root");
+    TFile *f1= TFile::Open("/scratch/Mainz_Software/a2GoAT/ParaPerpAsymm_Total_20.root");
     TTree *t1 = (TTree*)f1->Get("Parameter_Values");
     TF1 *LegendreFunc = new TF1("LegendreFit",  legendre, -1, 1, 7); //Give a name and range to the fitting funcion
 
-    Double_t pValues430[10], pValues450[10], pValues470[10], pValues490[10], pValues510[10], pValues530[10], pValues550[10], pValues570[10],, pValues590[10], pValues610[10];
-    Double_t pErrValues430[10], pErrValues450[10], pErrValues470[10],pErrValues490[10], pErrValues510[10], pErrValues530[10], pErrValues550[10], pErrValues570[10], pErrValues580[10], pErrValues590[10], pErrValues610[10];
-    Double_t pSigmaValues430[10], pSigmaValues450[10], pSigmaValues470[10],, pSigmaValues490[10], pSigmaValues510[10], pSigmaValues530[10], pSigmaValues550[10], pSigmaValues570[10], pSigmaValues590[10], pSigmaValues610[10];
-    Double_t pSigmaErrValues430[10], pSigmaErrValues450[10], pSigmaErrValues470[10], pSigmaErrValues490[10], pSigmaErrValues510[10], pSigmaErrValues530[10], pSigmaErrValues550[10], pSigmaErrValues570[10], pSigmaErrValues590[10], pSigmaErrValues610[10];;
+    Double_t pValues430[5], pValues450[5], pValues470[5], pValues490[5], pValues510[5], pValues530[5], pValues550[5], pValues570[5],, pValues590[5], pValues610[5];
+    Double_t pErrValues430[5], pErrValues450[5], pErrValues470[5],pErrValues490[5], pErrValues510[5], pErrValues530[5], pErrValues550[5], pErrValues570[5], pErrValues580[5], pErrValues590[5], pErrValues610[5];
+    Double_t pSigmaValues430[5], pSigmaValues450[5], pSigmaValues470[5],, pSigmaValues490[5], pSigmaValues510[5], pSigmaValues530[5], pSigmaValues550[5], pSigmaValues570[5], pSigmaValues590[5], pSigmaValues610[5];
+    Double_t pSigmaErrValues430[5], pSigmaErrValues450[5], pSigmaErrValues470[5], pSigmaErrValues490[5], pSigmaErrValues510[5], pSigmaErrValues530[5], pSigmaErrValues550[5], pSigmaErrValues570[5], pSigmaErrValues590[5], pSigmaErrValues610[5];;
 
     Double_t pCosAmp430, pCosAmpErr430;
     Double_t pCosAmp450, pCosAmpErr450;
@@ -54,7 +54,7 @@ void Sigma(){
     t1->SetBranchAddress("pCosAmpErr610", &pCosAmpErr610);
 
     // Load values from tree and asign values back into an array
-    for (Int_t k = 0; k < 10; k++){
+    for (Int_t k = 0; k < 5; k++){
         Parameter_Values->GetEntry(k);
         pValues430[k] = pCosAmp430;
         pErrValues430[k] = pCosAmpErr430;
@@ -81,7 +81,7 @@ void Sigma(){
     TFile *f2= TFile::Open("/scratch/Mainz_Software/a2GoAT/LinPol_Aug16.root"); // Open linear polarisation plot
 
     // Calculate values of sigma for each angular and energy bin
-    for (Int_t i = 0; i < 10; i++){
+    for (Int_t i = 0; i < 5; i++){
 
         pSigmaValues430[i] = pValues430[i]/(Graph->Eval(430,0));
         pSigmaErrValues430[i] = pErrValues430[i]/(Graph->Eval(430,0));
@@ -106,14 +106,14 @@ void Sigma(){
 
     }
 
-    TFile f3("Sigma_Plots_19.root", "RECREATE");
+    TFile f3("Sigma_Plots_20.root", "RECREATE");
 
     Float_t xMin = -1;
     Float_t xMax = 1;
     Float_t yMin = -5;
     Float_t yMax = 5;
-    Double_t x[10] = {0.9, 0.7, 0.5, 0.3, 0.1, -0.1, -0.3, -0.5, -0.7, -0.9}; // Need to adjust
-    Double_t ex[10] = {0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1}; // Need to adjust
+    Double_t x[5] = {0.8, 0.4, 0.0, -0.4, -0.8};
+    Double_t ex[5] = {0.2, 0.2, 0.2, 0.2, 0.2};
 
     TCanvas *canvas1 = new TCanvas("canvas1","canvas1", 1920, 1080);
     TPad *pad1 = new TPad("pad1","",0,0,1,1);
@@ -128,7 +128,7 @@ void Sigma(){
     hr1 = canvas1->DrawFrame(xMin,-1 ,xMax, 1 );
     hr1->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 430 #pm 10 MeV)");
 
-    gr1 = new TGraphErrors(10, x, pSigmaValues430 , ex, pSigmaErrValues430);
+    gr1 = new TGraphErrors(5, x, pSigmaValues430 , ex, pSigmaErrValues430);
     gr1->Fit("LegendreFit");
     gr1->SetMarkerColor(2);
     gr1->SetLineColor(2);
@@ -153,7 +153,7 @@ void Sigma(){
     hr2 = canvas2->DrawFrame(xMin,-1,xMax,1);
     hr2->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 450 #pm 10 MeV)");
 
-    gr2 = new TGraphErrors(10, x, pSigmaValues450 , ex, pSigmaErrValues450);
+    gr2 = new TGraphErrors(5, x, pSigmaValues450 , ex, pSigmaErrValues450);
     gr2->Fit("LegendreFit");
     gr2->SetMarkerColor(2);
     gr2->SetLineColor(2);
@@ -178,7 +178,7 @@ void Sigma(){
     hr3 = canvas3->DrawFrame(xMin,-1,xMax,1);
     hr3->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 470 #pm 10 MeV)");
 
-    gr3 = new TGraphErrors(10, x, pSigmaValues470, ex, pSigmaErrValues470);
+    gr3 = new TGraphErrors(5, x, pSigmaValues470, ex, pSigmaErrValues470);
     gr3->Fit("LegendreFit");
     gr3->SetMarkerColor(2);
     gr3->SetLineColor(2);
@@ -204,7 +204,7 @@ void Sigma(){
     hr4 = canvas4->DrawFrame(xMin,-1,xMax,1);
     hr4->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 490 #pm 10 MeV)");
 
-    gr4 = new TGraphErrors(10, x, pSigmaValues490, ex, pSigmaErrValues490);
+    gr4 = new TGraphErrors(5, x, pSigmaValues490, ex, pSigmaErrValues490);
     gr4->Fit("LegendreFit");
     gr4->SetMarkerColor(2);
     gr4->SetLineColor(2);
@@ -229,7 +229,7 @@ void Sigma(){
     hr5 = canvas5->DrawFrame(xMin,-1,xMax,1);
     hr5->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 510 #pm 10 MeV)");
 
-    gr5 = new TGraphErrors(10, x, pSigmaValues510, ex, pSigmaErrValues510);
+    gr5 = new TGraphErrors(5, x, pSigmaValues510, ex, pSigmaErrValues510);
     gr5->Fit("LegendreFit");
     gr5->SetMarkerColor(2);
     gr5->SetLineColor(2);
@@ -254,7 +254,7 @@ void Sigma(){
     hr6 = canvas6->DrawFrame(xMin,-1,xMax,1);
     hr6->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 530 #pm 10 MeV)");
 
-    gr6 = new TGraphErrors(10, x, pSigmaValues530, ex, pSigmaErrValues530);
+    gr6 = new TGraphErrors(5, x, pSigmaValues530, ex, pSigmaErrValues530);
     gr6->Fit("LegendreFit");
     gr6->SetMarkerColor(2);
     gr6->SetLineColor(2);
@@ -279,7 +279,7 @@ void Sigma(){
     hr7 = canvas7->DrawFrame(xMin,-1,xMax,1);
     hr7->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 550 #pm 10 MeV)");
 
-    gr7 = new TGraphErrors(10, x, pSigmaValues550, ex, pSigmaErrValues550);
+    gr7 = new TGraphErrors(5, x, pSigmaValues550, ex, pSigmaErrValues550);
     gr7->Fit("LegendreFit");
     gr7->SetMarkerColor(2);
     gr7->SetLineColor(2);
@@ -304,7 +304,7 @@ void Sigma(){
     hr8 = canvas8->DrawFrame(xMin,-1,xMax,1);
     hr8->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 570 #pm 10 MeV)");
 
-    gr8 = new TGraphErrors(10, x, pSigmaValues570, ex, pSigmaErrValues570);
+    gr8 = new TGraphErrors(5, x, pSigmaValues570, ex, pSigmaErrValues570);
     gr8->Fit("LegendreFit");
     gr8->SetMarkerColor(2);
     gr8->SetLineColor(2);
@@ -329,7 +329,7 @@ void Sigma(){
     hr9 = canvas9->DrawFrame(xMin,-1,xMax,1);
     hr9->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 590 #pm 10 MeV)");
 
-    gr9 = new TGraphErrors(10, x, pSigmaValues590, ex, pSigmaErrValues590);
+    gr9 = new TGraphErrors(5, x, pSigmaValues590, ex, pSigmaErrValues590);
     gr9->Fit("LegendreFit");
     gr9->SetMarkerColor(2);
     gr9->SetLineColor(2);
@@ -354,7 +354,7 @@ void Sigma(){
     hr10 = canvas10->DrawFrame(xMin,-1,xMax,1);
     hr10->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 610 #pm 10 MeV)");
 
-    gr10 = new TGraphErrors(10, x, pSigmaValues610, ex, pSigmaErrValues610);
+    gr10 = new TGraphErrors(5, x, pSigmaValues610, ex, pSigmaErrValues610);
     gr10->Fit("LegendreFit");
     gr10->SetMarkerColor(2);
     gr10->SetLineColor(2);

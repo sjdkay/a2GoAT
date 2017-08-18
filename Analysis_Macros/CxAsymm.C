@@ -62,7 +62,7 @@ void CxAsymm(){
     AsymmFunc->SetParameter(0, 0);
     TF1 *SinFunc = new TF1("SinFit", "[0]*sin(x*TMath::DegToRad())", -130, 130);
     SinFunc->SetParNames("InitialSinAmp");
-    TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Amo/Physics_Total_59_20_7_17.root"); // Open the latest PTotal file to load histograms from
+    TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Amo/Physics_Total_65_27_7_17.root"); // Open the latest PTotal file to load histograms from
 
     ///////////////////////////////////////////
     //////////////////  CM1  //////////////////
@@ -71,14 +71,14 @@ void CxAsymm(){
     PhiSc335AsymmCM1 = Phi_Scattered_335MeV_NegHelCM1->GetAsymmetry(Phi_Scattered_335MeV_PosHelCM1);
     PhiSc335AsymmCM1->SetName("PhiSc335AsymmCM1");
     PhiSc335AsymmCM1->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 300-370MeV (Cos #theta_{CM} 1-0.75)");
-    PhiSc335AsymmCM1->Fit("SinFit");
+    PhiSc335AsymmCM1->Fit("SinFit", "Q");
     InitialSinAmp[0][0] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[0][0] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc335AsymmCM1->Fit("AsymmFit");
+    PhiSc335AsymmCM1->Fit("AsymmFit", "Q");
     SinAmp[0][0] = AsymmFit->GetParameter(0);
     SinAmpErr[0][0] = AsymmFit->GetParError(0);
     CosAmp[0][0] = AsymmFit->GetParameter(1);
@@ -87,14 +87,14 @@ void CxAsymm(){
     PhiSc405AsymmCM1 = Phi_Scattered_405MeV_NegHelCM1->GetAsymmetry(Phi_Scattered_405MeV_PosHelCM1);
     PhiSc405AsymmCM1->SetName("PhiSc405AsymmCM1");
     PhiSc405AsymmCM1->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 370-440MeV (Cos #theta_{CM} 1-0.75)");
-    PhiSc405AsymmCM1->Fit("SinFit");
+    PhiSc405AsymmCM1->Fit("SinFit", "Q");
     InitialSinAmp[0][1] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[0][1] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc405AsymmCM1->Fit("AsymmFit");
+    PhiSc405AsymmCM1->Fit("AsymmFit", "Q");
     SinAmp[0][1] = AsymmFit->GetParameter(0);
     SinAmpErr[0][1] = AsymmFit->GetParError(0);
     CosAmp[0][1] = AsymmFit->GetParameter(1);
@@ -103,14 +103,14 @@ void CxAsymm(){
     PhiSc475AsymmCM1 = Phi_Scattered_475MeV_NegHelCM1->GetAsymmetry(Phi_Scattered_475MeV_PosHelCM1);
     PhiSc475AsymmCM1->SetName("PhiSc475AsymmCM1");
     PhiSc475AsymmCM1->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 440-510MeV (Cos #theta_{CM} 1-0.75)");
-    PhiSc475AsymmCM1->Fit("SinFit");
+    PhiSc475AsymmCM1->Fit("SinFit", "Q");
     InitialSinAmp[0][2] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[0][2] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc475AsymmCM1->Fit("AsymmFit");
+    PhiSc475AsymmCM1->Fit("AsymmFit", "Q");
     SinAmp[0][2] = AsymmFit->GetParameter(0);
     SinAmpErr[0][2] = AsymmFit->GetParError(0);
     CosAmp[0][2] = AsymmFit->GetParameter(1);
@@ -119,14 +119,14 @@ void CxAsymm(){
     PhiSc545AsymmCM1 = Phi_Scattered_545MeV_NegHelCM1->GetAsymmetry(Phi_Scattered_545MeV_PosHelCM1);
     PhiSc545AsymmCM1->SetName("PhiSc545AsymmCM1");
     PhiSc545AsymmCM1->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 510-580MeV (Cos #theta_{CM} 1-0.75)");
-    PhiSc545AsymmCM1->Fit("SinFit");
+    PhiSc545AsymmCM1->Fit("SinFit", "Q");
     InitialSinAmp[0][3] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[0][3] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc545AsymmCM1->Fit("AsymmFit");
+    PhiSc545AsymmCM1->Fit("AsymmFit", "Q");
     SinAmp[0][3] = AsymmFit->GetParameter(0);
     SinAmpErr[0][3] = AsymmFit->GetParError(0);
     CosAmp[0][3] = AsymmFit->GetParameter(1);
@@ -135,14 +135,14 @@ void CxAsymm(){
     PhiSc615AsymmCM1 = Phi_Scattered_615MeV_NegHelCM1->GetAsymmetry(Phi_Scattered_615MeV_PosHelCM1);
     PhiSc615AsymmCM1->SetName("PhiSc615AsymmCM1");
     PhiSc615AsymmCM1->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 580-650MeV (Cos #theta_{CM} 1-0.75)");
-    PhiSc615AsymmCM1->Fit("SinFit");
+    PhiSc615AsymmCM1->Fit("SinFit", "Q");
     InitialSinAmp[0][4] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[0][4] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc615AsymmCM1->Fit("AsymmFit");
+    PhiSc615AsymmCM1->Fit("AsymmFit", "Q");
     SinAmp[0][4] = AsymmFit->GetParameter(0);
     SinAmpErr[0][4] = AsymmFit->GetParError(0);
     CosAmp[0][4] = AsymmFit->GetParameter(1);
@@ -151,14 +151,14 @@ void CxAsymm(){
     PhiSc685AsymmCM1 = Phi_Scattered_685MeV_NegHelCM1->GetAsymmetry(Phi_Scattered_685MeV_PosHelCM1);
     PhiSc685AsymmCM1->SetName("PhiSc685AsymmCM1");
     PhiSc685AsymmCM1->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 650-720MeV (Cos #theta_{CM} 1-0.75)");
-    PhiSc685AsymmCM1->Fit("SinFit");
+    PhiSc685AsymmCM1->Fit("SinFit", "Q");
     InitialSinAmp[0][5] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[0][5] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc685AsymmCM1->Fit("AsymmFit");
+    PhiSc685AsymmCM1->Fit("AsymmFit", "Q");
     SinAmp[0][5] = AsymmFit->GetParameter(0);
     SinAmpErr[0][5] = AsymmFit->GetParError(0);
     CosAmp[0][5] = AsymmFit->GetParameter(1);
@@ -171,14 +171,14 @@ void CxAsymm(){
     PhiSc335AsymmCM2 = Phi_Scattered_335MeV_NegHelCM2->GetAsymmetry(Phi_Scattered_335MeV_PosHelCM2);
     PhiSc335AsymmCM2->SetName("PhiSc335AsymmCM2");
     PhiSc335AsymmCM2->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 300-370MeV (Cos #theta_{CM} 0.75-0.5)");
-    PhiSc335AsymmCM2->Fit("SinFit");
+    PhiSc335AsymmCM2->Fit("SinFit", "Q");
     InitialSinAmp[1][0] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[1][0] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc335AsymmCM2->Fit("AsymmFit");
+    PhiSc335AsymmCM2->Fit("AsymmFit", "Q");
     SinAmp[1][0] = AsymmFit->GetParameter(0);
     SinAmpErr[1][0] = AsymmFit->GetParError(0);
     CosAmp[1][0] = AsymmFit->GetParameter(1);
@@ -187,14 +187,14 @@ void CxAsymm(){
     PhiSc405AsymmCM2 = Phi_Scattered_405MeV_NegHelCM2->GetAsymmetry(Phi_Scattered_405MeV_PosHelCM2);
     PhiSc405AsymmCM2->SetName("PhiSc405AsymmCM2");
     PhiSc405AsymmCM2->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 370-440MeV (Cos #theta_{CM} 0.75-0.5)");
-    PhiSc405AsymmCM2->Fit("SinFit");
+    PhiSc405AsymmCM2->Fit("SinFit", "Q");
     InitialSinAmp[1][1] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[1][1] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc405AsymmCM2->Fit("AsymmFit");
+    PhiSc405AsymmCM2->Fit("AsymmFit", "Q");
     SinAmp[1][1] = AsymmFit->GetParameter(0);
     SinAmpErr[1][1] = AsymmFit->GetParError(0);
     CosAmp[1][1] = AsymmFit->GetParameter(1);
@@ -203,14 +203,14 @@ void CxAsymm(){
     PhiSc475AsymmCM2 = Phi_Scattered_475MeV_NegHelCM2->GetAsymmetry(Phi_Scattered_475MeV_PosHelCM2);
     PhiSc475AsymmCM2->SetName("PhiSc475AsymmCM2");
     PhiSc475AsymmCM2->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 440-510MeV (Cos #theta_{CM} 0.75-0.5)");
-    PhiSc475AsymmCM2->Fit("SinFit");
+    PhiSc475AsymmCM2->Fit("SinFit", "Q");
     InitialSinAmp[1][2] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[1][2] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc475AsymmCM2->Fit("AsymmFit");
+    PhiSc475AsymmCM2->Fit("AsymmFit", "Q");
     SinAmp[1][2] = AsymmFit->GetParameter(0);
     SinAmpErr[1][2] = AsymmFit->GetParError(0);
     CosAmp[1][2] = AsymmFit->GetParameter(1);
@@ -219,14 +219,14 @@ void CxAsymm(){
     PhiSc545AsymmCM2 = Phi_Scattered_545MeV_NegHelCM2->GetAsymmetry(Phi_Scattered_545MeV_PosHelCM2);
     PhiSc545AsymmCM2->SetName("PhiSc545AsymmCM2");
     PhiSc545AsymmCM2->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 510-580MeV (Cos #theta_{CM} 0.75-0.5)");
-    PhiSc545AsymmCM2->Fit("SinFit");
+    PhiSc545AsymmCM2->Fit("SinFit", "Q");
     InitialSinAmp[1][3] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[1][3] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc545AsymmCM2->Fit("AsymmFit");
+    PhiSc545AsymmCM2->Fit("AsymmFit", "Q");
     SinAmp[1][3] = AsymmFit->GetParameter(0);
     SinAmpErr[1][3] = AsymmFit->GetParError(0);
     CosAmp[1][3] = AsymmFit->GetParameter(1);
@@ -235,14 +235,14 @@ void CxAsymm(){
     PhiSc615AsymmCM2 = Phi_Scattered_615MeV_NegHelCM2->GetAsymmetry(Phi_Scattered_615MeV_PosHelCM2);
     PhiSc615AsymmCM2->SetName("PhiSc615AsymmCM2");
     PhiSc615AsymmCM2->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 580-650MeV (Cos #theta_{CM} 0.75-0.5)");
-    PhiSc615AsymmCM2->Fit("SinFit");
+    PhiSc615AsymmCM2->Fit("SinFit", "Q");
     InitialSinAmp[1][4] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[1][4] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc615AsymmCM2->Fit("AsymmFit");
+    PhiSc615AsymmCM2->Fit("AsymmFit", "Q");
     SinAmp[1][4] = AsymmFit->GetParameter(0);
     SinAmpErr[1][4] = AsymmFit->GetParError(0);
     CosAmp[1][4] = AsymmFit->GetParameter(1);
@@ -251,14 +251,14 @@ void CxAsymm(){
     PhiSc685AsymmCM2 = Phi_Scattered_685MeV_NegHelCM2->GetAsymmetry(Phi_Scattered_685MeV_PosHelCM2);
     PhiSc685AsymmCM2->SetName("PhiSc685AsymmCM2");
     PhiSc685AsymmCM2->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 650-720MeV (Cos #theta_{CM} 0.75-0.5)");
-    PhiSc685AsymmCM2->Fit("SinFit");
+    PhiSc685AsymmCM2->Fit("SinFit", "Q");
     InitialSinAmp[1][5] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[1][5] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc685AsymmCM2->Fit("AsymmFit");
+    PhiSc685AsymmCM2->Fit("AsymmFit", "Q");
     SinAmp[1][5] = AsymmFit->GetParameter(0);
     SinAmpErr[1][5] = AsymmFit->GetParError(0);
     CosAmp[1][5] = AsymmFit->GetParameter(1);
@@ -271,14 +271,14 @@ void CxAsymm(){
     PhiSc335AsymmCM3 = Phi_Scattered_335MeV_NegHelCM3->GetAsymmetry(Phi_Scattered_335MeV_PosHelCM3);
     PhiSc335AsymmCM3->SetName("PhiSc335AsymmCM3");
     PhiSc335AsymmCM3->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 300-370MeV (Cos #theta_{CM} 0.5-0.25)");
-    PhiSc335AsymmCM3->Fit("SinFit");
+    PhiSc335AsymmCM3->Fit("SinFit", "Q");
     InitialSinAmp[2][0] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[2][0] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc335AsymmCM3->Fit("AsymmFit");
+    PhiSc335AsymmCM3->Fit("AsymmFit", "Q");
     SinAmp[2][0] = AsymmFit->GetParameter(0);
     SinAmpErr[2][0] = AsymmFit->GetParError(0);
     CosAmp[2][0] = AsymmFit->GetParameter(1);
@@ -287,14 +287,14 @@ void CxAsymm(){
     PhiSc405AsymmCM3 = Phi_Scattered_405MeV_NegHelCM3->GetAsymmetry(Phi_Scattered_405MeV_PosHelCM3);
     PhiSc405AsymmCM3->SetName("PhiSc405AsymmCM3");
     PhiSc405AsymmCM3->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 370-440MeV (Cos #theta_{CM} 0.5-0.25)");
-    PhiSc405AsymmCM3->Fit("SinFit");
+    PhiSc405AsymmCM3->Fit("SinFit", "Q");
     InitialSinAmp[2][1] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[2][1] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc405AsymmCM3->Fit("AsymmFit");
+    PhiSc405AsymmCM3->Fit("AsymmFit", "Q");
     SinAmp[2][1] = AsymmFit->GetParameter(0);
     SinAmpErr[2][1] = AsymmFit->GetParError(0);
     CosAmp[2][1] = AsymmFit->GetParameter(1);
@@ -303,14 +303,14 @@ void CxAsymm(){
     PhiSc475AsymmCM3 = Phi_Scattered_475MeV_NegHelCM3->GetAsymmetry(Phi_Scattered_475MeV_PosHelCM3);
     PhiSc475AsymmCM3->SetName("PhiSc475AsymmCM3");
     PhiSc475AsymmCM3->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 440-510MeV (Cos #theta_{CM} 0.5-0.25)");
-    PhiSc475AsymmCM3->Fit("SinFit");
+    PhiSc475AsymmCM3->Fit("SinFit", "Q");
     InitialSinAmp[2][2] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[2][2] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc475AsymmCM3->Fit("AsymmFit");
+    PhiSc475AsymmCM3->Fit("AsymmFit", "Q");
     SinAmp[2][2] = AsymmFit->GetParameter(0);
     SinAmpErr[2][2] = AsymmFit->GetParError(0);
     CosAmp[2][2] = AsymmFit->GetParameter(1);
@@ -319,14 +319,14 @@ void CxAsymm(){
     PhiSc545AsymmCM3 = Phi_Scattered_545MeV_NegHelCM3->GetAsymmetry(Phi_Scattered_545MeV_PosHelCM3);
     PhiSc545AsymmCM3->SetName("PhiSc545AsymmCM3");
     PhiSc545AsymmCM3->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 510-580MeV (Cos #theta_{CM} 0.5-0.25)");
-    PhiSc545AsymmCM3->Fit("SinFit");
+    PhiSc545AsymmCM3->Fit("SinFit", "Q");
     InitialSinAmp[2][3] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[2][3] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc545AsymmCM3->Fit("AsymmFit");
+    PhiSc545AsymmCM3->Fit("AsymmFit", "Q");
     SinAmp[2][3] = AsymmFit->GetParameter(0);
     SinAmpErr[2][3] = AsymmFit->GetParError(0);
     CosAmp[2][3] = AsymmFit->GetParameter(1);
@@ -335,14 +335,14 @@ void CxAsymm(){
     PhiSc615AsymmCM3 = Phi_Scattered_615MeV_NegHelCM3->GetAsymmetry(Phi_Scattered_615MeV_PosHelCM3);
     PhiSc615AsymmCM3->SetName("PhiSc615AsymmCM3");
     PhiSc615AsymmCM3->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 580-650MeV (Cos #theta_{CM} 0.5-0.25)");
-    PhiSc615AsymmCM3->Fit("SinFit");
+    PhiSc615AsymmCM3->Fit("SinFit", "Q");
     InitialSinAmp[2][4] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[2][4] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc615AsymmCM3->Fit("AsymmFit");
+    PhiSc615AsymmCM3->Fit("AsymmFit", "Q");
     SinAmp[2][4] = AsymmFit->GetParameter(0);
     SinAmpErr[2][4] = AsymmFit->GetParError(0);
     CosAmp[2][4] = AsymmFit->GetParameter(1);
@@ -351,14 +351,14 @@ void CxAsymm(){
     PhiSc685AsymmCM3 = Phi_Scattered_685MeV_NegHelCM3->GetAsymmetry(Phi_Scattered_685MeV_PosHelCM3);
     PhiSc685AsymmCM3->SetName("PhiSc685AsymmCM3");
     PhiSc685AsymmCM3->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 650-720MeV (Cos #theta_{CM} 0.5-0.25)");
-    PhiSc685AsymmCM3->Fit("SinFit");
+    PhiSc685AsymmCM3->Fit("SinFit", "Q");
     InitialSinAmp[2][5] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[2][5] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc685AsymmCM3->Fit("AsymmFit");
+    PhiSc685AsymmCM3->Fit("AsymmFit", "Q");
     SinAmp[2][5] = AsymmFit->GetParameter(0);
     SinAmpErr[2][5] = AsymmFit->GetParError(0);
     CosAmp[2][5] = AsymmFit->GetParameter(1);
@@ -371,14 +371,14 @@ void CxAsymm(){
     PhiSc335AsymmCM4 = Phi_Scattered_335MeV_NegHelCM4->GetAsymmetry(Phi_Scattered_335MeV_PosHelCM4);
     PhiSc335AsymmCM4->SetName("PhiSc335AsymmCM4");
     PhiSc335AsymmCM4->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 300-370MeV (Cos #theta_{CM} 0.25-0.0)");
-    PhiSc335AsymmCM4->Fit("SinFit");
+    PhiSc335AsymmCM4->Fit("SinFit", "Q");
     InitialSinAmp[3][0] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[3][0] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc335AsymmCM4->Fit("AsymmFit");
+    PhiSc335AsymmCM4->Fit("AsymmFit", "Q");
     SinAmp[3][0] = AsymmFit->GetParameter(0);
     SinAmpErr[3][0] = AsymmFit->GetParError(0);
     CosAmp[3][0] = AsymmFit->GetParameter(1);
@@ -387,14 +387,14 @@ void CxAsymm(){
     PhiSc405AsymmCM4 = Phi_Scattered_405MeV_NegHelCM4->GetAsymmetry(Phi_Scattered_405MeV_PosHelCM4);
     PhiSc405AsymmCM4->SetName("PhiSc405AsymmCM4");
     PhiSc405AsymmCM4->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 370-440MeV (Cos #theta_{CM} 0.25-0.0)");
-    PhiSc405AsymmCM4->Fit("SinFit");
+    PhiSc405AsymmCM4->Fit("SinFit", "Q");
     InitialSinAmp[3][1] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[3][1] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc405AsymmCM4->Fit("AsymmFit");
+    PhiSc405AsymmCM4->Fit("AsymmFit", "Q");
     SinAmp[3][1] = AsymmFit->GetParameter(0);
     SinAmpErr[3][1] = AsymmFit->GetParError(0);
     CosAmp[3][1] = AsymmFit->GetParameter(1);
@@ -403,14 +403,14 @@ void CxAsymm(){
     PhiSc475AsymmCM4 = Phi_Scattered_475MeV_NegHelCM4->GetAsymmetry(Phi_Scattered_475MeV_PosHelCM4);
     PhiSc475AsymmCM4->SetName("PhiSc475AsymmCM4");
     PhiSc475AsymmCM4->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 440-510MeV (Cos #theta_{CM} 0.25-0.0)");
-    PhiSc475AsymmCM4->Fit("SinFit");
+    PhiSc475AsymmCM4->Fit("SinFit", "Q");
     InitialSinAmp[3][2] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[3][2] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc475AsymmCM4->Fit("AsymmFit");
+    PhiSc475AsymmCM4->Fit("AsymmFit", "Q");
     SinAmp[3][2] = AsymmFit->GetParameter(0);
     SinAmpErr[3][2] = AsymmFit->GetParError(0);
     CosAmp[3][2] = AsymmFit->GetParameter(1);
@@ -419,14 +419,14 @@ void CxAsymm(){
     PhiSc545AsymmCM4 = Phi_Scattered_545MeV_NegHelCM4->GetAsymmetry(Phi_Scattered_545MeV_PosHelCM4);
     PhiSc545AsymmCM4->SetName("PhiSc545AsymmCM4");
     PhiSc545AsymmCM4->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 510-580MeV (Cos #theta_{CM} 0.25-0.0)");
-    PhiSc545AsymmCM4->Fit("SinFit");
+    PhiSc545AsymmCM4->Fit("SinFit", "Q");
     InitialSinAmp[3][3] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[3][3] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc545AsymmCM4->Fit("AsymmFit");
+    PhiSc545AsymmCM4->Fit("AsymmFit", "Q");
     SinAmp[3][3] = AsymmFit->GetParameter(0);
     SinAmpErr[3][3] = AsymmFit->GetParError(0);
     CosAmp[3][3] = AsymmFit->GetParameter(1);
@@ -435,14 +435,14 @@ void CxAsymm(){
     PhiSc615AsymmCM4 = Phi_Scattered_615MeV_NegHelCM4->GetAsymmetry(Phi_Scattered_615MeV_PosHelCM4);
     PhiSc615AsymmCM4->SetName("PhiSc615AsymmCM4");
     PhiSc615AsymmCM4->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 580-650MeV (Cos #theta_{CM} 0.25-0.0)");
-    PhiSc615AsymmCM4->Fit("SinFit");
+    PhiSc615AsymmCM4->Fit("SinFit", "Q");
     InitialSinAmp[3][4] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[3][4] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc615AsymmCM4->Fit("AsymmFit");
+    PhiSc615AsymmCM4->Fit("AsymmFit", "Q");
     SinAmp[3][4] = AsymmFit->GetParameter(0);
     SinAmpErr[3][4] = AsymmFit->GetParError(0);
     CosAmp[3][4] = AsymmFit->GetParameter(1);
@@ -451,14 +451,14 @@ void CxAsymm(){
     PhiSc685AsymmCM4 = Phi_Scattered_685MeV_NegHelCM4->GetAsymmetry(Phi_Scattered_685MeV_PosHelCM4);
     PhiSc685AsymmCM4->SetName("PhiSc685AsymmCM4");
     PhiSc685AsymmCM4->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 650-720MeV (Cos #theta_{CM} 0.25-0.0)");
-    PhiSc685AsymmCM4->Fit("SinFit");
+    PhiSc685AsymmCM4->Fit("SinFit", "Q");
     InitialSinAmp[3][5] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[3][5] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc685AsymmCM4->Fit("AsymmFit");
+    PhiSc685AsymmCM4->Fit("AsymmFit", "Q");
     SinAmp[3][5] = AsymmFit->GetParameter(0);
     SinAmpErr[3][5] = AsymmFit->GetParError(0);
     CosAmp[3][5] = AsymmFit->GetParameter(1);
@@ -471,14 +471,14 @@ void CxAsymm(){
     PhiSc335AsymmCM5 = Phi_Scattered_335MeV_NegHelCM5->GetAsymmetry(Phi_Scattered_335MeV_PosHelCM5);
     PhiSc335AsymmCM5->SetName("PhiSc335AsymmCM5");
     PhiSc335AsymmCM5->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 300-370MeV (Cos #theta_{CM} 0.0-(-0.25))");
-    PhiSc335AsymmCM5->Fit("SinFit");
+    PhiSc335AsymmCM5->Fit("SinFit", "Q");
     InitialSinAmp[4][0] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[4][0] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc335AsymmCM5->Fit("AsymmFit");
+    PhiSc335AsymmCM5->Fit("AsymmFit", "Q");
     SinAmp[4][0] = AsymmFit->GetParameter(0);
     SinAmpErr[4][0] = AsymmFit->GetParError(0);
     CosAmp[4][0] = AsymmFit->GetParameter(1);
@@ -487,14 +487,14 @@ void CxAsymm(){
     PhiSc405AsymmCM5 = Phi_Scattered_405MeV_NegHelCM5->GetAsymmetry(Phi_Scattered_405MeV_PosHelCM5);
     PhiSc405AsymmCM5->SetName("PhiSc405AsymmCM5");
     PhiSc405AsymmCM5->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 370-440MeV (Cos #theta_{CM} 0.0-(-0.25))");
-    PhiSc405AsymmCM5->Fit("SinFit");
+    PhiSc405AsymmCM5->Fit("SinFit", "Q");
     InitialSinAmp[4][1] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[4][1] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc405AsymmCM5->Fit("AsymmFit");
+    PhiSc405AsymmCM5->Fit("AsymmFit", "Q");
     SinAmp[4][1] = AsymmFit->GetParameter(0);
     SinAmpErr[4][1] = AsymmFit->GetParError(0);
     CosAmp[4][1] = AsymmFit->GetParameter(1);
@@ -503,14 +503,14 @@ void CxAsymm(){
     PhiSc475AsymmCM5 = Phi_Scattered_475MeV_NegHelCM5->GetAsymmetry(Phi_Scattered_475MeV_PosHelCM5);
     PhiSc475AsymmCM5->SetName("PhiSc475AsymmCM5");
     PhiSc475AsymmCM5->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 440-510MeV (Cos #theta_{CM} 0.0-(-0.25))");
-    PhiSc475AsymmCM5->Fit("SinFit");
+    PhiSc475AsymmCM5->Fit("SinFit", "Q");
     InitialSinAmp[4][2] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[4][2] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc475AsymmCM5->Fit("AsymmFit");
+    PhiSc475AsymmCM5->Fit("AsymmFit", "Q");
     SinAmp[4][2] = AsymmFit->GetParameter(0);
     SinAmpErr[4][2] = AsymmFit->GetParError(0);
     CosAmp[4][2] = AsymmFit->GetParameter(1);
@@ -519,14 +519,14 @@ void CxAsymm(){
     PhiSc545AsymmCM5 = Phi_Scattered_545MeV_NegHelCM5->GetAsymmetry(Phi_Scattered_545MeV_PosHelCM5);
     PhiSc545AsymmCM5->SetName("PhiSc545AsymmCM5");
     PhiSc545AsymmCM5->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 510-580MeV (Cos #theta_{CM} 0.0-(-0.25))");
-    PhiSc545AsymmCM5->Fit("SinFit");
+    PhiSc545AsymmCM5->Fit("SinFit", "Q");
     InitialSinAmp[4][3] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[4][3] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc545AsymmCM5->Fit("AsymmFit");
+    PhiSc545AsymmCM5->Fit("AsymmFit", "Q");
     SinAmp[4][3] = AsymmFit->GetParameter(0);
     SinAmpErr[4][3] = AsymmFit->GetParError(0);
     CosAmp[4][3] = AsymmFit->GetParameter(1);
@@ -535,14 +535,14 @@ void CxAsymm(){
     PhiSc615AsymmCM5 = Phi_Scattered_615MeV_NegHelCM5->GetAsymmetry(Phi_Scattered_615MeV_PosHelCM5);
     PhiSc615AsymmCM5->SetName("PhiSc615AsymmCM5");
     PhiSc615AsymmCM5->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 580-650MeV (Cos #theta_{CM} 0.0-(-0.25))");
-    PhiSc615AsymmCM5->Fit("SinFit");
+    PhiSc615AsymmCM5->Fit("SinFit", "Q");
     InitialSinAmp[4][4] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[4][4] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc615AsymmCM5->Fit("AsymmFit");
+    PhiSc615AsymmCM5->Fit("AsymmFit", "Q");
     SinAmp[4][4] = AsymmFit->GetParameter(0);
     SinAmpErr[4][4] = AsymmFit->GetParError(0);
     CosAmp[4][4] = AsymmFit->GetParameter(1);
@@ -551,14 +551,14 @@ void CxAsymm(){
     PhiSc685AsymmCM5 = Phi_Scattered_685MeV_NegHelCM5->GetAsymmetry(Phi_Scattered_685MeV_PosHelCM5);
     PhiSc685AsymmCM5->SetName("PhiSc685AsymmCM5");
     PhiSc685AsymmCM5->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 650-720MeV (Cos #theta_{CM} 0.0-(-0.25))");
-    PhiSc685AsymmCM5->Fit("SinFit");
+    PhiSc685AsymmCM5->Fit("SinFit", "Q");
     InitialSinAmp[4][5] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[4][5] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc685AsymmCM5->Fit("AsymmFit");
+    PhiSc685AsymmCM5->Fit("AsymmFit", "Q");
     SinAmp[4][5] = AsymmFit->GetParameter(0);
     SinAmpErr[4][5] = AsymmFit->GetParError(0);
     CosAmp[4][5] = AsymmFit->GetParameter(1);
@@ -571,14 +571,14 @@ void CxAsymm(){
     PhiSc335AsymmCM6 = Phi_Scattered_335MeV_NegHelCM6->GetAsymmetry(Phi_Scattered_335MeV_PosHelCM6);
     PhiSc335AsymmCM6->SetName("PhiSc335AsymmCM6");
     PhiSc335AsymmCM6->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 300-370MeV (Cos #theta_{CM} -0.25-(-0.5))");
-    PhiSc335AsymmCM6->Fit("SinFit");
+    PhiSc335AsymmCM6->Fit("SinFit", "Q");
     InitialSinAmp[5][0] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[5][0] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc335AsymmCM6->Fit("AsymmFit");
+    PhiSc335AsymmCM6->Fit("AsymmFit", "Q");
     SinAmp[5][0] = AsymmFit->GetParameter(0);
     SinAmpErr[5][0] = AsymmFit->GetParError(0);
     CosAmp[5][0] = AsymmFit->GetParameter(1);
@@ -587,14 +587,14 @@ void CxAsymm(){
     PhiSc405AsymmCM6 = Phi_Scattered_405MeV_NegHelCM6->GetAsymmetry(Phi_Scattered_405MeV_PosHelCM6);
     PhiSc405AsymmCM6->SetName("PhiSc405AsymmCM6");
     PhiSc405AsymmCM6->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 370-440MeV (Cos #theta_{CM} -0.25-(-0.5))");
-    PhiSc405AsymmCM6->Fit("SinFit");
+    PhiSc405AsymmCM6->Fit("SinFit", "Q");
     InitialSinAmp[5][1] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[5][1] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc405AsymmCM6->Fit("AsymmFit");
+    PhiSc405AsymmCM6->Fit("AsymmFit", "Q");
     SinAmp[5][1] = AsymmFit->GetParameter(0);
     SinAmpErr[5][1] = AsymmFit->GetParError(0);
     CosAmp[5][1] = AsymmFit->GetParameter(1);
@@ -603,14 +603,14 @@ void CxAsymm(){
     PhiSc475AsymmCM6 = Phi_Scattered_475MeV_NegHelCM6->GetAsymmetry(Phi_Scattered_475MeV_PosHelCM6);
     PhiSc475AsymmCM6->SetName("PhiSc475AsymmCM6");
     PhiSc475AsymmCM6->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 440-510MeV (Cos #theta_{CM} -0.25-(-0.5))");
-    PhiSc475AsymmCM6->Fit("SinFit");
+    PhiSc475AsymmCM6->Fit("SinFit", "Q");
     InitialSinAmp[5][2] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[5][2] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc475AsymmCM6->Fit("AsymmFit");
+    PhiSc475AsymmCM6->Fit("AsymmFit", "Q");
     SinAmp[5][2] = AsymmFit->GetParameter(0);
     SinAmpErr[5][2] = AsymmFit->GetParError(0);
     CosAmp[5][2] = AsymmFit->GetParameter(1);
@@ -619,14 +619,14 @@ void CxAsymm(){
     PhiSc545AsymmCM6 = Phi_Scattered_545MeV_NegHelCM6->GetAsymmetry(Phi_Scattered_545MeV_PosHelCM6);
     PhiSc545AsymmCM6->SetName("PhiSc545AsymmCM6");
     PhiSc545AsymmCM6->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 510-580MeV (Cos #theta_{CM} -0.25-(-0.5))");
-    PhiSc545AsymmCM6->Fit("SinFit");
+    PhiSc545AsymmCM6->Fit("SinFit", "Q");
     InitialSinAmp[5][3] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[5][3] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc545AsymmCM6->Fit("AsymmFit");
+    PhiSc545AsymmCM6->Fit("AsymmFit", "Q");
     SinAmp[5][3] = AsymmFit->GetParameter(0);
     SinAmpErr[5][3] = AsymmFit->GetParError(0);
     CosAmp[5][3] = AsymmFit->GetParameter(1);
@@ -635,14 +635,14 @@ void CxAsymm(){
     PhiSc615AsymmCM6 = Phi_Scattered_615MeV_NegHelCM6->GetAsymmetry(Phi_Scattered_615MeV_PosHelCM6);
     PhiSc615AsymmCM6->SetName("PhiSc615AsymmCM6");
     PhiSc615AsymmCM6->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 580-650MeV (Cos #theta_{CM} -0.25-(-0.5))");
-    PhiSc615AsymmCM6->Fit("SinFit");
+    PhiSc615AsymmCM6->Fit("SinFit", "Q");
     InitialSinAmp[5][4] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[5][4] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc615AsymmCM6->Fit("AsymmFit");
+    PhiSc615AsymmCM6->Fit("AsymmFit", "Q");
     SinAmp[5][4] = AsymmFit->GetParameter(0);
     SinAmpErr[5][4] = AsymmFit->GetParError(0);
     CosAmp[5][4] = AsymmFit->GetParameter(1);
@@ -651,14 +651,14 @@ void CxAsymm(){
     PhiSc685AsymmCM6 = Phi_Scattered_685MeV_NegHelCM6->GetAsymmetry(Phi_Scattered_685MeV_PosHelCM6);
     PhiSc685AsymmCM6->SetName("PhiSc685AsymmCM6");
     PhiSc685AsymmCM6->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 650-720MeV (Cos #theta_{CM} -0.25-(-0.5))");
-    PhiSc685AsymmCM6->Fit("SinFit");
+    PhiSc685AsymmCM6->Fit("SinFit", "Q");
     InitialSinAmp[5][5] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[5][5] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc685AsymmCM6->Fit("AsymmFit");
+    PhiSc685AsymmCM6->Fit("AsymmFit", "Q");
     SinAmp[5][5] = AsymmFit->GetParameter(0);
     SinAmpErr[5][5] = AsymmFit->GetParError(0);
     CosAmp[5][5] = AsymmFit->GetParameter(1);
@@ -671,14 +671,14 @@ void CxAsymm(){
     PhiSc335AsymmCM7 = Phi_Scattered_335MeV_NegHelCM7->GetAsymmetry(Phi_Scattered_335MeV_PosHelCM7);
     PhiSc335AsymmCM7->SetName("PhiSc335AsymmCM7");
     PhiSc335AsymmCM7->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 300-370MeV (Cos #theta_{CM} -0.5-(-0.75))");
-    PhiSc335AsymmCM7->Fit("SinFit");
+    PhiSc335AsymmCM7->Fit("SinFit", "Q");
     InitialSinAmp[6][0] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[6][0] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc335AsymmCM7->Fit("AsymmFit");
+    PhiSc335AsymmCM7->Fit("AsymmFit", "Q");
     SinAmp[6][0] = AsymmFit->GetParameter(0);
     SinAmpErr[6][0] = AsymmFit->GetParError(0);
     CosAmp[6][0] = AsymmFit->GetParameter(1);
@@ -687,14 +687,14 @@ void CxAsymm(){
     PhiSc405AsymmCM7 = Phi_Scattered_405MeV_NegHelCM7->GetAsymmetry(Phi_Scattered_405MeV_PosHelCM7);
     PhiSc405AsymmCM7->SetName("PhiSc405AsymmCM7");
     PhiSc405AsymmCM7->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 370-440MeV (Cos #theta_{CM} -0.5-(-0.75))");
-    PhiSc405AsymmCM7->Fit("SinFit");
+    PhiSc405AsymmCM7->Fit("SinFit", "Q");
     InitialSinAmp[6][1] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[6][1] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc405AsymmCM7->Fit("AsymmFit");
+    PhiSc405AsymmCM7->Fit("AsymmFit", "Q");
     SinAmp[6][1] = AsymmFit->GetParameter(0);
     SinAmpErr[6][1] = AsymmFit->GetParError(0);
     CosAmp[6][1] = AsymmFit->GetParameter(1);
@@ -703,14 +703,14 @@ void CxAsymm(){
     PhiSc475AsymmCM7 = Phi_Scattered_475MeV_NegHelCM7->GetAsymmetry(Phi_Scattered_475MeV_PosHelCM7);
     PhiSc475AsymmCM7->SetName("PhiSc475AsymmCM7");
     PhiSc475AsymmCM7->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 440-510MeV (Cos #theta_{CM} -0.5-(-0.75))");
-    PhiSc475AsymmCM7->Fit("SinFit");
+    PhiSc475AsymmCM7->Fit("SinFit", "Q");
     InitialSinAmp[6][2] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[6][2] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc475AsymmCM7->Fit("AsymmFit");
+    PhiSc475AsymmCM7->Fit("AsymmFit", "Q");
     SinAmp[6][2] = AsymmFit->GetParameter(0);
     SinAmpErr[6][2] = AsymmFit->GetParError(0);
     CosAmp[6][2] = AsymmFit->GetParameter(1);
@@ -719,14 +719,14 @@ void CxAsymm(){
     PhiSc545AsymmCM7 = Phi_Scattered_545MeV_NegHelCM7->GetAsymmetry(Phi_Scattered_545MeV_PosHelCM7);
     PhiSc545AsymmCM7->SetName("PhiSc545AsymmCM7");
     PhiSc545AsymmCM7->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 510-580MeV (Cos #theta_{CM} -0.5-(-0.75))");
-    PhiSc545AsymmCM7->Fit("SinFit");
+    PhiSc545AsymmCM7->Fit("SinFit", "Q");
     InitialSinAmp[6][3] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[6][3] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc545AsymmCM7->Fit("AsymmFit");
+    PhiSc545AsymmCM7->Fit("AsymmFit", "Q");
     SinAmp[6][3] = AsymmFit->GetParameter(0);
     SinAmpErr[6][3] = AsymmFit->GetParError(0);
     CosAmp[6][3] = AsymmFit->GetParameter(1);
@@ -735,14 +735,14 @@ void CxAsymm(){
     PhiSc615AsymmCM7 = Phi_Scattered_615MeV_NegHelCM7->GetAsymmetry(Phi_Scattered_615MeV_PosHelCM7);
     PhiSc615AsymmCM7->SetName("PhiSc615AsymmCM7");
     PhiSc615AsymmCM7->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 580-650MeV (Cos #theta_{CM} -0.5-(-0.75))");
-    PhiSc615AsymmCM7->Fit("SinFit");
+    PhiSc615AsymmCM7->Fit("SinFit", "Q");
     InitialSinAmp[6][4] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[6][4] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc615AsymmCM7->Fit("AsymmFit");
+    PhiSc615AsymmCM7->Fit("AsymmFit", "Q");
     SinAmp[6][4] = AsymmFit->GetParameter(0);
     SinAmpErr[6][4] = AsymmFit->GetParError(0);
     CosAmp[6][4] = AsymmFit->GetParameter(1);
@@ -751,14 +751,14 @@ void CxAsymm(){
     PhiSc685AsymmCM7 = Phi_Scattered_685MeV_NegHelCM7->GetAsymmetry(Phi_Scattered_685MeV_PosHelCM7);
     PhiSc685AsymmCM7->SetName("PhiSc685AsymmCM7");
     PhiSc685AsymmCM7->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 650-720MeV (Cos #theta_{CM} -0.5-(-0.75))");
-    PhiSc685AsymmCM7->Fit("SinFit");
+    PhiSc685AsymmCM7->Fit("SinFit", "Q");
     InitialSinAmp[6][5] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[6][5] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc685AsymmCM7->Fit("AsymmFit");
+    PhiSc685AsymmCM7->Fit("AsymmFit", "Q");
     SinAmp[6][5] = AsymmFit->GetParameter(0);
     SinAmpErr[6][5] = AsymmFit->GetParError(0);
     CosAmp[6][5] = AsymmFit->GetParameter(1);
@@ -771,14 +771,14 @@ void CxAsymm(){
     PhiSc335AsymmCM8 = Phi_Scattered_335MeV_NegHelCM8->GetAsymmetry(Phi_Scattered_335MeV_PosHelCM8);
     PhiSc335AsymmCM8->SetName("PhiSc335AsymmCM8");
     PhiSc335AsymmCM8->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 300-370MeV (Cos #theta_{CM} -0.75-(-1.0))");
-    PhiSc335AsymmCM8->Fit("SinFit");
+    PhiSc335AsymmCM8->Fit("SinFit", "Q");
     InitialSinAmp[7][0] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[7][0] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc335AsymmCM8->Fit("AsymmFit");
+    PhiSc335AsymmCM8->Fit("AsymmFit", "Q");
     SinAmp[7][0] = AsymmFit->GetParameter(0);
     SinAmpErr[7][0] = AsymmFit->GetParError(0);
     CosAmp[7][0] = AsymmFit->GetParameter(1);
@@ -787,14 +787,14 @@ void CxAsymm(){
     PhiSc405AsymmCM8 = Phi_Scattered_405MeV_NegHelCM8->GetAsymmetry(Phi_Scattered_405MeV_PosHelCM8);
     PhiSc405AsymmCM8->SetName("PhiSc405AsymmCM8");
     PhiSc405AsymmCM8->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 370-440MeV (Cos #theta_{CM} -0.75-(-1.0))");
-    PhiSc405AsymmCM8->Fit("SinFit");
+    PhiSc405AsymmCM8->Fit("SinFit", "Q");
     InitialSinAmp[7][1] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[7][1] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc405AsymmCM8->Fit("AsymmFit");
+    PhiSc405AsymmCM8->Fit("AsymmFit", "Q");
     SinAmp[7][1] = AsymmFit->GetParameter(0);
     SinAmpErr[7][1] = AsymmFit->GetParError(0);
     CosAmp[7][1] = AsymmFit->GetParameter(1);
@@ -803,14 +803,14 @@ void CxAsymm(){
     PhiSc475AsymmCM8 = Phi_Scattered_475MeV_NegHelCM8->GetAsymmetry(Phi_Scattered_475MeV_PosHelCM8);
     PhiSc475AsymmCM8->SetName("PhiSc475AsymmCM8");
     PhiSc475AsymmCM8->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 440-510MeV (Cos #theta_{CM} -0.75-(-1.0))");
-    PhiSc475AsymmCM8->Fit("SinFit");
+    PhiSc475AsymmCM8->Fit("SinFit", "Q");
     InitialSinAmp[7][2] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[7][2] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc475AsymmCM8->Fit("AsymmFit");
+    PhiSc475AsymmCM8->Fit("AsymmFit", "Q");
     SinAmp[7][2] = AsymmFit->GetParameter(0);
     SinAmpErr[7][2] = AsymmFit->GetParError(0);
     CosAmp[7][2] = AsymmFit->GetParameter(1);
@@ -819,14 +819,14 @@ void CxAsymm(){
     PhiSc545AsymmCM8 = Phi_Scattered_545MeV_NegHelCM8->GetAsymmetry(Phi_Scattered_545MeV_PosHelCM8);
     PhiSc545AsymmCM8->SetName("PhiSc545AsymmCM8");
     PhiSc545AsymmCM8->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 510-580MeV (Cos #theta_{CM} -0.75-(-1.0))");
-    PhiSc545AsymmCM8->Fit("SinFit");
+    PhiSc545AsymmCM8->Fit("SinFit", "Q");
     InitialSinAmp[7][3] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[7][3] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc545AsymmCM8->Fit("AsymmFit");
+    PhiSc545AsymmCM8->Fit("AsymmFit", "Q");
     SinAmp[7][3] = AsymmFit->GetParameter(0);
     SinAmpErr[7][3] = AsymmFit->GetParError(0);
     CosAmp[7][3] = AsymmFit->GetParameter(1);
@@ -835,14 +835,14 @@ void CxAsymm(){
     PhiSc615AsymmCM8 = Phi_Scattered_615MeV_NegHelCM8->GetAsymmetry(Phi_Scattered_615MeV_PosHelCM8);
     PhiSc615AsymmCM8->SetName("PhiSc615AsymmCM8");
     PhiSc615AsymmCM8->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 580-650MeV (Cos #theta_{CM} -0.75-(-1.0))");
-    PhiSc615AsymmCM8->Fit("SinFit");
+    PhiSc615AsymmCM8->Fit("SinFit", "Q");
     InitialSinAmp[7][4] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[7][4] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc615AsymmCM8->Fit("AsymmFit");
+    PhiSc615AsymmCM8->Fit("AsymmFit", "Q");
     SinAmp[7][4] = AsymmFit->GetParameter(0);
     SinAmpErr[7][4] = AsymmFit->GetParError(0);
     CosAmp[7][4] = AsymmFit->GetParameter(1);
@@ -851,21 +851,21 @@ void CxAsymm(){
     PhiSc685AsymmCM8 = Phi_Scattered_685MeV_NegHelCM8->GetAsymmetry(Phi_Scattered_685MeV_PosHelCM8);
     PhiSc685AsymmCM8->SetName("PhiSc685AsymmCM8");
     PhiSc685AsymmCM8->SetTitle("-ve/+ve Helicity Asymmetry for #phi_{Sc} for E_{#gamma} 650-720MeV (Cos #theta_{CM} -0.75-(-1.0))");
-    PhiSc685AsymmCM8->Fit("SinFit");
+    PhiSc685AsymmCM8->Fit("SinFit", "Q");
     InitialSinAmp[7][5] = SinFunc->GetParameter(0);// Fit sine function to histogram
     InitialSinAmpErr[7][5] = SinFunc->GetParError(0);
     AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc685AsymmCM8->Fit("AsymmFit");
+    PhiSc685AsymmCM8->Fit("AsymmFit", "Q");
     SinAmp[7][5] = AsymmFit->GetParameter(0);
     SinAmpErr[7][5] = AsymmFit->GetParError(0);
     CosAmp[7][5] = AsymmFit->GetParameter(1);
     CosAmpErr[7][5] = AsymmFit->GetParError(1);
 
     // Define new file to store fit parameters
-    TFile f1("AsymmFits_PTotal59.root", "RECREATE");
+    TFile f1("AsymmFits_PTotal_65.root", "RECREATE");
 
     PhiSc335AsymmCM1->Write();
     PhiSc405AsymmCM1->Write();
@@ -1031,7 +1031,7 @@ void CxAsymm(){
 
     }
 
-    TFile f3("Cx_Plots_59.root", "RECREATE");
+    TFile f3("Cx_Plots_65.root", "RECREATE");
 
     Float_t xMin = -1;
     Float_t xMax = 1;

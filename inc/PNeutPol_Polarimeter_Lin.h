@@ -65,8 +65,8 @@ private:
     double_t WC2nX;
     double_t WC2nY;
     double_t WC2nZ;
-    double_t WCZnRec;
     double_t ThetapCM;
+    double_t ThetanCM;
     double_t CosThetapCM;
     double_t Thetan;
     double_t ThetapRec;
@@ -139,6 +139,7 @@ private:
     TLorentzVector Pi4Vect;
     TLorentzVector RecKinProton;
     TLorentzVector RecKinNeutron;
+    TLorentzVector RecKinNeutronB;
     TLorentzVector RecKinProtonPi;
     TLorentzVector RecKinPion;
     TLorentzVector RecKinPionP;
@@ -175,6 +176,7 @@ private:
     GH1* MMpEpCorrected;
     GH1* ZpDist;
     GH1* ThetanDist;
+    GH1* ThetanCMDist;
 
     GH2* E_dE;
     GH2* DeutKinPiKin;
@@ -249,61 +251,6 @@ private:
     GH1* Phip570CM5;
     GH1* Phip590CM5;
     GH1* Phip610CM5;
-
-    GH1* Phip430CM6;
-    GH1* Phip450CM6;
-    GH1* Phip470CM6;
-    GH1* Phip490CM6;
-    GH1* Phip510CM6;
-    GH1* Phip530CM6;
-    GH1* Phip550CM6;
-    GH1* Phip570CM6;
-    GH1* Phip590CM6;
-    GH1* Phip610CM6;
-
-    GH1* Phip430CM7;
-    GH1* Phip450CM7;
-    GH1* Phip470CM7;
-    GH1* Phip490CM7;
-    GH1* Phip510CM7;
-    GH1* Phip530CM7;
-    GH1* Phip550CM7;
-    GH1* Phip570CM7;
-    GH1* Phip590CM7;
-    GH1* Phip610CM7;
-
-    GH1* Phip430CM8;
-    GH1* Phip450CM8;
-    GH1* Phip470CM8;
-    GH1* Phip490CM8;
-    GH1* Phip510CM8;
-    GH1* Phip530CM8;
-    GH1* Phip550CM8;
-    GH1* Phip570CM8;
-    GH1* Phip590CM8;
-    GH1* Phip610CM8;
-
-    GH1* Phip430CM9;
-    GH1* Phip450CM9;
-    GH1* Phip470CM9;
-    GH1* Phip490CM9;
-    GH1* Phip510CM9;
-    GH1* Phip530CM9;
-    GH1* Phip550CM9;
-    GH1* Phip570CM9;
-    GH1* Phip590CM9;
-    GH1* Phip610CM9;
-
-    GH1* Phip430CM10;
-    GH1* Phip450CM10;
-    GH1* Phip470CM10;
-    GH1* Phip490CM10;
-    GH1* Phip510CM10;
-    GH1* Phip530CM10;
-    GH1* Phip550CM10;
-    GH1* Phip570CM10;
-    GH1* Phip590CM10;
-    GH1* Phip610CM10;
 
     char cutfilename[256];
     char cutname[256];

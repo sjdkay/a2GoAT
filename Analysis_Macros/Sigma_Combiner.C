@@ -2,7 +2,7 @@
 
 void Sigma_Combiner(){
 
-    TFile *CombData = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sigma_Combined_NS_9_S19.root", "UPDATE");
+    TFile *CombData = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sigma_Combined_NS_9_S20.root", "UPDATE");
 
     TCanvas *canvas21 = new TCanvas("canvas21","canvas21", 1920, 1080);
     canvas21->Divide(5,4);
@@ -123,6 +123,8 @@ void Sigma_Combiner(){
     Sigma435->SetMarkerColor(1);
     Sigma435->SetLineColor(1);
     Sigma435->Draw("sameep");
+    Sigma430_S->SetMinimum(-1);
+    Sigma430_S->SetMaximum(1);
 
     canvas23->cd(2);
     Sigma450_S->SetMarkerColor(807);
@@ -133,6 +135,8 @@ void Sigma_Combiner(){
     Sigma455->SetMarkerColor(1);
     Sigma455->SetLineColor(1);
     Sigma455->Draw("sameep");
+    Sigma450_S->SetMinimum(-1);
+    Sigma450_S->SetMaximum(1);
 
     canvas23->cd(3);
     Sigma470_S->SetMarkerColor(807);
@@ -143,6 +147,8 @@ void Sigma_Combiner(){
     Sigma475->SetMarkerColor(1);
     Sigma475->SetLineColor(1);
     Sigma475->Draw("sameep");
+    Sigma470_S->SetMinimum(-1);
+    Sigma470_S->SetMaximum(1);
 
     canvas23->cd(4);
     Sigma490_S->SetMarkerColor(807);
@@ -153,6 +159,8 @@ void Sigma_Combiner(){
     Sigma495->SetMarkerColor(1);
     Sigma495->SetLineColor(1);
     Sigma495->Draw("sameep");
+    Sigma490_S->SetMinimum(-1);
+    Sigma490_S->SetMaximum(1);
 
     canvas23->cd(5);
     Sigma510_S->SetMarkerColor(807);
@@ -163,6 +171,8 @@ void Sigma_Combiner(){
     Sigma515->SetMarkerColor(1);
     Sigma515->SetLineColor(1);
     Sigma515->Draw("sameep");
+    Sigma510_S->SetMinimum(-1);
+    Sigma510_S->SetMaximum(1);
 
     canvas23->cd(6);
     Sigma530_S->SetMarkerColor(807);
@@ -173,6 +183,8 @@ void Sigma_Combiner(){
     Sigma535->SetMarkerColor(1);
     Sigma535->SetLineColor(1);
     Sigma535->Draw("sameep");
+    Sigma530_S->SetMinimum(-1);
+    Sigma530_S->SetMaximum(1);
 
     canvas23->cd(7);
     Sigma550_S->SetMarkerColor(807);
@@ -183,6 +195,8 @@ void Sigma_Combiner(){
     Sigma555->SetMarkerColor(1);
     Sigma555->SetLineColor(1);
     Sigma555->Draw("sameep");
+    Sigma550_S->SetMinimum(-1);
+    Sigma550_S->SetMaximum(1);
 
     canvas23->cd(8);
     Sigma570_S->SetMarkerColor(807);
@@ -193,6 +207,8 @@ void Sigma_Combiner(){
     Sigma575->SetMarkerColor(1);
     Sigma575->SetLineColor(1);
     Sigma575->Draw("sameep");
+    Sigma570_S->SetMinimum(-1);
+    Sigma570_S->SetMaximum(1);
 
     canvas23->cd(9);
     Sigma590_S->SetMarkerColor(807);
@@ -203,6 +219,8 @@ void Sigma_Combiner(){
     Sigma595->SetMarkerColor(1);
     Sigma595->SetLineColor(1);
     Sigma595->Draw("sameep");
+    Sigma590_S->SetMinimum(-1);
+    Sigma590_S->SetMaximum(1);
 
     canvas23->cd(10);
     Sigma610_S->SetMarkerColor(807);
@@ -213,6 +231,8 @@ void Sigma_Combiner(){
     Sigma615->SetMarkerColor(1);
     Sigma615->SetLineColor(1);
     Sigma615->Draw("sameep");
+    Sigma610_S->SetMinimum(-1);
+    Sigma610_S->SetMaximum(1);
 
     canvas23->cd(11);
     leg = new TLegend(0.1, 0.1, 0.9, 0.9);

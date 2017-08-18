@@ -67,6 +67,7 @@ private:
     double_t WC2nZ;
     double_t WCZnRec;
     double_t ThetapCM;
+    double_t ThetanCM;
     double_t CosThetapCM;
     double_t Thetan;
     double_t ThetapRec;
@@ -145,6 +146,7 @@ private:
     TLorentzVector Pi4Vect;
     TLorentzVector RecKinProton;
     TLorentzVector RecKinNeutron;
+    TLorentzVector RecKinNeutronB;
     TLorentzVector RecKinProtonPi;
     TLorentzVector RecKinPion;
     TLorentzVector RecKinPionP;
@@ -175,18 +177,21 @@ private:
     TH1D*	time_cut;
 
     GH1* Eg;
+    GH1* PhiDet;
+    GH1* PhiRec;
     GH1* OAngle;
     GH1* ThetaSc;
     GH1* PhiSc;
-    GH1* PhiSc2;
-    GH1* PhiScMB;
     GH1* MMpEpCorrected;
     GH1* ZpDist;
     GH1* ThetanDist;
+    GH1* ThetanCMDist;
 
     GH2* DeutKinPiKin;
     GH2* E_dE;
     GH2* ThetaScPhiSc;
+    GH2* PhipPhinDet;
+    GH2* PhipPhinRec;
 
     GH1* ClosestApproach;
     GH1* POCAr;
