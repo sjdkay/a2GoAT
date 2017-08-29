@@ -302,7 +302,7 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
         ThetanDiff = abs(ThetanRec - ThetanCorr);
         PhinDiff = abs(PhinRec - Phn);
 
-        TVector3 ScattAngles = ScatteredFrameAnglesMB(RecNeutronEpCorr3, GVpCorr3, GVnCorr3, Gamma);
+        TVector3 ScattAngles = ScatteredFrameAngles(RecNeutronEpCorr3, GVpCorr3, GVnCorr3, Gamma);
         ScattTheta = ScattAngles(2); // Theta is 1st component in vector fn returns above
         ScattPhi = ScattAngles(0); // Phi is 2nd component
 

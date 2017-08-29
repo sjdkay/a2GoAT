@@ -62,6 +62,9 @@ private:
     double_t WC1nX;
     double_t WC1nY;
     double_t WC1nZ;
+    double_t WC2pX;
+    double_t WC2pY;
+    double_t WC2pZ;
     double_t WC2nX;
     double_t WC2nY;
     double_t WC2nZ;
@@ -122,8 +125,21 @@ private:
     double_t POCAz;
     double_t r;
 
+    double RtmpMass,RtmpMom;
+    double chi2;
+    TLorentzVector* Pp1;
+    TLorentzVector* Pp2;
+    TLorentzVector* Pbeam;
+    TLorentzVector* Pp1C;
+    TLorentzVector* Pp2C;
+    TLorentzVector* PbeamC;
+    TLorentzVector* PtargetC;
+
+    double_t WC1Phip;
+    double_t WC2Phip;
     double_t WC1Phin;
     double_t WC2Phin;
+    double_t WCPhiDiffp;
     double_t WCPhiDiffn;
 
     Bool_t MCData;
@@ -164,7 +180,8 @@ private:
     TVector3 GVn3Unit;
     TVector3 GVnCorr3Unit;
     TVector3 GVn3Rec;
-    TVector3 WC3Vectp;
+    TVector3 WC13Vectp;
+    TVector3 WC23Vectp;
     TVector3 WC13Vectn;
     TVector3 WC23Vectn;
     TVector3 P3Vect;
@@ -172,6 +189,7 @@ private:
     TVector3 N3VectUnit;
     TVector3 RecProtonEpCorr3;
     TVector3 RecNeutronEpCorr3;
+    TVector3 RecoilVector;
 
     TH1D*	time;
     TH1D*	time_cut;
@@ -203,6 +221,12 @@ private:
     GH1* ThetaDiff;
     GH1* PhiDiff;
     GH2* PhiDiffThetaDiff;
+
+    GH2* PhiScEg;
+    GH2* PhiScEp;
+
+    GH1* WCPhipDiff;
+    GH1* WCPhinDiff;
 
     GH1* MMp200300;
     GH1* MMp300400;

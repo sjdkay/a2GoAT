@@ -16,7 +16,7 @@ void CircPol(){
    CircPolGamma->GetXaxis()->SetTitle("PhotonEnergy/MeV");
    CircPolGamma->GetYaxis()->SetTitle("Circular Polarisation");
    CircPolGamma->GetXaxis()->SetLimits(300, 1557);
+   CircPolGamma->SetLineWidth(4);
    CircPolGamma->Draw("AC");
    CircPolGamma->SaveAs("CircPol_Aug16.root");
-
 }

@@ -299,92 +299,35 @@ Double_t PPhysics::CoeffC(Double_t ProtTheta){ // Calculate Coefficient C for MB
     return CoeC;
 }
 
-// Currently not working as intended?
 TVector3 PPhysics::ScatteredFrameAngles(TVector3 InitialVect, TVector3 RealPVect, TVector3 ScattVector, TLorentzVector GammaVect)
 {
-    TVector3 ValueHolder(0, 0, 0);
-    // Convert given TLorentzVectors to 3 vectors
-    TVector3 GammaVect3 = GammaVect.Vect();
-    // Get Axes of scattered frame
-    TVector3 ScattZAxis = (InitialVect.Unit()); // Z axis defined by reconstructed n vector
-    TVector3 ScattYAxis = ((GammaVect3.Cross(RealPVect)).Unit()); // Defined using the "real" proton and the photon vector
-    TVector3 ScattXAxis = (ScattYAxis.Cross(ScattZAxis));
-
-    Double_t ScattZ = ScattZAxis.Angle(ScattVector); // Gives the angles between the axes defined above and the Scattered Proton vector
-    Double_t ScattY = ScattYAxis.Angle(ScattVector);
-    Double_t ScattX = ScattXAxis.Angle(ScattVector);
-    Double_t ScattTheta = ScattZ*TMath::RadToDeg(); // Get the angle of the scattered particle in frame of initial particle
-    Double_t ScattPhi = (atan2(cos(ScattY),cos(ScattX)))*TMath::RadToDeg();
-    ValueHolder.SetX(ScattTheta);
-    ValueHolder.SetY(ScattPhi);
-
-    return ValueHolder;
-}
-
-TRotation PPhysics::ScatterFrame(TVector3 InitialVect, TVector3 RealPVect, TVector3 ScattVector, TLorentzVector GammaVect)
-{
-    TRotation react;
-    // Convert given TLorentzVectors to 3 vectors
-    TVector3 GammaVect3 = GammaVect.Vect();
-    // Get Axes of scattered frame
-    TVector3 ScattZ = (InitialVect.Unit()); // Z axis defined by reconstructed n vector
-    TVector3 ScattY = ((GammaVect3.Cross(RealPVect)).Unit()); // Defined using the "real" proton and the photon vector
-    TVector3 ScattX = (ScattY.Cross(ScattZ));
-
-    react.RotateAxes(ScattX, ScattY, ScattZ);
-
-    return react;
-}
-
-// Currently not working as intended?
-TVector3 PPhysics::ScatteredFrameAnglesMB(TVector3 InitialVect, TVector3 RealPVect, TVector3 ScattVector, TLorentzVector GammaVect)
-{
-    TVector3 ValueHolder(0, 0, 0);
+    TVector3 ValueHolder;
 
     TVector3 RecNeut = (InitialVect.Unit()); //neutron angle, z-axis
+    //cout << "Rec Neut" << "   " << RecNeut(0) << "   " << RecNeut(1) << "   " << RecNeut(2) << endl;
     TVector3 ZAxis = (InitialVect.Unit()); //neutron angle, z-axis
+    //cout << "Z Axis" << "   " << ZAxis(0) << "   " << ZAxis(1) << "   " << ZAxis(2) << endl;
 
     TVector3 ScattNeut = (ScattVector.Unit()); //recoil proton angle
     double_t TT1 = RecNeut.Angle(ScattNeut);
     double_t tmpPh = TMath::ATan2((RecNeut.Py()), (RecNeut.Px()))-0.5*acos(-1);
+    //cout << "Scatt Neut" << "   " << ScattNeut(0) << "   " << ScattNeut(1) << "   " << ScattNeut(2) << endl;
 
     TVector3 BeamVect = (GammaVect.Vect()).Unit();
     TVector3 ProtVect = (RealPVect.Unit());
     TVector3 YAxis = BeamVect.Cross(ProtVect); // Y-Axis
     TVector3 XAxis = YAxis.Cross(ZAxis); // X-Axis
 
+    //cout << "Y Axis" << "   " << YAxis(0) << "   " << YAxis(1) << "   " << YAxis(2) << endl;
+    //cout << "X Axis" << "   " << XAxis(0) << "   " << XAxis(1) << "   " << XAxis(2) << endl;
+
     double_t tmpL = cos(TT1);
+    //cout << "tmpL" << "   " << tmpL << endl;
     TVector3 V1(RecNeut.X()*tmpL, RecNeut.Y()*tmpL, RecNeut.Z()*tmpL); // Projection of lengths of n vector in scattered frame
-    TVector3 V2 = ScattNeut - V1; // XY projection of recoil vector in recoil frame
-
-    double_t Phi = TMath::ATan2(cos(YAxis.Angle(V2)), cos(XAxis.Angle(V2)));
-
-    ValueHolder.SetXYZ(Phi*TMath::RadToDeg(), tmpPh, TT1*TMath::RadToDeg());
-
-    return ValueHolder;
-}
-
-// As above but feed Lorentz Vectors
-TVector3 PPhysics::ScatteredFrameAnglesMB2(TLorentzVector InitialVect, TLorentzVector RealPVect, TLorentzVector ScattVector, TLorentzVector GammaVect)
-{
-    TVector3 ValueHolder(0, 0, 0);
-    TVector3 RecNeut, ZAxis, ScattNeut, BeamVect, ProtVect, YAxis, XAxis, V1, V2;
-
-    RecNeut.SetXYZ(InitialVect.Px()/InitialVect.P(), InitialVect.Py()/InitialVect.P(), InitialVect.Pz()/InitialVect.P());
-    ZAxis.SetXYZ(InitialVect.Px()/InitialVect.P(), InitialVect.Py()/InitialVect.P(), InitialVect.Pz()/InitialVect.P());
-
-    ScattNeut.SetXYZ(ScattVector.Px()/ScattVector.P(), ScattVector.Py()/ScattVector.P(), ScattVector.Pz()/ScattVector.P());
-    double_t TT1 = RecNeut.Angle(ScattNeut);
-    double_t tmpPh = TMath::ATan2((InitialVect).Py()/(InitialVect).P(),(InitialVect).Px()/(InitialVect).P())-0.5*acos(-1);
-
-    BeamVect.SetXYZ(GammaVect.Px()/GammaVect.P(), GammaVect.Py()/GammaVect.P(), GammaVect.Pz()/GammaVect.P());
-    ProtVect.SetXYZ(RealPVect.Px()/RealPVect.P(), RealPVect.Py()/RealPVect.P(), RealPVect.Pz()/RealPVect.P());
-    YAxis = BeamVect.Cross(ProtVect);
-    XAxis = YAxis.Cross(ZAxis);
-
-    double_t tmpL = ScattNeut.Mag()*cos(TT1)/RecNeut.Mag();
-    V1.SetXYZ(RecNeut.X()*tmpL, RecNeut.Y()*tmpL, RecNeut.Z()*tmpL);
-    V2 = ScattNeut - V1;
+    TVector3 V2 = ScattNeut-V1; // XY projection of recoil vector in recoil frame
+    //cout << "V1" << "   " << V1(0) << "   " << V1(1) << "   " << V1(2) << endl;
+    //cout << "V2" << "   " << V2(0) << "   " << V2(1) << "   " << V2(2) << endl;
+    //cout << YAxis.Angle(V2) << "   " << XAxis.Angle(V2) << endl;
 
     double_t Phi = TMath::ATan2(cos(YAxis.Angle(V2)), cos(XAxis.Angle(V2)));
 
