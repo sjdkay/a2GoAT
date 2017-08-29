@@ -251,7 +251,6 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
     WC2Phin = (WC23Vectn.Phi());
     WCPhiDiffp = abs(WC1Phip - WC2Phip);
     WCPhiDiffn = abs(WC1Phin - WC2Phin);
-    if(WCPhiDiffp > 5) cout << "Wrong track assignments in MWPC" << endl;
 
     GVpCorr3 = GVpCorr.Vect();
     GVnCorr3 = GVnCorr.Vect();
@@ -343,6 +342,8 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
         r = sqrt((TMath::Power(POCAx,2))+(TMath::Power(POCAy,2)));
         POCA = TVector3(POCAx, POCAy, POCAz);
 
+        if( r > 75 || r < 35 ) return; // Ensure POCA is at polarimeter radius
+
         //APLCON
         beamF.SetFromVector(Gamma); // Set Lorentz vectors for use in APLCON
         protonF.SetFromVector(GVpCorr);
@@ -362,60 +363,70 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
         beamF.Theta_Sigma=1e-3;
         beamF.Phi_Sigma=1e-3;
 
+//        // Calculate vertex position of interaction from MWPC info only, produces same result as pseudo vertex
+        MWPCpDir0.SetXYZ(WC2pX - WC1pX , WC2pY - WC1pY , WC2pZ - WC1pZ);
+        MWPCpDir1.SetXYZ(0, 0, 1);
+        MWPCpPerp.SetXYZ(-1*WC1pX, -1*WC1pY, -1*WC1pZ);
+        num0 = (MWPCpDir0.Dot(MWPCpPerp)) -(MWPCpDir0.Dot(MWPCpDir1))*(MWPCpDir1.Dot(MWPCpPerp));
+        denum0 = (MWPCpDir0.Dot(MWPCpDir0))-(MWPCpDir0.Dot(MWPCpDir1))*(MWPCpDir0.Dot(MWPCpDir1));
+        tsk = num0/denum0;
+        MWPCpCalcVertex.SetXYZ(WC1pX+tsk*MWPCpDir0.X(), WC1pY+tsk*MWPCpDir0.Y(), WC1pZ+tsk*MWPCpDir0.Z());
+        ZpMWPC = MWPCpCalcVertex.Z();
+
         //Pp1 = Corrected Proton Track, Pp2 = Scattered Neutron track, C = CM for vector
-//        const APLCON::Result_t& result = kinfit.DoFit();
-//        if(result.Status == APLCON::Result_Status_t::Success){
-//            chi2=result.ChiSquare;
-//            RtmpMass=938.272;
-//            RtmpMom=sqrt((result.Variables.at("protonF[0]").Value.After+RtmpMass)*(result.Variables.at("protonF[0]").Value.After+RtmpMass)-RtmpMass*RtmpMass);
-//            Pp1->SetPxPyPzE(RtmpMom*sin(result.Variables.at("protonF[1]").Value.After)*cos(result.Variables.at("protonF[2]").Value.After),RtmpMom*sin(result.Variables.at("protonF[1]").Value.After)*sin(result.Variables.at("protonF[2]").Value.After),RtmpMom*cos(result.Variables.at("protonF[1]").Value.After),result.Variables.at("protonF[0]").Value.After+RtmpMass);
-//
-//            RtmpMass=939.565;
-//            RtmpMom=sqrt((result.Variables.at("neutronF[0]").Value.After+RtmpMass)*(result.Variables.at("neutronF[0]").Value.After+RtmpMass)-RtmpMass*RtmpMass);
-//            Pp2->SetPxPyPzE(RtmpMom*sin(result.Variables.at("neutronF[1]").Value.After)*cos(result.Variables.at("neutronF[2]").Value.After),RtmpMom*sin(result.Variables.at("neutronF[1]").Value.After)*sin(result.Variables.at("neutronF[2]").Value.After),RtmpMom*cos(result.Variables.at("neutronF[1]").Value.After),result.Variables.at("neutronF[0]").Value.After+RtmpMass);
-//
-//            Pbeam->SetPxPyPzE(0,0,result.Variables.at("beamF[0]").Value.After,result.Variables.at("beamF[0]").Value.After);
-//
-//            *Pp1C=*Pp1;
-//            Pp1C->Boost(b);
-//            *Pp2C=*Pp2;
-//            Pp2C->Boost(b);
-//            *PbeamC=*Pbeam;
-//            PbeamC->Boost(b);
-//            *PtargetC=Deut;
-//            PtargetC->Boost(b);
-//
-//            if(TMath::Prob(chi2,1)>0.0&&dEp>0&&dEp<4&&EpCorr>0&&Zp!=0&&EpCorr<500&&(*Pbeam).E()>0&&(*Pp1).E()-(*Pp1).M()<400&&Zn!=0&&TMath::Abs((*Pp2).Phi()-WC1Phin)<0.5){
-//                TVector3 V1 = (RecNeutronEpCorr3.Unit()); //neutron angle, z-axis
-//                TVector3 VFZ = (RecNeutronEpCorr3.Unit()); //neutron angle, z-axis
-//                TVector3 V2 = (GVnCorr3.Unit()); //recoil proton angle
-//                double_t TT1 = V1.Angle(V2);
-//                double_t tmpPh = TMath::ATan2((V1.Py()), (V1.Px()))-0.5*acos(-1);
-//
-//                TVector3 Vbm = (Gamma.Vect()).Unit();
-//                TVector3 Vp1 = (GVpCorr3.Unit());
-//                TVector3 VFY = Vbm.Cross(Vp1); // Y-Axis
-//                TVector3 VFX = VFX.Cross(VFZ); // X-Axis
-//
-//                double_t tmpL = cos(TT1);
-//                TVector3 V4(V1.X()*tmpL, V1.Y()*tmpL, V1.Z()*tmpL); // Projection of lengths of n vector in scattered frame
-//                TVector3 V5 = V2-V4; // XY projection of recoil vector in recoil frame
-//
-//                RecoilVector.SetXYZ(sin(TT1)*cos(TMath::ATan2(cos(VFY.Angle(V5)),cos(VFX.Angle(V5)))),sin(TT1)*sin(TMath::ATan2(cos(VFY.Angle(V5)),cos(VFX.Angle(V5)))),cos(TT1));
-//                double_t Phi = TMath::ATan2(cos(VFY.Angle(V2)), cos(VFX.Angle(V2)));
-//
-//                FillHists(); // Fill histograms with data generated
-//            }
-//
-//        }
+        const APLCON::Result_t& result = kinfit.DoFit();
+        if(result.Status == APLCON::Result_Status_t::Success){
+            chi2=result.ChiSquare;
+            RtmpMass=938.272;
+            RtmpMom=sqrt((result.Variables.at("protonF[0]").Value.After+RtmpMass)*(result.Variables.at("protonF[0]").Value.After+RtmpMass)-RtmpMass*RtmpMass);
+            Pp1->SetPxPyPzE(RtmpMom*sin(result.Variables.at("protonF[1]").Value.After)*cos(result.Variables.at("protonF[2]").Value.After),RtmpMom*sin(result.Variables.at("protonF[1]").Value.After)*sin(result.Variables.at("protonF[2]").Value.After),RtmpMom*cos(result.Variables.at("protonF[1]").Value.After),result.Variables.at("protonF[0]").Value.After+RtmpMass);
+
+            RtmpMass=939.565;
+            RtmpMom=sqrt((result.Variables.at("neutronF[0]").Value.After+RtmpMass)*(result.Variables.at("neutronF[0]").Value.After+RtmpMass)-RtmpMass*RtmpMass);
+            Pp2->SetPxPyPzE(RtmpMom*sin(result.Variables.at("neutronF[1]").Value.After)*cos(result.Variables.at("neutronF[2]").Value.After),RtmpMom*sin(result.Variables.at("neutronF[1]").Value.After)*sin(result.Variables.at("neutronF[2]").Value.After),RtmpMom*cos(result.Variables.at("neutronF[1]").Value.After),result.Variables.at("neutronF[0]").Value.After+RtmpMass);
+
+            Pbeam->SetPxPyPzE(0,0,result.Variables.at("beamF[0]").Value.After,result.Variables.at("beamF[0]").Value.After);
+
+            *Pp1C=*Pp1;
+            Pp1C->Boost(b);
+            *Pp2C=*Pp2;
+            Pp2C->Boost(b);
+            *PbeamC=*Pbeam;
+            PbeamC->Boost(b);
+            *PtargetC=Deut;
+            PtargetC->Boost(b);
+
+            if(TMath::Prob(chi2,1)>0.0&&dEp>0&&dEp<4&&EpCorr>0&&Zp!=0&&EpCorr<500&&(*Pbeam).E()>0&&(*Pp1).E()-(*Pp1).M()<400&&Zn!=0&&TMath::Abs((*Pp2).Phi()-WC1Phin)<0.5){
+                TVector3 V1 = (RecNeutronEpCorr3.Unit()); //neutron angle, z-axis
+                TVector3 VFZ = (RecNeutronEpCorr3.Unit()); //neutron angle, z-axis
+                TVector3 V2 = (GVnCorr3.Unit()); //recoil proton angle
+                double_t TT1 = V1.Angle(V2);
+                double_t tmpPh = TMath::ATan2((V1.Py()), (V1.Px()))-0.5*acos(-1);
+
+                TVector3 Vbm = (Gamma.Vect()).Unit();
+                TVector3 Vp1 = (GVpCorr3.Unit());
+                TVector3 VFY = Vbm.Cross(Vp1); // Y-Axis
+                TVector3 VFX = VFX.Cross(VFZ); // X-Axis
+
+                double_t tmpL = cos(TT1);
+                TVector3 V4(V1.X()*tmpL, V1.Y()*tmpL, V1.Z()*tmpL); // Projection of lengths of n vector in scattered frame
+                TVector3 V5 = V2-V4; // XY projection of recoil vector in recoil frame
+
+                RecoilVector.SetXYZ(sin(TT1)*cos(TMath::ATan2(cos(VFY.Angle(V5)),cos(VFX.Angle(V5)))),sin(TT1)*sin(TMath::ATan2(cos(VFY.Angle(V5)),cos(VFX.Angle(V5)))),cos(TT1));
+                double_t Phi = TMath::ATan2(cos(VFY.Angle(V2)), cos(VFX.Angle(V2)));
+
+                FillHists(); // Fill histograms with data generated
+            }
+
+        }
 
         //if (ScattTheta > 90) continue;
 
-        //if( r > 75 || r < 35 ) return; // Ensure POCA is at polarimeter radius
+        if( r > 75 || r < 35 ) return; // Ensure POCA is at polarimeter radius
         //if(ThetanCM < 80 || ThetanCM > 100) return; // Ensure ThetaCM close to 90 degrees
         //if (ScattPhi < -20 || ScattPhi > 20) return;
 
-        FillHists(); // Fill histograms with data generated
+        //FillHists(); // Fill histograms with data generated
 
     }
 }
@@ -527,9 +538,12 @@ PNeutPol_Polarimeter_Circ::PNeutPol_Polarimeter_Circ() // Define a load of histo
 
     PhiScEg = new GH2("PhiScEg", "#phi_{Sc} as a Function of E_{#gamma}", 150, 200, 800, 150, -180, 180);
     PhiScEp = new GH2("PhiScEp", "#phi_{Sc} as a Function of E_{p}", 150, 100, 500, 150, -180, 180);
+    PhiScThetan = new GH2("PhiScThetan", "#phi_{Sc} as a Function of #theta_{n}", 150, 0, 180, 150, -180, 180);
 
     WCPhipDiff = new GH1 ("WCPhipDiff" , "#phi_{pWC1} - #phi_{pWC2}", 200, 0, 200);
     WCPhinDiff = new GH1 ("WCPhinDiff" , "#phi_{nWC1} - #phi_{nWC2}", 200, 0, 200);
+
+    ZpVertexDiff = new GH1 ("ZpVertexDiff", "Difference Between Z_{pPseudo} and Z_{pMWPC}", 200, -200, 200);
 
     // MMp across photon E bins
     MMp200300 = new GH1("MMp200300", "Missing mass as seen by Proton (200-300MeV E_{#gamma})", 400, 0, 2000);
@@ -688,9 +702,12 @@ void PNeutPol_Polarimeter_Circ::FillHists()
 
     PhiScEg->Fill(EGamma, ScattPhi, TaggerTime);
     PhiScEp->Fill(EpCorr, ScattPhi, TaggerTime);
+    PhiScThetan->Fill(ThetanRec, ScattPhi, TaggerTime);
 
     WCPhipDiff->Fill(WCPhiDiffp, TaggerTime);
     WCPhinDiff->Fill(WCPhiDiffn, TaggerTime);
+
+    ZpVertexDiff->Fill((Zp - ZpMWPC), TaggerTime);
 
     if(200 < EGamma && EGamma < 300){
         MMp200300->Fill(MMpEpCorr, TaggerTime);

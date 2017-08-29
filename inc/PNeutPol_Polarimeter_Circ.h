@@ -191,6 +191,16 @@ private:
     TVector3 RecNeutronEpCorr3;
     TVector3 RecoilVector;
 
+    // Variables for calculating P vertex from MWPC hit positions
+    double_t num0;
+    double_t denum0;
+    double_t tsk;
+    TVector3 MWPCpDir0;
+    TVector3 MWPCpDir1;
+    TVector3 MWPCpPerp;
+    TVector3 MWPCpCalcVertex;
+    double_t ZpMWPC;
+
     TH1D*	time;
     TH1D*	time_cut;
 
@@ -224,9 +234,12 @@ private:
 
     GH2* PhiScEg;
     GH2* PhiScEp;
+    GH2* PhiScThetan;
 
     GH1* WCPhipDiff;
     GH1* WCPhinDiff;
+
+    GH1* ZpVertexDiff;
 
     GH1* MMp200300;
     GH1* MMp300400;
