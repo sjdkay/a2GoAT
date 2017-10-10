@@ -1,19 +1,29 @@
 #include "./includes_Sigma.h"
 
 // define a legendre polynomial, need to define some limits?
-Double_t legendre(Double_t *x,Double_t *par)
-{
-    Double_t fitval = 0;
-    fitval = (1-TMath::Power(x[0],2)*(par[0]*3+par[1]*15*x[0]+par[2]*15.0/2*(7*TMath::Power(x[0],2)-1)+par[3]*105.0/2*x[0]*(3*TMath::Power(x[0],2)-1)+par[4]*105.0/8*(33*TMath::Power(x[0],4)-18*TMath::Power(x[0],2)+1)+par[5]*63.0/8*x*(143*TMath::Power(x[0],4)-110*TMath::Power(x[0],2)+15)+par[6]*315.0/16*(143*TMath::Power(x[0],6)-143*TMath::Power(x[0],4)+33*TMath::Power(x[0],2)-1)));
-    return fitval;
-}
+//Double_t legendre(Double_t *x,Double_t *par)
+//{
+   //// Double_t fitval = 0;
+  //  fitval = (1-TMath::Power(x[0],2)*(par[0]*3+par[1]*15*x[0]+par[2]*15.0/2*(7*TMath::Power(x[0],2)-1)+par[3]*105.0/2*x[0]*(3*TMath::Power(x[0],2)-1)+par[4]*105.0/8*(33*TMath::Power(x[0],4)-18*TMath::Power(x[0],2)+1)+par[5]*63.0/8*x*(143*TMath::Power(x[0],4)-110*TMath::Power(x[0],2)+15)+par[6]*315.0/16*(143*TMath::Power(x[0],6)-143*TMath::Power(x[0],4)+33*TMath::Power(x[0],2)-1)));
+  //  return fitval;
+//}
 
 void Sigma(){
     TFile *MBData = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sig_res_St.root");
 
-    TFile *f1= TFile::Open("/scratch/Mainz_Software/a2GoAT/ParaPerpAsymm_Total_20.root");
+    TFile *f1= TFile::Open("/scratch/Mainz_Software/a2GoAT/ParaPerpAsymm_S24.root");
     TTree *t1 = (TTree*)f1->Get("Parameter_Values");
-    TF1 *LegendreFunc = new TF1("LegendreFit",  legendre, -1, 1, 7); //Give a name and range to the fitting funcion
+    //TF1 *LegendreFunc = new TF1("LegendreFit",  legendre, -1, 1, 7); //Give a name and range to the fitting funcion
+    //Legendre Polynomial from Mikhail, x is Cos(Theta)
+    TF1 *LegPol = new TF1("LegPol","(1-x**2)*([0]*3+[1]*15*x+[2]*15.0/2*(7*x**2-1)+[3]*105.0/2*x*(3*x**2-1)+[4]*105.0/8*(33*x**4-18*x**2+1)+[5]*63.0/8*x*(143*x**4-110*x**2+15)+[6]*315.0/16*(143*x**6-143*x**4+33*x**2-1))",-1,1
+    LegPol->SetParLimits(0,-1,1);
+    LegPol->SetParLimits(1,-1,1);
+    LegPol->SetParLimits(2,-1,1);
+    LegPol->SetParLimits(3,-1,1);
+    LegPol->SetParLimits(4,-1,1);
+    LegPol->SetParLimits(5,-1,1);
+    LegPol->SetParLimits(6,-1,1);
+    LegPol->SetParLimits(7,-1,1);
 
     Double_t pValues430[5], pValues450[5], pValues470[5], pValues490[5], pValues510[5], pValues530[5], pValues550[5], pValues570[5],, pValues590[5], pValues610[5];
     Double_t pErrValues430[5], pErrValues450[5], pErrValues470[5],pErrValues490[5], pErrValues510[5], pErrValues530[5], pErrValues550[5], pErrValues570[5], pErrValues580[5], pErrValues590[5], pErrValues610[5];
@@ -106,7 +116,7 @@ void Sigma(){
 
     }
 
-    TFile f3("Sigma_Plots_20.root", "RECREATE");
+    TFile f3("Sigma_Plots_S24.root", "RECREATE");
 
     Float_t xMin = -1;
     Float_t xMax = 1;
@@ -122,18 +132,17 @@ void Sigma(){
 
     pad1->SetTickx(1);
     pad1->SetTicky(1);
-    pad1->SetGridx(1);
-    pad1->SetGridy(1);
+    pad1->SetGridx(0);
+    pad1->SetGridy(0);
     TH1F  *hr1;
-    hr1 = canvas1->DrawFrame(xMin,-1 ,xMax, 1 );
+    hr1 = canvas1->DrawFrame(xMin, -0.8 , xMax, 0.5);
     hr1->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 430 #pm 10 MeV)");
 
     gr1 = new TGraphErrors(5, x, pSigmaValues430 , ex, pSigmaErrValues430);
-    gr1->Fit("LegendreFit");
     gr1->SetMarkerColor(2);
     gr1->SetLineColor(2);
-    gr1->SetMarkerStyle(5);
-    gr1->SetMarkerSize(2);
+    gr1->SetMarkerStyle(8);
+    gr1->SetMarkerSize(1);
     gr1->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 430 #pm 10 MeV)");
     gr1->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr1->GetYaxis()->SetTitle("#Sigma");
@@ -147,18 +156,17 @@ void Sigma(){
 
     pad2->SetTickx(1);
     pad2->SetTicky(1);
-    pad2->SetGridx(1);
-    pad2->SetGridy(1);
+    pad2->SetGridx(0);
+    pad2->SetGridy(0);
     TH1F  *hr2;
-    hr2 = canvas2->DrawFrame(xMin,-1,xMax,1);
+    hr2 = canvas2->DrawFrame(xMin, -0.8 , xMax, 0.5);
     hr2->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 450 #pm 10 MeV)");
 
     gr2 = new TGraphErrors(5, x, pSigmaValues450 , ex, pSigmaErrValues450);
-    gr2->Fit("LegendreFit");
     gr2->SetMarkerColor(2);
     gr2->SetLineColor(2);
-    gr2->SetMarkerStyle(5);
-    gr2->SetMarkerSize(2);
+    gr2->SetMarkerStyle(8);
+    gr2->SetMarkerSize(1);
     gr2->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 450 #pm 10 MeV)");
     gr2->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr2->GetYaxis()->SetTitle("#Sigma");
@@ -172,24 +180,22 @@ void Sigma(){
 
     pad3->SetTickx(1);
     pad3->SetTicky(1);
-    pad3->SetGridx(1);
-    pad3->SetGridy(1);
+    pad3->SetGridx(0);
+    pad3->SetGridy(0);
     TH1F  *hr3;
-    hr3 = canvas3->DrawFrame(xMin,-1,xMax,1);
+    hr3 = canvas3->DrawFrame(xMin, -0.8 , xMax, 0.5);
     hr3->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 470 #pm 10 MeV)");
 
     gr3 = new TGraphErrors(5, x, pSigmaValues470, ex, pSigmaErrValues470);
-    gr3->Fit("LegendreFit");
     gr3->SetMarkerColor(2);
     gr3->SetLineColor(2);
-    gr3->SetMarkerStyle(5);
-    gr3->SetMarkerSize(2);
+    gr3->SetMarkerStyle(8);
+    gr3->SetMarkerSize(1);
     gr3->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 470 #pm 10 MeV)");
     gr3->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr3->GetYaxis()->SetTitle("#Sigma");
     gr3->SetName("Sigma470_S");
     gr3->Draw("ep");
-
 
     TCanvas *canvas4 = new TCanvas("canvas4","canvas4", 1920, 1080);
     TPad *pad4 = new TPad("pad4","",0,0,1,1);
@@ -198,18 +204,16 @@ void Sigma(){
 
     pad4->SetTickx(1);
     pad4->SetTicky(1);
-    pad4->SetGridx(1);
-    pad4->SetGridy(1);
+    pad4->SetGridx(0);
+    pad4->SetGridy(0);
     TH1F  *hr4;
-    hr4 = canvas4->DrawFrame(xMin,-1,xMax,1);
+    hr4 = canvas4->DrawFrame(xMin, -0.8 , xMax, 0.5);
     hr4->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 490 #pm 10 MeV)");
 
     gr4 = new TGraphErrors(5, x, pSigmaValues490, ex, pSigmaErrValues490);
-    gr4->Fit("LegendreFit");
-    gr4->SetMarkerColor(2);
     gr4->SetLineColor(2);
-    gr4->SetMarkerStyle(5);
-    gr4->SetMarkerSize(2);
+    gr4->SetMarkerStyle(8);
+    gr4->SetMarkerSize(1);
     gr4->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 490 #pm 10 MeV)");
     gr4->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr4->GetYaxis()->SetTitle("#Sigma");
@@ -223,18 +227,17 @@ void Sigma(){
 
     pad5->SetTickx(1);
     pad5->SetTicky(1);
-    pad5->SetGridx(1);
-    pad5->SetGridy(1);
+    pad5->SetGridx(0);
+    pad5->SetGridy(0);
     TH1F  *hr5;
-    hr5 = canvas5->DrawFrame(xMin,-1,xMax,1);
+    hr5 = canvas5->DrawFrame(xMin, -0.8 , xMax, 0.5);
     hr5->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 510 #pm 10 MeV)");
 
     gr5 = new TGraphErrors(5, x, pSigmaValues510, ex, pSigmaErrValues510);
-    gr5->Fit("LegendreFit");
     gr5->SetMarkerColor(2);
     gr5->SetLineColor(2);
-    gr5->SetMarkerStyle(5);
-    gr5->SetMarkerSize(2);
+    gr5->SetMarkerStyle(8);
+    gr5->SetMarkerSize(1);
     gr5->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 510 #pm 10 MeV)");
     gr5->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr5->GetYaxis()->SetTitle("#Sigma");
@@ -248,18 +251,17 @@ void Sigma(){
 
     pad6->SetTickx(1);
     pad6->SetTicky(1);
-    pad6->SetGridx(1);
-    pad6->SetGridy(1);
+    pad6->SetGridx(0);
+    pad6->SetGridy(0);
     TH1F  *hr6;
-    hr6 = canvas6->DrawFrame(xMin,-1,xMax,1);
+    hr6 = canvas6->DrawFrame(xMin, -0.8 , xMax, 0.5);
     hr6->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 530 #pm 10 MeV)");
 
     gr6 = new TGraphErrors(5, x, pSigmaValues530, ex, pSigmaErrValues530);
-    gr6->Fit("LegendreFit");
     gr6->SetMarkerColor(2);
     gr6->SetLineColor(2);
-    gr6->SetMarkerStyle(5);
-    gr6->SetMarkerSize(2);
+    gr6->SetMarkerStyle(8);
+    gr6->SetMarkerSize(1);
     gr6->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 530 #pm 10 MeV)");
     gr6->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr6->GetYaxis()->SetTitle("#Sigma");
@@ -273,18 +275,17 @@ void Sigma(){
 
     pad7->SetTickx(1);
     pad7->SetTicky(1);
-    pad7->SetGridx(1);
-    pad7->SetGridy(1);
+    pad7->SetGridx(0);
+    pad7->SetGridy(0);
     TH1F  *hr7;
-    hr7 = canvas7->DrawFrame(xMin,-1,xMax,1);
+    hr7 = canvas7->DrawFrame(xMin, -0.8 , xMax, 0.5);
     hr7->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 550 #pm 10 MeV)");
 
     gr7 = new TGraphErrors(5, x, pSigmaValues550, ex, pSigmaErrValues550);
-    gr7->Fit("LegendreFit");
     gr7->SetMarkerColor(2);
     gr7->SetLineColor(2);
-    gr7->SetMarkerStyle(5);
-    gr7->SetMarkerSize(2);
+    gr7->SetMarkerStyle(8);
+    gr7->SetMarkerSize(1);
     gr7->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 550 #pm 10 MeV)");
     gr7->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr7->GetYaxis()->SetTitle("#Sigma");
@@ -298,18 +299,17 @@ void Sigma(){
 
     pad8->SetTickx(1);
     pad8->SetTicky(1);
-    pad8->SetGridx(1);
-    pad8->SetGridy(1);
+    pad8->SetGridx(0);
+    pad8->SetGridy(0);
     TH1F  *hr8;
-    hr8 = canvas8->DrawFrame(xMin,-1,xMax,1);
+    hr8 = canvas8->DrawFrame(xMin, -0.8 , xMax, 0.5);
     hr8->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 570 #pm 10 MeV)");
 
     gr8 = new TGraphErrors(5, x, pSigmaValues570, ex, pSigmaErrValues570);
-    gr8->Fit("LegendreFit");
     gr8->SetMarkerColor(2);
     gr8->SetLineColor(2);
-    gr8->SetMarkerStyle(5);
-    gr8->SetMarkerSize(2);
+    gr8->SetMarkerStyle(8);
+    gr8->SetMarkerSize(1);
     gr8->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 570 #pm 10 MeV)");
     gr8->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr8->GetYaxis()->SetTitle("#Sigma");
@@ -323,18 +323,17 @@ void Sigma(){
 
     pad9->SetTickx(1);
     pad9->SetTicky(1);
-    pad9->SetGridx(1);
-    pad9->SetGridy(1);
+    pad9->SetGridx(0);
+    pad9->SetGridy(0);
     TH1F  *hr9;
-    hr9 = canvas9->DrawFrame(xMin,-1,xMax,1);
+    hr9 = canvas9->DrawFrame(xMin, -0.8 , xMax, 0.5);
     hr9->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 590 #pm 10 MeV)");
 
     gr9 = new TGraphErrors(5, x, pSigmaValues590, ex, pSigmaErrValues590);
-    gr9->Fit("LegendreFit");
     gr9->SetMarkerColor(2);
     gr9->SetLineColor(2);
-    gr9->SetMarkerStyle(5);
-    gr9->SetMarkerSize(2);
+    gr9->SetMarkerStyle(8);
+    gr9->SetMarkerSize(1);
     gr9->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 590 #pm 10 MeV)");
     gr9->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr9->GetYaxis()->SetTitle("#Sigma");
@@ -348,18 +347,17 @@ void Sigma(){
 
     pad10->SetTickx(1);
     pad10->SetTicky(1);
-    pad10->SetGridx(1);
-    pad10->SetGridy(1);
+    pad10->SetGridx(0);
+    pad10->SetGridy(0);
     TH1F  *hr10;
-    hr10 = canvas10->DrawFrame(xMin,-1,xMax,1);
+    hr10 = canvas10->DrawFrame(xMin, -0.8 , xMax, 0.5);
     hr10->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 610 #pm 10 MeV)");
 
     gr10 = new TGraphErrors(5, x, pSigmaValues610, ex, pSigmaErrValues610);
-    gr10->Fit("LegendreFit");
     gr10->SetMarkerColor(2);
     gr10->SetLineColor(2);
-    gr10->SetMarkerStyle(5);
-    gr10->SetMarkerSize(2);
+    gr10->SetMarkerStyle(8);
+    gr10->SetMarkerSize(1);
     gr10->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 610 #pm 10 MeV)");
     gr10->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr10->GetYaxis()->SetTitle("#Sigma");

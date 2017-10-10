@@ -28,7 +28,7 @@ void SigmaAsymm(){
     double pCosA610;
     double pCosAErr610;
 
-    TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/ParaPerp_Total_20_Combined.root"); // Open the latest PTotal combined file to load histograms from
+    TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/ParaPerp_S24.root"); // Open the latest PTotal combined file to load histograms from
     NPara = Eg_Para->GetEntries();
     NPerp = Eg_Perp->GetEntries();
     ScaleFactor = NPara/NPerp;
@@ -404,7 +404,7 @@ void SigmaAsymm(){
     pCosAmp[4][9] = CosFit->GetParameter(0);
     pCosAmpErr[4][9] = CosFit->GetParError(0);
 
-    TFile f1("ParaPerpAsymm_Total_20.root", "RECREATE");
+    TFile f1("ParaPerpAsymm_S24.root", "RECREATE");
 
     ParaPerpAsymmPhip_430MeVCM1->Write();
     ParaPerpAsymmPhip_450MeVCM1->Write();

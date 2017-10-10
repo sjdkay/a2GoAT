@@ -4,12 +4,11 @@
 #
 # Set prompt and random windows (standard library and GH1 library)
 Set-Prompt-Cut: -5 20
-Add-Random-Cut: -170 -35
-Add-Random-Cut: 35 275
+Add-Random-Cut: -135 -35
+Add-Random-Cut: 35 135
 
 # Set target mass (for standard physics library)
 Target-Mass: 1875.613
-#Target-Mass: 0
 
 # cut on the tagger channel (for standard physics library)
 Tagger-Channel-Cut: 1 350

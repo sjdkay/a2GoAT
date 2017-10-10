@@ -162,6 +162,7 @@ private:
     GH1* MMp700800;
     GH1* MMp800900;
 
+    GH1* Phip415CM1;
     GH1* Phip425CM1;
     GH1* Phip435CM1;
     GH1* Phip445CM1;
@@ -183,6 +184,7 @@ private:
     GH1* Phip605CM1;
     GH1* Phip615CM1;
 
+    GH1* Phip415CM2;
     GH1* Phip425CM2;
     GH1* Phip435CM2;
     GH1* Phip445CM2;
@@ -204,6 +206,7 @@ private:
     GH1* Phip605CM2;
     GH1* Phip615CM2;
 
+    GH1* Phip415CM3;
     GH1* Phip425CM3;
     GH1* Phip435CM3;
     GH1* Phip445CM3;
@@ -225,6 +228,7 @@ private:
     GH1* Phip605CM3;
     GH1* Phip615CM3;
 
+    GH1* Phip415CM4;
     GH1* Phip425CM4;
     GH1* Phip435CM4;
     GH1* Phip445CM4;
@@ -246,6 +250,7 @@ private:
     GH1* Phip605CM4;
     GH1* Phip615CM4;
 
+    GH1* Phip415CM5;
     GH1* Phip425CM5;
     GH1* Phip435CM5;
     GH1* Phip445CM5;
@@ -267,6 +272,7 @@ private:
     GH1* Phip605CM5;
     GH1* Phip615CM5;
 
+    GH1* Phip415CM6;
     GH1* Phip425CM6;
     GH1* Phip435CM6;
     GH1* Phip445CM6;
@@ -288,6 +294,7 @@ private:
     GH1* Phip605CM6;
     GH1* Phip615CM6;
 
+    GH1* Phip415CM7;
     GH1* Phip425CM7;
     GH1* Phip435CM7;
     GH1* Phip445CM7;
@@ -309,6 +316,7 @@ private:
     GH1* Phip605CM7;
     GH1* Phip615CM7;
 
+    GH1* Phip415CM8;
     GH1* Phip425CM8;
     GH1* Phip435CM8;
     GH1* Phip445CM8;
@@ -330,6 +338,7 @@ private:
     GH1* Phip605CM8;
     GH1* Phip615CM8;
 
+    GH1* Phip415CM9;
     GH1* Phip425CM9;
     GH1* Phip435CM9;
     GH1* Phip445CM9;
@@ -351,6 +360,7 @@ private:
     GH1* Phip605CM9;
     GH1* Phip615CM9;
 
+    GH1* Phip415CM10;
     GH1* Phip425CM10;
     GH1* Phip435CM10;
     GH1* Phip445CM10;

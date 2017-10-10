@@ -331,7 +331,7 @@ TVector3 PPhysics::ScatteredFrameAngles(TVector3 InitialVect, TVector3 RealPVect
 
     double_t Phi = TMath::ATan2(cos(YAxis.Angle(V2)), cos(XAxis.Angle(V2)));
 
-    ValueHolder.SetXYZ(Phi*TMath::RadToDeg(), tmpPh, TT1*TMath::RadToDeg());
+    ValueHolder.SetXYZ(Phi, tmpPh, TT1);
 
     return ValueHolder;
 }

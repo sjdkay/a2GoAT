@@ -2,7 +2,7 @@
 
 void ParaPerp_Combiner_NoScatt(){
 
-    TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Para/NoScatt/Physics_Total_Para_NoScatt_9_5_7_17.root"); // Open latest Para file
+    TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Para/NoScatt/Physics_Total_Para_NoScatt_12_19_09_17.root"); // Open latest Para file
 
     TH1D* time_Para = (TH1D*)f->Get("time")->Clone();
     time_Para->SetName("time_Para");
@@ -11,23 +11,18 @@ void ParaPerp_Combiner_NoScatt(){
 
     TH1D* Eg_Para = (TH1D*)f->Get("Eg")->Clone();
     Eg_Para->SetName("Eg_Para");
-    TH1D* PhiDifference_Para = (TH1D*)f->Get("PhiDifference")->Clone();
-    PhiDifference_Para->SetName("PhiDifference_Para");
-    TH1D* EpKin_Para = (TH1D*)f->Get("EpKin")->Clone();
-    EpKin_Para->SetName("EpKin_Para");
-    TH1D* EpCorrected_Para = (TH1D*)f->Get("EpCorrected")->Clone();
-    EpCorrected_Para->SetName("EpCorrected_Para");
-    TH1D* EpKinEpCorrDiff_Para = (TH1D*)f->Get("EpKinEpCorrDiff")->Clone();
-    EpKinEpCorrDiff_Para->SetName("EpKinEpCorrDiff_Para");
-    TH1D* EpEpCorrDiff_Para = (TH1D*)f->Get("EpEpCorrDiff")->Clone();
-    EpEpCorrDiff_Para->SetName("EpEpCorrDiff_Para");
-
     TH1D* MMpEpCorrected_Para = (TH1D*)f->Get("MMpEpCorrected")->Clone();
     MMpEpCorrected_Para->SetName("MMpEpCorrected_Para");
     TH1D* OAngle_Para = (TH1D*)f->Get("OAngle")->Clone();
     OAngle_Para->SetName("OAngle_Para");
-    TH1D* WCZnRecon_Para = (TH1D*)f->Get("WCZnRecon")->Clone();
-    WCZnRecon_Para->SetName("WCZnRecon_Para");
+    TH1D* ZpDist_Para = (TH1D*)f->Get("ZpDist")->Clone();
+    ZpDist_Para->SetName("ZpDist_Para");
+    TH1D* ThetanDist_Para = (TH1D*)f->Get("ThetanDist")->Clone();
+    ThetanDist_Para->SetName("ThetanDist_Para");
+    TH2D* E_dE_Para = (TH2D*)f->Get("E_dE")->Clone();
+    E_dE_Para->SetName("E_dE_Para");
+    TH2D* DeutKinPiKin_Para = (TH2D*)f->Get("DeutKinPiKin")->Clone();
+    DeutKinPiKin_Para->SetName("DeutKinPiKin_Para");
 
     TH1D* MMp200300_Para = (TH1D*)f->Get("MMp200300")->Clone();
     MMp200300_Para->SetName("MMp200300_Para");
@@ -44,9 +39,8 @@ void ParaPerp_Combiner_NoScatt(){
     TH1D* MMp800900_Para = (TH1D*)f->Get("MMp800900")->Clone();
     MMp800900_Para->SetName("MMp800900_Para");
 
-    TH1D* ZpDist_Para = (TH1D*)f->Get("ZpDist")->Clone();
-    ZpDist_Para->SetName("ZpDist_Para");
-
+    TH1D* Phip_415MeVCM1_Para = (TH1D*)f->Get("Phip_415MeVCM1")->Clone();
+    Phip_415MeVCM1_Para->SetName("Phip_415MeVCM1_Para");
     TH1D* Phip_425MeVCM1_Para = (TH1D*)f->Get("Phip_425MeVCM1")->Clone();
     Phip_425MeVCM1_Para->SetName("Phip_425MeVCM1_Para");
     TH1D* Phip_435MeVCM1_Para = (TH1D*)f->Get("Phip_435MeVCM1")->Clone();
@@ -88,6 +82,8 @@ void ParaPerp_Combiner_NoScatt(){
     TH1D* Phip_615MeVCM1_Para = (TH1D*)f->Get("Phip_615MeVCM1")->Clone();
     Phip_615MeVCM1_Para->SetName("Phip_615MeVCM1_Para");
 
+    TH1D* Phip_415MeVCM2_Para = (TH1D*)f->Get("Phip_415MeVCM2")->Clone();
+    Phip_415MeVCM2_Para->SetName("Phip_415MeVCM2_Para");
     TH1D* Phip_425MeVCM2_Para = (TH1D*)f->Get("Phip_425MeVCM2")->Clone();
     Phip_425MeVCM2_Para->SetName("Phip_425MeVCM2_Para");
     TH1D* Phip_435MeVCM2_Para = (TH1D*)f->Get("Phip_435MeVCM2")->Clone();
@@ -129,6 +125,8 @@ void ParaPerp_Combiner_NoScatt(){
     TH1D* Phip_615MeVCM2_Para = (TH1D*)f->Get("Phip_615MeVCM2")->Clone();
     Phip_615MeVCM2_Para->SetName("Phip_615MeVCM2_Para");
 
+    TH1D* Phip_415MeVCM3_Para = (TH1D*)f->Get("Phip_415MeVCM3")->Clone();
+    Phip_415MeVCM3_Para->SetName("Phip_415MeVCM3_Para");
     TH1D* Phip_425MeVCM3_Para = (TH1D*)f->Get("Phip_425MeVCM3")->Clone();
     Phip_425MeVCM3_Para->SetName("Phip_425MeVCM3_Para");
     TH1D* Phip_435MeVCM3_Para = (TH1D*)f->Get("Phip_435MeVCM3")->Clone();
@@ -170,6 +168,8 @@ void ParaPerp_Combiner_NoScatt(){
     TH1D* Phip_615MeVCM3_Para = (TH1D*)f->Get("Phip_615MeVCM3")->Clone();
     Phip_615MeVCM3_Para->SetName("Phip_615MeVCM3_Para");
 
+    TH1D* Phip_415MeVCM4_Para = (TH1D*)f->Get("Phip_415MeVCM4")->Clone();
+    Phip_415MeVCM4_Para->SetName("Phip_415MeVCM4_Para");
     TH1D* Phip_425MeVCM4_Para = (TH1D*)f->Get("Phip_425MeVCM4")->Clone();
     Phip_425MeVCM4_Para->SetName("Phip_425MeVCM4_Para");
     TH1D* Phip_435MeVCM4_Para = (TH1D*)f->Get("Phip_435MeVCM4")->Clone();
@@ -211,6 +211,8 @@ void ParaPerp_Combiner_NoScatt(){
     TH1D* Phip_615MeVCM4_Para = (TH1D*)f->Get("Phip_615MeVCM4")->Clone();
     Phip_615MeVCM4_Para->SetName("Phip_615MeVCM4_Para");
 
+    TH1D* Phip_415MeVCM5_Para = (TH1D*)f->Get("Phip_415MeVCM5")->Clone();
+    Phip_415MeVCM5_Para->SetName("Phip_415MeVCM5_Para");
     TH1D* Phip_425MeVCM5_Para = (TH1D*)f->Get("Phip_425MeVCM5")->Clone();
     Phip_425MeVCM5_Para->SetName("Phip_425MeVCM5_Para");
     TH1D* Phip_435MeVCM5_Para = (TH1D*)f->Get("Phip_435MeVCM5")->Clone();
@@ -252,6 +254,8 @@ void ParaPerp_Combiner_NoScatt(){
     TH1D* Phip_615MeVCM5_Para = (TH1D*)f->Get("Phip_615MeVCM5")->Clone();
     Phip_615MeVCM5_Para->SetName("Phip_615MeVCM5_Para");
 
+    TH1D* Phip_415MeVCM6_Para = (TH1D*)f->Get("Phip_415MeVCM6")->Clone();
+    Phip_415MeVCM6_Para->SetName("Phip_415MeVCM6_Para");
     TH1D* Phip_425MeVCM6_Para = (TH1D*)f->Get("Phip_425MeVCM6")->Clone();
     Phip_425MeVCM6_Para->SetName("Phip_425MeVCM6_Para");
     TH1D* Phip_435MeVCM6_Para = (TH1D*)f->Get("Phip_435MeVCM6")->Clone();
@@ -293,6 +297,8 @@ void ParaPerp_Combiner_NoScatt(){
     TH1D* Phip_615MeVCM6_Para = (TH1D*)f->Get("Phip_615MeVCM6")->Clone();
     Phip_615MeVCM6_Para->SetName("Phip_615MeVCM6_Para");
 
+    TH1D* Phip_415MeVCM7_Para = (TH1D*)f->Get("Phip_415MeVCM7")->Clone();
+    Phip_415MeVCM7_Para->SetName("Phip_415MeVCM7_Para");
     TH1D* Phip_425MeVCM7_Para = (TH1D*)f->Get("Phip_425MeVCM7")->Clone();
     Phip_425MeVCM7_Para->SetName("Phip_425MeVCM7_Para");
     TH1D* Phip_435MeVCM7_Para = (TH1D*)f->Get("Phip_435MeVCM7")->Clone();
@@ -334,6 +340,8 @@ void ParaPerp_Combiner_NoScatt(){
     TH1D* Phip_615MeVCM7_Para = (TH1D*)f->Get("Phip_615MeVCM7")->Clone();
     Phip_615MeVCM7_Para->SetName("Phip_615MeVCM7_Para");
 
+    TH1D* Phip_415MeVCM8_Para = (TH1D*)f->Get("Phip_415MeVCM8")->Clone();
+    Phip_415MeVCM8_Para->SetName("Phip_415MeVCM8_Para");
     TH1D* Phip_425MeVCM8_Para = (TH1D*)f->Get("Phip_425MeVCM8")->Clone();
     Phip_425MeVCM8_Para->SetName("Phip_425MeVCM8_Para");
     TH1D* Phip_435MeVCM8_Para = (TH1D*)f->Get("Phip_435MeVCM8")->Clone();
@@ -375,6 +383,8 @@ void ParaPerp_Combiner_NoScatt(){
     TH1D* Phip_615MeVCM8_Para = (TH1D*)f->Get("Phip_615MeVCM8")->Clone();
     Phip_615MeVCM8_Para->SetName("Phip_615MeVCM8_Para");
 
+    TH1D* Phip_415MeVCM9_Para = (TH1D*)f->Get("Phip_415MeVCM9")->Clone();
+    Phip_415MeVCM9_Para->SetName("Phip_415MeVCM9_Para");
     TH1D* Phip_425MeVCM9_Para = (TH1D*)f->Get("Phip_425MeVCM9")->Clone();
     Phip_425MeVCM9_Para->SetName("Phip_425MeVCM9_Para");
     TH1D* Phip_435MeVCM9_Para = (TH1D*)f->Get("Phip_435MeVCM9")->Clone();
@@ -416,6 +426,8 @@ void ParaPerp_Combiner_NoScatt(){
     TH1D* Phip_615MeVCM9_Para = (TH1D*)f->Get("Phip_615MeVCM9")->Clone();
     Phip_615MeVCM9_Para->SetName("Phip_615MeVCM9_Para");
 
+    TH1D* Phip_415MeVCM10_Para = (TH1D*)f->Get("Phip_415MeVCM10")->Clone();
+    Phip_415MeVCM10_Para->SetName("Phip_415MeVCM10_Para");
     TH1D* Phip_425MeVCM10_Para = (TH1D*)f->Get("Phip_425MeVCM10")->Clone();
     Phip_425MeVCM10_Para->SetName("Phip_425MeVCM10_Para");
     TH1D* Phip_435MeVCM10_Para = (TH1D*)f->Get("Phip_435MeVCM10")->Clone();
@@ -457,54 +469,13 @@ void ParaPerp_Combiner_NoScatt(){
     TH1D* Phip_615MeVCM10_Para = (TH1D*)f->Get("Phip_615MeVCM10")->Clone();
     Phip_615MeVCM10_Para->SetName("Phip_615MeVCM10_Para");
 
-    TH1D* ThetanDist_Para = (TH1D*)f->Get("ThetanDist")->Clone();
-    ThetanDist_Para->SetName("ThetanDist_Para");
-    TH1D* ThetanRecDist_Para = (TH1D*)f->Get("ThetanRecDist")->Clone();
-    ThetanRecDist_Para->SetName("ThetanRecDist_Para");
-    TH1D* ThetanDiffDist_Para = (TH1D*)f->Get("ThetanDiffDist")->Clone();
-    ThetanDiffDist_Para->SetName("ThetanDiffDist_Para");
-    TH2D* ThetanDiffZp_Para = (TH2D*)f->Get("ThetanDiffZp")->Clone();
-    ThetanDiffZp_Para->SetName("ThetanDiffZp_Para");
-
-    TH1D* ThetanCorrDist_Para = (TH1D*)f->Get("ThetanCorrDist")->Clone();
-    ThetanCorrDist_Para->SetName("ThetanCorrDist_Para");
-    TH1D* ThetanCorrDiffDist_Para = (TH1D*)f->Get("ThetanCorrDiffDist")->Clone();
-    ThetanCorrDiffDist_Para->SetName("ThetanCorrDiffDist_Para");
-    TH1D* ThetanCorrRecDiffDist_Para = (TH1D*)f->Get("ThetanCorrRecDiffDist")->Clone();
-    ThetanCorrRecDiffDist_Para->SetName("ThetanCorrRecDiffDist_Para");
-    TH2D* ThetanCorrDiffZp_Para = (TH2D*)f->Get("ThetanCorrDiffZp")->Clone();
-    ThetanCorrDiffZp_Para->SetName("ThetanCorrDiffZp_Para");
-
-    TH2D* E_dE_Para = (TH2D*)f->Get("E_dE")->Clone();
-    E_dE_Para->SetName("E_dE_Para");
-    TH2D* KinEp_dE_Para = (TH2D*)f->Get("KinEp_dE")->Clone();
-    KinEp_dE_Para->SetName("KinEp_dE_Para");
-    TH2D* E_KinEp_Para = (TH2D*)f->Get("E_KinEp")->Clone();
-    E_KinEp_Para->SetName("E_KinEp_Para");
-
-    TH1D* ThetaRecPiDiff_Para = (TH1D*)f->Get("ThetaRecPiDiff")->Clone();
-    ThetaRecPiDiff_Para->SetName("ThetaRecPiDiff_Para");
-    TH2D* ThetanThetaRecPi_Para = (TH2D*)f->Get("ThetanThetaRecPi")->Clone();
-    ThetanThetaRecPi_Para->SetName("ThetanThetaRecPi_Para");
-    TH2D* ThetanThetaRecPiDiff_Para = (TH2D*)f->Get("ThetanThetaRecPiDiff")->Clone();
-    ThetanThetaRecPiDiff_Para->SetName("ThetanThetaRecPiDiff_Para");
-    TH1D* ThetaRecPDiff_Para = (TH1D*)f->Get("ThetaRecPDiff")->Clone();
-    ThetaRecPDiff_Para->SetName("ThetaRecPDiff_Para");
-    TH2D* ThetanThetaRecP_Para = (TH2D*)f->Get("ThetanThetaRecP")->Clone();
-    ThetanThetaRecP_Para->SetName("ThetanThetaRecP_Para");
-    TH2D* ThetanThetaRecPDiff_Para = (TH2D*)f->Get("ThetanThetaRecPDiff")->Clone();
-    ThetanThetaRecPDiff_Para->SetName("ThetanThetaRecPDiff_Para");
-
-    TH2D* DeutKinPiKin_Para = (TH2D*)f->Get("DeutKinPiKin")->Clone();
-    DeutKinPiKin_Para->SetName("DeutKinPiKin_Para");
-
     ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////
     ///////////////// PARA DONE ////////////////////////
     ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////
 
-    TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Perp/NoScatt/Physics_Total_Perp_NoScatt_9_5_7_17.root"); // Open latest Perp file
+    TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Perp/NoScatt/Physics_Total_Perp_NoScatt_12_19_09_17.root"); // Open latest Perp file
 
     TH1D* time_Perp = (TH1D*)f->Get("time")->Clone();
     time_Perp->SetName("time_Perp");
@@ -513,23 +484,18 @@ void ParaPerp_Combiner_NoScatt(){
 
     TH1D* Eg_Perp = (TH1D*)f->Get("Eg")->Clone();
     Eg_Perp->SetName("Eg_Perp");
-    TH1D* PhiDifference_Perp = (TH1D*)f->Get("PhiDifference")->Clone();
-    PhiDifference_Perp->SetName("PhiDifference_Perp");
-    TH1D* EpKin_Perp = (TH1D*)f->Get("EpKin")->Clone();
-    EpKin_Perp->SetName("EpKin_Perp");
-    TH1D* EpCorrected_Perp = (TH1D*)f->Get("EpCorrected")->Clone();
-    EpCorrected_Perp->SetName("EpCorrected_Perp");
-    TH1D* EpKinEpCorrDiff_Perp = (TH1D*)f->Get("EpKinEpCorrDiff")->Clone();
-    EpKinEpCorrDiff_Perp->SetName("EpKinEpCorrDiff_Perp");
-    TH1D* EpEpCorrDiff_Perp = (TH1D*)f->Get("EpEpCorrDiff")->Clone();
-    EpEpCorrDiff_Perp->SetName("EpEpCorrDiff_Perp");
-
     TH1D* MMpEpCorrected_Perp = (TH1D*)f->Get("MMpEpCorrected")->Clone();
     MMpEpCorrected_Perp->SetName("MMpEpCorrected_Perp");
     TH1D* OAngle_Perp = (TH1D*)f->Get("OAngle")->Clone();
     OAngle_Perp->SetName("OAngle_Perp");
-    TH1D* WCZnRecon_Perp = (TH1D*)f->Get("WCZnRecon")->Clone();
-    WCZnRecon_Perp->SetName("WCZnRecon_Perp");
+    TH1D* ZpDist_Perp = (TH1D*)f->Get("ZpDist")->Clone();
+    ZpDist_Perp->SetName("ZpDist_Perp");
+    TH1D* ThetanDist_Perp = (TH1D*)f->Get("ThetanDist")->Clone();
+    ThetanDist_Perp->SetName("ThetanDist_Perp");
+    TH2D* E_dE_Perp = (TH2D*)f->Get("E_dE")->Clone();
+    E_dE_Perp->SetName("E_dE_Perp");
+    TH2D* DeutKinPiKin_Perp = (TH2D*)f->Get("DeutKinPiKin")->Clone();
+    DeutKinPiKin_Perp->SetName("DeutKinPiKin_Perp");
 
     TH1D* MMp200300_Perp = (TH1D*)f->Get("MMp200300")->Clone();
     MMp200300_Perp->SetName("MMp200300_Perp");
@@ -546,9 +512,23 @@ void ParaPerp_Combiner_NoScatt(){
     TH1D* MMp800900_Perp = (TH1D*)f->Get("MMp800900")->Clone();
     MMp800900_Perp->SetName("MMp800900_Perp");
 
-    TH1D* ZpDist_Perp = (TH1D*)f->Get("ZpDist")->Clone();
-    ZpDist_Perp->SetName("ZpDist_Perp");
+    TH1D* MMp200300_Perp = (TH1D*)f->Get("MMp200300")->Clone();
+    MMp200300_Perp->SetName("MMp200300_Perp");
+    TH1D* MMp300400_Perp = (TH1D*)f->Get("MMp300400")->Clone();
+    MMp300400_Perp->SetName("MMp300400_Perp");
+    TH1D* MMp400500_Perp = (TH1D*)f->Get("MMp400500")->Clone();
+    MMp400500_Perp->SetName("MMp400500_Perp");
+    TH1D* MMp500600_Perp = (TH1D*)f->Get("MMp500600")->Clone();
+    MMp500600_Perp->SetName("MMp500600_Perp");
+    TH1D* MMp600700_Perp = (TH1D*)f->Get("MMp600700")->Clone();
+    MMp600700_Perp->SetName("MMp600700_Perp");
+    TH1D* MMp700800_Perp = (TH1D*)f->Get("MMp700800")->Clone();
+    MMp700800_Perp->SetName("MMp700800_Perp");
+    TH1D* MMp800900_Perp = (TH1D*)f->Get("MMp800900")->Clone();
+    MMp800900_Perp->SetName("MMp800900_Perp");
 
+    TH1D* Phip_415MeVCM1_Perp = (TH1D*)f->Get("Phip_415MeVCM1")->Clone();
+    Phip_415MeVCM1_Perp->SetName("Phip_415MeVCM1_Perp");
     TH1D* Phip_425MeVCM1_Perp = (TH1D*)f->Get("Phip_425MeVCM1")->Clone();
     Phip_425MeVCM1_Perp->SetName("Phip_425MeVCM1_Perp");
     TH1D* Phip_435MeVCM1_Perp = (TH1D*)f->Get("Phip_435MeVCM1")->Clone();
@@ -590,6 +570,8 @@ void ParaPerp_Combiner_NoScatt(){
     TH1D* Phip_615MeVCM1_Perp = (TH1D*)f->Get("Phip_615MeVCM1")->Clone();
     Phip_615MeVCM1_Perp->SetName("Phip_615MeVCM1_Perp");
 
+    TH1D* Phip_415MeVCM2_Perp = (TH1D*)f->Get("Phip_415MeVCM2")->Clone();
+    Phip_415MeVCM2_Perp->SetName("Phip_415MeVCM2_Perp");
     TH1D* Phip_425MeVCM2_Perp = (TH1D*)f->Get("Phip_425MeVCM2")->Clone();
     Phip_425MeVCM2_Perp->SetName("Phip_425MeVCM2_Perp");
     TH1D* Phip_435MeVCM2_Perp = (TH1D*)f->Get("Phip_435MeVCM2")->Clone();
@@ -631,6 +613,8 @@ void ParaPerp_Combiner_NoScatt(){
     TH1D* Phip_615MeVCM2_Perp = (TH1D*)f->Get("Phip_615MeVCM2")->Clone();
     Phip_615MeVCM2_Perp->SetName("Phip_615MeVCM2_Perp");
 
+    TH1D* Phip_415MeVCM3_Perp = (TH1D*)f->Get("Phip_415MeVCM3")->Clone();
+    Phip_415MeVCM3_Perp->SetName("Phip_415MeVCM3_Perp");
     TH1D* Phip_425MeVCM3_Perp = (TH1D*)f->Get("Phip_425MeVCM3")->Clone();
     Phip_425MeVCM3_Perp->SetName("Phip_425MeVCM3_Perp");
     TH1D* Phip_435MeVCM3_Perp = (TH1D*)f->Get("Phip_435MeVCM3")->Clone();
@@ -672,6 +656,8 @@ void ParaPerp_Combiner_NoScatt(){
     TH1D* Phip_615MeVCM3_Perp = (TH1D*)f->Get("Phip_615MeVCM3")->Clone();
     Phip_615MeVCM3_Perp->SetName("Phip_615MeVCM3_Perp");
 
+    TH1D* Phip_415MeVCM4_Perp = (TH1D*)f->Get("Phip_415MeVCM4")->Clone();
+    Phip_415MeVCM4_Perp->SetName("Phip_415MeVCM4_Perp");
     TH1D* Phip_425MeVCM4_Perp = (TH1D*)f->Get("Phip_425MeVCM4")->Clone();
     Phip_425MeVCM4_Perp->SetName("Phip_425MeVCM4_Perp");
     TH1D* Phip_435MeVCM4_Perp = (TH1D*)f->Get("Phip_435MeVCM4")->Clone();
@@ -713,6 +699,8 @@ void ParaPerp_Combiner_NoScatt(){
     TH1D* Phip_615MeVCM4_Perp = (TH1D*)f->Get("Phip_615MeVCM4")->Clone();
     Phip_615MeVCM4_Perp->SetName("Phip_615MeVCM4_Perp");
 
+    TH1D* Phip_415MeVCM5_Perp = (TH1D*)f->Get("Phip_415MeVCM5")->Clone();
+    Phip_415MeVCM5_Perp->SetName("Phip_415MeVCM5_Perp");
     TH1D* Phip_425MeVCM5_Perp = (TH1D*)f->Get("Phip_425MeVCM5")->Clone();
     Phip_425MeVCM5_Perp->SetName("Phip_425MeVCM5_Perp");
     TH1D* Phip_435MeVCM5_Perp = (TH1D*)f->Get("Phip_435MeVCM5")->Clone();
@@ -754,6 +742,8 @@ void ParaPerp_Combiner_NoScatt(){
     TH1D* Phip_615MeVCM5_Perp = (TH1D*)f->Get("Phip_615MeVCM5")->Clone();
     Phip_615MeVCM5_Perp->SetName("Phip_615MeVCM5_Perp");
 
+    TH1D* Phip_415MeVCM6_Perp = (TH1D*)f->Get("Phip_415MeVCM6")->Clone();
+    Phip_415MeVCM6_Perp->SetName("Phip_415MeVCM6_Perp");
     TH1D* Phip_425MeVCM6_Perp = (TH1D*)f->Get("Phip_425MeVCM6")->Clone();
     Phip_425MeVCM6_Perp->SetName("Phip_425MeVCM6_Perp");
     TH1D* Phip_435MeVCM6_Perp = (TH1D*)f->Get("Phip_435MeVCM6")->Clone();
@@ -795,6 +785,8 @@ void ParaPerp_Combiner_NoScatt(){
     TH1D* Phip_615MeVCM6_Perp = (TH1D*)f->Get("Phip_615MeVCM6")->Clone();
     Phip_615MeVCM6_Perp->SetName("Phip_615MeVCM6_Perp");
 
+    TH1D* Phip_415MeVCM7_Perp = (TH1D*)f->Get("Phip_415MeVCM7")->Clone();
+    Phip_415MeVCM7_Perp->SetName("Phip_415MeVCM7_Perp");
     TH1D* Phip_425MeVCM7_Perp = (TH1D*)f->Get("Phip_425MeVCM7")->Clone();
     Phip_425MeVCM7_Perp->SetName("Phip_425MeVCM7_Perp");
     TH1D* Phip_435MeVCM7_Perp = (TH1D*)f->Get("Phip_435MeVCM7")->Clone();
@@ -836,6 +828,8 @@ void ParaPerp_Combiner_NoScatt(){
     TH1D* Phip_615MeVCM7_Perp = (TH1D*)f->Get("Phip_615MeVCM7")->Clone();
     Phip_615MeVCM7_Perp->SetName("Phip_615MeVCM7_Perp");
 
+    TH1D* Phip_415MeVCM8_Perp = (TH1D*)f->Get("Phip_415MeVCM8")->Clone();
+    Phip_415MeVCM8_Perp->SetName("Phip_415MeVCM8_Perp");
     TH1D* Phip_425MeVCM8_Perp = (TH1D*)f->Get("Phip_425MeVCM8")->Clone();
     Phip_425MeVCM8_Perp->SetName("Phip_425MeVCM8_Perp");
     TH1D* Phip_435MeVCM8_Perp = (TH1D*)f->Get("Phip_435MeVCM8")->Clone();
@@ -877,6 +871,8 @@ void ParaPerp_Combiner_NoScatt(){
     TH1D* Phip_615MeVCM8_Perp = (TH1D*)f->Get("Phip_615MeVCM8")->Clone();
     Phip_615MeVCM8_Perp->SetName("Phip_615MeVCM8_Perp");
 
+    TH1D* Phip_415MeVCM9_Perp = (TH1D*)f->Get("Phip_415MeVCM9")->Clone();
+    Phip_415MeVCM9_Perp->SetName("Phip_415MeVCM9_Perp");
     TH1D* Phip_425MeVCM9_Perp = (TH1D*)f->Get("Phip_425MeVCM9")->Clone();
     Phip_425MeVCM9_Perp->SetName("Phip_425MeVCM9_Perp");
     TH1D* Phip_435MeVCM9_Perp = (TH1D*)f->Get("Phip_435MeVCM9")->Clone();
@@ -918,6 +914,8 @@ void ParaPerp_Combiner_NoScatt(){
     TH1D* Phip_615MeVCM9_Perp = (TH1D*)f->Get("Phip_615MeVCM9")->Clone();
     Phip_615MeVCM9_Perp->SetName("Phip_615MeVCM9_Perp");
 
+    TH1D* Phip_415MeVCM10_Perp = (TH1D*)f->Get("Phip_415MeVCM10")->Clone();
+    Phip_415MeVCM10_Perp->SetName("Phip_415MeVCM10_Perp");
     TH1D* Phip_425MeVCM10_Perp = (TH1D*)f->Get("Phip_425MeVCM10")->Clone();
     Phip_425MeVCM10_Perp->SetName("Phip_425MeVCM10_Perp");
     TH1D* Phip_435MeVCM10_Perp = (TH1D*)f->Get("Phip_435MeVCM10")->Clone();
@@ -959,70 +957,24 @@ void ParaPerp_Combiner_NoScatt(){
     TH1D* Phip_615MeVCM10_Perp = (TH1D*)f->Get("Phip_615MeVCM10")->Clone();
     Phip_615MeVCM10_Perp->SetName("Phip_615MeVCM10_Perp");
 
-    TH1D* ThetanDist_Perp = (TH1D*)f->Get("ThetanDist")->Clone();
-    ThetanDist_Perp->SetName("ThetanDist_Perp");
-    TH1D* ThetanRecDist_Perp = (TH1D*)f->Get("ThetanRecDist")->Clone();
-    ThetanRecDist_Perp->SetName("ThetanRecDist_Perp");
-    TH1D* ThetanDiffDist_Perp = (TH1D*)f->Get("ThetanDiffDist")->Clone();
-    ThetanDiffDist_Perp->SetName("ThetanDiffDist_Perp");
-    TH2D* ThetanDiffZp_Perp = (TH2D*)f->Get("ThetanDiffZp")->Clone();
-    ThetanDiffZp_Perp->SetName("ThetanDiffZp_Perp");
-
-    TH1D* ThetanCorrDist_Perp = (TH1D*)f->Get("ThetanCorrDist")->Clone();
-    ThetanCorrDist_Perp->SetName("ThetanCorrDist_Perp");
-    TH1D* ThetanCorrDiffDist_Perp = (TH1D*)f->Get("ThetanCorrDiffDist")->Clone();
-    ThetanCorrDiffDist_Perp->SetName("ThetanCorrDiffDist_Perp");
-    TH1D* ThetanCorrRecDiffDist_Perp = (TH1D*)f->Get("ThetanCorrRecDiffDist")->Clone();
-    ThetanCorrRecDiffDist_Perp->SetName("ThetanCorrRecDiffDist_Perp");
-    TH2D* ThetanCorrDiffZp_Perp = (TH2D*)f->Get("ThetanCorrDiffZp")->Clone();
-    ThetanCorrDiffZp_Perp->SetName("ThetanCorrDiffZp_Perp");
-
-    TH2D* E_dE_Perp = (TH2D*)f->Get("E_dE")->Clone();
-    E_dE_Perp->SetName("E_dE_Perp");
-    TH2D* KinEp_dE_Perp = (TH2D*)f->Get("KinEp_dE")->Clone();
-    KinEp_dE_Perp->SetName("KinEp_dE_Perp");
-    TH2D* E_KinEp_Perp = (TH2D*)f->Get("E_KinEp")->Clone();
-    E_KinEp_Perp->SetName("E_KinEp_Perp");
-
-    TH1D* ThetaRecPiDiff_Perp = (TH1D*)f->Get("ThetaRecPiDiff")->Clone();
-    ThetaRecPiDiff_Perp->SetName("ThetaRecPiDiff_Perp");
-    TH2D* ThetanThetaRecPi_Perp = (TH2D*)f->Get("ThetanThetaRecPi")->Clone();
-    ThetanThetaRecPi_Perp->SetName("ThetanThetaRecPi_Perp");
-    TH2D* ThetanThetaRecPiDiff_Perp = (TH2D*)f->Get("ThetanThetaRecPiDiff")->Clone();
-    ThetanThetaRecPiDiff_Perp->SetName("ThetanThetaRecPiDiff_Perp");
-    TH1D* ThetaRecPDiff_Perp = (TH1D*)f->Get("ThetaRecPDiff")->Clone();
-    ThetaRecPDiff_Perp->SetName("ThetaRecPDiff_Perp");
-    TH2D* ThetanThetaRecP_Perp = (TH2D*)f->Get("ThetanThetaRecP")->Clone();
-    ThetanThetaRecP_Perp->SetName("ThetanThetaRecP_Perp");
-    TH2D* ThetanThetaRecPDiff_Perp = (TH2D*)f->Get("ThetanThetaRecPDiff")->Clone();
-    ThetanThetaRecPDiff_Perp->SetName("ThetanThetaRecPDiff_Perp");
-
-    TH2D* DeutKinPiKin_Perp = (TH2D*)f->Get("DeutKinPiKin")->Clone();
-    DeutKinPiKin_Perp->SetName("DeutKinPiKin_Perp");
-
     ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////
     ///////////////// PERP DONE ////////////////////////
     ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////
 
-    TFile f2("ParaPerp_NoScatt_Total_9_Combined.root", "RECREATE");
+    TFile f2("ParaPerp_NS12_Combined.root", "RECREATE");
 
     time_Para->Write();
     time_cut_Para->Write();
 
     Eg_Para->Write();
-    PhiDifference_Para->Write();
-    EpKin_Para->Write();
-    EpCorrected_Para->Write();
-    EpKinEpCorrDiff_Para->Write();
-    EpEpCorrDiff_Para->Write();
-
     MMpEpCorrected_Para->Write();
     OAngle_Para->Write();
-    WCZnRecon_Para->Write();
-
     ZpDist_Para->Write();
+    ThetanDist_Para->Write();
+    E_dE_Para->Write();
+    DeutKinPiKin_Para->Write();
 
     MMp200300_Para->Write();
     MMp300400_Para->Write();
@@ -1032,6 +984,7 @@ void ParaPerp_Combiner_NoScatt(){
     MMp700800_Para->Write();
     MMp800900_Para->Write();
 
+    Phip_415MeVCM1_Para->Write();
     Phip_425MeVCM1_Para->Write();
     Phip_435MeVCM1_Para->Write();
     Phip_445MeVCM1_Para->Write();
@@ -1053,6 +1006,7 @@ void ParaPerp_Combiner_NoScatt(){
     Phip_605MeVCM1_Para->Write();
     Phip_615MeVCM1_Para->Write();
 
+    Phip_415MeVCM2_Para->Write();
     Phip_425MeVCM2_Para->Write();
     Phip_435MeVCM2_Para->Write();
     Phip_445MeVCM2_Para->Write();
@@ -1074,6 +1028,7 @@ void ParaPerp_Combiner_NoScatt(){
     Phip_605MeVCM2_Para->Write();
     Phip_615MeVCM2_Para->Write();
 
+    Phip_415MeVCM3_Para->Write();
     Phip_425MeVCM3_Para->Write();
     Phip_435MeVCM3_Para->Write();
     Phip_445MeVCM3_Para->Write();
@@ -1095,6 +1050,7 @@ void ParaPerp_Combiner_NoScatt(){
     Phip_605MeVCM3_Para->Write();
     Phip_615MeVCM3_Para->Write();
 
+    Phip_415MeVCM4_Para->Write();
     Phip_425MeVCM4_Para->Write();
     Phip_435MeVCM4_Para->Write();
     Phip_445MeVCM4_Para->Write();
@@ -1116,6 +1072,7 @@ void ParaPerp_Combiner_NoScatt(){
     Phip_605MeVCM4_Para->Write();
     Phip_615MeVCM4_Para->Write();
 
+    Phip_415MeVCM5_Para->Write();
     Phip_425MeVCM5_Para->Write();
     Phip_435MeVCM5_Para->Write();
     Phip_445MeVCM5_Para->Write();
@@ -1137,6 +1094,7 @@ void ParaPerp_Combiner_NoScatt(){
     Phip_605MeVCM5_Para->Write();
     Phip_615MeVCM5_Para->Write();
 
+    Phip_415MeVCM6_Para->Write();
     Phip_425MeVCM6_Para->Write();
     Phip_435MeVCM6_Para->Write();
     Phip_445MeVCM6_Para->Write();
@@ -1158,6 +1116,7 @@ void ParaPerp_Combiner_NoScatt(){
     Phip_605MeVCM6_Para->Write();
     Phip_615MeVCM6_Para->Write();
 
+    Phip_415MeVCM7_Para->Write();
     Phip_425MeVCM7_Para->Write();
     Phip_435MeVCM7_Para->Write();
     Phip_445MeVCM7_Para->Write();
@@ -1179,6 +1138,7 @@ void ParaPerp_Combiner_NoScatt(){
     Phip_605MeVCM7_Para->Write();
     Phip_615MeVCM7_Para->Write();
 
+    Phip_415MeVCM8_Para->Write();
     Phip_425MeVCM8_Para->Write();
     Phip_435MeVCM8_Para->Write();
     Phip_445MeVCM8_Para->Write();
@@ -1200,6 +1160,7 @@ void ParaPerp_Combiner_NoScatt(){
     Phip_605MeVCM8_Para->Write();
     Phip_615MeVCM8_Para->Write();
 
+    Phip_415MeVCM9_Para->Write();
     Phip_425MeVCM9_Para->Write();
     Phip_435MeVCM9_Para->Write();
     Phip_445MeVCM9_Para->Write();
@@ -1221,6 +1182,7 @@ void ParaPerp_Combiner_NoScatt(){
     Phip_605MeVCM9_Para->Write();
     Phip_615MeVCM9_Para->Write();
 
+    Phip_415MeVCM10_Para->Write();
     Phip_425MeVCM10_Para->Write();
     Phip_435MeVCM10_Para->Write();
     Phip_445MeVCM10_Para->Write();
@@ -1242,28 +1204,6 @@ void ParaPerp_Combiner_NoScatt(){
     Phip_605MeVCM10_Para->Write();
     Phip_615MeVCM10_Para->Write();
 
-    ThetanDist_Para->Write();
-    ThetanRecDist_Para->Write();
-    ThetanDiffDist_Para->Write();
-    ThetanDiffZp_Para->Write();
-    ThetanCorrDist_Para->Write();
-    ThetanCorrDiffDist_Para->Write();
-    ThetanCorrRecDiffDist_Para->Write();
-    ThetanCorrDiffZp_Para->Write();
-
-    E_dE_Para->Write();;
-    KinEp_dE_Para->Write();
-    E_KinEp_Para->Write();
-
-    ThetaRecPiDiff_Para->Write();
-    ThetanThetaRecPi_Para->Write();
-    ThetanThetaRecPiDiff_Para->Write();
-    ThetaRecPDiff_Para->Write();
-    ThetanThetaRecP_Para->Write();
-    ThetanThetaRecPDiff_Para->Write();
-
-    DeutKinPiKin_Para->Write();
-
     ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////
     ///////////////// PARA DONE ////////////////////////
@@ -1274,17 +1214,12 @@ void ParaPerp_Combiner_NoScatt(){
     time_cut_Perp->Write();
 
     Eg_Perp->Write();
-    PhiDifference_Perp->Write();
-    EpKin_Perp->Write();
-    EpCorrected_Perp->Write();
-    EpKinEpCorrDiff_Perp->Write();
-    EpEpCorrDiff_Perp->Write();
-
     MMpEpCorrected_Perp->Write();
     OAngle_Perp->Write();
-    WCZnRecon_Perp->Write();
-
     ZpDist_Perp->Write();
+    ThetanDist_Perp->Write();
+    E_dE_Perp->Write();
+    DeutKinPiKin_Perp->Write();
 
     MMp200300_Perp->Write();
     MMp300400_Perp->Write();
@@ -1294,6 +1229,7 @@ void ParaPerp_Combiner_NoScatt(){
     MMp700800_Perp->Write();
     MMp800900_Perp->Write();
 
+    Phip_415MeVCM1_Perp->Write();
     Phip_425MeVCM1_Perp->Write();
     Phip_435MeVCM1_Perp->Write();
     Phip_445MeVCM1_Perp->Write();
@@ -1315,6 +1251,7 @@ void ParaPerp_Combiner_NoScatt(){
     Phip_605MeVCM1_Perp->Write();
     Phip_615MeVCM1_Perp->Write();
 
+    Phip_415MeVCM2_Perp->Write();
     Phip_425MeVCM2_Perp->Write();
     Phip_435MeVCM2_Perp->Write();
     Phip_445MeVCM2_Perp->Write();
@@ -1336,6 +1273,7 @@ void ParaPerp_Combiner_NoScatt(){
     Phip_605MeVCM2_Perp->Write();
     Phip_615MeVCM2_Perp->Write();
 
+    Phip_415MeVCM3_Perp->Write();
     Phip_425MeVCM3_Perp->Write();
     Phip_435MeVCM3_Perp->Write();
     Phip_445MeVCM3_Perp->Write();
@@ -1357,6 +1295,7 @@ void ParaPerp_Combiner_NoScatt(){
     Phip_605MeVCM3_Perp->Write();
     Phip_615MeVCM3_Perp->Write();
 
+    Phip_415MeVCM4_Perp->Write();
     Phip_425MeVCM4_Perp->Write();
     Phip_435MeVCM4_Perp->Write();
     Phip_445MeVCM4_Perp->Write();
@@ -1378,6 +1317,7 @@ void ParaPerp_Combiner_NoScatt(){
     Phip_605MeVCM4_Perp->Write();
     Phip_615MeVCM4_Perp->Write();
 
+    Phip_415MeVCM5_Perp->Write();
     Phip_425MeVCM5_Perp->Write();
     Phip_435MeVCM5_Perp->Write();
     Phip_445MeVCM5_Perp->Write();
@@ -1399,6 +1339,7 @@ void ParaPerp_Combiner_NoScatt(){
     Phip_605MeVCM5_Perp->Write();
     Phip_615MeVCM5_Perp->Write();
 
+    Phip_415MeVCM6_Perp->Write();
     Phip_425MeVCM6_Perp->Write();
     Phip_435MeVCM6_Perp->Write();
     Phip_445MeVCM6_Perp->Write();
@@ -1420,6 +1361,7 @@ void ParaPerp_Combiner_NoScatt(){
     Phip_605MeVCM6_Perp->Write();
     Phip_615MeVCM6_Perp->Write();
 
+    Phip_415MeVCM7_Perp->Write();
     Phip_425MeVCM7_Perp->Write();
     Phip_435MeVCM7_Perp->Write();
     Phip_445MeVCM7_Perp->Write();
@@ -1441,6 +1383,7 @@ void ParaPerp_Combiner_NoScatt(){
     Phip_605MeVCM7_Perp->Write();
     Phip_615MeVCM7_Perp->Write();
 
+    Phip_415MeVCM8_Perp->Write();
     Phip_425MeVCM8_Perp->Write();
     Phip_435MeVCM8_Perp->Write();
     Phip_445MeVCM8_Perp->Write();
@@ -1462,6 +1405,7 @@ void ParaPerp_Combiner_NoScatt(){
     Phip_605MeVCM8_Perp->Write();
     Phip_615MeVCM8_Perp->Write();
 
+    Phip_415MeVCM9_Perp->Write();
     Phip_425MeVCM9_Perp->Write();
     Phip_435MeVCM9_Perp->Write();
     Phip_445MeVCM9_Perp->Write();
@@ -1483,6 +1427,7 @@ void ParaPerp_Combiner_NoScatt(){
     Phip_605MeVCM9_Perp->Write();
     Phip_615MeVCM9_Perp->Write();
 
+    Phip_415MeVCM10_Perp->Write();
     Phip_425MeVCM10_Perp->Write();
     Phip_435MeVCM10_Perp->Write();
     Phip_445MeVCM10_Perp->Write();
@@ -1503,28 +1448,6 @@ void ParaPerp_Combiner_NoScatt(){
     Phip_595MeVCM10_Perp->Write();
     Phip_605MeVCM10_Perp->Write();
     Phip_615MeVCM10_Perp->Write();
-
-    ThetanDist_Perp->Write();
-    ThetanRecDist_Perp->Write();
-    ThetanDiffDist_Perp->Write();
-    ThetanDiffZp_Perp->Write();
-    ThetanCorrDist_Perp->Write();
-    ThetanCorrDiffDist_Perp->Write();
-    ThetanCorrRecDiffDist_Perp->Write();
-    ThetanCorrDiffZp_Perp->Write();
-
-    E_dE_Perp->Write();;
-    KinEp_dE_Perp->Write();
-    E_KinEp_Perp->Write();
-
-    ThetaRecPiDiff_Perp->Write();
-    ThetanThetaRecPi_Perp->Write();
-    ThetanThetaRecPiDiff_Perp->Write();
-    ThetaRecPDiff_Perp->Write();
-    ThetanThetaRecP_Perp->Write();
-    ThetanThetaRecPDiff_Perp->Write();
-
-    DeutKinPiKin_Perp->Write();
 
     f2.Write();
 

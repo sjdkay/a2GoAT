@@ -144,25 +144,16 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
         Php = GetTracks()->GetPhi(0);
         PhpRad = GetTracks()->GetPhiRad(0);
         Phn = GetTracks()->GetPhi(1);
-        Xp = GetTracks()->GetPseudoVertexX(0);
-        Yp = GetTracks()->GetPseudoVertexY(0);
-        Zp = GetTracks()->GetPseudoVertexZ(0); // First particle is proton, second neutron
-        Xn = GetTracks()->GetPseudoVertexX(1);
-        Yn = GetTracks()->GetPseudoVertexY(1);
-        Zn = GetTracks()->GetPseudoVertexZ(1);
         Ep = GetTracks()->GetClusterEnergy(0);
         En = GetTracks()->GetClusterEnergy(1);
         dEp = GetTracks()->GetVetoEnergy(0);
         dEn = GetTracks()->GetVetoEnergy(1);
-        WC1pX = GetTracks()->GetMWPC0PosX(0);
-        WC1pY = GetTracks()->GetMWPC0PosY(0);
-        WC1pZ = GetTracks()->GetMWPC0PosZ(0);
-        WC1nX = GetTracks()->GetMWPC0PosX(1);
-        WC1nY = GetTracks()->GetMWPC0PosY(1);
-        WC1nZ = GetTracks()->GetMWPC0PosZ(1);
-        WC2nX = GetTracks()->GetMWPC1PosX(1);
-        WC2nY = GetTracks()->GetMWPC1PosY(1);
-        WC2nZ = GetTracks()->GetMWPC1PosZ(1);
+        pVertex.SetXYZ(GetTracks()->GetPseudoVertexX(0), GetTracks()->GetPseudoVertexY(0), GetTracks()->GetPseudoVertexZ(0)); // First particle is proton, second is neutron
+        nVertex.SetXYZ(GetTracks()->GetPseudoVertexX(1), GetTracks()->GetPseudoVertexY(1), GetTracks()->GetPseudoVertexZ(1));
+        WC13Vectp.SetXYZ(GetTracks()->GetMWPC0PosX(0), GetTracks()->GetMWPC0PosY(0), GetTracks()->GetMWPC0PosZ(0));
+        WC23Vectp.SetXYZ(GetTracks()->GetMWPC1PosX(0), GetTracks()->GetMWPC1PosY(0), GetTracks()->GetMWPC1PosZ(0));
+        WC13Vectn.SetXYZ(GetTracks()->GetMWPC0PosX(1), GetTracks()->GetMWPC0PosY(1), GetTracks()->GetMWPC0PosZ(1));
+        WC23Vectn.SetXYZ(GetTracks()->GetMWPC1PosX(1), GetTracks()->GetMWPC1PosY(1), GetTracks()->GetMWPC1PosZ(1));
     }
 
     else if (Proton2 == kTRUE)
@@ -177,25 +168,16 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
         Php = GetTracks()->GetPhi(1);
         PhpRad = GetTracks()->GetPhiRad(1);
         Phn = GetTracks()->GetPhi(0);
-        Xp = GetTracks()->GetPseudoVertexX(1);
-        Yp = GetTracks()->GetPseudoVertexY(1);
-        Zp = GetTracks()->GetPseudoVertexZ(1); // First particle is neutron, second is proton
-        Xn = GetTracks()->GetPseudoVertexX(0);
-        Yn = GetTracks()->GetPseudoVertexY(0);
-        Zn = GetTracks()->GetPseudoVertexZ(0);
         Ep = GetTracks()->GetClusterEnergy(1); // Therefore the quantity mmp is the amount of missing mass we see when we do a kinematics calculation USING the proton
         En = GetTracks()->GetClusterEnergy(0);
         dEp = GetTracks()->GetVetoEnergy(1);
         dEn = GetTracks()->GetVetoEnergy(0);
-        WC1pX = GetTracks()->GetMWPC0PosX(1);
-        WC1pY = GetTracks()->GetMWPC0PosY(1);
-        WC1pZ = GetTracks()->GetMWPC0PosZ(1);
-        WC1nX = GetTracks()->GetMWPC0PosX(0);
-        WC1nY = GetTracks()->GetMWPC0PosY(0);
-        WC1nZ = GetTracks()->GetMWPC0PosZ(0);
-        WC2nX = GetTracks()->GetMWPC1PosX(0);
-        WC2nY = GetTracks()->GetMWPC1PosY(0);
-        WC2nZ = GetTracks()->GetMWPC1PosZ(0);
+        pVertex.SetXYZ(GetTracks()->GetPseudoVertexX(1), GetTracks()->GetPseudoVertexY(1), GetTracks()->GetPseudoVertexZ(1)); // First particle is neutron, second is proton
+        nVertex.SetXYZ(GetTracks()->GetPseudoVertexX(0), GetTracks()->GetPseudoVertexY(0), GetTracks()->GetPseudoVertexZ(0));
+        WC13Vectp.SetXYZ(GetTracks()->GetMWPC0PosX(1), GetTracks()->GetMWPC0PosY(1), GetTracks()->GetMWPC0PosZ(1));
+        WC23Vectp.SetXYZ(GetTracks()->GetMWPC1PosX(1), GetTracks()->GetMWPC1PosY(1), GetTracks()->GetMWPC1PosZ(1));
+        WC13Vectn.SetXYZ(GetTracks()->GetMWPC0PosX(0), GetTracks()->GetMWPC0PosY(0), GetTracks()->GetMWPC0PosZ(0));
+        WC23Vectn.SetXYZ(GetTracks()->GetMWPC1PosX(0), GetTracks()->GetMWPC1PosY(0), GetTracks()->GetMWPC1PosZ(0));
     }
 
     else
@@ -204,7 +186,7 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
     }
 
 
-    if( Zp > 60 || Zp < -60) return; // Particles selected out from other parts tend to be inside anyway, skip this?
+    if( pVertex(2) > 60 || pVertex(2) < -60) return; // Particles selected out from other parts tend to be inside anyway, skip this?
 
     EpCorr = EpPolCorrect(Ep, Thp); //correct Ep for energy loss in polarimeter
 
@@ -219,22 +201,17 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
     GVnCorr =  LNeutron4VectorCorr(Zp, GVn, En, Pn , Mn, Phn);
     ThetanCorr = (GVnCorr.Theta())*TMath::RadToDeg();
 
-    WC13Vectn.SetXYZ(WC1nX, WC1nY, WC1nZ);
-    WC23Vectn.SetXYZ(WC2nX, WC2nY, WC2nZ);
-
     GVpCorr3 = GVpCorr.Vect();
     GVnCorr3 = GVnCorr.Vect();
     GVn3Unit = (GVn.Vect()).Unit();
     GVnCorr3Unit = GVnCorr3.Unit();
-    pVertex = TVector3(Xp, Yp, Zp);
-    nVertex = TVector3(Xn, Yn, Zn);
 
     kinfit.LinkVariable("beamF",    beamF.Link(),       beamF.LinkSigma());
     kinfit.LinkVariable("protonF",    protonF.Link(),       protonF.LinkSigma());
     kinfit.LinkVariable("neutronF",    neutronF.Link(),       neutronF.LinkSigma());
 
     vector<string> all_names = {"beamF", "protonF", "neutronF"};
-    kinfit.AddConstraint("EnergyMomentumBalance", all_names, EnergyMomentumBalance);
+    kinfit.AddConstraint(" EnergyMomentumBalance", all_names, EnergyMomentumBalance);
 
     for (Int_t j = 0; j < GetTagger()->GetNTagged(); j++)
     {
@@ -270,24 +247,6 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
 
         PhiDiff = abs (Php-Phn); // This will always be 180?
         // if ( PhiDiff > 195 || PhiDiff < 165) return;
-
-        // Gamma(n,p)Pi (P detected correct)
-        // Assume proton track is proton and "neutron" track is from charged pion
-        KinEpPi = CalcKinEnergy(Thp, EGamma, Mn, 0, Mp, Mpi); // Calculate kin E of proton assuming g(n, p) pi
-        RecKinProtonPi = LProton4VectorKin(KinEpPi, ThpRad, PhpRad); // Get Proton 4 vector from calculated kin E
-        RecKinPion = LPion4VectorKin(RecKinProtonPi); // Get Pion 4 vector from 4 momenta conservation
-        ThetaPiRec = (RecKinPion.Theta())*TMath::RadToDeg();
-        PhiPiRec = (RecKinPion.Phi())*TMath::RadToDeg();
-        ThetaPiRecDiff = ThetaPiRec - ThetanCorr;
-
-        // Gamma(n,p)Pi (Pion detected correct)
-        // Assume proton track is pion and "neutron" track is from proton
-        KinPi = CalcKinEnergy(Thp, EGamma, Mn, 0, Mpi, Mp); // Calculate kin E of pion
-        RecKinPionP = LProton4VectorKin(KinPi, ThpRad, PhpRad); // Get Pion 4 vector from calculated kinE
-        RecKinPPi = LPion4VectorKin(RecKinPionP); // Get Proton 4 vector from 4 momenta conservation
-        ThetapRec = (RecKinPPi.Theta())*TMath::RadToDeg();
-        PhipRec = (RecKinPPi.Phi())*TMath::RadToDeg();
-        ThetapRecDiff = ThetapRec - ThetanCorr;
 
         KinEDiff = KinEp - EpCorr;
 
@@ -428,7 +387,6 @@ PNeutPol_Polarimeter_Lin::PNeutPol_Polarimeter_Lin() // Define a load of histogr
     ThetanCMDist = new GH1 ("ThetanCMDist", "#theta_{nCM} Distribution", 200, 0, 180);
 
     E_dE = new GH2 ("E_dE", "EdE Plot With E Loss Adjustment", 100, 0, 500, 100, 0, 5);
-    DeutKinPiKin = new GH2 ("DeutKinPiKin", "(#theta_{nRec} - #theta_{n}) vs (#theta_{#pi Rec} - #theta_{n})", 200, -180, 180, 200, -180, 180);
     ThetaScPhiSc = new GH2 ("ThetaScPhiSc", "Phi as a function of Theta (Both in rotated frame)", 100, 0, 180, 100, -180, 180);
 
     ClosestApproach = new GH1("ClosestApproach", "DOCA of n and p' vectors", 200, -200, 200);
@@ -517,12 +475,11 @@ void PNeutPol_Polarimeter_Lin::FillHists()
     ThetaSc -> Fill(ScattTheta, TaggerTime);
     PhiSc -> Fill(ScattPhi, TaggerTime);
     MMpEpCorrected->Fill(MMpEpCorr, TaggerTime);
-    ZpDist->Fill(Zp, TaggerTime);
+    ZpDist->Fill(pVertex(2), TaggerTime);
     ThetanDist->Fill(Thn, TaggerTime);
     ThetanCMDist->Fill(ThetanCM, TaggerTime);
 
     E_dE->Fill(EpCorr, dEp, TaggerTime);
-    DeutKinPiKin->Fill(ThetanRec-Thn, ThetaPiRecDiff, TaggerTime);
     ThetaScPhiSc->Fill(ScattTheta, ScattPhi, TaggerTime);
 
     ClosestApproach->Fill(DOCA, TaggerTime);

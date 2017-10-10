@@ -120,8 +120,6 @@ public:
 
     TVector3 ScatteredFrameAngles(TVector3 InitialVect, TVector3 RealPVect, TVector3 ScattVector, TLorentzVector GammaVect);
 
-    TVector3 ScatteredFrameAnglesMB(TVector3 InitialVect, TVector3 RealPVect, TVector3 ScattVector, TLorentzVector GammaVect);
-
     Double_t Calc_dtfInterDOCA(const TVector3 &locUnitDir1, const TVector3 &locUnitDir2, const TVector3 &locVertex1, const TVector3 &locVertex2, TVector3 &locInterDOCA1, TVector3 &locInterDOCA2);
 
     Bool_t MCDataCheck();

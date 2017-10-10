@@ -158,6 +158,8 @@ private:
     TVector3 GVnCorr3Unit;
     TVector3 GVn3Rec;
     TVector3 WC3Vectp;
+    TVector3 WC13Vectp;
+    TVector3 WC23Vectp;
     TVector3 WC13Vectn;
     TVector3 WC23Vectn;
     TVector3 P3Vect;
