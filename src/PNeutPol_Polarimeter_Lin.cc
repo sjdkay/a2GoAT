@@ -207,7 +207,7 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
     if(Cut_proton -> IsInside(EpCorr, dEp) == kFALSE) return; // If E loss correct proton is NOT inside p banana drop out
     if(MWPC0pE  < 80) return;
     if(MWPC0nE  < 80) return;
-    if((MWPC0nE + MWPC1nE) > 700) return;
+    if((MWPC0nE + MWPC1nE) > 700) return; // ???? Why is this here?
 
     EpDiff = abs(EpCorr - Ep);
 
@@ -263,6 +263,7 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
         nKinB = nKin;
         nKinB.Boost(b);
         ThetanCM = (nKinB.Theta())*TMath::RadToDeg();
+        if (80 > ThetanCM || ThetanCM > 100) continue;
 
         RecNeutronEpCorr = LNeutron4VectorKin(GVpCorr);
         MMpEpCorr = RecNeutronEpCorr.M();
@@ -279,6 +280,8 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
         ScattTheta = ScattThetaRad*TMath::RadToDeg();
         ScattPhiRad = ScattAngles(0);
         ScattPhi = ScattPhiRad*TMath::RadToDeg();
+        if (ScattPhiRad > -0.01 && ScattPhiRad < 0.01) continue; // Kill excessively small values
+        Wgt = 1 + ((-0.25546)+(-0.870945*(EGamma/1000))+(1.4198*(TMath::Power((EGamma/1000),2))*cos(ScattPhiRad)));
 
         DOCAVertex1 = TVector3(0., 0., 0.);
         DOCAVertex2 = TVector3(0., 0., 0.);
@@ -496,7 +499,7 @@ PNeutPol_Polarimeter_Lin::PNeutPol_Polarimeter_Lin() // Define a load of histogr
     PhiScEp = new GH2("PhiScEp", "#phi_{Sc} as a Function of E_{p}", 150, 100, 500, 150, -4, 4);
     PhiScThetan = new GH2("PhiScThetan", "#phi_{Sc} as a Function of #theta_{n}", 150, 0, 4, 150, -4, 4);
 
-    EMWPCnPhiSc = new GH2("EMWPCnPhiSc", "#phi_{Sc} as a Function of MWPC E_{Sum}", 200, 0, 1000, 200, 0, 4);
+    EMWPCnPhiSc = new GH2("EMWPCnPhiSc", "#phi_{Sc} as a Function of MWPC E_{Sum}", 200, 0, 750, 200, -4, 4);
 
     PhiSc320 = new GH1("PhiSc320", "#phi_{Sc} (300-340MeV)", 24, -4, 4);
     PhiSc360 = new GH1("PhiSc360", "#phi_{Sc} (340-380MeV)", 24, -4, 4);

@@ -35,6 +35,7 @@ public:
     const   GHistBGSub*     GetSum()    const   {return sum;}
     virtual Int_t           Fill(const Double_t value)                                                          {return sum->Fill(value);}
     virtual Int_t           Fill(const Double_t value, const Double_t taggerTime)                                  {return sum->Fill(value, taggerTime);}
+    virtual Int_t           FillWeighted(const Double_t value, const Double_t taggerTime, const Double_t Weight)                                  {return sum->FillWeighted(value, taggerTime, Weight);}
     virtual Int_t           Fill(const Double_t value, const Double_t taggerTime, const Int_t taggerChannel)       {return ((GHistBGSub2*)array)->Fill(value, taggerChannel, taggerTime);}
     virtual Int_t           Fill(const Double_t value, const GTreeTagger& tagger, const Bool_t CreateHistogramsForTaggerBinning = kFALSE);
     virtual void            PrepareWriteList(GHistWriteList* arr, const char* name = 0);

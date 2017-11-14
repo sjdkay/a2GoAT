@@ -112,6 +112,7 @@ private:
     double_t MWPC1nE;
     double_t AngularDiffr;
     double_t MWPCPLp;
+    double_t Wgt;
 
     double RtmpMass,RtmpMom;
     double chi2;

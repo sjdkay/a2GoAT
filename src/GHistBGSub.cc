@@ -94,7 +94,7 @@ Bool_t	GHistBGSub::Add(const GHistBGSub* h, Double_t c)
         if(i>=rand.GetEntriesFast())
             CreateRandBin();
         ((GHistScaCor*)rand.At(i))->Add((GHistScaCor*)h->rand.At(i), c);
-    }    
+    }
     return true;
 }
 
@@ -175,6 +175,20 @@ Int_t   GHistBGSub::Fill(const Double_t value, const Double_t taggerTime)
             ExpandRandBins(i+1);
         if(taggerTime>=cutRandMin[i] && taggerTime<=cutRandMax[i])
             return ((GHistScaCor*)rand.At(i))->Fill(value);
+    }
+    return 0;
+}
+
+Int_t   GHistBGSub::FillWeighted(const Double_t value, const Double_t taggerTime, const Double_t Weight)
+{
+    if(taggerTime>=cutPromptMin && taggerTime<=cutPromptMax)
+        return prompt->Fill(value, Weight);
+    for(Int_t i=0; i<GetNRandCuts(); i++)
+    {
+        if(i>=rand.GetEntriesFast())
+            ExpandRandBins(i+1);
+        if(taggerTime>=cutRandMin[i] && taggerTime<=cutRandMax[i])
+            return ((GHistScaCor*)rand.At(i))->Fill(value, Weight);
     }
     return 0;
 }

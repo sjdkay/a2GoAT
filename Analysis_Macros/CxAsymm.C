@@ -4,7 +4,7 @@
 Double_t fitf(Double_t *x,Double_t *par)
 {
     Double_t fitval = 0;
-    fitval =  ((par[0]*sin(x[0]*TMath::DegToRad()))/(1 + (par[1]*cos(x[0]*TMath::DegToRad()))));
+    fitval =  ((par[0]*sin(x[0]))/(1 + (par[1]*cos(x[0]))));
     return fitval;
 }
 
@@ -63,12 +63,12 @@ void CxAsymm() {
     Double_t Cx265[8], Cx335[8], Cx405[8], Cx475[8], Cx545[8], Cx615[8], Cx685[8];
     Double_t CxErr265[8], CxErr335[8], CxErr405[8], CxErr475[8], CxErr545[8], CxErr615[8], CxErr685[8];
 
-    TF1 *AsymmFunc = new TF1("AsymmFit",  fitf, -130.0, 130.0, 2); //Give a name and range to the fitting funcion
+    TF1 *AsymmFunc = new TF1("AsymmFit",  fitf, -3.0, 3.0, 2); //Give a name and range to the fitting funcion
     AsymmFunc->SetParNames("SinAmp", "CosAmp"); //Name the parameters
     AsymmFunc->SetParameter(0, 0);
-    TF1 *SinFunc = new TF1("SinFit", "[0]*sin(x*TMath::DegToRad())", -130, 130);
+    TF1 *SinFunc = new TF1("SinFit", "[0]*sin(x*TMath::DegToRad())", -3, 3);
     SinFunc->SetParNames("InitialSinAmp");
-    TFile *f = new TFile("/scratch/Mainz_Software/a2GoAT/AmoTotal_1_95_26.root"); // Open the latest PTotal file to load histograms from
+    TFile *f = new TFile("/scratch/Mainz_Software/a2GoAT/AmoTotal_2_96_27.root"); // Open the latest PTotal file to load histograms from
 
     ///////////////////////////////////////////
     //////////////////  CM1  //////////////////
@@ -999,7 +999,7 @@ void CxAsymm() {
     CosAmpErr[7][6] = AsymmFit->GetParError(1);
 
     // Define new file to store fit parameters
-    TFile f1("AsymmFits_PTotal_1_95_26.root", "RECREATE");
+    TFile f1("AsymmFits_PTotal_2_96_27.root", "RECREATE");
 
     PhiSc265AsymmCM1->Write();
     PhiSc335AsymmCM1->Write();
@@ -1187,7 +1187,7 @@ void CxAsymm() {
 
     }
 
-    TFile f3("Cx_Plots_1_95_26.root", "RECREATE");
+    TFile f3("Cx_Plots_2_96_27.root", "RECREATE");
 
     Float_t xMin = -1;
     Float_t xMax = 1;
