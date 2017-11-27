@@ -69,6 +69,7 @@ void CxAsymm() {
     TF1 *SinFunc = new TF1("SinFit", "[0]*sin(x*TMath::DegToRad())", -3, 3);
     SinFunc->SetParNames("InitialSinAmp");
     TFile *f = new TFile("/scratch/Mainz_Software/a2GoAT/AmoTotal_2_96_27.root"); // Open the latest PTotal file to load histograms from
+    TF1 *Pn90CM = new TF1("Pn90CM", "1.64576-2.95484*(x/1000)+0.684577*(x/1000)**2-0.65*90**2/4/((x-560)**2+90**2/4)+(5.32305-35.3819*(x/1000)+70.145*(x/1000)**2-44.2899*(x/1000)**3)",300,700);
 
     ///////////////////////////////////////////
     //////////////////  CM1  //////////////////

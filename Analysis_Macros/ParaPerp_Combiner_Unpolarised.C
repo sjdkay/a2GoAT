@@ -917,7 +917,7 @@ void ParaPerp_Combiner_Unpolarised() {
     list32->Add(EMWPCnPhiSc_Para);
     EMWPCnPhiSc_Perp->Scale(ScaleFactor);
     list32->Add(EMWPCnPhiSc_Perp);
-    EMWPCnPhiSc = new TH2D("EMWPCnPhiSc", "#phi_{Sc} as a Function of MWPC E_{Sum}", 200, 0, 1000, 200, 0, 4);
+    EMWPCnPhiSc = new TH2D("EMWPCnPhiSc", "#phi_{Sc} as a Function of MWPC E_{Sum}", 200, 0, 750, 200, 0, 4);
     EMWPCnPhiSc->Merge(list32);
 
     TList *list33 = new TList;

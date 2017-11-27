@@ -42,6 +42,7 @@ void P_Fitting(){
     //CosFit->SetParLimits(0, -1000, 1000);
     //CosFit->SetParLimits(1, -1, 1);
     CosFit->SetParNames("Y_Offset", "Amplitdue"); //Name the parameters
+    TF1 *Pn90CM = new TF1("Pn90CM", "1.64576-2.95484*(x/1000)+0.684577*(x/1000)**2-0.65*90**2/4/((x-560)**2+90**2/4)+(5.32305-35.3819*(x/1000)+70.145*(x/1000)**2-44.2899*(x/1000)**3)",300,700);
 
     // Add all relevant histograms to a list that can then be looped over
     TFile *f = new TFile("AmoTotal_1_95_26.root"); // Open the latest PTotal file to load histograms from
@@ -93,6 +94,7 @@ void P_Fitting(){
     gr->GetYaxis()->SetTitle("P_{y}");
     gr->SetName("P300700");
     gr->Draw("ep");
+    Pn90CM->Draw("SAME");
 
     gr->Write();
     canvas->Write();
