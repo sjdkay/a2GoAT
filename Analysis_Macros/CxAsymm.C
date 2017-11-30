@@ -62,6 +62,8 @@ void CxAsymm() {
 
     Double_t Cx265[8], Cx335[8], Cx405[8], Cx475[8], Cx545[8], Cx615[8], Cx685[8];
     Double_t CxErr265[8], CxErr335[8], CxErr405[8], CxErr475[8], CxErr545[8], CxErr615[8], CxErr685[8];
+    Double_t Pn265[8], Pn335[8], Pn405[8], Pn475[8], Pn545[8], Pn615[8], Pn685[8];
+    Double_t PnErr265[8], PnErr335[8], PnErr405[8], PnErr475[8], PnErr545[8], PnErr615[8], PnErr685[8];
 
     TF1 *AsymmFunc = new TF1("AsymmFit",  fitf, -3.0, 3.0, 2); //Give a name and range to the fitting funcion
     AsymmFunc->SetParNames("SinAmp", "CosAmp"); //Name the parameters
@@ -85,7 +87,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc265AsymmCM1->Fit("AsymmFit", "Q");
+    PhiSc265AsymmCM1->Fit("AsymmFit", "QLL");
     SinAmp[0][0] = AsymmFit->GetParameter(0);
     SinAmpErr[0][0] = AsymmFit->GetParError(0);
     CosAmp[0][0] = AsymmFit->GetParameter(1);
@@ -101,7 +103,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc335AsymmCM1->Fit("AsymmFit", "Q");
+    PhiSc335AsymmCM1->Fit("AsymmFit", "QLL");
     SinAmp[0][1] = AsymmFit->GetParameter(0);
     SinAmpErr[0][1] = AsymmFit->GetParError(0);
     CosAmp[0][1] = AsymmFit->GetParameter(1);
@@ -117,7 +119,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc405AsymmCM1->Fit("AsymmFit", "Q");
+    PhiSc405AsymmCM1->Fit("AsymmFit", "QLL");
     SinAmp[0][2] = AsymmFit->GetParameter(0);
     SinAmpErr[0][2] = AsymmFit->GetParError(0);
     CosAmp[0][2] = AsymmFit->GetParameter(1);
@@ -133,7 +135,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc475AsymmCM1->Fit("AsymmFit", "Q");
+    PhiSc475AsymmCM1->Fit("AsymmFit", "QLL");
     SinAmp[0][3] = AsymmFit->GetParameter(0);
     SinAmpErr[0][3] = AsymmFit->GetParError(0);
     CosAmp[0][3] = AsymmFit->GetParameter(1);
@@ -149,7 +151,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc545AsymmCM1->Fit("AsymmFit", "Q");
+    PhiSc545AsymmCM1->Fit("AsymmFit", "QLL");
     SinAmp[0][4] = AsymmFit->GetParameter(0);
     SinAmpErr[0][4] = AsymmFit->GetParError(0);
     CosAmp[0][4] = AsymmFit->GetParameter(1);
@@ -165,7 +167,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc615AsymmCM1->Fit("AsymmFit", "Q");
+    PhiSc615AsymmCM1->Fit("AsymmFit", "QLL");
     SinAmp[0][5] = AsymmFit->GetParameter(0);
     SinAmpErr[0][5] = AsymmFit->GetParError(0);
     CosAmp[0][5] = AsymmFit->GetParameter(1);
@@ -181,7 +183,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc685AsymmCM1->Fit("AsymmFit", "Q");
+    PhiSc685AsymmCM1->Fit("AsymmFit", "QLL");
     SinAmp[0][6] = AsymmFit->GetParameter(0);
     SinAmpErr[0][6] = AsymmFit->GetParError(0);
     CosAmp[0][6] = AsymmFit->GetParameter(1);
@@ -201,7 +203,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc265AsymmCM2->Fit("AsymmFit", "Q");
+    PhiSc265AsymmCM2->Fit("AsymmFit", "QLL");
     SinAmp[1][0] = AsymmFit->GetParameter(0);
     SinAmpErr[1][0] = AsymmFit->GetParError(0);
     CosAmp[1][0] = AsymmFit->GetParameter(1);
@@ -217,7 +219,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc335AsymmCM2->Fit("AsymmFit", "Q");
+    PhiSc335AsymmCM2->Fit("AsymmFit", "QLL");
     SinAmp[1][1] = AsymmFit->GetParameter(0);
     SinAmpErr[1][1] = AsymmFit->GetParError(0);
     CosAmp[1][1] = AsymmFit->GetParameter(1);
@@ -233,7 +235,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc405AsymmCM2->Fit("AsymmFit", "Q");
+    PhiSc405AsymmCM2->Fit("AsymmFit", "QLL");
     SinAmp[1][2] = AsymmFit->GetParameter(0);
     SinAmpErr[1][2] = AsymmFit->GetParError(0);
     CosAmp[1][2] = AsymmFit->GetParameter(1);
@@ -249,7 +251,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc475AsymmCM2->Fit("AsymmFit", "Q");
+    PhiSc475AsymmCM2->Fit("AsymmFit", "QLL");
     SinAmp[1][3] = AsymmFit->GetParameter(0);
     SinAmpErr[1][3] = AsymmFit->GetParError(0);
     CosAmp[1][3] = AsymmFit->GetParameter(1);
@@ -265,7 +267,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc545AsymmCM2->Fit("AsymmFit", "Q");
+    PhiSc545AsymmCM2->Fit("AsymmFit", "QLL");
     SinAmp[1][4] = AsymmFit->GetParameter(0);
     SinAmpErr[1][4] = AsymmFit->GetParError(0);
     CosAmp[1][4] = AsymmFit->GetParameter(1);
@@ -281,7 +283,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc615AsymmCM2->Fit("AsymmFit", "Q");
+    PhiSc615AsymmCM2->Fit("AsymmFit", "QLL");
     SinAmp[1][5] = AsymmFit->GetParameter(0);
     SinAmpErr[1][5] = AsymmFit->GetParError(0);
     CosAmp[1][5] = AsymmFit->GetParameter(1);
@@ -297,7 +299,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc685AsymmCM2->Fit("AsymmFit", "Q");
+    PhiSc685AsymmCM2->Fit("AsymmFit", "QLL");
     SinAmp[1][6] = AsymmFit->GetParameter(0);
     SinAmpErr[1][6] = AsymmFit->GetParError(0);
     CosAmp[1][6] = AsymmFit->GetParameter(1);
@@ -317,7 +319,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc265AsymmCM3->Fit("AsymmFit", "Q");
+    PhiSc265AsymmCM3->Fit("AsymmFit", "QLL");
     SinAmp[2][0] = AsymmFit->GetParameter(0);
     SinAmpErr[2][0] = AsymmFit->GetParError(0);
     CosAmp[2][0] = AsymmFit->GetParameter(1);
@@ -333,7 +335,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc335AsymmCM3->Fit("AsymmFit", "Q");
+    PhiSc335AsymmCM3->Fit("AsymmFit", "QLL");
     SinAmp[2][1] = AsymmFit->GetParameter(0);
     SinAmpErr[2][1] = AsymmFit->GetParError(0);
     CosAmp[2][1] = AsymmFit->GetParameter(1);
@@ -349,7 +351,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc405AsymmCM3->Fit("AsymmFit", "Q");
+    PhiSc405AsymmCM3->Fit("AsymmFit", "QLL");
     SinAmp[2][2] = AsymmFit->GetParameter(0);
     SinAmpErr[2][2] = AsymmFit->GetParError(0);
     CosAmp[2][2] = AsymmFit->GetParameter(1);
@@ -365,7 +367,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc475AsymmCM3->Fit("AsymmFit", "Q");
+    PhiSc475AsymmCM3->Fit("AsymmFit", "QLL");
     SinAmp[2][3] = AsymmFit->GetParameter(0);
     SinAmpErr[2][3] = AsymmFit->GetParError(0);
     CosAmp[2][3] = AsymmFit->GetParameter(1);
@@ -381,7 +383,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc545AsymmCM3->Fit("AsymmFit", "Q");
+    PhiSc545AsymmCM3->Fit("AsymmFit", "QLL");
     SinAmp[2][4] = AsymmFit->GetParameter(0);
     SinAmpErr[2][4] = AsymmFit->GetParError(0);
     CosAmp[2][4] = AsymmFit->GetParameter(1);
@@ -397,7 +399,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc615AsymmCM3->Fit("AsymmFit", "Q");
+    PhiSc615AsymmCM3->Fit("AsymmFit", "QLL");
     SinAmp[2][5] = AsymmFit->GetParameter(0);
     SinAmpErr[2][5] = AsymmFit->GetParError(0);
     CosAmp[2][5] = AsymmFit->GetParameter(1);
@@ -413,7 +415,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc685AsymmCM3->Fit("AsymmFit", "Q");
+    PhiSc685AsymmCM3->Fit("AsymmFit", "QLL");
     SinAmp[2][6] = AsymmFit->GetParameter(0);
     SinAmpErr[2][6] = AsymmFit->GetParError(0);
     CosAmp[2][6] = AsymmFit->GetParameter(1);
@@ -433,7 +435,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc265AsymmCM4->Fit("AsymmFit", "Q");
+    PhiSc265AsymmCM4->Fit("AsymmFit", "QLL");
     SinAmp[3][0] = AsymmFit->GetParameter(0);
     SinAmpErr[3][0] = AsymmFit->GetParError(0);
     CosAmp[3][0] = AsymmFit->GetParameter(1);
@@ -449,7 +451,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc335AsymmCM4->Fit("AsymmFit", "Q");
+    PhiSc335AsymmCM4->Fit("AsymmFit", "QLL");
     SinAmp[3][1] = AsymmFit->GetParameter(0);
     SinAmpErr[3][1] = AsymmFit->GetParError(0);
     CosAmp[3][1] = AsymmFit->GetParameter(1);
@@ -465,7 +467,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc405AsymmCM4->Fit("AsymmFit", "Q");
+    PhiSc405AsymmCM4->Fit("AsymmFit", "QLL");
     SinAmp[3][2] = AsymmFit->GetParameter(0);
     SinAmpErr[3][2] = AsymmFit->GetParError(0);
     CosAmp[3][2] = AsymmFit->GetParameter(1);
@@ -481,7 +483,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc475AsymmCM4->Fit("AsymmFit", "Q");
+    PhiSc475AsymmCM4->Fit("AsymmFit", "QLL");
     SinAmp[3][3] = AsymmFit->GetParameter(0);
     SinAmpErr[3][3] = AsymmFit->GetParError(0);
     CosAmp[3][3] = AsymmFit->GetParameter(1);
@@ -497,7 +499,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc545AsymmCM4->Fit("AsymmFit", "Q");
+    PhiSc545AsymmCM4->Fit("AsymmFit", "QLL");
     SinAmp[3][4] = AsymmFit->GetParameter(0);
     SinAmpErr[3][4] = AsymmFit->GetParError(0);
     CosAmp[3][4] = AsymmFit->GetParameter(1);
@@ -513,7 +515,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc615AsymmCM4->Fit("AsymmFit", "Q");
+    PhiSc615AsymmCM4->Fit("AsymmFit", "QLL");
     SinAmp[3][5] = AsymmFit->GetParameter(0);
     SinAmpErr[3][5] = AsymmFit->GetParError(0);
     CosAmp[3][5] = AsymmFit->GetParameter(1);
@@ -529,7 +531,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc685AsymmCM4->Fit("AsymmFit", "Q");
+    PhiSc685AsymmCM4->Fit("AsymmFit", "QLL");
     SinAmp[3][6] = AsymmFit->GetParameter(0);
     SinAmpErr[3][6] = AsymmFit->GetParError(0);
     CosAmp[3][6] = AsymmFit->GetParameter(1);
@@ -549,7 +551,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc265AsymmCM5->Fit("AsymmFit", "Q");
+    PhiSc265AsymmCM5->Fit("AsymmFit", "QLL");
     SinAmp[4][0] = AsymmFit->GetParameter(0);
     SinAmpErr[4][0] = AsymmFit->GetParError(0);
     CosAmp[4][0] = AsymmFit->GetParameter(1);
@@ -565,7 +567,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc335AsymmCM5->Fit("AsymmFit", "Q");
+    PhiSc335AsymmCM5->Fit("AsymmFit", "QLL");
     SinAmp[4][1] = AsymmFit->GetParameter(0);
     SinAmpErr[4][1] = AsymmFit->GetParError(0);
     CosAmp[4][1] = AsymmFit->GetParameter(1);
@@ -581,7 +583,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc405AsymmCM5->Fit("AsymmFit", "Q");
+    PhiSc405AsymmCM5->Fit("AsymmFit", "QLL");
     SinAmp[4][2] = AsymmFit->GetParameter(0);
     SinAmpErr[4][2] = AsymmFit->GetParError(0);
     CosAmp[4][2] = AsymmFit->GetParameter(1);
@@ -597,7 +599,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc475AsymmCM5->Fit("AsymmFit", "Q");
+    PhiSc475AsymmCM5->Fit("AsymmFit", "QLL");
     SinAmp[4][3] = AsymmFit->GetParameter(0);
     SinAmpErr[4][3] = AsymmFit->GetParError(0);
     CosAmp[4][3] = AsymmFit->GetParameter(1);
@@ -613,7 +615,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc545AsymmCM5->Fit("AsymmFit", "Q");
+    PhiSc545AsymmCM5->Fit("AsymmFit", "QLL");
     SinAmp[4][4] = AsymmFit->GetParameter(0);
     SinAmpErr[4][4] = AsymmFit->GetParError(0);
     CosAmp[4][4] = AsymmFit->GetParameter(1);
@@ -629,7 +631,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc615AsymmCM5->Fit("AsymmFit", "Q");
+    PhiSc615AsymmCM5->Fit("AsymmFit", "QLL");
     SinAmp[4][5] = AsymmFit->GetParameter(0);
     SinAmpErr[4][5] = AsymmFit->GetParError(0);
     CosAmp[4][5] = AsymmFit->GetParameter(1);
@@ -645,7 +647,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc685AsymmCM5->Fit("AsymmFit", "Q");
+    PhiSc685AsymmCM5->Fit("AsymmFit", "QLL");
     SinAmp[4][6] = AsymmFit->GetParameter(0);
     SinAmpErr[4][6] = AsymmFit->GetParError(0);
     CosAmp[4][6] = AsymmFit->GetParameter(1);
@@ -665,7 +667,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc265AsymmCM6->Fit("AsymmFit", "Q");
+    PhiSc265AsymmCM6->Fit("AsymmFit", "QLL");
     SinAmp[5][0] = AsymmFit->GetParameter(0);
     SinAmpErr[5][0] = AsymmFit->GetParError(0);
     CosAmp[5][0] = AsymmFit->GetParameter(1);
@@ -681,7 +683,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc335AsymmCM6->Fit("AsymmFit", "Q");
+    PhiSc335AsymmCM6->Fit("AsymmFit", "QLL");
     SinAmp[5][1] = AsymmFit->GetParameter(0);
     SinAmpErr[5][1] = AsymmFit->GetParError(0);
     CosAmp[5][1] = AsymmFit->GetParameter(1);
@@ -697,7 +699,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc405AsymmCM6->Fit("AsymmFit", "Q");
+    PhiSc405AsymmCM6->Fit("AsymmFit", "QLL");
     SinAmp[5][2] = AsymmFit->GetParameter(0);
     SinAmpErr[5][2] = AsymmFit->GetParError(0);
     CosAmp[5][2] = AsymmFit->GetParameter(1);
@@ -713,7 +715,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc475AsymmCM6->Fit("AsymmFit", "Q");
+    PhiSc475AsymmCM6->Fit("AsymmFit", "QLL");
     SinAmp[5][3] = AsymmFit->GetParameter(0);
     SinAmpErr[5][3] = AsymmFit->GetParError(0);
     CosAmp[5][3] = AsymmFit->GetParameter(1);
@@ -729,7 +731,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc545AsymmCM6->Fit("AsymmFit", "Q");
+    PhiSc545AsymmCM6->Fit("AsymmFit", "QLL");
     SinAmp[5][4] = AsymmFit->GetParameter(0);
     SinAmpErr[5][4] = AsymmFit->GetParError(0);
     CosAmp[5][4] = AsymmFit->GetParameter(1);
@@ -745,7 +747,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc615AsymmCM6->Fit("AsymmFit", "Q");
+    PhiSc615AsymmCM6->Fit("AsymmFit", "QLL");
     SinAmp[5][5] = AsymmFit->GetParameter(0);
     SinAmpErr[5][5] = AsymmFit->GetParError(0);
     CosAmp[5][5] = AsymmFit->GetParameter(1);
@@ -761,7 +763,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc685AsymmCM6->Fit("AsymmFit", "Q");
+    PhiSc685AsymmCM6->Fit("AsymmFit", "QLL");
     SinAmp[5][6] = AsymmFit->GetParameter(0);
     SinAmpErr[5][6] = AsymmFit->GetParError(0);
     CosAmp[5][6] = AsymmFit->GetParameter(1);
@@ -781,7 +783,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc265AsymmCM7->Fit("AsymmFit", "Q");
+    PhiSc265AsymmCM7->Fit("AsymmFit", "QLL");
     SinAmp[6][0] = AsymmFit->GetParameter(0);
     SinAmpErr[6][0] = AsymmFit->GetParError(0);
     CosAmp[6][0] = AsymmFit->GetParameter(1);
@@ -797,7 +799,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc335AsymmCM7->Fit("AsymmFit", "Q");
+    PhiSc335AsymmCM7->Fit("AsymmFit", "QLL");
     SinAmp[6][1] = AsymmFit->GetParameter(0);
     SinAmpErr[6][1] = AsymmFit->GetParError(0);
     CosAmp[6][1] = AsymmFit->GetParameter(1);
@@ -813,7 +815,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc405AsymmCM7->Fit("AsymmFit", "Q");
+    PhiSc405AsymmCM7->Fit("AsymmFit", "QLL");
     SinAmp[6][2] = AsymmFit->GetParameter(0);
     SinAmpErr[6][2] = AsymmFit->GetParError(0);
     CosAmp[6][2] = AsymmFit->GetParameter(1);
@@ -829,7 +831,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc475AsymmCM7->Fit("AsymmFit", "Q");
+    PhiSc475AsymmCM7->Fit("AsymmFit", "QLL");
     SinAmp[6][3] = AsymmFit->GetParameter(0);
     SinAmpErr[6][3] = AsymmFit->GetParError(0);
     CosAmp[6][3] = AsymmFit->GetParameter(1);
@@ -845,7 +847,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc545AsymmCM7->Fit("AsymmFit", "Q");
+    PhiSc545AsymmCM7->Fit("AsymmFit", "QLL");
     SinAmp[6][4] = AsymmFit->GetParameter(0);
     SinAmpErr[6][4] = AsymmFit->GetParError(0);
     CosAmp[6][4] = AsymmFit->GetParameter(1);
@@ -861,7 +863,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc615AsymmCM7->Fit("AsymmFit", "Q");
+    PhiSc615AsymmCM7->Fit("AsymmFit", "QLL");
     SinAmp[6][5] = AsymmFit->GetParameter(0);
     SinAmpErr[6][5] = AsymmFit->GetParError(0);
     CosAmp[6][5] = AsymmFit->GetParameter(1);
@@ -877,7 +879,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc685AsymmCM7->Fit("AsymmFit", "Q");
+    PhiSc685AsymmCM7->Fit("AsymmFit", "QLL");
     SinAmp[6][6] = AsymmFit->GetParameter(0);
     SinAmpErr[6][6] = AsymmFit->GetParError(0);
     CosAmp[6][6] = AsymmFit->GetParameter(1);
@@ -897,7 +899,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc265AsymmCM8->Fit("AsymmFit", "Q");
+    PhiSc265AsymmCM8->Fit("AsymmFit", "QLL");
     SinAmp[7][0] = AsymmFit->GetParameter(0);
     SinAmpErr[7][0] = AsymmFit->GetParError(0);
     CosAmp[7][0] = AsymmFit->GetParameter(1);
@@ -913,7 +915,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc335AsymmCM8->Fit("AsymmFit", "Q");
+    PhiSc335AsymmCM8->Fit("AsymmFit", "QLL");
     SinAmp[7][1] = AsymmFit->GetParameter(0);
     SinAmpErr[7][1] = AsymmFit->GetParError(0);
     CosAmp[7][1] = AsymmFit->GetParameter(1);
@@ -929,7 +931,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc405AsymmCM8->Fit("AsymmFit", "Q");
+    PhiSc405AsymmCM8->Fit("AsymmFit", "QLL");
     SinAmp[7][2] = AsymmFit->GetParameter(0);
     SinAmpErr[7][2] = AsymmFit->GetParError(0);
     CosAmp[7][2] = AsymmFit->GetParameter(1);
@@ -945,7 +947,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc475AsymmCM8->Fit("AsymmFit", "Q");
+    PhiSc475AsymmCM8->Fit("AsymmFit", "QLL");
     SinAmp[7][3] = AsymmFit->GetParameter(0);
     SinAmpErr[7][3] = AsymmFit->GetParError(0);
     CosAmp[7][3] = AsymmFit->GetParameter(1);
@@ -961,7 +963,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc545AsymmCM8->Fit("AsymmFit", "Q");
+    PhiSc545AsymmCM8->Fit("AsymmFit", "QLL");
     SinAmp[7][4] = AsymmFit->GetParameter(0);
     SinAmpErr[7][4] = AsymmFit->GetParError(0);
     CosAmp[7][4] = AsymmFit->GetParameter(1);
@@ -977,7 +979,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc615AsymmCM8->Fit("AsymmFit", "Q");
+    PhiSc615AsymmCM8->Fit("AsymmFit", "QLL");
     SinAmp[7][5] = AsymmFit->GetParameter(0);
     SinAmpErr[7][5] = AsymmFit->GetParError(0);
     CosAmp[7][5] = AsymmFit->GetParameter(1);
@@ -993,7 +995,7 @@ void CxAsymm() {
     AsymmFunc->SetParError(1, SinFunc->GetParError(0));
     AsymmFunc->SetParLimits(0, -1, 1);
     AsymmFunc->SetParLimits(1, -1, 1);
-    PhiSc685AsymmCM8->Fit("AsymmFit", "Q");
+    PhiSc685AsymmCM8->Fit("AsymmFit", "QLL");
     SinAmp[7][6] = AsymmFit->GetParameter(0);
     SinAmpErr[7][6] = AsymmFit->GetParError(0);
     CosAmp[7][6] = AsymmFit->GetParameter(1);
@@ -1186,9 +1188,25 @@ void CxAsymm() {
         Cx685[n] = SinAmp[n][6]/(0.1*(Graph->Eval(685,0)));
         CxErr685[n] = SinAmpErr[n][6]/((0.1)*(Graph->Eval(685,0)));
 
+        // NOTE - This is to show amplitude only! Need to divide by Ay too!
+        Pn265[n] = CosAmp[n][0];
+        PnErr265[n] = CosAmpErr[n][0];
+        Pn335[n] = CosAmp[n][1];
+        PnErr335[n] = CosAmpErr[n][1];
+        Pn405[n] = CosAmp[n][2];
+        PnErr405[n] = CosAmpErr[n][2];
+        Pn475[n] = CosAmp[n][3];
+        PnErr475[n] = CosAmpErr[n][3];
+        Pn545[n] = CosAmp[n][4];
+        PnErr545[n] = CosAmpErr[n][4];
+        Pn615[n] = CosAmp[n][5];
+        PnErr615[n] = CosAmpErr[n][5];
+        Pn685[n] = CosAmp[n][6];
+        PnErr685[n] = CosAmpErr[n][6];
+
     }
 
-    TFile f3("Cx_Plots_2_96_27.root", "RECREATE");
+    TFile f3("Cx_Plots_2_96_27_v3.root", "RECREATE");
 
     Float_t xMin = -1;
     Float_t xMax = 1;
@@ -1390,6 +1408,185 @@ void CxAsymm() {
     canvas7->cd(7);
     pad6->Draw();
     canvas7->Write();
+
+    TCanvas *canvas8 = new TCanvas("canvas8","canvas8", 1920, 1080);
+    TPad *pad7 = new TPad("pad7","",0,0,1,1);
+    pad7->Draw();
+    pad7->cd();
+
+    pad7->SetTickx(1);
+    pad7->SetTicky(1);
+    pad7->SetGridx(1);
+    pad7->SetGridy(1);
+    TH1F  *hr7;
+    hr7 = canvas->DrawFrame(xMin, -10, xMax, 10);
+    hr7->SetTitle("P_{n} as fn of Cos#theta_{CM} (E_{#gamma} 230-300MeV)");
+
+    gr7 = new TGraphErrors(8, x, Pn265, ex, PnErr265);
+    gr7->SetMarkerColor(2);
+    gr7->SetMarkerStyle(5);
+    gr7->SetMarkerSize(2);
+    gr7->SetTitle("P_{n} as fn of Cos#theta_{CM} (E_{#gamma} 230-300MeV)");
+    gr7->GetXaxis()->SetTitle("Cos#theta_{CM}");
+    gr7->GetYaxis()->SetTitle("P_{n}");
+    gr7->SetName("Pn265");
+    gr7->Draw("ep");
+
+    TCanvas *canvas9 = new TCanvas("canvas9","canvas9", 1920, 1080);
+    TPad *pad8 = new TPad("pad8","",0,0,1,1);
+    pad8->Draw();
+    pad8->cd();
+
+    pad8->SetTickx(1);
+    pad8->SetTicky(1);
+    pad8->SetGridx(1);
+    pad8->SetGridy(1);
+    TH1F  *hr8;
+    hr8 = canvas9->DrawFrame(xMin, -10, xMax, 10);
+    hr8->SetTitle("P_{n} as fn of Cos#theta_{CM} (E_{#gamma} 300-370MeV)");
+
+    gr8 = new TGraphErrors(8, x, Pn335, ex, PnErr335);
+    gr8->SetMarkerColor(2);
+    gr8->SetMarkerStyle(5);
+    gr8->SetMarkerSize(2);
+    gr8->SetTitle("P_{n} as fn of Cos#theta_{CM} (E_{#gamma} 300-370MeV)");
+    gr8->GetXaxis()->SetTitle("Cos#theta_{CM}");
+    gr8->GetYaxis()->SetTitle("P_{n}");
+    gr8->SetName("Pn335");
+    gr8->Draw("ep");
+
+    TCanvas *canvas10 = new TCanvas("canvas10","canvas10", 1920, 1080);
+    TPad *pad9 = new TPad("pad9","",0,0,1,1);
+    pad9->Draw();
+    pad9->cd();
+
+    pad9->SetTickx(1);
+    pad9->SetTicky(1);
+    pad9->SetGridx(1);
+    pad9->SetGridy(1);
+    TH1F  *hr9;
+    hr9 = canvas10->DrawFrame(xMin, -10, xMax, 10);
+    hr9->SetTitle("P_{n} as fn of Cos#theta_{CM} (E_{#gamma} 370-440MeV)");
+
+    gr9 = new TGraphErrors(8, x, Pn405, ex, PnErr405);
+    gr9->SetMarkerColor(2);
+    gr9->SetMarkerStyle(5);
+    gr9->SetMarkerSize(2);
+    gr9->SetTitle("P_{n} as fn of Cos#theta_{CM} (E_{#gamma} 370-440MeV)");
+    gr9->GetXaxis()->SetTitle("Cos#theta_{CM}");
+    gr9->GetYaxis()->SetTitle("P_{n}");
+    gr9->SetName("Pn405");
+    gr9->Draw("ep");
+
+    TCanvas *canvas11 = new TCanvas("canvas11","canvas11", 1920, 1080);
+    TPad *pad10 = new TPad("pad10","",0,0,1,1);
+    pad10->Draw();
+    pad10->cd();
+
+    pad10->SetTickx(1);
+    pad10->SetTicky(1);
+    pad10->SetGridx(1);
+    pad10->SetGridy(1);
+    TH1F  *hr10;
+    hr10 = canvas11->DrawFrame(xMin, -10, xMax, 10);
+    hr10->SetTitle("P_{n} as fn of Cos#theta_{CM} (E_{#gamma} 440-510MeV)");
+
+    gr10 = new TGraphErrors(8, x, Pn475, ex, PnErr475);
+    gr10->SetMarkerColor(2);
+    gr10->SetMarkerStyle(5);
+    gr10->SetMarkerSize(2);
+    gr10->SetTitle("P_{n} as fn of Cos#theta_{CM} (E_{#gamma} 440-510MeV)");
+    gr10->GetXaxis()->SetTitle("Cos#theta_{CM}");
+    gr10->GetYaxis()->SetTitle("P_{n}");
+    gr10->SetName("Pn475");
+    gr10->Draw("ep");
+
+    TCanvas *canvas12 = new TCanvas("canvas12","canvas12", 1920, 1080);
+    TPad *pad11 = new TPad("pad11","",0,0,1,1);
+    pad11->Draw();
+    pad11->cd();
+
+    pad11->SetTickx(1);
+    pad11->SetTicky(1);
+    pad11->SetGridx(1);
+    pad11->SetGridy(1);
+    TH1F  *hr11;
+    hr11 = canvas12->DrawFrame(xMin, -10, xMax, 10);
+    hr11->SetTitle("P_{n} as fn of Cos#theta_{CM} (E_{#gamma} 510-580MeV)");
+
+    gr11 = new TGraphErrors(8, x, Pn545, ex, PnErr545);
+    gr11->SetMarkerColor(2);
+    gr11->SetMarkerStyle(5);
+    gr11->SetMarkerSize(2);
+    gr11->SetTitle("P_{n} as fn of Cos#theta_{CM} (E_{#gamma} 510-580MeV)");
+    gr11->GetXaxis()->SetTitle("Cos#theta_{CM}");
+    gr11->GetYaxis()->SetTitle("P_{n}");
+    gr11->SetName("Pn545");
+    gr11->Draw("ep");
+
+    TCanvas *canvas13 = new TCanvas("canvas13","canvas13", 1920, 1080);
+    TPad *pad12 = new TPad("pad12","",0,0,1,1);
+    pad12->Draw();
+    pad12->cd();
+
+    pad12->SetTickx(1);
+    pad12->SetTicky(1);
+    pad12->SetGridx(1);
+    pad12->SetGridy(1);
+    TH1F  *hr12;
+    hr12 = canvas13->DrawFrame(xMin, -10, xMax, 10);
+    hr12->SetTitle("P_{n} as fn of Cos#theta_{CM} (E_{#gamma} 580-650MeV)");
+
+    gr12 = new TGraphErrors(8, x, Pn615, ex, PnErr615);
+    gr12->SetMarkerColor(2);
+    gr12->SetMarkerStyle(5);
+    gr12->SetMarkerSize(2);
+    gr12->SetTitle("P_{n} as fn of Cos#theta_{CM} (E_{#gamma} 580-650MeV)");
+    gr12->GetXaxis()->SetTitle("Cos#theta_{CM}");
+    gr12->GetYaxis()->SetTitle("P_{n}");
+    gr12->SetName("Pn615");
+    gr12->Draw("ep");
+
+    TCanvas *canvas14 = new TCanvas("canvas14","canvas14", 1920, 1080);
+    TPad *pad13 = new TPad("pad13","",0,0,1,1);
+    pad13->Draw();
+    pad13->cd();
+
+    pad13->SetTickx(1);
+    pad13->SetTicky(1);
+    pad13->SetGridx(1);
+    pad13->SetGridy(1);
+    TH1F  *hr13;
+    hr13 = canvas14->DrawFrame(xMin, -10, xMax, 10);
+    hr13->SetTitle("P_{n} as fn of Cos#theta_{CM} (E_{#gamma} 650-720MeV)");
+
+    gr13 = new TGraphErrors(8, x, Pn685, ex, PnErr685);
+    gr13->SetMarkerColor(2);
+    gr13->SetMarkerStyle(5);
+    gr13->SetMarkerSize(2);
+    gr13->SetTitle("P_{n} as fn of Cos#theta_{CM} (E_{#gamma} 650-720MeV)");
+    gr13->GetXaxis()->SetTitle("Cos#theta_{CM}");
+    gr13->GetYaxis()->SetTitle("P_{n}");
+    gr13->SetName("Pn685");
+    gr13->Draw("ep");
+
+    TCanvas *canvas15 = new TCanvas("canvas15","canvas15", 1920, 1080);
+    canvas15->Divide(4,2);
+    canvas15->cd(1);
+    pad7->Draw();
+    canvas15->cd(2);
+    pad8->Draw();
+    canvas15->cd(3);
+    pad9->Draw();
+    canvas15->cd(4);
+    pad10->Draw();
+    canvas15->cd(5);
+    pad11->Draw();
+    canvas15->cd(6);
+    pad12->Draw();
+    canvas15->cd(7);
+    pad13->Draw();
+    canvas15->Write();
 
     f3.Write();
 
