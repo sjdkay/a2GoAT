@@ -207,11 +207,9 @@ private:
     TH1D*	time;
     TH1D*	time_cut;
 
-//    GH1* Eg;
     GH1* PhiDet;
     GH1* PhiRec;
     GH1* ThetaSc;
-    GH1* PhiSc;
     GH1* MMpEpCorrected;
     GH1* ZpDist;
     GH1* ThetanDist;
@@ -253,17 +251,6 @@ private:
     GH1* MMp600700;
     GH1* MMp700800;
     GH1* MMp800900;
-
-//    GH1* PhiSc320;
-//    GH1* PhiSc360;
-//    GH1* PhiSc400;
-//    GH1* PhiSc440;
-//    GH1* PhiSc480;
-//    GH1* PhiSc520;
-//    GH1* PhiSc560;
-//    GH1* PhiSc600;
-//    GH1* PhiSc640;
-//    GH1* PhiSc680;
 
     TH1D* Eg;
     TH1D* PhiSc;
@@ -358,7 +345,7 @@ private:
     GH1* Phip590CM5;
     GH1* Phip610CM5;
 
-        TH1D* PhiSc265NegHelCM1;
+    TH1D* PhiSc265NegHelCM1;
     TH1D* PhiSc335NegHelCM1;
     TH1D* PhiSc405NegHelCM1;
     TH1D* PhiSc475NegHelCM1;
