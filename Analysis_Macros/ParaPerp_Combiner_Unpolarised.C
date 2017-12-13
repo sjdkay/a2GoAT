@@ -2,7 +2,7 @@
 
 void ParaPerp_Combiner_Unpolarised() {
 
-    TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Para/Physics_Total_Para_29_30_11_17.root"); // Open latest Para file
+    TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Para/Physics_Total_Para_31_6_12_17.root"); // Open latest Para file
 
 //    TH1D* time_Para = (TH1D*)f->Get("time")->Clone();
 //    time_Para->SetName("time_Para");
@@ -349,7 +349,7 @@ void ParaPerp_Combiner_Unpolarised() {
     ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////
 
-    TFile *f1 = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Perp/Physics_Total_Perp_29_30_11_17.root"); // Open latest Para file
+    TFile *f1 = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Perp/Physics_Total_Perp_31_6_12_17.root"); // Open latest Para file
 
 //    TH1D* time_Perp = (TH1D*)f->Get("time")->Clone();
 //    time_Perp->SetName("time_Perp");
@@ -1831,7 +1831,7 @@ void ParaPerp_Combiner_Unpolarised() {
     Phi_Scattered_685MeV_PosHelCM8 = new TH1D( "Phi_Scattered_685MeV_PosHelCM8", "#phi_{Sc} E_{#gamma}685 #pm 35MeV (Cos#theta_{CM}-0.57-(-1.0) for +ve Helicity", 20, -4, 4);
     Phi_Scattered_685MeV_PosHelCM8->Merge(list105a);
 
-    TFile f2("ParaPerp_Total_29_Combined_Unpolarised.root", "RECREATE");
+    TFile f2("ParaPerp_Total_31_Combined_Unpolarised.root", "RECREATE");
 
 //    time->Write();
 //    time_cut->Write();

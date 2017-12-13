@@ -180,20 +180,6 @@ private:
     TVector3 WCDirp;
     TVector3 RecoilVector;
 
-    //APLCON DOCA
-
-    double_t DOCAApl;
-    double_t POCAxApl;
-    double_t POCAyApl;
-    double_t POCAzApl;
-    TVector3 DOCAVertex1Apl;
-    TVector3 DOCAVertex2Apl;
-    TVector3 POCAApl;
-    double_t rApl;
-    GH1* ClosestApproachApl;
-    GH1* POCArApl;
-    GH2* POCArPOCArAPL;
-
     // Variables for calculating P vertex from MWPC hit positions
     double_t num0;
     double_t denum0;
@@ -206,51 +192,6 @@ private:
 
     TH1D*	time;
     TH1D*	time_cut;
-
-    GH1* PhiDet;
-    GH1* PhiRec;
-    GH1* ThetaSc;
-    GH1* MMpEpCorrected;
-    GH1* ZpDist;
-    GH1* ThetanDist;
-    GH1* ThetanCMDist;
-
-    GH2* DeutKinPiKin;
-    GH2* E_dE;
-    GH2* ThetaScPhiSc;
-    GH2* PhiPp1Phip;
-    GH2* EdEMWPCp;
-    GH2* EdEMWPCn;
-
-    GH1* ClosestApproach;
-    GH1* POCAr;
-    GH1* ScatterVertexZ;
-    GH2* ScatterVertexZr;
-    GH2* ScatterVertexXY;
-    GH3* ScatterVertex;
-    GH2* POCArPhiSc;
-
-    GH1* ThetapCorrDiff;
-    GH1* PhipCorrDiff;
-    GH1* ThetaDiff;
-    GH1* PhiDiff;
-    GH2* PhiDiffThetaDiff;
-
-    GH2* PhiScEg;
-    GH2* PhiScEp;
-    GH2* PhiScThetan;
-
-    GH2* EMWPCnPhiSc;
-
-    GH1* ZpVertexDiff;
-
-    GH1* MMp200300;
-    GH1* MMp300400;
-    GH1* MMp400500;
-    GH1* MMp500600;
-    GH1* MMp600700;
-    GH1* MMp700800;
-    GH1* MMp800900;
 
     TH1D* Eg;
     TH1D* PhiSc;
@@ -289,61 +230,6 @@ private:
     TH1D* PhiSc600Random;
     TH1D* PhiSc640Random;
     TH1D* PhiSc680Random;
-
-    GH1* Phip430CM1;
-    GH1* Phip450CM1;
-    GH1* Phip470CM1;
-    GH1* Phip490CM1;
-    GH1* Phip510CM1;
-    GH1* Phip530CM1;
-    GH1* Phip550CM1;
-    GH1* Phip570CM1;
-    GH1* Phip590CM1;
-    GH1* Phip610CM1;
-
-    GH1* Phip430CM2;
-    GH1* Phip450CM2;
-    GH1* Phip470CM2;
-    GH1* Phip490CM2;
-    GH1* Phip510CM2;
-    GH1* Phip530CM2;
-    GH1* Phip550CM2;
-    GH1* Phip570CM2;
-    GH1* Phip590CM2;
-    GH1* Phip610CM2;
-
-    GH1* Phip430CM3;
-    GH1* Phip450CM3;
-    GH1* Phip470CM3;
-    GH1* Phip490CM3;
-    GH1* Phip510CM3;
-    GH1* Phip530CM3;
-    GH1* Phip550CM3;
-    GH1* Phip570CM3;
-    GH1* Phip590CM3;
-    GH1* Phip610CM3;
-
-    GH1* Phip430CM4;
-    GH1* Phip450CM4;
-    GH1* Phip470CM4;
-    GH1* Phip490CM4;
-    GH1* Phip510CM4;
-    GH1* Phip530CM4;
-    GH1* Phip550CM4;
-    GH1* Phip570CM4;
-    GH1* Phip590CM4;
-    GH1* Phip610CM4;
-
-    GH1* Phip430CM5;
-    GH1* Phip450CM5;
-    GH1* Phip470CM5;
-    GH1* Phip490CM5;
-    GH1* Phip510CM5;
-    GH1* Phip530CM5;
-    GH1* Phip550CM5;
-    GH1* Phip570CM5;
-    GH1* Phip590CM5;
-    GH1* Phip610CM5;
 
     TH1D* PhiSc265NegHelCM1;
     TH1D* PhiSc335NegHelCM1;

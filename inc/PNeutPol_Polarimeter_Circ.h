@@ -180,20 +180,6 @@ private:
     TVector3 WCDirp;
     TVector3 RecoilVector;
 
-    //APLCON DOCA
-
-    double_t DOCAApl;
-    double_t POCAxApl;
-    double_t POCAyApl;
-    double_t POCAzApl;
-    TVector3 DOCAVertex1Apl;
-    TVector3 DOCAVertex2Apl;
-    TVector3 POCAApl;
-    double_t rApl;
-    GH1* ClosestApproachApl;
-    GH1* POCArApl;
-    GH2* POCArPOCArAPL;
-
     // Variables for calculating P vertex from MWPC hit positions
     double_t num0;
     double_t denum0;
@@ -206,51 +192,6 @@ private:
 
     TH1D*	time;
     TH1D*	time_cut;
-
-    GH1* PhiDet;
-    GH1* PhiRec;
-    GH1* ThetaSc;
-    GH1* MMpEpCorrected;
-    GH1* ZpDist;
-    GH1* ThetanDist;
-    GH1* ThetanCMDist;
-
-    GH2* DeutKinPiKin;
-    GH2* E_dE;
-    GH2* ThetaScPhiSc;
-    GH2* PhiPp1Phip;
-    GH2* EdEMWPCp;
-    GH2* EdEMWPCn;
-
-    GH1* ClosestApproach;
-    GH1* POCAr;
-    GH1* ScatterVertexZ;
-    GH2* ScatterVertexZr;
-    GH2* ScatterVertexXY;
-    GH3* ScatterVertex;
-    GH2* POCArPhiSc;
-
-    GH1* ThetapCorrDiff;
-    GH1* PhipCorrDiff;
-    GH1* ThetaDiff;
-    GH1* PhiDiff;
-    GH2* PhiDiffThetaDiff;
-
-    GH2* PhiScEg;
-    GH2* PhiScEp;
-    GH2* PhiScThetan;
-
-    GH2* EMWPCnPhiSc;
-
-    GH1* ZpVertexDiff;
-
-    GH1* MMp200300;
-    GH1* MMp300400;
-    GH1* MMp400500;
-    GH1* MMp500600;
-    GH1* MMp600700;
-    GH1* MMp700800;
-    GH1* MMp800900;
 
     TH1D* Eg;
     TH1D* PhiSc;
