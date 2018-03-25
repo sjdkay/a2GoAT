@@ -122,16 +122,6 @@ private:
     double_t MWPCPLp;
     double_t Wgt;
 
-    double RtmpMass,RtmpMom;
-    double chi2;
-    TLorentzVector* Pp1;
-    TLorentzVector* Pp2;
-    TLorentzVector* Pbeam;
-    TLorentzVector* Pp1C;
-    TLorentzVector* Pp2C;
-    TLorentzVector* PbeamC;
-    TLorentzVector* PtargetC;
-
     double_t WC1Phip;
     double_t WC2Phip;
     double_t WC1Phin;

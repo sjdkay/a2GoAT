@@ -48,13 +48,6 @@ Bool_t	PNeutPol_Polarimeter_Lin::Start()
     Md = 1875.613; //Mass of Deuterium in MeV
     Mpi = 139.57018; // Mass of charged pion in MeV
     Deut = TLorentzVector (0., 0., 0., 1875.613); // 4-Vector of Deuterium target, assume at rest
-    Pp1 = new TLorentzVector(0.,0.,0.,0.);
-    Pp2 = new TLorentzVector(0.,0.,0.,0.);
-    Pp1C = new TLorentzVector(0.,0.,0.,0.);
-    Pp2C = new TLorentzVector(0.,0.,0.,0.);
-    Pbeam = new TLorentzVector(0.,0.,0.,0.);
-    PbeamC = new TLorentzVector(0.,0.,0.,0.);
-    PtargetC = new TLorentzVector(0.,0.,0.,0.);
 
     Cut_CB_proton = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Proton_11_05_17.root", "Proton"); // These will need adjusting with new Acqu files
     Cut_proton = Cut_CB_proton;
@@ -241,13 +234,6 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
 
     GVn3 = GVn.Vect();
 
-    kinfit.LinkVariable("beamF",    beamF.Link(),       beamF.LinkSigma());
-    kinfit.LinkVariable("protonF",    protonF.Link(),       protonF.LinkSigma());
-    kinfit.LinkVariable("neutronF",    neutronF.Link(),       neutronF.LinkSigma());
-
-    vector<string> all_names = {"beamF", "protonF", "neutronF"};
-    kinfit.AddConstraint("EnergyMomentumBalance", all_names, EnergyMomentumBalance);
-
     for (Int_t j = 0; j < GetTagger()->GetNTagged(); j++)
     {
         TaggerTime = GetTagger()->GetTaggedTime(j); // Get tagged time for event
@@ -304,25 +290,6 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
         POCA = TVector3(POCAx, POCAy, POCAz);
 
         if( r < 35 ) return; // Ensure POCA is at polarimeter radius
-
-        //APLCON
-        beamF.SetFromVector(Gamma); // Set Lorentz vectors for use in APLCON
-        protonF.SetFromVector(GVpCorr);
-        neutronF.SetFromVector(GVn);
-
-        neutronF.Ek_Sigma=0; // Set errors on Ek, Theta and Phi for n/p/Photon
-        neutronF.Theta_Sigma=0.0474839+0.00425626*GVnCorr.Theta();
-        neutronF.Phi_Sigma=0.112339-0.0761341*GVnCorr.Theta()+0.0244866*GVnCorr.Theta()*GVnCorr.Theta();
-
-        protonF.Ek_Sigma=(0.045+0.043*(GVpCorr.E()-GVpCorr.M()))*4;
-        protonF.Theta_Sigma=0.00920133-0.00511389*GVpCorr.Theta()+0.00307915*GVpCorr.Theta()*GVpCorr.Theta();
-        protonF.Phi_Sigma=0.00974036+0.00411955*GVpCorr.Theta()-0.0096472*GVpCorr.Theta()*GVpCorr.Theta()+0.00414428*GVpCorr.Theta()*GVpCorr.Theta()*GVpCorr.Theta();
-
-        if(EpCorr>410)protonF.Ek_Sigma=0;
-
-        beamF.Ek_Sigma=0.87-0.0000011*(EGamma-177);
-        beamF.Theta_Sigma=1e-3;
-        beamF.Phi_Sigma=1e-3;
 
         tdif = TaggerTime - Timep;
 

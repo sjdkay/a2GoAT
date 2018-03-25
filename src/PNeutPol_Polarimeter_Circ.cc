@@ -306,25 +306,6 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
         if( r < 35 ) return; // Ensure POCA is at polarimeter radius
         if(ScattTheta > 45) return;
 
-        //APLCON
-        beamF.SetFromVector(Gamma); // Set Lorentz vectors for use in APLCON
-        protonF.SetFromVector(GVpCorr);
-        neutronF.SetFromVector(GVn);
-
-        neutronF.Ek_Sigma=0; // Set errors on Ek, Theta and Phi for n/p/Photon
-        neutronF.Theta_Sigma=0.0474839+0.00425626*GVnCorr.Theta();
-        neutronF.Phi_Sigma=0.112339-0.0761341*GVnCorr.Theta()+0.0244866*GVnCorr.Theta()*GVnCorr.Theta();
-
-        protonF.Ek_Sigma=(0.045+0.043*(GVpCorr.E()-GVpCorr.M()))*4;
-        protonF.Theta_Sigma=0.00920133-0.00511389*GVpCorr.Theta()+0.00307915*GVpCorr.Theta()*GVpCorr.Theta();
-        protonF.Phi_Sigma=0.00974036+0.00411955*GVpCorr.Theta()-0.0096472*GVpCorr.Theta()*GVpCorr.Theta()+0.00414428*GVpCorr.Theta()*GVpCorr.Theta()*GVpCorr.Theta();
-
-        if(EpCorr>410)protonF.Ek_Sigma=0;
-
-        beamF.Ek_Sigma=0.87-0.0000011*(EGamma-177);
-        beamF.Theta_Sigma=1e-3;
-        beamF.Phi_Sigma=1e-3;
-
         tdif = TaggerTime - Timep;
 
         //Calculate vertex position of interaction from MWPC info only, produces same result as pseudo vertex
