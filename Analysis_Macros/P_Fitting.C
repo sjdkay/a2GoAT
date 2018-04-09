@@ -44,7 +44,7 @@ void P_Fitting(){
     TF1 *Pn90CM = new TF1("Pn90CM", "1.64576-2.95484*(x/1000)+0.684577*(x/1000)**2-0.65*90**2/4/((x-560)**2+90**2/4)+(5.32305-35.3819*(x/1000)+70.145*(x/1000)**2-44.2899*(x/1000)**3)",300,700);
 
     // Add all relevant histograms to a list that can then be looped over
-    TFile *f = new TFile("AmoTotal_6_101_31.root"); // Open the latest PTotal file to load histograms from
+    TFile *f = new TFile("Physics_Total_104_5_4_18.root"); // Open the latest PTotal file to load histograms from
     TText *warn = new TText(0, 0 ,"PRELIMINARY"); // Preliminary warning label text
     TList *PhiScList = new TList;
     PhiScList->Add(PhiSc320);
@@ -73,7 +73,7 @@ void P_Fitting(){
         PhiScFitList->Add(hist);
     }
 
-    TFile f1("Py_6_101_31.root", "RECREATE");
+    TFile f1("Py_104.root", "RECREATE");
 
     TCanvas *canvas = new TCanvas("canvas","canvas", 1920, 1080);
     TPad *pad = new TPad("pad","",0,0,1,1);

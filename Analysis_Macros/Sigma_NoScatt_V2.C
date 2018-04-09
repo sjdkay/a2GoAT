@@ -1,0 +1,998 @@
+#include "./includes_Sigma_NoScatt.h"
+
+// define a legendre polynomial, 6 parameters. Need to set limits? This is different polynomial?
+//Double_t legendre(Double_t *x,Double_t *par)
+//{
+//    Double_t fitval = 0;
+//    fitval = (1-TMath::Power(x[0],2)*(par[0]*3+par[1]*15*x[0]+par[2]*15.0/2*(7*TMath::Power(x[0],2)-1)+par[3]*105.0/2*x[0]*(3*TMath::Power(x[0],2)-1)+par[4]*105.0/8*(33*TMath::Power(x[0],4)-18*TMath::Power(x[0],2)+1)+par[5]*63.0/8*x*(143*TMath::Power(x[0],4)-110*TMath::Power(x[0],2)+15)+par[6]*315.0/16*(143*TMath::Power(x[0],6)-143*TMath::Power(x[0],4)+33*TMath::Power(x[0],2)-1)));
+//    return fitval;
+//}
+
+void Sigma_NoScatt_V2(){
+
+    TFile *MBData = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sig_res_St.root");
+
+    TFile *f1= TFile::Open("/scratch/Mainz_Software/a2GoAT/Results/ParaPerpAsymm_NS14.root");
+    TTree *t1 = (TTree*)f1->Get("Parameter_Values");
+    //TF1 *LegPol = new TF1("LegPol","(1-x**2)*([0]*3+[1]*15*x+[2]*15.0/2*(7*x**2-1)+[3]*105.0/2*x*(3*x**2-1)+[4]*105.0/8*(33*x**4-18*x**2+1)+[5]*63.0/8*x*(143*x**4-110*x**2+15)+[6]*315.0/16*(143*x**6-143*x**4+33*x**2-1))",-1,1);
+    //TF1* LegFunc = new TF1("LegPol", legendre, -1, 1, 7);
+    TF1 *LegPol = new TF1("LegPol", "[0]+[1]*x+[2]*(0.5*(3*x**2-1))+[3]*(0.5*(5*x**3-3*x))+[4]*(0.125*(35*x**4-30*x**2+3))+[5]*(1.0/8.0*(63*x**5-70*x**3+15*x))+[6]*(1.0/16*(231*x**6-315*x**4+105*x**2-5))", -1, 1);
+    LegPol->SetParLimits(0,-1,1);
+    LegPol->SetParLimits(1,-1,1);
+    LegPol->SetParLimits(2,-1,1);
+    LegPol->SetParLimits(3,-1,1);
+    LegPol->SetParLimits(4,-1,1);
+    LegPol->SetParLimits(5,-1,1);
+    LegPol->SetParLimits(6,-1,1);
+    //LegPol->SetParLimits(7,-1,1);
+    LegPol->SetLineColor(4);
+    LegPol->SetLineWidth(3);
+
+    Double_t pValues415[20], pValues425[20], pValues435[20], pValues445[20], pValues455[20], pValues465[20], pValues475[20], pValues485[20], pValues495[20], pValues505[20], pValues515[20], pValues525[20], pValues535[20], pValues545[20], pValues555[20], pValues565[20], pValues575[20], pValues585[20], pValues595[20], pValues605[20], pValues615[20];
+    Double_t pErrValues415[20], pErrValues425[20], pErrValues435[20], pErrValues445[20], pErrValues455[20], pErrValues465[20], pErrValues475[20], pErrValues485[20], pErrValues495[20], pErrValues505[20], pErrValues515[20], pErrValues525[20], pErrValues535[20], pErrValues545[20], pErrValues555[20], pErrValues565[20], pErrValues575[20], pErrValues585[20], pErrValues595[20], pErrValues605[20], pErrValues615[20];
+    Double_t pSigmaValues415[18], pSigmaValues425[18], pSigmaValues435[18], pSigmaValues445[18], pSigmaValues455[18], pSigmaValues465[18], pSigmaValues475[18], pSigmaValues485[18], pSigmaValues495[18], pSigmaValues505[18], pSigmaValues515[18], pSigmaValues525[18], pSigmaValues535[18], pSigmaValues545[18], pSigmaValues555[18], pSigmaValues565[18], pSigmaValues575[18], pSigmaValues585[18], pSigmaValues595[18], pSigmaValues605[18], pSigmaValues615[18];
+    Double_t pSigmaErrValues415[18], pSigmaErrValues425[18], pSigmaErrValues435[18], pSigmaErrValues445[18], pSigmaErrValues455[18], pSigmaErrValues465[18], pSigmaErrValues475[18], pSigmaErrValues485[18], pSigmaErrValues495[18], pSigmaErrValues505[18], pSigmaErrValues515[18], pSigmaErrValues525[18], pSigmaErrValues535[18], pSigmaErrValues545[18], pSigmaErrValues555[18], pSigmaErrValues565[18], pSigmaErrValues575[18], pSigmaErrValues585[18], pSigmaErrValues595[18], pSigmaErrValues605[18], pSigmaErrValues615[18];
+    Double_t LegPar[7][21];
+    Double_t LegParErr[7][21];
+    double p0, p0Err, p1, p1Err, p2, p2Err, p3, p3Err, p4, p4Err, p5, p5Err, p6, p6Err;
+
+    Double_t pCosAmp415, pCosAmpErr415;
+    Double_t pCosAmp425, pCosAmpErr425;
+    Double_t pCosAmp435, pCosAmpErr435;
+    Double_t pCosAmp445, pCosAmpErr445;
+    Double_t pCosAmp455, pCosAmpErr455;
+    Double_t pCosAmp465, pCosAmpErr465;
+    Double_t pCosAmp475, pCosAmpErr475;
+    Double_t pCosAmp485, pCosAmpErr485;
+    Double_t pCosAmp495, pCosAmpErr495;
+    Double_t pCosAmp505, pCosAmpErr505;
+    Double_t pCosAmp515, pCosAmpErr515;
+    Double_t pCosAmp525, pCosAmpErr525;
+    Double_t pCosAmp535, pCosAmpErr535;
+    Double_t pCosAmp545, pCosAmpErr545;
+    Double_t pCosAmp555, pCosAmpErr555;
+    Double_t pCosAmp565, pCosAmpErr565;
+    Double_t pCosAmp575, pCosAmpErr575;
+    Double_t pCosAmp585, pCosAmpErr585;
+    Double_t pCosAmp595, pCosAmpErr595;
+    Double_t pCosAmp605, pCosAmpErr605;
+    Double_t pCosAmp615, pCosAmpErr615;
+
+    // Set branch addresses to get values from
+    t1->SetBranchAddress("pCosAmp415", &pCosAmp415);
+    t1->SetBranchAddress("pCosAmpErr415", &pCosAmpErr415);
+    t1->SetBranchAddress("pCosAmp425", &pCosAmp425);
+    t1->SetBranchAddress("pCosAmpErr425", &pCosAmpErr425);
+    t1->SetBranchAddress("pCosAmp435", &pCosAmp435);
+    t1->SetBranchAddress("pCosAmpErr435", &pCosAmpErr435);
+    t1->SetBranchAddress("pCosAmp445", &pCosAmp445);
+    t1->SetBranchAddress("pCosAmpErr445", &pCosAmpErr445);
+    t1->SetBranchAddress("pCosAmp455", &pCosAmp455);
+    t1->SetBranchAddress("pCosAmpErr455", &pCosAmpErr455);
+    t1->SetBranchAddress("pCosAmp465", &pCosAmp465);
+    t1->SetBranchAddress("pCosAmpErr465", &pCosAmpErr465);
+    t1->SetBranchAddress("pCosAmp475", &pCosAmp475);
+    t1->SetBranchAddress("pCosAmpErr475", &pCosAmpErr475);
+    t1->SetBranchAddress("pCosAmp485", &pCosAmp485);
+    t1->SetBranchAddress("pCosAmpErr485", &pCosAmpErr485);
+    t1->SetBranchAddress("pCosAmp495", &pCosAmp495);
+    t1->SetBranchAddress("pCosAmpErr495", &pCosAmpErr495);
+    t1->SetBranchAddress("pCosAmp505", &pCosAmp505);
+    t1->SetBranchAddress("pCosAmpErr505", &pCosAmpErr505);
+    t1->SetBranchAddress("pCosAmp515", &pCosAmp515);
+    t1->SetBranchAddress("pCosAmpErr515", &pCosAmpErr515);
+    t1->SetBranchAddress("pCosAmp525", &pCosAmp525);
+    t1->SetBranchAddress("pCosAmpErr525", &pCosAmpErr525);
+    t1->SetBranchAddress("pCosAmp535", &pCosAmp535);
+    t1->SetBranchAddress("pCosAmpErr535", &pCosAmpErr535);
+    t1->SetBranchAddress("pCosAmp545", &pCosAmp545);
+    t1->SetBranchAddress("pCosAmpErr545", &pCosAmpErr545);
+    t1->SetBranchAddress("pCosAmp555", &pCosAmp555);
+    t1->SetBranchAddress("pCosAmpErr555", &pCosAmpErr555);
+    t1->SetBranchAddress("pCosAmp565", &pCosAmp565);
+    t1->SetBranchAddress("pCosAmpErr565", &pCosAmpErr565);
+    t1->SetBranchAddress("pCosAmp575", &pCosAmp575);
+    t1->SetBranchAddress("pCosAmpErr575", &pCosAmpErr575);
+    t1->SetBranchAddress("pCosAmp585", &pCosAmp585);
+    t1->SetBranchAddress("pCosAmpErr585", &pCosAmpErr585);
+    t1->SetBranchAddress("pCosAmp595", &pCosAmp595);
+    t1->SetBranchAddress("pCosAmpErr595", &pCosAmpErr595);
+    t1->SetBranchAddress("pCosAmp605", &pCosAmp605);
+    t1->SetBranchAddress("pCosAmpErr605", &pCosAmpErr605);
+    t1->SetBranchAddress("pCosAmp615", &pCosAmp615);
+    t1->SetBranchAddress("pCosAmpErr615", &pCosAmpErr615);
+
+    // Load values from tree and asign values back into an array
+    for (Int_t k = 0; k < 20; k++){
+        Parameter_Values->GetEntry(k);
+        pValues415[k] = pCosAmp415;
+        pErrValues415[k] = pCosAmpErr415;
+        pValues425[k] = pCosAmp425;
+        pErrValues425[k] = pCosAmpErr425;
+        pValues435[k] = pCosAmp435;
+        pErrValues435[k] = pCosAmpErr435;
+        pValues445[k] = pCosAmp445;
+        pErrValues445[k] = pCosAmpErr445;
+        pValues455[k] = pCosAmp455;
+        pErrValues455[k] = pCosAmpErr455;
+        pValues465[k] = pCosAmp465;
+        pErrValues465[k] = pCosAmpErr465;
+        pValues475[k] = pCosAmp475;
+        pErrValues475[k] = pCosAmpErr475;
+        pValues485[k] = pCosAmp485;
+        pErrValues485[k] = pCosAmpErr485;
+        pValues495[k] = pCosAmp495;
+        pErrValues495[k] = pCosAmpErr495;
+        pValues505[k] = pCosAmp505;
+        pErrValues505[k] = pCosAmpErr505;
+        pValues515[k] = pCosAmp515;
+        pErrValues515[k] = pCosAmpErr515;
+        pValues525[k] = pCosAmp525;
+        pErrValues525[k] = pCosAmpErr525;
+        pValues535[k] = pCosAmp535;
+        pErrValues535[k] = pCosAmpErr535;
+        pValues545[k] = pCosAmp545;
+        pErrValues545[k] = pCosAmpErr545;
+        pValues555[k] = pCosAmp555;
+        pErrValues555[k] = pCosAmpErr555;
+        pValues565[k] = pCosAmp565;
+        pErrValues565[k] = pCosAmpErr565;
+        pValues575[k] = pCosAmp575;
+        pErrValues575[k] = pCosAmpErr575;
+        pValues585[k] = pCosAmp585;
+        pErrValues585[k] = pCosAmpErr585;
+        pValues595[k] = pCosAmp595;
+        pErrValues595[k] = pCosAmpErr595;
+        pValues605[k] = pCosAmp605;
+        pErrValues605[k] = pCosAmpErr605;
+        pValues615[k] = pCosAmp615;
+        pErrValues615[k] = pCosAmpErr615;
+
+    }
+
+    TFile *f2= TFile::Open("/scratch/Mainz_Software/a2GoAT/LinPol_Aug16.root"); // Open linear polarisation plot
+
+    // Calculate values of sigma for each angular and energy bin
+    // Exclude bins at edges!
+    for (Int_t i = 0; i < 18; i++){
+
+        pSigmaValues415[i] = pValues415[i+1]/(Graph->Eval(425,0));
+        pSigmaErrValues415[i] = pErrValues415[i+1]/(Graph->Eval(425,0));
+        pSigmaValues425[i] = pValues425[i+1]/(Graph->Eval(425,0));
+        pSigmaErrValues425[i] = pErrValues425[i+1]/(Graph->Eval(425,0));
+        pSigmaValues435[i] = pValues435[i+1]/(Graph->Eval(435,0));
+        pSigmaErrValues435[i] = pErrValues435[i+1]/(Graph->Eval(435,0));
+        pSigmaValues445[i] = pValues445[i+1]/(Graph->Eval(445,0));
+        pSigmaErrValues445[i] = pErrValues445[i+1]/(Graph->Eval(445,0));
+        pSigmaValues455[i] = pValues455[i+1]/(Graph->Eval(455,0));
+        pSigmaErrValues455[i] = pErrValues455[i+1]/(Graph->Eval(455,0));
+        pSigmaValues465[i] = pValues465[i+1]/(Graph->Eval(465,0));
+        pSigmaErrValues465[i] = pErrValues465[i+1]/(Graph->Eval(465,0));
+        pSigmaValues475[i] = pValues475[i+1]/(Graph->Eval(475,0));
+        pSigmaErrValues475[i] = pErrValues475[i+1]/(Graph->Eval(475,0));
+        pSigmaValues485[i] = pValues485[i+1]/(Graph->Eval(485,0));
+        pSigmaErrValues485[i] = pErrValues485[i+1]/(Graph->Eval(485,0));
+        pSigmaValues495[i] = pValues495[i+1]/(Graph->Eval(495,0));
+        pSigmaErrValues495[i] = pErrValues495[i+1]/(Graph->Eval(495,0));
+        pSigmaValues505[i] = pValues505[i+1]/(Graph->Eval(505,0));
+        pSigmaErrValues505[i] = pErrValues505[i+1]/(Graph->Eval(505,0));
+        pSigmaValues515[i] = pValues515[i+1]/(Graph->Eval(515,0));
+        pSigmaErrValues515[i] = pErrValues515[i+1]/(Graph->Eval(515,0));
+        pSigmaValues525[i] = pValues525[i+1]/(Graph->Eval(525,0));
+        pSigmaErrValues525[i] = pErrValues525[i+1]/(Graph->Eval(525,0));
+        pSigmaValues535[i] = pValues535[i+1]/(Graph->Eval(535,0));
+        pSigmaErrValues535[i] = pErrValues535[i+1]/(Graph->Eval(535,0));
+        pSigmaValues545[i] = pValues545[i+1]/(Graph->Eval(545,0));
+        pSigmaErrValues545[i] = pErrValues545[i+1]/(Graph->Eval(545,0));
+        pSigmaValues555[i] = pValues555[i+1]/(Graph->Eval(555,0));
+        pSigmaErrValues555[i] = pErrValues555[i+1]/(Graph->Eval(555,0));
+        pSigmaValues565[i] = pValues565[i+1]/(Graph->Eval(565,0));
+        pSigmaErrValues565[i] = pErrValues565[i+1]/(Graph->Eval(565,0));
+        pSigmaValues575[i] = pValues575[i+1]/(Graph->Eval(575,0));
+        pSigmaErrValues575[i] = pErrValues575[i+1]/(Graph->Eval(575,0));
+        pSigmaValues585[i] = pValues585[i+1]/(Graph->Eval(585,0));
+        pSigmaErrValues585[i] = pErrValues585[i+1]/(Graph->Eval(585,0));
+        pSigmaValues595[i] = pValues595[i+1]/(Graph->Eval(595,0));
+        pSigmaErrValues595[i] = pErrValues595[i+1]/(Graph->Eval(595,0));
+        pSigmaValues605[i] = pValues605[i+1]/(Graph->Eval(605,0));
+        pSigmaErrValues605[i] = pErrValues605[i+1]/(Graph->Eval(605,0));
+        pSigmaValues615[i] = pValues615[i+1]/(Graph->Eval(615,0));
+        pSigmaErrValues615[i] = pErrValues615[i+1]/(Graph->Eval(615,0));
+
+    }
+
+    TFile f3("Sigma_Plots_NS14_V1.root", "RECREATE");
+
+    Float_t xMin = -1;
+    Float_t xMax = 1;
+    double x[18] = {0.85, 0.75, 0.65, 0.55, 0.45, 0.35, 0.25, 0.15, 0.05, -0.05, -0.15, -0.25, -0.35, -0.45, -0.55, -0.65, -0.75, -0.85}; // Need to adjust
+    double ex[18] = {0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05}; // Need to adjust
+
+    TCanvas *canvas0 = new TCanvas("canvas0","canvas0", 1920, 1080);
+    TPad *pad = new TPad("pad","",0,0,1,1);
+    pad->Draw();
+    pad->cd();
+
+    pad->SetTickx(1);
+    pad->SetTicky(1);
+    pad->SetGridx(0);
+    pad->SetGridy(0);
+    TH1F  *hr0;
+    hr0 = canvas0->DrawFrame(xMin, -1,xMax, 1);
+    hr0->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 410-420MeV)");
+
+    gr = new TGraphErrors(18, x, pSigmaValues415, ex, pSigmaErrValues415);
+    gr->Fit("LegPol", "B");
+    gr->SetMarkerColor(4);
+    gr->SetLineColor(4);
+    gr->SetMarkerStyle(8);
+    gr->SetMarkerSize(1);
+    gr->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 410-420MeV)");
+    gr->GetXaxis()->SetTitle("Cos#theta_{CM}");
+    gr->GetYaxis()->SetTitle("#Sigma");
+    gr->SetName("Sigma415");
+    gr->Draw("ep");
+
+    for(Int_t j = 0; j < 7; j++){
+        LegPar[j][ 0] = LegPol->GetParameter(j);
+        LegParErr[j][ 0] = LegPol->GetParError(j);
+    }
+
+    TCanvas *canvas = new TCanvas("canvas","canvas", 1920, 1080);
+    TPad *pad1 = new TPad("pad1","",0,0,1,1);
+    pad1->Draw();
+    pad1->cd();
+
+    pad1->SetTickx(1);
+    pad1->SetTicky(1);
+    pad1->SetGridx(0);
+    pad1->SetGridy(0);
+    TH1F  *hr;
+    hr = canvas->DrawFrame(xMin, -1,xMax, 1);
+    hr->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 420-430MeV)");
+
+    gr1 = new TGraphErrors(18, x, pSigmaValues425, ex, pSigmaErrValues425);
+    gr1->Fit("LegPol", "B");
+    gr1->SetMarkerColor(4);
+    gr1->SetLineColor(4);
+    gr1->SetMarkerStyle(8);
+    gr1->SetMarkerSize(1);
+    gr1->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 420-430MeV)");
+    gr1->GetXaxis()->SetTitle("Cos#theta_{CM}");
+    gr1->GetYaxis()->SetTitle("#Sigma");
+    gr1->SetName("Sigma425");
+    gr1->Draw("ep");
+
+    for(Int_t j = 0; j < 7; j++){
+        LegPar[j][1] = LegPol->GetParameter(j);
+        LegParErr[j][1] = LegPol->GetParError(j);
+    }
+
+    TCanvas *canvas1 = new TCanvas("canvas1","canvas1", 1920, 1080);
+    TPad *pad2 = new TPad("pad2","",0,0,1,1);
+    pad2->Draw();
+    pad2->cd();
+
+    pad2->SetTickx(1);
+    pad2->SetTicky(1);
+    pad2->SetGridx(0);
+    pad2->SetGridy(0);
+    TH1F  *hr1;
+    hr1 = canvas1->DrawFrame(xMin, -1 ,xMax, 1);
+    hr1->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 430-440MeV)");
+
+    gr2 = new TGraphErrors(18, x, pSigmaValues435 , ex, pSigmaErrValues435);
+    gr2->Fit("LegPol", "B");
+    gr2->SetMarkerColor(4);
+    gr2->SetLineColor(4);
+    gr2->SetMarkerStyle(8);
+    gr2->SetMarkerSize(1);
+    gr2->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 430-440MeV)");
+    gr2->GetXaxis()->SetTitle("Cos#theta_{CM}");
+    gr2->GetYaxis()->SetTitle("#Sigma");
+    gr2->SetName("Sigma435");
+    gr2->Draw("ep");
+
+    for(Int_t j = 0; j < 7; j++){
+        LegPar[j][ 2] = LegPol->GetParameter(j);
+        LegParErr[j][ 2] = LegPol->GetParError(j);
+    }
+
+    TCanvas *canvas2 = new TCanvas("canvas2","canvas2", 1920, 1080);
+    TPad *pad3 = new TPad("pad3","",0,0,1,1);
+    pad3->Draw();
+    pad3->cd();
+
+    pad3->SetTickx(1);
+    pad3->SetTicky(1);
+    pad3->SetGridx(0);
+    pad3->SetGridy(0);
+    TH1F  *hr2;
+    hr2 = canvas2->DrawFrame(xMin, -1 ,xMax, 1);
+    hr2->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 440-450MeV)");
+
+    gr3 = new TGraphErrors(18, x, pSigmaValues445 , ex, pSigmaErrValues445);
+    gr3->Fit("LegPol", "B");
+    gr3->SetMarkerColor(4);
+    gr3->SetLineColor(4);
+    gr3->SetMarkerStyle(8);
+    gr3->SetMarkerSize(1);
+    gr3->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 440-450MeV)");
+    gr3->GetXaxis()->SetTitle("Cos#theta_{CM}");
+    gr3->GetYaxis()->SetTitle("#Sigma");
+    gr3->SetName("Sigma445");
+    gr3->Draw("ep");
+
+    for(Int_t j = 0; j < 7; j++){
+        LegPar[j][ 3] = LegPol->GetParameter(j);
+        LegParErr[j][ 3] = LegPol->GetParError(j);
+    }
+    TCanvas *canvas3 = new TCanvas("canvas3","canvas3", 1920, 1080);
+    TPad *pad4 = new TPad("pad4","",0,0,1,1);
+    pad4->Draw();
+    pad4->cd();
+
+    pad4->SetTickx(1);
+    pad4->SetTicky(1);
+    pad4->SetGridx(0);
+    pad4->SetGridy(0);
+    TH1F  *hr3;
+    hr3 = canvas3->DrawFrame(xMin, -1 ,xMax, 1);
+    hr3->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 450-460MeV)");
+
+    gr4 = new TGraphErrors(18 , x, pSigmaValues455 , ex, pSigmaErrValues455);
+    gr4->Fit("LegPol", "B");
+    gr4->SetMarkerColor(4);
+    gr4->SetLineColor(4);
+    gr4->SetMarkerStyle(8);
+    gr4->SetMarkerSize(1);
+    gr4->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 450-460MeV)");
+    gr4->GetXaxis()->SetTitle("Cos#theta_{CM}");
+    gr4->GetYaxis()->SetTitle("#Sigma");
+    gr4->SetName("Sigma455");
+    gr4->Draw("ep");
+
+    for(Int_t j = 0 ; j < 7; j++){
+        LegPar[j][ 4] = LegPol->GetParameter(j);
+        LegParErr[j][ 4] = LegPol->GetParError(j);
+    }
+
+    TCanvas *canvas4 = new TCanvas("canvas4","canvas4", 1920, 1080);
+    TPad *pad5 = new TPad("pad5","",0,0,1,1);
+    pad5->Draw();
+    pad5->cd();
+
+    pad5->SetTickx(1);
+    pad5->SetTicky(1);
+    pad5->SetGridx(0);
+    pad5->SetGridy(0);
+    TH1F  *hr4;
+    hr4 = canvas4->DrawFrame(xMin, -1 ,xMax, 1);
+    hr4->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 460-470MeV)");
+
+    gr5 = new TGraphErrors(18, x, pSigmaValues465, ex, pSigmaErrValues465);
+    gr5->Fit("LegPol", "B");
+    gr5->SetMarkerColor(4);
+    gr5->SetLineColor(4);
+    gr5->SetMarkerStyle(8);
+    gr5->SetMarkerSize(1);
+    gr5->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 460-470MeV)");
+    gr5->GetXaxis()->SetTitle("Cos#theta_{CM}");
+    gr5->GetYaxis()->SetTitle("#Sigma");
+    gr5->SetName("Sigma465");
+    gr5->Draw("ep");
+
+    for(Int_t j = 0 ; j < 7; j++){
+        LegPar[j][ 5] = LegPol->GetParameter(j);
+        LegParErr[j][ 5] = LegPol->GetParError(j);
+    }
+
+    TCanvas *canvas5 = new TCanvas("canvas5","canvas5", 1920, 1080);
+    TPad *pad6 = new TPad("pad6","",0,0,1,1);
+    pad6->Draw();
+    pad6->cd();
+
+    pad6->SetTickx(1);
+    pad6->SetTicky(1);
+    pad6->SetGridx(0);
+    pad6->SetGridy(0);
+    TH1F  *hr5;
+    hr5 = canvas5->DrawFrame(xMin, -1 ,xMax, 1);
+    hr5->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 470-480MeV)");
+
+    gr6 = new TGraphErrors(18, x, pSigmaValues475, ex, pSigmaErrValues475);
+    gr6->Fit("LegPol", "B");
+    gr6->SetMarkerColor(4);
+    gr6->SetLineColor(4);
+    gr6->SetMarkerStyle(8);
+    gr6->SetMarkerSize(1);
+    gr6->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 470-480MeV)");
+    gr6->GetXaxis()->SetTitle("Cos#theta_{CM}");
+    gr6->GetYaxis()->SetTitle("#Sigma");
+    gr6->SetName("Sigma475");
+    gr6->Draw("ep");
+
+    for(Int_t j = 0 ; j < 7; j++){
+        LegPar[j][ 6] = LegPol->GetParameter(j);
+        LegParErr[j][ 6] = LegPol->GetParError(j);
+    }
+
+    TCanvas *canvas6 = new TCanvas("canvas6","canvas6", 1920, 1080);
+    TPad *pad7 = new TPad("pad7","",0,0,1,1);
+    pad7->Draw();
+    pad7->cd();
+
+    pad7->SetTickx(1);
+    pad7->SetTicky(1);
+    pad7->SetGridx(0);
+    pad7->SetGridy(0);
+    TH1F  *hr6;
+    hr6 = canvas6->DrawFrame(xMin, -1 ,xMax, 1);
+    hr6->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 480-490MeV)");
+
+    gr7 = new TGraphErrors(18, x, pSigmaValues485, ex, pSigmaErrValues485);
+    gr7->Fit("LegPol", "B");
+    gr7->SetMarkerColor(4);
+    gr7->SetLineColor(4);
+    gr7->SetMarkerStyle(8);
+    gr7->SetMarkerSize(1);
+    gr7->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 480-490MeV)");
+    gr7->GetXaxis()->SetTitle("Cos#theta_{CM}");
+    gr7->GetYaxis()->SetTitle("#Sigma");
+    gr7->SetName("Sigma485");
+    gr7->Draw("ep");
+
+    for(Int_t j = 0 ; j < 7; j++){
+        LegPar[j][ 7] = LegPol->GetParameter(j);
+        LegParErr[j][ 7] = LegPol->GetParError(j);
+    }
+
+    TCanvas *canvas7 = new TCanvas("canvas7","canvas7", 1920, 1080);
+    TPad *pad8 = new TPad("pad8","",0,0,1,1);
+    pad8->Draw();
+    pad8->cd();
+
+    pad8->SetTickx(1);
+    pad8->SetTicky(1);
+    pad8->SetGridx(0);
+    pad8->SetGridy(0);
+    TH1F  *hr7;
+    hr7 = canvas7->DrawFrame(xMin, -1 ,xMax, 1);
+    hr7->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 490-500MeV)");
+
+    gr8 = new TGraphErrors(18, x, pSigmaValues495, ex, pSigmaErrValues495);
+    gr8->Fit("LegPol", "B");
+    gr8->SetMarkerColor(4);
+    gr8->SetLineColor(4);
+    gr8->SetMarkerStyle(8);
+    gr8->SetMarkerSize(1);
+    gr8->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 490-500MeV)");
+    gr8->GetXaxis()->SetTitle("Cos#theta_{CM}");
+    gr8->GetYaxis()->SetTitle("#Sigma");
+    gr8->SetName("Sigma495");
+    gr8->Draw("ep");
+
+    for(Int_t j = 0 ; j < 7; j++){
+        LegPar[j][ 8] = LegPol->GetParameter(j);
+        LegParErr[j][ 8] = LegPol->GetParError(j);
+    }
+
+    TCanvas *canvas8 = new TCanvas("canvas8","canvas8", 1920, 1080);
+    TPad *pad9 = new TPad("pad9","",0,0,1,1);
+    pad9->Draw();
+    pad9->cd();
+
+    pad9->SetTickx(1);
+    pad9->SetTicky(1);
+    pad9->SetGridx(0);
+    pad9->SetGridy(0);
+    TH1F  *hr8;
+    hr8 = canvas8->DrawFrame(xMin, -1 ,xMax, 1);
+    hr8->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 500-510MeV)");
+
+    gr9 = new TGraphErrors(18, x, pSigmaValues505, ex, pSigmaErrValues505);
+    gr9->Fit("LegPol", "B");
+    gr9->SetMarkerColor(4);
+    gr9->SetLineColor(4);
+    gr9->SetMarkerStyle(8);
+    gr9->SetMarkerSize(1);
+    gr9->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 500-510MeV)");
+    gr9->GetXaxis()->SetTitle("Cos#theta_{CM}");
+    gr9->GetYaxis()->SetTitle("#Sigma");
+    gr9->SetName("Sigma505");
+    gr9->Draw("ep");
+
+    for(Int_t j = 0 ; j < 7; j++){
+        LegPar[j][ 9] = LegPol->GetParameter(j);
+        LegParErr[j][ 9] = LegPol->GetParError(j);
+    }
+
+    TCanvas *canvas9 = new TCanvas("canvas9","canvas9", 1920, 1080);
+    TPad *pad10 = new TPad("pad10","",0,0,1,1);
+    pad10->Draw();
+    pad10->cd();
+
+    pad10->SetTickx(1);
+    pad10->SetTicky(1);
+    pad10->SetGridx(0);
+    pad10->SetGridy(0);
+    TH1F  *hr9;
+    hr9 = canvas9->DrawFrame(xMin, -1 ,xMax, 1);
+    hr9->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 510-520MeV)");
+
+    gr10 = new TGraphErrors(18, x, pSigmaValues515, ex, pSigmaErrValues515);
+    gr10->Fit("LegPol", "B");
+    gr10->SetMarkerColor(4);
+    gr10->SetLineColor(4);
+    gr10->SetMarkerStyle(8);
+    gr10->SetMarkerSize(1);
+    gr10->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 510-520MeV)");
+    gr10->GetXaxis()->SetTitle("Cos#theta_{CM}");
+    gr10->GetYaxis()->SetTitle("#Sigma");
+    gr10->SetName("Sigma515");
+    gr10->Draw("ep");
+
+    for(Int_t j = 0 ; j < 7; j++){
+        LegPar[j][ 10] = LegPol->GetParameter(j);
+        LegParErr[j][ 10] = LegPol->GetParError(j);
+    }
+
+    TCanvas *canvas10 = new TCanvas("canvas10","canvas10", 1920, 1080);
+    TPad *pad11 = new TPad("pad11","",0,0,1,1);
+    pad11->Draw();
+    pad11->cd();
+
+    pad11->SetTickx(1);
+    pad11->SetTicky(1);
+    pad11->SetGridx(0);
+    pad11->SetGridy(0);
+    TH1F  *hr10;
+    hr10 = canvas10->DrawFrame(xMin, -1 ,xMax, 1);
+    hr10->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 520-530MeV)");
+
+    gr11 = new TGraphErrors(18, x, pSigmaValues525, ex, pSigmaErrValues525);
+    gr11->Fit("LegPol", "B");
+    gr11->SetMarkerColor(4);
+    gr11->SetLineColor(4);
+    gr11->SetMarkerStyle(8);
+    gr11->SetMarkerSize(1);
+    gr11->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 520-530MeV)");
+    gr11->GetXaxis()->SetTitle("Cos#theta_{CM}");
+    gr11->GetYaxis()->SetTitle("#Sigma");
+    gr11->SetName("Sigma525");
+    gr11->Draw("ep");
+
+    for(Int_t j = 0 ; j < 7; j++){
+        LegPar[j][ 11] = LegPol->GetParameter(j);
+        LegParErr[j][ 11] = LegPol->GetParError(j);
+    }
+
+    TCanvas *canvas11 = new TCanvas("canvas11","canvas11", 1920, 1080);
+    TPad *pad12 = new TPad("pad12","",0,0,1,1);
+    pad12->Draw();
+    pad12->cd();
+
+    pad12->SetTickx(1);
+    pad12->SetTicky(1);
+    pad12->SetGridx(0);
+    pad12->SetGridy(0);
+    TH1F  *hr11;
+    hr11 = canvas11->DrawFrame(xMin, -1 ,xMax, 1);
+    hr11->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 530-540MeV)");
+
+    gr12 = new TGraphErrors(18, x, pSigmaValues535, ex, pSigmaErrValues535);
+    gr12->Fit("LegPol", "B");
+    gr12->SetMarkerColor(4);
+    gr12->SetLineColor(4);
+    gr12->SetMarkerStyle(8);
+    gr12->SetMarkerSize(1);
+    gr12->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 530-540MeV)");
+    gr12->GetXaxis()->SetTitle("Cos#theta_{CM}");
+    gr12->GetYaxis()->SetTitle("#Sigma");
+    gr12->SetName("Sigma535");
+    gr12->Draw("ep");
+
+    for(Int_t j = 0 ; j < 7; j++){
+        LegPar[j][ 12] = LegPol->GetParameter(j);
+        LegParErr[j][ 12] = LegPol->GetParError(j);
+    }
+
+    TCanvas *canvas12 = new TCanvas("canvas12","canvas12", 1920, 1080);
+    TPad *pad13 = new TPad("pad13","",0,0,1,1);
+    pad13->Draw();
+    pad13->cd();
+
+    pad13->SetTickx(1);
+    pad13->SetTicky(1);
+    pad13->SetGridx(0);
+    pad13->SetGridy(0);
+    TH1F  *hr12;
+    hr12 = canvas12->DrawFrame(xMin, -1 ,xMax, 1);
+    hr12->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 540-550MeV)");
+
+    gr13 = new TGraphErrors(18, x, pSigmaValues545, ex, pSigmaErrValues545);
+    gr13->Fit("LegPol", "B");
+    gr13->SetMarkerColor(4);
+    gr13->SetLineColor(4);
+    gr13->SetMarkerStyle(8);
+    gr13->SetMarkerSize(1);
+    gr13->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 540-550MeV)");
+    gr13->GetXaxis()->SetTitle("Cos#theta_{CM}");
+    gr13->GetYaxis()->SetTitle("#Sigma");
+    gr13->SetName("Sigma545");
+    gr13->Draw("ep");
+
+    for(Int_t j = 0 ; j < 7; j++){
+        LegPar[j][ 13] = LegPol->GetParameter(j);
+        LegParErr[j][ 13] = LegPol->GetParError(j);
+    }
+
+    TCanvas *canvas13 = new TCanvas("canvas13","canvas13", 1920, 1080);
+    TPad *pad14 = new TPad("pad14","",0,0,1,1);
+    pad14->Draw();
+    pad14->cd();
+
+    pad14->SetTickx(1);
+    pad14->SetTicky(1);
+    pad14->SetGridx(0);
+    pad14->SetGridy(0);
+    TH1F  *hr13;
+    hr13 = canvas13->DrawFrame(xMin, -1 ,xMax, 1);
+    hr13->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 550-560MeV)");
+
+    gr14 = new TGraphErrors(18, x, pSigmaValues555, ex, pSigmaErrValues555);
+    gr14->SetMarkerColor(4);
+    gr14->SetLineColor(4);
+    gr14->SetMarkerStyle(8);
+    gr14->SetMarkerSize(1);
+    gr14->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 550-560MeV)");
+    gr14->GetXaxis()->SetTitle("Cos#theta_{CM}");
+    gr14->GetYaxis()->SetTitle("#Sigma");
+    gr14->SetName("Sigma555");
+    gr14->Draw("ep");
+
+    for(Int_t j = 0 ; j < 7; j++){
+        LegPar[j][ 14] = LegPol->GetParameter(j);
+        LegParErr[j][ 14] = LegPol->GetParError(j);
+    }
+
+    TCanvas *canvas14 = new TCanvas("canvas14","canvas14", 1920, 1080);
+    TPad *pad15 = new TPad("pad15","",0,0,1,1);
+    pad15->Draw();
+    pad15->cd();
+
+    pad15->SetTickx(1);
+    pad15->SetTicky(1);
+    pad15->SetGridx(0);
+    pad15->SetGridy(0);
+    TH1F  *hr14;
+    hr14 = canvas14->DrawFrame(xMin, -1 ,xMax, 1);
+    hr14->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 560-570MeV)");
+
+    gr15 = new TGraphErrors(18, x, pSigmaValues565, ex, pSigmaErrValues565);
+    gr15->Fit("LegPol", "B");
+    gr15->SetMarkerColor(4);
+    gr15->SetLineColor(4);
+    gr15->SetMarkerStyle(8);
+    gr15->SetMarkerSize(1);
+    gr15->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 560-570MeV)");
+    gr15->GetXaxis()->SetTitle("Cos#theta_{CM}");
+    gr15->GetYaxis()->SetTitle("#Sigma");
+    gr15->SetName("Sigma565");
+    gr15->Draw("ep");
+
+    for(Int_t j = 0 ; j < 7; j++){
+        LegPar[j][15] = LegPol->GetParameter(j);
+        LegParErr[j][15] = LegPol->GetParError(j);
+    }
+
+    TCanvas *canvas15 = new TCanvas("canvas15","canvas15", 1920, 1080);
+    TPad *pad16 = new TPad("pad16","",0,0,1,1);
+    pad16->Draw();
+    pad16->cd();
+
+    pad16->SetTickx(1);
+    pad16->SetTicky(1);
+    pad16->SetGridx(0);
+    pad16->SetGridy(0);
+    TH1F  *hr15;
+    hr15 = canvas15->DrawFrame(xMin, -1 ,xMax, 1);
+    hr15->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 570-580MeV)");
+
+    gr16 = new TGraphErrors(18, x, pSigmaValues575, ex, pSigmaErrValues575);
+    gr16->Fit("LegPol", "B");
+    gr16->SetMarkerColor(4);
+    gr16->SetLineColor(4);
+    gr16->SetMarkerStyle(8);
+    gr16->SetMarkerSize(1);
+    gr16->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 570-580MeV)");
+    gr16->GetXaxis()->SetTitle("Cos#theta_{CM}");
+    gr16->GetYaxis()->SetTitle("#Sigma");
+    gr16->SetName("Sigma575");
+    gr16->Draw("ep");
+
+    for(Int_t j = 0 ; j < 7; j++){
+        LegPar[j][ 16] = LegPol->GetParameter(j);
+        LegParErr[j][ 16] = LegPol->GetParError(j);
+    }
+
+    TCanvas *canvas16 = new TCanvas("canvas16","canvas16", 1920, 1080);
+    TPad *pad17 = new TPad("pad17","",0,0,1,1);
+    pad17->Draw();
+    pad17->cd();
+
+    pad17->SetTickx(1);
+    pad17->SetTicky(1);
+    pad17->SetGridx(0);
+    pad17->SetGridy(0);
+    TH1F  *hr16;
+    hr16 = canvas16->DrawFrame(xMin, -1 ,xMax, 1);
+    hr16->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 580-590MeV)");
+
+    gr17 = new TGraphErrors(18, x, pSigmaValues585, ex, pSigmaErrValues585);
+    gr17->Fit("LegPol", "B");
+    gr17->SetMarkerColor(4);
+    gr17->SetLineColor(4);
+    gr17->SetMarkerStyle(8);
+    gr17->SetMarkerSize(1);
+    gr17->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 580-590MeV)");
+    gr17->GetXaxis()->SetTitle("Cos#theta_{CM}");
+    gr17->GetYaxis()->SetTitle("#Sigma");
+    gr17->SetName("Sigma585");
+    gr17->Draw("ep");
+
+    for(Int_t j = 0 ; j < 7; j++){
+        LegPar[j][ 17] = LegPol->GetParameter(j);
+        LegParErr[j][ 17] = LegPol->GetParError(j);
+    }
+
+    TCanvas *canvas17 = new TCanvas("canvas17","canvas17", 1920, 1080);
+    TPad *pad18 = new TPad("pad18","",0,0,1,1);
+    pad18->Draw();
+    pad18->cd();
+
+    pad18->SetTickx(1);
+    pad18->SetTicky(1);
+    pad18->SetGridx(0);
+    pad18->SetGridy(0);
+    TH1F  *hr17;
+    hr17 = canvas17->DrawFrame(xMin, -1 ,xMax, 1);
+    hr17->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 590-600MeV)");
+
+    gr18 = new TGraphErrors(18, x, pSigmaValues595, ex, pSigmaErrValues595);
+    gr18->Fit("LegPol", "B");
+    gr18->SetMarkerColor(4);
+    gr18->SetLineColor(4);
+    gr18->SetMarkerStyle(8);
+    gr18->SetMarkerSize(1);
+    gr18->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 590-600MeV)");
+    gr18->GetXaxis()->SetTitle("Cos#theta_{CM}");
+    gr18->GetYaxis()->SetTitle("#Sigma");
+    gr18->SetName("Sigma595");
+    gr18->Draw("ep");
+
+    for(Int_t j = 0 ; j < 7; j++){
+        LegPar[j][ 18] = LegPol->GetParameter(j);
+        LegParErr[j][ 18] = LegPol->GetParError(j);
+    }
+
+    TCanvas *canvas18 = new TCanvas("canvas18","canvas18", 1920, 1080);
+    TPad *pad19 = new TPad("pad19","",0,0,1,1);
+    pad19->Draw();
+    pad19->cd();
+
+    pad19->SetTickx(1);
+    pad19->SetTicky(1);
+    pad19->SetGridx(0);
+    pad19->SetGridy(0);
+    TH1F  *hr18;
+    hr18 = canvas18->DrawFrame(xMin, -1 ,xMax, 1);
+    hr18->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 600-610MeV)");
+
+    gr19 = new TGraphErrors(18, x, pSigmaValues605, ex, pSigmaErrValues605);
+    gr19->Fit("LegPol", "B");
+    gr19->SetMarkerColor(4);
+    gr19->SetLineColor(4);
+    gr19->SetMarkerStyle(8);
+    gr19->SetMarkerSize(1);
+    gr19->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 600-610MeV)");
+    gr19->GetXaxis()->SetTitle("Cos#theta_{CM}");
+    gr19->GetYaxis()->SetTitle("#Sigma");
+    gr19->SetName("Sigma605");
+    gr19->Draw("ep");
+
+    for(Int_t j = 0 ; j < 7; j++){
+        LegPar[j][ 19] = LegPol->GetParameter(j);
+        LegParErr[j][ 19] = LegPol->GetParError(j);
+    }
+
+    TCanvas *canvas19 = new TCanvas("canvas19","canvas19", 1920, 1080);
+    TPad *pad20 = new TPad("pad20","",0,0,1,1);
+    pad20->Draw();
+    pad20->cd();
+
+    pad20->SetTickx(1);
+    pad20->SetTicky(1);
+    pad20->SetGridx(0);
+    pad20->SetGridy(0);
+    TH1F  *hr19;
+    hr19 = canvas19->DrawFrame(xMin, -1 ,xMax, 1);
+    hr19->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 610-620MeV)");
+
+    gr20 = new TGraphErrors(18, x, pSigmaValues615, ex, pSigmaErrValues615);
+    gr20->Fit("LegPol", "B");
+    gr20->SetMarkerColor(4);
+    gr20->SetLineColor(4);
+    gr20->SetMarkerStyle(8);
+    gr20->SetMarkerSize(1);
+    gr20->SetTitle("#Sigma as fn of Cos#theta_{CM} (E_{#gamma} 610-620MeV)");
+    gr20->GetXaxis()->SetTitle("Cos#theta_{CM}");
+    gr20->GetYaxis()->SetTitle("#Sigma");
+    gr20->SetName("Sigma615");
+    gr20->Draw("ep");
+
+    for(Int_t j = 0 ; j < 7; j++){
+        LegPar[j][ 20] = LegPol->GetParameter(j);
+        LegParErr[j][ 20] = LegPol->GetParError(j);
+    }
+
+    canvas0->Write();
+    gr->Write();
+    canvas->Write();
+    gr1->Write();
+    canvas1->Write();
+    gr2->Write();
+    canvas2->Write();
+    gr3->Write();
+    canvas3->Write();
+    gr4->Write();
+    canvas4->Write();
+    gr5->Write();
+    canvas5->Write();
+    gr6->Write();
+    canvas6->Write();
+    gr7->Write();
+    canvas7->Write();
+    gr8->Write();
+    canvas8->Write();
+    gr9->Write();
+    canvas9->Write();
+    gr10->Write();
+    canvas10->Write();
+    gr11->Write();
+    canvas11->Write();
+    gr12->Write();
+    canvas12->Write();
+    gr13->Write();
+    canvas13->Write();
+    gr14->Write();
+    canvas14->Write();
+    gr15->Write();
+    canvas15->Write();
+    gr16->Write();
+    canvas16->Write();
+    gr17->Write();
+    canvas17->Write();
+    gr18->Write();
+    canvas18->Write();
+    gr19->Write();
+    canvas19->Write();
+    gr20->Write();
+
+    TCanvas *canvas20 = new TCanvas("canvas20","canvas20", 1920, 1080);
+    canvas20->Divide(5,4);
+    canvas20->cd(1);
+    pad1->Draw();
+    canvas20->cd(2);
+    pad2->Draw();
+    canvas20->cd(3);
+    pad3->Draw();
+    canvas20->cd(4);
+    pad4->Draw();
+    canvas20->cd(5);
+    pad5->Draw();
+    canvas20->cd(6);
+    pad6->Draw();
+    canvas20->cd(7);
+    pad7->Draw();
+    canvas20->cd(8);
+    pad8->Draw();
+    canvas20->cd(9);
+    pad9->Draw();
+    canvas20->cd(10);
+    pad10->Draw();
+    canvas20->cd(11);
+    pad11->Draw();
+    canvas20->cd(12);
+    pad12->Draw();
+    canvas20->cd(13);
+    pad13->Draw();
+    canvas20->cd(14);
+    pad14->Draw();
+    canvas20->cd(15);
+    pad15->Draw();
+    canvas20->cd(16);
+    pad16->Draw();
+    canvas20->cd(17);
+    pad17->Draw();
+    canvas20->cd(18);
+    pad18->Draw();
+    canvas20->cd(19);
+    pad19->Draw();
+    canvas20->cd(20);
+    pad20->Draw();
+
+    canvas20->Write();
+
+    //Define new tree to store parameters in
+    TTree* p0tree = new TTree("Parameter0_Values", "Tree_of_Values");
+    p0tree->Branch("p0", &p0, "p0/D");
+    p0tree->Branch("p0Err", &p0Err, "p0Err/D");
+    for (Int_t m = 0; m < 21; m++){
+        p0 = LegPar[0][m];
+        p0Err = LegParErr[0][m];
+        p0tree->Fill();
+    }
+
+    //Define new tree to store parameters in
+    TTree* p1tree = new TTree("Parameter1_Values", "Tree_of_Values");
+    p1tree->Branch("p1", &p1, "p1/D");
+    p1tree->Branch("p1Err", &p1Err, "p1Err/D");
+    for (Int_t m = 0; m < 21; m++){
+        p1 = LegPar[1][m];
+        p1Err = LegParErr[1][m];
+        p1tree->Fill();
+    }
+
+    //Define new tree to store parameters in
+    TTree* p2tree = new TTree("Parameter2_Values", "Tree_of_Values");
+    p2tree->Branch("p2", &p2, "p2/D");
+    p2tree->Branch("p2Err", &p2Err, "p2Err/D");
+    for (Int_t m = 0; m < 21; m++){
+        p2 = LegPar[2][m];
+        p2Err = LegParErr[2][m];
+        p2tree->Fill();
+    }
+
+    //Define new tree to store parameters in
+    TTree* p3tree = new TTree("Parameter3_Values", "Tree_of_Values");
+    p3tree->Branch("p3", &p3, "p3/D");
+    p3tree->Branch("p3Err", &p3Err, "p3Err/D");
+    for (Int_t m = 0; m < 21; m++){
+        p3 = LegPar[3][m];
+        p3Err = LegParErr[3][m];
+        p3tree->Fill();
+    }
+
+    //Define new tree to store parameters in
+    TTree* p4tree = new TTree("Parameter4_Values", "Tree_of_Values");
+    p4tree->Branch("p4", &p4, "p4/D");
+    p4tree->Branch("p4Err", &p4Err, "p4Err/D");
+    for (Int_t m = 0; m < 21; m++){
+        p4 = LegPar[4][m];
+        p4Err = LegParErr[4][m];
+        p4tree->Fill();
+    }
+
+    //Define new tree to store parameters in
+    TTree* p5tree = new TTree("Parameter5_Values", "Tree_of_Values");
+    p5tree->Branch("p5", &p5, "p5/D");
+    p5tree->Branch("p5Err", &p5Err, "p5Err/D");
+    for (Int_t m = 0; m < 21; m++){
+        p5 = LegPar[5][m];
+        p5Err = LegParErr[5][m];
+        p5tree->Fill();
+    }
+
+    //Define new tree to store parameters in
+    TTree* p6tree = new TTree("Parameter6_Values", "Tree_of_Values");
+    p6tree->Branch("p6", &p6, "p6/D");
+    p6tree->Branch("p6Err", &p6Err, "p6Err/D");
+    for (Int_t m = 0; m < 21; m++){
+        p6 = LegPar[6][m];
+        p6Err = LegParErr[6][m];
+        p6tree->Fill();
+    }
+
+    f3.Write();
+}

@@ -37,9 +37,33 @@
 using namespace std;
 using namespace TMath;
 
-Double_t NPara;
-Double_t NPerp;
-Double_t ScaleFactor;
-Double_t ScaleFactorErr;
+    Double_t NPara;
+    Double_t NPerp;
+    Double_t ScaleFactor;
+    Double_t ScaleFactorErr;
+
+    TH1D* Sig415Asymm[20];
+    TH1D* Sig425Asymm[20];
+    TH1D* Sig435Asymm[20];
+    TH1D* Sig445Asymm[20];
+    TH1D* Sig455Asymm[20];
+    TH1D* Sig465Asymm[20];
+    TH1D* Sig475Asymm[20];
+    TH1D* Sig485Asymm[20];
+    TH1D* Sig495Asymm[20];
+    TH1D* Sig505Asymm[20];
+    TH1D* Sig515Asymm[20];
+    TH1D* Sig525Asymm[20];
+    TH1D* Sig535Asymm[20];
+    TH1D* Sig545Asymm[20];
+    TH1D* Sig555Asymm[20];
+    TH1D* Sig565Asymm[20];
+    TH1D* Sig575Asymm[20];
+    TH1D* Sig585Asymm[20];
+    TH1D* Sig595Asymm[20];
+    TH1D* Sig605Asymm[20];
+    TH1D* Sig615Asymm[20];
+    TH1D* Sig625Asymm[20];
+
 
 

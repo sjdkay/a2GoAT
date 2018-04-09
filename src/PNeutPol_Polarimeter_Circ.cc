@@ -32,10 +32,17 @@ Bool_t	PNeutPol_Polarimeter_Circ::Start()
 
     SetAsPhysicsFile();
 
+//    PromptLow = -5;
+//    PromptHigh = 20;
+//    RandomLow1 = -135;
+//    RandomHigh1 = -35;
+//    RandomLow2 = 35;
+//    RandomHigh2 = 135;
+
     PromptLow = -5;
     PromptHigh = 20;
-    RandomLow1 = -135;
-    RandomHigh1 = -35;
+    RandomLow1 = -120;
+    RandomHigh1 = -20;
     RandomLow2 = 35;
     RandomHigh2 = 135;
     PvRratio = (PromptHigh - PromptLow)/( (RandomHigh1 - RandomLow1) + (RandomHigh2 - RandomLow2));
@@ -274,7 +281,7 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
         nKinB = nKin;
         nKinB.Boost(b);
         ThetanCM = (nKinB.Theta())*TMath::RadToDeg();
-        if (80 > ThetanCM || ThetanCM > 100) continue;
+        //if (80 > ThetanCM || ThetanCM > 100) continue;
 
         RecNeutronEpCorr = CNeutron4VectorKin(GVpCorr);
         MMpEpCorr = RecNeutronEpCorr.M();
@@ -291,7 +298,7 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
         ScattTheta = ScattThetaRad*TMath::RadToDeg();
         ScattPhiRad = ScattAngles(0);
         ScattPhi = ScattPhiRad*TMath::RadToDeg();
-        if (ScattPhiRad > -0.01 && ScattPhiRad < 0.01) continue; // Kill excessively small values
+        //if (ScattPhiRad > -0.01 && ScattPhiRad < 0.01) continue; // Kill excessively small values
         Wgt = 1 + ((-0.25546)+(-0.870945*(EGamma/1000))+(1.4198*(TMath::Power((EGamma/1000),2))*cos(ScattPhiRad)));
 
         DOCAVertex1 = TVector3(0., 0., 0.);
@@ -389,13 +396,41 @@ TLorentzVector PNeutPol_Polarimeter_Circ::CNeutron4VectorKin(TLorentzVector Prot
 
 PNeutPol_Polarimeter_Circ::PNeutPol_Polarimeter_Circ() // Define a load of histograms to fill
 {
-Eg = new TH1D( "Eg", "E_{#gamma} Distribution", 200, 100, 1600 );
+    Eg = new TH1D( "Eg", "E_{#gamma} Distribution", 200, 100, 1600 );
     EgPrompt = new TH1D( "EgPrompt", "E_{#gamma} Distribution", 200, 100, 1600 );
     EgRandom = new TH1D( "EgRandom", "E_{#gamma} Distribution", 200, 100, 1600 );
 
+    ThetaSc = new TH1D ("ThetaSc", "#theta_{Sc} Distribution", 200, -4, 4);
+    ThetaScPrompt = new TH1D ("ThetaScPrompt", "#theta_{Sc} Distribution", 200, -4, 4);
+    ThetaScRandom = new TH1D ("ThetaScRandom", "#theta_{Sc} Distribution", 200, -4, 4);
+
+    RPoca = new TH1D("RPoca", "R_{POCA} Distribution", 200, 0, 200);
+    RPocaPrompt = new TH1D("RPocaPrompt", "R_{POCA} Distribution", 200, 0, 200);
+    RPocaRandom = new TH1D("RPocaRandom", "R_{POCA} Distribution", 200, 0, 200);
+
+    Thetap = new TH1D ("Thetap", "#theta_{p} Distribution", 200, 0, 4);
+    ThetapPrompt = new TH1D ("ThetapPrompt", "#theta_{p} Distribution", 200, 0, 4);
+    ThetapRandom = new TH1D ("ThetapRandom", "#theta_{p} Distribution", 200, 0, 4);
+
+    Phip = new TH1D( "Phip", "#phi_{sc} Proton Distribution", 200, -4, 4);
+    PhipPrompt = new TH1D( "PhipPrompt", "#phi_{sc} Proton Distribution", 200, -4, 4);
+    PhipRandom = new TH1D( "PhipRandom", "#phi_{sc} Proton Distribution", 200, -4, 4);
+
+    EProton = new TH1D( "EProton", "E_{p} Distribution", 200, 0, 400);
+    EProtonPrompt = new TH1D( "EProtonPrompt", "E_{p} Distribution", 200, 0, 400);
+    EProtonRandom = new TH1D( "EProtonRandom", "E_{p} Distribution", 200, 0, 400);
+
+    MMProton = new TH1D( "MMProton", "MM_{p} Distribution", 200, 800, 1200);
+    MMProtonPrompt = new TH1D( "MMProtonPrompt", "MM_{p} Distribution", 200, 800, 1200);
+    MMProtonRandom = new TH1D( "MMProtonRandom", "MM_{p} Distribution", 200, 800, 1200);
+
     PhiSc = new TH1D( "Phi_Scattered", "#phi_{sc} Proton Distribution", 200, -4, 4);
-    PhiScPrompt = new TH1D( "Phi_Scattered", "#phi_{sc} Proton Distribution", 200, -4, 4);
-    PhiScRandom = new TH1D( "Phi_Scattered", "#phi_{sc} Proton Distribution", 200, -4, 4);
+    PhiScPrompt = new TH1D( "Phi_ScatteredPrompt", "#phi_{sc} Proton Distribution", 200, -4, 4);
+    PhiScRandom = new TH1D( "Phi_ScatteredRandom", "#phi_{sc} Proton Distribution", 200, -4, 4);
+
+    EdE = new TH2D ("EdE", "dE_{p} as a function of E_{p}", 200, 0, 400, 200, 0, 10);
+    EdEPrompt = new TH2D ("EdEPrompt", "dE_{p} as a function of E_{p}", 200, 0, 400, 200, 0, 10);
+    EdERandom = new TH2D ("EdERandom", "dE_{p} as a function of E_{p}", 200, 0, 400, 200, 0, 10);
 
     PhiSc320 = new TH1D("PhiSc320", "#phi_{Sc} (300-340MeV)", 24, -4, 4);
     PhiSc360 = new TH1D("PhiSc360", "#phi_{Sc} (340-380MeV)", 24, -4, 4);
@@ -821,626 +856,644 @@ void PNeutPol_Polarimeter_Circ::FillHists()
 {
     if (GHistBGSub::IsPrompt(TaggerTime) == kTRUE){
         EgPrompt->Fill(EGamma);
-        PhiScPrompt->Fill(ScattPhiRad, Wgt);
-        if(ThetanCM  > 80 && ThetanCM < 100){
-            if ( 300 < EGamma && EGamma < 340) PhiSc320Prompt->Fill(ScattPhiRad, Wgt);
-            if ( 340 < EGamma && EGamma < 380) PhiSc360Prompt->Fill(ScattPhiRad, Wgt);
-            if ( 380 < EGamma && EGamma < 420) PhiSc400Prompt->Fill(ScattPhiRad, Wgt);
-            if ( 420 < EGamma && EGamma < 460) PhiSc440Prompt->Fill(ScattPhiRad, Wgt);
-            if ( 460 < EGamma && EGamma < 500) PhiSc480Prompt->Fill(ScattPhiRad, Wgt);
-            if ( 500 < EGamma && EGamma < 540) PhiSc520Prompt->Fill(ScattPhiRad, Wgt);
-            if ( 540 < EGamma && EGamma < 580) PhiSc560Prompt->Fill(ScattPhiRad, Wgt);
-            if ( 580 < EGamma && EGamma < 620) PhiSc600Prompt->Fill(ScattPhiRad, Wgt);
-            if ( 620 < EGamma && EGamma < 660) PhiSc640Prompt->Fill(ScattPhiRad, Wgt);
-            if ( 660 < EGamma && EGamma < 700) PhiSc680Prompt->Fill(ScattPhiRad, Wgt);
+        PhiScPrompt->Fill(ScattPhiRad);
+
+        ThetaScPrompt->Fill(ScattThetaRad);
+        RPocaPrompt->Fill(r);
+        ThetapPrompt->Fill(ThpRad);
+        PhipPrompt->Fill(PhpRad);
+        EProtonPrompt->Fill(Ep);
+        MMProtonPrompt->Fill(MMpEpCorr);
+        EdEPrompt->Fill(Ep, dEp);
+
+        //if(ThetanCM  > 80 && ThetanCM < 100){
+            if ( 300 < EGamma && EGamma < 340) PhiSc320Prompt->Fill(ScattPhiRad);
+            if ( 340 < EGamma && EGamma < 380) PhiSc360Prompt->Fill(ScattPhiRad);
+            if ( 380 < EGamma && EGamma < 420) PhiSc400Prompt->Fill(ScattPhiRad);
+            if ( 420 < EGamma && EGamma < 460) PhiSc440Prompt->Fill(ScattPhiRad);
+            if ( 460 < EGamma && EGamma < 500) PhiSc480Prompt->Fill(ScattPhiRad);
+            if ( 500 < EGamma && EGamma < 540) PhiSc520Prompt->Fill(ScattPhiRad);
+            if ( 540 < EGamma && EGamma < 580) PhiSc560Prompt->Fill(ScattPhiRad);
+            if ( 580 < EGamma && EGamma < 620) PhiSc600Prompt->Fill(ScattPhiRad);
+            if ( 620 < EGamma && EGamma < 660) PhiSc640Prompt->Fill(ScattPhiRad);
+            if ( 660 < EGamma && EGamma < 700) PhiSc680Prompt->Fill(ScattPhiRad);
 
             if ( 230 < EGamma && EGamma < 300) {
                 if(1 > CosThetapCM && CosThetapCM > 0.75 ){
-                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM1Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM1Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM1Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM1Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(0.75 > CosThetapCM && CosThetapCM > 0.5){
-                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM2Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM2Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM2Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM2Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(0.5 > CosThetapCM && CosThetapCM > 0.25){
-                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM3Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM3Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM3Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM3Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(0.5 > CosThetapCM && CosThetapCM > 0.0){
-                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM4Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM4Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM4Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM4Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(0.0 > CosThetapCM && CosThetapCM > -0.25){
-                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM5Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM5Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM5Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM5Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(-0.25 > CosThetapCM && CosThetapCM > -0.5){
-                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM6Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM6Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM6Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM6Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(-0.5 > CosThetapCM && CosThetapCM > -0.75){
-                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM7Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM7Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM7Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM7Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(-0.75 > CosThetapCM && CosThetapCM > -1){
-                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM8Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM8Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM8Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM8Prompt->Fill(ScattPhiRad);
                 }
             }
 
 
             if ( 300 < EGamma && EGamma < 370) {
                 if(1 > CosThetapCM && CosThetapCM > 0.75 ){
-                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM1Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM1Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM1Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM1Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(0.75 > CosThetapCM && CosThetapCM > 0.5){
-                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM2Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM2Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM2Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM2Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(0.5 > CosThetapCM && CosThetapCM > 0.25){
-                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM3Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM3Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM3Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM3Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(0.5 > CosThetapCM && CosThetapCM > 0.0){
-                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM4Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM4Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM4Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM4Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(0.0 > CosThetapCM && CosThetapCM > -0.25){
-                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM5Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM5Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM5Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM5Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(-0.25 > CosThetapCM && CosThetapCM > -0.5){
-                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM6Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM6Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM6Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM6Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(-0.5 > CosThetapCM && CosThetapCM > -0.75){
-                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM7Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM7Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM7Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM7Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(-0.75 > CosThetapCM && CosThetapCM > -1){
-                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM8Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM8Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM8Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM8Prompt->Fill(ScattPhiRad);
                 }
             }
 
             if ( 370 < EGamma && EGamma < 440) {
                 if(1 > CosThetapCM && CosThetapCM > 0.75 ){
-                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM1Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM1Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM1Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM1Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(0.75 > CosThetapCM && CosThetapCM > 0.5){
-                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM2Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM2Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM2Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM2Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(0.5 > CosThetapCM && CosThetapCM > 0.25){
-                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM3Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM3Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM3Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM3Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(0.5 > CosThetapCM && CosThetapCM > 0.0){
-                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM4Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM4Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM4Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM4Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(0.0 > CosThetapCM && CosThetapCM > -0.25){
-                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM5Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM5Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM5Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM5Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(-0.25 > CosThetapCM && CosThetapCM > -0.5){
-                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM6Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM6Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM6Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM6Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(-0.5 > CosThetapCM && CosThetapCM > -0.75){
-                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM7Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM7Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM7Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM7Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(-0.75 > CosThetapCM && CosThetapCM > -1){
-                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM8Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM8Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM8Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM8Prompt->Fill(ScattPhiRad);
                 }
             }
 
             if ( 440 < EGamma && EGamma < 510) {
                 if(1 > CosThetapCM && CosThetapCM > 0.75 ){
-                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM1Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM1Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM1Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM1Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(0.75 > CosThetapCM && CosThetapCM > 0.5){
-                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM2Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM2Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM2Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM2Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(0.5 > CosThetapCM && CosThetapCM > 0.25){
-                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM3Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM3Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM3Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM3Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(0.5 > CosThetapCM && CosThetapCM > 0.0){
-                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM4Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM4Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM4Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM4Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(0.0 > CosThetapCM && CosThetapCM > -0.25){
-                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM5Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM5Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM5Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM5Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(-0.25 > CosThetapCM && CosThetapCM > -0.5){
-                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM6Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM6Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM6Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM6Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(-0.5 > CosThetapCM && CosThetapCM > -0.75){
-                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM7Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM7Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM7Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM7Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(-0.75 > CosThetapCM && CosThetapCM > -1){
-                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM8Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM8Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM8Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM8Prompt->Fill(ScattPhiRad);
                 }
             }
 
             if ( 510 < EGamma && EGamma < 580) {
                 if(1 > CosThetapCM && CosThetapCM > 0.75 ){
-                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM1Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM1Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM1Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM1Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(0.75 > CosThetapCM && CosThetapCM > 0.5){
-                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM2Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM2Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM2Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM2Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(0.5 > CosThetapCM && CosThetapCM > 0.25){
-                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM3Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM3Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM3Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM3Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(0.5 > CosThetapCM && CosThetapCM > 0.0){
-                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM4Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM4Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM4Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM4Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(0.0 > CosThetapCM && CosThetapCM > -0.25){
-                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM5Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM5Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM5Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM5Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(-0.25 > CosThetapCM && CosThetapCM > -0.5){
-                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM6Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM6Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM6Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM6Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(-0.5 > CosThetapCM && CosThetapCM > -0.75){
-                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM7Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM7Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM7Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM7Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(-0.75 > CosThetapCM && CosThetapCM > -1){
-                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM8Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM8Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM8Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM8Prompt->Fill(ScattPhiRad);
                 }
             }
 
             if ( 580 < EGamma && EGamma < 650) {
                 if(1 > CosThetapCM && CosThetapCM > 0.75 ){
-                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM1Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM1Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM1Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM1Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(0.75 > CosThetapCM && CosThetapCM > 0.5){
-                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM2Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM2Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM2Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM2Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(0.5 > CosThetapCM && CosThetapCM > 0.25){
-                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM3Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM3Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM3Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM3Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(0.5 > CosThetapCM && CosThetapCM > 0.0){
-                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM4Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM4Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM4Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM4Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(0.0 > CosThetapCM && CosThetapCM > -0.25){
-                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM5Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM5Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM5Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM5Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(-0.25 > CosThetapCM && CosThetapCM > -0.5){
-                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM6Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM6Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM6Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM6Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(-0.5 > CosThetapCM && CosThetapCM > -0.75){
-                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM7Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM7Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM7Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM7Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(-0.75 > CosThetapCM && CosThetapCM > -1){
-                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM8Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM8Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM8Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM8Prompt->Fill(ScattPhiRad);
                 }
             }
 
             if ( 650 < EGamma && EGamma < 720) {
                 if(1 > CosThetapCM && CosThetapCM > 0.75 ){
-                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM1Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM1Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM1Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM1Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(0.75 > CosThetapCM && CosThetapCM > 0.5){
-                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM2Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM2Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM2Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM2Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(0.5 > CosThetapCM && CosThetapCM > 0.25){
-                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM3Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM3Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM3Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM3Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(0.5 > CosThetapCM && CosThetapCM > 0.0){
-                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM4Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM4Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM4Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM4Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(0.0 > CosThetapCM && CosThetapCM > -0.25){
-                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM5Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM5Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM5Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM5Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(-0.25 > CosThetapCM && CosThetapCM > -0.5){
-                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM6Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM6Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM6Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM6Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(-0.5 > CosThetapCM && CosThetapCM > -0.75){
-                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM7Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM7Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM7Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM7Prompt->Fill(ScattPhiRad);
                 }
 
                 else if(-0.75 > CosThetapCM && CosThetapCM > -1){
-                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM8Prompt->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM8Prompt->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM8Prompt->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM8Prompt->Fill(ScattPhiRad);
                 }
             }
-        }
+        //}
     }
 
     if (GHistBGSub::IsRandom(TaggerTime) == kTRUE){
         EgRandom->Fill(EGamma);
-        PhiScRandom->Fill(ScattPhiRad, Wgt);
-        if(ThetanCM  > 80 && ThetanCM < 100){
-            if ( 300 < EGamma && EGamma < 340) PhiSc320Random->Fill(ScattPhiRad, Wgt);
-            if ( 340 < EGamma && EGamma < 380) PhiSc360Random->Fill(ScattPhiRad, Wgt);
-            if ( 380 < EGamma && EGamma < 420) PhiSc400Random->Fill(ScattPhiRad, Wgt);
-            if ( 420 < EGamma && EGamma < 460) PhiSc440Random->Fill(ScattPhiRad, Wgt);
-            if ( 460 < EGamma && EGamma < 500) PhiSc480Random->Fill(ScattPhiRad, Wgt);
-            if ( 500 < EGamma && EGamma < 540) PhiSc520Random->Fill(ScattPhiRad, Wgt);
-            if ( 540 < EGamma && EGamma < 580) PhiSc560Random->Fill(ScattPhiRad, Wgt);
-            if ( 580 < EGamma && EGamma < 620) PhiSc600Random->Fill(ScattPhiRad, Wgt);
-            if ( 620 < EGamma && EGamma < 660) PhiSc640Random->Fill(ScattPhiRad, Wgt);
-            if ( 660 < EGamma && EGamma < 700) PhiSc680Random->Fill(ScattPhiRad, Wgt);
+        PhiScRandom->Fill(ScattPhiRad);
+
+        ThetaScRandom->Fill(ScattThetaRad);
+        RPocaRandom->Fill(r);
+        ThetapRandom->Fill(ThpRad);
+        PhipRandom->Fill(PhpRad);
+        EProtonRandom->Fill(Ep);
+        MMProtonRandom->Fill(MMpEpCorr);
+        EdERandom->Fill(Ep, dEp);
+
+        //if(ThetanCM  > 80 && ThetanCM < 100){
+            if ( 300 < EGamma && EGamma < 340) PhiSc320Random->Fill(ScattPhiRad);
+            if ( 340 < EGamma && EGamma < 380) PhiSc360Random->Fill(ScattPhiRad);
+            if ( 380 < EGamma && EGamma < 420) PhiSc400Random->Fill(ScattPhiRad);
+            if ( 420 < EGamma && EGamma < 460) PhiSc440Random->Fill(ScattPhiRad);
+            if ( 460 < EGamma && EGamma < 500) PhiSc480Random->Fill(ScattPhiRad);
+            if ( 500 < EGamma && EGamma < 540) PhiSc520Random->Fill(ScattPhiRad);
+            if ( 540 < EGamma && EGamma < 580) PhiSc560Random->Fill(ScattPhiRad);
+            if ( 580 < EGamma && EGamma < 620) PhiSc600Random->Fill(ScattPhiRad);
+            if ( 620 < EGamma && EGamma < 660) PhiSc640Random->Fill(ScattPhiRad);
+            if ( 660 < EGamma && EGamma < 700) PhiSc680Random->Fill(ScattPhiRad);
 
             if ( 230 < EGamma && EGamma < 300) {
                 if(1 > CosThetapCM && CosThetapCM > 0.75 ){
-                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM1Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM1Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM1Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM1Random->Fill(ScattPhiRad);
                 }
 
                 else if(0.75 > CosThetapCM && CosThetapCM > 0.5){
-                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM2Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM2Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM2Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM2Random->Fill(ScattPhiRad);
                 }
 
                 else if(0.5 > CosThetapCM && CosThetapCM > 0.25){
-                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM3Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM3Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM3Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM3Random->Fill(ScattPhiRad);
                 }
 
                 else if(0.5 > CosThetapCM && CosThetapCM > 0.0){
-                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM4Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM4Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM4Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM4Random->Fill(ScattPhiRad);
                 }
 
                 else if(0.0 > CosThetapCM && CosThetapCM > -0.25){
-                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM5Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM5Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM5Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM5Random->Fill(ScattPhiRad);
                 }
 
                 else if(-0.25 > CosThetapCM && CosThetapCM > -0.5){
-                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM6Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM6Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM6Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM6Random->Fill(ScattPhiRad);
                 }
 
                 else if(-0.5 > CosThetapCM && CosThetapCM > -0.75){
-                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM7Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM7Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM7Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM7Random->Fill(ScattPhiRad);
                 }
 
                 else if(-0.75 > CosThetapCM && CosThetapCM > -1){
-                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM8Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM8Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM8Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM8Random->Fill(ScattPhiRad);
                 }
             }
 
 
             if ( 300 < EGamma && EGamma < 370) {
                 if(1 > CosThetapCM && CosThetapCM > 0.75 ){
-                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM1Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM1Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM1Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM1Random->Fill(ScattPhiRad);
                 }
 
                 else if(0.75 > CosThetapCM && CosThetapCM > 0.5){
-                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM2Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM2Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM2Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM2Random->Fill(ScattPhiRad);
                 }
 
                 else if(0.5 > CosThetapCM && CosThetapCM > 0.25){
-                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM3Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM3Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM3Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM3Random->Fill(ScattPhiRad);
                 }
 
                 else if(0.5 > CosThetapCM && CosThetapCM > 0.0){
-                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM4Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM4Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM4Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM4Random->Fill(ScattPhiRad);
                 }
 
                 else if(0.0 > CosThetapCM && CosThetapCM > -0.25){
-                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM5Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM5Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM5Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM5Random->Fill(ScattPhiRad);
                 }
 
                 else if(-0.25 > CosThetapCM && CosThetapCM > -0.5){
-                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM6Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM6Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM6Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM6Random->Fill(ScattPhiRad);
                 }
 
                 else if(-0.5 > CosThetapCM && CosThetapCM > -0.75){
-                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM7Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM7Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM7Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM7Random->Fill(ScattPhiRad);
                 }
 
                 else if(-0.75 > CosThetapCM && CosThetapCM > -1){
-                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM8Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM8Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM8Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM8Random->Fill(ScattPhiRad);
                 }
             }
 
             if ( 370 < EGamma && EGamma < 440) {
                 if(1 > CosThetapCM && CosThetapCM > 0.75 ){
-                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM1Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM1Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM1Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM1Random->Fill(ScattPhiRad);
                 }
 
                 else if(0.75 > CosThetapCM && CosThetapCM > 0.5){
-                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM2Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM2Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM2Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM2Random->Fill(ScattPhiRad);
                 }
 
                 else if(0.5 > CosThetapCM && CosThetapCM > 0.25){
-                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM3Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM3Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM3Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM3Random->Fill(ScattPhiRad);
                 }
 
                 else if(0.5 > CosThetapCM && CosThetapCM > 0.0){
-                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM4Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM4Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM4Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM4Random->Fill(ScattPhiRad);
                 }
 
                 else if(0.0 > CosThetapCM && CosThetapCM > -0.25){
-                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM5Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM5Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM5Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM5Random->Fill(ScattPhiRad);
                 }
 
                 else if(-0.25 > CosThetapCM && CosThetapCM > -0.5){
-                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM6Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM6Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM6Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM6Random->Fill(ScattPhiRad);
                 }
 
                 else if(-0.5 > CosThetapCM && CosThetapCM > -0.75){
-                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM7Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM7Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM7Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM7Random->Fill(ScattPhiRad);
                 }
 
                 else if(-0.75 > CosThetapCM && CosThetapCM > -1){
-                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM8Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM8Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM8Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM8Random->Fill(ScattPhiRad);
                 }
             }
 
             if ( 440 < EGamma && EGamma < 510) {
                 if(1 > CosThetapCM && CosThetapCM > 0.75 ){
-                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM1Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM1Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM1Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM1Random->Fill(ScattPhiRad);
                 }
 
                 else if(0.75 > CosThetapCM && CosThetapCM > 0.5){
-                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM2Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM2Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM2Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM2Random->Fill(ScattPhiRad);
                 }
 
                 else if(0.5 > CosThetapCM && CosThetapCM > 0.25){
-                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM3Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM3Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM3Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM3Random->Fill(ScattPhiRad);
                 }
 
                 else if(0.5 > CosThetapCM && CosThetapCM > 0.0){
-                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM4Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM4Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM4Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM4Random->Fill(ScattPhiRad);
                 }
 
                 else if(0.0 > CosThetapCM && CosThetapCM > -0.25){
-                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM5Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM5Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM5Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM5Random->Fill(ScattPhiRad);
                 }
 
                 else if(-0.25 > CosThetapCM && CosThetapCM > -0.5){
-                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM6Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM6Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM6Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM6Random->Fill(ScattPhiRad);
                 }
 
                 else if(-0.5 > CosThetapCM && CosThetapCM > -0.75){
-                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM7Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM7Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM7Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM7Random->Fill(ScattPhiRad);
                 }
 
                 else if(-0.75 > CosThetapCM && CosThetapCM > -1){
-                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM8Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM8Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM8Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM8Random->Fill(ScattPhiRad);
                 }
             }
 
             if ( 510 < EGamma && EGamma < 580) {
                 if(1 > CosThetapCM && CosThetapCM > 0.75 ){
-                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM1Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM1Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM1Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM1Random->Fill(ScattPhiRad);
                 }
 
                 else if(0.75 > CosThetapCM && CosThetapCM > 0.5){
-                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM2Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM2Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM2Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM2Random->Fill(ScattPhiRad);
                 }
 
                 else if(0.5 > CosThetapCM && CosThetapCM > 0.25){
-                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM3Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM3Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM3Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM3Random->Fill(ScattPhiRad);
                 }
 
                 else if(0.5 > CosThetapCM && CosThetapCM > 0.0){
-                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM4Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM4Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM4Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM4Random->Fill(ScattPhiRad);
                 }
 
                 else if(0.0 > CosThetapCM && CosThetapCM > -0.25){
-                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM5Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM5Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM5Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM5Random->Fill(ScattPhiRad);
                 }
 
                 else if(-0.25 > CosThetapCM && CosThetapCM > -0.5){
-                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM6Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM6Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM6Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM6Random->Fill(ScattPhiRad);
                 }
 
                 else if(-0.5 > CosThetapCM && CosThetapCM > -0.75){
-                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM7Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM7Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM7Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM7Random->Fill(ScattPhiRad);
                 }
 
                 else if(-0.75 > CosThetapCM && CosThetapCM > -1){
-                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM8Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM8Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM8Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM8Random->Fill(ScattPhiRad);
                 }
             }
 
             if ( 580 < EGamma && EGamma < 650) {
                 if(1 > CosThetapCM && CosThetapCM > 0.75 ){
-                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM1Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM1Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM1Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM1Random->Fill(ScattPhiRad);
                 }
 
                 else if(0.75 > CosThetapCM && CosThetapCM > 0.5){
-                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM2Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM2Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM2Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM2Random->Fill(ScattPhiRad);
                 }
 
                 else if(0.5 > CosThetapCM && CosThetapCM > 0.25){
-                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM3Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM3Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM3Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM3Random->Fill(ScattPhiRad);
                 }
 
                 else if(0.5 > CosThetapCM && CosThetapCM > 0.0){
-                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM4Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM4Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM4Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM4Random->Fill(ScattPhiRad);
                 }
 
                 else if(0.0 > CosThetapCM && CosThetapCM > -0.25){
-                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM5Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM5Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM5Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM5Random->Fill(ScattPhiRad);
                 }
 
                 else if(-0.25 > CosThetapCM && CosThetapCM > -0.5){
-                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM6Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM6Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM6Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM6Random->Fill(ScattPhiRad);
                 }
 
                 else if(-0.5 > CosThetapCM && CosThetapCM > -0.75){
-                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM7Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM7Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM7Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM7Random->Fill(ScattPhiRad);
                 }
 
                 else if(-0.75 > CosThetapCM && CosThetapCM > -1){
-                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM8Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM8Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM8Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM8Random->Fill(ScattPhiRad);
                 }
             }
 
             if ( 650 < EGamma && EGamma < 720) {
                 if(1 > CosThetapCM && CosThetapCM > 0.75 ){
-                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM1Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM1Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM1Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM1Random->Fill(ScattPhiRad);
                 }
 
                 else if(0.75 > CosThetapCM && CosThetapCM > 0.5){
-                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM2Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM2Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM2Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM2Random->Fill(ScattPhiRad);
                 }
 
                 else if(0.5 > CosThetapCM && CosThetapCM > 0.25){
-                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM3Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM3Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM3Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM3Random->Fill(ScattPhiRad);
                 }
 
                 else if(0.5 > CosThetapCM && CosThetapCM > 0.0){
-                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM4Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM4Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM4Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM4Random->Fill(ScattPhiRad);
                 }
 
                 else if(0.0 > CosThetapCM && CosThetapCM > -0.25){
-                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM5Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM5Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM5Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM5Random->Fill(ScattPhiRad);
                 }
 
                 else if(-0.25 > CosThetapCM && CosThetapCM > -0.5){
-                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM6Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM6Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM6Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM6Random->Fill(ScattPhiRad);
                 }
 
                 else if(-0.5 > CosThetapCM && CosThetapCM > -0.75){
-                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM7Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM7Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM7Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM7Random->Fill(ScattPhiRad);
                 }
 
                 else if(-0.75 > CosThetapCM && CosThetapCM > -1){
-                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM8Random->Fill(ScattPhiRad, Wgt);
-                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM8Random->Fill(ScattPhiRad, Wgt);
+                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM8Random->Fill(ScattPhiRad);
+                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM8Random->Fill(ScattPhiRad);
                 }
             }
-        }
+        //}
     }
 }
 
@@ -1448,6 +1501,22 @@ void PNeutPol_Polarimeter_Circ::BGSub(){
 
     Eg->Add(EgPrompt);
     Eg->Add(EgRandom, -PvRratio);
+    ThetaSc->Add(ThetaScPrompt);
+    ThetaSc->Add(ThetaScRandom, -PvRratio);
+    RPoca->Add(RPocaPrompt);
+    RPoca->Add(RPocaRandom, -PvRratio);
+    Thetap->Add(ThetapPrompt);
+    Thetap->Add(ThetapRandom, -PvRratio);
+    Phip->Add(PhipPrompt);
+    Phip->Add(PhipRandom, -PvRratio);
+    EProton->Add(EProtonPrompt);
+    EProton->Add(EProtonRandom, -PvRratio);
+    MMProton->Add(MMProtonPrompt);
+    MMProton->Add(MMProtonRandom, -PvRratio);
+
+    EdE->Add(EdEPrompt);
+    EdE->Add(EdERandom, -PvRratio);
+
     PhiSc->Add(PhiScPrompt);
     PhiSc->Add(PhiScRandom, -PvRratio);
     PhiSc320->Add(PhiSc320Prompt);

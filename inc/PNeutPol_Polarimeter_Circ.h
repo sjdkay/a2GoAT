@@ -194,6 +194,12 @@ private:
     TH1D*	time_cut;
 
     TH1D* Eg;
+    TH1D* ThetaSc;
+    TH1D* RPoca;
+    TH1D* Thetap;
+    TH1D* Phip;
+    TH1D* EProton;
+    TH1D* MMProton;
     TH1D* PhiSc;
     TH1D* PhiSc320;
     TH1D* PhiSc360;
@@ -206,8 +212,24 @@ private:
     TH1D* PhiSc640;
     TH1D* PhiSc680;
 
+    TH2D* EdE;
+    TH2D* EdEPrompt;
+    TH2D* EdERandom;
+
     TH1D* EgPrompt;
+    TH1D* ThetaScPrompt;
+    TH1D* RPocaPrompt;
+    TH1D* ThetapPrompt;
+    TH1D* PhipPrompt;
+    TH1D* EProtonPrompt;
+    TH1D* MMProtonPrompt;
     TH1D* EgRandom;
+    TH1D* ThetaScRandom;
+    TH1D* RPocaRandom;
+    TH1D* ThetapRandom;
+    TH1D* PhipRandom;
+    TH1D* EProtonRandom;
+    TH1D* MMProtonRandom;
     TH1D* PhiScPrompt;
     TH1D* PhiScRandom;
     TH1D* PhiSc320Prompt;
