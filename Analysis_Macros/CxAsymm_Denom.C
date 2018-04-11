@@ -539,8 +539,8 @@ void CxAsymm_Denom() {
 
     Float_t xMin = -1;
     Float_t xMax = 1;
-    Float_t yMin = -100;
-    Float_t yMax = 100;
+    Float_t yMin = -1000;
+    Float_t yMax = 1000;
     Double_t x[8] = {0.875, 0.625, 0.375, 0.125, -0.125, -0.375, -0.625, -0.875}; // Need to adjust
     Double_t ex[8] = {0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125}; // Need to adjust
 
@@ -555,13 +555,13 @@ void CxAsymm_Denom() {
     pad->SetGridy(1);
     TH1F  *hr;
     hr = canvas->DrawFrame(xMin, yMin, xMax, yMax);
-    hr->SetTitle("#Sigma^{#pm} Amp as fn of Cos#theta_{CM} (E_{#gamma} 230-300MeV)");
+    hr->SetTitle("#Sigma^{#pm}(Cos#theta_{CM}) E_{#gamma} 230-300 MeV");
 
     gr = new TGraphErrors(8, x, SumAm265, ex, SumAmErr265);
     gr->SetMarkerColor(2);
     gr->SetMarkerStyle(5);
     gr->SetMarkerSize(2);
-    gr->SetTitle("#Sigma^{#pm} Amp as fn of Cos#theta_{CM} (E_{#gamma} 230-300MeV)");
+    gr->SetTitle("#Sigma^{#pm}(Cos#theta_{CM}) E_{#gamma} 230-300 MeV");
     gr->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr->GetYaxis()->SetTitle("#Sigma^{#pm} Amp");
     gr->SetName("SumAm265");
@@ -578,13 +578,13 @@ void CxAsymm_Denom() {
     pad1->SetGridy(1);
     TH1F  *hr1;
     hr1 = canvas1->DrawFrame(xMin, yMin, xMax, yMax);
-    hr1->SetTitle("#Sigma^{#pm} Amp as fn of Cos#theta_{CM} (E_{#gamma} 300-370MeV)");
+    hr1->SetTitle("#Sigma^{#pm}(Cos#theta_{CM}) E_{#gamma} 300-370 MeV");
 
     gr1 = new TGraphErrors(8, x, SumAm335, ex, SumAmErr335);
     gr1->SetMarkerColor(2);
     gr1->SetMarkerStyle(5);
     gr1->SetMarkerSize(2);
-    gr1->SetTitle("#Sigma^{#pm} Amp as fn of Cos#theta_{CM} (E_{#gamma} 300-370MeV)");
+    gr1->SetTitle("#Sigma^{#pm}(Cos#theta_{CM}) E_{#gamma} 300-370 MeV");
     gr1->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr1->GetYaxis()->SetTitle("#Sigma^{#pm} Amp");
     gr1->SetName("SumAm335");
@@ -601,13 +601,13 @@ void CxAsymm_Denom() {
     pad2->SetGridy(1);
     TH1F  *hr2;
     hr2 = canvas2->DrawFrame(xMin, yMin, xMax, yMax);
-    hr2->SetTitle("#Sigma^{#pm} Amp as fn of Cos#theta_{CM} (E_{#gamma} 370-440MeV)");
+    hr2->SetTitle("#Sigma^{#pm}(Cos#theta_{CM}) E_{#gamma} 370-440 MeV");
 
     gr2 = new TGraphErrors(8, x, SumAm405, ex, SumAmErr405);
     gr2->SetMarkerColor(2);
     gr2->SetMarkerStyle(5);
     gr2->SetMarkerSize(2);
-    gr2->SetTitle("#Sigma^{#pm} Amp as fn of Cos#theta_{CM} (E_{#gamma} 370-440MeV)");
+    gr2->SetTitle("#Sigma^{#pm}(Cos#theta_{CM}) E_{#gamma} 370-440 MeV");
     gr2->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr2->GetYaxis()->SetTitle("#Sigma^{#pm} Amp");
     gr2->SetName("SumAm405");
@@ -624,13 +624,13 @@ void CxAsymm_Denom() {
     pad3->SetGridy(1);
     TH1F  *hr3;
     hr3 = canvas3->DrawFrame(xMin, yMin, xMax, yMax);
-    hr3->SetTitle("#Sigma^{#pm} Amp as fn of Cos#theta_{CM} (E_{#gamma} 440-510MeV)");
+    hr3->SetTitle("#Sigma^{#pm}(Cos#theta_{CM}) E_{#gamma} 440-510 MeV");
 
     gr3 = new TGraphErrors(8, x, SumAm475, ex, SumAmErr475);
     gr3->SetMarkerColor(2);
     gr3->SetMarkerStyle(5);
     gr3->SetMarkerSize(2);
-    gr3->SetTitle("#Sigma^{#pm} Amp as fn of Cos#theta_{CM} (E_{#gamma} 440-510MeV)");
+    gr3->SetTitle("#Sigma^{#pm}(Cos#theta_{CM}) E_{#gamma} 440-510 MeV");
     gr3->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr3->GetYaxis()->SetTitle("#Sigma^{#pm} Amp");
     gr3->SetName("SumAm475");
@@ -647,13 +647,13 @@ void CxAsymm_Denom() {
     pad4->SetGridy(1);
     TH1F  *hr4;
     hr4 = canvas4->DrawFrame(xMin, yMin, xMax, yMax);
-    hr4->SetTitle("#Sigma^{#pm} Amp as fn of Cos#theta_{CM} (E_{#gamma} 510-580MeV)");
+    hr4->SetTitle("#Sigma^{#pm}(Cos#theta_{CM}) (E_{#gamma} 510-580 MeV");
 
     gr4 = new TGraphErrors(8, x, SumAm545, ex, SumAmErr545);
     gr4->SetMarkerColor(2);
     gr4->SetMarkerStyle(5);
     gr4->SetMarkerSize(2);
-    gr4->SetTitle("#Sigma^{#pm} Amp as fn of Cos#theta_{CM} (E_{#gamma} 510-580MeV)");
+    gr4->SetTitle("#Sigma^{#pm}(Cos#theta_{CM}) E_{#gamma} 510-580 MeV");
     gr4->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr4->GetYaxis()->SetTitle("#Sigma^{#pm} Amp");
     gr4->SetName("SumAm545");
@@ -670,13 +670,13 @@ void CxAsymm_Denom() {
     pad5->SetGridy(1);
     TH1F  *hr5;
     hr5 = canvas5->DrawFrame(xMin, yMin, xMax, yMax);
-    hr5->SetTitle("#Sigma^{#pm} Amp as fn of Cos#theta_{CM} (E_{#gamma} 580-650MeV)");
+    hr5->SetTitle("#Sigma^{#pm}(Cos#theta_{CM}) E_{#gamma} 580-650 MeV");
 
     gr5 = new TGraphErrors(8, x, SumAm615, ex, SumAmErr615);
     gr5->SetMarkerColor(2);
     gr5->SetMarkerStyle(5);
     gr5->SetMarkerSize(2);
-    gr5->SetTitle("#Sigma^{#pm} Amp as fn of Cos#theta_{CM} (E_{#gamma} 580-650MeV)");
+    gr5->SetTitle("#Sigma^{#pm}(Cos#theta_{CM}) E_{#gamma} 580-650 MeV");
     gr5->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr5->GetYaxis()->SetTitle("#Sigma^{#pm} Amp");
     gr5->SetName("SumAm615");
@@ -693,13 +693,13 @@ void CxAsymm_Denom() {
     pad6->SetGridy(1);
     TH1F  *hr6;
     hr6 = canvas6->DrawFrame(xMin, yMin, xMax, yMax);
-    hr6->SetTitle("#Sigma^{#pm} Amp as fn of Cos#theta_{CM} (E_{#gamma} 650-720MeV)");
+    hr6->SetTitle("#Sigma^{#pm}(Cos#theta_{CM}) E_{#gamma} 650-720 MeV");
 
     gr6 = new TGraphErrors(8, x, SumAm685, ex, SumAmErr685);
     gr6->SetMarkerColor(2);
     gr6->SetMarkerStyle(5);
     gr6->SetMarkerSize(2);
-    gr6->SetTitle("#Sigma^{#pm} Amp as fn of Cos#theta_{CM} (E_{#gamma} 650-720MeV)");
+    gr6->SetTitle("#Sigma^{#pm}(Cos#theta_{CM}) E_{#gamma} 650-720 MeV");
     gr6->GetXaxis()->SetTitle("Cos#theta_{CM}");
     gr6->GetYaxis()->SetTitle("#Sigma^{#pm} Amp");
     gr6->SetName("SumAm685");

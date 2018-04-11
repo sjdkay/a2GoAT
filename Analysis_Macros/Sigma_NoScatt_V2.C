@@ -14,19 +14,21 @@ void Sigma_NoScatt_V2(){
     TGraphErrors* SigmaPlots[21];
     char name[21];
     char title[60];
+    char MBname[20];
+
+    TH1F* MBHist[20];
+
+    for (Int_t i = 0; i < 20; i++){
+        sprintf(MBname, "hslC%i", 43+i);
+        MBHist[i] = (TH1F*)MBData->Get(MBname);
+    }
+
 
     TFile *f1= TFile::Open("/scratch/Mainz_Software/a2GoAT/Results/ParaPerpAsymm_NS14.root");
     TTree *t1 = (TTree*)f1->Get("Parameter_Values");
     //TF1 *LegPol = new TF1("LegPol","(1-x**2)*([0]*3+[1]*15*x+[2]*15.0/2*(7*x**2-1)+[3]*105.0/2*x*(3*x**2-1)+[4]*105.0/8*(33*x**4-18*x**2+1)+[5]*63.0/8*x*(143*x**4-110*x**2+15)+[6]*315.0/16*(143*x**6-143*x**4+33*x**2-1))",-1,1);
     //TF1* LegFunc = new TF1("LegPol", legendre, -1, 1, 7);
     TF1 *LegPol = new TF1("LegPol", "[0]+[1]*x+[2]*(0.5*(3*x**2-1))+[3]*(0.5*(5*x**3-3*x))+[4]*(0.125*(35*x**4-30*x**2+3))+[5]*(1.0/8.0*(63*x**5-70*x**3+15*x))+[6]*(1.0/16*(231*x**6-315*x**4+105*x**2-5))", -1, 1);
-    LegPol->SetParLimits(0,-1,1);
-    LegPol->SetParLimits(1,-1,1);
-    LegPol->SetParLimits(2,-1,1);
-    LegPol->SetParLimits(3,-1,1);
-    LegPol->SetParLimits(4,-1,1);
-    LegPol->SetParLimits(5,-1,1);
-    LegPol->SetParLimits(6,-1,1);
     LegPol->SetLineColor(4);
     LegPol->SetLineWidth(3);
 
@@ -152,6 +154,149 @@ void Sigma_NoScatt_V2(){
 
     }
 
+    double x412[7] = { cos(35.0*TMath::DegToRad()), cos(55.0*TMath::DegToRad()), cos(75.0*TMath::DegToRad()), cos(95.0*TMath::DegToRad()), cos(115.0*TMath::DegToRad()), cos(135.0*TMath::DegToRad()), cos(155.0*TMath::DegToRad())};
+    double ex412[7] = {0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1};
+    double y412[7] = {0.353, -0.124, -0.188, -0.474, -0.355, -0.301, 0.003};
+    double ey412[7] = {sqrt(0.114**2+0.033**2), sqrt(0.072**2+0.014**2), sqrt(0.072**2+0.02**2), sqrt(0.061**2+0.049**2), sqrt(0.058**2+0.032**2), sqrt(0.073**2+0.027**2), sqrt(0.103**2+0.015**2)};
+    e412 =  new TGraphErrors(7, x412, y412, ex412, ey412);
+    e412->SetMarkerStyle(24);
+    e412->SetMarkerColor(1);
+    e412->SetMarkerSize(1.5);
+    e412->SetLineColor(1);
+    e412->SetLineWidth(3);
+
+    double x435[2] = {cos(75.0*TMath::DegToRad()), cos(90.0*TMath::DegToRad())};
+    double ex435[2] = {0.1, 0.1};
+    double y435[2] = {-0.2, -0.23};
+    double ey435[2] = {0.05, 0.04};
+    e435 = new TGraphErrors(2, x435, y435, ex435, ey435);
+    e435->SetMarkerStyle(24);
+    e435->SetMarkerColor(1);
+    e435->SetMarkerSize(1.5);
+    e435->SetLineColor(1);
+    e435->SetLineWidth(3);
+
+    double x455[2] = {cos(75.0*TMath::DegToRad()), cos(90.0*TMath::DegToRad())};
+    double ex455[2] = {0.1, 0.1};
+    double y455[2] = {-0.25, -0.23};
+    double ey455[2] = {0.04, 0.04};
+    e455 = new TGraphErrors(2, x455, y455, ex455, ey455);
+    e455->SetMarkerStyle(24);
+    e455->SetMarkerColor(1);
+    e455->SetMarkerSize(1.5);
+    e455->SetLineColor(1);
+    e455->SetLineWidth(3);
+
+    double x465[2] = {cos(45.0*TMath::DegToRad()), cos(60.0*TMath::DegToRad())};
+    double ex465[2] = {0.1, 0.1};
+    double y465[2] = {0.04, -0.04};
+    double ey465[2] = {0.04, 0.04};
+    e465 = new TGraphErrors(2, x465, y465, ex465, ey465);
+    e465->SetMarkerStyle(24);
+    e465->SetMarkerColor(1);
+    e465->SetMarkerSize(1.5);
+    e465->SetLineColor(1);
+    e465->SetLineWidth(3);
+
+    double x475[3] = {cos(45.0*TMath::DegToRad()), cos(75.0*TMath::DegToRad()), cos(90.0*TMath::DegToRad())};
+    double ex475[3] = {0.1, 0.1, 0.1};
+    double y475[3] = {-0.01, -0.15, -0.09};
+    double ey475[3] = {0.05, 0.04, 0.04};
+    e475 = new TGraphErrors(3, x475, y475, ex475, ey475);
+    e475->SetMarkerStyle(24);
+    e475->SetMarkerColor(1);
+    e475->SetMarkerSize(1.5);
+    e475->SetLineColor(1);
+    e475->SetLineWidth(3);
+
+    double x485[2] = {cos(60.0*TMath::DegToRad()), cos(75.0*TMath::DegToRad())};
+    double ex485[2] = {0.1, 0.1};
+    double y485[2] = {0.02, -0.22};
+    double ey485[2] = {0.05, 0.06};
+    e485 = new TGraphErrors(2, x485, y485, ex485, ey485);
+    e485->SetMarkerStyle(24);
+    e485->SetMarkerColor(1);
+    e485->SetMarkerSize(1.5);
+    e485->SetLineColor(1);
+    e485->SetLineWidth(3);
+
+    double x505[3] = {cos(45.0*TMath::DegToRad()), cos(60.0*TMath::DegToRad()), cos(90.0*TMath::DegToRad())};
+    double ex505[3] = {0.1, 0.1, 0.1};
+    double y505[3] = {0.07, 0.02, -0.15};
+    double ey505[3] = {0.05, 0.06, 0.05};
+    e505 = new TGraphErrors(3, x505, y505, ex505, ey505);
+    e505->SetMarkerStyle(24);
+    e505->SetMarkerColor(1);
+    e505->SetMarkerSize(1.5);
+    e505->SetLineColor(1);
+    e505->SetLineWidth(3);
+
+    double x515[2] = {cos(45.0*TMath::DegToRad()), cos(75.0*TMath::DegToRad())};
+    double ex515[2] = {0.1, 0.1};
+    double y515[2] = {0.07, -0.15};
+    double ey515[2] = {0.05, 0.05};
+    e515 = new TGraphErrors(2, x515, y515, ex515, ey515);
+    e515->SetMarkerStyle(24);
+    e515->SetMarkerColor(1);
+    e515->SetMarkerSize(1.5);
+    e515->SetLineColor(1);
+    e515->SetLineWidth(3);
+
+    double x525[3] = {cos(45.0*TMath::DegToRad()), cos(60.0*TMath::DegToRad()), cos(90.0*TMath::DegToRad())};
+    double ex525[3] = {0.1, 0.1, 0.1};
+    double y525[3] = {0.06, 0.05, -0.08};
+    double ey525[3] = {0.05, 0.06, 0.05};
+    e525 = new TGraphErrors(3, x525, y525, ex525, ey525);
+    e525->SetMarkerStyle(24);
+    e525->SetMarkerColor(1);
+    e525->SetMarkerSize(1.5);
+    e525->SetLineColor(1);
+    e525->SetLineWidth(3);
+
+    double x545[2] = {cos(45.0*TMath::DegToRad()), cos(60.0*TMath::DegToRad())};
+    double ex545[2] = {0.1, 0.1};
+    double y545[2] = {0.12, 0.16};
+    double ey545[2] = {0.05, 0.05};
+    e545 = new TGraphErrors(2, x545, y545, ex545, ey545);
+    e545->SetMarkerStyle(24);
+    e545->SetMarkerColor(1);
+    e545->SetMarkerSize(1.5);
+    e545->SetLineColor(1);
+    e545->SetLineWidth(3);
+
+    double x575[3] = {cos(45.0*TMath::DegToRad()), cos(75.0*TMath::DegToRad()), cos(90.0*TMath::DegToRad())};
+    double ex575[3] = {0.1, 0.1, 0.1};
+    double y575[3] = {0.19, 0.12, 0.02};
+    double ey575[3] = {0.04, 0.05, 0.06};
+    e575 = new TGraphErrors(3, x575, y575, ex575, ey575);
+    e575->SetMarkerStyle(24);
+    e575->SetMarkerColor(1);
+    e575->SetMarkerSize(1.5);
+    e575->SetLineColor(1);
+    e575->SetLineWidth(3);
+
+    double x595[3] = {cos(60.0*TMath::DegToRad()), cos(75.0*TMath::DegToRad()), cos(90.0*TMath::DegToRad())};
+    double ex595[3] = {0.1, 0.1, 0.1};
+    double y595[3] = {0.23, 0.16, 0.18};
+    double ey595[3] = {0.05, 0.06, 0.07};
+    e595 = new TGraphErrors(3, x595, y595, ex595, ey595);
+    e595->SetMarkerStyle(24);
+    e595->SetMarkerColor(1);
+    e595->SetMarkerSize(1.5);
+    e595->SetLineColor(1);
+    e595->SetLineWidth(3);
+
+    double x615[4] = {cos(45.0*TMath::DegToRad()), cos(60.0*TMath::DegToRad()), cos(75.0*TMath::DegToRad()), cos(90.0*TMath::DegToRad())};
+    double ex615[4] = {0.1, 0.1, 0.1, 0.1};
+    double y615[4] = {0.23, 0.22, 0.2, 0.15};
+    double ey615[4] = {0.05, 0.05, 0.06, 0.07};
+    e615 = new TGraphErrors(4, x615, y615, ex615, ey615);
+    e615->SetMarkerStyle(24);
+    e615->SetMarkerColor(1);
+    e615->SetMarkerSize(1.5);
+    e615->SetLineColor(1);
+    e615->SetLineWidth(3);
+
     TFile *f2= TFile::Open("/scratch/Mainz_Software/a2GoAT/LinPol_Aug16.root"); // Open linear polarisation plot
 
     // Calculate values of sigma for each angular and energy bin
@@ -211,17 +356,41 @@ void Sigma_NoScatt_V2(){
     double x[18] = {0.85, 0.75, 0.65, 0.55, 0.45, 0.35, 0.25, 0.15, 0.05, -0.05, -0.15, -0.25, -0.35, -0.45, -0.55, -0.65, -0.75, -0.85}; // Need to adjust
     double ex[18] = {0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05}; // Need to adjust
 
-    for(int i = 0 ; i < 21 ; i++)
+    for(Int_t i = 0 ; i < 21 ; i++)
     {
         sprintf(name, "Sigma_%i", 415+(i*10));
         sprintf(title, "#Sigma(Cos#theta_{CM}) for E_{#gamma} %i #pm 10 MeV", 415+(i*10));
         SigmaPlots[i] = new TGraphErrors(18 , x, SigmaValues[i], ex, SigmaErrValues[i]);
-        if (i != 14)SigmaPlots[i]->Fit("LegPol", "B");
+
+        if(i == 0){
+            LegPol->SetParLimits(0, -1, 1);
+            LegPol->SetParLimits(1, -1, 1);
+            LegPol->SetParLimits(2, -1, 1);
+            LegPol->SetParLimits(3, -1, 1);
+            LegPol->SetParLimits(4, -1, 1);
+            LegPol->SetParLimits(5, -1, 1);
+            LegPol->SetParLimits(6, -1, 1);
+        }
+
+//        if(i != 0){
+//            LegPol->SetParLimits(0, (LegPol->GetParameter(0))-0.05, (LegPol->GetParameter(0))+0.05);
+//            LegPol->SetParLimits(1, (LegPol->GetParameter(1))-0.05, (LegPol->GetParameter(1))+0.05);
+//            LegPol->SetParLimits(2, (LegPol->GetParameter(2))-0.05, (LegPol->GetParameter(2))+0.05);
+//            LegPol->SetParLimits(3, (LegPol->GetParameter(3))-0.05, (LegPol->GetParameter(3))+0.05);
+//            LegPol->SetParLimits(4, (LegPol->GetParameter(4))-0.05, (LegPol->GetParameter(4))+0.05);
+//            LegPol->SetParLimits(5, (LegPol->GetParameter(5))-0.05, (LegPol->GetParameter(5))+0.05);
+//            LegPol->SetParLimits(6, (LegPol->GetParameter(6))-0.05, (LegPol->GetParameter(6))+0.05);
+//        }
+
+        if (i != 14) SigmaPlots[i]->Fit("LegPol", "MB");
+
         SigmaPlots[i]->SetMarkerColor(4);
         SigmaPlots[i]->SetLineColor(4);
         SigmaPlots[i]->SetMarkerStyle(8);
         SigmaPlots[i]->SetMarkerSize(1);
         SigmaPlots[i]->GetXaxis()->SetTitle("Cos#theta_{CM}");
+        SigmaPlots[i]->GetXaxis()->SetRangeUser(-1, 1);
+        SigmaPlots[i]->GetYaxis()->SetRangeUser(-1, 1);
         SigmaPlots[i]->GetYaxis()->SetTitle("#Sigma");
         SigmaPlots[i]->SetName(name);
         SigmaPlots[i]->SetTitle(title);
@@ -243,6 +412,65 @@ void Sigma_NoScatt_V2(){
     }
 
     canvas20->Write();
+
+    TCanvas *canvas21 = new TCanvas("canvas21","canvas21", 1920, 1080);
+    canvas21->Divide(5,5);
+    for(int i = 1 ; i < 22 ; i++){
+        canvas21->cd(i);
+        if (i != 1){
+            SigmaPlots[i-1]->Draw("AEP");
+            MBHist[i-2]->Draw("SAMEEP");
+        }
+        elseif (i == 1){
+            SigmaPlots[i-1]->Draw("AEP");
+        }
+    }
+
+    canvas21->Write();
+
+    TCanvas *canvas22 = new TCanvas("canvas22","canvas22", 1920, 1080);
+    canvas22->Divide(5,3);
+    canvas22->cd(1);
+    SigmaPlots[0]->Draw("AEP");
+    e412->Draw("sameepz");
+    canvas22->cd(2);
+    SigmaPlots[2]->Draw("AEP");
+    e435->Draw("sameepz");
+    canvas22->cd(3);
+    SigmaPlots[4]->Draw("AEP");
+    e455->Draw("sameepz");
+    canvas22->cd(4);
+    SigmaPlots[5]->Draw("AEP");
+    e465->Draw("sameepz");
+    canvas22->cd(5);
+    SigmaPlots[6]->Draw("AEP");
+    e475->Draw("sameepz");
+    canvas22->cd(6);
+    SigmaPlots[7]->Draw("AEP");
+    e485->Draw("sameepz");
+    canvas22->cd(7);
+    SigmaPlots[9]->Draw("AEP");
+    e505->Draw("sameepz");
+    canvas22->cd(8);
+    SigmaPlots[10]->Draw("AEP");
+    e515->Draw("sameepz");
+    canvas22->cd(9);
+    SigmaPlots[11]->Draw("AEP");
+    e525->Draw("sameepz");
+    canvas22->cd(10);
+    SigmaPlots[13]->Draw("AEP");
+    e545->Draw("sameepz");
+    canvas22->cd(11);
+    SigmaPlots[16]->Draw("AEP");
+    e575->Draw("sameepz");
+    canvas22->cd(12);
+    SigmaPlots[18]->Draw("AEP");
+    e595->Draw("sameepz");
+    canvas22->cd(13);
+    SigmaPlots[20]->Draw("AEP");
+    e615->Draw("sameepz");
+
+    canvas22->Write();
 
     //Define new tree to store parameters in
     TTree* p0tree = new TTree("Parameter0_Values", "Tree_of_Values");

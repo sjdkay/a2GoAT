@@ -584,8 +584,8 @@ void CxAsymm_Numer() {
 
     Float_t xMin = -1;
     Float_t xMax = 1;
-    Float_t yMin = -1000;
-    Float_t yMax = 1000;
+    Float_t yMin = -10;
+    Float_t yMax = 10;
     Double_t x[8] = {0.875, 0.625, 0.375, 0.125, -0.125, -0.375, -0.625, -0.875}; // Need to adjust
     Double_t ex[8] = {0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125}; // Need to adjust
 
@@ -600,15 +600,15 @@ void CxAsymm_Numer() {
     pad->SetGridy(1);
     TH1F  *hr;
     hr = canvas->DrawFrame(xMin, yMin, xMax, yMax);
-    hr->SetTitle("#Sigma^{#pm} Amp as fn of Cos#theta_{CM} (E_{#gamma} 230-300MeV)");
+    hr->SetTitle("#Delta^{#pm}(Cos#theta_{CM}) E_{#gamma} 230-300 MeV");
 
     gr = new TGraphErrors(8, x, DiffAm265, ex, DiffAmErr265);
     gr->SetMarkerColor(2);
     gr->SetMarkerStyle(5);
     gr->SetMarkerSize(2);
-    gr->SetTitle("#Sigma^{#pm} Amp as fn of Cos#theta_{CM} (E_{#gamma} 230-300MeV)");
+    gr->SetTitle("#Delta^{#pm}(Cos#theta_{CM}) E_{#gamma} 230-300 MeV");
     gr->GetXaxis()->SetTitle("Cos#theta_{CM}");
-    gr->GetYaxis()->SetTitle("#Sigma^{#pm} Amp");
+    gr->GetYaxis()->SetTitle("#Delta^{#pm} Amp");
     gr->SetName("DiffAm265");
     gr->Draw("ep");
 
@@ -623,15 +623,15 @@ void CxAsymm_Numer() {
     pad1->SetGridy(1);
     TH1F  *hr1;
     hr1 = canvas1->DrawFrame(xMin, yMin, xMax, yMax);
-    hr1->SetTitle("#Sigma^{#pm} Amp as fn of Cos#theta_{CM} (E_{#gamma} 300-370MeV)");
+    hr1->SetTitle("#Delta^{#pm}(Cos#theta_{CM}) E_{#gamma} 300-370 MeV");
 
     gr1 = new TGraphErrors(8, x, DiffAm335, ex, DiffAmErr335);
     gr1->SetMarkerColor(2);
     gr1->SetMarkerStyle(5);
     gr1->SetMarkerSize(2);
-    gr1->SetTitle("#Sigma^{#pm} Amp as fn of Cos#theta_{CM} (E_{#gamma} 300-370MeV)");
+    gr1->SetTitle("#Delta^{#pm}(Cos#theta_{CM}) E_{#gamma} 300-370 MeV");
     gr1->GetXaxis()->SetTitle("Cos#theta_{CM}");
-    gr1->GetYaxis()->SetTitle("#Sigma^{#pm} Amp");
+    gr1->GetYaxis()->SetTitle("#Delta^{#pm} Amp");
     gr1->SetName("DiffAm335");
     gr1->Draw("ep");
 
@@ -646,15 +646,15 @@ void CxAsymm_Numer() {
     pad2->SetGridy(1);
     TH1F  *hr2;
     hr2 = canvas2->DrawFrame(xMin, yMin, xMax, yMax);
-    hr2->SetTitle("#Sigma^{#pm} Amp as fn of Cos#theta_{CM} (E_{#gamma} 370-440MeV)");
+    hr2->SetTitle("#Delta^{#pm}(Cos#theta_{CM}) E_{#gamma} 370-440 MeV");
 
     gr2 = new TGraphErrors(8, x, DiffAm405, ex, DiffAmErr405);
     gr2->SetMarkerColor(2);
     gr2->SetMarkerStyle(5);
     gr2->SetMarkerSize(2);
-    gr2->SetTitle("#Sigma^{#pm} Amp as fn of Cos#theta_{CM} (E_{#gamma} 370-440MeV)");
+    gr2->SetTitle("#Delta^{#pm}(Cos#theta_{CM}) E_{#gamma} 370-440 MeV");
     gr2->GetXaxis()->SetTitle("Cos#theta_{CM}");
-    gr2->GetYaxis()->SetTitle("#Sigma^{#pm} Amp");
+    gr2->GetYaxis()->SetTitle("#Delta^{#pm} Amp");
     gr2->SetName("DiffAm405");
     gr2->Draw("ep");
 
@@ -669,15 +669,15 @@ void CxAsymm_Numer() {
     pad3->SetGridy(1);
     TH1F  *hr3;
     hr3 = canvas3->DrawFrame(xMin, yMin, xMax, yMax);
-    hr3->SetTitle("#Sigma^{#pm} Amp as fn of Cos#theta_{CM} (E_{#gamma} 440-510MeV)");
+    hr3->SetTitle("#Delta^{#pm}(Cos#theta_{CM}) E_{#gamma} 440-510 MeV");
 
     gr3 = new TGraphErrors(8, x, DiffAm475, ex, DiffAmErr475);
     gr3->SetMarkerColor(2);
     gr3->SetMarkerStyle(5);
     gr3->SetMarkerSize(2);
-    gr3->SetTitle("#Sigma^{#pm} Amp as fn of Cos#theta_{CM} (E_{#gamma} 440-510MeV)");
+    gr3->SetTitle("#Delta^{#pm}(Cos#theta_{CM}) E_{#gamma} 440-510 MeV");
     gr3->GetXaxis()->SetTitle("Cos#theta_{CM}");
-    gr3->GetYaxis()->SetTitle("#Sigma^{#pm} Amp");
+    gr3->GetYaxis()->SetTitle("#Delta^{#pm} Amp");
     gr3->SetName("DiffAm475");
     gr3->Draw("ep");
 
@@ -692,15 +692,15 @@ void CxAsymm_Numer() {
     pad4->SetGridy(1);
     TH1F  *hr4;
     hr4 = canvas4->DrawFrame(xMin, yMin, xMax, yMax);
-    hr4->SetTitle("#Sigma^{#pm} Amp as fn of Cos#theta_{CM} (E_{#gamma} 510-580MeV)");
+    hr4->SetTitle("#Delta^{#pm}(Cos#theta_{CM}) E_{#gamma} 510-580 MeV");
 
     gr4 = new TGraphErrors(8, x, DiffAm545, ex, DiffAmErr545);
     gr4->SetMarkerColor(2);
     gr4->SetMarkerStyle(5);
     gr4->SetMarkerSize(2);
-    gr4->SetTitle("#Sigma^{#pm} Amp as fn of Cos#theta_{CM} (E_{#gamma} 510-580MeV)");
+    gr4->SetTitle("#Delta^{#pm}(Cos#theta_{CM}) E_{#gamma} 510-580 MeV");
     gr4->GetXaxis()->SetTitle("Cos#theta_{CM}");
-    gr4->GetYaxis()->SetTitle("#Sigma^{#pm} Amp");
+    gr4->GetYaxis()->SetTitle("#Delta^{#pm} Amp");
     gr4->SetName("DiffAm545");
     gr4->Draw("ep");
 
@@ -715,15 +715,15 @@ void CxAsymm_Numer() {
     pad5->SetGridy(1);
     TH1F  *hr5;
     hr5 = canvas5->DrawFrame(xMin, yMin, xMax, yMax);
-    hr5->SetTitle("#Sigma^{#pm} Amp as fn of Cos#theta_{CM} (E_{#gamma} 580-650MeV)");
+    hr5->SetTitle("#Delta^{#pm}(Cos#theta_{CM}) E_{#gamma} 580-650 MeV");
 
     gr5 = new TGraphErrors(8, x, DiffAm615, ex, DiffAmErr615);
     gr5->SetMarkerColor(2);
     gr5->SetMarkerStyle(5);
     gr5->SetMarkerSize(2);
-    gr5->SetTitle("#Sigma^{#pm} Amp as fn of Cos#theta_{CM} (E_{#gamma} 580-650MeV)");
+    gr5->SetTitle("#Delta^{#pm}(Cos#theta_{CM}) E_{#gamma} 580-650 MeV");
     gr5->GetXaxis()->SetTitle("Cos#theta_{CM}");
-    gr5->GetYaxis()->SetTitle("#Sigma^{#pm} Amp");
+    gr5->GetYaxis()->SetTitle("#Delta^{#pm} Amp");
     gr5->SetName("DiffAm615");
     gr5->Draw("ep");
 
@@ -738,15 +738,15 @@ void CxAsymm_Numer() {
     pad6->SetGridy(1);
     TH1F  *hr6;
     hr6 = canvas6->DrawFrame(xMin, yMin, xMax, yMax);
-    hr6->SetTitle("#Sigma^{#pm} Amp as fn of Cos#theta_{CM} (E_{#gamma} 650-720MeV)");
+    hr6->SetTitle("#Delta^{#pm}(Cos#theta_{CM}) E_{#gamma} 650-720 MeV");
 
     gr6 = new TGraphErrors(8, x, DiffAm685, ex, DiffAmErr685);
     gr6->SetMarkerColor(2);
     gr6->SetMarkerStyle(5);
     gr6->SetMarkerSize(2);
-    gr6->SetTitle("#Sigma^{#pm} Amp as fn of Cos#theta_{CM} (E_{#gamma} 650-720MeV)");
+    gr6->SetTitle("#Delta^{#pm}(Cos#theta_{CM}) E_{#gamma} 650-720 MeV");
     gr6->GetXaxis()->SetTitle("Cos#theta_{CM}");
-    gr6->GetYaxis()->SetTitle("#Sigma^{#pm} Amp");
+    gr6->GetYaxis()->SetTitle("#Delta^{#pm} Amp");
     gr6->SetName("DiffAm685");
     gr6->Draw("ep");
 
