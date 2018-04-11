@@ -4,7 +4,7 @@
 Double_t fitf(Double_t *x,Double_t *par)
 {
     Double_t fitval = 0;
-    fitval = par[0]*(1 + (par[1]*cos(x[0])));
+    fitval = (1 + (par[0]*cos(x[0]))) + par[1];
     return fitval;
 }
 
@@ -34,11 +34,10 @@ void CxAsymm_Denom() {
 
 
     TF1 *Func = new TF1("Fit",  fitf, -3.0, 3.0, 2); //Give a name and range to the fitting funcion
-    Func->SetParNames("Acceptance");
     Func->SetParNames("CosAmp"); //Name the parameters
     Func->SetParLimits(0, -1000, 1000);
     Func->SetParLimits(1, -1000, 1000);
-    TFile *f = new TFile("/scratch/Mainz_Software/a2GoAT/AmoTotal_5_100_30.root"); // Open the latest PTotal file to load histograms from
+    TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Amo/Physics_Total_108_6_4_18.root"); // Open the latest PTotal file to load histograms from
     nBins = Phi_Scattered_265MeV_NegHelCM1->GetNbinsX();
 
     ///////////////////////////////////////////
@@ -411,7 +410,7 @@ void CxAsymm_Denom() {
 
 
     // Define new file to store fit parameters
-    TFile f1("SumFits_PTotal_5_100_30_v3.root", "RECREATE");
+    TFile f1("SumFits_PTotal_108_v1.root", "RECREATE");
 
     PhiSc265SumCM1->Write();
     PhiSc335SumCM1->Write();
@@ -536,12 +535,12 @@ void CxAsymm_Denom() {
     f1.Write();
     f1.Close();
 
-    TFile f3("Cx_Denom_Plots_5_100_30_v3.root", "RECREATE");
+    TFile f3("Cx_Denom_Plots_PTotal_108_v1.root", "RECREATE");
 
     Float_t xMin = -1;
     Float_t xMax = 1;
-    Float_t yMin = -10;
-    Float_t yMax = 10;
+    Float_t yMin = -100;
+    Float_t yMax = 100;
     Double_t x[8] = {0.875, 0.625, 0.375, 0.125, -0.125, -0.375, -0.625, -0.875}; // Need to adjust
     Double_t ex[8] = {0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125}; // Need to adjust
 
