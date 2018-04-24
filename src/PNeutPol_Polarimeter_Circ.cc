@@ -213,7 +213,7 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
     }
 
     if( pVertex(2) > 60 || pVertex(2) < -60) return; // Particles selected out from other parts tend to be inside anyway, skip this?
-    if( nVertex(2) > 60 || nVertex(2) < -60) return;
+    //if( nVertex(2) > 60 || nVertex(2) < -60) return;
     EpCorr = EpPolCorrect(Ep, Thp); //correct Ep for energy loss in polarimeter
 
     if(Cut_proton -> IsInside(EpCorr, dEp) == kFALSE) return; // If E loss correct proton is NOT inside p banana drop out
@@ -227,11 +227,12 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
 
     Pp = sqrt (TMath::Power((Mp + EpCorr),2) - TMath::Power(Mp,2));
     Pn = sqrt (TMath::Power((En + Mn ),2) - TMath::Power(Mn,2));
-    GVpCorr = TLorentzVector(Pp*sin(Thp)*cos(Php), Pp*sin(Thp)*sin(Php), Pp*cos(Thp), EpCorr+Mp);
+    GVpCorr = TLorentzVector(Pp*sin(ThpRad)*cos(PhpRad), Pp*sin(ThpRad)*sin(PhpRad), Pp*cos(ThpRad), EpCorr+Mp);
 
     // MUST FEED IN n PHI IN RAD NOT DEG!
     GVnCorr =  CNeutron4VectorCorr(pVertex(2), GVn, En, Pn , Mn, PhnRad);
     ThetanCorr = (GVnCorr.Theta())*TMath::RadToDeg();
+    PhinCorr = (GVnCorr.Phi())*TMath::RadToDeg();
 
     WC1Phip = (WC13Vectp.Phi());
     WC2Phip = (WC23Vectp.Phi());
@@ -260,15 +261,6 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
         B = (Deut + Gamma);
         b = -1*B.BoostVector();
 
-        // Gamma(d,p)n calc n from kinematics
-        KinEp = CalcKinEnergy(Thp, EGamma, Md, 0., Mp, Mn); // Calculate kin E of proton assuming pn production
-        pKin = CProton4VectorKin(KinEp, ThpRad, PhpRad);
-        nKin = CNeutron4VectorKin(pKin);
-        ThetanRec = (nKin.Theta()) * TMath::RadToDeg();
-        PhinRec = (nKin.Phi()) * TMath::RadToDeg();
-        pKin3 = pKin.Vect();
-        nKin3 = nKin.Vect();
-
         // Boost p and n to CM frame
         pKinB = pKin;
         pKinB.Boost(b);
@@ -282,11 +274,22 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
         RecNeutronEpCorr = CNeutron4VectorKin(GVpCorr);
         MMpEpCorr = RecNeutronEpCorr.M();
 
+        FillHistsPreMMCut();
+        if (((MMpEpCorr < 887.8) == kTRUE) || ((MMpEpCorr > 994.2) == kTRUE)) continue; // Force a missing mass cut
+
+        // Gamma(d,p)n calc n from kinematics
+        KinEp = CalcKinEnergy(Thp, EGamma, Md, 0., Mp, Mn); // Calculate kin E of proton assuming pn production
+        pKin = CProton4VectorKin(KinEp, ThpRad, PhpRad);
+        nKin = CNeutron4VectorKin(pKin);
+        ThetanRec = (nKin.Theta()) * TMath::RadToDeg();
+        PhinRec = (nKin.Phi()) * TMath::RadToDeg();
+        pKin3 = pKin.Vect();
+        nKin3 = nKin.Vect();
 
         KinEDiff = KinEp - EpCorr;
 
         ThetanDiff = ThetanCorr-ThetanRec;
-        PhinDiff = Phn-PhinRec;
+        PhinDiff = PhinCorr-PhinRec;
 
         TVector3 ScattAngles = ScatteredFrameAngles(nKin3, pKin3 , GVn3 , Gamma);
         ScattThetaRad = ScattAngles(2);
@@ -305,8 +308,8 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
         r = sqrt((TMath::Power(POCAx,2))+(TMath::Power(POCAy,2)));
         POCA = TVector3(POCAx, POCAy, POCAz);
 
-        if( r < 35 ) return; // Ensure POCA is at polarimeter radius
-        if(ScattTheta > 45) return;
+        //if( r < 35 ) return; // Ensure POCA is at polarimeter radius
+        //if(ScattTheta > 45) return;
 
         tdif = TaggerTime - Timep;
 
@@ -320,8 +323,6 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
         MWPCpCalcVertex.SetXYZ(WC13Vectp(0)+tsk*MWPCpDir0.X(), WC13Vectp(1)+tsk*MWPCpDir0.Y(), WC13Vectp(2)+tsk*MWPCpDir0.Z());
         ZpMWPC = MWPCpCalcVertex.Z();
 
-        FillHistsPreMMCut();
-        if (((MMpEpCorr < 800) == kTRUE) || ((MMpEpCorr > 1100) == kTRUE)) continue; // Force a missing mass cut
         FillHists(); // Fill histograms with data generated
 
     }
@@ -397,9 +398,9 @@ PNeutPol_Polarimeter_Circ::PNeutPol_Polarimeter_Circ() // Define a load of histo
     EgPrompt = new TH1D( "EgPrompt", "E_{#gamma} Distribution", 200, 100, 1600 );
     EgRandom = new TH1D( "EgRandom", "E_{#gamma} Distribution", 200, 100, 1600 );
 
-    ThetaSc = new TH1D ("ThetaSc", "#theta_{Sc} Distribution", 200, -4, 4);
-    ThetaScPrompt = new TH1D ("ThetaScPrompt", "#theta_{Sc} Distribution", 200, -4, 4);
-    ThetaScRandom = new TH1D ("ThetaScRandom", "#theta_{Sc} Distribution", 200, -4, 4);
+    ThetaSc = new TH1D ("ThetaSc", "#theta_{Sc} Distribution", 200, 0, 4);
+    ThetaScPrompt = new TH1D ("ThetaScPrompt", "#theta_{Sc} Distribution", 200, 0, 4);
+    ThetaScRandom = new TH1D ("ThetaScRandom", "#theta_{Sc} Distribution", 200, 0, 4);
 
     RPoca = new TH1D("RPoca", "R_{POCA} Distribution", 200, 0, 200);
     RPocaPrompt = new TH1D("RPocaPrompt", "R_{POCA} Distribution", 200, 0, 200);
@@ -417,17 +418,33 @@ PNeutPol_Polarimeter_Circ::PNeutPol_Polarimeter_Circ() // Define a load of histo
     EProtonPrompt = new TH1D( "EProtonPrompt", "E_{p} Distribution", 200, 0, 400);
     EProtonRandom = new TH1D( "EProtonRandom", "E_{p} Distribution", 200, 0, 400);
 
-    MMProton = new TH1D( "MMProton", "MM_{p} Distribution", 200, 800, 1200);
-    MMProtonPrompt = new TH1D( "MMProtonPrompt", "MM_{p} Distribution", 200, 800, 1200);
-    MMProtonRandom = new TH1D( "MMProtonRandom", "MM_{p} Distribution", 200, 800, 1200);
+    MMProton = new TH1D( "MMProton", "MM_{p} Distribution", 200, 0, 2000);
+    MMProtonPrompt = new TH1D( "MMProtonPrompt", "MM_{p} Distribution", 200, 0, 2000);
+    MMProtonRandom = new TH1D( "MMProtonRandom", "MM_{p} Distribution", 200, 0, 2000);
 
     PhiSc = new TH1D( "Phi_Scattered", "#phi_{sc} Proton Distribution", 200, -4, 4);
     PhiScPrompt = new TH1D( "Phi_ScatteredPrompt", "#phi_{sc} Proton Distribution", 200, -4, 4);
     PhiScRandom = new TH1D( "Phi_ScatteredRandom", "#phi_{sc} Proton Distribution", 200, -4, 4);
 
-    EdE = new TH2D ("EdE", "dE_{p} as a function of E_{p}", 200, 0, 400, 200, 0, 10);
-    EdEPrompt = new TH2D ("EdEPrompt", "dE_{p} as a function of E_{p}", 200, 0, 400, 200, 0, 10);
-    EdERandom = new TH2D ("EdERandom", "dE_{p} as a function of E_{p}", 200, 0, 400, 200, 0, 10);
+    EdE = new TH2D ("EdE", "dE_{p} as a function of E_{p}", 200, 0, 1000, 200, 0, 10);
+    EdEPrompt = new TH2D ("EdEPrompt", "dE_{p} as a function of E_{p}", 200, 0, 1000, 200, 0, 10);
+    EdERandom = new TH2D ("EdERandom", "dE_{p} as a function of E_{p}", 200, 0, 1000, 200, 0, 10);
+
+    ThetaScThetap = new TH2D ("ThetaScThetap", "#theta_{p}(#theta_{Sc})", 200, 0, 3, 200, 0, 3);
+    ThetaScThetapPrompt = new TH2D ("ThetaScThetapPrompt", "#theta_{p}(#theta_{Sc})", 200, 0, 3, 200, 0, 3);
+    ThetaScThetapRandom = new TH2D ("ThetaScThetapRandom", "#theta_{p}(#theta_{Sc})", 200, 0, 3, 200, 0, 3);
+
+    PhiScThetap = new TH2D ("PhiScThetap", "#theta_{p}(#phi_{Sc})", 200, -4, 4, 200,  0, 3);
+    PhiScThetapPrompt = new TH2D ("PhiScThetapPrompt", "#theta_{p}(#phi_{Sc})", 200, -4, 4, 200, 0, 3);
+    PhiScThetapRandom = new TH2D ("PhiScThetapRandom", "#theta_{p}(#phi_{Sc})", 200, -4, 4, 200,  0, 3);
+
+    rPocaThetap = new TH2D ("rPocaThetap", "#theta_{p}(r_{POCA})", 200, 0, 200, 200,  0, 3);
+    rPocaThetapPrompt = new TH2D ("rPocaThetapPrompt", "#theta_{p}(r_{POCA})", 200, 0, 200, 200, 0, 3);
+    rPocaThetapRandom = new TH2D ("rPocaThetapRandom", "#theta_{p}(r_{POCA})", 200, 0, 200, 200, 0, 3);
+
+    ThetaDiffPhiDiff = new TH2D("ThetaDiffPhiDiff", "#phi_{nDiff}(#theta_{nDiff})", 200, -180, 180, 200, -180, 180);
+    ThetaDiffPhiDiffPrompt = new TH2D("ThetaDiffPhiDiffPrompt", "#phi_{nDiff}(#theta_{nDiff})", 200, -180, 180, 200, -180, 180);
+    ThetaDiffPhiDiffRandom = new TH2D("ThetaDiffPhiDiffRandom", "#phi_{nDiff}(#theta_{nDiff})", 200, -180, 180, 200, -180, 180);
 
     PhiSc320 = new TH1D("PhiSc320", "#phi_{Sc} (300-340MeV)", 24, -4, 4);
     PhiSc360 = new TH1D("PhiSc360", "#phi_{Sc} (340-380MeV)", 24, -4, 4);
@@ -460,255 +477,18 @@ PNeutPol_Polarimeter_Circ::PNeutPol_Polarimeter_Circ() // Define a load of histo
     PhiSc640Prompt = new TH1D("PhiSc640Prompt", "#phi_{Sc} (620-660MeV)", 24, -4, 4);
     PhiSc680Prompt = new TH1D("PhiSc680Prompt", "#phi_{Sc} (660-700MeV)", 24, -4, 4);
 
-    //    // Angles of neutron in scattered frame across EGamma bins for negative helicity
-    PhiSc265NegHelCM1 = new TH1D( "Phi_Scattered_265MeV_NegHelCM1", "#phi_{Sc} E_{#gamma}265 #pm 35MeV (Cos#theta_{CM}1-0.6)) for -ve Helicity", 10, -4, 4);
-    PhiSc335NegHelCM1 = new TH1D( "Phi_Scattered_335MeV_NegHelCM1", "#phi_{Sc} E_{#gamma}335 #pm 35MeV (Cos#theta_{CM}1-0.6)) for -ve Helicity", 10, -4, 4);
-    PhiSc405NegHelCM1 = new TH1D( "Phi_Scattered_405MeV_NegHelCM1", "#phi_{Sc} E_{#gamma}405 #pm 35MeV (Cos#theta_{CM}1-0.6)) for -ve Helicity", 10, -4, 4);
-    PhiSc475NegHelCM1 = new TH1D( "Phi_Scattered_475MeV_NegHelCM1", "#phi_{Sc} E_{#gamma}475 #pm 35MeV (Cos#theta_{CM}1-0.6)) for -ve Helicity", 10, -4, 4);
-    PhiSc545NegHelCM1 = new TH1D( "Phi_Scattered_545MeV_NegHelCM1", "#phi_{Sc} E_{#gamma}545 #pm 35MeV (Cos#theta_{CM}1-0.6)) for -ve Helicity", 10, -4, 4);
-    PhiSc615NegHelCM1 = new TH1D( "Phi_Scattered_615MeV_NegHelCM1", "#phi_{Sc} E_{#gamma}615 #pm 35MeV (Cos#theta_{CM}1-0.6)) for -ve Helicity", 10, -4, 4);
-    PhiSc685NegHelCM1 = new TH1D( "Phi_Scattered_685MeV_NegHelCM1", "#phi_{Sc} E_{#gamma}685 #pm 35MeV (Cos#theta_{CM}1-0.6)) for -ve Helicity", 10, -4, 4);
-
-    PhiSc265NegHelCM2 = new TH1D( "Phi_Scattered_265MeV_NegHelCM2", "#phi_{Sc} E_{#gamma}265 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for -ve Helicity", 10, -4, 4);
-    PhiSc335NegHelCM2 = new TH1D( "Phi_Scattered_335MeV_NegHelCM2", "#phi_{Sc} E_{#gamma}335 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for -ve Helicity", 10, -4, 4);
-    PhiSc405NegHelCM2 = new TH1D( "Phi_Scattered_405MeV_NegHelCM2", "#phi_{Sc} E_{#gamma}405 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for -ve Helicity", 10, -4, 4);
-    PhiSc475NegHelCM2 = new TH1D( "Phi_Scattered_475MeV_NegHelCM2", "#phi_{Sc} E_{#gamma}475 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for -ve Helicity", 10, -4, 4);
-    PhiSc545NegHelCM2 = new TH1D( "Phi_Scattered_545MeV_NegHelCM2", "#phi_{Sc} E_{#gamma}545 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for -ve Helicity", 10, -4, 4);
-    PhiSc615NegHelCM2 = new TH1D( "Phi_Scattered_615MeV_NegHelCM2", "#phi_{Sc} E_{#gamma}615 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for -ve Helicity", 10, -4, 4);
-    PhiSc685NegHelCM2 = new TH1D( "Phi_Scattered_685MeV_NegHelCM2", "#phi_{Sc} E_{#gamma}685 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for -ve Helicity", 10, -4, 4);
-
-    PhiSc265NegHelCM3 = new TH1D( "Phi_Scattered_265MeV_NegHelCM3", "#phi_{Sc} E_{#gamma}265 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for -ve Helicity", 10, -4, 4);
-    PhiSc335NegHelCM3 = new TH1D( "Phi_Scattered_335MeV_NegHelCM3", "#phi_{Sc} E_{#gamma}335 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for -ve Helicity", 10, -4, 4);
-    PhiSc405NegHelCM3 = new TH1D( "Phi_Scattered_405MeV_NegHelCM3", "#phi_{Sc} E_{#gamma}405 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for -ve Helicity", 10, -4, 4);
-    PhiSc475NegHelCM3 = new TH1D( "Phi_Scattered_475MeV_NegHelCM3", "#phi_{Sc} E_{#gamma}475 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for -ve Helicity", 10, -4, 4);
-    PhiSc545NegHelCM3 = new TH1D( "Phi_Scattered_545MeV_NegHelCM3", "#phi_{Sc} E_{#gamma}545 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for -ve Helicity", 10, -4, 4);
-    PhiSc615NegHelCM3 = new TH1D( "Phi_Scattered_615MeV_NegHelCM3", "#phi_{Sc} E_{#gamma}615 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for -ve Helicity", 10, -4, 4);
-    PhiSc685NegHelCM3 = new TH1D( "Phi_Scattered_685MeV_NegHelCM3", "#phi_{Sc} E_{#gamma}685 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for -ve Helicity", 10, -4, 4);
-
-    PhiSc265NegHelCM4 = new TH1D( "Phi_Scattered_265MeV_NegHelCM4", "#phi_{Sc} E_{#gamma}265 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for -ve Helicity", 10, -4, 4);
-    PhiSc335NegHelCM4 = new TH1D( "Phi_Scattered_335MeV_NegHelCM4", "#phi_{Sc} E_{#gamma}335 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for -ve Helicity", 10, -4, 4);
-    PhiSc405NegHelCM4 = new TH1D( "Phi_Scattered_405MeV_NegHelCM4", "#phi_{Sc} E_{#gamma}405 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for -ve Helicity", 10, -4, 4);
-    PhiSc475NegHelCM4 = new TH1D( "Phi_Scattered_475MeV_NegHelCM4", "#phi_{Sc} E_{#gamma}475 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for -ve Helicity", 10, -4, 4);
-    PhiSc545NegHelCM4 = new TH1D( "Phi_Scattered_545MeV_NegHelCM4", "#phi_{Sc} E_{#gamma}545 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for -ve Helicity", 10, -4, 4);
-    PhiSc615NegHelCM4 = new TH1D( "Phi_Scattered_615MeV_NegHelCM4", "#phi_{Sc} E_{#gamma}615 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for -ve Helicity", 10, -4, 4);
-    PhiSc685NegHelCM4 = new TH1D( "Phi_Scattered_685MeV_NegHelCM4", "#phi_{Sc} E_{#gamma}685 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for -ve Helicity", 10, -4, 4);
-
-    PhiSc265NegHelCM5 = new TH1D( "Phi_Scattered_265MeV_NegHelCM5", "#phi_{Sc} E_{#gamma}265 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for -ve Helicity", 10, -4, 4);
-    PhiSc335NegHelCM5 = new TH1D( "Phi_Scattered_335MeV_NegHelCM5", "#phi_{Sc} E_{#gamma}335 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for -ve Helicity", 10, -4, 4);
-    PhiSc405NegHelCM5 = new TH1D( "Phi_Scattered_405MeV_NegHelCM5", "#phi_{Sc} E_{#gamma}405 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for -ve Helicity", 10, -4, 4);
-    PhiSc475NegHelCM5 = new TH1D( "Phi_Scattered_475MeV_NegHelCM5", "#phi_{Sc} E_{#gamma}475 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for -ve Helicity", 10, -4, 4);
-    PhiSc545NegHelCM5 = new TH1D( "Phi_Scattered_545MeV_NegHelCM5", "#phi_{Sc} E_{#gamma}545 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for -ve Helicity", 10, -4, 4);
-    PhiSc615NegHelCM5 = new TH1D( "Phi_Scattered_615MeV_NegHelCM5", "#phi_{Sc} E_{#gamma}615 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for -ve Helicity", 10, -4, 4);
-    PhiSc685NegHelCM5 = new TH1D( "Phi_Scattered_685MeV_NegHelCM5", "#phi_{Sc} E_{#gamma}685 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for -ve Helicity", 10, -4, 4);
-
-    // Angles of neutron in scattered frame across EGamma bins for positive helicity
-    PhiSc265PosHelCM1 = new TH1D( "Phi_Scattered_265MeV_PosHelCM1", "#phi_{Sc} E_{#gamma}265 #pm 35MeV (Cos#theta_{CM}1-0.6)) for +ve Helicity", 10, -4, 4);
-    PhiSc335PosHelCM1 = new TH1D( "Phi_Scattered_335MeV_PosHelCM1", "#phi_{Sc} E_{#gamma}335 #pm 35MeV (Cos#theta_{CM}1-0.6)) for +ve Helicity", 10, -4, 4);
-    PhiSc405PosHelCM1 = new TH1D( "Phi_Scattered_405MeV_PosHelCM1", "#phi_{Sc} E_{#gamma}405 #pm 35MeV (Cos#theta_{CM}1-0.6)) for +ve Helicity", 10, -4, 4);
-    PhiSc475PosHelCM1 = new TH1D( "Phi_Scattered_475MeV_PosHelCM1", "#phi_{Sc} E_{#gamma}475 #pm 35MeV (Cos#theta_{CM}1-0.6)) for +ve Helicity", 10, -4, 4);
-    PhiSc545PosHelCM1 = new TH1D( "Phi_Scattered_545MeV_PosHelCM1", "#phi_{Sc} E_{#gamma}545 #pm 35MeV (Cos#theta_{CM}1-0.6)) for +ve Helicity", 10, -4, 4);
-    PhiSc615PosHelCM1 = new TH1D( "Phi_Scattered_615MeV_PosHelCM1", "#phi_{Sc} E_{#gamma}615 #pm 35MeV (Cos#theta_{CM}1-0.6)) for +ve Helicity", 10, -4, 4);
-    PhiSc685PosHelCM1 = new TH1D( "Phi_Scattered_685MeV_PosHelCM1", "#phi_{Sc} E_{#gamma}685 #pm 35MeV (Cos#theta_{CM}1-0.6)) for +ve Helicity", 10, -4, 4);
-
-    PhiSc265PosHelCM2 = new TH1D( "Phi_Scattered_265MeV_PosHelCM2", "#phi_{Sc} E_{#gamma}265 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for +ve Helicity", 10, -4, 4);
-    PhiSc335PosHelCM2 = new TH1D( "Phi_Scattered_335MeV_PosHelCM2", "#phi_{Sc} E_{#gamma}335 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for +ve Helicity", 10, -4, 4);
-    PhiSc405PosHelCM2 = new TH1D( "Phi_Scattered_405MeV_PosHelCM2", "#phi_{Sc} E_{#gamma}405 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for +ve Helicity", 10, -4, 4);
-    PhiSc475PosHelCM2 = new TH1D( "Phi_Scattered_475MeV_PosHelCM2", "#phi_{Sc} E_{#gamma}475 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for +ve Helicity", 10, -4, 4);
-    PhiSc545PosHelCM2 = new TH1D( "Phi_Scattered_545MeV_PosHelCM2", "#phi_{Sc} E_{#gamma}545 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for +ve Helicity", 10, -4, 4);
-    PhiSc615PosHelCM2 = new TH1D( "Phi_Scattered_615MeV_PosHelCM2", "#phi_{Sc} E_{#gamma}615 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for +ve Helicity", 10, -4, 4);
-    PhiSc685PosHelCM2 = new TH1D( "Phi_Scattered_685MeV_PosHelCM2", "#phi_{Sc} E_{#gamma}685 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for +ve Helicity", 10, -4, 4);
-
-    PhiSc265PosHelCM3 = new TH1D( "Phi_Scattered_265MeV_PosHelCM3", "#phi_{Sc} E_{#gamma}265 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for +ve Helicity", 10, -4, 4);
-    PhiSc335PosHelCM3 = new TH1D( "Phi_Scattered_335MeV_PosHelCM3", "#phi_{Sc} E_{#gamma}335 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for +ve Helicity", 10, -4, 4);
-    PhiSc405PosHelCM3 = new TH1D( "Phi_Scattered_405MeV_PosHelCM3", "#phi_{Sc} E_{#gamma}405 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for +ve Helicity", 10, -4, 4);
-    PhiSc475PosHelCM3 = new TH1D( "Phi_Scattered_475MeV_PosHelCM3", "#phi_{Sc} E_{#gamma}475 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for +ve Helicity", 10, -4, 4);
-    PhiSc545PosHelCM3 = new TH1D( "Phi_Scattered_545MeV_PosHelCM3", "#phi_{Sc} E_{#gamma}545 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for +ve Helicity", 10, -4, 4);
-    PhiSc615PosHelCM3 = new TH1D( "Phi_Scattered_615MeV_PosHelCM3", "#phi_{Sc} E_{#gamma}615 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for +ve Helicity", 10, -4, 4);
-    PhiSc685PosHelCM3 = new TH1D( "Phi_Scattered_685MeV_PosHelCM3", "#phi_{Sc} E_{#gamma}685 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for +ve Helicity", 10, -4, 4);
-
-    PhiSc265PosHelCM4 = new TH1D( "Phi_Scattered_265MeV_PosHelCM4", "#phi_{Sc} E_{#gamma}265 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for +ve Helicity", 10, -4, 4);
-    PhiSc335PosHelCM4 = new TH1D( "Phi_Scattered_335MeV_PosHelCM4", "#phi_{Sc} E_{#gamma}335 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for +ve Helicity", 10, -4, 4);
-    PhiSc405PosHelCM4 = new TH1D( "Phi_Scattered_405MeV_PosHelCM4", "#phi_{Sc} E_{#gamma}405 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for +ve Helicity", 10, -4, 4);
-    PhiSc475PosHelCM4 = new TH1D( "Phi_Scattered_475MeV_PosHelCM4", "#phi_{Sc} E_{#gamma}475 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for +ve Helicity", 10, -4, 4);
-    PhiSc545PosHelCM4 = new TH1D( "Phi_Scattered_545MeV_PosHelCM4", "#phi_{Sc} E_{#gamma}545 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for +ve Helicity", 10, -4, 4);
-    PhiSc615PosHelCM4 = new TH1D( "Phi_Scattered_615MeV_PosHelCM4", "#phi_{Sc} E_{#gamma}615 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for +ve Helicity", 10, -4, 4);
-    PhiSc685PosHelCM4 = new TH1D( "Phi_Scattered_685MeV_PosHelCM4", "#phi_{Sc} E_{#gamma}685 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for +ve Helicity", 10, -4, 4);
-
-    PhiSc265PosHelCM5 = new TH1D( "Phi_Scattered_265MeV_PosHelCM5", "#phi_{Sc} E_{#gamma}265 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for +ve Helicity", 10, -4, 4);
-    PhiSc335PosHelCM5 = new TH1D( "Phi_Scattered_335MeV_PosHelCM5", "#phi_{Sc} E_{#gamma}335 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for +ve Helicity", 10, -4, 4);
-    PhiSc405PosHelCM5 = new TH1D( "Phi_Scattered_405MeV_PosHelCM5", "#phi_{Sc} E_{#gamma}405 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for +ve Helicity", 10, -4, 4);
-    PhiSc475PosHelCM5 = new TH1D( "Phi_Scattered_475MeV_PosHelCM5", "#phi_{Sc} E_{#gamma}475 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for +ve Helicity", 10, -4, 4);
-    PhiSc545PosHelCM5 = new TH1D( "Phi_Scattered_545MeV_PosHelCM5", "#phi_{Sc} E_{#gamma}545 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for +ve Helicity", 10, -4, 4);
-    PhiSc615PosHelCM5 = new TH1D( "Phi_Scattered_615MeV_PosHelCM5", "#phi_{Sc} E_{#gamma}615 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for +ve Helicity", 10, -4, 4);
-    PhiSc685PosHelCM5 = new TH1D( "Phi_Scattered_685MeV_PosHelCM5", "#phi_{Sc} E_{#gamma}685 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for +ve Helicity", 10, -4, 4);
-
-    PhiSc265NegHelCM1Prompt = new TH1D( "Phi_Scattered_265MeV_NegHelCM1Prompt", "#phi_{Sc} E_{#gamma}265 #pm 35MeV (Cos#theta_{CM}1-0.6)) for -ve Helicity", 10, -4, 4);
-    PhiSc335NegHelCM1Prompt = new TH1D( "Phi_Scattered_335MeV_NegHelCM1Prompt", "#phi_{Sc} E_{#gamma}335 #pm 35MeV (Cos#theta_{CM}1-0.6)) for -ve Helicity", 10, -4, 4);
-    PhiSc405NegHelCM1Prompt = new TH1D( "Phi_Scattered_405MeV_NegHelCM1Prompt", "#phi_{Sc} E_{#gamma}405 #pm 35MeV (Cos#theta_{CM}1-0.6)) for -ve Helicity", 10, -4, 4);
-    PhiSc475NegHelCM1Prompt = new TH1D( "Phi_Scattered_475MeV_NegHelCM1Prompt", "#phi_{Sc} E_{#gamma}475 #pm 35MeV (Cos#theta_{CM}1-0.6)) for -ve Helicity", 10, -4, 4);
-    PhiSc545NegHelCM1Prompt = new TH1D( "Phi_Scattered_545MeV_NegHelCM1Prompt", "#phi_{Sc} E_{#gamma}545 #pm 35MeV (Cos#theta_{CM}1-0.6)) for -ve Helicity", 10, -4, 4);
-    PhiSc615NegHelCM1Prompt = new TH1D( "Phi_Scattered_615MeV_NegHelCM1Prompt", "#phi_{Sc} E_{#gamma}615 #pm 35MeV (Cos#theta_{CM}1-0.6)) for -ve Helicity", 10, -4, 4);
-    PhiSc685NegHelCM1Prompt = new TH1D( "Phi_Scattered_685MeV_NegHelCM1Prompt", "#phi_{Sc} E_{#gamma}685 #pm 35MeV (Cos#theta_{CM}1-0.6)) for -ve Helicity", 10, -4, 4);
-
-    PhiSc265NegHelCM2Prompt = new TH1D( "Phi_Scattered_265MeV_NegHelCM2Prompt", "#phi_{Sc} E_{#gamma}265 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for -ve Helicity", 10, -4, 4);
-    PhiSc335NegHelCM2Prompt = new TH1D( "Phi_Scattered_335MeV_NegHelCM2Prompt", "#phi_{Sc} E_{#gamma}335 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for -ve Helicity", 10, -4, 4);
-    PhiSc405NegHelCM2Prompt = new TH1D( "Phi_Scattered_405MeV_NegHelCM2Prompt", "#phi_{Sc} E_{#gamma}405 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for -ve Helicity", 10, -4, 4);
-    PhiSc475NegHelCM2Prompt = new TH1D( "Phi_Scattered_475MeV_NegHelCM2Prompt", "#phi_{Sc} E_{#gamma}475 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for -ve Helicity", 10, -4, 4);
-    PhiSc545NegHelCM2Prompt = new TH1D( "Phi_Scattered_545MeV_NegHelCM2Prompt", "#phi_{Sc} E_{#gamma}545 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for -ve Helicity", 10, -4, 4);
-    PhiSc615NegHelCM2Prompt = new TH1D( "Phi_Scattered_615MeV_NegHelCM2Prompt", "#phi_{Sc} E_{#gamma}615 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for -ve Helicity", 10, -4, 4);
-    PhiSc685NegHelCM2Prompt = new TH1D( "Phi_Scattered_685MeV_NegHelCM2Prompt", "#phi_{Sc} E_{#gamma}685 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for -ve Helicity", 10, -4, 4);
-
-    PhiSc265NegHelCM3Prompt = new TH1D( "Phi_Scattered_265MeV_NegHelCM3Prompt", "#phi_{Sc} E_{#gamma}265 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for -ve Helicity", 10, -4, 4);
-    PhiSc335NegHelCM3Prompt = new TH1D( "Phi_Scattered_335MeV_NegHelCM3Prompt", "#phi_{Sc} E_{#gamma}335 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for -ve Helicity", 10, -4, 4);
-    PhiSc405NegHelCM3Prompt = new TH1D( "Phi_Scattered_405MeV_NegHelCM3Prompt", "#phi_{Sc} E_{#gamma}405 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for -ve Helicity", 10, -4, 4);
-    PhiSc475NegHelCM3Prompt = new TH1D( "Phi_Scattered_475MeV_NegHelCM3Prompt", "#phi_{Sc} E_{#gamma}475 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for -ve Helicity", 10, -4, 4);
-    PhiSc545NegHelCM3Prompt = new TH1D( "Phi_Scattered_545MeV_NegHelCM3Prompt", "#phi_{Sc} E_{#gamma}545 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for -ve Helicity", 10, -4, 4);
-    PhiSc615NegHelCM3Prompt = new TH1D( "Phi_Scattered_615MeV_NegHelCM3Prompt", "#phi_{Sc} E_{#gamma}615 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for -ve Helicity", 10, -4, 4);
-    PhiSc685NegHelCM3Prompt = new TH1D( "Phi_Scattered_685MeV_NegHelCM3Prompt", "#phi_{Sc} E_{#gamma}685 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for -ve Helicity", 10, -4, 4);
-
-    PhiSc265NegHelCM4Prompt = new TH1D( "Phi_Scattered_265MeV_NegHelCM4Prompt", "#phi_{Sc} E_{#gamma}265 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for -ve Helicity", 10, -4, 4);
-    PhiSc335NegHelCM4Prompt = new TH1D( "Phi_Scattered_335MeV_NegHelCM4Prompt", "#phi_{Sc} E_{#gamma}335 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for -ve Helicity", 10, -4, 4);
-    PhiSc405NegHelCM4Prompt = new TH1D( "Phi_Scattered_405MeV_NegHelCM4Prompt", "#phi_{Sc} E_{#gamma}405 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for -ve Helicity", 10, -4, 4);
-    PhiSc475NegHelCM4Prompt = new TH1D( "Phi_Scattered_475MeV_NegHelCM4Prompt", "#phi_{Sc} E_{#gamma}475 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for -ve Helicity", 10, -4, 4);
-    PhiSc545NegHelCM4Prompt = new TH1D( "Phi_Scattered_545MeV_NegHelCM4Prompt", "#phi_{Sc} E_{#gamma}545 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for -ve Helicity", 10, -4, 4);
-    PhiSc615NegHelCM4Prompt = new TH1D( "Phi_Scattered_615MeV_NegHelCM4Prompt", "#phi_{Sc} E_{#gamma}615 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for -ve Helicity", 10, -4, 4);
-    PhiSc685NegHelCM4Prompt = new TH1D( "Phi_Scattered_685MeV_NegHelCM4Prompt", "#phi_{Sc} E_{#gamma}685 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for -ve Helicity", 10, -4, 4);
-
-    PhiSc265NegHelCM5Prompt = new TH1D( "Phi_Scattered_265MeV_NegHelCM5Prompt", "#phi_{Sc} E_{#gamma}265 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for -ve Helicity", 10, -4, 4);
-    PhiSc335NegHelCM5Prompt = new TH1D( "Phi_Scattered_335MeV_NegHelCM5Prompt", "#phi_{Sc} E_{#gamma}335 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for -ve Helicity", 10, -4, 4);
-    PhiSc405NegHelCM5Prompt = new TH1D( "Phi_Scattered_405MeV_NegHelCM5Prompt", "#phi_{Sc} E_{#gamma}405 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for -ve Helicity", 10, -4, 4);
-    PhiSc475NegHelCM5Prompt = new TH1D( "Phi_Scattered_475MeV_NegHelCM5Prompt", "#phi_{Sc} E_{#gamma}475 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for -ve Helicity", 10, -4, 4);
-    PhiSc545NegHelCM5Prompt = new TH1D( "Phi_Scattered_545MeV_NegHelCM5Prompt", "#phi_{Sc} E_{#gamma}545 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for -ve Helicity", 10, -4, 4);
-    PhiSc615NegHelCM5Prompt = new TH1D( "Phi_Scattered_615MeV_NegHelCM5Prompt", "#phi_{Sc} E_{#gamma}615 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for -ve Helicity", 10, -4, 4);
-    PhiSc685NegHelCM5Prompt = new TH1D( "Phi_Scattered_685MeV_NegHelCM5Prompt", "#phi_{Sc} E_{#gamma}685 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for -ve Helicity", 10, -4, 4);
-
-    // Angles of neutron in scattered frame across EGamma bins for positive helicity
-    PhiSc265PosHelCM1Prompt = new TH1D( "Phi_Scattered_265MeV_PosHelCM1Prompt", "#phi_{Sc} E_{#gamma}265 #pm 35MeV (Cos#theta_{CM}1-0.6)) for +ve Helicity", 10, -4, 4);
-    PhiSc335PosHelCM1Prompt = new TH1D( "Phi_Scattered_335MeV_PosHelCM1Prompt", "#phi_{Sc} E_{#gamma}335 #pm 35MeV (Cos#theta_{CM}1-0.6)) for +ve Helicity", 10, -4, 4);
-    PhiSc405PosHelCM1Prompt = new TH1D( "Phi_Scattered_405MeV_PosHelCM1Prompt", "#phi_{Sc} E_{#gamma}405 #pm 35MeV (Cos#theta_{CM}1-0.6)) for +ve Helicity", 10, -4, 4);
-    PhiSc475PosHelCM1Prompt = new TH1D( "Phi_Scattered_475MeV_PosHelCM1Prompt", "#phi_{Sc} E_{#gamma}475 #pm 35MeV (Cos#theta_{CM}1-0.6)) for +ve Helicity", 10, -4, 4);
-    PhiSc545PosHelCM1Prompt = new TH1D( "Phi_Scattered_545MeV_PosHelCM1Prompt", "#phi_{Sc} E_{#gamma}545 #pm 35MeV (Cos#theta_{CM}1-0.6)) for +ve Helicity", 10, -4, 4);
-    PhiSc615PosHelCM1Prompt = new TH1D( "Phi_Scattered_615MeV_PosHelCM1Prompt", "#phi_{Sc} E_{#gamma}615 #pm 35MeV (Cos#theta_{CM}1-0.6)) for +ve Helicity", 10, -4, 4);
-    PhiSc685PosHelCM1Prompt = new TH1D( "Phi_Scattered_685MeV_PosHelCM1Prompt", "#phi_{Sc} E_{#gamma}685 #pm 35MeV (Cos#theta_{CM}1-0.6)) for +ve Helicity", 10, -4, 4);
-
-    PhiSc265PosHelCM2Prompt = new TH1D( "Phi_Scattered_265MeV_PosHelCM2Prompt", "#phi_{Sc} E_{#gamma}265 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for +ve Helicity", 10, -4, 4);
-    PhiSc335PosHelCM2Prompt = new TH1D( "Phi_Scattered_335MeV_PosHelCM2Prompt", "#phi_{Sc} E_{#gamma}335 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for +ve Helicity", 10, -4, 4);
-    PhiSc405PosHelCM2Prompt = new TH1D( "Phi_Scattered_405MeV_PosHelCM2Prompt", "#phi_{Sc} E_{#gamma}405 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for +ve Helicity", 10, -4, 4);
-    PhiSc475PosHelCM2Prompt = new TH1D( "Phi_Scattered_475MeV_PosHelCM2Prompt", "#phi_{Sc} E_{#gamma}475 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for +ve Helicity", 10, -4, 4);
-    PhiSc545PosHelCM2Prompt = new TH1D( "Phi_Scattered_545MeV_PosHelCM2Prompt", "#phi_{Sc} E_{#gamma}545 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for +ve Helicity", 10, -4, 4);
-    PhiSc615PosHelCM2Prompt = new TH1D( "Phi_Scattered_615MeV_PosHelCM2Prompt", "#phi_{Sc} E_{#gamma}615 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for +ve Helicity", 10, -4, 4);
-    PhiSc685PosHelCM2Prompt = new TH1D( "Phi_Scattered_685MeV_PosHelCM2Prompt", "#phi_{Sc} E_{#gamma}685 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for +ve Helicity", 10, -4, 4);
-
-    PhiSc265PosHelCM3Prompt = new TH1D( "Phi_Scattered_265MeV_PosHelCM3Prompt", "#phi_{Sc} E_{#gamma}265 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for +ve Helicity", 10, -4, 4);
-    PhiSc335PosHelCM3Prompt = new TH1D( "Phi_Scattered_335MeV_PosHelCM3Prompt", "#phi_{Sc} E_{#gamma}335 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for +ve Helicity", 10, -4, 4);
-    PhiSc405PosHelCM3Prompt = new TH1D( "Phi_Scattered_405MeV_PosHelCM3Prompt", "#phi_{Sc} E_{#gamma}405 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for +ve Helicity", 10, -4, 4);
-    PhiSc475PosHelCM3Prompt = new TH1D( "Phi_Scattered_475MeV_PosHelCM3Prompt", "#phi_{Sc} E_{#gamma}475 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for +ve Helicity", 10, -4, 4);
-    PhiSc545PosHelCM3Prompt = new TH1D( "Phi_Scattered_545MeV_PosHelCM3Prompt", "#phi_{Sc} E_{#gamma}545 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for +ve Helicity", 10, -4, 4);
-    PhiSc615PosHelCM3Prompt = new TH1D( "Phi_Scattered_615MeV_PosHelCM3Prompt", "#phi_{Sc} E_{#gamma}615 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for +ve Helicity", 10, -4, 4);
-    PhiSc685PosHelCM3Prompt = new TH1D( "Phi_Scattered_685MeV_PosHelCM3Prompt", "#phi_{Sc} E_{#gamma}685 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for +ve Helicity", 10, -4, 4);
-
-    PhiSc265PosHelCM4Prompt = new TH1D( "Phi_Scattered_265MeV_PosHelCM4Prompt", "#phi_{Sc} E_{#gamma}265 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for +ve Helicity", 10, -4, 4);
-    PhiSc335PosHelCM4Prompt = new TH1D( "Phi_Scattered_335MeV_PosHelCM4Prompt", "#phi_{Sc} E_{#gamma}335 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for +ve Helicity", 10, -4, 4);
-    PhiSc405PosHelCM4Prompt = new TH1D( "Phi_Scattered_405MeV_PosHelCM4Prompt", "#phi_{Sc} E_{#gamma}405 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for +ve Helicity", 10, -4, 4);
-    PhiSc475PosHelCM4Prompt = new TH1D( "Phi_Scattered_475MeV_PosHelCM4Prompt", "#phi_{Sc} E_{#gamma}475 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for +ve Helicity", 10, -4, 4);
-    PhiSc545PosHelCM4Prompt = new TH1D( "Phi_Scattered_545MeV_PosHelCM4Prompt", "#phi_{Sc} E_{#gamma}545 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for +ve Helicity", 10, -4, 4);
-    PhiSc615PosHelCM4Prompt = new TH1D( "Phi_Scattered_615MeV_PosHelCM4Prompt", "#phi_{Sc} E_{#gamma}615 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for +ve Helicity", 10, -4, 4);
-    PhiSc685PosHelCM4Prompt = new TH1D( "Phi_Scattered_685MeV_PosHelCM4Prompt", "#phi_{Sc} E_{#gamma}685 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for +ve Helicity", 10, -4, 4);
-
-    PhiSc265PosHelCM5Prompt = new TH1D( "Phi_Scattered_265MeV_PosHelCM5Prompt", "#phi_{Sc} E_{#gamma}265 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for +ve Helicity", 10, -4, 4);
-    PhiSc335PosHelCM5Prompt = new TH1D( "Phi_Scattered_335MeV_PosHelCM5Prompt", "#phi_{Sc} E_{#gamma}335 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for +ve Helicity", 10, -4, 4);
-    PhiSc405PosHelCM5Prompt = new TH1D( "Phi_Scattered_405MeV_PosHelCM5Prompt", "#phi_{Sc} E_{#gamma}405 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for +ve Helicity", 10, -4, 4);
-    PhiSc475PosHelCM5Prompt = new TH1D( "Phi_Scattered_475MeV_PosHelCM5Prompt", "#phi_{Sc} E_{#gamma}475 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for +ve Helicity", 10, -4, 4);
-    PhiSc545PosHelCM5Prompt = new TH1D( "Phi_Scattered_545MeV_PosHelCM5Prompt", "#phi_{Sc} E_{#gamma}545 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for +ve Helicity", 10, -4, 4);
-    PhiSc615PosHelCM5Prompt = new TH1D( "Phi_Scattered_615MeV_PosHelCM5Prompt", "#phi_{Sc} E_{#gamma}615 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for +ve Helicity", 10, -4, 4);
-    PhiSc685PosHelCM5Prompt = new TH1D( "Phi_Scattered_685MeV_PosHelCM5Prompt", "#phi_{Sc} E_{#gamma}685 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for +ve Helicity", 10, -4, 4);
-
-    PhiSc265NegHelCM1Random = new TH1D( "Phi_Scattered_265MeV_NegHelCM1Random", "#phi_{Sc} E_{#gamma}265 #pm 35MeV (Cos#theta_{CM}1-0.6)) for -ve Helicity", 10, -4, 4);
-    PhiSc335NegHelCM1Random = new TH1D( "Phi_Scattered_335MeV_NegHelCM1Random", "#phi_{Sc} E_{#gamma}335 #pm 35MeV (Cos#theta_{CM}1-0.6)) for -ve Helicity", 10, -4, 4);
-    PhiSc405NegHelCM1Random = new TH1D( "Phi_Scattered_405MeV_NegHelCM1Random", "#phi_{Sc} E_{#gamma}405 #pm 35MeV (Cos#theta_{CM}1-0.6)) for -ve Helicity", 10, -4, 4);
-    PhiSc475NegHelCM1Random = new TH1D( "Phi_Scattered_475MeV_NegHelCM1Random", "#phi_{Sc} E_{#gamma}475 #pm 35MeV (Cos#theta_{CM}1-0.6)) for -ve Helicity", 10, -4, 4);
-    PhiSc545NegHelCM1Random = new TH1D( "Phi_Scattered_545MeV_NegHelCM1Random", "#phi_{Sc} E_{#gamma}545 #pm 35MeV (Cos#theta_{CM}1-0.6)) for -ve Helicity", 10, -4, 4);
-    PhiSc615NegHelCM1Random = new TH1D( "Phi_Scattered_615MeV_NegHelCM1Random", "#phi_{Sc} E_{#gamma}615 #pm 35MeV (Cos#theta_{CM}1-0.6)) for -ve Helicity", 10, -4, 4);
-    PhiSc685NegHelCM1Random = new TH1D( "Phi_Scattered_685MeV_NegHelCM1Random", "#phi_{Sc} E_{#gamma}685 #pm 35MeV (Cos#theta_{CM}1-0.6)) for -ve Helicity", 10, -4, 4);
-
-    PhiSc265NegHelCM2Random = new TH1D( "Phi_Scattered_265MeV_NegHelCM2Random", "#phi_{Sc} E_{#gamma}265 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for -ve Helicity", 10, -4, 4);
-    PhiSc335NegHelCM2Random = new TH1D( "Phi_Scattered_335MeV_NegHelCM2Random", "#phi_{Sc} E_{#gamma}335 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for -ve Helicity", 10, -4, 4);
-    PhiSc405NegHelCM2Random = new TH1D( "Phi_Scattered_405MeV_NegHelCM2Random", "#phi_{Sc} E_{#gamma}405 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for -ve Helicity", 10, -4, 4);
-    PhiSc475NegHelCM2Random = new TH1D( "Phi_Scattered_475MeV_NegHelCM2Random", "#phi_{Sc} E_{#gamma}475 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for -ve Helicity", 10, -4, 4);
-    PhiSc545NegHelCM2Random = new TH1D( "Phi_Scattered_545MeV_NegHelCM2Random", "#phi_{Sc} E_{#gamma}545 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for -ve Helicity", 10, -4, 4);
-    PhiSc615NegHelCM2Random = new TH1D( "Phi_Scattered_615MeV_NegHelCM2Random", "#phi_{Sc} E_{#gamma}615 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for -ve Helicity", 10, -4, 4);
-    PhiSc685NegHelCM2Random = new TH1D( "Phi_Scattered_685MeV_NegHelCM2Random", "#phi_{Sc} E_{#gamma}685 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for -ve Helicity", 10, -4, 4);
-
-    PhiSc265NegHelCM3Random = new TH1D( "Phi_Scattered_265MeV_NegHelCM3Random", "#phi_{Sc} E_{#gamma}265 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for -ve Helicity", 10, -4, 4);
-    PhiSc335NegHelCM3Random = new TH1D( "Phi_Scattered_335MeV_NegHelCM3Random", "#phi_{Sc} E_{#gamma}335 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for -ve Helicity", 10, -4, 4);
-    PhiSc405NegHelCM3Random = new TH1D( "Phi_Scattered_405MeV_NegHelCM3Random", "#phi_{Sc} E_{#gamma}405 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for -ve Helicity", 10, -4, 4);
-    PhiSc475NegHelCM3Random = new TH1D( "Phi_Scattered_475MeV_NegHelCM3Random", "#phi_{Sc} E_{#gamma}475 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for -ve Helicity", 10, -4, 4);
-    PhiSc545NegHelCM3Random = new TH1D( "Phi_Scattered_545MeV_NegHelCM3Random", "#phi_{Sc} E_{#gamma}545 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for -ve Helicity", 10, -4, 4);
-    PhiSc615NegHelCM3Random = new TH1D( "Phi_Scattered_615MeV_NegHelCM3Random", "#phi_{Sc} E_{#gamma}615 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for -ve Helicity", 10, -4, 4);
-    PhiSc685NegHelCM3Random = new TH1D( "Phi_Scattered_685MeV_NegHelCM3Random", "#phi_{Sc} E_{#gamma}685 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for -ve Helicity", 10, -4, 4);
-
-    PhiSc265NegHelCM4Random = new TH1D( "Phi_Scattered_265MeV_NegHelCM4Random", "#phi_{Sc} E_{#gamma}265 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for -ve Helicity", 10, -4, 4);
-    PhiSc335NegHelCM4Random = new TH1D( "Phi_Scattered_335MeV_NegHelCM4Random", "#phi_{Sc} E_{#gamma}335 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for -ve Helicity", 10, -4, 4);
-    PhiSc405NegHelCM4Random = new TH1D( "Phi_Scattered_405MeV_NegHelCM4Random", "#phi_{Sc} E_{#gamma}405 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for -ve Helicity", 10, -4, 4);
-    PhiSc475NegHelCM4Random = new TH1D( "Phi_Scattered_475MeV_NegHelCM4Random", "#phi_{Sc} E_{#gamma}475 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for -ve Helicity", 10, -4, 4);
-    PhiSc545NegHelCM4Random = new TH1D( "Phi_Scattered_545MeV_NegHelCM4Random", "#phi_{Sc} E_{#gamma}545 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for -ve Helicity", 10, -4, 4);
-    PhiSc615NegHelCM4Random = new TH1D( "Phi_Scattered_615MeV_NegHelCM4Random", "#phi_{Sc} E_{#gamma}615 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for -ve Helicity", 10, -4, 4);
-    PhiSc685NegHelCM4Random = new TH1D( "Phi_Scattered_685MeV_NegHelCM4Random", "#phi_{Sc} E_{#gamma}685 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for -ve Helicity", 10, -4, 4);
-
-    PhiSc265NegHelCM5Random = new TH1D( "Phi_Scattered_265MeV_NegHelCM5Random", "#phi_{Sc} E_{#gamma}265 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for -ve Helicity", 10, -4, 4);
-    PhiSc335NegHelCM5Random = new TH1D( "Phi_Scattered_335MeV_NegHelCM5Random", "#phi_{Sc} E_{#gamma}335 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for -ve Helicity", 10, -4, 4);
-    PhiSc405NegHelCM5Random = new TH1D( "Phi_Scattered_405MeV_NegHelCM5Random", "#phi_{Sc} E_{#gamma}405 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for -ve Helicity", 10, -4, 4);
-    PhiSc475NegHelCM5Random = new TH1D( "Phi_Scattered_475MeV_NegHelCM5Random", "#phi_{Sc} E_{#gamma}475 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for -ve Helicity", 10, -4, 4);
-    PhiSc545NegHelCM5Random = new TH1D( "Phi_Scattered_545MeV_NegHelCM5Random", "#phi_{Sc} E_{#gamma}545 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for -ve Helicity", 10, -4, 4);
-    PhiSc615NegHelCM5Random = new TH1D( "Phi_Scattered_615MeV_NegHelCM5Random", "#phi_{Sc} E_{#gamma}615 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for -ve Helicity", 10, -4, 4);
-    PhiSc685NegHelCM5Random = new TH1D( "Phi_Scattered_685MeV_NegHelCM5Random", "#phi_{Sc} E_{#gamma}685 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for -ve Helicity", 10, -4, 4);
-
-    // Angles of neutron in scattered frame across EGamma bins for positive helicity
-    PhiSc265PosHelCM1Random = new TH1D( "Phi_Scattered_265MeV_PosHelCM1Random", "#phi_{Sc} E_{#gamma}265 #pm 35MeV (Cos#theta_{CM}1-0.6)) for +ve Helicity", 10, -4, 4);
-    PhiSc335PosHelCM1Random = new TH1D( "Phi_Scattered_335MeV_PosHelCM1Random", "#phi_{Sc} E_{#gamma}335 #pm 35MeV (Cos#theta_{CM}1-0.6)) for +ve Helicity", 10, -4, 4);
-    PhiSc405PosHelCM1Random = new TH1D( "Phi_Scattered_405MeV_PosHelCM1Random", "#phi_{Sc} E_{#gamma}405 #pm 35MeV (Cos#theta_{CM}1-0.6)) for +ve Helicity", 10, -4, 4);
-    PhiSc475PosHelCM1Random = new TH1D( "Phi_Scattered_475MeV_PosHelCM1Random", "#phi_{Sc} E_{#gamma}475 #pm 35MeV (Cos#theta_{CM}1-0.6)) for +ve Helicity", 10, -4, 4);
-    PhiSc545PosHelCM1Random = new TH1D( "Phi_Scattered_545MeV_PosHelCM1Random", "#phi_{Sc} E_{#gamma}545 #pm 35MeV (Cos#theta_{CM}1-0.6)) for +ve Helicity", 10, -4, 4);
-    PhiSc615PosHelCM1Random = new TH1D( "Phi_Scattered_615MeV_PosHelCM1Random", "#phi_{Sc} E_{#gamma}615 #pm 35MeV (Cos#theta_{CM}1-0.6)) for +ve Helicity", 10, -4, 4);
-    PhiSc685PosHelCM1Random = new TH1D( "Phi_Scattered_685MeV_PosHelCM1Random", "#phi_{Sc} E_{#gamma}685 #pm 35MeV (Cos#theta_{CM}1-0.6)) for +ve Helicity", 10, -4, 4);
-
-    PhiSc265PosHelCM2Random = new TH1D( "Phi_Scattered_265MeV_PosHelCM2Random", "#phi_{Sc} E_{#gamma}265 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for +ve Helicity", 10, -4, 4);
-    PhiSc335PosHelCM2Random = new TH1D( "Phi_Scattered_335MeV_PosHelCM2Random", "#phi_{Sc} E_{#gamma}335 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for +ve Helicity", 10, -4, 4);
-    PhiSc405PosHelCM2Random = new TH1D( "Phi_Scattered_405MeV_PosHelCM2Random", "#phi_{Sc} E_{#gamma}405 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for +ve Helicity", 10, -4, 4);
-    PhiSc475PosHelCM2Random = new TH1D( "Phi_Scattered_475MeV_PosHelCM2Random", "#phi_{Sc} E_{#gamma}475 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for +ve Helicity", 10, -4, 4);
-    PhiSc545PosHelCM2Random = new TH1D( "Phi_Scattered_545MeV_PosHelCM2Random", "#phi_{Sc} E_{#gamma}545 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for +ve Helicity", 10, -4, 4);
-    PhiSc615PosHelCM2Random = new TH1D( "Phi_Scattered_615MeV_PosHelCM2Random", "#phi_{Sc} E_{#gamma}615 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for +ve Helicity", 10, -4, 4);
-    PhiSc685PosHelCM2Random = new TH1D( "Phi_Scattered_685MeV_PosHelCM2Random", "#phi_{Sc} E_{#gamma}685 #pm 35MeV (Cos#theta_{CM}0.6-0.2)) for +ve Helicity", 10, -4, 4);
-
-    PhiSc265PosHelCM3Random = new TH1D( "Phi_Scattered_265MeV_PosHelCM3Random", "#phi_{Sc} E_{#gamma}265 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for +ve Helicity", 10, -4, 4);
-    PhiSc335PosHelCM3Random = new TH1D( "Phi_Scattered_335MeV_PosHelCM3Random", "#phi_{Sc} E_{#gamma}335 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for +ve Helicity", 10, -4, 4);
-    PhiSc405PosHelCM3Random = new TH1D( "Phi_Scattered_405MeV_PosHelCM3Random", "#phi_{Sc} E_{#gamma}405 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for +ve Helicity", 10, -4, 4);
-    PhiSc475PosHelCM3Random = new TH1D( "Phi_Scattered_475MeV_PosHelCM3Random", "#phi_{Sc} E_{#gamma}475 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for +ve Helicity", 10, -4, 4);
-    PhiSc545PosHelCM3Random = new TH1D( "Phi_Scattered_545MeV_PosHelCM3Random", "#phi_{Sc} E_{#gamma}545 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for +ve Helicity", 10, -4, 4);
-    PhiSc615PosHelCM3Random = new TH1D( "Phi_Scattered_615MeV_PosHelCM3Random", "#phi_{Sc} E_{#gamma}615 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for +ve Helicity", 10, -4, 4);
-    PhiSc685PosHelCM3Random = new TH1D( "Phi_Scattered_685MeV_PosHelCM3Random", "#phi_{Sc} E_{#gamma}685 #pm 35MeV (Cos#theta_{CM}0.2-(-0.2))) for +ve Helicity", 10, -4, 4);
-
-    PhiSc265PosHelCM4Random = new TH1D( "Phi_Scattered_265MeV_PosHelCM4Random", "#phi_{Sc} E_{#gamma}265 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for +ve Helicity", 10, -4, 4);
-    PhiSc335PosHelCM4Random = new TH1D( "Phi_Scattered_335MeV_PosHelCM4Random", "#phi_{Sc} E_{#gamma}335 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for +ve Helicity", 10, -4, 4);
-    PhiSc405PosHelCM4Random = new TH1D( "Phi_Scattered_405MeV_PosHelCM4Random", "#phi_{Sc} E_{#gamma}405 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for +ve Helicity", 10, -4, 4);
-    PhiSc475PosHelCM4Random = new TH1D( "Phi_Scattered_475MeV_PosHelCM4Random", "#phi_{Sc} E_{#gamma}475 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for +ve Helicity", 10, -4, 4);
-    PhiSc545PosHelCM4Random = new TH1D( "Phi_Scattered_545MeV_PosHelCM4Random", "#phi_{Sc} E_{#gamma}545 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for +ve Helicity", 10, -4, 4);
-    PhiSc615PosHelCM4Random = new TH1D( "Phi_Scattered_615MeV_PosHelCM4Random", "#phi_{Sc} E_{#gamma}615 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for +ve Helicity", 10, -4, 4);
-    PhiSc685PosHelCM4Random = new TH1D( "Phi_Scattered_685MeV_PosHelCM4Random", "#phi_{Sc} E_{#gamma}685 #pm 35MeV (Cos#theta_{CM}-0.2-(-0.6))) for +ve Helicity", 10, -4, 4);
-
-    PhiSc265PosHelCM5Random = new TH1D( "Phi_Scattered_265MeV_PosHelCM5Random", "#phi_{Sc} E_{#gamma}265 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for +ve Helicity", 10, -4, 4);
-    PhiSc335PosHelCM5Random = new TH1D( "Phi_Scattered_335MeV_PosHelCM5Random", "#phi_{Sc} E_{#gamma}335 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for +ve Helicity", 10, -4, 4);
-    PhiSc405PosHelCM5Random = new TH1D( "Phi_Scattered_405MeV_PosHelCM5Random", "#phi_{Sc} E_{#gamma}405 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for +ve Helicity", 10, -4, 4);
-    PhiSc475PosHelCM5Random = new TH1D( "Phi_Scattered_475MeV_PosHelCM5Random", "#phi_{Sc} E_{#gamma}475 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for +ve Helicity", 10, -4, 4);
-    PhiSc545PosHelCM5Random = new TH1D( "Phi_Scattered_545MeV_PosHelCM5Random", "#phi_{Sc} E_{#gamma}545 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for +ve Helicity", 10, -4, 4);
-    PhiSc615PosHelCM5Random = new TH1D( "Phi_Scattered_615MeV_PosHelCM5Random", "#phi_{Sc} E_{#gamma}615 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for +ve Helicity", 10, -4, 4);
-    PhiSc685PosHelCM5Random = new TH1D( "Phi_Scattered_685MeV_PosHelCM5Random", "#phi_{Sc} E_{#gamma}685 #pm 35MeV (Cos#theta_{CM}-0.6-(-1))) for +ve Helicity", 10, -4, 4);
-
     for(Int_t A = 0; A < 7; A++){
         for(Int_t B = 0; B < 5; B++){
             MM_Eg_CM_Tot[A][B] = new TH1D(Form("MM_Eg%i_CM%i_Tot", 265+(A*70), B+1), Form("MM_E_{#gamma}%i CM%i", 265+(A*70), B+1), 150, 0, 1500);
             MM_Eg_CM_Tot_Prompt[A][B] = new TH1D(Form("MM_Eg%i_CM%i_Tot_Prompt", 265+(A*70), B+1), Form("MM_E_{#gamma}%i CM%i", 265+(A*70), B+1), 150, 0, 1500);
             MM_Eg_CM_Tot_Random[A][B] = new TH1D(Form("MM_Eg%i_CM%i_Tot_Random", 265+(A*70), B+1), Form("MM_E_{#gamma}%i CM%i", 265+(A*70), B+1), 150, 0, 1500);
+
+            PhiScPosHel[A][B] = new TH1D(Form("PhiSc%iPosHelCM%i", 265+(A*70), B+1), Form("#phi_{Sc} E_{#gamma}%i #pm 35MeV CM%i for +ve Helicity", 265+(A*70), B+1), 10, -4, 4);
+            PhiScPosHelPrompt[A][B] = new TH1D(Form("PhiSc%iPosHelCM%iPrompt", 265+(A*70), B+1), Form("#phi_{Sc} E_{#gamma}%i #pm 35MeV CM%i for +ve Helicity", 265+(A*70), B+1), 10, -4, 4);
+            PhiScPosHelRandom[A][B] = new TH1D(Form("PhiSc%iPosHelCM%iRandom", 265+(A*70), B+1), Form("#phi_{Sc} E_{#gamma}%i #pm 35MeV CM%i for +ve Helicity", 265+(A*70), B+1), 10, -4, 4);
+            PhiScNegHel[A][B] = new TH1D(Form("PhiSc%iNegHelCM%i", 265+(A*70), B+1), Form("#phi_{Sc} E_{#gamma}%i #pm 35MeV CM%i for -ve Helicity", 265+(A*70), B+1), 10, -4, 4);
+            PhiScNegHelPrompt[A][B] = new TH1D(Form("PhiSc%iNegHelCM%iPrompt", 265+(A*70), B+1), Form("#phi_{Sc} E_{#gamma}%i #pm 35MeV CM%i for -ve Helicity", 265+(A*70), B+1), 10, -4, 4);
+            PhiScNegHelRandom[A][B] = new TH1D(Form("PhiSc%iNegHelCM%iRandom", 265+(A*70), B+1), Form("#phi_{Sc} E_{#gamma}%i #pm 35MeV CM%i for -ve Helicity", 265+(A*70), B+1), 10, -4, 4);
         }
     }
 
@@ -813,210 +593,37 @@ void PNeutPol_Polarimeter_Circ::FillHists()
         PhipPrompt->Fill(PhpRad);
         EProtonPrompt->Fill(Ep);
         MMProtonPrompt->Fill(MMpEpCorr);
-        EdEPrompt->Fill(Ep, dEp);
+        EdEPrompt->Fill(EpCorr, dEp);
+        ThetaScThetapPrompt->Fill(ScattThetaRad, ThpRad);
+        PhiScThetapPrompt->Fill(ScattPhiRad, ThpRad);
+        rPocaThetapPrompt->Fill(r, ThpRad);
+        ThetaDiffPhiDiffPrompt->Fill(ThetanDiff, PhinDiff);
 
-        //if(ThetanCM  > 80 && ThetanCM < 100){
-            if ( 300 < EGamma && EGamma < 340) PhiSc320Prompt->Fill(ScattPhiRad);
-            if ( 340 < EGamma && EGamma < 380) PhiSc360Prompt->Fill(ScattPhiRad);
-            if ( 380 < EGamma && EGamma < 420) PhiSc400Prompt->Fill(ScattPhiRad);
-            if ( 420 < EGamma && EGamma < 460) PhiSc440Prompt->Fill(ScattPhiRad);
-            if ( 460 < EGamma && EGamma < 500) PhiSc480Prompt->Fill(ScattPhiRad);
-            if ( 500 < EGamma && EGamma < 540) PhiSc520Prompt->Fill(ScattPhiRad);
-            if ( 540 < EGamma && EGamma < 580) PhiSc560Prompt->Fill(ScattPhiRad);
-            if ( 580 < EGamma && EGamma < 620) PhiSc600Prompt->Fill(ScattPhiRad);
-            if ( 620 < EGamma && EGamma < 660) PhiSc640Prompt->Fill(ScattPhiRad);
-            if ( 660 < EGamma && EGamma < 700) PhiSc680Prompt->Fill(ScattPhiRad);
+        if ( 300 < EGamma && EGamma < 340) PhiSc320Prompt->Fill(ScattPhiRad);
+        if ( 340 < EGamma && EGamma < 380) PhiSc360Prompt->Fill(ScattPhiRad);
+        if ( 380 < EGamma && EGamma < 420) PhiSc400Prompt->Fill(ScattPhiRad);
+        if ( 420 < EGamma && EGamma < 460) PhiSc440Prompt->Fill(ScattPhiRad);
+        if ( 460 < EGamma && EGamma < 500) PhiSc480Prompt->Fill(ScattPhiRad);
+        if ( 500 < EGamma && EGamma < 540) PhiSc520Prompt->Fill(ScattPhiRad);
+        if ( 540 < EGamma && EGamma < 580) PhiSc560Prompt->Fill(ScattPhiRad);
+        if ( 580 < EGamma && EGamma < 620) PhiSc600Prompt->Fill(ScattPhiRad);
+        if ( 620 < EGamma && EGamma < 660) PhiSc640Prompt->Fill(ScattPhiRad);
+        if ( 660 < EGamma && EGamma < 700) PhiSc680Prompt->Fill(ScattPhiRad);
 
-            if ( 230 < EGamma && EGamma < 300) {
-                if(1 > CosThetapCM && CosThetapCM > 0.6 ){
-                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM1Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM1Prompt->Fill(ScattPhiRad);
-                }
-
-                else if(0.6 > CosThetapCM && CosThetapCM > 0.2){
-                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM2Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM2Prompt->Fill(ScattPhiRad);
-                }
-
-                else if(0.2 > CosThetapCM && CosThetapCM > -0.2){
-                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM3Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM3Prompt->Fill(ScattPhiRad);
-                }
-
-                else if(-0.2 > CosThetapCM && CosThetapCM > -0.6){
-                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM4Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM4Prompt->Fill(ScattPhiRad);
-                }
-
-                else if(-0.6 > CosThetapCM && CosThetapCM > -1){
-                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM5Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM5Prompt->Fill(ScattPhiRad);
+        for(Int_t d = 0; d < 7; d++){ //Energy bins
+            ELow = 230 + (d*EWidth);
+            EHigh = 300 + (d*EWidth);
+            if( ELow < EGamma && EGamma < EHigh){
+                for(Int_t e = 0; e < 5; e++){
+                    CosThetaLow = 0.6 - (e*CosThetaWidth);
+                    CosThetaHigh = 1 - (e*CosThetaWidth);
+                    if(CosThetaHigh > CosThetapCM && CosThetapCM > CosThetaLow){
+                        if(BeamHelicity == kTRUE) PhiScPosHelPrompt[d][e]->Fill(ScattPhiRad);
+                        else if(BeamHelicity == kFALSE) PhiScNegHelPrompt[d][e]->Fill(ScattPhiRad);
+                    }
                 }
             }
-
-
-            if ( 300 < EGamma && EGamma < 370) {
-                if(1 > CosThetapCM && CosThetapCM > 0.6 ){
-                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM1Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM1Prompt->Fill(ScattPhiRad);
-                }
-
-                else if(0.6 > CosThetapCM && CosThetapCM > 0.2){
-                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM2Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM2Prompt->Fill(ScattPhiRad);
-                }
-
-                else if(0.2 > CosThetapCM && CosThetapCM > -0.2){
-                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM3Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM3Prompt->Fill(ScattPhiRad);
-                }
-
-                else if(-0.2 > CosThetapCM && CosThetapCM > -0.6){
-                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM4Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM4Prompt->Fill(ScattPhiRad);
-                }
-
-                else if(-0.6 > CosThetapCM && CosThetapCM > -1){
-                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM5Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM5Prompt->Fill(ScattPhiRad);
-                }
-            }
-
-            if ( 370 < EGamma && EGamma < 440) {
-                if(1 > CosThetapCM && CosThetapCM > 0.6 ){
-                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM1Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM1Prompt->Fill(ScattPhiRad);
-                }
-
-                else if(0.6 > CosThetapCM && CosThetapCM > 0.2){
-                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM2Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM2Prompt->Fill(ScattPhiRad);
-                }
-
-                else if(0.2 > CosThetapCM && CosThetapCM > -0.2){
-                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM3Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM3Prompt->Fill(ScattPhiRad);
-                }
-
-                else if(-0.2 > CosThetapCM && CosThetapCM > -0.6){
-                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM4Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM4Prompt->Fill(ScattPhiRad);
-                }
-
-                else if(-0.6 > CosThetapCM && CosThetapCM > -1){
-                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM5Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM5Prompt->Fill(ScattPhiRad);
-                }
-            }
-
-            if ( 440 < EGamma && EGamma < 510) {
-                if(1 > CosThetapCM && CosThetapCM > 0.6 ){
-                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM1Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM1Prompt->Fill(ScattPhiRad);
-                }
-
-                else if(0.6 > CosThetapCM && CosThetapCM > 0.2){
-                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM2Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM2Prompt->Fill(ScattPhiRad);
-                }
-
-                else if(0.2 > CosThetapCM && CosThetapCM > -0.2){
-                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM3Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM3Prompt->Fill(ScattPhiRad);
-                }
-
-                else if(-0.2 > CosThetapCM && CosThetapCM > -0.6){
-                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM4Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM4Prompt->Fill(ScattPhiRad);
-                }
-
-                else if(-0.6 > CosThetapCM && CosThetapCM > -1){
-                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM5Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM5Prompt->Fill(ScattPhiRad);
-                }
-            }
-
-            if ( 510 < EGamma && EGamma < 580) {
-                if(1 > CosThetapCM && CosThetapCM > 0.6 ){
-                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM1Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM1Prompt->Fill(ScattPhiRad);
-                }
-
-                else if(0.6 > CosThetapCM && CosThetapCM > 0.2){
-                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM2Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM2Prompt->Fill(ScattPhiRad);
-                }
-
-                else if(0.2 > CosThetapCM && CosThetapCM > -0.2){
-                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM3Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM3Prompt->Fill(ScattPhiRad);
-                }
-
-                else if(-0.2 > CosThetapCM && CosThetapCM > -0.6){
-                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM4Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM4Prompt->Fill(ScattPhiRad);
-                }
-
-                else if(-0.6 > CosThetapCM && CosThetapCM > -1){
-                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM5Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM5Prompt->Fill(ScattPhiRad);
-                }
-            }
-
-            if ( 580 < EGamma && EGamma < 650) {
-                if(1 > CosThetapCM && CosThetapCM > 0.6 ){
-                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM1Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM1Prompt->Fill(ScattPhiRad);
-                }
-
-                else if(0.6 > CosThetapCM && CosThetapCM > 0.2){
-                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM2Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM2Prompt->Fill(ScattPhiRad);
-                }
-
-                else if(0.2 > CosThetapCM && CosThetapCM > -0.2){
-                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM3Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM3Prompt->Fill(ScattPhiRad);
-                }
-
-                else if(-0.2 > CosThetapCM && CosThetapCM > -0.6){
-                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM4Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM4Prompt->Fill(ScattPhiRad);
-                }
-
-                else if(-0.6 > CosThetapCM && CosThetapCM > -1){
-                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM5Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM5Prompt->Fill(ScattPhiRad);
-                }
-            }
-
-            if ( 650 < EGamma && EGamma < 720) {
-                if(1 > CosThetapCM && CosThetapCM > 0.6 ){
-                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM1Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM1Prompt->Fill(ScattPhiRad);
-                }
-
-                else if(0.6 > CosThetapCM && CosThetapCM > 0.2){
-                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM2Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM2Prompt->Fill(ScattPhiRad);
-                }
-
-                else if(0.2 > CosThetapCM && CosThetapCM > -0.2){
-                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM3Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM3Prompt->Fill(ScattPhiRad);
-                }
-
-                else if(-0.2 > CosThetapCM && CosThetapCM > -0.6){
-                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM4Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM4Prompt->Fill(ScattPhiRad);
-                }
-
-                else if(-0.6 > CosThetapCM && CosThetapCM > -1){
-                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM5Prompt->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM5Prompt->Fill(ScattPhiRad);
-                }
-            }
-        //}
+        }
     }
 
     if (GHistBGSub::IsRandom(TaggerTime) == kTRUE){
@@ -1029,210 +636,37 @@ void PNeutPol_Polarimeter_Circ::FillHists()
         PhipRandom->Fill(PhpRad);
         EProtonRandom->Fill(Ep);
         MMProtonRandom->Fill(MMpEpCorr);
-        EdERandom->Fill(Ep, dEp);
+        EdERandom->Fill(EpCorr, dEp);
+        ThetaScThetapRandom->Fill(ScattThetaRad, ThpRad);
+        PhiScThetapRandom->Fill(ScattPhiRad, ThpRad);
+        rPocaThetapRandom->Fill(r, ThpRad);
+        ThetaDiffPhiDiffRandom->Fill(ThetanDiff, PhinDiff);
 
-        //if(ThetanCM  > 80 && ThetanCM < 100){
-            if ( 300 < EGamma && EGamma < 340) PhiSc320Random->Fill(ScattPhiRad);
-            if ( 340 < EGamma && EGamma < 380) PhiSc360Random->Fill(ScattPhiRad);
-            if ( 380 < EGamma && EGamma < 420) PhiSc400Random->Fill(ScattPhiRad);
-            if ( 420 < EGamma && EGamma < 460) PhiSc440Random->Fill(ScattPhiRad);
-            if ( 460 < EGamma && EGamma < 500) PhiSc480Random->Fill(ScattPhiRad);
-            if ( 500 < EGamma && EGamma < 540) PhiSc520Random->Fill(ScattPhiRad);
-            if ( 540 < EGamma && EGamma < 580) PhiSc560Random->Fill(ScattPhiRad);
-            if ( 580 < EGamma && EGamma < 620) PhiSc600Random->Fill(ScattPhiRad);
-            if ( 620 < EGamma && EGamma < 660) PhiSc640Random->Fill(ScattPhiRad);
-            if ( 660 < EGamma && EGamma < 700) PhiSc680Random->Fill(ScattPhiRad);
+        if ( 300 < EGamma && EGamma < 340) PhiSc320Random->Fill(ScattPhiRad);
+        if ( 340 < EGamma && EGamma < 380) PhiSc360Random->Fill(ScattPhiRad);
+        if ( 380 < EGamma && EGamma < 420) PhiSc400Random->Fill(ScattPhiRad);
+        if ( 420 < EGamma && EGamma < 460) PhiSc440Random->Fill(ScattPhiRad);
+        if ( 460 < EGamma && EGamma < 500) PhiSc480Random->Fill(ScattPhiRad);
+        if ( 500 < EGamma && EGamma < 540) PhiSc520Random->Fill(ScattPhiRad);
+        if ( 540 < EGamma && EGamma < 580) PhiSc560Random->Fill(ScattPhiRad);
+        if ( 580 < EGamma && EGamma < 620) PhiSc600Random->Fill(ScattPhiRad);
+        if ( 620 < EGamma && EGamma < 660) PhiSc640Random->Fill(ScattPhiRad);
+        if ( 660 < EGamma && EGamma < 700) PhiSc680Random->Fill(ScattPhiRad);
 
-            if ( 230 < EGamma && EGamma < 300) {
-                if(1 > CosThetapCM && CosThetapCM > 0.6 ){
-                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM1Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM1Random->Fill(ScattPhiRad);
-                }
-
-                else if(0.6 > CosThetapCM && CosThetapCM > 0.2){
-                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM2Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM2Random->Fill(ScattPhiRad);
-                }
-
-                else if(0.2 > CosThetapCM && CosThetapCM > -0.2){
-                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM3Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM3Random->Fill(ScattPhiRad);
-                }
-
-                else if(-0.2 > CosThetapCM && CosThetapCM > -0.6){
-                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM4Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM4Random->Fill(ScattPhiRad);
-                }
-
-                else if(-0.6 > CosThetapCM && CosThetapCM > -1){
-                    if (BeamHelicity == kFALSE) PhiSc265NegHelCM5Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc265PosHelCM5Random->Fill(ScattPhiRad);
+        for(Int_t d = 0; d < 7; d++){ //Energy bins
+            ELow = 230 + (d*EWidth);
+            EHigh = 300 + (d*EWidth);
+            if( ELow < EGamma && EGamma < EHigh){
+                for(Int_t e = 0; e < 5; e++){
+                    CosThetaLow = 0.6 - (e*CosThetaWidth);
+                    CosThetaHigh = 1 - (e*CosThetaWidth);
+                    if(CosThetaHigh > CosThetapCM && CosThetapCM > CosThetaLow){
+                        if(BeamHelicity == kTRUE) PhiScPosHelRandom[d][e]->Fill(ScattPhiRad);
+                        else if(BeamHelicity == kFALSE) PhiScNegHelRandom[d][e]->Fill(ScattPhiRad);
+                    }
                 }
             }
-
-
-            if ( 300 < EGamma && EGamma < 370) {
-                if(1 > CosThetapCM && CosThetapCM > 0.6 ){
-                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM1Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM1Random->Fill(ScattPhiRad);
-                }
-
-                else if(0.6 > CosThetapCM && CosThetapCM > 0.2){
-                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM2Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM2Random->Fill(ScattPhiRad);
-                }
-
-                else if(0.2 > CosThetapCM && CosThetapCM > -0.2){
-                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM3Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM3Random->Fill(ScattPhiRad);
-                }
-
-                else if(-0.2 > CosThetapCM && CosThetapCM > -0.6){
-                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM4Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM4Random->Fill(ScattPhiRad);
-                }
-
-                else if(-0.6 > CosThetapCM && CosThetapCM > -1){
-                    if (BeamHelicity == kFALSE) PhiSc335NegHelCM5Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc335PosHelCM5Random->Fill(ScattPhiRad);
-                }
-            }
-
-            if ( 370 < EGamma && EGamma < 440) {
-                if(1 > CosThetapCM && CosThetapCM > 0.6 ){
-                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM1Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM1Random->Fill(ScattPhiRad);
-                }
-
-                else if(0.6 > CosThetapCM && CosThetapCM > 0.2){
-                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM2Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM2Random->Fill(ScattPhiRad);
-                }
-
-                else if(0.2 > CosThetapCM && CosThetapCM > -0.2){
-                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM3Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM3Random->Fill(ScattPhiRad);
-                }
-
-                else if(-0.2 > CosThetapCM && CosThetapCM > -0.6){
-                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM4Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM4Random->Fill(ScattPhiRad);
-                }
-
-                else if(-0.6 > CosThetapCM && CosThetapCM > -1){
-                    if (BeamHelicity == kFALSE) PhiSc405NegHelCM5Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc405PosHelCM5Random->Fill(ScattPhiRad);
-                }
-            }
-
-            if ( 440 < EGamma && EGamma < 510) {
-                if(1 > CosThetapCM && CosThetapCM > 0.6 ){
-                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM1Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM1Random->Fill(ScattPhiRad);
-                }
-
-                else if(0.6 > CosThetapCM && CosThetapCM > 0.2){
-                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM2Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM2Random->Fill(ScattPhiRad);
-                }
-
-                else if(0.2 > CosThetapCM && CosThetapCM > -0.2){
-                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM3Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM3Random->Fill(ScattPhiRad);
-                }
-
-                else if(-0.2 > CosThetapCM && CosThetapCM > -0.6){
-                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM4Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM4Random->Fill(ScattPhiRad);
-                }
-
-                else if(-0.6 > CosThetapCM && CosThetapCM > -1){
-                    if (BeamHelicity == kFALSE) PhiSc475NegHelCM5Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc475PosHelCM5Random->Fill(ScattPhiRad);
-                }
-            }
-
-            if ( 510 < EGamma && EGamma < 580) {
-                if(1 > CosThetapCM && CosThetapCM > 0.6 ){
-                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM1Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM1Random->Fill(ScattPhiRad);
-                }
-
-                else if(0.6 > CosThetapCM && CosThetapCM > 0.2){
-                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM2Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM2Random->Fill(ScattPhiRad);
-                }
-
-                else if(0.2 > CosThetapCM && CosThetapCM > -0.2){
-                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM3Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM3Random->Fill(ScattPhiRad);
-                }
-
-                else if(-0.2 > CosThetapCM && CosThetapCM > -0.6){
-                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM4Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM4Random->Fill(ScattPhiRad);
-                }
-
-                else if(-0.6 > CosThetapCM && CosThetapCM > -1){
-                    if (BeamHelicity == kFALSE) PhiSc545NegHelCM5Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc545PosHelCM5Random->Fill(ScattPhiRad);
-                }
-            }
-
-            if ( 580 < EGamma && EGamma < 650) {
-                if(1 > CosThetapCM && CosThetapCM > 0.6 ){
-                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM1Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM1Random->Fill(ScattPhiRad);
-                }
-
-                else if(0.6 > CosThetapCM && CosThetapCM > 0.2){
-                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM2Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM2Random->Fill(ScattPhiRad);
-                }
-
-                else if(0.2 > CosThetapCM && CosThetapCM > -0.2){
-                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM3Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM3Random->Fill(ScattPhiRad);
-                }
-
-                else if(-0.2 > CosThetapCM && CosThetapCM > -0.6){
-                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM4Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM4Random->Fill(ScattPhiRad);
-                }
-
-                else if(-0.6 > CosThetapCM && CosThetapCM > -1){
-                    if (BeamHelicity == kFALSE) PhiSc615NegHelCM5Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc615PosHelCM5Random->Fill(ScattPhiRad);
-                }
-            }
-
-            if ( 650 < EGamma && EGamma < 720) {
-                if(1 > CosThetapCM && CosThetapCM > 0.6 ){
-                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM1Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM1Random->Fill(ScattPhiRad);
-                }
-
-                else if(0.6 > CosThetapCM && CosThetapCM > 0.2){
-                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM2Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM2Random->Fill(ScattPhiRad);
-                }
-
-                else if(0.2 > CosThetapCM && CosThetapCM > -0.2){
-                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM3Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM3Random->Fill(ScattPhiRad);
-                }
-
-                else if(-0.2 > CosThetapCM && CosThetapCM > -0.6){
-                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM4Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM4Random->Fill(ScattPhiRad);
-                }
-
-                else if(-0.6 > CosThetapCM && CosThetapCM > -1){
-                    if (BeamHelicity == kFALSE) PhiSc685NegHelCM5Random->Fill(ScattPhiRad);
-                    else if (BeamHelicity == kTRUE) PhiSc685PosHelCM5Random->Fill(ScattPhiRad);
-                }
-            }
-        //}
+        }
     }
 }
 
@@ -1255,11 +689,23 @@ void PNeutPol_Polarimeter_Circ::BGSub(){
 
     EdE->Add(EdEPrompt);
     EdE->Add(EdERandom, -PvRratio);
+    ThetaScThetap->Add(ThetaScThetapPrompt);
+    ThetaScThetap->Add(ThetaScThetapRandom, -PvRratio);
+    PhiScThetap->Add(PhiScThetapPrompt);
+    PhiScThetap->Add(PhiScThetapRandom, -PvRratio);
+    rPocaThetap->Add(rPocaThetapPrompt);
+    rPocaThetap->Add(rPocaThetapRandom, -PvRratio);
+    ThetaDiffPhiDiff->Add(ThetaDiffPhiDiffPrompt);
+    ThetaDiffPhiDiff->Add(ThetaDiffPhiDiffRandom, -PvRratio);
 
     for(Int_t E = 0; E < 7; E++){
         for(Int_t F = 0; F < 5; F++){
             MM_Eg_CM_Tot[E][F]->Add(MM_Eg_CM_Tot_Prompt[E][F]);
             MM_Eg_CM_Tot[E][F]->Add(MM_Eg_CM_Tot_Random[E][F], -PvRratio);
+            PhiScNegHel[E][F]->Add(PhiScNegHelPrompt[E][F]);
+            PhiScNegHel[E][F]->Add(PhiScNegHelRandom[E][F], -PvRratio);
+            PhiScPosHel[E][F]->Add(PhiScPosHelPrompt[E][F]);
+            PhiScPosHel[E][F]->Add(PhiScPosHelRandom[E][F], -PvRratio);
         }
     }
 
@@ -1295,147 +741,6 @@ void PNeutPol_Polarimeter_Circ::BGSub(){
     PhiSc680->Add(PhiSc680Prompt);
     PhiSc680->Add(PhiSc680Random, -PvRratio);
 
-    PhiSc265NegHelCM1->Add(PhiSc265NegHelCM1Prompt);
-    PhiSc335NegHelCM1->Add(PhiSc335NegHelCM1Prompt);
-    PhiSc405NegHelCM1->Add(PhiSc405NegHelCM1Prompt);
-    PhiSc475NegHelCM1->Add(PhiSc475NegHelCM1Prompt);
-    PhiSc545NegHelCM1->Add(PhiSc545NegHelCM1Prompt);
-    PhiSc615NegHelCM1->Add(PhiSc615NegHelCM1Prompt);
-    PhiSc685NegHelCM1->Add(PhiSc685NegHelCM1Prompt);
-    PhiSc265NegHelCM2->Add(PhiSc265NegHelCM2Prompt);
-    PhiSc335NegHelCM2->Add(PhiSc335NegHelCM2Prompt);
-    PhiSc405NegHelCM2->Add(PhiSc405NegHelCM2Prompt);
-    PhiSc475NegHelCM2->Add(PhiSc475NegHelCM2Prompt);
-    PhiSc545NegHelCM2->Add(PhiSc545NegHelCM2Prompt);
-    PhiSc615NegHelCM2->Add(PhiSc615NegHelCM2Prompt);
-    PhiSc685NegHelCM2->Add(PhiSc685NegHelCM2Prompt);
-    PhiSc265NegHelCM3->Add(PhiSc265NegHelCM3Prompt);
-    PhiSc335NegHelCM3->Add(PhiSc335NegHelCM3Prompt);
-    PhiSc405NegHelCM3->Add(PhiSc405NegHelCM3Prompt);
-    PhiSc475NegHelCM3->Add(PhiSc475NegHelCM3Prompt);
-    PhiSc545NegHelCM3->Add(PhiSc545NegHelCM3Prompt);
-    PhiSc615NegHelCM3->Add(PhiSc615NegHelCM3Prompt);
-    PhiSc685NegHelCM3->Add(PhiSc685NegHelCM3Prompt);
-    PhiSc265NegHelCM4->Add(PhiSc265NegHelCM4Prompt);
-    PhiSc335NegHelCM4->Add(PhiSc335NegHelCM4Prompt);
-    PhiSc405NegHelCM4->Add(PhiSc405NegHelCM4Prompt);
-    PhiSc475NegHelCM4->Add(PhiSc475NegHelCM4Prompt);
-    PhiSc545NegHelCM4->Add(PhiSc545NegHelCM4Prompt);
-    PhiSc615NegHelCM4->Add(PhiSc615NegHelCM4Prompt);
-    PhiSc685NegHelCM4->Add(PhiSc685NegHelCM4Prompt);
-    PhiSc265NegHelCM5->Add(PhiSc265NegHelCM5Prompt);
-    PhiSc335NegHelCM5->Add(PhiSc335NegHelCM5Prompt);
-    PhiSc405NegHelCM5->Add(PhiSc405NegHelCM5Prompt);
-    PhiSc475NegHelCM5->Add(PhiSc475NegHelCM5Prompt);
-    PhiSc545NegHelCM5->Add(PhiSc545NegHelCM5Prompt);
-    PhiSc615NegHelCM5->Add(PhiSc615NegHelCM5Prompt);
-    PhiSc685NegHelCM5->Add(PhiSc685NegHelCM5Prompt);
-    PhiSc265PosHelCM1->Add(PhiSc265PosHelCM1Prompt);
-    PhiSc335PosHelCM1->Add(PhiSc335PosHelCM1Prompt);
-    PhiSc405PosHelCM1->Add(PhiSc405PosHelCM1Prompt);
-    PhiSc475PosHelCM1->Add(PhiSc475PosHelCM1Prompt);
-    PhiSc545PosHelCM1->Add(PhiSc545PosHelCM1Prompt);
-    PhiSc615PosHelCM1->Add(PhiSc615PosHelCM1Prompt);
-    PhiSc685PosHelCM1->Add(PhiSc685PosHelCM1Prompt);
-    PhiSc265PosHelCM2->Add(PhiSc265PosHelCM2Prompt);
-    PhiSc335PosHelCM2->Add(PhiSc335PosHelCM2Prompt);
-    PhiSc405PosHelCM2->Add(PhiSc405PosHelCM2Prompt);
-    PhiSc475PosHelCM2->Add(PhiSc475PosHelCM2Prompt);
-    PhiSc545PosHelCM2->Add(PhiSc545PosHelCM2Prompt);
-    PhiSc615PosHelCM2->Add(PhiSc615PosHelCM2Prompt);
-    PhiSc685PosHelCM2->Add(PhiSc685PosHelCM2Prompt);
-    PhiSc265PosHelCM3->Add(PhiSc265PosHelCM3Prompt);
-    PhiSc335PosHelCM3->Add(PhiSc335PosHelCM3Prompt);
-    PhiSc405PosHelCM3->Add(PhiSc405PosHelCM3Prompt);
-    PhiSc475PosHelCM3->Add(PhiSc475PosHelCM3Prompt);
-    PhiSc545PosHelCM3->Add(PhiSc545PosHelCM3Prompt);
-    PhiSc615PosHelCM3->Add(PhiSc615PosHelCM3Prompt);
-    PhiSc685PosHelCM3->Add(PhiSc685PosHelCM3Prompt);
-    PhiSc265PosHelCM4->Add(PhiSc265PosHelCM4Prompt);
-    PhiSc335PosHelCM4->Add(PhiSc335PosHelCM4Prompt);
-    PhiSc405PosHelCM4->Add(PhiSc405PosHelCM4Prompt);
-    PhiSc475PosHelCM4->Add(PhiSc475PosHelCM4Prompt);
-    PhiSc545PosHelCM4->Add(PhiSc545PosHelCM4Prompt);
-    PhiSc615PosHelCM4->Add(PhiSc615PosHelCM4Prompt);
-    PhiSc685PosHelCM4->Add(PhiSc685PosHelCM4Prompt);
-    PhiSc265PosHelCM5->Add(PhiSc265PosHelCM5Prompt);
-    PhiSc335PosHelCM5->Add(PhiSc335PosHelCM5Prompt);
-    PhiSc405PosHelCM5->Add(PhiSc405PosHelCM5Prompt);
-    PhiSc475PosHelCM5->Add(PhiSc475PosHelCM5Prompt);
-    PhiSc545PosHelCM5->Add(PhiSc545PosHelCM5Prompt);
-    PhiSc615PosHelCM5->Add(PhiSc615PosHelCM5Prompt);
-    PhiSc685PosHelCM5->Add(PhiSc685PosHelCM5Prompt);
-
-    PhiSc265NegHelCM1->Add(PhiSc265NegHelCM1Random, -PvRratio);
-    PhiSc335NegHelCM1->Add(PhiSc335NegHelCM1Random, -PvRratio);
-    PhiSc405NegHelCM1->Add(PhiSc405NegHelCM1Random, -PvRratio);
-    PhiSc475NegHelCM1->Add(PhiSc475NegHelCM1Random, -PvRratio);
-    PhiSc545NegHelCM1->Add(PhiSc545NegHelCM1Random, -PvRratio);
-    PhiSc615NegHelCM1->Add(PhiSc615NegHelCM1Random, -PvRratio);
-    PhiSc685NegHelCM1->Add(PhiSc685NegHelCM1Random, -PvRratio);
-    PhiSc265NegHelCM2->Add(PhiSc265NegHelCM2Random, -PvRratio);
-    PhiSc335NegHelCM2->Add(PhiSc335NegHelCM2Random, -PvRratio);
-    PhiSc405NegHelCM2->Add(PhiSc405NegHelCM2Random, -PvRratio);
-    PhiSc475NegHelCM2->Add(PhiSc475NegHelCM2Random, -PvRratio);
-    PhiSc545NegHelCM2->Add(PhiSc545NegHelCM2Random, -PvRratio);
-    PhiSc615NegHelCM2->Add(PhiSc615NegHelCM2Random, -PvRratio);
-    PhiSc685NegHelCM2->Add(PhiSc685NegHelCM2Random, -PvRratio);
-    PhiSc265NegHelCM3->Add(PhiSc265NegHelCM3Random, -PvRratio);
-    PhiSc335NegHelCM3->Add(PhiSc335NegHelCM3Random, -PvRratio);
-    PhiSc405NegHelCM3->Add(PhiSc405NegHelCM3Random, -PvRratio);
-    PhiSc475NegHelCM3->Add(PhiSc475NegHelCM3Random, -PvRratio);
-    PhiSc545NegHelCM3->Add(PhiSc545NegHelCM3Random, -PvRratio);
-    PhiSc615NegHelCM3->Add(PhiSc615NegHelCM3Random, -PvRratio);
-    PhiSc685NegHelCM3->Add(PhiSc685NegHelCM3Random, -PvRratio);
-    PhiSc265NegHelCM4->Add(PhiSc265NegHelCM4Random, -PvRratio);
-    PhiSc335NegHelCM4->Add(PhiSc335NegHelCM4Random, -PvRratio);
-    PhiSc405NegHelCM4->Add(PhiSc405NegHelCM4Random, -PvRratio);
-    PhiSc475NegHelCM4->Add(PhiSc475NegHelCM4Random, -PvRratio);
-    PhiSc545NegHelCM4->Add(PhiSc545NegHelCM4Random, -PvRratio);
-    PhiSc615NegHelCM4->Add(PhiSc615NegHelCM4Random, -PvRratio);
-    PhiSc685NegHelCM4->Add(PhiSc685NegHelCM4Random, -PvRratio);
-    PhiSc265NegHelCM5->Add(PhiSc265NegHelCM5Random, -PvRratio);
-    PhiSc335NegHelCM5->Add(PhiSc335NegHelCM5Random, -PvRratio);
-    PhiSc405NegHelCM5->Add(PhiSc405NegHelCM5Random, -PvRratio);
-    PhiSc475NegHelCM5->Add(PhiSc475NegHelCM5Random, -PvRratio);
-    PhiSc545NegHelCM5->Add(PhiSc545NegHelCM5Random, -PvRratio);
-    PhiSc615NegHelCM5->Add(PhiSc615NegHelCM5Random, -PvRratio);
-    PhiSc685NegHelCM5->Add(PhiSc685NegHelCM5Random, -PvRratio);
-    PhiSc265PosHelCM1->Add(PhiSc265PosHelCM1Random, -PvRratio);
-    PhiSc335PosHelCM1->Add(PhiSc335PosHelCM1Random, -PvRratio);
-    PhiSc405PosHelCM1->Add(PhiSc405PosHelCM1Random, -PvRratio);
-    PhiSc475PosHelCM1->Add(PhiSc475PosHelCM1Random, -PvRratio);
-    PhiSc545PosHelCM1->Add(PhiSc545PosHelCM1Random, -PvRratio);
-    PhiSc615PosHelCM1->Add(PhiSc615PosHelCM1Random, -PvRratio);
-    PhiSc685PosHelCM1->Add(PhiSc685PosHelCM1Random, -PvRratio);
-    PhiSc265PosHelCM2->Add(PhiSc265PosHelCM2Random, -PvRratio);
-    PhiSc335PosHelCM2->Add(PhiSc335PosHelCM2Random, -PvRratio);
-    PhiSc405PosHelCM2->Add(PhiSc405PosHelCM2Random, -PvRratio);
-    PhiSc475PosHelCM2->Add(PhiSc475PosHelCM2Random, -PvRratio);
-    PhiSc545PosHelCM2->Add(PhiSc545PosHelCM2Random, -PvRratio);
-    PhiSc615PosHelCM2->Add(PhiSc615PosHelCM2Random, -PvRratio);
-    PhiSc685PosHelCM2->Add(PhiSc685PosHelCM2Random, -PvRratio);
-    PhiSc265PosHelCM3->Add(PhiSc265PosHelCM3Random, -PvRratio);
-    PhiSc335PosHelCM3->Add(PhiSc335PosHelCM3Random, -PvRratio);
-    PhiSc405PosHelCM3->Add(PhiSc405PosHelCM3Random, -PvRratio);
-    PhiSc475PosHelCM3->Add(PhiSc475PosHelCM3Random, -PvRratio);
-    PhiSc545PosHelCM3->Add(PhiSc545PosHelCM3Random, -PvRratio);
-    PhiSc615PosHelCM3->Add(PhiSc615PosHelCM3Random, -PvRratio);
-    PhiSc685PosHelCM3->Add(PhiSc685PosHelCM3Random, -PvRratio);
-    PhiSc265PosHelCM4->Add(PhiSc265PosHelCM4Random, -PvRratio);
-    PhiSc335PosHelCM4->Add(PhiSc335PosHelCM4Random, -PvRratio);
-    PhiSc405PosHelCM4->Add(PhiSc405PosHelCM4Random, -PvRratio);
-    PhiSc475PosHelCM4->Add(PhiSc475PosHelCM4Random, -PvRratio);
-    PhiSc545PosHelCM4->Add(PhiSc545PosHelCM4Random, -PvRratio);
-    PhiSc615PosHelCM4->Add(PhiSc615PosHelCM4Random, -PvRratio);
-    PhiSc685PosHelCM4->Add(PhiSc685PosHelCM4Random, -PvRratio);
-    PhiSc265PosHelCM5->Add(PhiSc265PosHelCM5Random, -PvRratio);
-    PhiSc335PosHelCM5->Add(PhiSc335PosHelCM5Random, -PvRratio);
-    PhiSc405PosHelCM5->Add(PhiSc405PosHelCM5Random, -PvRratio);
-    PhiSc475PosHelCM5->Add(PhiSc475PosHelCM5Random, -PvRratio);
-    PhiSc545PosHelCM5->Add(PhiSc545PosHelCM5Random, -PvRratio);
-    PhiSc615PosHelCM5->Add(PhiSc615PosHelCM5Random, -PvRratio);
-    PhiSc685PosHelCM5->Add(PhiSc685PosHelCM5Random, -PvRratio);
 }
 
 

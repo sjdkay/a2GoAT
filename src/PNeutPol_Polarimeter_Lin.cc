@@ -217,7 +217,7 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
 
     Pp = sqrt (TMath::Power((Mp + EpCorr),2) - TMath::Power(Mp,2));
     Pn = sqrt (TMath::Power((En + Mn ),2) - TMath::Power(Mn,2));
-    GVpCorr = TLorentzVector(Pp*sin(Thp)*cos(Php), Pp*sin(Thp)*sin(Php), Pp*cos(Thp), EpCorr+Mp);
+    GVpCorr = TLorentzVector(Pp*sin(ThpRad)*cos(PhpRad), Pp*sin(ThpRad)*sin(PhpRad), Pp*cos(ThpRad), EpCorr+Mp);
 
     // MUST FEED IN n PHI IN RAD NOT DEG!
     GVnCorr =  LNeutron4VectorCorr(pVertex(2), GVn, En, Pn , Mn, PhnRad);
