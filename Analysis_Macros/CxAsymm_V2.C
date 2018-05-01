@@ -10,13 +10,34 @@ Double_t fitf(Double_t *x,Double_t *par)
 
 void CxAsymm_V2() {
 
-    double InitialSinAmp[8][8];
-    double InitialSinAmpErr[8][8];
-    double SinAmp[8][8]; // Format of arrays is Theta Bin Defined by i, Energy bin defined by j
-    double SinAmpErr[8][8];
-    double CosAmp[8][8]; // Format of arrays is Theta Bin Defined by i, Energy bin defined by j
-    double CosAmpErr[8][8];
-    Int_t i;
+    char PosHelHistName[60];
+    char NegHelHistName[60];
+    char AsymmHistName[60];
+    char ISinAmBranchName[60];
+    char ISinAmErBranchName[60];
+    char SinAmBranchName[60];
+    char SinAmErBranchName[60];
+    char CosAmBranchName[60];
+    char CosAmErBranchName[60];
+    char name[60];
+    char title[60];
+
+    double InitialSinAmp[7][5];
+    double InitialSinAmpErr[7][5];
+    double SinAmp[7][5]; // Format of arrays is Theta Bin Defined by i, Energy bin defined by j
+    double SinAmpErr[7][5];
+    double CosAmp[7][5]; // Format of arrays is Theta Bin Defined by i, Energy bin defined by j
+    double CosAmpErr[7][5];
+    TGraphErrors* CxPlots[7];
+    TGraphErrors* PnPlots[7];
+
+    TH1F* AsymmHists[7][5];
+
+    Double_t Cx[7][5];
+    Double_t CxErr[7][5];
+    Double_t Pn[7][5];
+    Double_t PnErr[7][5];
+
     double ISinAm265;
     double ISinAmErr265;
     double SinAm265;
@@ -60,158 +81,180 @@ void CxAsymm_V2() {
     double CosAm685;
     double CosAmErr685;
 
-    Double_t Cx265[8], Cx335[8], Cx405[8], Cx475[8], Cx545[8], Cx615[8], Cx685[8];
-    Double_t CxErr265[8], CxErr335[8], CxErr405[8], CxErr475[8], CxErr545[8], CxErr615[8], CxErr685[8];
-
     TF1 *AsymmFunc = new TF1("AsymmFit",  fitf, -3.0, 3.0, 2); //Give a name and range to the fitting funcion
     AsymmFunc->SetParNames("SinAmp", "CosAmp"); //Name the parameters
     AsymmFunc->SetParameter(0, 0);
     TF1 *SinFunc = new TF1("SinFit", "[0]*sin(x*TMath::DegToRad())", -3, 3);
     SinFunc->SetParNames("InitialSinAmp");
-    TFile *f = new TFile("/scratch/Mainz_Software/a2GoAT/AmoTotal_2_96_27.root"); // Open the latest PTotal file to load histograms from
+    TFile *f = new TFile("/scratch/Mainz_Software/a2GoAT/Physics_Total_116_26_4_18.root"); // Open the latest PTotal file to load histograms from
     TF1 *Pn90CM = new TF1("Pn90CM", "1.64576-2.95484*(x/1000)+0.684577*(x/1000)**2-0.65*90**2/4/((x-560)**2+90**2/4)+(5.32305-35.3819*(x/1000)+70.145*(x/1000)**2-44.2899*(x/1000)**3)",300,700);
 
-    TList *PhiSc265NegHelList = new TList;
-    TList *PhiSc265PosHelList = new TList;
-    TList *PhiSc265AsymmList = new TList;
-    TList *PhiSc335NegHelList = new TList;
-    TList *PhiSc335PosHelList = new TList;
-    TList *PhiSc335AsymmList = new TList;
-    TList *PhiSc405NegHelList = new TList;
-    TList *PhiSc405PosHelList = new TList;
-    TList *PhiSc405AsymmList = new TList;
-    TList *PhiSc475NegHelList = new TList;
-    TList *PhiSc475PosHelList = new TList;
-    TList *PhiSc475AsymmList = new TList;
-    TList *PhiSc545NegHelList = new TList;
-    TList *PhiSc545PosHelList = new TList;
-    TList *PhiSc545AsymmList = new TList;
-    TList *PhiSc615NegHelList = new TList;
-    TList *PhiSc615PosHelList = new TList;
-    TList *PhiSc615AsymmList = new TList;
-    TList *PhiSc685NegHelList = new TList;
-    TList *PhiSc685PosHelList = new TList;
-    TList *PhiSc685AsymmList = new TList;
+    for(Int_t i = 0; i < 7; i++){ // Energy
+        for(Int_t j = 0; j < 5; j++){ // Theta
+            sprintf(PosHelHistName, "PhiSc%iPosHelCM%i", 265+(i*70), j+1);
+            sprintf(NegHelHistName, "PhiSc%iNegHelCM%i", 265+(i*70), j+1);
+            sprintf(AsymmHistName, "CxAsymm%iCM%i", 265+(i*70), j+1);
+            AsymmHists[i][j] = (TH1F*) (((TH1F*)f->Get(PosHelHistName))->GetAsymmetry(((TH1F*)f->Get(NegHelHistName)))));
+            AsymmHists[i][j]->SetName(AsymmHistName);
+            AsymmHists[i][j]->Fit("SinFit", "Q");
+            AsymmFunc->SetParameter(1, SinFunc->GetParameter(0));
+            AsymmFunc->SetParError(1, SinFunc->GetParError(0));
+            AsymmFunc->SetParLimits(0, -1, 1);
+            AsymmFunc->SetParLimits(1, -1, 1);
+            AsymmHists[i][j]->Fit("AsymmFit", "QLL");
+            SinAmp[i][j] = AsymmFit->GetParameter(0);
+            SinAmpErr[i][j] = AsymmFit->GetParError(0);
+            CosAmp[i][j] = AsymmFit->GetParameter(1);
+            CosAmpErr[i][j] = AsymmFit->GetParError(1);
+        }
+    }
 
-    PhiSc265NegHelList->Add(Phi_Scattered_265MeV_NegHelCM1);
-    PhiSc265NegHelList->Add(Phi_Scattered_265MeV_NegHelCM2);
-    PhiSc265NegHelList->Add(Phi_Scattered_265MeV_NegHelCM3);
-    PhiSc265NegHelList->Add(Phi_Scattered_265MeV_NegHelCM4);
-    PhiSc265NegHelList->Add(Phi_Scattered_265MeV_NegHelCM5);
-    PhiSc265NegHelList->Add(Phi_Scattered_265MeV_NegHelCM6);
-    PhiSc265NegHelList->Add(Phi_Scattered_265MeV_NegHelCM7);
-    PhiSc265NegHelList->Add(Phi_Scattered_265MeV_NegHelCM8);
-    PhiSc265PosHelList->Add(Phi_Scattered_265MeV_PosHelCM1);
-    PhiSc265PosHelList->Add(Phi_Scattered_265MeV_PosHelCM2);
-    PhiSc265PosHelList->Add(Phi_Scattered_265MeV_PosHelCM3);
-    PhiSc265PosHelList->Add(Phi_Scattered_265MeV_PosHelCM4);
-    PhiSc265PosHelList->Add(Phi_Scattered_265MeV_PosHelCM5);
-    PhiSc265PosHelList->Add(Phi_Scattered_265MeV_PosHelCM6);
-    PhiSc265PosHelList->Add(Phi_Scattered_265MeV_PosHelCM7);
-    PhiSc265PosHelList->Add(Phi_Scattered_265MeV_PosHelCM8);
+    TFile f1("AsymmFits_PTotal_AmoOnly_116.root", "RECREATE");
 
-    PhiSc335NegHelList->Add(Phi_Scattered_335MeV_NegHelCM1);
-    PhiSc335NegHelList->Add(Phi_Scattered_335MeV_NegHelCM2);
-    PhiSc335NegHelList->Add(Phi_Scattered_335MeV_NegHelCM3);
-    PhiSc335NegHelList->Add(Phi_Scattered_335MeV_NegHelCM4);
-    PhiSc335NegHelList->Add(Phi_Scattered_335MeV_NegHelCM5);
-    PhiSc335NegHelList->Add(Phi_Scattered_335MeV_NegHelCM6);
-    PhiSc335NegHelList->Add(Phi_Scattered_335MeV_NegHelCM7);
-    PhiSc335NegHelList->Add(Phi_Scattered_335MeV_NegHelCM8);
-    PhiSc335PosHelList->Add(Phi_Scattered_335MeV_PosHelCM1);
-    PhiSc335PosHelList->Add(Phi_Scattered_335MeV_PosHelCM2);
-    PhiSc335PosHelList->Add(Phi_Scattered_335MeV_PosHelCM3);
-    PhiSc335PosHelList->Add(Phi_Scattered_335MeV_PosHelCM4);
-    PhiSc335PosHelList->Add(Phi_Scattered_335MeV_PosHelCM5);
-    PhiSc335PosHelList->Add(Phi_Scattered_335MeV_PosHelCM6);
-    PhiSc335PosHelList->Add(Phi_Scattered_335MeV_PosHelCM7);
-    PhiSc335PosHelList->Add(Phi_Scattered_335MeV_PosHelCM8);
+    for(Int_t i = 0; i < 7; i++){ // Energy
+        for(Int_t j = 0; j < 5; j++){ // Theta
+            AsymmHists[i][j]->Write();
+        }
+    }
 
-    PhiSc405NegHelList->Add(Phi_Scattered_405MeV_NegHelCM1);
-    PhiSc405NegHelList->Add(Phi_Scattered_405MeV_NegHelCM2);
-    PhiSc405NegHelList->Add(Phi_Scattered_405MeV_NegHelCM3);
-    PhiSc405NegHelList->Add(Phi_Scattered_405MeV_NegHelCM4);
-    PhiSc405NegHelList->Add(Phi_Scattered_405MeV_NegHelCM5);
-    PhiSc405NegHelList->Add(Phi_Scattered_405MeV_NegHelCM6);
-    PhiSc405NegHelList->Add(Phi_Scattered_405MeV_NegHelCM7);
-    PhiSc405NegHelList->Add(Phi_Scattered_405MeV_NegHelCM8);
-    PhiSc405PosHelList->Add(Phi_Scattered_405MeV_PosHelCM1);
-    PhiSc405PosHelList->Add(Phi_Scattered_405MeV_PosHelCM2);
-    PhiSc405PosHelList->Add(Phi_Scattered_405MeV_PosHelCM3);
-    PhiSc405PosHelList->Add(Phi_Scattered_405MeV_PosHelCM4);
-    PhiSc405PosHelList->Add(Phi_Scattered_405MeV_PosHelCM5);
-    PhiSc405PosHelList->Add(Phi_Scattered_405MeV_PosHelCM6);
-    PhiSc405PosHelList->Add(Phi_Scattered_405MeV_PosHelCM7);
-    PhiSc405PosHelList->Add(Phi_Scattered_405MeV_PosHelCM8);
+    TTree* tree = new TTree("Parameter_Values", "Tree_of_Values");
 
-    PhiSc475NegHelList->Add(Phi_Scattered_475MeV_NegHelCM1);
-    PhiSc475NegHelList->Add(Phi_Scattered_475MeV_NegHelCM2);
-    PhiSc475NegHelList->Add(Phi_Scattered_475MeV_NegHelCM3);
-    PhiSc475NegHelList->Add(Phi_Scattered_475MeV_NegHelCM4);
-    PhiSc475NegHelList->Add(Phi_Scattered_475MeV_NegHelCM5);
-    PhiSc475NegHelList->Add(Phi_Scattered_475MeV_NegHelCM6);
-    PhiSc475NegHelList->Add(Phi_Scattered_475MeV_NegHelCM7);
-    PhiSc475NegHelList->Add(Phi_Scattered_475MeV_NegHelCM8);
-    PhiSc475PosHelList->Add(Phi_Scattered_475MeV_PosHelCM1);
-    PhiSc475PosHelList->Add(Phi_Scattered_475MeV_PosHelCM2);
-    PhiSc475PosHelList->Add(Phi_Scattered_475MeV_PosHelCM3);
-    PhiSc475PosHelList->Add(Phi_Scattered_475MeV_PosHelCM4);
-    PhiSc475PosHelList->Add(Phi_Scattered_475MeV_PosHelCM5);
-    PhiSc475PosHelList->Add(Phi_Scattered_475MeV_PosHelCM6);
-    PhiSc475PosHelList->Add(Phi_Scattered_475MeV_PosHelCM7);
-    PhiSc475PosHelList->Add(Phi_Scattered_475MeV_PosHelCM8);
+    // Define branches to store parameters, (Branch Name, Variable, Type of Variable)
 
-    PhiSc545NegHelList->Add(Phi_Scattered_545MeV_NegHelCM1);
-    PhiSc545NegHelList->Add(Phi_Scattered_545MeV_NegHelCM2);
-    PhiSc545NegHelList->Add(Phi_Scattered_545MeV_NegHelCM3);
-    PhiSc545NegHelList->Add(Phi_Scattered_545MeV_NegHelCM4);
-    PhiSc545NegHelList->Add(Phi_Scattered_545MeV_NegHelCM5);
-    PhiSc545NegHelList->Add(Phi_Scattered_545MeV_NegHelCM6);
-    PhiSc545NegHelList->Add(Phi_Scattered_545MeV_NegHelCM7);
-    PhiSc545NegHelList->Add(Phi_Scattered_545MeV_NegHelCM8);
-    PhiSc545PosHelList->Add(Phi_Scattered_545MeV_PosHelCM1);
-    PhiSc545PosHelList->Add(Phi_Scattered_545MeV_PosHelCM2);
-    PhiSc545PosHelList->Add(Phi_Scattered_545MeV_PosHelCM3);
-    PhiSc545PosHelList->Add(Phi_Scattered_545MeV_PosHelCM4);
-    PhiSc545PosHelList->Add(Phi_Scattered_545MeV_PosHelCM5);
-    PhiSc545PosHelList->Add(Phi_Scattered_545MeV_PosHelCM6);
-    PhiSc545PosHelList->Add(Phi_Scattered_545MeV_PosHelCM7);
-    PhiSc545PosHelList->Add(Phi_Scattered_545MeV_PosHelCM8);
+    tree->Branch("InitialSinAmp265", &ISinAm265, "ISinAm265/D");
+    tree->Branch("InitialSinAmpErr265", &ISinAmErr265, "ISinAmErr265/D");
+    tree->Branch("CosAmp265", &CosAm265, "CosAm265/D");
+    tree->Branch("CosAmpErr265", &CosAmErr265, "CosAmErr265/D");
+    tree->Branch("SinAmp265", &SinAm265, "SinAm265/D");
+    tree->Branch("SinAmpErr265", &SinAmErr265, "SinAmErr265/D");
+    tree->Branch("InitialSinAmp335", &ISinAm335, "ISinAm335/D");
+    tree->Branch("InitialSinAmpErr335", &ISinAmErr335, "ISinAmErr335/D");
+    tree->Branch("CosAmp335", &CosAm335, "CosAm335/D");
+    tree->Branch("CosAmpErr335", &CosAmErr335, "CosAmErr335/D");
+    tree->Branch("SinAmp335", &SinAm335, "SinAm335/D");
+    tree->Branch("SinAmpErr335", &SinAmErr335, "SinAmErr335/D");
+    tree->Branch("InitialSinAmp405", &ISinAm405, "ISinAm405/D");
+    tree->Branch("InitialSinAmpErr405", &ISinAmErr405, "ISinAmErr405/D");
+    tree->Branch("CosAmp405", &CosAm405, "CosAm405/D");
+    tree->Branch("CosAmpErr405", &CosAmErr405, "CosAmErr405/D");
+    tree->Branch("SinAmp405", &SinAm405, "SinAm405/D");
+    tree->Branch("SinAmpErr405", &SinAmErr405, "SinAmErr405/D");
+    tree->Branch("InitialSinAmp475", &ISinAm475, "ISinAm475/D");
+    tree->Branch("InitialSinAmpErr475", &ISinAmErr475, "ISinAmErr475/D");
+    tree->Branch("CosAmp475", &CosAm475, "CosAm475/D");
+    tree->Branch("CosAmpErr475", &CosAmErr475, "CosAmErr475/D");
+    tree->Branch("SinAmp475", &SinAm475, "SinAm475/D");
+    tree->Branch("SinAmpErr475", &SinAmErr475, "SinAmErr475/D");
+    tree->Branch("InitialSinAmp545", &ISinAm545, "ISinAm545/D");
+    tree->Branch("InitialSinAmpErr545", &ISinAmErr545, "ISinAmErr545/D");
+    tree->Branch("CosAmp545", &CosAm545, "CosAm545/D");
+    tree->Branch("CosAmpErr545", &CosAmErr545, "CosAmErr545/D");
+    tree->Branch("SinAmp545", &SinAm545, "SinAm545/D");
+    tree->Branch("SinAmpErr545", &SinAmErr545, "SinAmErr545/D");
+    tree->Branch("InitialSinAmp615", &ISinAm615, "ISinAm615/D");
+    tree->Branch("InitialSinAmpErr615", &ISinAmErr615, "ISinAmErr615/D");
+    tree->Branch("CosAmp615", &CosAm615, "CosAm615/D");
+    tree->Branch("CosAmpErr615", &CosAmErr615, "CosAmErr615/D");
+    tree->Branch("SinAmp615", &SinAm615, "SinAm615/D");
+    tree->Branch("SinAmpErr615", &SinAmErr615, "SinAmErr615/D");
+    tree->Branch("InitialSinAmp685", &ISinAm685, "ISinAm685/D");
+    tree->Branch("InitialSinAmpErr685", &ISinAmErr685, "ISinAmErr685/D");
+    tree->Branch("CosAmp685", &CosAm685, "CosAm685/D");
+    tree->Branch("CosAmpErr685", &CosAmErr685, "CosAmErr685/D");
+    tree->Branch("SinAmp685", &SinAm685, "SinAm685/D");
+    tree->Branch("SinAmpErr685", &SinAmErr685, "SinAmErr685/D");
 
-    PhiSc615NegHelList->Add(Phi_Scattered_615MeV_NegHelCM1);
-    PhiSc615NegHelList->Add(Phi_Scattered_615MeV_NegHelCM2);
-    PhiSc615NegHelList->Add(Phi_Scattered_615MeV_NegHelCM3);
-    PhiSc615NegHelList->Add(Phi_Scattered_615MeV_NegHelCM4);
-    PhiSc615NegHelList->Add(Phi_Scattered_615MeV_NegHelCM5);
-    PhiSc615NegHelList->Add(Phi_Scattered_615MeV_NegHelCM6);
-    PhiSc615NegHelList->Add(Phi_Scattered_615MeV_NegHelCM7);
-    PhiSc615NegHelList->Add(Phi_Scattered_615MeV_NegHelCM8);
-    PhiSc615PosHelList->Add(Phi_Scattered_615MeV_PosHelCM1);
-    PhiSc615PosHelList->Add(Phi_Scattered_615MeV_PosHelCM2);
-    PhiSc615PosHelList->Add(Phi_Scattered_615MeV_PosHelCM3);
-    PhiSc615PosHelList->Add(Phi_Scattered_615MeV_PosHelCM4);
-    PhiSc615PosHelList->Add(Phi_Scattered_615MeV_PosHelCM5);
-    PhiSc615PosHelList->Add(Phi_Scattered_615MeV_PosHelCM6);
-    PhiSc615PosHelList->Add(Phi_Scattered_615MeV_PosHelCM7);
-    PhiSc615PosHelList->Add(Phi_Scattered_615MeV_PosHelCM8);
+    //Fill branches (and hence tree) with corresponding parameters from above
+//    for(Int_t A = 0; A < 7; A++){
+//        sprintf(ISinAmBranchName, "ISinAm%i", 265+(A*70));
+//        sprintf(ISinAmErBranchName, "ISinAmErr%i", 265+(A*70));
+//        sprintf(SinAmBranchName, "SinAm%i", 265+(A*70));
+//        sprintf(SinAmErBranchName, "SinAmErr%i", 265+(A*70));
+//        sprintf(CosAmBranchName , "CosAm%i", 265+(A*70));
+//        sprintf(CosAmErBranchName, "CosAmErr%i", 265+(A*70));
+//        for(Int_t m = 0; m < 5; m++){
+//            ((TBranch*)f1->Get(ISinAmBranchName)) = InitialSinAmp[A][m];
+//            ((TBranch*)f1->Get(ISinAmErBranchName)) = InitialSinAmpErr[A][m];
+//            ((TBranch*)f1->Get(SinAmErBranchName)) = SinAmp[A][m];
+//            ((TBranch*)f1->Get(SinAmErBranchName)) = SinAmpErr[A][m];
+//            ((TBranch*)f1->Get(CosAmErBranchName)) = CosAmp[A][m];
+//            ((TBranch*)f1->Get(CosAmErBranchName)) = CosAmpErr[A][m];
+//
+//            tree->Fill();
+//        }
+//    }
 
-    PhiSc685NegHelList->Add(Phi_Scattered_685MeV_NegHelCM1);
-    PhiSc685NegHelList->Add(Phi_Scattered_685MeV_NegHelCM2);
-    PhiSc685NegHelList->Add(Phi_Scattered_685MeV_NegHelCM3);
-    PhiSc685NegHelList->Add(Phi_Scattered_685MeV_NegHelCM4);
-    PhiSc685NegHelList->Add(Phi_Scattered_685MeV_NegHelCM5);
-    PhiSc685NegHelList->Add(Phi_Scattered_685MeV_NegHelCM6);
-    PhiSc685NegHelList->Add(Phi_Scattered_685MeV_NegHelCM7);
-    PhiSc685NegHelList->Add(Phi_Scattered_685MeV_NegHelCM8);
-    PhiSc685PosHelList->Add(Phi_Scattered_685MeV_PosHelCM1);
-    PhiSc685PosHelList->Add(Phi_Scattered_685MeV_PosHelCM2);
-    PhiSc685PosHelList->Add(Phi_Scattered_685MeV_PosHelCM3);
-    PhiSc685PosHelList->Add(Phi_Scattered_685MeV_PosHelCM4);
-    PhiSc685PosHelList->Add(Phi_Scattered_685MeV_PosHelCM5);
-    PhiSc685PosHelList->Add(Phi_Scattered_685MeV_PosHelCM6);
-    PhiSc685PosHelList->Add(Phi_Scattered_685MeV_PosHelCM7);
-    PhiSc685PosHelList->Add(Phi_Scattered_685MeV_PosHelCM8);
+    f1.Write();
+    f1.Close();
 
+    TFile *f2= TFile::Open("/scratch/Mainz_Software/a2GoAT/CircPol_Aug16.root");
 
+    for (Int_t n = 0; n < 7; n++){
+        for(Int_t k = 0; k < 5; k++){
+        Double_t EPoint = 265 + (n*70);
+        Cx[n][k] = SinAmp[n][k]/(0.1*(Graph->Eval(EPoint ,0)));
+        CxErr[n][k] = SinAmpErr[n][k]/(0.1*(Graph->Eval(EPoint ,0)));
+        }
+    }
+
+    TFile f3("Cx_Plots_AmoOnly_116.root", "RECREATE");
+
+    Float_t xMin = -1;
+    Float_t xMax = 1;
+    double x[5] = {0.8, 0.4, 0, -0.4, -0.8};
+    double ex[5] = {0.2, 0.2, 0.2, 0.2, 0.2};
+
+    for(Int_t i = 0 ; i < 7 ; i++)
+    {
+        sprintf(name, "Cx_%i", 265+(i*70));
+        sprintf(title, "#C_{x}(Cos#theta_{CM}) E_{#gamma} %i #pm 35 MeV", 265+(i*70));
+        CxPlots[i] = new TGraphErrors(5 , x, Cx[i], ex, Cx[i]);
+        CxPlots[i]->SetMarkerColor(4);
+        CxPlots[i]->SetLineColor(4);
+        CxPlots[i]->SetMarkerStyle(8);
+        CxPlots[i]->SetMarkerSize(1);
+        CxPlots[i]->GetXaxis()->SetTitle("Cos#theta_{CM}");
+        CxPlots[i]->GetXaxis()->SetRangeUser(-1, 1);
+        CxPlots[i]->GetYaxis()->SetRangeUser(-1, 1);
+        CxPlots[i]->GetYaxis()->SetTitle("C_{x}");
+        CxPlots[i]->SetName(name);
+        CxPlots[i]->SetTitle(title);
+
+        sprintf(name, "Pn_%i", 265+(i*70));
+        sprintf(title, "P_{n}(Cos#theta_{CM}) E_{#gamma} %i #pm 35 MeV", 265+(i*70));
+        PnPlots[i] = new TGraphErrors(5 , x, CosAmp[i], ex, CosAmpErr[i]);
+        PnPlots[i]->SetMarkerColor(4);
+        PnPlots[i]->SetLineColor(4);
+        PnPlots[i]->SetMarkerStyle(8);
+        PnPlots[i]->SetMarkerSize(1);
+        PnPlots[i]->GetXaxis()->SetTitle("Cos#theta_{CM}");
+        PnPlots[i]->GetXaxis()->SetRangeUser(-1, 1);
+        PnPlots[i]->GetYaxis()->SetRangeUser(-5, 5);
+        PnPlots[i]->GetYaxis()->SetTitle("P_{n}");
+        PnPlots[i]->SetName(name);
+        PnPlots[i]->SetTitle(title);
+
+        CxPlots[i]->Write();
+        PnPlots[i]->Write();
+    }
+
+    TCanvas *canvas20 = new TCanvas("canvas20","canvas20", 1920, 1080);
+    canvas20->Divide(4, 2);
+    for(int i = 1 ; i < 8 ; i++){
+        canvas20->cd(i);
+        CxPlots[i-1]->Draw("AEP");
+    }
+    canvas20->Write();
+
+    TCanvas *canvas21 = new TCanvas("canvas21","canvas21", 1920, 1080);
+    canvas21->Divide(4, 2);
+    for(int i = 1 ; i < 8 ; i++){
+        canvas21->cd(i);
+        PnPlots[i-1]->Draw("AEP");
+    }
+
+    canvas21->Write();
+
+    f3.Write();
 
 }

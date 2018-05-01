@@ -53,6 +53,7 @@ private:
     double_t Thp;
     double_t ThpRad;
     double_t Thn;
+    double_t ThnRad;
     double_t Php;
     double_t PhpRad;
     double_t Phn;
@@ -212,16 +213,6 @@ private:
     TH1D* EProton;
     TH1D* MMProton;
     TH1D* PhiSc;
-    TH1D* PhiSc320;
-    TH1D* PhiSc360;
-    TH1D* PhiSc400;
-    TH1D* PhiSc440;
-    TH1D* PhiSc480;
-    TH1D* PhiSc520;
-    TH1D* PhiSc560;
-    TH1D* PhiSc600;
-    TH1D* PhiSc640;
-    TH1D* PhiSc680;
 
     TH2D* EdE;
     TH2D* EdEPrompt;
@@ -243,6 +234,30 @@ private:
     TH2D* ThetaDiffPhiDiffPrompt;
     TH2D* ThetaDiffPhiDiffRandom;
 
+    TH2D* ThetapEgamma;
+    TH2D* ThetapEgammaPrompt;
+    TH2D* ThetapEgammaRandom;
+
+    TH2D* ThetapMMp;
+    TH2D* ThetapMMpPrompt;
+    TH2D* ThetapMMpRandom;
+
+    TH2D* ThetanEgamma;
+    TH2D* ThetanEgammaPrompt;
+    TH2D* ThetanEgammaRandom;
+
+    TH2D* ThetanMMp;
+    TH2D* ThetanMMpPrompt;
+    TH2D* ThetanMMpRandom;
+
+    TH2D* PhiScThetan;
+    TH2D* PhiScThetanPrompt;
+    TH2D* PhiScThetanRandom;
+
+    TH2D* PhiScThetapCM;
+    TH2D* PhiScThetapCMPrompt;
+    TH2D* PhiScThetapCMRandom;
+
     TH1D* EgPrompt;
     TH1D* ThetaScPrompt;
     TH1D* RPocaPrompt;
@@ -259,26 +274,6 @@ private:
     TH1D* MMProtonRandom;
     TH1D* PhiScPrompt;
     TH1D* PhiScRandom;
-    TH1D* PhiSc320Prompt;
-    TH1D* PhiSc360Prompt;
-    TH1D* PhiSc400Prompt;
-    TH1D* PhiSc440Prompt;
-    TH1D* PhiSc480Prompt;
-    TH1D* PhiSc520Prompt;
-    TH1D* PhiSc560Prompt;
-    TH1D* PhiSc600Prompt;
-    TH1D* PhiSc640Prompt;
-    TH1D* PhiSc680Prompt;
-    TH1D* PhiSc320Random;
-    TH1D* PhiSc360Random;
-    TH1D* PhiSc400Random;
-    TH1D* PhiSc440Random;
-    TH1D* PhiSc480Random;
-    TH1D* PhiSc520Random;
-    TH1D* PhiSc560Random;
-    TH1D* PhiSc600Random;
-    TH1D* PhiSc640Random;
-    TH1D* PhiSc680Random;
 
     TH1D* MM_Eg_CM_Tot[7][5];
     TH1D* MM_Eg_CM_Tot_Prompt[7][5];
@@ -293,6 +288,10 @@ private:
     TH1D* PhiScNegHel[7][5];
     TH1D* PhiScNegHelPrompt[7][5];
     TH1D* PhiScNegHelRandom[7][5];
+
+    TH1D* MMpEgamma[12];
+    TH1D* MMpEgammaPrompt[12];
+    TH1D* MMpEgammaRandom[12];
 
     char cutfilename[256];
     char cutname[256];

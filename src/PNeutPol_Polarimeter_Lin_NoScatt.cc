@@ -60,7 +60,7 @@ Bool_t	PNeutPol_Polarimeter_Lin_NoScatt::Start()
     Cut_proton = Cut_CB_proton;
     Cut_CB_pion = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Pion_29_07_15.root", "Pion");
     Cut_pion = Cut_CB_pion;
-    Cut_CB_protonKinGood = OpenCutFile("configfiles/cuts/CB_DeltaE-E_ProtonKinGood_11_05_17.root", "ProtonKinGood"); // These will need adjusting with new Acqu files
+    Cut_CB_protonKinGood = OpenCutFile("configfiles/cuts/CB_DeltaE-E_ProtonKinGood_26_4_18.root", "ProtonKinGood"); // These will need adjusting with new Acqu files
     Cut_protonKinGood = Cut_CB_protonKinGood;
     Cut_CB_protonKinBad = OpenCutFile("configfiles/cuts/CB_DeltaE-E_ProtonKinBad_15_12_16.root", "ProtonKinBad");
     Cut_protonKinBad = Cut_CB_protonKinBad;
@@ -199,7 +199,7 @@ void	PNeutPol_Polarimeter_Lin_NoScatt::ProcessEvent()
 
     EpCorr = EpPolCorrect(Ep, Thp); //correct Ep for energy loss in polarimeter
 
-    //if(Cut_proton -> IsInside(EpCorr, dEp) == kFALSE) return; // If E loss correct proton is NOT inside p banana drop out
+    if(Cut_proton -> IsInside(EpCorr, dEp) == kFALSE) return; // If E loss correct proton is NOT inside p banana drop out
 
     EpDiff = abs(EpCorr - Ep);
 
@@ -240,7 +240,6 @@ void	PNeutPol_Polarimeter_Lin_NoScatt::ProcessEvent()
         nKinB = nKin;
         nKinB.Boost(b);
         ThetanCM = (nKinB.Theta())*TMath::RadToDeg();
-        //if (80 > ThetanCM || ThetanCM > 100) continue;
 
         WCZnRec = 72/tan(RecKinNeutron.Theta());
 
@@ -281,8 +280,10 @@ void	PNeutPol_Polarimeter_Lin_NoScatt::ProcessEvent()
         ScattTheta = ScattAngles(0); // Theta is 1st component in vector fn returns above
         ScattPhi = ScattAngles(1); // Phi is 2nd component
 
-        //if(Cut_protonKinGood -> IsInside(KinEp, dEp) == kFALSE) continue; // If KinE proton is NOT inside p banana drop out
-        if (((MMpEpCorr < 872.1) == kTRUE) || ((MMpEpCorr > 1008.9) == kTRUE)) continue; // Force a missing mass cut
+        if(Cut_protonKinGood -> IsInside(KinEp, dEp) == kFALSE) continue; // If KinE proton is NOT inside p banana drop out
+
+        if (((MMpEpCorr < 800) == kTRUE) || ((MMpEpCorr > 1300) == kTRUE)) continue; // Very rough cut on MM
+
         if ( (ThetanCorr-ThetanRec) < -15 || (ThetanCorr-ThetanRec) > 15) continue;
 
         FillHists(); // Fill histograms with data generated
@@ -374,20 +375,15 @@ PNeutPol_Polarimeter_Lin_NoScatt::PNeutPol_Polarimeter_Lin_NoScatt() // Define a
     ThetanDist = new GH1 ("ThetanDist", "#theta_{n} Distribution", 200, 0, 180);
     ThetanDiffDist = new GH1("ThetanDiffDist", "#theta_{nMeas} - #theta_{nRec}", 360, -180, 180);
 
+    Thetap = new TH1D ("Thetap", "#theta_{p} Distribution", 200, 0, 4);
+    ThetapPrompt = new TH1D ("ThetapPrompt", "#theta_{p} Distribution", 200, 0, 4);
+    ThetapRandom = new TH1D ("ThetapRandom", "#theta_{p} Distribution", 200, 0, 4);
+
     EdE = new TH2D ("EdE", "dE_{p} as a function of E_{p}", 200, 0, 1000, 200, 0, 10);
     EdEPrompt = new TH2D ("EdEPrompt", "dE_{p} as a function of E_{p}", 200, 0, 1000, 200, 0, 10);
     EdERandom = new TH2D ("EdERandom", "dE_{p} as a function of E_{p}", 200, 0, 1000, 200, 0, 10);
     E_dEKin = new GH2 ("E_dEKin", "E_{pKin}-dE", 100, 0, 500, 100, 0, 10);
     DeutKinPiKin = new GH2 ("DeutKinPiKin", "(#theta_{nRec} - #theta_{n}) vs (#theta_{#pi Rec} - #theta_{n})", 200, -180, 180, 200, -180, 180);
-
-    // MMp across photon E bins
-    MMp200300 = new GH1("MMp200300", "Missing mass as seen by Proton (200-300MeV Photon Energy)", 400, 0, 2000);
-    MMp300400 = new GH1("MMp300400", "Missing mass as seen by Proton (300-400MeV Photon Energy)", 400, 0, 2000);
-    MMp400500 = new GH1("MMp400500", "Missing mass as seen by Proton (400-500MeV Photon Energy)", 400, 0, 2000);
-    MMp500600 = new GH1("MMp500600", "Missing mass as seen by Proton (500-600MeV Photon Energy)", 400, 0, 2000);
-    MMp600700 = new GH1("MMp600700", "Missing mass as seen by Proton (600-700MeV Photon Energy)", 400, 0, 2000);
-    MMp700800 = new GH1("MMp700800", "Missing mass as seen by Proton (700-800MeV Photon Energy)", 400, 0, 2000);
-    MMp800900 = new GH1("MMp800900", "Missing mass as seen by Proton (800-900MeV Photon Energy)", 400, 0, 2000);
 
     Eg2 = new TH1D( "Eg2", "E_{#gamma} Distribution", 200, 100, 1600 );
     EgPrompt = new TH1D( "EgPrompt", "E_{#gamma} Distribution", 200, 100, 1600 );
@@ -412,10 +408,31 @@ PNeutPol_Polarimeter_Lin_NoScatt::PNeutPol_Polarimeter_Lin_NoScatt() // Define a
         }
     }
 
+    for(Int_t X = 0; X < 12; X++){
+        MMpEgamma[X] = new TH1D(Form("MMp_%iMeV", 225+(X*50)), Form("#MM_{p} %i #pm 25MeV", 225+(X*50)), 400, 0, 2000);
+        MMpEgammaPrompt[X] = new TH1D(Form("MMp_%iMeVPrompt", 225+(X*50)), Form("#MM_{p} %i #pm 25MeV", 225+(X*50)), 400, 0, 2000);
+        MMpEgammaRandom[X] = new TH1D(Form("MMp_%iMeVRandom", 225+(X*50)), Form("#MM_{p} %i #pm 25MeV", 225+(X*50)), 400, 0, 2000);
+    }
+
 }
 
 void PNeutPol_Polarimeter_Lin_NoScatt::FillHists()
 {
+    // Cutting on MM as fn of energy HERE to avoid looping issues above
+    double MMCutArray[10][2] = {{937, 14.4}, {939.5, 20.4}, {942.2, 29.1}, {944.1, 36.5}, {946, 49.7}, {952.2, 59.3}, {951, 62.7}, {956.4, 69.9}, {959.0, 79.9}, {981.3, 109.2}};
+
+    for(Int_t M = 0; M <10; M++){ // For EGamma between 200-700 cut on MM differently for each energy
+        double_t EgMMLow = 200 + (M*50);
+        double_t EgMMHigh = 250 + (M*50);
+        if( EgMMLow < EGamma && EGamma < EgMMHigh){ // Cut on missing mass depending upon enegry
+            if (((MMpEpCorr < (MMCutArray[M][0] - (2*MMCutArray[M][1]))) == kTRUE) || (MMpEpCorr > (MMCutArray[M][0])) == kTRUE) return;
+        }
+    }
+
+    if (200 > EGamma || EGamma > 700){ // If outside 200-700 MeV cut on 2Sigma of main MM peak
+        if (((MMpEpCorr < 872.1) == kTRUE) || ((MMpEpCorr > 950) == kTRUE)) return;
+    }
+
     time->Fill(TaggerTime);
     if (-5 < TaggerTime && TaggerTime < 20) time_cut->Fill(TaggerTime);
 
@@ -430,37 +447,10 @@ void PNeutPol_Polarimeter_Lin_NoScatt::FillHists()
     E_dEKin->Fill(KinEp, dEp, TaggerTime);
     DeutKinPiKin->Fill(ThetanRec-Thn, ThetaPiRecDiff, TaggerTime);
 
-    if(200 < EGamma && EGamma < 300){
-        MMp200300->Fill(MMpEpCorr, TaggerTime);
-    }
-
-    else if(300 < EGamma && EGamma < 400){
-        MMp300400->Fill(MMpEpCorr, TaggerTime);
-    }
-
-    else if(400 < EGamma && EGamma < 500){
-        MMp400500->Fill(MMpEpCorr, TaggerTime);
-    }
-
-    else if(500 < EGamma && EGamma < 600){
-        MMp500600->Fill(MMpEpCorr, TaggerTime);
-    }
-
-    else if(600 < EGamma && EGamma < 700){
-        MMp600700->Fill(MMpEpCorr, TaggerTime);
-    }
-
-    else if(700 < EGamma && EGamma < 800){
-        MMp700800->Fill(MMpEpCorr, TaggerTime);
-    }
-
-    else if(800 < EGamma && EGamma < 900){
-        MMp800900->Fill(MMpEpCorr, TaggerTime);
-    }
-
     if (GHistBGSub::IsPrompt(TaggerTime) == kTRUE){
         EgPrompt->Fill(EGamma);
-        EdERandom->Fill(EpCorr, dEp);
+        EdEPrompt->Fill(EpCorr, dEp);
+        ThetapPrompt->Fill(ThpRad);
 
         for(Int_t d = 0; d < 7; d++){ //Energy bins
             ELow = 230 + (d*EWidth);
@@ -490,11 +480,20 @@ void PNeutPol_Polarimeter_Lin_NoScatt::FillHists()
                 }
             }
         }
+
+        for(Int_t Y =0; Y < 12; Y++){
+            double_t EMMLOW = 200 + (Y*50);
+            double_t EMMHIGH = 250 + (Y*50);
+            if( EMMLOW < EGamma && EGamma < EMMHIGH) MMpEgammaPrompt[Y]->Fill(MMpEpCorr);
+        }
     }
+
+
 
     if (GHistBGSub::IsRandom(TaggerTime) == kTRUE){
         EgRandom->Fill(EGamma);
-        EdEPrompt->Fill(EpCorr, dEp);
+        EdERandom->Fill(EpCorr, dEp);
+        ThetapRandom->Fill(ThpRad);
 
         for(Int_t d = 0; d < 7; d++){ //Energy bins
             ELow = 230 + (d*EWidth);
@@ -524,6 +523,12 @@ void PNeutPol_Polarimeter_Lin_NoScatt::FillHists()
                 }
             }
         }
+
+        for(Int_t Y =0; Y < 12; Y++){
+            double_t EMMLOW = 200 + (Y*50);
+            double_t EMMHIGH = 250 + (Y*50);
+            if( EMMLOW < EGamma && EGamma < EMMHIGH) MMpEgammaRandom[Y]->Fill(MMpEpCorr);
+        }
     }
 }
 
@@ -533,6 +538,8 @@ void PNeutPol_Polarimeter_Lin_NoScatt::BGSub(){
     Eg2->Add(EgRandom, -PvRratio);
     EdE->Add(EdEPrompt);
     EdE->Add(EdERandom, -PvRratio);
+    Thetap->Add(ThetapPrompt);
+    Thetap->Add(ThetapRandom, -PvRratio);
 
     for(Int_t E = 0; E < 7; E++){
         for(Int_t F = 0; F < 5; F++){
@@ -548,6 +555,11 @@ void PNeutPol_Polarimeter_Lin_NoScatt::BGSub(){
             PhipSet[G][H]->Add(PhipSetPrompt[G][H]);
             PhipSet[G][H]->Add(PhipSetRandom[G][H], -PvRratio);
         }
+    }
+
+    for(Int_t XY = 0; XY < 12; XY++){
+        MMpEgamma[XY]->Add(MMpEgammaPrompt[XY]);
+        MMpEgamma[XY]->Add(MMpEgammaRandom[XY], -PvRratio);
     }
 
 }

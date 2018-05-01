@@ -120,6 +120,7 @@ private:
     Bool_t Proton1;
     Bool_t Proton2;
     Bool_t BeamHelicity;
+    Bool_t ExecuteCut;
 
     TLorentzVector B;
     TLorentzVector GVp;
@@ -186,20 +187,15 @@ private:
     GH2* E_dEKin;
     GH2* DeutKinPiKin;
 
-    GH1* MMp200300;
-    GH1* MMp300400;
-    GH1* MMp400500;
-    GH1* MMp500600;
-    GH1* MMp600700;
-    GH1* MMp700800;
-    GH1* MMp800900;
-
     TH1D* Eg2;
     TH1D* EgPrompt;
     TH1D* EgRandom;
     TH2D* EdE;
     TH2D* EdEPrompt;
     TH2D* EdERandom;
+    TH1D* Thetap;
+    TH1D* ThetapPrompt;
+    TH1D* ThetapRandom;
 
     TH1D* PhipPosHel[7][5];
     TH1D* PhipPosHelPrompt[7][5];
@@ -211,6 +207,10 @@ private:
     TH1D* PhipSet[21][20];
     TH1D* PhipSetPrompt[21][20];
     TH1D* PhipSetRandom[21][20];
+
+    TH1D* MMpEgamma[12];
+    TH1D* MMpEgammaPrompt[12];
+    TH1D* MMpEgammaRandom[12];
 
     char cutfilename[256];
     char cutname[256];

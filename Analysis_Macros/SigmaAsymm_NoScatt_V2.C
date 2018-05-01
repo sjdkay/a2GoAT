@@ -11,7 +11,7 @@ void SigmaAsymm_NoScatt_V2(){
     char PerpHistName[60];
     char AsymmHistName[60];
 
-    TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/ParaPerp_NS14_Combined_V2.root"); // Open the latest PTotal combined file to load histograms from
+    TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/ParaPerp_NS19_Combined.root"); // Open the latest PTotal combined file to load histograms from
     NPara = Eg_Para->GetEntries();
     NPerp = Eg_Perp->GetEntries();
     ScaleFactor = NPara/NPerp;
@@ -31,7 +31,7 @@ void SigmaAsymm_NoScatt_V2(){
         }
     }
 
-    TFile f1("ParaPerpAsymm_NS14_V2.root", "RECREATE");
+    TFile f1("ParaPerpAsymm_NS19.root", "RECREATE");
 
     //Define new tree to store parameters in
     TTree* tree = new TTree("Parameter_Values", "Tree_of_Values");

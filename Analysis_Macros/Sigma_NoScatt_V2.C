@@ -18,7 +18,7 @@ void Sigma_NoScatt_V2(){
         MBHist[i] = (TH1F*)MBData->Get(MBname);
     }
 
-    TFile *f1= TFile::Open("/scratch/Mainz_Software/a2GoAT/Results/ParaPerpAsymm_NS14_V2.root");
+    TFile *f1= TFile::Open("/scratch/Mainz_Software/a2GoAT/Results/ParaPerpAsymm_NS19.root");
     TTree *t1 = (TTree*)f1->Get("Parameter_Values");
     // Old version
     //TF1 *LegPol = new TF1("LegPol", "[0]+[1]*x+[2]*(0.5*(3*x**2-1))+[3]*(0.5*(5*x**3-3*x))+[4]*(0.125*(35*x**4-30*x**2+3))+[5]*(1.0/8.0*(63*x**5-70*x**3+15*x))+[6]*(1.0/16*(231*x**6-315*x**4+105*x**2-5))", -1, 1);
@@ -318,7 +318,7 @@ void Sigma_NoScatt_V2(){
 
     }
 
-    TFile f3("Sigma_Plots_NS14_V4.root", "RECREATE");
+    TFile f3("Sigma_Plots_NS19.root", "RECREATE");
 
     Float_t xMin = -1;
     Float_t xMax = 1;
