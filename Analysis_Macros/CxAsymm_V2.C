@@ -86,7 +86,7 @@ void CxAsymm_V2() {
     AsymmFunc->SetParameter(0, 0);
     TF1 *SinFunc = new TF1("SinFit", "[0]*sin(x*TMath::DegToRad())", -3, 3);
     SinFunc->SetParNames("InitialSinAmp");
-    TFile *f = new TFile("/scratch/Mainz_Software/a2GoAT/Physics_Total_116_26_4_18.root"); // Open the latest PTotal file to load histograms from
+    TFile *f = new TFile("/scratch/Mainz_Software/a2GoAT/Physics_Total_118_01_05_18.root"); // Open the latest PTotal file to load histograms from
     TF1 *Pn90CM = new TF1("Pn90CM", "1.64576-2.95484*(x/1000)+0.684577*(x/1000)**2-0.65*90**2/4/((x-560)**2+90**2/4)+(5.32305-35.3819*(x/1000)+70.145*(x/1000)**2-44.2899*(x/1000)**3)",300,700);
 
     for(Int_t i = 0; i < 7; i++){ // Energy
@@ -109,7 +109,7 @@ void CxAsymm_V2() {
         }
     }
 
-    TFile f1("AsymmFits_PTotal_AmoOnly_116.root", "RECREATE");
+    TFile f1("AsymmFits_PTotal_AmoOnly_118.root", "RECREATE");
 
     for(Int_t i = 0; i < 7; i++){ // Energy
         for(Int_t j = 0; j < 5; j++){ // Theta
@@ -197,7 +197,7 @@ void CxAsymm_V2() {
         }
     }
 
-    TFile f3("Cx_Plots_AmoOnly_116.root", "RECREATE");
+    TFile f3("Cx_Plots_AmoOnly_118.root", "RECREATE");
 
     Float_t xMin = -1;
     Float_t xMax = 1;
@@ -207,7 +207,7 @@ void CxAsymm_V2() {
     for(Int_t i = 0 ; i < 7 ; i++)
     {
         sprintf(name, "Cx_%i", 265+(i*70));
-        sprintf(title, "#C_{x}(Cos#theta_{CM}) E_{#gamma} %i #pm 35 MeV", 265+(i*70));
+        sprintf(title, "C_{x}(Cos#theta_{CM}) E_{#gamma} %i #pm 35 MeV", 265+(i*70));
         CxPlots[i] = new TGraphErrors(5 , x, Cx[i], ex, Cx[i]);
         CxPlots[i]->SetMarkerColor(4);
         CxPlots[i]->SetLineColor(4);
@@ -215,7 +215,7 @@ void CxAsymm_V2() {
         CxPlots[i]->SetMarkerSize(1);
         CxPlots[i]->GetXaxis()->SetTitle("Cos#theta_{CM}");
         CxPlots[i]->GetXaxis()->SetRangeUser(-1, 1);
-        CxPlots[i]->GetYaxis()->SetRangeUser(-1, 1);
+        //CxPlots[i]->GetYaxis()->SetRangeUser(-1, 1);
         CxPlots[i]->GetYaxis()->SetTitle("C_{x}");
         CxPlots[i]->SetName(name);
         CxPlots[i]->SetTitle(title);

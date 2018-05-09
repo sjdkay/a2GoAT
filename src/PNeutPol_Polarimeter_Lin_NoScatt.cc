@@ -199,7 +199,7 @@ void	PNeutPol_Polarimeter_Lin_NoScatt::ProcessEvent()
 
     EpCorr = EpPolCorrect(Ep, Thp); //correct Ep for energy loss in polarimeter
 
-    if(Cut_proton -> IsInside(EpCorr, dEp) == kFALSE) return; // If E loss correct proton is NOT inside p banana drop out
+    //if(Cut_proton -> IsInside(EpCorr, dEp) == kFALSE) return; // If E loss correct proton is NOT inside p banana drop out
 
     EpDiff = abs(EpCorr - Ep);
 
@@ -234,6 +234,7 @@ void	PNeutPol_Polarimeter_Lin_NoScatt::ProcessEvent()
 
         // Boost p and n to CM frame
         pKinB = pKin;
+        //pKinB = GVpCorr;
         pKinB.Boost(b);
         ThetapCM = (pKinB.Theta())*TMath::RadToDeg();
         CosThetapCM = cos (pKinB.Theta());
@@ -282,7 +283,7 @@ void	PNeutPol_Polarimeter_Lin_NoScatt::ProcessEvent()
 
         if(Cut_protonKinGood -> IsInside(KinEp, dEp) == kFALSE) continue; // If KinE proton is NOT inside p banana drop out
 
-        if (((MMpEpCorr < 800) == kTRUE) || ((MMpEpCorr > 1300) == kTRUE)) continue; // Very rough cut on MM
+        \\if (((MMpEpCorr < 800) == kTRUE) || ((MMpEpCorr > 1300) == kTRUE)) continue; // Very rough cut on MM
 
         if ( (ThetanCorr-ThetanRec) < -15 || (ThetanCorr-ThetanRec) > 15) continue;
 
@@ -402,9 +403,9 @@ PNeutPol_Polarimeter_Lin_NoScatt::PNeutPol_Polarimeter_Lin_NoScatt() // Define a
 
     for(Int_t C = 0; C < 21; C++){
         for(Int_t D = 0; D < 20; D++){
-            PhipSet[C][D] = new TH1D(Form("Phip_%iMeVCM%i", 415+(C*10), D+1), Form("#phi_{p} %i #pm 5MeV CM%i", 415+(C*10), D+1), 10, -180, 180);
-            PhipSetPrompt[C][D] = new TH1D(Form("Phip_%iMeVCM%iPrompt", 415+(C*10), D+1), Form("#phi_{p} %i #pm 5MeV CM%i", 415+(C*10), D+1), 10, -180, 180);
-            PhipSetRandom[C][D] = new TH1D(Form("Phip_%iMeVCM%iRandom", 415+(C*10), D+1), Form("#phi_{p} %i #pm 5MeV CM%i", 415+(C*10), D+1), 10, -180, 180);
+            PhipSet[C][D] = new TH1D(Form("Phip_%iMeVCM%i", 410+(C*10), D+1), Form("#phi_{p} %i #pm 5MeV CM%i", 410+(C*10), D+1), 10, -180, 180);
+            PhipSetPrompt[C][D] = new TH1D(Form("Phip_%iMeVCM%iPrompt", 410+(C*10), D+1), Form("#phi_{p} %i #pm 5MeV CM%i", 410+(C*10), D+1), 10, -180, 180);
+            PhipSetRandom[C][D] = new TH1D(Form("Phip_%iMeVCM%iRandom", 410+(C*10), D+1), Form("#phi_{p} %i #pm 5MeV CM%i", 410+(C*10), D+1), 10, -180, 180);
         }
     }
 
@@ -425,7 +426,7 @@ void PNeutPol_Polarimeter_Lin_NoScatt::FillHists()
         double_t EgMMLow = 200 + (M*50);
         double_t EgMMHigh = 250 + (M*50);
         if( EgMMLow < EGamma && EGamma < EgMMHigh){ // Cut on missing mass depending upon enegry
-            if (((MMpEpCorr < (MMCutArray[M][0] - (2*MMCutArray[M][1]))) == kTRUE) || (MMpEpCorr > (MMCutArray[M][0])) == kTRUE) return;
+            if (((MMpEpCorr < (MMCutArray[M][0] - (2*MMCutArray[M][1]))) == kTRUE) || (MMpEpCorr > (MMCutArray[M][0] + (2*MMCutArray[M][1]))) == kTRUE) return;
         }
     }
 

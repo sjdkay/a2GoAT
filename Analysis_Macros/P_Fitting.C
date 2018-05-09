@@ -37,6 +37,7 @@ void P_Fitting(){
     double F;
     double BinValue;
     double AdjBinValue;
+    char name[60];
 
     TF1 *CosFit = new TF1("CosFit",  fitf, -3.0, 3.0, 2); //Give a name and range to the fitting funcion
 
@@ -44,19 +45,14 @@ void P_Fitting(){
     TF1 *Pn90CM = new TF1("Pn90CM", "1.64576-2.95484*(x/1000)+0.684577*(x/1000)**2-0.65*90**2/4/((x-560)**2+90**2/4)+(5.32305-35.3819*(x/1000)+70.145*(x/1000)**2-44.2899*(x/1000)**3)",300,700);
 
     // Add all relevant histograms to a list that can then be looped over
-    TFile *f = new TFile("Physics_Total_104_5_4_18.root"); // Open the latest PTotal file to load histograms from
+    TFile *f = new TFile("Physics_Total_119_03_5_18.root"); // Open the latest PTotal file to load histograms from
     TText *warn = new TText(0, 0 ,"PRELIMINARY"); // Preliminary warning label text
     TList *PhiScList = new TList;
-    PhiScList->Add(PhiSc320);
-    PhiScList->Add(PhiSc360);
-    PhiScList->Add(PhiSc400);
-    PhiScList->Add(PhiSc440);
-    PhiScList->Add(PhiSc480);
-    PhiScList->Add(PhiSc520);
-    PhiScList->Add(PhiSc560);
-    PhiScList->Add(PhiSc600);
-    PhiScList->Add(PhiSc640);
-    PhiScList->Add(PhiSc680);
+
+    for (Int_t k = 0; k < 10; k++){
+        sprintf(name, "PhiSc_%iMeV", 320+(k*40));
+        PhiScList->Add((TH1F*)f->Get(name));
+    }
 
     TList *PhiScFitList = new TList;
 
@@ -73,7 +69,7 @@ void P_Fitting(){
         PhiScFitList->Add(hist);
     }
 
-    TFile f1("Py_104.root", "RECREATE");
+    TFile f1("Py_119.root", "RECREATE");
 
     TCanvas *canvas = new TCanvas("canvas","canvas", 1920, 1080);
     TPad *pad = new TPad("pad","",0,0,1,1);

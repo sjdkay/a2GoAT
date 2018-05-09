@@ -212,7 +212,6 @@ private:
     TH1D* Phip;
     TH1D* EProton;
     TH1D* MMProton;
-    TH1D* PhiSc;
 
     TH2D* EdE;
     TH2D* EdEPrompt;
@@ -258,6 +257,14 @@ private:
     TH2D* PhiScThetapCMPrompt;
     TH2D* PhiScThetapCMRandom;
 
+    TH2D* WeightEg;
+    TH2D* WeightEgPrompt;
+    TH2D* WeightEgRandom;
+
+    TH2D* WeightPhiSc;
+    TH2D* WeightPhiScPrompt;
+    TH2D* WeightPhiScRandom;
+
     TH1D* EgPrompt;
     TH1D* ThetaScPrompt;
     TH1D* RPocaPrompt;
@@ -272,8 +279,6 @@ private:
     TH1D* PhipRandom;
     TH1D* EProtonRandom;
     TH1D* MMProtonRandom;
-    TH1D* PhiScPrompt;
-    TH1D* PhiScRandom;
 
     TH1D* MM_Eg_CM_Tot[7][5];
     TH1D* MM_Eg_CM_Tot_Prompt[7][5];
@@ -288,6 +293,10 @@ private:
     TH1D* PhiScNegHel[7][5];
     TH1D* PhiScNegHelPrompt[7][5];
     TH1D* PhiScNegHelRandom[7][5];
+
+    TH1D* PhiSc[10];
+    TH1D* PhiScPrompt[10];
+    TH1D* PhiScRandom[10];
 
     TH1D* MMpEgamma[12];
     TH1D* MMpEgammaPrompt[12];

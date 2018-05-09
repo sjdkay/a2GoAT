@@ -11,7 +11,7 @@ void SigmaAsymm_NoScatt_V2(){
     char PerpHistName[60];
     char AsymmHistName[60];
 
-    TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/ParaPerp_NS19_Combined.root"); // Open the latest PTotal combined file to load histograms from
+    TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/ParaPerp_NS18_Combined.root"); // Open the latest PTotal combined file to load histograms from
     NPara = Eg_Para->GetEntries();
     NPerp = Eg_Perp->GetEntries();
     ScaleFactor = NPara/NPerp;
@@ -26,12 +26,13 @@ void SigmaAsymm_NoScatt_V2(){
             AsymmHists[i][j] = (TH1F*) (((TH1F*)f->Get(ParaHistName))->GetAsymmetry(((TH1F*)f->Get(PerpHistName)), ScaleFactor, ScaleFactorErr)));
             AsymmHists[i][j]->SetName(AsymmHistName);
             AsymmHists[i][j]-> Fit("CosFit", "Q");
+            cout << "NDOF " << CosFit->GetNDF() << "   " << "Chi2 " << CosFit->GetChisquare() << "   " << "Chi2/DoF " << CosFit->GetChisquare()/CosFit->GetNDF() << endl;
             pCosAmp[i][j] = CosFit->GetParameter(0);
             pCosAmpErr[i][j] = CosFit->GetParError(0);
         }
     }
 
-    TFile f1("ParaPerpAsymm_NS19.root", "RECREATE");
+    TFile f1("ParaPerpAsymm_NS18.root", "RECREATE");
 
     //Define new tree to store parameters in
     TTree* tree = new TTree("Parameter_Values", "Tree_of_Values");

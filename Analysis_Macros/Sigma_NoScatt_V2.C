@@ -18,7 +18,7 @@ void Sigma_NoScatt_V2(){
         MBHist[i] = (TH1F*)MBData->Get(MBname);
     }
 
-    TFile *f1= TFile::Open("/scratch/Mainz_Software/a2GoAT/Results/ParaPerpAsymm_NS19.root");
+    TFile *f1= TFile::Open("/scratch/Mainz_Software/a2GoAT/Results/ParaPerpAsymm_NS17.root");
     TTree *t1 = (TTree*)f1->Get("Parameter_Values");
     // Old version
     //TF1 *LegPol = new TF1("LegPol", "[0]+[1]*x+[2]*(0.5*(3*x**2-1))+[3]*(0.5*(5*x**3-3*x))+[4]*(0.125*(35*x**4-30*x**2+3))+[5]*(1.0/8.0*(63*x**5-70*x**3+15*x))+[6]*(1.0/16*(231*x**6-315*x**4+105*x**2-5))", -1, 1);
@@ -318,7 +318,7 @@ void Sigma_NoScatt_V2(){
 
     }
 
-    TFile f3("Sigma_Plots_NS19.root", "RECREATE");
+    TFile f3("Sigma_Plots_NS17.root", "RECREATE");
 
     Float_t xMin = -1;
     Float_t xMax = 1;
@@ -340,8 +340,10 @@ void Sigma_NoScatt_V2(){
             LegPol->SetParLimits(5, -1, 1);
         }
 
-
-        if (i != 14) SigmaPlots[i]->Fit("LegPol", "M");
+        if (i != 14) {
+            SigmaPlots[i]->Fit("LegPol", "M");
+            cout << "NDOF " << LegPol->GetNDF() << "   " << "Chi2 " << LegPol->GetChisquare() << "   " << "Chi2/DoF " << LegPol->GetChisquare()/LegPol->GetNDF() << endl;
+        }
 
         SigmaPlots[i]->SetMarkerColor(4);
         SigmaPlots[i]->SetLineColor(4);
@@ -470,7 +472,6 @@ void Sigma_NoScatt_V2(){
     }
 
     canvas23->Write();
-
 
     //Define new tree to store parameters in
     TTree* p0tree = new TTree("Parameter0_Values", "Tree_of_Values");
