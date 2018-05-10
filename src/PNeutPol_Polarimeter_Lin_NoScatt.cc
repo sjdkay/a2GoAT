@@ -283,7 +283,7 @@ void	PNeutPol_Polarimeter_Lin_NoScatt::ProcessEvent()
 
         if(Cut_protonKinGood -> IsInside(KinEp, dEp) == kFALSE) continue; // If KinE proton is NOT inside p banana drop out
 
-        \\if (((MMpEpCorr < 800) == kTRUE) || ((MMpEpCorr > 1300) == kTRUE)) continue; // Very rough cut on MM
+        if (((MMpEpCorr < 800) == kTRUE) || ((MMpEpCorr > 1300) == kTRUE)) continue; // Very rough cut on MM
 
         if ( (ThetanCorr-ThetanRec) < -15 || (ThetanCorr-ThetanRec) > 15) continue;
 

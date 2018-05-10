@@ -265,6 +265,10 @@ private:
     TH2D* WeightPhiScPrompt;
     TH2D* WeightPhiScRandom;
 
+    TH2D* ThetapThetan;
+    TH2D* ThetapThetanPrompt;
+    TH2D* ThetapThetanRandom;
+
     TH1D* EgPrompt;
     TH1D* ThetaScPrompt;
     TH1D* RPocaPrompt;

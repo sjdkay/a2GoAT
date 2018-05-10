@@ -60,7 +60,7 @@ void CxAsymm_Denom() {
     TF1 *Func = new TF1("Fit",  fitf, -3.0, 3.0, 2); //Give a name and range to the fitting funcion
     Func->SetParNames("CosAmp"); //Name the parameters
     Func->SetParLimits(0, -1000, 1000);
-    TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Amo/Physics_Total_108_6_4_18.root"); // Open the latest PTotal file to load histograms from
+    TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Amo/Physics_Total_118_01_05_18.root"); // Open the latest PTotal file to load histograms from
     nBins = Phi_Scattered_265MeV_NegHelCM1->GetNbinsX();
 
     for(Int_t i = 0; i < 7; i++){ // Energy
@@ -83,7 +83,7 @@ void CxAsymm_Denom() {
     }
 
     // Define new file to store fit parameters
-    TFile f1("SumFits_PTotal_108_v1.root", "RECREATE");
+    TFile f1("SumFits_PTotal_118_v1.root", "RECREATE");
 
     for(Int_t i = 0; i < 7; i++){
         for(Int_t j = 0; j < 8; j++){

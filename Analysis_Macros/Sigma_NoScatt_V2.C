@@ -271,7 +271,7 @@ void Sigma_NoScatt_V2(){
     // Calculate values of sigma for each angular and energy bin
     // Exclude bins at edges!
 
-    for (Int_t i = 0; i < 18; i++){
+    for (Int_t i = 0; i < 18; i++){ // Need to re-write this in a less terrible way...
 
         SigmaValues[0][i] = pValues415[i+1]/(Graph->Eval(425,0));
         SigmaErrValues[0][i] = pErrValues415[i+1]/(Graph->Eval(425,0));

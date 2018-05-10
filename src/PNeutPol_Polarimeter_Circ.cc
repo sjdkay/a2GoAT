@@ -39,8 +39,8 @@ Bool_t	PNeutPol_Polarimeter_Circ::Start()
     RandomHigh2 = 135;
     PvRratio = (PromptHigh - PromptLow)/( (RandomHigh1 - RandomLow1) + (RandomHigh2 - RandomLow2));
 
-    EWidth = 70; //Fix the width of the Energy and CosTheta bins used later
-    CosThetaWidth = 0.4;
+    EWidth = 100; //Fix the width of the Energy and CosTheta bins used later
+    CosThetaWidth = (2./3.);
     PhiScWidth = 0.8;
 
     NP = 0; // Set number of Protons to 0 before checking
@@ -272,7 +272,6 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
         RecNeutronEpCorr = CNeutron4VectorKin(GVpCorr);
         MMpEpCorr = RecNeutronEpCorr.M();
 
-        FillHistsPreMMCut();
         if (((MMpEpCorr < 887.8) == kTRUE) || ((MMpEpCorr > 994.2) == kTRUE)) continue; // Force a missing mass cut
 
         // Gamma(d,p)n calc n from kinematics
@@ -287,7 +286,7 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
         nKinB = nKin;
         nKinB.Boost(b);
         ThetanCM = (nKinB.Theta())*TMath::RadToDeg();
-        if (80 > ThetanCM || ThetanCM > 100) continue;
+//        if (80 > ThetanCM || ThetanCM > 100) continue;
 
         KinEDiff = KinEp - EpCorr;
 
@@ -478,32 +477,21 @@ PNeutPol_Polarimeter_Circ::PNeutPol_Polarimeter_Circ() // Define a load of histo
     WeightPhiScPrompt = new TH2D("WeightPhiScPrompt", "Weight(#phi_{Sc})", 200, -4, 4, 200, -1, 1);
     WeightPhiScRandom = new TH2D("WeightPhiScRandom", "Weight(#phi_{Sc})", 200, -4, 4, 200, -1, 1);
 
-    for(Int_t A = 0; A < 7; A++){
-        for(Int_t B = 0; B < 5; B++){
-            MM_Eg_CM_Tot[A][B] = new TH1D(Form("MM_Eg%i_CM%i_Tot", 265+(A*70), B+1), Form("MM_E_{#gamma}%i CM%i", 265+(A*70), B+1), 150, 0, 1500);
-            MM_Eg_CM_Tot_Prompt[A][B] = new TH1D(Form("MM_Eg%i_CM%i_Tot_Prompt", 265+(A*70), B+1), Form("MM_E_{#gamma}%i CM%i", 265+(A*70), B+1), 150, 0, 1500);
-            MM_Eg_CM_Tot_Random[A][B] = new TH1D(Form("MM_Eg%i_CM%i_Tot_Random", 265+(A*70), B+1), Form("MM_E_{#gamma}%i CM%i", 265+(A*70), B+1), 150, 0, 1500);
+    ThetapThetan = new TH2D ("ThetapThetan", "#theta_{p}(#theta_{n})", 200, 0, 4, 200, 0, 4);
+    ThetapThetanPrompt = new TH2D ("ThetapThetanPrompt", "#theta_{p}(#theta_{n})", 200, 0, 4, 200, 0, 4);
+    ThetapThetanRandom = new TH2D ("ThetapThetanRandom", "#theta_{p}(#theta_{n})", 200, 0, 4, 200, 0, 4);
 
-            PhiScPosHel[A][B] = new TH1D(Form("PhiSc%iPosHelCM%i", 265+(A*70), B+1), Form("#phi_{Sc} E_{#gamma}%i #pm 35MeV CM%i for +ve Helicity", 265+(A*70), B+1), 10, -4, 4);
-            PhiScPosHelPrompt[A][B] = new TH1D(Form("PhiSc%iPosHelCM%iPrompt", 265+(A*70), B+1), Form("#phi_{Sc} E_{#gamma}%i #pm 35MeV CM%i for +ve Helicity", 265+(A*70), B+1), 10, -4, 4);
-            PhiScPosHelRandom[A][B] = new TH1D(Form("PhiSc%iPosHelCM%iRandom", 265+(A*70), B+1), Form("#phi_{Sc} E_{#gamma}%i #pm 35MeV CM%i for +ve Helicity", 265+(A*70), B+1), 10, -4, 4);
-            PhiScNegHel[A][B] = new TH1D(Form("PhiSc%iNegHelCM%i", 265+(A*70), B+1), Form("#phi_{Sc} E_{#gamma}%i #pm 35MeV CM%i for -ve Helicity", 265+(A*70), B+1), 10, -4, 4);
-            PhiScNegHelPrompt[A][B] = new TH1D(Form("PhiSc%iNegHelCM%iPrompt", 265+(A*70), B+1), Form("#phi_{Sc} E_{#gamma}%i #pm 35MeV CM%i for -ve Helicity", 265+(A*70), B+1), 10, -4, 4);
-            PhiScNegHelRandom[A][B] = new TH1D(Form("PhiSc%iNegHelCM%iRandom", 265+(A*70), B+1), Form("#phi_{Sc} E_{#gamma}%i #pm 35MeV CM%i for -ve Helicity", 265+(A*70), B+1), 10, -4, 4);
+    for(Int_t A = 0; A < 6; A++){
+        for(Int_t B = 0; B < 3; B++){
+            PhiScPosHel[A][B] = new TH1D(Form("PhiSc%iPosHelCM%i", 200+(A*100), B+1), Form("#phi_{Sc} E_{#gamma}%i #pm 50MeV CM%i for +ve Helicity", 200+(A*100), B+1), 10, -4, 4);
+            PhiScPosHelPrompt[A][B] = new TH1D(Form("PhiSc%iPosHelCM%iPrompt", 200+(A*100), B+1), Form("#phi_{Sc} E_{#gamma}%i #pm 50MeV CM%i for +ve Helicity", 200+(A*100), B+1), 10, -4, 4);
+            PhiScPosHelRandom[A][B] = new TH1D(Form("PhiSc%iPosHelCM%iRandom", 200+(A*100), B+1), Form("#phi_{Sc} E_{#gamma}%i #pm 50MeV CM%i for +ve Helicity", 200+(A*100), B+1), 10, -4, 4);
+            PhiScNegHel[A][B] = new TH1D(Form("PhiSc%iNegHelCM%i", 200+(A*100), B+1), Form("#phi_{Sc} E_{#gamma}%i #pm 50MeV CM%i for -ve Helicity", 200+(A*100), B+1), 10, -4, 4);
+            PhiScNegHelPrompt[A][B] = new TH1D(Form("PhiSc%iNegHelCM%iPrompt", 200+(A*100), B+1), Form("#phi_{Sc} E_{#gamma}%i #pm 50MeV CM%i for -ve Helicity", 200+(A*100), B+1), 10, -4, 4);
+            PhiScNegHelRandom[A][B] = new TH1D(Form("PhiSc%iNegHelCM%iRandom", 200+(A*100), B+1), Form("#phi_{Sc} E_{#gamma}%i #pm 50MeV CM%i for -ve Helicity", 265+(A*70), B+1), 10, -4, 4);
         }
     }
 
-    // PhiSc ranges from -4 to +4 in 10 bins so PhiSc1 is -4 - -3.2 e.t.c.
-    for(Int_t a = 0; a < 7; a++){
-        for(Int_t b = 0; b < 5; b++){
-            for(Int_t c = 0; c < 10; c++){
-            MM_Eg_CM_Binned[a][b][c] = new TH1D(Form("MM_Eg%i_CM%i_PhiSc%i", 265+(a*70), b+1, c+1), Form("MM_E_{#gamma}%i CM%i #phi_{Sc}%i", 265+(a*70), b+1, c+1), 150, 0, 1500);
-            MM_Eg_CM_Binned_Prompt[a][b][c] = new TH1D(Form("MM_Eg%i_CM%i_PhiSc%i_Prompt", 265+(a*70), b+1, c+1), Form("MM_E_{#gamma}%i CM%i #phi_{Sc}%i", 265+(a*70), b+1, c+1), 150, 0, 1500);
-            MM_Eg_CM_Binned_Random[a][b][c] = new TH1D(Form("MM_Eg%i_CM%i_PhiSc%i_Random", 265+(a*70), b+1, c+1), Form("MM_E_{#gamma}%i CM%i #phi_{Sc}%i", 265+(a*70), b+1, c+1), 150, 0, 1500);
-
-            }
-        }
-    }
 
     for(Int_t X = 0; X < 12; X++){
         MMpEgamma[X] = new TH1D(Form("MMp_%iMeV", 225+(X*50)), Form("#M_{p} %i #pm 25MeV", 225+(X*50)), 400, 0, 2000);
@@ -511,103 +499,6 @@ PNeutPol_Polarimeter_Circ::PNeutPol_Polarimeter_Circ() // Define a load of histo
         MMpEgammaRandom[X] = new TH1D(Form("MMp_%iMeVRandom", 225+(X*50)), Form("MM_{p} %i #pm 25MeV", 225+(X*50)), 400, 0, 2000);
     }
 
-    for(Int_t X = 0; X < 10; X++){
-        PhiSc[X] = new TH1D(Form("PhiSc_%iMeV", 320+(X*40)), Form("#phi_{Sc} %i #pm 20MeV", 320+(X*40)), 20, -4, 4);
-        PhiScPrompt[X] = new TH1D(Form("PhiSc_%iMeVPrompt", 320+(X*40)), Form("#phi_{Sc} %i #pm 20MeV", 320+(X*40)), 20, -4, 4);
-        PhiScRandom[X] = new TH1D(Form("PhiSc_%iMeVRandom", 320+(X*40)), Form("#phi_{Sc} %i #pm 20MeV", 320+(X*40)), 20, -4, 4);
-    }
-
-}
-
-void PNeutPol_Polarimeter_Circ::FillHistsPreMMCut(){
-
-    if (GHistBGSub::IsPrompt(TaggerTime) == kTRUE){
-        for(Int_t C = 0; C < 7; C++){ //Energy bins
-            ELow = 230 + (C*EWidth);
-            EHigh = 300 + (C*EWidth);
-            if( ELow < EGamma && EGamma < EHigh){
-                for(Int_t D = 0; D < 5; D++){
-                    CosThetaLow = 0.6 - (D*CosThetaWidth);
-                    CosThetaHigh = 1 - (D*CosThetaWidth);
-                    if(CosThetaHigh > CosThetapCM && CosThetapCM > CosThetaLow){
-                        MM_Eg_CM_Tot_Prompt[C][D]->Fill(MMpEpCorr);
-                    }
-                }
-            }
-        }
-
-        for(Int_t C = 0; C < 10; C++){ //Energy bins
-            ELow = 300 + (C*40);
-            EHigh = 340 + (C*40);
-            if( ELow < EGamma && EGamma < EHigh){
-                PhiScPrompt[C]->Fill(ScattPhiRad);
-            }
-        }
-
-        for(Int_t d = 0; d < 7; d++){ //Energy bins
-            ELow = 230 + (d*EWidth);
-            EHigh = 300 + (d*EWidth);
-            if( ELow < EGamma && EGamma < EHigh){
-                for(Int_t e = 0; e < 5; e++){
-                    CosThetaLow = 0.6 - (e*CosThetaWidth);
-                    CosThetaHigh = 1 - (e*CosThetaWidth);
-                    if(CosThetaHigh > CosThetapCM && CosThetapCM > CosThetaLow){
-                        for(Int_t F = 0; F < 5; F++){
-                            PhiScLow = -4 +(F*PhiScWidth);
-                            PhiScHigh = PhiScLow + PhiScWidth;
-                            if(PhiScLow < ScattPhiRad && ScattPhiRad < PhiScHigh){
-                                MM_Eg_CM_Binned_Prompt[d][e][F]->Fill(MMpEpCorr);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    else if (GHistBGSub::IsRandom(TaggerTime) == kTRUE){
-        for(Int_t C = 0; C < 7; C++){ //Energy bins
-            ELow = 230 + (C*EWidth);
-            EHigh = 300 + (C*EWidth);
-            if( ELow < EGamma && EGamma < EHigh){
-                for(Int_t D = 0; D < 5; D++){
-                    CosThetaLow = 0.6 - (D*CosThetaWidth);
-                    CosThetaHigh = 1 - (D*CosThetaWidth);
-                    if(CosThetaHigh > CosThetapCM && CosThetapCM > CosThetaLow){
-                        MM_Eg_CM_Tot_Random[C][D]->Fill(MMpEpCorr);
-                    }
-                }
-            }
-        }
-
-        for(Int_t C = 0; C < 10; C++){ //Energy bins
-            ELow = 300 + (C*40);
-            EHigh = 340 + (C*40);
-            if( ELow < EGamma && EGamma < EHigh){
-                PhiScRandom[C]->Fill(ScattPhiRad);
-            }
-        }
-
-        for(Int_t d = 0; d < 7; d++){ //Energy bins
-            ELow = 230 + (d*EWidth);
-            EHigh = 300 + (d*EWidth);
-            if( ELow < EGamma && EGamma < EHigh){
-                for(Int_t e = 0; e < 5; e++){
-                    CosThetaLow = 0.6 - (e*CosThetaWidth);
-                    CosThetaHigh = 1 - (e*CosThetaWidth);
-                    if(CosThetaHigh > CosThetapCM && CosThetapCM > CosThetaLow){
-                        for(Int_t F = 0; F < 5; F++){
-                            PhiScLow = -4 +(F*PhiScWidth);
-                            PhiScHigh = PhiScLow + PhiScWidth;
-                            if(PhiScLow < ScattPhiRad && ScattPhiRad < PhiScHigh){
-                                MM_Eg_CM_Binned_Random[d][e][F]->Fill(MMpEpCorr);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
 }
 
 void PNeutPol_Polarimeter_Circ::FillHists()
@@ -638,12 +529,14 @@ void PNeutPol_Polarimeter_Circ::FillHists()
         WeightEgPrompt->Fill(EGamma, Wgt);
         WeightPhiScPrompt->Fill(ScattPhiRad, Wgt);
 
-        for(Int_t d = 0; d < 7; d++){ //Energy bins
-            ELow = 230 + (d*EWidth);
+        ThetapThetanPrompt->Fill(ThpRad, nKin.Theta());
+
+        for(Int_t d = 0; d < 6; d++){ //Energy bins
+            ELow = 200 + (d*EWidth);
             EHigh = 300 + (d*EWidth);
             if( ELow < EGamma && EGamma < EHigh){
-                for(Int_t e = 0; e < 5; e++){
-                    CosThetaLow = 0.6 - (e*CosThetaWidth);
+                for(Int_t e = 0; e < 3; e++){
+                    CosThetaLow = (1./3.) - (e*CosThetaWidth);
                     CosThetaHigh = 1 - (e*CosThetaWidth);
                     if(CosThetaHigh > CosThetapCM && CosThetapCM > CosThetaLow){
                         if(BeamHelicity == kTRUE) PhiScPosHelPrompt[d][e]->Fill(ScattPhiRad);
@@ -686,12 +579,14 @@ void PNeutPol_Polarimeter_Circ::FillHists()
         WeightEgRandom->Fill(EGamma, Wgt);
         WeightPhiScRandom->Fill(ScattPhiRad, Wgt);
 
-        for(Int_t d = 0; d < 7; d++){ //Energy bins
-            ELow = 230 + (d*EWidth);
+        ThetapThetanRandom->Fill(ThpRad, nKin.Theta());
+
+        for(Int_t d = 0; d < 6; d++){ //Energy bins
+            ELow = 200 + (d*EWidth);
             EHigh = 300 + (d*EWidth);
             if( ELow < EGamma && EGamma < EHigh){
-                for(Int_t e = 0; e < 5; e++){
-                    CosThetaLow = 0.6 - (e*CosThetaWidth);
+                for(Int_t e = 0; e < 3; e++){
+                    CosThetaLow = (1./3.) - (e*CosThetaWidth);
                     CosThetaHigh = 1 - (e*CosThetaWidth);
                     if(CosThetaHigh > CosThetapCM && CosThetapCM > CosThetaLow){
                         if(BeamHelicity == kTRUE) PhiScPosHelRandom[d][e]->Fill(ScattPhiRad);
@@ -756,10 +651,11 @@ void PNeutPol_Polarimeter_Circ::BGSub(){
     WeightPhiSc->Add(WeightPhiScPrompt);
     WeightPhiSc->Add(WeightPhiScRandom, -PvRratio);
 
-    for(Int_t E = 0; E < 7; E++){
-        for(Int_t F = 0; F < 5; F++){
-            MM_Eg_CM_Tot[E][F]->Add(MM_Eg_CM_Tot_Prompt[E][F]);
-            MM_Eg_CM_Tot[E][F]->Add(MM_Eg_CM_Tot_Random[E][F], -PvRratio);
+    ThetapThetan->Add(ThetapThetanPrompt);
+    ThetapThetan->Add(ThetapThetanRandom, -PvRratio);
+
+    for(Int_t E = 0; E < 6; E++){
+        for(Int_t F = 0; F < 3; F++){
             PhiScNegHel[E][F]->Add(PhiScNegHelPrompt[E][F]);
             PhiScNegHel[E][F]->Add(PhiScNegHelRandom[E][F], -PvRratio);
             PhiScPosHel[E][F]->Add(PhiScPosHelPrompt[E][F]);
@@ -767,23 +663,10 @@ void PNeutPol_Polarimeter_Circ::BGSub(){
         }
     }
 
-    for(Int_t G = 0; G < 7; G++){
-        for(Int_t H = 0; H < 5; H++){
-            for(Int_t I = 0; I < 10; I++){
-                MM_Eg_CM_Binned[G][H][I]->Add(MM_Eg_CM_Binned_Prompt[G][H][I]);
-                MM_Eg_CM_Binned[G][H][I]->Add(MM_Eg_CM_Binned_Random[G][H][I], -PvRratio);
-            }
-        }
-    }
 
     for(Int_t XY = 0; XY < 12; XY++){
         MMpEgamma[XY]->Add(MMpEgammaPrompt[XY]);
         MMpEgamma[XY]->Add(MMpEgammaRandom[XY], -PvRratio);
-    }
-
-    for(Int_t X = 0; X < 10; X++){
-        PhiSc[X]->Add(PhiScPrompt[X]);
-        PhiSc[X]->Add(PhiScRandom[X], -PvRratio);
     }
 
 }
