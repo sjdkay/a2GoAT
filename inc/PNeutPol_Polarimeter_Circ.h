@@ -217,6 +217,8 @@ private:
     TH2D* EdEPrompt;
     TH2D* EdERandom;
 
+    GH1* ZpDist;
+
     TH2D* ThetaScThetap;
     TH2D* ThetaScThetapPrompt;
     TH2D* ThetaScThetapRandom;
@@ -305,6 +307,23 @@ private:
     TH1D* MMpEgamma[12];
     TH1D* MMpEgammaPrompt[12];
     TH1D* MMpEgammaRandom[12];
+
+    TH1D* PhipSet[10][5];
+    TH1D* PhipSetPrompt[10][5];
+    TH1D* PhipSetRandom[10][5];
+
+    TH1D* MWPCnSum;
+    TH1D* MWPCnSumPrompt;
+    TH1D* MWPCnSumRandom;
+
+    TH2D* EMWPC1pEp;
+    TH2D* EMWPC1pEpPrompt;
+    TH2D* EMWPC1pEpRandom;
+
+    double_t ELow2;
+    double_t EHigh2;
+    double_t CosThetaLow2;
+    double_t CosThetaHigh2;
 
     char cutfilename[256];
     char cutname[256];

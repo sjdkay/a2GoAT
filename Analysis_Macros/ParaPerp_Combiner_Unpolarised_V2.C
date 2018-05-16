@@ -7,7 +7,7 @@ void ParaPerp_Combiner_Unpolarised_V2() {
     char PosHelHistName[60];
     char NegHelHistName[60];
 
-    TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Para/Physics_Total_Para_32_9_5_18.root"); // Open latest Para file
+    TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Para/Physics_Total_Para_34_14_5_18.root"); // Open latest Para file
 
     TH1D* Eg_Para = (TH1D*)f->Get("Eg")->Clone();
     Eg_Para->SetName("Eg_Para");
@@ -21,7 +21,7 @@ void ParaPerp_Combiner_Unpolarised_V2() {
         }
     }
 
-    TFile *f1 = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Perp/Physics_Total_Perp_32_9_5_18.root"); // Open latest Perp file
+    TFile *f1 = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Perp/Physics_Total_Perp_34_14_5_18.root"); // Open latest Perp file
 
     TH1D* Eg_Perp = (TH1D*)f1->Get("Eg")->Clone();
     Eg_Perp->SetName("Eg_Perp");
@@ -65,7 +65,7 @@ void ParaPerp_Combiner_Unpolarised_V2() {
         }
     }
 
-    TFile f2("ParaPerp_Total_32_Combined_Unpolarised.root", "RECREATE");
+    TFile f2("ParaPerp_Total_34_Combined_Unpolarised.root", "RECREATE");
 
     Eg->Write();
 

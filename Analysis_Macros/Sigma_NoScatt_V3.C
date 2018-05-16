@@ -1,9 +1,116 @@
-#include "./includes_Sigma_NoScatt_V2.h"
+#include "./includes_Sigma_NoScatt_V3.h"
 
-void Sigma_NoScatt_V2(){
+void Sigma_NoScatt_V3(){
+
+    char HistName[60];
+    char NewHistName[60];
+    TH1F* PhipPara[21][20];
+    TH1F* PhipPerp[21][20];
+    double EStart = 415; // What is the initial EGamma bin? Change this depending on value
+    Double_t* SystematicArray[21];
+    double Systematic[21][18];
+
+    TF1 *CosFunc = new TF1("CosFit", "[0]*cos((2*x*TMath::DegToRad())+acos(0))");
+    CosFunc->SetParNames("Amplitude");
+
+    TH1F* AsymmHists[21][20];
+
+    char ParaHistName[60];
+    char PerpHistName[60];
+    char AsymmHistName[60];
+    char GraphName[60];
+
+    TF1 *LegPol = new TF1("LegPol", "(1-x**2)*([0]*3+[1]*15*x+[2]*15.0/2*(7*x**2-1)+[3]*105.0/2*x*(3*x**2-1)+[4]*105.0/8*(33*x**4-18*x**2+1)+[5]*63.0/8*x*(143*x**4-110*x**2+15)+[6]*315.0/16*(143*x**6-143*x**4+33*x**2-1)+[7]*495.0/16*(221*x**7-273*x**5+91*x**3-7*x))", -1, 1);
+    LegPol->SetLineColor(4);
+    LegPol->SetLineWidth(2);
+    LegPol->SetParLimits(6, 0.0, 0.0);
+    LegPol->SetParLimits(7, 0.0, 0.0);
+    LegPol->FixParameter(6, 0.0); // These seem to be ignored?
+    LegPol->FixParameter(7, 0.0);
+
+    TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Para/NoScatt/Physics_Total_Para_NoScatt_18_26_4_18.root"); // Open latest Para file
+
+    TH1D* Eg_Para = (TH1D*)f->Get("Eg2")->Clone();
+    Eg_Para->SetName("Eg_Para");
+
+    for(Int_t i = 0; i < 21; i++){ // Energy
+        for(Int_t j = 0; j < 20; j++){ // Theta
+            sprintf(HistName, "Phip_%iMeVCM%i", EStart+(i*10) , j+1);
+            sprintf(NewHistName, "Phip_%iMeVCM%i_Para", EStart+(i*10) , j+1);
+            PhipPara[i][j] = ((TH1F*)f->Get(HistName));
+            PhipPara[i][j]->SetName(NewHistName);
+        }
+    }
+
+
+    /////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////
+    ////////////////////////// Para Done ////////////////////////////
+    /////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////
+
+    TFile *f1 = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Perp/NoScatt/Physics_Total_Perp_NoScatt_18_26_4_18.root"); // Open latest Para file
+
+    TH1D* Eg_Perp = (TH1D*)f1->Get("Eg2")->Clone();
+    Eg_Perp->SetName("Eg_Perp");
+
+    for(Int_t i = 0; i < 21; i++){ // Energy
+        for(Int_t j = 0; j < 20; j++){ // Theta
+            sprintf(HistName, "Phip_%iMeVCM%i", EStart+(i*10) , j+1);
+            sprintf(NewHistName, "Phip_%iMeVCM%i_Perp", EStart+(i*10) , j+1);
+            PhipPerp[i][j] = ((TH1F*)f1->Get(HistName));
+            PhipPerp[i][j]->SetName(NewHistName);
+        }
+    }
+
+    TFile f2("ParaPerp_NS18_Combined.root", "RECREATE");
+
+    Eg_Para->Write();
+    Eg_Perp->Write();
+
+    for(Int_t i = 0; i < 21; i++){ // Energy
+        for(Int_t j = 0; j < 20; j++){ // Theta
+            PhipPara[i][j]->Write();
+            PhipPerp[i][j]->Write();
+        }
+    }
+
+    f2.Write();
+
+    NPara = Eg_Para->GetEntries();
+    NPerp = Eg_Perp->GetEntries();
+    ScaleFactor = NPara/NPerp;
+    ScaleFactorErr = sqrt( (NPara/((TMath::Power(NPerp,2)))) + (((TMath::Power(NPara,2)))/(TMath::Power(NPerp,3))) ); // Error Propagation of above formula, see notebook 5
+
+    for(Int_t i = 0; i < 21; i++){ // Energy
+        for(Int_t j = 0; j < 20; j++){ // Theta
+            sprintf(ParaHistName, "Phip_%iMeVCM%i_Para", EStart+(i*10) , j+1);
+            sprintf(PerpHistName, "Phip_%iMeVCM%i_Perp", EStart+(i*10) , j+1);
+            sprintf(AsymmHistName, "Sigma_%iMeV_CM%i_Hist", EStart+(i*10) , j+1);
+            AsymmHists[i][j] = (TH1F*) (((TH1F*)f2.Get(ParaHistName))->GetAsymmetry(((TH1F*)f2.Get(PerpHistName)), ScaleFactor, ScaleFactorErr)));
+            AsymmHists[i][j]->SetName(AsymmHistName);
+            AsymmHists[i][j]-> Fit("CosFit", "Q");
+            cout << "NDOF " << CosFit->GetNDF() << "   " << "Chi2 " << CosFit->GetChisquare() << "   " << "Chi2/DoF " << CosFit->GetChisquare()/CosFit->GetNDF() << endl;
+            pCosAmp[i][j] = CosFit->GetParameter(0);
+            pCosAmpErr[i][j] = CosFit->GetParError(0);
+        }
+    }
+
+    TFile f3("ParaPerpAsymm_NS18.root", "RECREATE");
+    // In other version fill a tree here to read for next file - Don't bother now?
+    // Add back in later maybe?
+
+    for(Int_t i = 0; i < 21; i++){ // Energy
+        for(Int_t j = 0; j < 20; j++){ // Theta
+            AsymmHists[i][j]->Write();
+        }
+    }
+
+    f3.Write();
 
     TFile *MBData = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sig_res_St.root");
     TGraphErrors* SigmaPlots[21];
+    TGraphErrors* SigmaSystPlots[21];
     TGraphErrors* ParameterPlots[6];
     char name[21];
     char title[60];
@@ -13,115 +120,12 @@ void Sigma_NoScatt_V2(){
 
     TH1F* MBHist[20];
 
-    for (Int_t i = 0; i < 20; i++){
+    for (Int_t i = 0; i < 20; i++){ // Get Mikhail plots
         sprintf(MBname, "hslC%i", 43+i);
         MBHist[i] = (TH1F*)MBData->Get(MBname);
     }
 
-    TFile *f1= TFile::Open("/scratch/Mainz_Software/a2GoAT/Results/ParaPerpAsymm_NS18.root");
-    TTree *t1 = (TTree*)f1->Get("Parameter_Values");
-    // Old version
-    //TF1 *LegPol = new TF1("LegPol", "[0]+[1]*x+[2]*(0.5*(3*x**2-1))+[3]*(0.5*(5*x**3-3*x))+[4]*(0.125*(35*x**4-30*x**2+3))+[5]*(1.0/8.0*(63*x**5-70*x**3+15*x))+[6]*(1.0/16*(231*x**6-315*x**4+105*x**2-5))", -1, 1);
-    // New Version, 8 parameters
-    TF1 *LegPol = new TF1("LegPol", "(1-x**2)*([0]*3+[1]*15*x+[2]*15.0/2*(7*x**2-1)+[3]*105.0/2*x*(3*x**2-1)+[4]*105.0/8*(33*x**4-18*x**2+1)+[5]*63.0/8*x*(143*x**4-110*x**2+15)+[6]*315.0/16*(143*x**6-143*x**4+33*x**2-1)+[7]*495.0/16*(221*x**7-273*x**5+91*x**3-7*x))", -1, 1);
-    LegPol->SetLineColor(4);
-    LegPol->SetLineWidth(2);
-    LegPol->SetParLimits(6, 0.0, 0.0);
-    LegPol->SetParLimits(7, 0.0, 0.0);
-    LegPol->FixParameter(6, 0.0); // These seem to be ignored?
-    LegPol->FixParameter(7, 0.0);
-
-    // Set branch addresses to get values from
-    t1->SetBranchAddress("pCosAmp415", &pCosAmp415);
-    t1->SetBranchAddress("pCosAmpErr415", &pCosAmpErr415);
-    t1->SetBranchAddress("pCosAmp425", &pCosAmp425);
-    t1->SetBranchAddress("pCosAmpErr425", &pCosAmpErr425);
-    t1->SetBranchAddress("pCosAmp435", &pCosAmp435);
-    t1->SetBranchAddress("pCosAmpErr435", &pCosAmpErr435);
-    t1->SetBranchAddress("pCosAmp445", &pCosAmp445);
-    t1->SetBranchAddress("pCosAmpErr445", &pCosAmpErr445);
-    t1->SetBranchAddress("pCosAmp455", &pCosAmp455);
-    t1->SetBranchAddress("pCosAmpErr455", &pCosAmpErr455);
-    t1->SetBranchAddress("pCosAmp465", &pCosAmp465);
-    t1->SetBranchAddress("pCosAmpErr465", &pCosAmpErr465);
-    t1->SetBranchAddress("pCosAmp475", &pCosAmp475);
-    t1->SetBranchAddress("pCosAmpErr475", &pCosAmpErr475);
-    t1->SetBranchAddress("pCosAmp485", &pCosAmp485);
-    t1->SetBranchAddress("pCosAmpErr485", &pCosAmpErr485);
-    t1->SetBranchAddress("pCosAmp495", &pCosAmp495);
-    t1->SetBranchAddress("pCosAmpErr495", &pCosAmpErr495);
-    t1->SetBranchAddress("pCosAmp505", &pCosAmp505);
-    t1->SetBranchAddress("pCosAmpErr505", &pCosAmpErr505);
-    t1->SetBranchAddress("pCosAmp515", &pCosAmp515);
-    t1->SetBranchAddress("pCosAmpErr515", &pCosAmpErr515);
-    t1->SetBranchAddress("pCosAmp525", &pCosAmp525);
-    t1->SetBranchAddress("pCosAmpErr525", &pCosAmpErr525);
-    t1->SetBranchAddress("pCosAmp535", &pCosAmp535);
-    t1->SetBranchAddress("pCosAmpErr535", &pCosAmpErr535);
-    t1->SetBranchAddress("pCosAmp545", &pCosAmp545);
-    t1->SetBranchAddress("pCosAmpErr545", &pCosAmpErr545);
-    t1->SetBranchAddress("pCosAmp555", &pCosAmp555);
-    t1->SetBranchAddress("pCosAmpErr555", &pCosAmpErr555);
-    t1->SetBranchAddress("pCosAmp565", &pCosAmp565);
-    t1->SetBranchAddress("pCosAmpErr565", &pCosAmpErr565);
-    t1->SetBranchAddress("pCosAmp575", &pCosAmp575);
-    t1->SetBranchAddress("pCosAmpErr575", &pCosAmpErr575);
-    t1->SetBranchAddress("pCosAmp585", &pCosAmp585);
-    t1->SetBranchAddress("pCosAmpErr585", &pCosAmpErr585);
-    t1->SetBranchAddress("pCosAmp595", &pCosAmp595);
-    t1->SetBranchAddress("pCosAmpErr595", &pCosAmpErr595);
-    t1->SetBranchAddress("pCosAmp605", &pCosAmp605);
-    t1->SetBranchAddress("pCosAmpErr605", &pCosAmpErr605);
-    t1->SetBranchAddress("pCosAmp615", &pCosAmp615);
-    t1->SetBranchAddress("pCosAmpErr615", &pCosAmpErr615);
-
-    // Load values from tree and asign values back into an array
-    for (Int_t k = 0; k < 20; k++){
-        Parameter_Values->GetEntry(k);
-        pValues415[k] = pCosAmp415;
-        pErrValues415[k] = pCosAmpErr415;
-        pValues425[k] = pCosAmp425;
-        pErrValues425[k] = pCosAmpErr425;
-        pValues435[k] = pCosAmp435;
-        pErrValues435[k] = pCosAmpErr435;
-        pValues445[k] = pCosAmp445;
-        pErrValues445[k] = pCosAmpErr445;
-        pValues455[k] = pCosAmp455;
-        pErrValues455[k] = pCosAmpErr455;
-        pValues465[k] = pCosAmp465;
-        pErrValues465[k] = pCosAmpErr465;
-        pValues475[k] = pCosAmp475;
-        pErrValues475[k] = pCosAmpErr475;
-        pValues485[k] = pCosAmp485;
-        pErrValues485[k] = pCosAmpErr485;
-        pValues495[k] = pCosAmp495;
-        pErrValues495[k] = pCosAmpErr495;
-        pValues505[k] = pCosAmp505;
-        pErrValues505[k] = pCosAmpErr505;
-        pValues515[k] = pCosAmp515;
-        pErrValues515[k] = pCosAmpErr515;
-        pValues525[k] = pCosAmp525;
-        pErrValues525[k] = pCosAmpErr525;
-        pValues535[k] = pCosAmp535;
-        pErrValues535[k] = pCosAmpErr535;
-        pValues545[k] = pCosAmp545;
-        pErrValues545[k] = pCosAmpErr545;
-        pValues555[k] = pCosAmp555;
-        pErrValues555[k] = pCosAmpErr555;
-        pValues565[k] = pCosAmp565;
-        pErrValues565[k] = pCosAmpErr565;
-        pValues575[k] = pCosAmp575;
-        pErrValues575[k] = pCosAmpErr575;
-        pValues585[k] = pCosAmp585;
-        pErrValues585[k] = pCosAmpErr585;
-        pValues595[k] = pCosAmp595;
-        pErrValues595[k] = pCosAmpErr595;
-        pValues605[k] = pCosAmp605;
-        pErrValues605[k] = pCosAmpErr605;
-        pValues615[k] = pCosAmp615;
-        pErrValues615[k] = pCosAmpErr615;
-
-    }
+    // Get previous data plots
 
     double x412[7] = { cos(35.0*TMath::DegToRad()), cos(55.0*TMath::DegToRad()), cos(75.0*TMath::DegToRad()), cos(95.0*TMath::DegToRad()), cos(115.0*TMath::DegToRad()), cos(135.0*TMath::DegToRad()), cos(155.0*TMath::DegToRad())};
     double ex412[7] = {0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1};
@@ -266,59 +270,33 @@ void Sigma_NoScatt_V2(){
     e615->SetLineColor(1);
     e615->SetLineWidth(3);
 
-    TFile *f2= TFile::Open("/scratch/Mainz_Software/a2GoAT/LinPol_Aug16.root"); // Open linear polarisation plot
+    TFile *f4= TFile::Open("/scratch/Mainz_Software/a2GoAT/LinPol_Aug16.root"); // Open linear polarisation plot
 
     // Calculate values of sigma for each angular and energy bin
     // Exclude bins at edges!
 
-    for (Int_t i = 0; i < 18; i++){ // Need to re-write this in a less terrible way...
-
-        SigmaValues[0][i] = pValues415[i+1]/(Graph->Eval(415,0));
-        SigmaErrValues[0][i] = pErrValues415[i+1]/(Graph->Eval(415,0));
-        SigmaValues[1][i] = pValues425[i+1]/(Graph->Eval(425,0));
-        SigmaErrValues[1][i] = pErrValues425[i+1]/(Graph->Eval(425,0));
-        SigmaValues[2][i] = pValues435[i+1]/(Graph->Eval(435,0));
-        SigmaErrValues[2][i] = pErrValues435[i+1]/(Graph->Eval(435,0));
-        SigmaValues[3][i] = pValues445[i+1]/(Graph->Eval(445,0));
-        SigmaErrValues[3][i] = pErrValues445[i+1]/(Graph->Eval(445,0));
-        SigmaValues[4][i] = pValues455[i+1]/(Graph->Eval(455,0));
-        SigmaErrValues[4][i] = pErrValues455[i+1]/(Graph->Eval(455,0));
-        SigmaValues[5][i] = pValues465[i+1]/(Graph->Eval(465,0));
-        SigmaErrValues[5][i] = pErrValues465[i+1]/(Graph->Eval(465,0));
-        SigmaValues[6][i] = pValues475[i+1]/(Graph->Eval(475,0));
-        SigmaErrValues[6][i] = pErrValues475[i+1]/(Graph->Eval(475,0));
-        SigmaValues[7][i] = pValues485[i+1]/(Graph->Eval(485,0));
-        SigmaErrValues[7][i] = pErrValues485[i+1]/(Graph->Eval(485,0));
-        SigmaValues[8][i] = pValues495[i+1]/(Graph->Eval(495,0));
-        SigmaErrValues[8][i] = pErrValues495[i+1]/(Graph->Eval(495,0));
-        SigmaValues[9][i] = pValues505[i+1]/(Graph->Eval(505,0));
-        SigmaErrValues[9][i] = pErrValues505[i+1]/(Graph->Eval(505,0));
-        SigmaValues[10][i] = pValues515[i+1]/(Graph->Eval(515,0));
-        SigmaErrValues[10][i] = pErrValues515[i+1]/(Graph->Eval(515,0));
-        SigmaValues[11][i] = pValues525[i+1]/(Graph->Eval(525,0));
-        SigmaErrValues[11][i] = pErrValues525[i+1]/(Graph->Eval(525,0));
-        SigmaValues[12][i] = pValues535[i+1]/(Graph->Eval(535,0));
-        SigmaErrValues[12][i] = pErrValues535[i+1]/(Graph->Eval(535,0));
-        SigmaValues[13][i] = pValues545[i+1]/(Graph->Eval(545,0));
-        SigmaErrValues[13][i] = pErrValues545[i+1]/(Graph->Eval(545,0));
-        SigmaValues[14][i] = pValues555[i+1]/(Graph->Eval(555,0));
-        SigmaErrValues[14][i] = pErrValues555[i+1]/(Graph->Eval(555,0));
-        SigmaValues[15][i] = pValues565[i+1]/(Graph->Eval(565,0));
-        SigmaErrValues[15][i] = pErrValues565[i+1]/(Graph->Eval(565,0));
-        SigmaValues[16][i] = pValues575[i+1]/(Graph->Eval(575,0));
-        SigmaErrValues[16][i] = pErrValues575[i+1]/(Graph->Eval(575,0));
-        SigmaValues[17][i] = pValues585[i+1]/(Graph->Eval(585,0));
-        SigmaErrValues[17][i] = pErrValues585[i+1]/(Graph->Eval(585,0));
-        SigmaValues[18][i] = pValues595[i+1]/(Graph->Eval(595,0));
-        SigmaErrValues[18][i] = pErrValues595[i+1]/(Graph->Eval(595,0));
-        SigmaValues[19][i] = pValues605[i+1]/(Graph->Eval(605,0));
-        SigmaErrValues[19][i] = pErrValues605[i+1]/(Graph->Eval(605,0));
-        SigmaValues[20][i] = pValues615[i+1]/(Graph->Eval(615,0));
-        SigmaErrValues[20][i] = pErrValues615[i+1]/(Graph->Eval(615,0));
-
+    for(Int_t i = 0; i < 21; i++){
+        for(Int_t j = 0; j < 18; j++){
+            Double_t EValue = EStart + (i*10);
+            Double_t PolVal = Graph->Eval(EValue, 0);
+            Double_t PolErrVal = (3./100.)*PolVal; // 3% error on Polarisation assumed here
+            SigmaValues[i][j] = pCosAmp[i][j+1]/(PolVal);
+            SigmaErrValues[i][j] = sqrt(((pCosAmpErr[i][j+1]/(PolVal))**2) + (((PolErrVal*pCosAmp[i][j+1])/(PolVal**2))**2));
+        }
     }
 
-    TFile f3("Sigma_Plots_NS18.root", "RECREATE");
+    TFile *fSyst = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sigma_Systematic_18_17_V2.root");
+
+    for(Int_t i = 0; i < 21; i ++){ // Egamma value
+        sprintf(GraphName, "SigmaSyst_%i", EStart+(i*10));
+        SystematicArray[i] = ((TGraphErrors*)fSyst->Get(GraphName))->GetY();
+        for(Int_t j = 0; j < 18; j ++){
+            Systematic[i][j] = -1+(fabs(*(SystematicArray[i] + j)));
+            if(i == 14) Systematic[i][j] = -1;
+        }
+    }
+
+    TFile f5("Sigma_Plots_NS18_V3.root", "RECREATE");
 
     Float_t xMin = -1;
     Float_t xMax = 1;
@@ -327,8 +305,8 @@ void Sigma_NoScatt_V2(){
 
     for(Int_t i = 0 ; i < 21 ; i++)
     {
-        sprintf(name, "Sigma_%i", 415+(i*10));
-        sprintf(title, "#Sigma(Cos#theta_{CM}) E_{#gamma} %i #pm 10 MeV", 415+(i*10));
+        sprintf(name, "Sigma_%i", EStart+(i*10));
+        sprintf(title, "#Sigma(Cos#theta_{CM}) E_{#gamma} %i #pm 10 MeV", EStart+(i*10));
         SigmaPlots[i] = new TGraphErrors(18 , x, SigmaValues[i], ex, SigmaErrValues[i]);
 
         if(i == 0){
@@ -360,12 +338,13 @@ void Sigma_NoScatt_V2(){
             LegPar[j][i] = LegPol->GetParameter(j);
             LegParErr[j][i] = LegPol->GetParError(j);
         }
-
         SigmaPlots[i]->Write();
-
     }
 
-    double x2[21] = {415, 425, 435, 445, 455, 465, 475, 485, 495, 505, 515, 525, 535, 545, 555, 565, 575, 585, 595, 605, 615}; // Need to adjust
+    double x2[21];
+    for(Int_t i = 0 ; i < 21 ; i++){
+        x2[i] = EStart + (i*10);
+    }
     double ex2[21] = {5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5}; // Need to adjust
 
     for(Int_t k = 0; k < 6; k++){
@@ -377,13 +356,15 @@ void Sigma_NoScatt_V2(){
         ParameterPlots[k]->SetMarkerStyle(8);
         ParameterPlots[k]->SetMarkerSize(1);
         ParameterPlots[k]->GetXaxis()->SetTitle("E_{#gamma}");
-        ParameterPlots[k]->GetXaxis()->SetRangeUser(410, 620);
+        ParameterPlots[k]->GetXaxis()->SetRangeUser(400, 620);
         ParameterPlots[k]->GetYaxis()->SetTitle(title2);
         ParameterPlots[k]->SetName(name2);
+        ParameterPlots[k]->RemovePoint(14);
         ParameterPlots[k]->SetTitle(title2);
         ParameterPlots[k]->Write();
     }
 
+    // Draw all plots for Sigma without systematics
     TCanvas *canvas20 = new TCanvas("canvas20","canvas20", 1920, 1080);
     canvas20->Divide(5,5);
     for(int i = 1 ; i < 22 ; i++){
@@ -392,6 +373,19 @@ void Sigma_NoScatt_V2(){
     }
 
     canvas20->Write();
+
+    // Draw all plots for Sigma with systematics
+    TCanvas *canvas20a = new TCanvas("canvas20a","canvas20a", 1920, 1080);
+    canvas20a->Divide(5,5);
+    for(int i = 1 ; i < 22 ; i++){
+        canvas20a->cd(i);
+        SigmaPlots[i-1]->Draw("AEP");
+        SigmaSystPlots[i-1] = new TGraphErrors(18 , x, Systematic[i-1], ex, 0);
+        SigmaSystPlots[i-1]->SetFillColor(25);
+        SigmaSystPlots[i-1]->Draw("SAMEB1");
+    }
+
+    canvas20a->Write();
 
     leg = new TLegend(0.1, 0.1, 0.9, 0.9);
     leg->AddEntry(MBHist[1], "APLCON Analysis", "lepz");
@@ -463,6 +457,65 @@ void Sigma_NoScatt_V2(){
     leg2->Draw();
 
     canvas22->Write();
+
+    TCanvas *canvas22a = new TCanvas("canvas22a","canvas22a", 1920, 1080);
+    canvas22a->Divide(5,3);
+    canvas22a->cd(1);
+    SigmaPlots[0]->Draw("AEP");
+    e412->Draw("sameepz");
+    SigmaSystPlots[0]->Draw("SAMEB1");
+    canvas22a->cd(2);
+    SigmaPlots[2]->Draw("AEP");
+    e435->Draw("sameepz");
+    SigmaSystPlots[2]->Draw("SAMEB1");
+    canvas22a->cd(3);
+    SigmaPlots[4]->Draw("AEP");
+    e455->Draw("sameepz");
+    SigmaSystPlots[4]->Draw("SAMEB1");
+    canvas22a->cd(4);
+    SigmaPlots[5]->Draw("AEP");
+    e465->Draw("sameepz");
+    SigmaSystPlots[5]->Draw("SAMEB1");
+    canvas22a->cd(5);
+    SigmaPlots[6]->Draw("AEP");
+    e475->Draw("sameepz");
+    SigmaSystPlots[6]->Draw("SAMEB1");
+    canvas22a->cd(6);
+    SigmaPlots[7]->Draw("AEP");
+    e485->Draw("sameepz");
+    SigmaSystPlots[7]->Draw("SAMEB1");
+    canvas22a->cd(7);
+    SigmaPlots[9]->Draw("AEP");
+    e505->Draw("sameepz");
+    SigmaSystPlots[9]->Draw("SAMEB1");
+    canvas22a->cd(8);
+    SigmaPlots[10]->Draw("AEP");
+    e515->Draw("sameepz");
+    SigmaSystPlots[10]->Draw("SAMEB1");
+    canvas22a->cd(9);
+    SigmaPlots[11]->Draw("AEP");
+    e525->Draw("sameepz");
+    SigmaSystPlots[11]->Draw("SAMEB1");
+    canvas22a->cd(10);
+    SigmaPlots[13]->Draw("AEP");
+    e545->Draw("sameepz");
+    SigmaSystPlots[13]->Draw("SAMEB1");
+    canvas22a->cd(11);
+    SigmaPlots[16]->Draw("AEP");
+    e575->Draw("sameepz");
+    SigmaSystPlots[16]->Draw("SAMEB1");
+    canvas22a->cd(12);
+    SigmaPlots[18]->Draw("AEP");
+    e595->Draw("sameepz");
+    SigmaSystPlots[18]->Draw("SAMEB1");
+    canvas22a->cd(13);
+    SigmaPlots[20]->Draw("AEP");
+    e615->Draw("sameepz");
+    SigmaSystPlots[20]->Draw("SAMEB1");
+    canvas22a->cd(14);
+    leg2->Draw();
+
+    canvas22a->Write();
 
     TCanvas *canvas23 = new TCanvas("canvas23","canvas23", 1920, 1080);
     canvas23->Divide(3,2);
@@ -553,5 +606,6 @@ void Sigma_NoScatt_V2(){
         p7tree->Fill();
     }
 
-    f3.Write();
+    f5.Write();
+
 }

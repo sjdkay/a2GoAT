@@ -277,10 +277,6 @@ void	PNeutPol_Polarimeter_Lin_NoScatt::ProcessEvent()
         ThetanDiff = abs(ThetanRec - ThetanCorr);
         PhinDiff = abs(PhinRec - Phn);
 
-        TVector3 ScattAngles = ScatteredFrameAngles(RecNeutronEpCorr3, GVpCorr3, GVnCorr3, Gamma);
-        ScattTheta = ScattAngles(0); // Theta is 1st component in vector fn returns above
-        ScattPhi = ScattAngles(1); // Phi is 2nd component
-
         if(Cut_protonKinGood -> IsInside(KinEp, dEp) == kFALSE) continue; // If KinE proton is NOT inside p banana drop out
 
         if (((MMpEpCorr < 800) == kTRUE) || ((MMpEpCorr > 1300) == kTRUE)) continue; // Very rough cut on MM

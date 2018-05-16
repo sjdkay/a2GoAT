@@ -331,14 +331,6 @@ void Sigma_Systematics(){
         if (i < 15) canvas20->cd(i);
         else if (i > 15) canvas20->cd(i-1);
         SigmaSystPlots[i-1]->Draw("AEP");
-//        TLine *Plus1Sigma = new TLine(-1, LinePar[i-1] + LineParErr[i-1], 1, LinePar[i-1] + LineParErr[i-1]);
-//        TLine *Minus1Sigma = new TLine(-1, LinePar[i-1] - LineParErr[i-1], 1, LinePar[i-1] - LineParErr[i-1]);
-//        Plus1Sigma->SetLineColor(2);
-//        Plus1Sigma->SetLineStyle(9);
-//        Plus1Sigma->Draw("SAME");
-//        Minus1Sigma->SetLineColor(2);
-//        Minus1Sigma->SetLineStyle(9);
-//        Minus1Sigma->Draw("SAME");
     }
 
     canvas20->Write();

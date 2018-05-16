@@ -36,10 +36,10 @@ void CxAsymm_V3() {
     AsymmFunc->SetParameter(0, 0);
     TF1 *SinFunc = new TF1("SinFit", "[0]*sin(x)", -3, 3);
     SinFunc->SetParNames("InitialSinAmp");
-    TFile *f = new TFile("/scratch/Mainz_Software/a2GoAT/Physics_Total_Amo122_Lin32_Combined.root"); // Open the latest PTotal file to load histograms from
+    TFile *f = new TFile("/scratch/Mainz_Software/a2GoAT/Physics_Total_133_16_5_18.root"); // Open the latest PTotal file to load histograms from
     TF1 *Pn90CM = new TF1("Pn90CM", "1.64576-2.95484*(x/1000)+0.684577*(x/1000)**2-0.65*90**2/4/((x-560)**2+90**2/4)+(5.32305-35.3819*(x/1000)+70.145*(x/1000)**2-44.2899*(x/1000)**3)",300,700);
 
-    for(Int_t i = 0; i < 4; i++){ // Fit version
+    for(Int_t i = 0; i < 2; i++){ // Fit version
         for(Int_t j = 0; j < 4; j++){ // Energy
 
             sprintf(PosHelHistName, "PhiSc%iPosHelCM2", 400+(j*100));
@@ -60,41 +60,21 @@ void CxAsymm_V3() {
                 SinAmpErrs[i][j] = AsymmFit->GetParError(0);
             }
 
-            if (i == 1){
-                AsymmFit->SetLineColor(2);
-                AsymmFit->FixParameter(1, 0.);
-                AsymmHists[i][j]->Fit("AsymmFit", "LL");
-                SinAmps[i][j] = AsymmFit->GetParameter(0);
-                SinAmpErrs[i][j] = AsymmFit->GetParError(0);
-            }
-
-            if(i == 2){
+            if(i == 1){
                 AsymmFit->SetLineColor(4);
                 AsymmFit->SetLineStyle(10);
                 AsymmFit->FixParameter(1, AmpVal);
                 AsymmHists[i][j]->Fit("AsymmFit", "");
                 SinAmps[i][j] = AsymmFit->GetParameter(0);
                 SinAmpErrs[i][j] = AsymmFit->GetParError(0);
-                SinAmps[i-2][j] = AsymmFit->GetParameter(1);
-                SinAmpErrs[i-2][j] = AsymmFit->GetParError(1);
             }
 
-            if(i == 3){
-                AsymmFit->SetLineColor(2);
-                AsymmFit->SetLineStyle(10);
-                AsymmFit->FixParameter(1, AmpVal);
-                AsymmHists[i][j]->Fit("AsymmFit", "LL");
-                SinAmps[i][j] = AsymmFit->GetParameter(0);
-                SinAmpErrs[i][j] = AsymmFit->GetParError(0);
-                SinAmps[i-2][j] = AsymmFit->GetParameter(1);
-                SinAmpErrs[i-2][j] = AsymmFit->GetParError(1);
-            }
         }
     }
 
-    TFile f1("CM2_AsymmFits_PTotal_122_32_V2.root", "RECREATE");
+    TFile f1("CM2_AsymmFits_PTotal_133_V1.root", "RECREATE");
 
-    for(Int_t i = 0; i < 4; i++){ // Fit version
+    for(Int_t i = 0; i < 2; i++){ // Fit version
         for(Int_t j = 0; j < 4; j++){ // Energy
             AsymmHists[i][j]->Write();
         }
@@ -105,7 +85,7 @@ void CxAsymm_V3() {
     for(int i = 1 ; i < 5 ; i++){
         canvas20->cd(i);
         AsymmHists[0][i-1]->Draw("EP");
-        for(int j = 1 ; j < 4 ; j++){
+        for(int j = 1 ; j < 2 ; j++){
             AsymmHists[j][i-1]->Draw("SAMEEP");
         }
     }
@@ -117,7 +97,7 @@ void CxAsymm_V3() {
 
     TFile *f2= TFile::Open("/scratch/Mainz_Software/a2GoAT/CircPol_Aug16.root");
 
-    for (Int_t m = 0; m < 4; m++){ // Fit Version
+    for (Int_t m = 0; m < 2; m++){ // Fit Version
         for (Int_t n = 0; n < 4; n++){ //E
 
             Double_t EPoint = 450 + (n*100);
@@ -129,12 +109,12 @@ void CxAsymm_V3() {
     }
 
 
-    TFile f3("CM2_Cx_Plots_122_32_V2.root", "RECREATE");
+    TFile f3("CM2_Cx_Plots_133_V1.root", "RECREATE");
 
     double x[4] = {400, 500, 600, 700};
     double ex[4] = {50, 50, 50, 50};
 
-    for(Int_t i = 0 ; i < 4 ; i++)
+    for(Int_t i = 0 ; i < 2 ; i++)
     {
         sprintf(name, "Cx_V%i", (i+1));
         CxPlots[i] = new TGraphErrors(4 , x, Cx[i], ex, CxErr[i]);
@@ -146,7 +126,7 @@ void CxAsymm_V3() {
         CxPlots[i]->SetMarkerSize(1);
         CxPlots[i]->GetXaxis()->SetTitle("E_{#gamma}");
         CxPlots[i]->GetXaxis()->SetRangeUser(300, 800);
-        CxPlots[i]->GetYaxis()->SetRangeUser(-10, 10);
+        CxPlots[i]->GetYaxis()->SetRangeUser(-20, 20);
         CxPlots[i]->GetYaxis()->SetTitle("C_{x}");
         CxPlots[i]->Write();
     }
@@ -156,18 +136,10 @@ void CxAsymm_V3() {
     CxPlots[1]->SetMarkerColor(2);
     CxPlots[1]->SetLineColor(2);
     CxPlots[1]->Draw("SAMEEP");
-    CxPlots[2]->SetMarkerStyle(21);
-    CxPlots[2]->Draw("SAMEEP");
-    CxPlots[3]->SetMarkerColor(2);
-    CxPlots[3]->SetLineColor(2);
-    CxPlots[3]->SetMarkerStyle(21);
-    CxPlots[3]->Draw("SAMEEP");
 
     leg = new TLegend(0.75, 0.75, 0.9, 0.9);
     leg->AddEntry(CxPlots[0], "Fixed P = 0, #chi^{2}", "lepz");
-    leg->AddEntry(CxPlots[1], "Fixed P = 0 , LL", "lepz");
-    leg->AddEntry(CxPlots[2], "Fixed P, #chi^{2}", "lepz");
-    leg->AddEntry(CxPlots[3], "Fixed P, LL", "lepz");
+    leg->AddEntry(CxPlots[1], "Fixed P, #chi^{2}", "lepz");
 
     leg->Draw("SAME");
 

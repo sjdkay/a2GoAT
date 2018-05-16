@@ -272,7 +272,7 @@ void	PNeutPol_Polarimeter_Lin::ProcessEvent()
         ThetanDiff = ThetanCorr-ThetanRec;
         PhinDiff = Phn-PhinRec;
 
-        TVector3 ScattAngles = ScatteredFrameAngles(nKin3, pKin3 , GVn3 , Gamma);
+        TVector3 ScattAngles = ScatteredFrameAngles(nKin3, pKin3, GVn3 , Gamma);
         ScattThetaRad = ScattAngles(2);
         ScattTheta = ScattThetaRad*TMath::RadToDeg();
         ScattPhiRad = ScattAngles(0);
