@@ -18,7 +18,7 @@ void Sigma_Scatt_V2(){
         MBHist[i] = (TH1F*)MBData->Get(MBname);
     }
 
-    TFile *f1= TFile::Open("/scratch/Mainz_Software/a2GoAT/Results/ParaPerpAsymm_S34.root");
+    TFile *f1= TFile::Open("/scratch/Mainz_Software/a2GoAT/Results/ParaPerpAsymm_S35.root");
     TTree *t1 = (TTree*)f1->Get("Parameter_Values");
 
     // Set branch addresses to get values from
@@ -220,12 +220,12 @@ void Sigma_Scatt_V2(){
 
     for (Int_t i = 0; i < 5; i++){ // Need to re-write this in a less terrible way...
 
-        SigmaValues[0][i] = pValues410[i]/(Graph->Eval(410,0));
-        SigmaErrValues[0][i] = pErrValues410[i]/(Graph->Eval(410,0));
-        SigmaValues[1][i] = pValues430[i]/(Graph->Eval(430,0));
-        SigmaErrValues[1][i] = pErrValues430[i]/(Graph->Eval(430,0));
-        SigmaValues[2][i] = pValues450[i]/(Graph->Eval(450,0));
-        SigmaErrValues[2][i] = pErrValues450[i]/(Graph->Eval(450,0));
+        SigmaValues[0][i] = pValues415[i]/(Graph->Eval(415,0));
+        SigmaErrValues[0][i] = pErrValues415[i]/(Graph->Eval(415,0));
+        SigmaValues[1][i] = pValues435[i]/(Graph->Eval(435,0));
+        SigmaErrValues[1][i] = pErrValues435[i]/(Graph->Eval(435,0));
+        SigmaValues[2][i] = pValues455[i]/(Graph->Eval(455,0));
+        SigmaErrValues[2][i] = pErrValues455[i]/(Graph->Eval(455,0));
         SigmaValues[3][i] = pValues470[i]/(Graph->Eval(470,0));
         SigmaErrValues[3][i] = pErrValues470[i]/(Graph->Eval(470,0));
         SigmaValues[4][i] = pValues490[i]/(Graph->Eval(490,0));
@@ -243,17 +243,17 @@ void Sigma_Scatt_V2(){
 
     }
 
-    TFile f3("Sigma_Plots_S34.root", "RECREATE");
+    TFile f3("Sigma_Plots_S35.root", "RECREATE");
 
     Float_t xMin = -1;
     Float_t xMax = 1;
     double x[5] = {0.8, 0.4, 0, -0.4, -0.8};
-    double ex[5] = {0.2, 0.2, 0.2, 0.2, 0.2}; // Need to adjust
+    double ex[5] = {0.2, 0.2, 0.2, 0.2, 0.2};
 
     for(Int_t i = 0 ; i < 10 ; i++)
     {
-        sprintf(name, "Sigma_%i", 410+(i*20));
-        sprintf(title, "#Sigma(Cos#theta_{CM}) E_{#gamma} %i #pm 10 MeV", 410+(i*20));
+        sprintf(name, "Sigma_%i", 415+(i*20));
+        sprintf(title, "#Sigma(Cos#theta_{CM}) E_{#gamma} %i #pm 10 MeV", 415+(i*20));
         SigmaPlots[i] = new TGraphErrors(5 , x, SigmaValues[i], ex, SigmaErrValues[i]);
         SigmaPlots[i]->SetMarkerColor(4);
         SigmaPlots[i]->SetLineColor(4);

@@ -62,6 +62,7 @@ private:
     double_t ThetapCM;
     double_t ThetanCM;
     double_t CosThetapCM;
+    double_t CosThetapScCM;
     double_t Thetan;
     double_t ThetapRec;
     double_t ThetanRec;
@@ -123,6 +124,7 @@ private:
     double_t AngularDiffr;
     double_t MWPCPLp;
     double_t Wgt;
+    double_t nKinE;
 
     double_t ELow;
     double_t EHigh;
@@ -172,6 +174,8 @@ private:
     TLorentzVector nKin;
     TLorentzVector pKinB;
     TLorentzVector nKinB;
+    TLorentzVector pSc;
+    TLorentzVector pScB;
     TVector3 pKin3;
     TVector3 nKin3;
 
@@ -299,6 +303,9 @@ private:
     TH1D* PhiScNegHel[7][5];
     TH1D* PhiScNegHelPrompt[7][5];
     TH1D* PhiScNegHelRandom[7][5];
+    TH2D* NeutronEThetaSc[7][5];
+    TH2D* NeutronEThetaScPrompt[7][5];
+    TH2D* NeutronEThetaScRandom[7][5];
 
     TH1D* PhiSc[10];
     TH1D* PhiScPrompt[10];
@@ -319,6 +326,22 @@ private:
     TH2D* EMWPC1pEp;
     TH2D* EMWPC1pEpPrompt;
     TH2D* EMWPC1pEpRandom;
+
+    TH1D* NeutronE;
+    TH1D* NeutronEPrompt;
+    TH1D* NeutronERandom;
+
+    TH2D* NeutronEThetaScFull;
+    TH2D* NeutronEThetaScFullPrompt;
+    TH2D* NeutronEThetaScFullRandom;
+
+    TH2D* NeutronEEg;
+    TH2D* NeutronEEgPrompt;
+    TH2D* NeutronEEgRandom;
+
+    TH2D* ThetaScEg;
+    TH2D* ThetaScEgPrompt;
+    TH2D* ThetaScEgRandom;
 
     double_t ELow2;
     double_t EHigh2;

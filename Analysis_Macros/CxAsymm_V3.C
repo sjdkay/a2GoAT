@@ -13,6 +13,7 @@ void CxAsymm_V3() {
     char PosHelHistName[60];
     char NegHelHistName[60];
     char AsymmHistName[60];
+    char NeutronEThetaScName[60];
     char name[60];
     char title[60];
 
@@ -23,6 +24,8 @@ void CxAsymm_V3() {
     double CosAmps[2][4]; // To store and get P amps
     double SinAmpErrs[4][4]; // To store and get Cx amps
     double CosAmpErrs[2][4]; // To store and get P amps
+    double MeanX[4];
+    double MeanY[4];
 
     Double_t Cx[4][4]; // Fixed P Chi2 fit, Fixed P LL fit, Variable p Chi2 fit, Variable P LL fit
     Double_t CxErr[4][4];
@@ -30,13 +33,17 @@ void CxAsymm_V3() {
     Double_t PVal;
     Double_t ECentre;
     Double_t AmpVal;
+    Double_t AEff[4];
+    Double_t CorrFac[4];
+    Double_t AEffCorr[4];
 
     TF1 *AsymmFunc = new TF1("AsymmFit",  fitf, -3.0, 3.0, 2); //Give a name and range to the fitting funcion
     AsymmFunc->SetParNames("SinAmp", "CosAmp"); //Name the parameters
     AsymmFunc->SetParameter(0, 0);
     TF1 *SinFunc = new TF1("SinFit", "[0]*sin(x)", -3, 3);
     SinFunc->SetParNames("InitialSinAmp");
-    TFile *f = new TFile("/scratch/Mainz_Software/a2GoAT/Physics_Total_133_16_5_18.root"); // Open the latest PTotal file to load histograms from
+    TFile *f = new TFile("/scratch/Mainz_Software/a2GoAT/Physics_Total_Amo137_Lin37_Combined.root"); // Open the latest PTotal file to load histograms from
+    TFile *fAy = new TFile ("/scratch/Mainz_Software/a2GoAT/npAy.root");
     TF1 *Pn90CM = new TF1("Pn90CM", "1.64576-2.95484*(x/1000)+0.684577*(x/1000)**2-0.65*90**2/4/((x-560)**2+90**2/4)+(5.32305-35.3819*(x/1000)+70.145*(x/1000)**2-44.2899*(x/1000)**3)",300,700);
 
     for(Int_t i = 0; i < 2; i++){ // Fit version
@@ -45,17 +52,24 @@ void CxAsymm_V3() {
             sprintf(PosHelHistName, "PhiSc%iPosHelCM2", 400+(j*100));
             sprintf(NegHelHistName, "PhiSc%iNegHelCM2", 400+(j*100));
             sprintf(AsymmHistName, "CxAsymm%iCM2Fit%i", 400+(j*100), i+1);
+            sprintf(NeutronEThetaScName, "NeutronEThetaSc%iCM2", 400+(j*100));
             AsymmHists[i][j] = (TH1F*) (((TH1F*)f->Get(PosHelHistName))->GetAsymmetry(((TH1F*)f->Get(NegHelHistName)))));
             AsymmHists[i][j]->SetName(AsymmHistName);
 
+            MeanX[j] = ((TH2D*)f->Get(NeutronEThetaScName))->GetMean(1);
+            MeanY[j] = ((TH2D*)f->Get(NeutronEThetaScName))->GetMean(2);
+
             ECentre = 450+(j*100); // Get centre of energy bin
             PVal = (Pn90CM->Eval(ECentre, 0)); // Get PValue for energy bin to fix parameter with
-            AmpVal = PVal*0.1; // Adjust 0.1 to be correct Analysing power later!
+            AEff[j] = ((TH2F*)fAy->Get("nppnAy"))->Interpolate(MeanX[j], MeanY[j]);
+            CorrFac[j] = (1+exp(1.81572-(0.0139530*MeanX[j])));
+            AEffCorr[j] = AEff[j] * CorrFac[j]; //Analysing power for 12C based on correction factor from Mikhail
+            AmpVal = PVal*AEff[j];
 
             if (i == 0){
                 AsymmFit->SetLineColor(4);
                 AsymmFit->FixParameter(1, 0.);
-                AsymmHists[i][j]->Fit("AsymmFit", "");
+                AsymmHists[i][j]->Fit("AsymmFit", "Q");
                 SinAmps[i][j] = AsymmFit->GetParameter(0);
                 SinAmpErrs[i][j] = AsymmFit->GetParError(0);
             }
@@ -64,7 +78,7 @@ void CxAsymm_V3() {
                 AsymmFit->SetLineColor(4);
                 AsymmFit->SetLineStyle(10);
                 AsymmFit->FixParameter(1, AmpVal);
-                AsymmHists[i][j]->Fit("AsymmFit", "");
+                AsymmHists[i][j]->Fit("AsymmFit", "Q");
                 SinAmps[i][j] = AsymmFit->GetParameter(0);
                 SinAmpErrs[i][j] = AsymmFit->GetParError(0);
             }
@@ -72,7 +86,7 @@ void CxAsymm_V3() {
         }
     }
 
-    TFile f1("CM2_AsymmFits_PTotal_133_V1.root", "RECREATE");
+    TFile f1("CM2_AsymmFits_PTotal_137_37_V1.root", "RECREATE");
 
     for(Int_t i = 0; i < 2; i++){ // Fit version
         for(Int_t j = 0; j < 4; j++){ // Energy
@@ -102,14 +116,13 @@ void CxAsymm_V3() {
 
             Double_t EPoint = 450 + (n*100);
 
-            Cx[m][n] = SinAmps[m][n]/(0.1*(Graph->Eval(EPoint ,0)));
-            CxErr[m][n] = SinAmpErrs[m][n]/(0.1*(Graph->Eval(EPoint ,0)));
-
+            Cx[m][n] = SinAmps[m][n]/(AEff[n]*(Graph->Eval(EPoint ,0)));
+            CxErr[m][n] = fabs(SinAmpErrs[m][n]/(AEff[n]*(Graph->Eval(EPoint ,0))));
         }
     }
 
 
-    TFile f3("CM2_Cx_Plots_133_V1.root", "RECREATE");
+    TFile f3("CM2_Cx_Plots_137_37_V1.root", "RECREATE");
 
     double x[4] = {400, 500, 600, 700};
     double ex[4] = {50, 50, 50, 50};
@@ -126,7 +139,7 @@ void CxAsymm_V3() {
         CxPlots[i]->SetMarkerSize(1);
         CxPlots[i]->GetXaxis()->SetTitle("E_{#gamma}");
         CxPlots[i]->GetXaxis()->SetRangeUser(300, 800);
-        CxPlots[i]->GetYaxis()->SetRangeUser(-20, 20);
+        CxPlots[i]->GetYaxis()->SetRangeUser(-1, 1);
         CxPlots[i]->GetYaxis()->SetTitle("C_{x}");
         CxPlots[i]->Write();
     }

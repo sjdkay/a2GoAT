@@ -19,6 +19,8 @@ void Sigma_NoScatt_V3(){
     char PerpHistName[60];
     char AsymmHistName[60];
     char GraphName[60];
+    char ScGraphName[60];
+    char ScGraphNameAdj[60];
 
     TF1 *LegPol = new TF1("LegPol", "(1-x**2)*([0]*3+[1]*15*x+[2]*15.0/2*(7*x**2-1)+[3]*105.0/2*x*(3*x**2-1)+[4]*105.0/8*(33*x**4-18*x**2+1)+[5]*63.0/8*x*(143*x**4-110*x**2+15)+[6]*315.0/16*(143*x**6-143*x**4+33*x**2-1)+[7]*495.0/16*(221*x**7-273*x**5+91*x**3-7*x))", -1, 1);
     LegPol->SetLineColor(4);
@@ -112,6 +114,7 @@ void Sigma_NoScatt_V3(){
     TGraphErrors* SigmaPlots[21];
     TGraphErrors* SigmaSystPlots[21];
     TGraphErrors* ParameterPlots[6];
+    TGraphErrors* SigmaScPlots[10];
     char name[21];
     char title[60];
     char MBname[20];
@@ -285,7 +288,11 @@ void Sigma_NoScatt_V3(){
         }
     }
 
+    // Open file to grap systematic errors for 1 sigma vs 2 sigma MM cut
     TFile *fSyst = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sigma_Systematic_18_17_V2.root");
+
+    double xSc[5] = {0.8, 0.4, 0, -0.4, -0.8};
+    double exSc[5] = {0.2, 0.2, 0.2, 0.2, 0.2};
 
     for(Int_t i = 0; i < 21; i ++){ // Egamma value
         sprintf(GraphName, "SigmaSyst_%i", EStart+(i*10));
@@ -296,7 +303,21 @@ void Sigma_NoScatt_V3(){
         }
     }
 
-    TFile f5("Sigma_Plots_NS18_V3.root", "RECREATE");
+    // Open file to get latest values for Sigma from scattered data
+    TFile *fScatt = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sigma_Plots_S37.root");
+
+    for(Int_t i = 0; i < 10; i ++){ // Egamma value
+        sprintf(ScGraphName, "Sigma_%i", EStart+(i*20));
+        sprintf(ScGraphNameAdj, "SigmaSc_%i", EStart+(i*20)-5);
+        SigmaScPlots[i] = ((TGraphErrors*)fScatt->Get(ScGraphName));
+        SigmaScPlots[i]->SetName(ScGraphNameAdj);
+        SigmaScPlots[i]->SetLineColor(618);
+        SigmaScPlots[i]->SetMarkerColor(618);
+        SigmaScPlots[i]->SetMarkerStyle(33);
+        SigmaScPlots[i]->SetMarkerSize(1.5);
+    }
+
+    TFile f5("Sigma_Plots_NS18_V4_NS18_S37.root", "RECREATE");
 
     Float_t xMin = -1;
     Float_t xMax = 1;
@@ -341,11 +362,16 @@ void Sigma_NoScatt_V3(){
         SigmaPlots[i]->Write();
     }
 
+    for(Int_t i = 0; i < 10; i ++){ // Egamma value
+        SigmaScPlots[i]->Write();
+    }
+
+
     double x2[21];
     for(Int_t i = 0 ; i < 21 ; i++){
         x2[i] = EStart + (i*10);
     }
-    double ex2[21] = {5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5}; // Need to adjust
+    double ex2[21] = {5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5};
 
     for(Int_t k = 0; k < 6; k++){
         sprintf(name2, "P%i", k);
@@ -386,6 +412,29 @@ void Sigma_NoScatt_V3(){
     }
 
     canvas20a->Write();
+
+    // Draw all plots for Sigma without systematics
+    TCanvas *canvas20b = new TCanvas("canvas20b","canvas20b", 1920, 1080);
+    canvas20b->Divide(5,5);
+    for(int i = 0 ; i < 21 ; i++){
+        canvas20b->cd(i+1);
+        SigmaPlots[i]->Draw("AEP");
+        if(i % 2 == kFALSE){
+            if(i==20) continue;
+            SigmaScPlots[i/2]->Draw("SAMEEP");
+        }
+        else if (i % 2){
+            SigmaScPlots[(i-1)/2]->Draw("SAMEEP");
+        }
+    }
+
+    legend = new TLegend(0.1, 0.1, 0.9, 0.9);
+    legend->AddEntry(SigmaPlots[1], "Non-Scattered Events", "lepz");
+    legend->AddEntry(SigmaScPlots[1], "Scattered Events", "lepz");
+    canvas20b->cd(22);
+    legend->Draw();
+
+    canvas20b->Write();
 
     leg = new TLegend(0.1, 0.1, 0.9, 0.9);
     leg->AddEntry(MBHist[1], "APLCON Analysis", "lepz");
