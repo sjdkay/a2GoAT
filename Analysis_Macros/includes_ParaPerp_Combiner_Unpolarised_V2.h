@@ -41,18 +41,22 @@ TH1D* Eg;
 TH1D* Eg_Para;
 TH1D* Eg_Perp;
 
-TH1D* PhiScPosHel[7][5];
-TH1D* PhiScNegHel[7][5];
+TH1D* PhiScPosHel[8][5];
+TH1D* PhiScNegHel[8][5];
 
-TH1D* PhiScPosHelPara[7][5];
-TH1D* PhiScNegHelPara[7][5];
+TH1D* PhiScPosHelPara[8][5];
+TH1D* PhiScNegHelPara[8][5];
 
-TH1D* PhiScPosHelPerp[7][5];
-TH1D* PhiScNegHelPerp[7][5];
+TH1D* PhiScPosHelPerp[8][5];
+TH1D* PhiScNegHelPerp[8][5];
 
-TH2D* NeutronEThetaScPara[7][5];
-TH2D* NeutronEThetaScPerp[7][5];
-TH2D* NeutronEThetaSc[7][5];
+TH1D* PhiSc[12];
+TH1D* PhiScPara[12];
+TH1D* PhiScPerp[12];
+
+TH2D* NeutronEThetaScPara[8][5];
+TH2D* NeutronEThetaScPerp[8][5];
+TH2D* NeutronEThetaSc[8][5];
 
 Double_t NPara;
 Double_t NPerp;

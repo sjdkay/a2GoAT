@@ -2,6 +2,8 @@
 
 void Sigma_Systematics_V2(){
 
+    gStyle->SetTitleFontSize(0.06);
+
     char HistName[60];
     char NewHistName[60];
     TH1F* PhipPara[21][20];
@@ -111,7 +113,7 @@ void Sigma_Systematics_V2(){
         }
     }
 
-    TFile f6("Sigma_Systematic_18_17_V2.root", "RECREATE");
+    TFile f6("Sigma_Systematic_18_17_V3.root", "RECREATE");
 
     TF1 *Line = new TF1("Line", "[0]", -1, 1);
     double x[18] = {0.85, 0.75, 0.65, 0.55, 0.45, 0.35, 0.25, 0.15, 0.05, -0.05, -0.15, -0.25, -0.35, -0.45, -0.55, -0.65, -0.75, -0.85}; // Need to adjust
@@ -135,6 +137,14 @@ void Sigma_Systematics_V2(){
         SigmaSystPlots[i]->GetYaxis()->SetTitle("#Sigma_{2#sigma} - #Sigma_{1#sigma}");
         SigmaSystPlots[i]->SetName(name);
         SigmaSystPlots[i]->SetTitle(title);
+        SigmaSystPlots[i]->GetXaxis()->SetLabelSize(0.06);
+        SigmaSystPlots[i]->GetXaxis()->SetTitleSize(0.06);
+        SigmaSystPlots[i]->GetXaxis()->SetTitleOffset(0.7);
+        SigmaSystPlots[i]->GetXaxis()->CenterTitle();
+        SigmaSystPlots[i]->GetYaxis()->SetLabelSize(0.06);
+        SigmaSystPlots[i]->GetYaxis()->SetTitleSize(0.08);
+        SigmaSystPlots[i]->GetYaxis()->SetTitleOffset(0.5);
+        SigmaSystPlots[i]->GetYaxis()->CenterTitle();
         SigmaSystPlots[i]->Write();
 
         LinePar[i] = Line->GetParameter(0);

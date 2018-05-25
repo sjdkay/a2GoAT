@@ -121,6 +121,8 @@ private:
     double_t MWPC1pE;
     double_t MWPC0nE;
     double_t MWPC1nE;
+    double_t MWPCnETot;
+    double_t MWPCpETot;
     double_t AngularDiffr;
     double_t MWPCPLp;
     double_t Wgt;
@@ -275,6 +277,14 @@ private:
     TH2D* ThetapThetanPrompt;
     TH2D* ThetapThetanRandom;
 
+    TH2D* EpMWPCEpTot;
+    TH2D* EpMWPCEpTotPrompt;
+    TH2D* EpMWPCEpTotRandom;
+
+    TH2D* EnMWPCEnTot;
+    TH2D* EnMWPCEnTotPrompt;
+    TH2D* EnMWPCEnTotRandom;
+
     TH1D* EgPrompt;
     TH1D* ThetaScPrompt;
     TH1D* RPocaPrompt;
@@ -297,19 +307,19 @@ private:
     TH1D* MM_Eg_CM_Binned_Prompt[7][5][10];
     TH1D* MM_Eg_CM_Binned_Random[7][5][10];
 
-    TH1D* PhiScPosHel[7][5];
-    TH1D* PhiScPosHelPrompt[7][5];
-    TH1D* PhiScPosHelRandom[7][5];
-    TH1D* PhiScNegHel[7][5];
-    TH1D* PhiScNegHelPrompt[7][5];
-    TH1D* PhiScNegHelRandom[7][5];
-    TH2D* NeutronEThetaSc[7][5];
-    TH2D* NeutronEThetaScPrompt[7][5];
-    TH2D* NeutronEThetaScRandom[7][5];
+    TH1D* PhiScPosHel[8][5];
+    TH1D* PhiScPosHelPrompt[8][5];
+    TH1D* PhiScPosHelRandom[8][5];
+    TH1D* PhiScNegHel[8][5];
+    TH1D* PhiScNegHelPrompt[8][5];
+    TH1D* PhiScNegHelRandom[8][5];
+    TH2D* NeutronEThetaSc[8][5];
+    TH2D* NeutronEThetaScPrompt[8][5];
+    TH2D* NeutronEThetaScRandom[8][5];
 
-    TH1D* PhiSc[10];
-    TH1D* PhiScPrompt[10];
-    TH1D* PhiScRandom[10];
+    TH1D* PhiSc[12];
+    TH1D* PhiScPrompt[12];
+    TH1D* PhiScRandom[12];
 
     TH1D* MMpEgamma[12];
     TH1D* MMpEgammaPrompt[12];

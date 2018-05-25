@@ -2,6 +2,8 @@
 
 void Sigma_NoScatt_V2(){
 
+    gStyle->SetTitleFontSize(0.06);
+
     TFile *MBData = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sig_res_St.root");
     TGraphErrors* SigmaPlots[21];
     TGraphErrors* ParameterPlots[6];
@@ -18,7 +20,7 @@ void Sigma_NoScatt_V2(){
         MBHist[i] = (TH1F*)MBData->Get(MBname);
     }
 
-    TFile *f1= TFile::Open("/scratch/Mainz_Software/a2GoAT/Results/ParaPerpAsymm_NS18.root");
+    TFile *f1= TFile::Open("/scratch/Mainz_Software/a2GoAT/Results/ParaPerpAsymm_NS17.root");
     TTree *t1 = (TTree*)f1->Get("Parameter_Values");
     // Old version
     //TF1 *LegPol = new TF1("LegPol", "[0]+[1]*x+[2]*(0.5*(3*x**2-1))+[3]*(0.5*(5*x**3-3*x))+[4]*(0.125*(35*x**4-30*x**2+3))+[5]*(1.0/8.0*(63*x**5-70*x**3+15*x))+[6]*(1.0/16*(231*x**6-315*x**4+105*x**2-5))", -1, 1);
@@ -318,7 +320,7 @@ void Sigma_NoScatt_V2(){
 
     }
 
-    TFile f3("Sigma_Plots_NS18.root", "RECREATE");
+    TFile f3("Sigma_Plots_NS17.root", "RECREATE");
 
     Float_t xMin = -1;
     Float_t xMax = 1;
@@ -328,7 +330,7 @@ void Sigma_NoScatt_V2(){
     for(Int_t i = 0 ; i < 21 ; i++)
     {
         sprintf(name, "Sigma_%i", 415+(i*10));
-        sprintf(title, "#Sigma(Cos#theta_{CM}) E_{#gamma} %i #pm 10 MeV", 415+(i*10));
+        sprintf(title, "#Sigma(Cos#theta_{CM}) E_{#gamma} %i #pm 5 MeV", 415+(i*10));
         SigmaPlots[i] = new TGraphErrors(18 , x, SigmaValues[i], ex, SigmaErrValues[i]);
 
         if(i == 0){
@@ -355,6 +357,14 @@ void Sigma_NoScatt_V2(){
         SigmaPlots[i]->GetYaxis()->SetTitle("#Sigma");
         SigmaPlots[i]->SetName(name);
         SigmaPlots[i]->SetTitle(title);
+        SigmaPlots[i]->GetXaxis()->SetLabelSize(0.05);
+        SigmaPlots[i]->GetXaxis()->SetTitleSize(0.06);
+        SigmaPlots[i]->GetXaxis()->SetTitleOffset(0.7);
+        SigmaPlots[i]->GetXaxis()->CenterTitle();
+        SigmaPlots[i]->GetYaxis()->SetLabelSize(0.06);
+        SigmaPlots[i]->GetYaxis()->SetTitleSize(0.08);
+        SigmaPlots[i]->GetYaxis()->SetTitleOffset(0.5);
+        SigmaPlots[i]->GetYaxis()->CenterTitle();
 
         for(Int_t j = 0; j < 8; j++){
             LegPar[j][i] = LegPol->GetParameter(j);
@@ -385,10 +395,16 @@ void Sigma_NoScatt_V2(){
     }
 
     TCanvas *canvas20 = new TCanvas("canvas20","canvas20", 1920, 1080);
-    canvas20->Divide(5,5);
-    for(int i = 1 ; i < 22 ; i++){
-        canvas20->cd(i);
-        SigmaPlots[i-1]->Draw("AEP");
+    canvas20->Divide(5,4);
+    for(int i = 0 ; i < 21 ; i++){
+        if (i < 14){
+            canvas20->cd(i+1);
+            SigmaPlots[i]->Draw("AEP");
+        }
+        if (i > 14){
+            canvas20->cd(i);
+            SigmaPlots[i]->Draw("AEP");
+        }
     }
 
     canvas20->Write();

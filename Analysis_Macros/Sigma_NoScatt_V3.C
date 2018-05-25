@@ -2,6 +2,8 @@
 
 void Sigma_NoScatt_V3(){
 
+    gStyle->SetTitleFontSize(0.06);
+
     char HistName[60];
     char NewHistName[60];
     TH1F* PhipPara[21][20];
@@ -9,6 +11,11 @@ void Sigma_NoScatt_V3(){
     double EStart = 415; // What is the initial EGamma bin? Change this depending on value
     Double_t* SystematicArray[21];
     double Systematic[21][18];
+    double Sigma90[20];
+    double SigmaErr90[20];
+    TGraphErrors* Sigma90DegCM;
+    TGraphErrors* Sigma90DegCMAdamian;
+    TGraphErrors* Sigma90DegCMGorbenko;
 
     TF1 *CosFunc = new TF1("CosFit", "[0]*cos((2*x*TMath::DegToRad())+acos(0))");
     CosFunc->SetParNames("Amplitude");
@@ -278,8 +285,8 @@ void Sigma_NoScatt_V3(){
     // Calculate values of sigma for each angular and energy bin
     // Exclude bins at edges!
 
-    for(Int_t i = 0; i < 21; i++){
-        for(Int_t j = 0; j < 18; j++){
+    for(Int_t i = 0; i < 21; i++){ // Energy
+        for(Int_t j = 0; j < 18; j++){ // Theta
             Double_t EValue = EStart + (i*10);
             Double_t PolVal = Graph->Eval(EValue, 0);
             Double_t PolErrVal = (3./100.)*PolVal; // 3% error on Polarisation assumed here
@@ -304,7 +311,7 @@ void Sigma_NoScatt_V3(){
     }
 
     // Open file to get latest values for Sigma from scattered data
-    TFile *fScatt = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sigma_Plots_S37.root");
+    TFile *fScatt = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sigma_Plots_S43.root");
 
     for(Int_t i = 0; i < 10; i ++){ // Egamma value
         sprintf(ScGraphName, "Sigma_%i", EStart+(i*20));
@@ -315,9 +322,17 @@ void Sigma_NoScatt_V3(){
         SigmaScPlots[i]->SetMarkerColor(618);
         SigmaScPlots[i]->SetMarkerStyle(33);
         SigmaScPlots[i]->SetMarkerSize(1.5);
+        SigmaScPlots[i]->GetXaxis()->SetLabelSize(0.06);
+        SigmaScPlots[i]->GetXaxis()->SetTitleSize(0.06);
+        SigmaScPlots[i]->GetXaxis()->SetTitleOffset(0.7);
+        SigmaScPlots[i]->GetXaxis()->CenterTitle();
+        SigmaScPlots[i]->GetYaxis()->SetLabelSize(0.06);
+        SigmaScPlots[i]->GetYaxis()->SetTitleSize(0.08);
+        SigmaScPlots[i]->GetYaxis()->SetTitleOffset(0.5);
+        SigmaScPlots[i]->GetYaxis()->CenterTitle();
     }
 
-    TFile f5("Sigma_Plots_NS18_V4_NS18_S37.root", "RECREATE");
+    TFile f5("Sigma_Plots_NS18_S43_V1.root", "RECREATE");
 
     Float_t xMin = -1;
     Float_t xMax = 1;
@@ -327,7 +342,7 @@ void Sigma_NoScatt_V3(){
     for(Int_t i = 0 ; i < 21 ; i++)
     {
         sprintf(name, "Sigma_%i", EStart+(i*10));
-        sprintf(title, "#Sigma(Cos#theta_{CM}) E_{#gamma} %i #pm 10 MeV", EStart+(i*10));
+        sprintf(title, "#Sigma(Cos#theta_{CM}) E_{#gamma} %i #pm 5 MeV", EStart+(i*10));
         SigmaPlots[i] = new TGraphErrors(18 , x, SigmaValues[i], ex, SigmaErrValues[i]);
 
         if(i == 0){
@@ -354,6 +369,14 @@ void Sigma_NoScatt_V3(){
         SigmaPlots[i]->GetYaxis()->SetTitle("#Sigma");
         SigmaPlots[i]->SetName(name);
         SigmaPlots[i]->SetTitle(title);
+        SigmaPlots[i]->GetXaxis()->SetLabelSize(0.05);
+        SigmaPlots[i]->GetXaxis()->SetTitleSize(0.06);
+        SigmaPlots[i]->GetXaxis()->SetTitleOffset(0.7);
+        SigmaPlots[i]->GetXaxis()->CenterTitle();
+        SigmaPlots[i]->GetYaxis()->SetLabelSize(0.06);
+        SigmaPlots[i]->GetYaxis()->SetTitleSize(0.08);
+        SigmaPlots[i]->GetYaxis()->SetTitleOffset(0.5);
+        SigmaPlots[i]->GetYaxis()->CenterTitle();
 
         for(Int_t j = 0; j < 8; j++){
             LegPar[j][i] = LegPol->GetParameter(j);
@@ -384,6 +407,14 @@ void Sigma_NoScatt_V3(){
         ParameterPlots[k]->GetXaxis()->SetTitle("E_{#gamma}");
         ParameterPlots[k]->GetXaxis()->SetRangeUser(400, 620);
         ParameterPlots[k]->GetYaxis()->SetTitle(title2);
+        ParameterPlots[k]->GetXaxis()->SetLabelSize(0.04);
+        ParameterPlots[k]->GetXaxis()->SetTitleSize(0.06);
+        ParameterPlots[k]->GetXaxis()->SetTitleOffset(0.7);
+        ParameterPlots[k]->GetXaxis()->CenterTitle();
+        ParameterPlots[k]->GetYaxis()->SetLabelSize(0.02);
+        ParameterPlots[k]->GetYaxis()->SetTitleSize(0.06);
+        ParameterPlots[k]->GetYaxis()->SetTitleOffset(0.75);
+        ParameterPlots[k]->GetYaxis()->CenterTitle();
         ParameterPlots[k]->SetName(name2);
         ParameterPlots[k]->RemovePoint(14);
         ParameterPlots[k]->SetTitle(title2);
@@ -391,47 +422,75 @@ void Sigma_NoScatt_V3(){
     }
 
     // Draw all plots for Sigma without systematics
-    TCanvas *canvas20 = new TCanvas("canvas20","canvas20", 1920, 1080);
-    canvas20->Divide(5,5);
-    for(int i = 1 ; i < 22 ; i++){
-        canvas20->cd(i);
-        SigmaPlots[i-1]->Draw("AEP");
+    TCanvas *canvas20 = new TCanvas("canvas20","canvas20", 2560, 1440);
+    canvas20->Divide(5,4, 0.0000001, 0.001);
+    for(int i = 0 ; i < 21 ; i++){
+        if (i < 14){
+            canvas20->cd(i+1);
+            SigmaPlots[i]->Draw("AEP");
+        }
+        if (i > 14){
+            canvas20->cd(i);
+            SigmaPlots[i]->Draw("AEP");
+        }
     }
 
     canvas20->Write();
 
     // Draw all plots for Sigma with systematics
-    TCanvas *canvas20a = new TCanvas("canvas20a","canvas20a", 1920, 1080);
-    canvas20a->Divide(5,5);
-    for(int i = 1 ; i < 22 ; i++){
-        canvas20a->cd(i);
-        SigmaPlots[i-1]->Draw("AEP");
-        SigmaSystPlots[i-1] = new TGraphErrors(18 , x, Systematic[i-1], ex, 0);
-        SigmaSystPlots[i-1]->SetFillColor(25);
-        SigmaSystPlots[i-1]->Draw("SAMEB1");
+    TCanvas *canvas20a = new TCanvas("canvas20a","canvas20a", 2560, 1440);
+    canvas20a->Divide(5,4, 0.0000001, 0.001);
+    for(int i = 0 ; i < 21 ; i++){
+        if (i < 14){
+            canvas20a->cd(i+1);
+            SigmaPlots[i]->Draw("AEP");
+            SigmaSystPlots[i] = new TGraphErrors(18 , x, Systematic[i], ex, 0);
+            SigmaSystPlots[i]->SetFillColor(25);
+            SigmaSystPlots[i]->Draw("SAMEB1");
+        }
+
+        if (i > 14){
+            canvas20a->cd(i);
+            SigmaPlots[i]->Draw("AEP");
+            SigmaSystPlots[i] = new TGraphErrors(18 , x, Systematic[i], ex, 0);
+            SigmaSystPlots[i]->SetFillColor(25);
+            SigmaSystPlots[i]->Draw("SAMEB1");
+        }
     }
 
     canvas20a->Write();
 
     // Draw all plots for Sigma without systematics
-    TCanvas *canvas20b = new TCanvas("canvas20b","canvas20b", 1920, 1080);
-    canvas20b->Divide(5,5);
-    for(int i = 0 ; i < 21 ; i++){
-        canvas20b->cd(i+1);
-        SigmaPlots[i]->Draw("AEP");
-        if(i % 2 == kFALSE){
-            if(i==20) continue;
-            SigmaScPlots[i/2]->Draw("SAMEEP");
+    TCanvas *canvas20b = new TCanvas("canvas20b","canvas20b", 2560, 1440);
+    canvas20b->Divide(5,4, 0.0000001, 0.001);
+    for(int i = 0 ; i < 20 ; i++){
+        if (i < 14){
+            canvas20b->cd(i+1);
+            SigmaPlots[i]->Draw("AEP");
+            if(i % 2 == kFALSE){
+                SigmaScPlots[i/2]->Draw("SAMEEP");
+            }
+            else if (i % 2){
+                SigmaScPlots[(i-1)/2]->Draw("SAMEEP");
+            }
         }
-        else if (i % 2){
-            SigmaScPlots[(i-1)/2]->Draw("SAMEEP");
+
+        if (i > 14){
+            canvas20b->cd(i);
+            SigmaPlots[i]->Draw("AEP");
+            if(i % 2 == kFALSE){
+                SigmaScPlots[i/2]->Draw("SAMEEP");
+            }
+            else if (i % 2){
+                SigmaScPlots[(i-1)/2]->Draw("SAMEEP");
+            }
         }
     }
 
     legend = new TLegend(0.1, 0.1, 0.9, 0.9);
     legend->AddEntry(SigmaPlots[1], "Non-Scattered Events", "lepz");
     legend->AddEntry(SigmaScPlots[1], "Scattered Events", "lepz");
-    canvas20b->cd(22);
+    canvas20b->cd(20);
     legend->Draw();
 
     canvas20b->Write();
@@ -440,8 +499,8 @@ void Sigma_NoScatt_V3(){
     leg->AddEntry(MBHist[1], "APLCON Analysis", "lepz");
     leg->AddEntry(SigmaPlots[0], "Alternative Analysis", "lepz");
 
-    TCanvas *canvas21 = new TCanvas("canvas21","canvas21", 1920, 1080);
-    canvas21->Divide(5,5);
+    TCanvas *canvas21 = new TCanvas("canvas21","canvas21", 2560, 1440);
+    canvas21->Divide(5,5, 0.0000001, 0.001);
     for(int i = 1 ; i < 22 ; i++){
         canvas21->cd(i);
         if (i != 1){
@@ -461,8 +520,8 @@ void Sigma_NoScatt_V3(){
     leg2->AddEntry(e435, "Previous Results", "lepz");
     leg2->AddEntry(SigmaPlots[0], "This Analysis", "lepz");
 
-    TCanvas *canvas22 = new TCanvas("canvas22","canvas22", 1920, 1080);
-    canvas22->Divide(5,3);
+    TCanvas *canvas22 = new TCanvas("canvas22","canvas22", 2560, 1440);
+    canvas22->Divide(5,3, 0.0000001, 0.001);
     canvas22->cd(1);
     SigmaPlots[0]->Draw("AEP");
     e412->Draw("sameepz");
@@ -507,8 +566,8 @@ void Sigma_NoScatt_V3(){
 
     canvas22->Write();
 
-    TCanvas *canvas22a = new TCanvas("canvas22a","canvas22a", 1920, 1080);
-    canvas22a->Divide(5,3);
+    TCanvas *canvas22a = new TCanvas("canvas22a","canvas22a", 2560, 1440);
+    canvas22a->Divide(5,3, 0.0000001, 0.001);
     canvas22a->cd(1);
     SigmaPlots[0]->Draw("AEP");
     e412->Draw("sameepz");
@@ -566,8 +625,79 @@ void Sigma_NoScatt_V3(){
 
     canvas22a->Write();
 
-    TCanvas *canvas23 = new TCanvas("canvas23","canvas23", 1920, 1080);
-    canvas23->Divide(3,2);
+    // Average bins at pm 0.05 Cos Theta to get a bin at 90, plot these as funtion of EGamma
+
+    double Adamian90x[12] = {414, 433, 451, 476, 504, 528, 552, 575, 598, 620, 644, 672};
+    double Adamian90y[12] = {-0.27, -0.23, -0.23, -0.09, -0.15, -0.08, 0.0, 0.02, 0.18, 0.15, 0.27, 0.35};
+    double Adamian90yErr[12] = {0.04, 0.04, 0.04, 0.04, 0.05, 0.05, 0.05, 0.06, 0.07, 0.07, 0.07, 0.06};
+    double Gorbenko90x[6] = {400, 400, 450, 500, 550, 600};
+    double Gorbenko90y[6] = {-0.267, -0.257, -0.164, -0.150, 0.0, 0.126};
+    double Gorbenko90yErr[6] = {0.061, 0.033, 0.028, 0.057, 0.094, 0.142};
+
+    for(Int_t i = 0; i < 20; i++){
+        if(i < 14){
+            Sigma90[i] = (SigmaValues[i][8] + SigmaValues[i][9])/2;
+            SigmaErr90[i] = 0.5*(sqrt( (SigmaErrValues[i][8]**2) + (SigmaErrValues[i][9]**2)));
+        }
+        else if (i > 14){
+            Sigma90[i] = (SigmaValues[i+1][8] + SigmaValues[i+1][9])/2;
+            SigmaErr90[i] = 0.5*(sqrt( (SigmaErrValues[i+1][8]**2) + (SigmaErrValues[i+1][9]**2)));
+        }
+    }
+
+    double x3[20] = {415, 425, 435, 445, 455, 465, 475, 485, 495, 505, 515, 525, 535, 545, 565, 575, 585, 595, 605, 615};
+    double ex3[20] = {5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5};
+
+    Sigma90DegCM = new TGraphErrors(20, x3, Sigma90, ex3, SigmaErr90);
+    Sigma90DegCM->SetMarkerColor(4);
+    Sigma90DegCM->SetLineColor(4);
+    Sigma90DegCM->SetMarkerStyle(21);
+    Sigma90DegCM->SetMarkerSize(2);
+    Sigma90DegCM->GetXaxis()->SetTitle("E_{#gamma}");
+    Sigma90DegCM->GetXaxis()->SetRangeUser(400, 700);
+    Sigma90DegCM->GetYaxis()->SetTitle("#Sigma(90^{#circ})");
+    Sigma90DegCM->GetXaxis()->SetLabelSize(0.04);
+    Sigma90DegCM->GetXaxis()->SetTitleSize(0.06);
+    Sigma90DegCM->GetXaxis()->SetTitleOffset(0.7);
+    Sigma90DegCM->GetXaxis()->CenterTitle();
+    Sigma90DegCM->GetYaxis()->SetLabelSize(0.04);
+    Sigma90DegCM->GetYaxis()->SetTitleSize(0.06);
+    Sigma90DegCM->GetYaxis()->SetTitleOffset(0.75);
+    Sigma90DegCM->GetYaxis()->CenterTitle();
+    Sigma90DegCM->SetName("Sigma90DegCM");
+    Sigma90DegCM->SetTitle("#Sigma(E_{#gamma})");
+    Sigma90DegCM->Write();
+
+    Sigma90DegCMAdamian = new TGraphErrors(12, Adamian90x, Adamian90y, 0, Adamian90yErr);
+    Sigma90DegCMAdamian->SetMarkerColor(1);
+    Sigma90DegCMAdamian->SetLineColor(1);
+    Sigma90DegCMAdamian->SetMarkerStyle(20);
+    Sigma90DegCMAdamian->SetMarkerSize(2);
+    Sigma90DegCMAdamian->SetName("Sigma90DegCMAdamian");
+    Sigma90DegCMAdamian->Write();
+
+    Sigma90DegCMGorbenko = new TGraphErrors(6, Gorbenko90x, Gorbenko90y, 0, Gorbenko90yErr);
+    Sigma90DegCMGorbenko->SetMarkerColor(2);
+    Sigma90DegCMGorbenko->SetLineColor(2);
+    Sigma90DegCMGorbenko->SetMarkerStyle(22);
+    Sigma90DegCMGorbenko->SetMarkerSize(2);
+    Sigma90DegCMGorbenko->SetName("Sigma90DegCMGorbenko");
+    Sigma90DegCMGorbenko->Write();
+
+    leg3 = new TLegend(0.7, 0.2, 0.9, 0.4);
+    leg3->AddEntry(Sigma90DegCM, "This Work", "lepz");
+    leg3->AddEntry(Sigma90DegCMAdamian, "Adamian91", "lepz");
+    leg3->AddEntry(Sigma90DegCMGorbenko, "Gorbenko82", "lepz");
+
+    TCanvas *canvas22b = new TCanvas("canvas22b","canvas22b", 2560, 1440);
+    Sigma90DegCM->Draw("AEP");
+    Sigma90DegCMAdamian->Draw("SAMEEP");
+    Sigma90DegCMGorbenko->Draw("SAMEEP");
+    leg3->Draw("SAME");
+    canvas22b->Write();
+
+    TCanvas *canvas23 = new TCanvas("canvas23","canvas23", 2560, 1440);
+    canvas23->Divide(3,2, 0.0000001, 0.001);
     for(int i = 1 ; i < 7 ; i++){
         canvas23->cd(i);
         ParameterPlots[i-1]->Draw("AEP");
