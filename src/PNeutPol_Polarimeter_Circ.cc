@@ -40,7 +40,7 @@ Bool_t	PNeutPol_Polarimeter_Circ::Start()
     PvRratio = (PromptHigh - PromptLow)/( (RandomHigh1 - RandomLow1) + (RandomHigh2 - RandomLow2));
 
     EWidth = 100; //Fix the width of the Energy and CosTheta bins used later
-    CosThetaWidth = (2./3.);
+    CosThetaWidth = (0.4);
     PhiScWidth = 0.8;
 
     NP = 0; // Set number of Protons to 0 before checking
@@ -60,7 +60,7 @@ Bool_t	PNeutPol_Polarimeter_Circ::Start()
     PtargetC = new TLorentzVector(0.,0.,0.,0.);
 
     //Cut_CB_proton = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Proton_24_4_18.root", "Proton");
-    Cut_CB_proton = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Proton_25_5_18_V2.root", "Proton"); 
+    Cut_CB_proton = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Proton_25_5_18_V2.root", "Proton");
     Cut_proton = Cut_CB_proton;
     Cut_CB_pion = OpenCutFile("configfiles/cuts/CB_DeltaE-E_Pion_29_07_15.root", "Pion");
     Cut_pion = Cut_CB_pion;
@@ -219,28 +219,38 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
     //if( nVertex(2) > 60 || nVertex(2) < -60) return;
     EpCorr = EpPolCorrect(Ep, Thp); //correct Ep for energy loss in polarimeter
 
-    //if(Cut_proton -> IsInside(EpCorr, dEp) == kFALSE) return; // If E loss correct proton is NOT inside p banana drop out
-    //if (MWPC0pE != 0){ // If hit detected in MWPC0 for p track check it is over 100 ARB units in E
-    //    if(MWPC0pE  < 100) return;
-    //}
-    //if (MWPC1pE != 0){ // If hit detected in MWPC1 for p track check it is over 100 ARB units in E
-    //    if(MWPC1pE  < 100) return;
-    //}
-    //if (MWPC0nE != 0){ // If hit detected in MWPC0 for n track check it is over 100 ARB units in E
-    //    if(MWPC0nE  < 100) return;
-    //}
-    //if (MWPC1nE != 0){ // If hit detected in MWPC1 for n track check it is over 100 ARB units in E
-    //    if(MWPC1nE  < 100) return;
-    //}
-    MWPCnETot = MWPC0nE + MWPC1nE;
-    MWPCpETot = MWPC0pE + MWPC1pE;
-    //if(MWPCnETot > 1000) return;
+    if(Cut_proton -> IsInside(EpCorr, dEp) == kFALSE) return; // If E loss correct proton is NOT inside p banana drop out
 
     EpDiff = abs(EpCorr - Ep);
 
     Pp = sqrt (TMath::Power((Mp + EpCorr),2) - TMath::Power(Mp,2));
     Pn = sqrt (TMath::Power((En + Mn ),2) - TMath::Power(Mn,2));
     GVpCorr = TLorentzVector(Pp*sin(ThpRad)*cos(PhpRad), Pp*sin(ThpRad)*sin(PhpRad), Pp*cos(ThpRad), EpCorr+Mp);
+    MWPC0pEVeto = MWPC0pE*sin(GVpCorr.Theta());
+    MWPC1pEVeto = MWPC1pE*sin(GVpCorr.Theta());
+    MWPC0nEVeto = MWPC0pE*sin(GVpCorr.Theta());
+    MWPC1nEVeto = MWPC1pE*sin(GVpCorr.Theta());
+
+    if((MWPC0pE != 0) && (MWPC1pE != 0)){ // If there is a non zero energy deposit in each MWPC for proton set one MWPC energy sum
+        MWPCpETot2 = MWPC0pE + MWPC1pE;
+        MWPCpEVetoTot2 = MWPC0pEVeto + MWPC1pEVeto;
+        MWPCpEVetoTot1 = 0;
+    }
+    else if (((MWPC0pE != 0) && (MWPC1pE == 0)) == kTRUE || ((MWPC0pE == 0) && (MWPC1pE != 0)) == kTRUE){ // If only detect proton in one chamber set different ESum
+        MWPCpETot1 = MWPC0pE + MWPC1pE;
+        MWPCpEVetoTot1 = MWPC0pEVeto + MWPC1pEVeto;
+        MWPCpEVetoTot2 = 0;
+    }
+    if((MWPC0nE != 0) && (MWPC1nE != 0)){ // If there is a non zero energy deposit in each MWPC for neutron set one MWPC energy sum
+        MWPCnETot2 = MWPC0nE + MWPC1nE;
+        MWPCnEVetoTot2 = MWPC0nEVeto + MWPC1nEVeto;
+        MWPCnEVetoTot1 = 0;
+    }
+    else if (((MWPC0nE != 0) && (MWPC1nE == 0)) == kTRUE || ((MWPC0nE == 0) && (MWPC1nE != 0)) == kTRUE){ // If only detect neutron in one chamber set different ESum
+        MWPCnETot1 = MWPC0nE + MWPC1nE;
+        MWPCnEVetoTot1 = MWPC0nEVeto + MWPC1nEVeto;
+        MWPCnEVetoTot2 = 0;
+    }
 
     // MUST FEED IN n PHI IN RAD NOT DEG!
     GVnCorr =  CNeutron4VectorCorr(pVertex(2), GVn, En, Pn , Mn, PhnRad);
@@ -329,6 +339,12 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
 
         if( r < 35 ) return; // Ensure POCA is at polarimeter radius
         if(ScattTheta > 45) return;
+//        if((MWPC0nE != 0) && (MWPC1nE != 0)){
+//            if(MWPCnEVetoTot2 < 89.326) return; // If Total MWPC veto energy for scattered proton track less than X return
+//        }
+//        else if (((MWPC0nE != 0) && (MWPC1nE == 0)) == kTRUE || ((MWPC0nE == 0) && (MWPC1nE != 0)) == kTRUE){ // If only detect neutron in one chamber set different ESum
+//            if(MWPCnEVetoTot1 < 76.7) return;
+//        }
 
         tdif = TaggerTime - Timep;
 
@@ -427,13 +443,13 @@ PNeutPol_Polarimeter_Circ::PNeutPol_Polarimeter_Circ() // Define a load of histo
     RPocaPrompt = new TH1D("RPocaPrompt", "R_{POCA} Distribution", 200, 0, 200);
     RPocaRandom = new TH1D("RPocaRandom", "R_{POCA} Distribution", 200, 0, 200);
 
-    Thetap = new TH1D ("Thetap", "#theta_{p} Distribution", 200, 0, -1*acos(-1));
+    Thetap = new TH1D ("Thetap", "#theta_{p} Distribution", 200, 0, acos(-1));
     ThetapPrompt = new TH1D ("ThetapPrompt", "#theta_{p} Distribution", 200, 0, acos(-1));
     ThetapRandom = new TH1D ("ThetapRandom", "#theta_{p} Distribution", 200, 0, acos(-1));
 
-    Phip = new TH1D( "Phip", "#phi_{sc} Proton Distribution", 200, -1*acos(-1), acos(-1));
-    PhipPrompt = new TH1D( "PhipPrompt", "#phi_{sc} Proton Distribution", 200, -1*acos(-1), acos(-1));
-    PhipRandom = new TH1D( "PhipRandom", "#phi_{sc} Proton Distribution", 200, -1-acos(-1), acos(-1));
+    Phip = new TH1D( "Phip", "#phi_{p} Proton Distribution", 200, -1*acos(-1), acos(-1));
+    PhipPrompt = new TH1D( "PhipPrompt", "#phi_{p} Proton Distribution", 200, -1*acos(-1), acos(-1));
+    PhipRandom = new TH1D( "PhipRandom", "#phi_{p} Proton Distribution", 200, -1*acos(-1), acos(-1));
 
     EProton = new TH1D( "EProton", "E_{p} Distribution", 200, 0, 400);
     EProtonPrompt = new TH1D( "EProtonPrompt", "E_{p} Distribution", 200, 0, 400);
@@ -499,14 +515,6 @@ PNeutPol_Polarimeter_Circ::PNeutPol_Polarimeter_Circ() // Define a load of histo
     ThetapThetanPrompt = new TH2D ("ThetapThetanPrompt", "#theta_{p}(#theta_{n})", 200, 0, acos(-1), 200, 0, acos(-1));
     ThetapThetanRandom = new TH2D ("ThetapThetanRandom", "#theta_{p}(#theta_{n})", 200, 0, acos(-1), 200, 0, acos(-1));
 
-    MWPCnSum = new TH1D ("MWPCnSum", "#Sigma E_{MWPCn}", 500, 0, 2000);
-    MWPCnSumPrompt = new TH1D ("MWPCnSumPrompt", "#Sigma E_{MWPCn}", 500, 0, 2000);
-    MWPCnSumRandom = new TH1D ("MWPCnSumRandom", "#Sigma E_{MWPCn}", 500, 0, 2000);
-
-    EMWPC1pEp = new TH2D("EMWPC1pEp", "E_{MWPC1p}(E_{p})", 200, 0, 1000, 200, 0, 2000);
-    EMWPC1pEpPrompt = new TH2D("EMWPC1pEpPrompt", "E_{MWPC1p}(E_{p})", 200, 0, 1000, 200, 0, 2000);
-    EMWPC1pEpRandom = new TH2D("EMWPC1pEpRandom", "E_{MWPC1p}(E_{p})", 200, 0, 1000, 200, 0, 2000);
-
     NeutronE = new TH1D("NeutronE", "E_{n}", 400, 0, 500);
     NeutronEPrompt = new TH1D("NeutronEPrompt", "E_{n}", 400, 0, 500);
     NeutronERandom = new TH1D("NeutronERandom", "E_{n}", 400, 0, 500);
@@ -523,25 +531,50 @@ PNeutPol_Polarimeter_Circ::PNeutPol_Polarimeter_Circ() // Define a load of histo
     ThetaScEgPrompt = new TH2D("ThetaScEgPrompt", "E_{#gamma}(#theta_{Sc})", 200, 0, 90, 200, 0, 1600);
     ThetaScEgRandom = new TH2D("ThetaScEgRandom", "E_{#gamma}(#theta_{Sc})", 200, 0, 90, 200, 0, 1600);
 
-    EpMWPCEpTot = new TH2D("EpMWPCEpTot", "E^{Total}_MWPCp(E_{p})", 200, 0, 500, 200, 0, 2000);
-    EpMWPCEpTotPrompt = new TH2D("EpMWPCEpTotPrompt", "E^{Total}_MWPCp(E_{p})", 200, 0, 500, 200, 0, 2000);
-    EpMWPCEpTotRandom = new TH2D("EpMWPCEpTotRandom", "E^{Total}_MWPCp(E_{p})", 200, 0, 500, 200, 0, 2000);
+    EpMWPCEpVetoTot1 = new TH2D("EpMWPCEpVetoTot1", "EVeto^{Tot1}_MWPCp(E_{p})", 200, 0, 500, 200, 0, 2000);
+    EpMWPCEpVetoTot1Prompt = new TH2D("EpMWPCEpVetoTot1Prompt", "EVeto^{Tot1}_MWPCp(E_{p})", 200, 0, 500, 200, 0, 2000);
+    EpMWPCEpVetoTot1Random = new TH2D("EpMWPCEpVetoTot1Random", "EVeto^{Tot1}_MWPCp(E_{p})", 200, 0, 500, 200, 0, 2000);
 
-    EnMWPCEnTot = new TH2D("EnMWPCEnTot", "E^{Total}_MWPCn(E_{n})", 200, 0, 500, 200, 0, 2000);
-    EnMWPCEnTotPrompt = new TH2D("EnMWPCEnTotPrompt", "E^{Total}_MWPCn(E_{n})", 200, 0, 500, 200, 0, 2000);
-    EnMWPCEnTotRandom = new TH2D("EnMWPCEnTotRandom", "E^{Total}_MWPCn(E_{n})", 200, 0, 500, 200, 0, 2000);
+    EnMWPCEnVetoTot1 = new TH2D("EnMWPCEnVetoTot1", "EVeto^{Tot1}_MWPCn(E_{n})", 200, 0, 500, 200, 0, 400);
+    EnMWPCEnVetoTot1Prompt = new TH2D("EnMWPCEnVetoTot1Prompt", "E^{Tot1}_MWPCn(E_{n})", 200, 0, 500, 200, 0, 400);
+    EnMWPCEnVetoTot1Random = new TH2D("EnMWPCEnVetoTot1Random", "E^{Tot1}_MWPCn(E_{n})", 200, 0, 500, 200, 0, 400);
+
+    EpMWPCEpVetoTot2 = new TH2D("EpMWPCEpVetoTot2", "EVeto^{Tot1}_MWPCp(E_{p})", 200, 0, 500, 200, 0, 2000);
+    EpMWPCEpVetoTot2 = new TH2D("EpMWPCEpVetoTot2", "EVeto^{Tot1}_MWPCp(E_{p})", 200, 0, 500, 200, 0, 2000);
+    EpMWPCEpVetoTot2Prompt = new TH2D("EpMWPCEpVetoTot2Prompt", "EVeto^{Tot2}_MWPCp(E_{p})", 200, 0, 500, 200, 0, 2000);
+    EpMWPCEpVetoTot2Random = new TH2D("EpMWPCEpVetoTot2Random", "EVeto^{Tot2}_MWPCp(E_{p})", 200, 0, 500, 200, 0, 2000);
+
+    EnMWPCEnVetoTot2 = new TH2D("EnMWPCEnVetoTot2", "EVeto^{Tot2}_MWPCn(E_{n})", 200, 0, 500, 200, 0, 1600);
+    EnMWPCEnVetoTot2Prompt = new TH2D("EnMWPCEnVetoTot2Prompt", "E^{Tot2}_MWPCn(E_{n})", 200, 0, 500, 200, 0, 1600);
+    EnMWPCEnVetoTot2Random = new TH2D("EnMWPCEnVetoTot2Random", "E^{Tot2}_MWPCn(E_{n})", 200, 0, 500, 200, 0, 1600);
+
+    ThetapMWPCEpTot1 = new TH2D("ThetapMWPCEpTot1", "E^{Tot1}_MWPCp(#theta_{p})", 200, 0, 180, 200, 0, 400);
+    ThetapMWPCEpTot1Prompt = new TH2D("ThetapMWPCEpTot1Prompt", "E^{Tot1}_MWPCp(#theta_{p})", 200, 0, 180, 200, 0, 400);
+    ThetapMWPCEpTot1Random = new TH2D("ThetapMWPCEpTot1Random", "E^{Tot1}_MWPCp(#theta_{p})", 200, 0, 180, 200, 0, 400);
+
+    ThetanMWPCEnTot1 = new TH2D("ThetanMWPCEnTot1", "E^{Tot1}_MWPCp(#theta_{n})", 200, 0, 180, 200, 0, 400);
+    ThetanMWPCEnTot1Prompt = new TH2D("ThetanMWPCEnTot1Prompt", "E^{Tot1}_MWPCn(#theta_{n})", 200, 0, 180, 200, 0, 400);
+    ThetanMWPCEnTot1Random = new TH2D("ThetanMWPCEnTot1Random", "E^{Tot1}_MWPCn(#theta_{n})", 200, 0, 180, 200, 0, 400);
+
+    ThetapMWPCEpTot2 = new TH2D("ThetapMWPCEpTot2", "E^{Tot2}_MWPCp(#theta_{p})", 200, 0, 180, 200, 0, 1600);
+    ThetapMWPCEpTot2Prompt = new TH2D("ThetapMWPCEpTot2Prompt", "E^{Tot2}_MWPCp(#theta_{p})", 200, 0, 180, 200, 0, 1600);
+    ThetapMWPCEpTot2Random = new TH2D("ThetapMWPCEpTot2Random", "E^{Tot2}_MWPCp(#theta_{p})", 200, 0, 180, 200, 0, 1600);
+
+    ThetanMWPCEnTot2 = new TH2D("ThetanMWPCEnTot2", "E^{Tot2}_MWPCp(#theta_{n})", 200, 0, 180, 200, 0, 1600);
+    ThetanMWPCEnTot2Prompt = new TH2D("ThetanMWPCEnTot2Prompt", "E^{Tot2}_MWPCn(#theta_{n})", 200, 0, 180, 200, 0, 1600);
+    ThetanMWPCEnTot2Random = new TH2D("ThetanMWPCEnTot2Random", "E^{Tot2}_MWPCn(#theta_{n})", 200, 0, 180, 200, 0, 1600);
 
     for(Int_t A = 0; A < 8; A++){
-        for(Int_t B = 0; B < 3; B++){
-            PhiScPosHel[A][B] = new TH1D(Form("PhiSc%iPosHelCM%i", 250+(A*100), B+1), Form("#phi_{Sc} E_{#gamma}%i #pm 50MeV CM%i for +ve Helicity", 250+(A*100), B+1), 10, -1*acos(-1) , acos(-1));
-            PhiScPosHelPrompt[A][B] = new TH1D(Form("PhiSc%iPosHelCM%iPrompt", 250+(A*100), B+1), Form("#phi_{Sc} E_{#gamma}%i #pm 50MeV CM%i for +ve Helicity", 250+(A*100), B+1), 10, -1*acos(-1) , acos(-1));
-            PhiScPosHelRandom[A][B] = new TH1D(Form("PhiSc%iPosHelCM%iRandom", 250+(A*100), B+1), Form("#phi_{Sc} E_{#gamma}%i #pm 50MeV CM%i for +ve Helicity", 250+(A*100), B+1), 10, -1*acos(-1) , acos(-1));
-            PhiScNegHel[A][B] = new TH1D(Form("PhiSc%iNegHelCM%i", 250+(A*100), B+1), Form("#phi_{Sc} E_{#gamma}%i #pm 50MeV CM%i for -ve Helicity", 250+(A*100), B+1), 10, -1*acos(-1) , acos(-1));
-            PhiScNegHelPrompt[A][B] = new TH1D(Form("PhiSc%iNegHelCM%iPrompt", 250+(A*100), B+1), Form("#phi_{Sc} E_{#gamma}%i #pm 50MeV CM%i for -ve Helicity", 250+(A*100), B+1), 10, -1*acos(-1) , acos(-1));
-            PhiScNegHelRandom[A][B] = new TH1D(Form("PhiSc%iNegHelCM%iRandom", 250+(A*100), B+1), Form("#phi_{Sc} E_{#gamma}%i #pm 50MeV CM%i for -ve Helicity", 250+(A*100), B+1), 10, -1*acos(-1) , acos(-1));
-            NeutronEThetaSc[A][B] = new TH2D(Form ("NeutronEThetaSc%iCM%i", 250+(A*100), B+1), Form ("#theta_{Sc}(E_{n}) %iMeV CM%i", 250+(A*100), B+1), 200, 0, 800, 200, 0, 90);
-            NeutronEThetaScPrompt[A][B] = new TH2D(Form ("NeutronEThetaSc%iCM%iPrompt", 250+(A*100), B+1), Form ("#theta_{Sc}(E_{n}) %iMeV CM%i", 250+(A*100), B+1), 200, 0, 800, 200, 0, 90);
-            NeutronEThetaScRandom[A][B] = new TH2D(Form ("NeutronEThetaSc%iCM%iRandom", 250+(A*100), B+1), Form ("#theta_{Sc}(E_{n}) %iMeV CM%i", 250+(A*100), B+1), 200, 0, 800, 200, 0, 90);
+        for(Int_t B = 0; B < 5; B++){
+            PhiScPosHel[A][B] = new TH1D(Form("PhiSc%iPosHelCM%i", 260+(A*100), B+1), Form("#phi_{Sc} E_{#gamma}%i #pm 50MeV CM%i for +ve Helicity", 260+(A*100), B+1), 10, -1*acos(-1) , acos(-1));
+            PhiScPosHelPrompt[A][B] = new TH1D(Form("PhiSc%iPosHelCM%iPrompt", 260+(A*100), B+1), Form("#phi_{Sc} E_{#gamma}%i #pm 50MeV CM%i for +ve Helicity", 260+(A*100), B+1), 10, -1*acos(-1) , acos(-1));
+            PhiScPosHelRandom[A][B] = new TH1D(Form("PhiSc%iPosHelCM%iRandom", 260+(A*100), B+1), Form("#phi_{Sc} E_{#gamma}%i #pm 50MeV CM%i for +ve Helicity", 260+(A*100), B+1), 10, -1*acos(-1) , acos(-1));
+            PhiScNegHel[A][B] = new TH1D(Form("PhiSc%iNegHelCM%i", 260+(A*100), B+1), Form("#phi_{Sc} E_{#gamma}%i #pm 50MeV CM%i for -ve Helicity", 260+(A*100), B+1), 10, -1*acos(-1) , acos(-1));
+            PhiScNegHelPrompt[A][B] = new TH1D(Form("PhiSc%iNegHelCM%iPrompt", 260+(A*100), B+1), Form("#phi_{Sc} E_{#gamma}%i #pm 50MeV CM%i for -ve Helicity", 260+(A*100), B+1), 10, -1*acos(-1) , acos(-1));
+            PhiScNegHelRandom[A][B] = new TH1D(Form("PhiSc%iNegHelCM%iRandom", 260+(A*100), B+1), Form("#phi_{Sc} E_{#gamma}%i #pm 50MeV CM%i for -ve Helicity", 260+(A*100), B+1), 10, -1*acos(-1) , acos(-1));
+            NeutronEThetaSc[A][B] = new TH2D(Form ("NeutronEThetaSc%iCM%i", 260+(A*100), B+1), Form ("#theta_{Sc}(E_{n}) %iMeV CM%i", 260+(A*100), B+1), 200, 0, 800, 200, 0, 90);
+            NeutronEThetaScPrompt[A][B] = new TH2D(Form ("NeutronEThetaSc%iCM%iPrompt", 260+(A*100), B+1), Form ("#theta_{Sc}(E_{n}) %iMeV CM%i", 260+(A*100), B+1), 200, 0, 800, 200, 0, 90);
+            NeutronEThetaScRandom[A][B] = new TH2D(Form ("NeutronEThetaSc%iCM%iRandom", 260+(A*100), B+1), Form ("#theta_{Sc}(E_{n}) %iMeV CM%i", 260+(A*100), B+1), 200, 0, 800, 200, 0, 90);
         }
     }
 
@@ -609,9 +642,6 @@ void PNeutPol_Polarimeter_Circ::FillHists()
         WeightEgPrompt->Fill(EGamma, Wgt);
         WeightPhiScPrompt->Fill(ScattPhiRad, Wgt);
 
-        MWPCnSumPrompt->Fill(MWPC0nE + MWPC1nE);
-        EMWPC1pEpPrompt->Fill(EpCorr, MWPC0pE);
-
         NeutronEPrompt->Fill(nKinE);
         NeutronEThetaScFullPrompt->Fill(nKinE, ScattTheta);
         NeutronEEgPrompt->Fill(nKinE, EGamma);
@@ -619,15 +649,29 @@ void PNeutPol_Polarimeter_Circ::FillHists()
 
         ThetapThetanPrompt->Fill(ThpRad, nKin.Theta());
 
-	EpMWPCEpTotPrompt->Fill(EpCorr, MWPCpETot);
-	EnMWPCEnTotPrompt->Fill(GVnCorr.E() - Mn, MWPCnETot);
+        if((MWPC0pE != 0) && (MWPC1pE != 0)){ // If there is a non zero energy deposit in each MWPC for proton set one MWPC energy sum
+            EpMWPCEpVetoTot2Prompt->Fill(EpCorr, MWPCpEVetoTot2);
+            ThetapMWPCEpTot2Prompt->Fill(Thp, MWPCpETot2);
+        }
+        else if (((MWPC0pE != 0) && (MWPC1pE == 0)) == kTRUE || ((MWPC0pE == 0) && (MWPC1pE != 0)) == kTRUE){ // If only detect proton in one chamber set different ESum
+            EpMWPCEpVetoTot1Prompt->Fill(EpCorr, MWPCpEVetoTot1);
+            ThetapMWPCEpTot1Prompt->Fill(Thp, MWPCpETot1);
+        }
+        if((MWPC0nE != 0) && (MWPC1nE != 0)){ // If there is a non zero energy deposit in each MWPC for neutron set one MWPC energy sum
+            EnMWPCEnVetoTot2Prompt->Fill(GVnCorr.E() - Mn, MWPCnEVetoTot2);
+            ThetanMWPCEnTot2Prompt->Fill(Thn, MWPCnETot2);
+        }
+        else if (((MWPC0nE != 0) && (MWPC1nE == 0)) == kTRUE || ((MWPC0nE == 0) && (MWPC1nE != 0)) == kTRUE){ // If only detect neutron in one chamber set different ESum
+            EnMWPCEnVetoTot1Prompt->Fill(GVnCorr.E() - Mn, MWPCnEVetoTot1);
+            ThetanMWPCEnTot1Prompt->Fill(Thn, MWPCnETot1);
+        }
 
         for(Int_t d = 0; d < 8; d++){ //Energy bins
-            ELow = 200 + (d*EWidth);
-            EHigh = 300 + (d*EWidth);
+            ELow = 210 + (d*EWidth);
+            EHigh = 310 + (d*EWidth);
             if( ELow < EGamma && EGamma < EHigh){
-                for(Int_t e = 0; e < 3; e++){
-                    CosThetaLow = (1./3.) - (e*CosThetaWidth);
+                for(Int_t e = 0; e < 5; e++){
+                    CosThetaLow = (0.6) - (e*CosThetaWidth);
                     CosThetaHigh = 1 - (e*CosThetaWidth);
                     if(CosThetaHigh > CosThetapCM && CosThetapCM > CosThetaLow){
                         NeutronEThetaScPrompt[d][e]->Fill(nKinE, ScattTheta);
@@ -687,26 +731,36 @@ void PNeutPol_Polarimeter_Circ::FillHists()
 
         WeightEgRandom->Fill(EGamma, Wgt);
         WeightPhiScRandom->Fill(ScattPhiRad, Wgt);
-
-        MWPCnSumRandom->Fill(MWPC0nE + MWPC1nE);
-        EMWPC1pEpRandom->Fill(EpCorr, MWPC0pE);
-
         NeutronERandom->Fill(nKinE);
         NeutronEThetaScFullRandom->Fill(nKinE, ScattTheta);
         NeutronEEgRandom->Fill(nKinE, EGamma);
         ThetaScEgRandom->Fill(ScattTheta, EGamma);
 
+        if((MWPC0pE != 0) && (MWPC1pE != 0)){ // If there is a non zero energy deposit in each MWPC for proton set one MWPC energy sum
+            EpMWPCEpVetoTot2Random->Fill(EpCorr, MWPCpEVetoTot2);
+            ThetapMWPCEpTot2Random->Fill(Thp, MWPCpETot2);
+        }
+        else if (((MWPC0pE != 0) && (MWPC1pE == 0)) == kTRUE || ((MWPC0pE == 0) && (MWPC1pE != 0)) == kTRUE){ // If only detect proton in one chamber set different ESum
+            EpMWPCEpVetoTot1Random->Fill(EpCorr, MWPCpEVetoTot1);
+            ThetapMWPCEpTot1Random->Fill(Thp, MWPCpETot1);
+        }
+        if((MWPC0nE != 0) && (MWPC1nE != 0)){ // If there is a non zero energy deposit in each MWPC for neutron set one MWPC energy sum
+            EnMWPCEnVetoTot2Random->Fill(GVnCorr.E() - Mn, MWPCnEVetoTot2);
+            ThetanMWPCEnTot2Random->Fill(Thn, MWPCnETot2);
+        }
+        else if (((MWPC0nE != 0) && (MWPC1nE == 0)) == kTRUE || ((MWPC0nE == 0) && (MWPC1nE != 0)) == kTRUE){ // If only detect neutron in one chamber set different ESum
+            EnMWPCEnVetoTot1Random->Fill(GVnCorr.E() - Mn, MWPCnEVetoTot1);
+            ThetanMWPCEnTot1Random->Fill(Thn, MWPCnETot1);
+        }
+
         ThetapThetanRandom->Fill(ThpRad, nKin.Theta());
 
-	EpMWPCEpTotRandom->Fill(EpCorr, MWPCpETot);
-	EnMWPCEnTotRandom->Fill(GVnCorr.E() - Mn, MWPCnETot);
-
         for(Int_t d = 0; d < 8; d++){ //Energy bins
-            ELow = 200 + (d*EWidth);
-            EHigh = 300 + (d*EWidth);
+            ELow = 210 + (d*EWidth);
+            EHigh = 310 + (d*EWidth);
             if( ELow < EGamma && EGamma < EHigh){
-                for(Int_t e = 0; e < 3; e++){
-                    CosThetaLow = (1./3.) - (e*CosThetaWidth);
+                for(Int_t e = 0; e < 5; e++){
+                    CosThetaLow = (0.6) - (e*CosThetaWidth);
                     CosThetaHigh = 1 - (e*CosThetaWidth);
                     if(CosThetaHigh > CosThetapCM && CosThetapCM > CosThetaLow){
                         NeutronEThetaScRandom[d][e]->Fill(nKinE, ScattTheta);
@@ -790,11 +844,6 @@ void PNeutPol_Polarimeter_Circ::BGSub(){
     WeightPhiSc->Add(WeightPhiScPrompt);
     WeightPhiSc->Add(WeightPhiScRandom, -PvRratio);
 
-    MWPCnSum->Add(MWPCnSumPrompt);
-    MWPCnSum->Add(MWPCnSumRandom, -PvRratio);
-    EMWPC1pEp->Add(EMWPC1pEpPrompt);
-    EMWPC1pEp->Add(EMWPC1pEpRandom, -PvRratio);
-
     ThetapThetan->Add(ThetapThetanPrompt);
     ThetapThetan->Add(ThetapThetanRandom, -PvRratio);
 
@@ -810,13 +859,26 @@ void PNeutPol_Polarimeter_Circ::BGSub(){
     ThetaScEg->Add(ThetaScEgPrompt);
     ThetaScEg->Add(ThetaScEgRandom, -PvRratio);
 
-    EpMWPCEpTot->Add(EpMWPCEpTotPrompt);
-    EpMWPCEpTot->Add(EpMWPCEpTotRandom, -PvRratio);
-    //EnMWPCEnTot->Add(EnMWPCEnTotPrompt);
-    //EnMWPCEnTot->Add(EnMWPCEnTotRandom, -PvRratio);
+    EpMWPCEpVetoTot1->Add(EpMWPCEpVetoTot1Prompt);
+    EpMWPCEpVetoTot1->Add(EpMWPCEpVetoTot1Random, -PvRratio);
+    EpMWPCEpVetoTot2->Add(EpMWPCEpVetoTot2Prompt);
+    EpMWPCEpVetoTot2->Add(EpMWPCEpVetoTot2Random, -PvRratio);
+    EnMWPCEnVetoTot1->Add(EnMWPCEnVetoTot1Prompt);
+    EnMWPCEnVetoTot1->Add(EnMWPCEnVetoTot1Random, -PvRratio);
+    EnMWPCEnVetoTot2->Add(EnMWPCEnVetoTot2Prompt);
+    EnMWPCEnVetoTot2->Add(EnMWPCEnVetoTot2Random, -PvRratio);
+
+    ThetapMWPCEpTot1->Add(ThetapMWPCEpTot1Prompt);
+    ThetapMWPCEpTot1->Add(ThetapMWPCEpTot1Random, -PvRratio);
+    ThetapMWPCEpTot2->Add(ThetapMWPCEpTot2Prompt);
+    ThetapMWPCEpTot2->Add(ThetapMWPCEpTot2Random, -PvRratio);
+    ThetanMWPCEnTot1->Add(ThetanMWPCEnTot1Prompt);
+    ThetanMWPCEnTot1->Add(ThetanMWPCEnTot1Random, -PvRratio);
+    ThetanMWPCEnTot2->Add(ThetanMWPCEnTot2Prompt);
+    ThetanMWPCEnTot2->Add(ThetanMWPCEnTot2Random, -PvRratio);
 
     for(Int_t E = 0; E < 8; E++){
-        for(Int_t F = 0; F < 3; F++){
+        for(Int_t F = 0; F < 5; F++){
             PhiScNegHel[E][F]->Add(PhiScNegHelPrompt[E][F]);
             PhiScNegHel[E][F]->Add(PhiScNegHelRandom[E][F], -PvRratio);
             PhiScPosHel[E][F]->Add(PhiScPosHelPrompt[E][F]);

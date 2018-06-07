@@ -121,13 +121,22 @@ private:
     double_t MWPC1pE;
     double_t MWPC0nE;
     double_t MWPC1nE;
-    double_t MWPCnETot;
-    double_t MWPCpETot;
+    double_t MWPCnETot1;
+    double_t MWPCpETot1;
+    double_t MWPCnETot2;
+    double_t MWPCpETot2;
+    double_t MWPC0pEVeto;
+    double_t MWPC1pEVeto;
+    double_t MWPC0nEVeto;
+    double_t MWPC1nEVeto;
+    double_t MWPCnEVetoTot1;
+    double_t MWPCpEVetoTot1;
+    double_t MWPCnEVetoTot2;
+    double_t MWPCpEVetoTot2;
     double_t AngularDiffr;
     double_t MWPCPLp;
     double_t Wgt;
     double_t nKinE;
-
     double_t ELow;
     double_t EHigh;
     double_t EWidth;
@@ -277,13 +286,37 @@ private:
     TH2D* ThetapThetanPrompt;
     TH2D* ThetapThetanRandom;
 
-    TH2D* EpMWPCEpTot;
-    TH2D* EpMWPCEpTotPrompt;
-    TH2D* EpMWPCEpTotRandom;
+    TH2D* EpMWPCEpVetoTot1;
+    TH2D* EpMWPCEpVetoTot1Prompt;
+    TH2D* EpMWPCEpVetoTot1Random;
 
-    TH2D* EnMWPCEnTot;
-    TH2D* EnMWPCEnTotPrompt;
-    TH2D* EnMWPCEnTotRandom;
+    TH2D* EnMWPCEnVetoTot1;
+    TH2D* EnMWPCEnVetoTot1Prompt;
+    TH2D* EnMWPCEnVetoTot1Random;
+
+    TH2D* EpMWPCEpVetoTot2;
+    TH2D* EpMWPCEpVetoTot2Prompt;
+    TH2D* EpMWPCEpVetoTot2Random;
+
+    TH2D* EnMWPCEnVetoTot2;
+    TH2D* EnMWPCEnVetoTot2Prompt;
+    TH2D* EnMWPCEnVetoTot2Random;
+
+    TH2D* ThetapMWPCEpTot1;
+    TH2D* ThetapMWPCEpTot1Prompt;
+    TH2D* ThetapMWPCEpTot1Random;
+
+    TH2D* ThetanMWPCEnTot1;
+    TH2D* ThetanMWPCEnTot1Prompt;
+    TH2D* ThetanMWPCEnTot1Random;
+
+    TH2D* ThetapMWPCEpTot2;
+    TH2D* ThetapMWPCEpTot2Prompt;
+    TH2D* ThetapMWPCEpTot2Random;
+
+    TH2D* ThetanMWPCEnTot2;
+    TH2D* ThetanMWPCEnTot2Prompt;
+    TH2D* ThetanMWPCEnTot2Random;
 
     TH1D* EgPrompt;
     TH1D* ThetaScPrompt;
@@ -328,14 +361,6 @@ private:
     TH1D* PhipSet[10][5];
     TH1D* PhipSetPrompt[10][5];
     TH1D* PhipSetRandom[10][5];
-
-    TH1D* MWPCnSum;
-    TH1D* MWPCnSumPrompt;
-    TH1D* MWPCnSumRandom;
-
-    TH2D* EMWPC1pEp;
-    TH2D* EMWPC1pEpPrompt;
-    TH2D* EMWPC1pEpRandom;
 
     TH1D* NeutronE;
     TH1D* NeutronEPrompt;

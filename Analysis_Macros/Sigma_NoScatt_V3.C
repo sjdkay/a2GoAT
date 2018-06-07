@@ -28,6 +28,9 @@ void Sigma_NoScatt_V3(){
     char GraphName[60];
     char ScGraphName[60];
     char ScGraphNameAdj[60];
+    char FitName[60];
+    char FitErrName[60];
+    char FitGraphName[60];
 
     TF1 *LegPol = new TF1("LegPol", "(1-x**2)*([0]*3+[1]*15*x+[2]*15.0/2*(7*x**2-1)+[3]*105.0/2*x*(3*x**2-1)+[4]*105.0/8*(33*x**4-18*x**2+1)+[5]*63.0/8*x*(143*x**4-110*x**2+15)+[6]*315.0/16*(143*x**6-143*x**4+33*x**2-1)+[7]*495.0/16*(221*x**7-273*x**5+91*x**3-7*x))", -1, 1);
     LegPol->SetLineColor(4);
@@ -311,7 +314,7 @@ void Sigma_NoScatt_V3(){
     }
 
     // Open file to get latest values for Sigma from scattered data
-    TFile *fScatt = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sigma_Plots_S43.root");
+    TFile *fScatt = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sigma_Plots_S47.root");
 
     for(Int_t i = 0; i < 10; i ++){ // Egamma value
         sprintf(ScGraphName, "Sigma_%i", EStart+(i*20));
@@ -332,7 +335,7 @@ void Sigma_NoScatt_V3(){
         SigmaScPlots[i]->GetYaxis()->CenterTitle();
     }
 
-    TFile f5("Sigma_Plots_NS18_S43_V1.root", "RECREATE");
+    TFile f5("Sigma_Plots_NS18_S47_V4.root", "RECREATE");
 
     Float_t xMin = -1;
     Float_t xMax = 1;
@@ -634,14 +637,15 @@ void Sigma_NoScatt_V3(){
     double Gorbenko90y[6] = {-0.267, -0.257, -0.164, -0.150, 0.0, 0.126};
     double Gorbenko90yErr[6] = {0.061, 0.033, 0.028, 0.057, 0.094, 0.142};
 
-    for(Int_t i = 0; i < 20; i++){
+    for(Int_t i = 0; i < 21; i++){
         if(i < 14){
             Sigma90[i] = (SigmaValues[i][8] + SigmaValues[i][9])/2;
             SigmaErr90[i] = 0.5*(sqrt( (SigmaErrValues[i][8]**2) + (SigmaErrValues[i][9]**2)));
         }
+        else if (i==14) continue;
         else if (i > 14){
-            Sigma90[i] = (SigmaValues[i+1][8] + SigmaValues[i+1][9])/2;
-            SigmaErr90[i] = 0.5*(sqrt( (SigmaErrValues[i+1][8]**2) + (SigmaErrValues[i+1][9]**2)));
+            Sigma90[i-1] = (SigmaValues[i][8] + SigmaValues[i][9])/2;
+            SigmaErr90[i-1] = 0.5*(sqrt( (SigmaErrValues[i][8]**2) + (SigmaErrValues[i][9]**2)));
         }
     }
 
@@ -785,6 +789,208 @@ void Sigma_NoScatt_V3(){
         p7tree->Fill();
     }
 
+// Couting loop for results to be inputted into LaTeX if needed
+//    for(Int_t i = 0; i < 21; i++){ // Energy
+//        Double_t EValue = EStart + (i*10);
+//        cout << std::setprecision(3) << EValue << " #pm " << 5 << "\t";
+//        for (Int_t j = 0; j < 18; j++){
+//                if (j!= 17) cout << std::setprecision(3) << std::fixed << SigmaValues[i][j] << " #pm " << SigmaErrValues[i][j] << "\t";
+//                else if (j == 17) cout << SigmaValues[i][j] << " #pm " << SigmaErrValues[i][j] << endl;
+//            }
+//        }
+
+    double SigmaEDepPar[6][7] = {{2.99203,-11.6753,22.4077,-27.858,23.5892,-12.9431,3.63412},
+                                {-1.67285,5.72189,-9.9412,11.3262,-8.83277,4.43907,-1.10018},
+                                {0.648495,-1.96551,3.04773,-3.14691,2.31897,-1.16499,0.309782},
+                                {-0.884155,3.09574,-5.41028,6.06124,-4.58708,2.23079,-0.544889},
+                                {-0.134468,0.560091,-1.0877,1.2847,-0.972672,0.445549,-0.0954476},
+                                {-0.460013,1.41646,-2.17844,2.15514,-1.45138,0.633165,-0.139968}}; // Par 0 is P22 e.t.c.
+    double SigmaEDepParErr[6][7] = {{0.0186005,0.0245129,0.0207498,0.0193895,0.0178788,0.0180634,0.0120939},
+                                    {0.0102835,0.0134829,0.0113874,0.0105955,0.0097473,0.00981033,0.0065908},
+                                    {0.00698575,0.00911475,0.00767362,0.00710237,0.0065157,0.00653866,0.00441064},
+                                    {0.00542185,0.00703949,0.00593895,0.00550025,0.00505964,0.00508222,0.00344486},
+                                    {0.00423913,0.00553335,0.0046663,0.00433196,0.00399039,0.0040243,0.00272008},
+                                    {0.00353928,0.00460135,0.00388868,0.00360703,0.00332274,0.00333902,0.00226802}};
+
+    // Define Energy dependence fits of 7 gaussians to the Sigma values
+    TF1 **EDepP2 = new TF1*[6];
+    double EDepP2FitValsX[6][21];
+    double EDepP2FitValsY[6][21];
+    // Define Energy dependence fits of 7 gaussians to the Sigma values for inclusion of errors
+    TF1 **EDepErrP2 = new TF1*[6];
+    double EDepErrP2FitValsY[6][21];
+    TGraphErrors* EDepP2Graphs[6];
+
+    for(Int_t i = 0; i < 6; i++){
+        sprintf(FitName, "EDepP2%i", i+2);
+        sprintf(FitErrName, "EDepP2%iErr", i+2);
+        EDepP2[i] = new TF1 (FitName,"[0]*exp(-1*(x-420)**2/2/60**2)+[1]*exp(-1*(x-450)**2/2/60**2)+[2]*exp(-1*(x-480)**2/2/60**2)+[3]*exp(-1*(x-510)**2/2/60**2)+[4]*exp(-1*(x-540)**2/2/60**2)+[5]*exp(-1*(x-570)**2/2/60**2)+[6]*exp(-1*(x-600)**2/2/60**2)" , 410, 620);
+        EDepErrP2[i] = new TF1 (FitErrName,"[0]*exp(-1*(x-420)**2/2/60**2)+[1]*exp(-1*(x-450)**2/2/60**2)+[2]*exp(-1*(x-480)**2/2/60**2)+[3]*exp(-1*(x-510)**2/2/60**2)+[4]*exp(-1*(x-540)**2/2/60**2)+[5]*exp(-1*(x-570)**2/2/60**2)+[6]*exp(-1*(x-600)**2/2/60**2)" , 410, 620);
+        for(Int_t j =0 ; j<7; j++){
+            EDepP2[i]->SetParameter(j, SigmaEDepPar[i][j]);
+            EDepErrP2[i]->SetParameter(j, SigmaEDepPar[i][j] + 0.5*SigmaEDepParErr[i][j]);
+        }
+        for(Int_t k = 0; k < 21; k++){
+            EDepP2FitValsX[i][k] = 415+(k*10);
+            EDepP2FitValsY[i][k] = EDepP2[i]->Eval(415+(k*10));
+            EDepErrP2FitValsY[i][k] = fabs(EDepP2[i]->Eval(415+(k*10)) - EDepErrP2[i]->Eval(415+(k*15)))/2;
+        }
+    }
+
+    for(int i = 0; i < 6; i++){
+        sprintf(FitGraphName, "EDepP2%i_Graph", i+2);
+        EDepP2Graphs[i] = new TGraphErrors(21 , EDepP2FitValsX[i], EDepP2FitValsY[i], ex2, EDepErrP2FitValsY[i]);
+        EDepP2Graphs[i]->SetFillColor(2);
+        EDepP2Graphs[i]->SetFillStyle(3005);
+        EDepP2Graphs[i]->SetName(FitGraphName);
+        EDepP2Graphs[i]->Write();
+    }
+
+    TCanvas *canvas24 = new TCanvas("canvas24","canvas24", 2560, 1440);
+    canvas24->Divide(3,2, 0.0000001, 0.001);
+    for(int i = 1; i < 7; i++){
+        canvas24->cd(i);
+        ParameterPlots[i-1]->Draw("AEP");
+        EDepP2[i-1]->Draw("SAME");
+    }
+    canvas24->Write();
+
+    TCanvas *canvas25 = new TCanvas("canvas25","canvas25", 2560, 1440);
+    canvas25->Divide(3,2, 0.0000001, 0.001);
+    for(int i = 1; i < 7; i++){
+        canvas25->cd(i);
+        ParameterPlots[i-1]->Draw("AEP");
+        EDepP2[i-1]->Draw("SAME");
+        EDepP2Graphs[i-1]->Draw("SAMEE3");
+    }
+    canvas25->Write();
+
+    double SigmaEDepPar2[6][4] = {{-0.108754,-0.00356053,0.0745446,-0.0212027},
+                                   {0.0238134,-0.00919569,0.0305643,-0.0102451},
+                                    {0.00121507,-0.00177259,0.0044306,-0.00475281},
+                                    {0.00533593,-0.000667558,0.00358099,-0.00188308},
+                                    {0.0029606,-0.00206478,0.00386589,-0.00364641},
+                                    {0.00146578,-0.000521466,0.0013484,-0.00115159}}; // Par 0 is P22 e.t.c.
+    double SigmaEDepParErr2[6][4] = {{0.0117154,0.0145275,0.00995927,0.0083138},
+                                    {0.00659844,0.00815144,0.00555855,0.00462971},
+                                    {0.0045234,0.00556333,0.00377952,0.00312741},
+                                    {0.00359515,0.00441473,0.00302053,0.00248303},
+                                    {0.00273471,0.00336765,0.00231762,0.00190911},
+                                    {0.00235227,0.00289976,0.0020076,0.00164492}};
+
+    // Define Energy dependence fits of 3 gaussians + BW to the Sigma values
+    TF1 **EDepP2_2 = new TF1*[6];
+    double EDepP2FitValsX2[6][21];
+    double EDepP2FitValsY2[6][21];
+    // Define Energy dependence fits of 3 gaussians + BW to the Sigma values for inclusion of errors
+    TF1 **EDepErrP2_2 = new TF1*[6];
+    double EDepErrP2FitValsY2[6][21];
+    TGraphErrors* EDepP2Graphs2[6];
+
+    for(Int_t i = 0; i < 6; i++){
+        sprintf(FitName, "EDepP2%i_2", i+2);
+        sprintf(FitErrName, "EDepP2%iErr_2", i+2);
+        EDepP2_2[i] = new TF1 (FitName, "[0]*exp(-1*(x-420)*(x-420)/2/100/100)+[1]*exp(-1*(x-520)*(x-520)/2/100/100)+[2]*exp(-1*(x-620)*(x-620)/2/100/100)+[3]*70*70/4/((x-570)*(x-570)+70*70/4)", 410, 620);
+        EDepErrP2_2[i] = new TF1 (FitErrName, "[0]*exp(-1*(x-420)*(x-420)/2/100/100)+[1]*exp(-1*(x-520)*(x-520)/2/100/100)+[2]*exp(-1*(x-620)*(x-620)/2/100/100)+[3]*70*70/4/((x-570)*(x-570)+70*70/4)", 410, 620);
+        for(Int_t j =0 ; j < 4; j++){
+            EDepP2_2[i]->SetParameter(j, SigmaEDepPar2[i][j]);
+            EDepErrP2_2[i]->SetParameter(j, SigmaEDepPar2[i][j] + 0.5*SigmaEDepParErr2[i][j]);
+        }
+        for(Int_t k = 0; k < 21; k++){
+            EDepP2FitValsX2[i][k] = 415+(k*10);
+            EDepP2FitValsY2[i][k] = EDepP2_2[i]->Eval(415+(k*10));
+            EDepErrP2FitValsY2[i][k] = fabs(EDepP2_2[i]->Eval(415+(k*10)) - EDepErrP2_2[i]->Eval(415+(k*15)))/2;
+        }
+    }
+
+    for(int i = 0; i < 6; i++){
+        sprintf(FitGraphName, "EDepP2%i_Graph2", i+2);
+        EDepP2Graphs2[i] = new TGraphErrors(21 , EDepP2FitValsX2[i], EDepP2FitValsY2[i], ex2, EDepErrP2FitValsY2[i]);
+        EDepP2Graphs2[i]->SetFillColor(2);
+        EDepP2Graphs2[i]->SetFillStyle(3005);
+        EDepP2Graphs2[i]->SetName(FitGraphName);
+        EDepP2Graphs2[i]->Write();
+    }
+
+    TCanvas *canvas26 = new TCanvas("canvas26","canvas26", 2560, 1440);
+    canvas26->Divide(3,2, 0.0000001, 0.001);
+    for(int i = 1; i < 7; i++){
+        canvas26->cd(i);
+        ParameterPlots[i-1]->Draw("AEP");
+        EDepP2_2[i-1]->Draw("SAME");
+    }
+    canvas26->Write();
+
+    TCanvas *canvas27 = new TCanvas("canvas27","canvas27", 2560, 1440);
+    canvas27->Divide(3,2, 0.0000001, 0.001);
+    for(int i = 1; i < 7; i++){
+        canvas27->cd(i);
+        ParameterPlots[i-1]->Draw("AEP");
+        EDepP2_2[i-1]->Draw("SAME");
+        EDepP2Graphs2[i-1]->Draw("SAMEE3");
+    }
+    canvas27->Write();
+
+    TF1 **LegPolEDep1 = new TF1*[21];
+    TF1 **LegPolEDep2 = new TF1*[21];
+    for(Int_t i = 0; i < 21; i++){
+        LegPolEDep1[i] = new TF1(Form("LegPolEDep1_%i", 415+(i*10)), "(1-x**2)*([0]*3+[1]*15*x+[2]*15.0/2*(7*x**2-1)+[3]*105.0/2*x*(3*x**2-1)+[4]*105.0/8*(33*x**4-18*x**2+1)+[5]*63.0/8*x*(143*x**4-110*x**2+15)+[6]*315.0/16*(143*x**6-143*x**4+33*x**2-1)+[7]*495.0/16*(221*x**7-273*x**5+91*x**3-7*x))", -1, 1);
+        LegPolEDep1[i]->SetLineColor(807);
+        LegPolEDep2[i] = new TF1(Form("LegPolEDep2_%i", 415+(i*10)), "(1-x**2)*([0]*3+[1]*15*x+[2]*15.0/2*(7*x**2-1)+[3]*105.0/2*x*(3*x**2-1)+[4]*105.0/8*(33*x**4-18*x**2+1)+[5]*63.0/8*x*(143*x**4-110*x**2+15)+[6]*315.0/16*(143*x**6-143*x**4+33*x**2-1)+[7]*495.0/16*(221*x**7-273*x**5+91*x**3-7*x))", -1, 1);
+        LegPolEDep2[i]->SetLineColor(1);
+        for(Int_t j = 0; j < 6; j++){
+            LegPolEDep1[i]->SetParameter(j, EDepP2[j]->Eval(415+(i*10)));
+            LegPolEDep2[i]->SetParameter(j, EDepP2_2[j]->Eval(415+(i*10)));
+        }
+        LegPolEDep1[i]->SetParameter(6, 0);
+        LegPolEDep2[i]->SetParameter(6, 0);
+        LegPolEDep1[i]->SetParameter(7, 0);
+        LegPolEDep2[i]->SetParameter(7, 0);
+    }
+
+    TCanvas *canvas28 = new TCanvas("canvas28","canvas28", 2560, 1440);
+    canvas28->Divide(5,4, 0.0000001, 0.001);
+    for(int i = 0 ; i < 21 ; i++){
+        if (i < 14){
+            canvas28->cd(i+1);
+            SigmaPlots[i]->Draw("AEP");
+            LegPolEDep1[i]->Draw("SAME");
+            LegPolEDep2[i]->Draw("SAME");
+        }
+        if (i > 14){
+            canvas28->cd(i);
+            SigmaPlots[i]->Draw("AEP");
+            LegPolEDep1[i]->Draw("SAME");
+            LegPolEDep2[i]->Draw("SAME");
+        }
+    }
+
+    canvas28->Write();
+
+    leg4 = new TLegend(0.7, 0.7, 0.9, 0.9);
+    leg4->AddEntry(SigmaPlots[7], "E Indep Fit", "l");
+    leg4->AddEntry(LegPolEDep1[7], "E Dep Fit (7 Gaus)", "l");
+    leg4->AddEntry(LegPolEDep2[7], "E Dep Fit (3 Gaus + BW)", "l");
+
+    TCanvas *canvas29 = new TCanvas("canvas29","canvas29", 2560, 1440);
+    SigmaPlots[7]->Draw("AEP");
+    LegPolEDep1[7]->Draw("SAME");
+    LegPolEDep2[7]->Draw("SAME");
+    leg4->Draw("SAME");
+    canvas29->Write();
+
     f5.Write();
+     // Save Sigma Values to .dat file
+    ofstream outfile1("Sigma_NS18.dat");
+
+    Int_t Dummy1=0;
+    for(Int_t i = 0;i < 21;i++){
+        for(Int_t j =0 ; j<18; j++){
+            if(i != 14){
+            outfile1 << Dummy1 <<"   "<< 415+(i*10) <<"   "<< 0.85 - (j*0.1) <<"   "<< SigmaValues[i][j] <<"   "<< SigmaErrValues[i][j] <<endl;
+            Dummy1+=1;
+            }
+        }
+    }
 
 }

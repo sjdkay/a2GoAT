@@ -28,7 +28,7 @@ void Sigma_Scatt_V3(){
     LegPol->FixParameter(6, 0.0); // These seem to be ignored?
     LegPol->FixParameter(7, 0.0);
 
-    TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Para/Physics_Total_Para_43_25_5_18.root"); // Open latest Para file
+    TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Para/Physics_Total_Para_47_28_5_18.root"); // Open latest Para file
 
     TH1D* Eg_Para = (TH1D*)f->Get("Eg")->Clone();
     Eg_Para->SetName("Eg_Para");
@@ -49,7 +49,7 @@ void Sigma_Scatt_V3(){
     /////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////
 
-    TFile *f1 = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Perp/Physics_Total_Perp_43_25_5_18.root"); // Open latest Para file
+    TFile *f1 = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Perp/Physics_Total_Perp_47_28_5_18.root"); // Open latest Para file
 
     TH1D* Eg_Perp = (TH1D*)f1->Get("Eg")->Clone();
     Eg_Perp->SetName("Eg_Perp");
@@ -63,7 +63,7 @@ void Sigma_Scatt_V3(){
         }
     }
 
-    TFile f2("ParaPerp_S43_Combined.root", "RECREATE");
+    TFile f2("ParaPerp_S47_Combined.root", "RECREATE");
 
     Eg_Para->Write();
     Eg_Perp->Write();
@@ -96,7 +96,7 @@ void Sigma_Scatt_V3(){
         }
     }
 
-    TFile f3("ParaPerpAsymm_S43.root", "RECREATE");
+    TFile f3("ParaPerpAsymm_S47.root", "RECREATE");
 
     for(Int_t i = 0; i < 10; i++){ // Energy
         for(Int_t j = 0; j < 5; j++){ // Theta
@@ -127,7 +127,7 @@ void Sigma_Scatt_V3(){
     }
 
 
-    TFile f5("Sigma_Plots_S43.root", "RECREATE");
+    TFile f5("Sigma_Plots_S47.root", "RECREATE");
 
     Float_t xMin = -1;
     Float_t xMax = 1;
