@@ -4,7 +4,7 @@ void CircPol(){
 
    TCanvas *canvas = new TCanvas("canvas","canvas", 1920, 1080);
    Double_t x[1257], y[1257];
-   Double_t Pm = 0.7;
+   Double_t Pm = 0.7666;
    Double_t Em = 1557;
    Int_t n = 1257;
    for (Int_t i=0; i<n; i++) {

@@ -40,7 +40,7 @@ void Sigma_NoScatt_V3(){
     LegPol->FixParameter(6, 0.0); // These seem to be ignored?
     LegPol->FixParameter(7, 0.0);
 
-    TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Para/NoScatt/Physics_Total_Para_NoScatt_18_26_4_18.root"); // Open latest Para file
+    TFile *f = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Para/NoScatt/Physics_Total_Para_NoScatt_18_26_4_18_V2.root"); // Open latest Para file
 
     TH1D* Eg_Para = (TH1D*)f->Get("Eg2")->Clone();
     Eg_Para->SetName("Eg_Para");
@@ -61,7 +61,7 @@ void Sigma_NoScatt_V3(){
     /////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////
 
-    TFile *f1 = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Perp/NoScatt/Physics_Total_Perp_NoScatt_18_26_4_18.root"); // Open latest Para file
+    TFile *f1 = new TFile("/scratch/Mainz_Software/Data/GoAT_Output/GoAT_23_01_17/Perp/NoScatt/Physics_Total_Perp_NoScatt_18_26_4_18_V2.root"); // Open latest Para file
 
     TH1D* Eg_Perp = (TH1D*)f1->Get("Eg2")->Clone();
     Eg_Perp->SetName("Eg_Perp");
@@ -75,7 +75,7 @@ void Sigma_NoScatt_V3(){
         }
     }
 
-    TFile f2("ParaPerp_NS18_Combined.root", "RECREATE");
+    TFile f2("ParaPerp_NS18_Combined_V2.root", "RECREATE");
 
     Eg_Para->Write();
     Eg_Perp->Write();
@@ -108,7 +108,7 @@ void Sigma_NoScatt_V3(){
         }
     }
 
-    TFile f3("ParaPerpAsymm_NS18.root", "RECREATE");
+    TFile f3("ParaPerpAsymm_NS18_V2.root", "RECREATE");
     // In other version fill a tree here to read for next file - Don't bother now?
     // Add back in later maybe?
 
@@ -299,7 +299,7 @@ void Sigma_NoScatt_V3(){
     }
 
     // Open file to grap systematic errors for 1 sigma vs 2 sigma MM cut
-    TFile *fSyst = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sigma_Systematic_18_17_V2.root");
+    TFile *fSyst = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sigma_Systematic_18_17_V4.root");
 
     double xSc[5] = {0.8, 0.4, 0, -0.4, -0.8};
     double exSc[5] = {0.2, 0.2, 0.2, 0.2, 0.2};
@@ -314,7 +314,7 @@ void Sigma_NoScatt_V3(){
     }
 
     // Open file to get latest values for Sigma from scattered data
-    TFile *fScatt = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sigma_Plots_S47.root");
+    TFile *fScatt = TFile::Open("/scratch/Mainz_Software/a2GoAT/Sigma_Plots_S48_V2.root");
 
     for(Int_t i = 0; i < 10; i ++){ // Egamma value
         sprintf(ScGraphName, "Sigma_%i", EStart+(i*20));
@@ -335,7 +335,7 @@ void Sigma_NoScatt_V3(){
         SigmaScPlots[i]->GetYaxis()->CenterTitle();
     }
 
-    TFile f5("Sigma_Plots_NS18_S47_V4.root", "RECREATE");
+    TFile f5("Sigma_Plots_NS18_S48_V2_1.root", "RECREATE");
 
     Float_t xMin = -1;
     Float_t xMax = 1;
@@ -878,6 +878,7 @@ void Sigma_NoScatt_V3(){
                                     {0.00273471,0.00336765,0.00231762,0.00190911},
                                     {0.00235227,0.00289976,0.0020076,0.00164492}};
 
+
     // Define Energy dependence fits of 3 gaussians + BW to the Sigma values
     TF1 **EDepP2_2 = new TF1*[6];
     double EDepP2FitValsX2[6][21];
@@ -912,6 +913,54 @@ void Sigma_NoScatt_V3(){
         EDepP2Graphs2[i]->Write();
     }
 
+    double SigmaEDepPar3[6][3] = {{-0.163267,0.0763012,0.0745446},
+                                    {0.00272942,0.02196,0.0305643},
+                                    {0.00109954,-0.000781213,0.0044306},
+                                    {0.00319168,0.00246247,0.00358099},
+                                    {0.00232062,-0.000615963,0.00386589},
+                                    {0.00109522,0.000139162,0.0013484}}; // Par 0 is P22 e.t.c.
+    double SigmaEDepParErr3[6][3] = {{0.00249515,0.00171847,0.00721249},
+                                    {0.00137007,0.000936932,1.41421},
+                                    {0.000924276,0.000626941,1.41421},
+                                    {0.00071391,0.00048596,1.41421},
+                                    {0.000561895,0.000383696,1.41421},
+                                    {0.000466879,0.000318795,1.41421}};
+
+    // Define Energy dependence fits of 3 gaussiansto the Sigma values
+    TF1 **EDepP2_3 = new TF1*[6];
+    double EDepP2FitValsX3[6][21];
+    double EDepP2FitValsY3[6][21];
+    // Define Energy dependence fits of 3 gaussians to the Sigma values for inclusion of errors
+    TF1 **EDepErrP2_3 = new TF1*[6];
+    double EDepErrP2FitValsY3[6][21];
+    TGraphErrors* EDepP2Graphs3[6];
+
+    for(Int_t i = 0; i < 6; i++){
+        sprintf(FitName, "EDepP2%i_3", i+2);
+        sprintf(FitErrName, "EDepP2%iErr_3", i+2);
+        EDepP2_3[i] = new TF1 (FitName, "[0]*exp(-1*(x-420)*(x-420)/2/100/100)+[1]*exp(-1*(x-520)*(x-520)/2/100/100)+[2]*exp(-1*(x-620)*(x-620)/2/100/100)", 410, 620);
+        EDepErrP2_3[i] = new TF1 (FitErrName, "[0]*exp(-1*(x-420)*(x-420)/2/100/100)+[1]*exp(-1*(x-520)*(x-520)/2/100/100)+[2]*exp(-1*(x-620)*(x-620)/2/100/100)", 410, 620);
+        EDepP2_3[i]->SetLineStyle(9);
+        for(Int_t j =0 ; j < 3; j++){
+            EDepP2_3[i]->SetParameter(j, SigmaEDepPar2[i][j]);
+            EDepErrP2_3[i]->SetParameter(j, SigmaEDepPar2[i][j] + 0.5*SigmaEDepParErr2[i][j]);
+        }
+        for(Int_t k = 0; k < 21; k++){
+            EDepP2FitValsX3[i][k] = 415+(k*10);
+            EDepP2FitValsY3[i][k] = EDepP2_3[i]->Eval(415+(k*10));
+            EDepErrP2FitValsY3[i][k] = fabs(EDepP2_3[i]->Eval(415+(k*10)) - EDepErrP2_3[i]->Eval(415+(k*15)))/2;
+        }
+    }
+
+    for(int i = 0; i < 6; i++){
+        sprintf(FitGraphName, "EDepP2%i_Graph3", i+2);
+        EDepP2Graphs3[i] = new TGraphErrors(21 , EDepP2FitValsX3[i], EDepP2FitValsY3[i], ex2, 0);
+        EDepP2Graphs3[i]->SetFillColor(2);
+        EDepP2Graphs3[i]->SetLineStyle(9);
+        EDepP2Graphs3[i]->SetName(FitGraphName);
+        EDepP2Graphs3[i]->Write();
+    }
+
     TCanvas *canvas26 = new TCanvas("canvas26","canvas26", 2560, 1440);
     canvas26->Divide(3,2, 0.0000001, 0.001);
     for(int i = 1; i < 7; i++){
@@ -930,6 +979,17 @@ void Sigma_NoScatt_V3(){
         EDepP2Graphs2[i-1]->Draw("SAMEE3");
     }
     canvas27->Write();
+
+    TCanvas *canvas27a = new TCanvas("canvas27a","canvas27a", 2560, 1440);
+    canvas27a->Divide(3,2, 0.0000001, 0.001);
+    for(int i = 1; i < 7; i++){
+        canvas27a->cd(i);
+        ParameterPlots[i-1]->Draw("AEP");
+        EDepP2_2[i-1]->Draw("SAME");
+        EDepP2_3[i-1]->Draw("SAME");
+        EDepP2Graphs2[i-1]->Draw("SAMEE3");
+    }
+    canvas27a->Write();
 
     TF1 **LegPolEDep1 = new TF1*[21];
     TF1 **LegPolEDep2 = new TF1*[21];

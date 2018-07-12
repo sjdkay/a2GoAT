@@ -59,7 +59,7 @@ void CxAsymm_V3() {
     TF1 *AsymmFunc = new TF1("AsymmFit",  fitf, -3.0, 3.0, 2); //Give a name and range to the fitting funcion
     AsymmFunc->SetParNames("SinAmp", "CosAmp"); //Name the parameters
     AsymmFunc->SetParameter(0, 0);
-    TFile *f = new TFile("/scratch/Mainz_Software/a2GoAT/Physics_Total_Amo148_Lin48_Combined.root"); // Open the latest PTotal file to load histograms from
+    TFile *f = new TFile("/scratch/Mainz_Software/a2GoAT/Physics_Total_Amo148_Lin48_Combined_V2.root"); // Open the latest PTotal file to load histograms from
     TFile *fAy = new TFile ("/scratch/Mainz_Software/a2GoAT/npAy.root");
     TF1 *Pn90CM = new TF1("Pn90CM", "1.64576-2.95484*(x/1000)+0.684577*(x/1000)**2-0.65*90**2/4/((x-560)**2+90**2/4)+(5.32305-35.3819*(x/1000)+70.145*(x/1000)**2-44.2899*(x/1000)**3)",200,1000);
 
@@ -114,7 +114,7 @@ void CxAsymm_V3() {
         }
     }
 
-    TFile f1("AsymmFits_PTotal_148_48_V2.root", "RECREATE");
+    TFile f1("AsymmFits_PTotal_148_48_V2_1.root", "RECREATE");
 
     for(Int_t i = 0; i < 3; i++){ // Fit version
         for(Int_t j = 0; j < 8; j++){ // Energy
@@ -143,7 +143,7 @@ void CxAsymm_V3() {
         }
     }
 
-    TFile f3("Cx_Plots_148_48_V3.root", "RECREATE");
+    TFile f3("Cx_Plots_148_48_V2_1.root", "RECREATE");
 
     double x[5] = {0.8, 0.4, 0, -0.4, -0.8};
     double ex[5] = {0.2, 0.2, 0.2, 0.2, 0.2};

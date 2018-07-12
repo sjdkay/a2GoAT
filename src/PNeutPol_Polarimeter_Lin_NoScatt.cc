@@ -399,9 +399,9 @@ PNeutPol_Polarimeter_Lin_NoScatt::PNeutPol_Polarimeter_Lin_NoScatt() // Define a
 
     for(Int_t C = 0; C < 21; C++){
         for(Int_t D = 0; D < 20; D++){
-            PhipSet[C][D] = new TH1D(Form("Phip_%iMeVCM%i", 410+(C*10), D+1), Form("#phi_{p} %i #pm 5MeV CM%i", 410+(C*10), D+1), 10, -180, 180);
-            PhipSetPrompt[C][D] = new TH1D(Form("Phip_%iMeVCM%iPrompt", 410+(C*10), D+1), Form("#phi_{p} %i #pm 5MeV CM%i", 410+(C*10), D+1), 10, -180, 180);
-            PhipSetRandom[C][D] = new TH1D(Form("Phip_%iMeVCM%iRandom", 410+(C*10), D+1), Form("#phi_{p} %i #pm 5MeV CM%i", 410+(C*10), D+1), 10, -180, 180);
+            PhipSet[C][D] = new TH1D(Form("Phip_%iMeVCM%i", 415+(C*10), D+1), Form("#phi_{p} %i #pm 5MeV CM%i", 415+(C*10), D+1), 10, -180, 180);
+            PhipSetPrompt[C][D] = new TH1D(Form("Phip_%iMeVCM%iPrompt", 415+(C*10), D+1), Form("#phi_{p} %i #pm 5MeV CM%i", 415+(C*10), D+1), 10, -180, 180);
+            PhipSetRandom[C][D] = new TH1D(Form("Phip_%iMeVCM%iRandom", 415+(C*10), D+1), Form("#phi_{p} %i #pm 5MeV CM%i", 415+(C*10), D+1), 10, -180, 180);
         }
     }
 
@@ -422,7 +422,7 @@ void PNeutPol_Polarimeter_Lin_NoScatt::FillHists()
         double_t EgMMLow = 200 + (M*50);
         double_t EgMMHigh = 250 + (M*50);
         if( EgMMLow < EGamma && EGamma < EgMMHigh){ // Cut on missing mass depending upon enegry
-            if (((MMpEpCorr < (MMCutArray[M][0] - (2*MMCutArray[M][1]))) == kTRUE) || (MMpEpCorr > (MMCutArray[M][0] + (2*MMCutArray[M][1]))) == kTRUE) return;
+            if (((MMpEpCorr < (MMCutArray[M][0] - (1*MMCutArray[M][1]))) == kTRUE) || (MMpEpCorr > (MMCutArray[M][0] + (1*MMCutArray[M][1]))) == kTRUE) return;
         }
     }
 
