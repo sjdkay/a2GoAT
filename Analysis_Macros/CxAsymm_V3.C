@@ -62,6 +62,7 @@ void CxAsymm_V3() {
     TFile *f = new TFile("/scratch/Mainz_Software/a2GoAT/Physics_Total_Amo148_Lin48_Combined_V2.root"); // Open the latest PTotal file to load histograms from
     TFile *fAy = new TFile ("/scratch/Mainz_Software/a2GoAT/npAy.root");
     TF1 *Pn90CM = new TF1("Pn90CM", "1.64576-2.95484*(x/1000)+0.684577*(x/1000)**2-0.65*90**2/4/((x-560)**2+90**2/4)+(5.32305-35.3819*(x/1000)+70.145*(x/1000)**2-44.2899*(x/1000)**3)",200,1000);
+    TH2D *AEffVals = new TH2D("AEffVals", "A_{Eff}(E_{#gamma}, cos(#theta_{CM}))", 8, 200, 1000, 5, -1, 1);
 
     for(Int_t i = 0; i < 3; i++){ // Fit version
         for(Int_t j = 0; j < 8; j++){ // Energy
@@ -80,6 +81,7 @@ void CxAsymm_V3() {
                 MeanY[j][k] = ((TH2D*)f->Get(NeutronEThetaScName))->GetMean(2);
 
                 AEff[j][k] = ((TH2F*)fAy->Get("nppnAy"))->Interpolate(MeanX[j][k], MeanY[j][k]);
+                AEffVals->SetBinContent(j+1, 5-k, AEff[j][k]);
                 CorrFac[j][k] = (1+exp(1.81572-(0.0139530*MeanX[j][k])));
                 AEffCorr[j][k] = AEff[j][k] * CorrFac[j][k]; //Analysing power for 12C based on correction factor from Mikhail
                 AmpVal = PVal*AEffCorr[j][k];
@@ -124,6 +126,8 @@ void CxAsymm_V3() {
         }
     }
 
+    AEffVals->Write();
+
     f1.Write();
     f1.Close();
 
@@ -143,7 +147,7 @@ void CxAsymm_V3() {
         }
     }
 
-    TFile f3("Cx_Plots_148_48_V2_1.root", "RECREATE");
+    TFile f3("Cx_Plots_148_48_V2_2.root", "RECREATE");
 
     double x[5] = {0.8, 0.4, 0, -0.4, -0.8};
     double ex[5] = {0.2, 0.2, 0.2, 0.2, 0.2};
@@ -221,7 +225,7 @@ double ex2[8] = {50, 50, 50, 50, 50, 50, 50, 50};
                 Cx2Err[i][j] = CxErr[i][j][k];
             }
             sprintf(name2, "Cx_CM%i_V%i_5Theta", k+1, i+1);
-            sprintf(title2, "C_{x'}(E_{#gamma}) #theta_{CM} %i - %i", k*36 ,36 + (k*36));
+            sprintf(title2, "C_{x'}(E_{#gamma}) #theta_{CM} %i - %i^{o}", k*36 ,36 + (k*36));
             Cx2Plots[i][k] = new TGraphErrors(8 , x2, Cx2[i], ex2, Cx2Err[i]);
             Cx2Plots[i][k]->SetName(name2);
             Cx2Plots[i][k]->SetTitle(title2);
@@ -243,7 +247,7 @@ double ex2[8] = {50, 50, 50, 50, 50, 50, 50, 50};
                 Cx2Plots[i][k]->SetMarkerStyle(22);
                 Cx2Plots[i][k]->SetLineColor(1);
             }
-            Cx2Plots[i][k]->GetXaxis()->SetTitle("E_{#gamma}");
+            Cx2Plots[i][k]->GetXaxis()->SetTitle("E_{#gamma}/MeV");
             Cx2Plots[i][k]->GetXaxis()->SetRangeUser(100, 1000);
             Cx2Plots[i][k]->GetYaxis()->SetRangeUser(-2, 2);
             Cx2Plots[i][k]->GetYaxis()->SetTitle("C_{x'}");
@@ -313,7 +317,7 @@ double ex2[8] = {50, 50, 50, 50, 50, 50, 50, 50};
 
     for(Int_t j = 0; j < 5; j++){
         sprintf(name4, "py_CM%i", j+1);
-        sprintf(title4, "p_{y}(E_{#gamma}) #theta_{CM} %i - %i", j*36 ,36 + (j*36));
+        sprintf(title4, "p_{y}(E_{#gamma}) #theta_{CM} %i - %i^{o}", j*36 ,36 + (j*36));
         py2Plots[j] = new TGraphErrors(8 , x2, py2[j], ex2, py2Err[j]);
         py2Plots[j]->SetName(name4);
         py2Plots[j]->SetTitle(title4);
@@ -322,7 +326,7 @@ double ex2[8] = {50, 50, 50, 50, 50, 50, 50, 50};
         py2Plots[j]->SetMarkerStyle(22);
         py2Plots[j]->SetMarkerSize(1.2);
         py2Plots[j]->SetLineColor(1);
-        py2Plots[j]->GetXaxis()->SetTitle("E_{#gamma}");
+        py2Plots[j]->GetXaxis()->SetTitle("E_{#gamma}/MeV");
         py2Plots[j]->GetXaxis()->SetRangeUser(200, 1000);
         py2Plots[j]->GetYaxis()->SetRangeUser(-2, 2);
         py2Plots[j]->GetYaxis()->SetTitle("p_{y}");

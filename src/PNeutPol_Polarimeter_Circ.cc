@@ -127,10 +127,6 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
     {
         Proton1 = kTRUE;
         Proton2 = kFALSE;
-        //if (GetTracks()->GetMWPC0Energy(0) == 0) return; // If no hit in first chamber for p drop out
-        //if (GetTracks()->GetMWPC1Energy(0) == 0) return; // If no hit in second chamber for p drop out
-        //if (GetTracks()->GetMWPC0Energy(1) == 0) return; // If no hit in first chamber for n drop out
-        //if (GetTracks()->GetMWPC1Energy(1) == 0) return; // If no hit in second chamber for p drop out
     }
 
     // If track 2 only gives signals in MWPC and CB it is the neutron
@@ -138,10 +134,6 @@ void	PNeutPol_Polarimeter_Circ::ProcessEvent()
     {
         Proton1 = kFALSE;
         Proton2 = kTRUE;
-        //if (GetTracks()->GetMWPC0Energy(1) == 0) return; // If no hit in first chamber for p drop out
-        //if (GetTracks()->GetMWPC1Energy(1) == 0) return; // If no hit in second chamber for p drop out
-        //if (GetTracks()->GetMWPC0Energy(0) == 0) return; // If no hit in first chamber for n drop out
-        //if (GetTracks()->GetMWPC1Energy(0) == 0) return; // If no hit in second chamber for n drop out
     }
 
     // Drop out on ANY other condition (for now)
@@ -563,6 +555,38 @@ PNeutPol_Polarimeter_Circ::PNeutPol_Polarimeter_Circ() // Define a load of histo
     ThetanMWPCEnTot2Prompt = new TH2D("ThetanMWPCEnTot2Prompt", "E^{Tot2}_MWPCn(#theta_{n})", 200, 0, 180, 200, 0, 1600);
     ThetanMWPCEnTot2Random = new TH2D("ThetanMWPCEnTot2Random", "E^{Tot2}_MWPCn(#theta_{n})", 200, 0, 180, 200, 0, 1600);
 
+    DOCADist = new TH1D("DOCADist", "DOCA", 500, 0, 1000);
+    DOCADistPrompt = new TH1D("DOCADistPrompt", "DOCA", 500, 0, 1000);
+    DOCADistRandom = new TH1D("DOCADistRandom", "DOCA", 500, 0, 1000);
+
+    DOCArPOCA = new TH2D("DOCArPOCA", "DOCA(r_{POCA})", 200, 0, 200, 200, 0, 1000);
+    DOCArPOCAPrompt = new TH2D("DOCArPOCAPrompt", "DOCA(r_{POCA})", 200, 0, 200, 200, 0, 1000);
+    DOCArPOCARandom = new TH2D("DOCArPOCARandom", "DOCA(r_{POCA})", 200, 0, 200, 200, 0, 1000);
+
+    ThetaScPhiSc = new TH2D("ThetaScPhiSc", "#phi_{Sc}(#theta_{Sc})", 200, 0 , 1, 200, -1*acos(-1) , acos(-1));
+    ThetaScPhiScPrompt = new TH2D("ThetaScPhiScPrompt", "#phi_{Sc}(#theta_{Sc})", 200, 0 , 1, 200, -1*acos(-1) , acos(-1));
+    ThetaScPhiScRandom = new TH2D("ThetaScPhiScRandom", "#phi_{Sc}(#theta_{Sc})", 200, 0 , 1, 200, -1*acos(-1) , acos(-1));
+
+    PhiScPosHelFull = new TH1D("PhiScPosHelFull", "#phi_{Sc} +ve Helicity", 200, -1*acos(-1), acos(-1));
+    PhiScPosHelFullPrompt = new TH1D("PhiScPosHelFullPrompt", "#phi_{Sc} +ve Helicity", 200, -1*acos(-1), acos(-1));
+    PhiScPosHelFullRandom = new TH1D("PhiScPosHelFullRandom", "#phi_{Sc} +ve Helicity", 200, -1*acos(-1), acos(-1));
+
+    PhiScNegHelFull = new TH1D("PhiScNegHelFull", "#phi_{Sc} +ve Helicity", 200, -1*acos(-1), acos(-1));
+    PhiScNegHelFullPrompt = new TH1D("PhiScNegHelFullPrompt", "#phi_{Sc} +ve Helicity", 200, -1*acos(-1), acos(-1));
+    PhiScNegHelFullRandom = new TH1D("PhiScNegHelFullRandom", "#phi_{Sc} +ve Helicity", 200, -1*acos(-1), acos(-1));
+
+    MMEg = new TH2D("MMEg", "MM_{p}(E_{#gamma})", 200, 0, 1000, 200, 0, 2000);
+    MMEgPrompt = new TH2D("MMEgPrompt", "MM_{p}(E_{#gamma})", 200, 0, 1000, 200, 0, 2000);
+    MMEgRandom = new TH2D("MMEgRadnom", "MM_{p}(E_{#gamma})", 200, 0, 1000, 200, 0, 2000);
+
+    PhiScEg = new TH2D ("PhiScEg", "#phi_{Sc}(E_{#gamma})", 200, 0 ,1000, 200, -1*acos(-1), acos(-1));
+    PhiScEgPrompt = new TH2D ("PhiScEgPrompt", "#phi_{Sc}(E_{#gamma})", 200, 0, 1000, 200, -1*acos(-1), acos(-1));
+    PhiScEgRandom = new TH2D ("PhiScEgRandom", "#phi_{Sc}(E_{#gamma})", 200, 0, 1000, 200, -1*acos(-1), acos(-1));
+
+    PhiScZp = new TH2D ("PhiScZp", "#phi_{Sc}(Z_{p})", 200, -100 ,100, 200, -1*acos(-1), acos(-1));
+    PhiScZpPrompt = new TH2D ("PhiScZpPrompt", "#phi_{Sc}(Z_{p})", 200, -100, 100, 200, -1*acos(-1), acos(-1));
+    PhiScZpRandom = new TH2D ("PhiScZpRandom", "#phi_{Sc}(Z_{p})", 200, -100, 100, 200, -1*acos(-1), acos(-1));
+
     for(Int_t A = 0; A < 8; A++){
         for(Int_t B = 0; B < 3; B++){
             PhiScPosHel[A][B] = new TH1D(Form("PhiSc%iPosHelCM%i", 250+(A*100), B+1), Form("#phi_{Sc} E_{#gamma}%i #pm 50MeV CM%i for +ve Helicity", 250+(A*100), B+1), 10, -1*acos(-1) , acos(-1));
@@ -647,6 +671,16 @@ void PNeutPol_Polarimeter_Circ::FillHists()
         ThetaScEgPrompt->Fill(ScattTheta, EGamma);
 
         ThetapThetanPrompt->Fill(ThpRad, nKin.Theta());
+
+        DOCADistPrompt->Fill(DOCA);
+        DOCArPOCAPrompt->Fill(r, DOCA);
+        ThetaScPhiScPrompt->Fill(ScattThetaRad, ScattPhiRad);
+        MMEgPrompt->Fill(EGamma, MMpEpCorr);
+        PhiScEgPrompt->Fill(EGamma, ScattPhiRad);
+        PhiScZpPrompt->Fill(pVertex(2), ScattPhiRad);
+
+        if(BeamHelicity == kTRUE) PhiScPosHelFullPrompt->Fill(ScattPhiRad);
+        else if(BeamHelicity == kFALSE) PhiScNegHelFullPrompt->Fill(ScattPhiRad);
 
         if((MWPC0pE != 0) && (MWPC1pE != 0)){ // If there is a non zero energy deposit in each MWPC for proton set one MWPC energy sum
             EpMWPCEpVetoTot2Prompt->Fill(EpCorr, MWPCpEVetoTot2);
@@ -734,6 +768,17 @@ void PNeutPol_Polarimeter_Circ::FillHists()
         NeutronEThetaScFullRandom->Fill(nKinE, ScattTheta);
         NeutronEEgRandom->Fill(nKinE, EGamma);
         ThetaScEgRandom->Fill(ScattTheta, EGamma);
+
+        DOCADistRandom->Fill(DOCA);
+        DOCArPOCARandom->Fill(r, DOCA);
+        ThetaScPhiScRandom->Fill(ScattThetaRad, ScattPhiRad);
+        MMEgRandom->Fill(EGamma, MMpEpCorr);
+
+        PhiScEgRandom->Fill(EGamma, ScattPhiRad);
+        PhiScZpRandom->Fill(pVertex(2), ScattPhiRad);
+
+        if(BeamHelicity == kTRUE) PhiScPosHelFullRandom->Fill(ScattPhiRad);
+        else if(BeamHelicity == kFALSE) PhiScNegHelFullRandom->Fill(ScattPhiRad);
 
         if((MWPC0pE != 0) && (MWPC1pE != 0)){ // If there is a non zero energy deposit in each MWPC for proton set one MWPC energy sum
             EpMWPCEpVetoTot2Random->Fill(EpCorr, MWPCpEVetoTot2);
@@ -875,6 +920,23 @@ void PNeutPol_Polarimeter_Circ::BGSub(){
     ThetanMWPCEnTot1->Add(ThetanMWPCEnTot1Random, -PvRratio);
     ThetanMWPCEnTot2->Add(ThetanMWPCEnTot2Prompt);
     ThetanMWPCEnTot2->Add(ThetanMWPCEnTot2Random, -PvRratio);
+
+    DOCADist->Add(DOCADistPrompt);
+    DOCADist->Add(DOCADistRandom, -PvRratio);
+    DOCArPOCA->Add(DOCArPOCAPrompt);
+    DOCArPOCA->Add(DOCArPOCARandom, -PvRratio);
+    ThetaScPhiSc->Add(ThetaScPhiScPrompt);
+    ThetaScPhiSc->Add(ThetaScPhiScRandom, -PvRratio);
+    PhiScPosHelFull->Add(PhiScPosHelFullPrompt);
+    PhiScPosHelFull->Add(PhiScPosHelFullRandom, -PvRratio);
+    PhiScNegHelFull->Add(PhiScNegHelFullPrompt);
+    PhiScNegHelFull->Add(PhiScNegHelFullRandom, -PvRratio);
+    MMEg->Add(MMEgPrompt);
+    MMEg->Add(MMEgRandom, -PvRratio);
+    PhiScEg->Add(PhiScEgPrompt);
+    PhiScEg->Add(PhiScEgRandom, -PvRratio);
+    PhiScZp->Add(PhiScZpPrompt);
+    PhiScZp->Add(PhiScZpRandom, -PvRratio);
 
     for(Int_t E = 0; E < 8; E++){
         for(Int_t F = 0; F < 3; F++){

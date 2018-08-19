@@ -2,10 +2,10 @@
 
 void Thesis_Plots() {
 
-    gStyle->SetTitleFontSize(0.06);
+    gStyle->SetTitleFontSize(0.05);
 
-    TFile *f = new TFile("/scratch/Mainz_Software/a2GoAT/Cx_143_148_Combined.root"); // Open the latest PTotal file to load histograms from
-    TFile f1("Cx_143_148_Plots_Combo.root", "RECREATE");
+    TFile *f = new TFile("/scratch/Mainz_Software/a2GoAT/Cx_147_148_Combined_V2.root"); // Open the latest PTotal file to load histograms from
+    TFile f1("Cx_147_148_Plots_Combo_V2.root", "RECREATE");
 
     char name[60];
     TGraphErrors* CxPlots3Bins[3][8]; // As fn of Angular bin for fixed energies

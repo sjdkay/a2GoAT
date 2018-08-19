@@ -174,7 +174,7 @@ void CxAsymm_V3_3ThetaBin() {
         }
     }
 
-    TFile f3("Cx_Plots_147_47_V4.root", "RECREATE");
+    TFile f3("Cx_Plots_147_47_V5.root", "RECREATE");
 
     double x[3] = {2./3., 0., -2./3.};
     double ex[3] = {1./3., 1./3., 1./3.};
@@ -252,7 +252,7 @@ void CxAsymm_V3_3ThetaBin() {
                 Cx2Err[i][j] = CxErr[i][j][k];
             }
             sprintf(name2, "Cx_CM%i_V%i_3Theta", k+1, i+1);
-            sprintf(title2, "C_{x'}(E_{#gamma}) #theta_{CM} %i - %i", k*60 ,60 + (k*60));
+            sprintf(title2, "C_{x'}(E_{#gamma}) #theta_{CM} %i - %i^{o}", k*60 ,60 + (k*60));
             Cx2Plots[i][k] = new TGraphErrors(8 , x2, Cx2[i], ex2, Cx2Err[i]);
             Cx2Plots[i][k]->SetName(name2);
             Cx2Plots[i][k]->SetTitle(title2);
@@ -274,7 +274,7 @@ void CxAsymm_V3_3ThetaBin() {
                 Cx2Plots[i][k]->SetMarkerStyle(22);
                 Cx2Plots[i][k]->SetLineColor(1);
             }
-            Cx2Plots[i][k]->GetXaxis()->SetTitle("E_{#gamma}");
+            Cx2Plots[i][k]->GetXaxis()->SetTitle("E_{#gamma}/MeV");
             Cx2Plots[i][k]->GetXaxis()->SetRangeUser(100, 1000);
             Cx2Plots[i][k]->GetYaxis()->SetRangeUser(-2, 2);
             Cx2Plots[i][k]->GetYaxis()->SetTitle("C_{x'}");
@@ -344,7 +344,7 @@ void CxAsymm_V3_3ThetaBin() {
 
     for(Int_t j = 0; j < 3; j++){
         sprintf(name4, "py_CM%i", j+1);
-        sprintf(title4, "p_{y}(E_{#gamma}) #theta_{CM} %i - %i", j*60 ,60 + (j*60));
+        sprintf(title4, "p_{y}(E_{#gamma}) #theta_{CM} %i - %i^{o}", j*60 ,60 + (j*60));
         py2Plots[j] = new TGraphErrors(8 , x2, py2[j], ex2, py2Err[j]);
         py2Plots[j]->SetName(name4);
         py2Plots[j]->SetTitle(title4);
@@ -353,7 +353,7 @@ void CxAsymm_V3_3ThetaBin() {
         py2Plots[j]->SetMarkerStyle(22);
         py2Plots[j]->SetMarkerSize(1.2);
         py2Plots[j]->SetLineColor(1);
-        py2Plots[j]->GetXaxis()->SetTitle("E_{#gamma}");
+        py2Plots[j]->GetXaxis()->SetTitle("E_{#gamma}/MeV");
         py2Plots[j]->GetXaxis()->SetRangeUser(200, 1000);
         py2Plots[j]->GetYaxis()->SetRangeUser(-2, 2);
         py2Plots[j]->GetYaxis()->SetTitle("p_{y}");

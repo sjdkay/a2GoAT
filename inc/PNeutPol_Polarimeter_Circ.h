@@ -318,6 +318,38 @@ private:
     TH2D* ThetanMWPCEnTot2Prompt;
     TH2D* ThetanMWPCEnTot2Random;
 
+    TH1D* DOCADist;
+    TH1D* DOCADistPrompt;
+    TH1D* DOCADistRandom;
+
+    TH2D* DOCArPOCA;
+    TH2D* DOCArPOCAPrompt;
+    TH2D* DOCArPOCARandom;
+
+    TH2D* ThetaScPhiSc;
+    TH2D* ThetaScPhiScPrompt;
+    TH2D* ThetaScPhiScRandom;
+
+    TH1D* PhiScPosHelFull;
+    TH1D* PhiScPosHelFullPrompt;
+    TH1D* PhiScPosHelFullRandom;
+
+    TH1D* PhiScNegHelFull;
+    TH1D* PhiScNegHelFullPrompt;
+    TH1D* PhiScNegHelFullRandom;
+
+    TH2D* MMEg;
+    TH2D* MMEgPrompt;
+    TH2D* MMEgRandom;
+
+    TH2D* PhiScEg;
+    TH2D* PhiScEgPrompt;
+    TH2D* PhiScEgRandom;
+
+    TH2D* PhiScZp;
+    TH2D* PhiScZpPrompt;
+    TH2D* PhiScZpRandom;
+
     TH1D* EgPrompt;
     TH1D* ThetaScPrompt;
     TH1D* RPocaPrompt;

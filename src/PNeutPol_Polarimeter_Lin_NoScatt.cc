@@ -199,7 +199,7 @@ void	PNeutPol_Polarimeter_Lin_NoScatt::ProcessEvent()
 
     EpCorr = EpPolCorrect(Ep, Thp); //correct Ep for energy loss in polarimeter
 
-    //if(Cut_proton -> IsInside(EpCorr, dEp) == kFALSE) return; // If E loss correct proton is NOT inside p banana drop out
+    if(Cut_proton -> IsInside(EpCorr, dEp) == kFALSE) return; // If E loss correct proton is NOT inside p banana drop out
 
     EpDiff = abs(EpCorr - Ep);
 

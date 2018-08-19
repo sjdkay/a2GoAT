@@ -113,21 +113,20 @@ void Sigma_Systematics_V2(){
         }
     }
 
-    TFile f6("Sigma_Systematic_18_17_V4.root", "RECREATE");
+    TFile f6("Sigma_Systematic_18_17_V5.root", "RECREATE");
 
-    TF1 *Line = new TF1("Line", "[0]", -1, 1);
     double x[18] = {0.85, 0.75, 0.65, 0.55, 0.45, 0.35, 0.25, 0.15, 0.05, -0.05, -0.15, -0.25, -0.35, -0.45, -0.55, -0.65, -0.75, -0.85}; // Need to adjust
     double ex[18] = {0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05}; // Need to adjust
 
     for(Int_t i = 0; i < 21; i ++){ // Egamma value
         for(Int_t j = 0; j < 18; j ++){ // CM value
             SystValues[i][j] = SigmaValues[0][i][j] - SigmaValues[1][i][j];
-            SystErrValues[i][j] = sqrt( ((SigmaErrValues[0][i][j])**2) + ((SigmaErrValues[1][i][j])**2) );
+            SystErrValues[i][j] = 0;
         }
 
         sprintf(title, "#Sigma_{2#sigma} - #Sigma_{1#sigma} E_{#gamma} %i #pm 10 MeV", EStart+(i*10));
+        sprintf(name, "SigmaSyst_%i", EStart+(i*10));
         SigmaSystPlots[i] = new TGraphErrors(18 , x, SystValues[i] , ex, SystErrValues[i]) ;
-        SigmaSystPlots[i]->Fit("Line", "M");
         SigmaSystPlots[i]->SetMarkerColor(4);
         SigmaSystPlots[i]->SetLineColor(4);
         SigmaSystPlots[i]->SetMarkerStyle(8);
@@ -137,20 +136,19 @@ void Sigma_Systematics_V2(){
         SigmaSystPlots[i]->GetYaxis()->SetTitle("#Sigma_{2#sigma} - #Sigma_{1#sigma}");
         SigmaSystPlots[i]->SetName(name);
         SigmaSystPlots[i]->SetTitle(title);
-        SigmaSystPlots[i]->GetXaxis()->SetLabelSize(0.06);
+        SigmaSystPlots[i]->GetXaxis()->SetLabelSize(0.05);
         SigmaSystPlots[i]->GetXaxis()->SetTitleSize(0.06);
         SigmaSystPlots[i]->GetXaxis()->SetTitleOffset(0.7);
         SigmaSystPlots[i]->GetXaxis()->CenterTitle();
-        SigmaSystPlots[i]->GetYaxis()->SetLabelSize(0.06);
-        SigmaSystPlots[i]->GetYaxis()->SetTitleSize(0.08);
-        SigmaSystPlots[i]->GetYaxis()->SetTitleOffset(0.5);
+        SigmaSystPlots[i]->GetYaxis()->SetLabelSize(0.04);
+        SigmaSystPlots[i]->GetYaxis()->SetTitleSize(0.06);
+        SigmaSystPlots[i]->GetYaxis()->SetTitleOffset(0.7);
         SigmaSystPlots[i]->GetYaxis()->CenterTitle();
+
+
+
         SigmaSystPlots[i]->Write();
 
-        LinePar[i] = Line->GetParameter(0);
-        LineParErr[i] = Line->GetParError(0);
-
-        cout << (LinePar[i])/(LineParErr[i]) << endl;
     }
 
     TCanvas *canvas20 = new TCanvas("canvas20","canvas20", 1920, 1080);
@@ -160,6 +158,14 @@ void Sigma_Systematics_V2(){
         if (i < 15) canvas20->cd(i);
         else if (i > 15) canvas20->cd(i-1);
         SigmaSystPlots[i-1]->Draw("AEP");
+        TLine *MeanLine = new TLine (-1, SigmaSystPlots[i-1]->GetMean(2), 1 , SigmaSystPlots[i-1]->GetMean(2));
+        TLine *RMSLine = new TLine (-1, SigmaSystPlots[i-1]->GetRMS(2), 1 , SigmaSystPlots[i-1]->GetRMS(2));
+        MeanLine->SetLineColor(2);
+        MeanLine->SetLineStyle(1);
+        MeanLine->Draw("SAME");
+        RMSLine->SetLineColor(2);
+        RMSLine->SetLineStyle(2);
+        RMSLine->Draw("SAME");
     }
 
     canvas20->Write();

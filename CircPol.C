@@ -12,9 +12,9 @@ void CircPol(){
      y[i] = (Pm*x[i]*(Em+((1/3)*(Pm-x[i]))))/((TMath::Power(Em,2))+(TMath::Power((Em-x[i]),2))-((2/3)*Em*(Em-x[i])));
    }
    TGraph* CircPolGamma = new TGraph(n,x,y);
-   CircPolGamma->SetTitle("Circular Polarisation of Photon Beam as Function of Photon Energy");
-   CircPolGamma->GetXaxis()->SetTitle("PhotonEnergy/MeV");
-   CircPolGamma->GetYaxis()->SetTitle("Circular Polarisation");
+   CircPolGamma->SetTitle("p^{#odot}_{#gamma}(E_{#gamma})");
+   CircPolGamma->GetXaxis()->SetTitle("E_{#gamma}/MeV");
+   CircPolGamma->GetYaxis()->SetTitle("p^{#odot}_{#gamma}");
    CircPolGamma->GetXaxis()->SetLimits(300, 1557);
    CircPolGamma->SetLineWidth(4);
    CircPolGamma->Draw("AC");
