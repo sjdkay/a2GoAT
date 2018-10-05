@@ -59,8 +59,8 @@ void CxAsymm_V3() {
     TF1 *AsymmFunc = new TF1("AsymmFit",  fitf, -3.0, 3.0, 2); //Give a name and range to the fitting funcion
     AsymmFunc->SetParNames("SinAmp", "CosAmp"); //Name the parameters
     AsymmFunc->SetParameter(0, 0);
-    TFile *f = new TFile("/scratch/Mainz_Software/a2GoAT/Physics_Total_Amo148_Lin48_Combined_V2.root"); // Open the latest PTotal file to load histograms from
-    TFile *fAy = new TFile ("/scratch/Mainz_Software/a2GoAT/npAy.root");
+    TFile *f = new TFile("/d4tb1/sjdkay/MainzRecoil/Results/Physics_Total_Amo148_Lin48_Combined_V2.root"); // Open the latest PTotal file to load histograms from
+    TFile *fAy = new TFile ("/home/sjdkay/work/A2/a2GoAT/npAy.root");
     TF1 *Pn90CM = new TF1("Pn90CM", "1.64576-2.95484*(x/1000)+0.684577*(x/1000)**2-0.65*90**2/4/((x-560)**2+90**2/4)+(5.32305-35.3819*(x/1000)+70.145*(x/1000)**2-44.2899*(x/1000)**3)",200,1000);
     TH2D *AEffVals = new TH2D("AEffVals", "A_{Eff}(E_{#gamma}, cos(#theta_{CM}))", 8, 200, 1000, 5, -1, 1);
 
@@ -131,7 +131,7 @@ void CxAsymm_V3() {
     f1.Write();
     f1.Close();
 
-    TFile *f2= TFile::Open("/scratch/Mainz_Software/a2GoAT/CircPol_Aug16.root");
+    TFile *f2= TFile::Open("/home/sjdkay/work/A2/a2GoAT/CircPol_Aug16.root");
 
     for (Int_t m = 0; m < 3; m++){ // Fit Version
         for (Int_t n = 0; n < 8; n++){ //E

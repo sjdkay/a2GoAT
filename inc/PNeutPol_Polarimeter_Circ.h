@@ -21,6 +21,8 @@ private:
 
     TH1*	TaggerAccScal;
 
+    TFile* fAy;
+
     Int_t NP;
     Int_t NPi;
     Int_t NRoo;
@@ -146,6 +148,7 @@ private:
     double_t PhiScLow;
     double_t PhiScHigh;
     double_t PhiScWidth;
+    double_t AEff;
 
     double RtmpMass,RtmpMom;
     double chi2;
@@ -378,6 +381,12 @@ private:
     TH1D* PhiScNegHel[8][5];
     TH1D* PhiScNegHelPrompt[8][5];
     TH1D* PhiScNegHelRandom[8][5];
+    TH2D* PhiScAEffPosHel[8][5];
+    TH2D* PhiScAEffPosHelPrompt[8][5];
+    TH2D* PhiScAEffPosHelRandom[8][5];
+    TH2D* PhiScAEffNegHel[8][5];
+    TH2D* PhiScAEffNegHelPrompt[8][5];
+    TH2D* PhiScAEffNegHelRandom[8][5];
     TH2D* NeutronEThetaSc[8][5];
     TH2D* NeutronEThetaScPrompt[8][5];
     TH2D* NeutronEThetaScRandom[8][5];
