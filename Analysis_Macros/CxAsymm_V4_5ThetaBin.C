@@ -11,7 +11,7 @@ Double_t fitf(Double_t *x,Double_t *par)
     return fitval;
 }
 
-void CxAsymm_V4_3ThetaBin() {
+void CxAsymm_V4_5ThetaBin() {
   
   gStyle->SetTitleFontSize(0.06);
   gStyle->SetOptStat(0);
@@ -23,35 +23,27 @@ void CxAsymm_V4_3ThetaBin() {
   char PosHelProjName[60];
   char NegHelProjName[60];
   char AsymmHistName[60];
-  char NeutronEThetaScName[60];
-  char name[60];
-  char title[60];
-  char name2[60];
-  char title2[60];
-  char name3[60];
-  char title3[60];
-  char name4[60];
-  char title4[60];
+  char NeutronEThetaScName[60];;
   char AsymmHistTitle[60];
   
-  TProfile* PhiScAEffXProfile[9][2][8][3]; // Need each helicity so 0 is -ve, 1 is +ve for first index
-  TH1D* PhiScAEffXProjection[9][2][8][3];
-  TH1D* AsymmHists[9][8][3];
+  TProfile* PhiScAEffXProfile[9][2][8][5]; // Need each helicity so 0 is -ve, 1 is +ve for first index
+  TH1D* PhiScAEffXProjection[9][2][8][5];
+  TH1D* AsymmHists[9][8][5];
   
   Double_t NumerSum1;
   Double_t NumerSum2;
   Double_t DenomSum1;
   Double_t DenomSum2;
-  Double_t AEff[9][2][8][3];
-  Double_t AEffErr[9][2][8][3];
-  Double_t CorrFac[9][2][8][3];
-  Double_t AEffCorr[9][2][8][3];
+  Double_t AEff[9][8][5];
+  Double_t AEffErr[9][8][5];
+  Double_t CorrFac[9][8][5];
+  Double_t AEffCorr[9][8][5];
   
   TF1 *AsymmFunc = new TF1("AsymmFit",  fitf, -3.0, 3.0, 2); //Give a name and range to the fitting funcion
   AsymmFunc->SetParNames("SinAmp", "CosAmp"); //Name the parameters
   AsymmFunc->SetParameter(0, 0);
   TF1 *Pn90CM = new TF1("Pn90CM", "1.64576-2.95484*(x/1000)+0.684577*(x/1000)**2-0.65*90**2/4/((x-560)**2+90**2/4)+(5.32305-35.3819*(x/1000)+70.145*(x/1000)**2-44.2899*(x/1000)**3)",200,1000);
-  TFile *f = new TFile("/home/sjdkay/work/A2/a2GoAT/Physics_Total_153_53/Physics_Total_Amo153_Lin53_Combined_EgShift.root"); // Open the latest PTotal file to load histograms from
+  TFile *f = new TFile("/home/sjdkay/work/A2/a2GoAT/Physics_Total_154_54/Physics_Total_Amo154_Lin54_Combined_EgShift.root"); // Open the latest PTotal file to load histograms from
   
   // PROFILE of PhiScAEff gives the averaged AEff values for each PhiSc bin, e.g. will give a 1D hist of this
   // PhiScAEff440PosHelCM2->ProfileX("Test2", 0, -1, "ode")
@@ -62,12 +54,12 @@ void CxAsymm_V4_3ThetaBin() {
   // Default version probably fine averages over all bins y
   // So for each Asymmetry should probably determine a WEIGHTED average value for AEff
   
-  TFile f1("AsymmFits_PTotal_153_53_V4_TEST.root", "RECREATE");
+  TFile f1("AsymmFits_PTotal_154_54_V4_TEST.root", "RECREATE");
   Double_t EVals[9] = {250, 260, 270, 280, 290, 310, 320, 330, 340};
   
   for(Int_t i = 0; i < 9; i++){ // Centre of energy bin
     for(Int_t j = 0; j < 8; j++){ // Energy
-      for(Int_t k = 0; k < 3; k++)){ // CosThetaBin
+      for(Int_t k = 0; k < 5; k++)){ // CosThetaBin
       sprintf(PosHelHistName, "PhiScAEff%iPosHelCM%i", EVals[i]+(j*100), k+1);
       sprintf(NegHelHistName, "PhiScAEff%iNegHelCM%i", EVals[i]+(j*100), k+1);
       sprintf(PosHelProfName, "AEff%iPosHelCM%i", EVals[i]+(j*100), k+1);
@@ -84,17 +76,15 @@ void CxAsymm_V4_3ThetaBin() {
       DenomSum2 = 0;
       NumerSum1 = 0;
       NumerSum2 = 0;
-      for(Int_t l = 1; l < NBinsProf; l++){
+      for(Int_t l = 1; l < NBinsProf; l++){ // Calculate weighted average of AEff for each Energy/CosTheta bin for each helicity
 	DenomSum1 =+ (1)/(Power(PhiScAEffXProfile[i][0][j][k]->GetBinError(l), 2));
 	DenomSum2 =+ (1)/(Power(PhiScAEffXProfile[i][1][j][k]->GetBinError(l), 2));
 	NumerSum1 =+ (PhiScAEffXProfile[i][0][j][k]->GetBinContent(l))/(Power(PhiScAEffXProfile[i][0][j][k]->GetBinError(l), 2));
 	NumerSum2 =+ (PhiScAEffXProfile[i][1][j][k]->GetBinContent(l))/(Power(PhiScAEffXProfile[i][1][j][k]->GetBinError(l), 2));    
       } 
-      AEff[i][0][j][k] = NumerSum1/DenomSum1;
-      AEff[i][1][j][k] = NumerSum2/DenomSum2;
-      AEffErr[i][0][j][k] = sqrt(1/DenomSum1);
-      AEffErr[i][1][j][k] = sqrt(1/DenomSum2);
-      
+      AEff[i][j][k] = (NumerSum1+NumerSum2)/(DenomSum1+DenomSum2);
+      AEffErr[i][j][k] = sqrt(1/(DenomSum1+DenomSum2));
+
       sprintf(AsymmHistName, "CxAsymm%iCM%i", EVals[i]+(j*100), k+1);                                                                                                                             
       sprintf(AsymmHistTitle, "#phi_{Sc} Asymmetry (%i #pm 50) MeV CM%i",EVals[i]+(j*100), k+1);
       

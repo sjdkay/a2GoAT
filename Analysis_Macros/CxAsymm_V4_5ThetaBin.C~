@@ -34,24 +34,24 @@ void CxAsymm_V4_3ThetaBin() {
   char title4[60];
   char AsymmHistTitle[60];
   
-  TProfile* PhiScAEffXProfile[9][2][8][3]; // Need each helicity so 0 is -ve, 1 is +ve for first index
-  TH1D* PhiScAEffXProjection[9][2][8][3];
-  TH1D* AsymmHists[9][8][3];
+  TProfile* PhiScAEffXProfile[9][2][8][5]; // Need each helicity so 0 is -ve, 1 is +ve for first index
+  TH1D* PhiScAEffXProjection[9][2][8][5];
+  TH1D* AsymmHists[9][8][5];
   
   Double_t NumerSum1;
   Double_t NumerSum2;
   Double_t DenomSum1;
   Double_t DenomSum2;
-  Double_t AEff[9][2][8][3];
-  Double_t AEffErr[9][2][8][3];
-  Double_t CorrFac[9][2][8][3];
-  Double_t AEffCorr[9][2][8][3];
+  Double_t AEff[9][2][8][5];
+  Double_t AEffErr[9][2][8][5];
+  Double_t CorrFac[9][2][8][5];
+  Double_t AEffCorr[9][2][8][5];
   
   TF1 *AsymmFunc = new TF1("AsymmFit",  fitf, -3.0, 3.0, 2); //Give a name and range to the fitting funcion
   AsymmFunc->SetParNames("SinAmp", "CosAmp"); //Name the parameters
   AsymmFunc->SetParameter(0, 0);
   TF1 *Pn90CM = new TF1("Pn90CM", "1.64576-2.95484*(x/1000)+0.684577*(x/1000)**2-0.65*90**2/4/((x-560)**2+90**2/4)+(5.32305-35.3819*(x/1000)+70.145*(x/1000)**2-44.2899*(x/1000)**3)",200,1000);
-  TFile *f = new TFile("/home/sjdkay/work/A2/a2GoAT/Physics_Total_153_53/Physics_Total_Amo153_Lin53_Combined_EgShift.root"); // Open the latest PTotal file to load histograms from
+  TFile *f = new TFile("/home/sjdkay/work/A2/a2GoAT/Physics_Total_154_54/Physics_Total_Amo154_Lin54_Combined_EgShift.root"); // Open the latest PTotal file to load histograms from
   
   // PROFILE of PhiScAEff gives the averaged AEff values for each PhiSc bin, e.g. will give a 1D hist of this
   // PhiScAEff440PosHelCM2->ProfileX("Test2", 0, -1, "ode")
@@ -67,7 +67,7 @@ void CxAsymm_V4_3ThetaBin() {
   
   for(Int_t i = 0; i < 9; i++){ // Centre of energy bin
     for(Int_t j = 0; j < 8; j++){ // Energy
-      for(Int_t k = 0; k < 3; k++)){ // CosThetaBin
+      for(Int_t k = 0; k < 5; k++)){ // CosThetaBin
       sprintf(PosHelHistName, "PhiScAEff%iPosHelCM%i", EVals[i]+(j*100), k+1);
       sprintf(NegHelHistName, "PhiScAEff%iNegHelCM%i", EVals[i]+(j*100), k+1);
       sprintf(PosHelProfName, "AEff%iPosHelCM%i", EVals[i]+(j*100), k+1);
