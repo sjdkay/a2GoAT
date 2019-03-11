@@ -9,7 +9,7 @@ void CircPol(){
    Int_t n = 1257;
    for (Int_t i=0; i<n; i++) {
      x[i] = i+300;
-     y[i] = (Pm*x[i]*(Em+((1/3)*(Pm-x[i]))))/((TMath::Power(Em,2))+(TMath::Power((Em-x[i]),2))-((2/3)*Em*(Em-x[i])));
+     y[i] = (Pm*x[i]*(Em+((1/3)*(Em-x[i]))))/((TMath::Power(Em,2))+(TMath::Power((Em-x[i]),2))-((2/3)*Em*(Em-x[i])));
    }
    TGraph* CircPolGamma = new TGraph(n,x,y);
    CircPolGamma->SetTitle("p^{#odot}_{#gamma}(E_{#gamma})");
