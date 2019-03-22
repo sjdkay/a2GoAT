@@ -100,6 +100,10 @@ void CxAsymm_V4_3ThetaBin() {
             AEff[i][j][k] = (NumerSum1+NumerSum2)/(DenomSum1+DenomSum2);
             AEffErr[i][j][k] = sqrt(1/(DenomSum1+DenomSum2));
 
+            // Will need to modify this, need to plot PhiScAeffCorr in main analysis routine
+            //CorrFac[i][j][k] = (1+exp(1.81572-(0.0139530*MeanX[j][k])));
+            //AEffCorr[i][j][k] = AEff[i][j][k] * CorrFac[i][j][k]; //Analysing power for 12C based on correction factor from Mikhail
+
             sprintf(AsymmHistName, "CxAsymm%iCM%i", EVals[i]+(j*100), k+1);
             sprintf(AsymmHistTitle, "#phi_{Sc} Asymmetry (%i #pm 50) MeV CM%i",EVals[i]+(j*100), k+1);
 

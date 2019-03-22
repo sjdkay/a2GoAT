@@ -149,6 +149,7 @@ private:
     double_t PhiScHigh;
     double_t PhiScWidth;
     double_t AEff;
+    double_t AEffCorr;
 
     double RtmpMass,RtmpMom;
     double chi2;
@@ -387,6 +388,12 @@ private:
     TH2D* PhiScAEffNegHel[8][5];
     TH2D* PhiScAEffNegHelPrompt[8][5];
     TH2D* PhiScAEffNegHelRandom[8][5];
+    TH2D* PhiScAEffCorrPosHel[8][5];
+    TH2D* PhiScAEffCorrPosHelPrompt[8][5];
+    TH2D* PhiScAEffCorrPosHelRandom[8][5];
+    TH2D* PhiScAEffCorrNegHel[8][5];
+    TH2D* PhiScAEffCorrNegHelPrompt[8][5];
+    TH2D* PhiScAEffCorrNegHelRandom[8][5];
     TH2D* NeutronEThetaSc[8][5];
     TH2D* NeutronEThetaScPrompt[8][5];
     TH2D* NeutronEThetaScRandom[8][5];
